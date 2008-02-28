@@ -1,0 +1,29 @@
+Release details:
+This package provides the core functionality 
+of the XBRLAPI.  The XLink, XPointer,
+XMLBase packages also need to be downloaded to 
+use the XBRLAPI. The DOM-based data store 
+is included.  If you want to use a persistent data store
+then you need to download the JAR for the 
+desired data store also.
+
+Release 3.1
+Feb 28, 2008
+Point release to include various bug-fixes. 
+
+Release 3.0
+July 29, 2007
+Added new network and relationship level functionality.
+
+Release 2.0
+May 21, 2007
+Fixed up omission of class files from the JAR file.
+
+Release 2.0
+March 23, 2007
+Created the api module by splitting out the 
+non-DOM data store implementations.
+
+Release 1.0 was the version of the eXist 
+data store that was bundled with the XBRLAPI.
+

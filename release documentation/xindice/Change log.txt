@@ -1,0 +1,8 @@
+July 29, 2007
+Fixed up NPE bug in the hasFragment method.
+
+March 23, 2006
+Created the Xindice module by splitting it 
+out from the xbrlapi. This limits XBRLAPI 
+dependencies on Xindice to those users choosing
+to use Xindice as the data store implementation.

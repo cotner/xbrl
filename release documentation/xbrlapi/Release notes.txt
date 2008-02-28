@@ -1,0 +1,67 @@
+Release details:
+
+Release 3.1
+Feb 28, 2008
+Point release to include various bug-fixes. 
+
+Release 3.0
+July 29, 2007
+Added new network and relationship level functionality.
+
+Release 2.0
+March 23, 2007
+Changed the package to only include the
+full Javadoc documentation and the full
+source.  Executables are no longer part
+of this package.
+
+Release 1.0 update
+October 16, 2006
+Streamlined the DTS discovery process to eliminate
+all post processing of XLink materials.
+Enabled exist data store to also operate in embedded mode,
+significantly enhancing performance.
+
+Release 1.0
+October 02, 2006
+Completed implementation and testing 
+of read-access fragment API.
+The API is now ready for widespread usage.
+
+Release 0.2 update
+Date September 25, 2006
+Fixed up the Exist indexing.
+Added a lot of fragment interface implementation.
+Merged the data and metadata collections.
+Fixed up the Jar file manifest to make the -jar file option
+work from execution at the commandline.
+
+Release 0.2
+Date September 14, 2006
+This version is now ready for testing.
+
+Release 0.1 update
+Date August 10, 2006
+Implemented the data store using the Exist database and implemented
+the data store using an in-memory XML DOM.
+
+Release 0.1 update
+Date December 9, 2005
+Fixed incorrect content for the release documents.
+Captured large number of improvements to the API implementation.
+
+Release: 0.1
+Date: May 6, 2005
+
+XBRLAPI
+
+The XBRLAPI is an XBRL API and an implementation of that API in Java.
+It is intended to provide a complete set of XBRL manipulation functionality
+using persistent data storage for XBRL information.  The current data persistence
+is achieved using the Xindice XML database.
+
+This is a pre-release version.  Limited parts of the API are implemented to date.
+
+Installation instructions.
+
+See the installation instructions that are available at http://www.xbrlapi.org/

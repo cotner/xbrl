@@ -1,0 +1,15 @@
+Release details:
+The Oracle Berkeley Database XML data store implementation
+for XBRLAPI.
+
+Release 3.1
+Feb 28, 2008
+Point release to include various bug-fixes. 
+
+Release 3.0
+July 29, 2006
+Created the bdbxml module to enable the Oracle Berkeley 
+database to be used as a persistent data store for
+XBRLAPI.  The version number is 3.0 to keep the module 
+version numbers synchronised across the XBRLAPI distribution.
+

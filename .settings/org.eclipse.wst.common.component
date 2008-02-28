@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+<wb-module deploy-name="xbrlapi">
+<wb-resource deploy-path="/" source-path="/conf"/>
+<wb-resource deploy-path="/" source-path="/module-xpointer/src/main/java"/>
+<wb-resource deploy-path="/" source-path="/module-api/src/test/java"/>
+<wb-resource deploy-path="/" source-path="/module-xpointer/src/test/java"/>
+<wb-resource deploy-path="/" source-path="/module-xlink/src/test/java"/>
+<wb-resource deploy-path="/" source-path="/module-xindice/src/main/java"/>
+<wb-resource deploy-path="/" source-path="/module-xmlbase/src/test/java"/>
+<wb-resource deploy-path="/" source-path="/module-exist/src/main/java"/>
+<wb-resource deploy-path="/" source-path="/module-exist/src/test/java"/>
+<wb-resource deploy-path="/" source-path="/module-xindice/src/test/java"/>
+<wb-resource deploy-path="/" source-path="/module-xmlbase/src/main/java"/>
+<wb-resource deploy-path="/" source-path="/module-api/src/main/java"/>
+<wb-resource deploy-path="/" source-path="/module-xlink/src/main/java"/>
+<wb-resource deploy-path="/" source-path="/module-bdb-xml/src/main/java"/>
+<wb-resource deploy-path="/" source-path="/module-bdb-xml/src/test/java"/>
+<wb-resource deploy-path="/" source-path="/module-utilities/src/main/java"/>
+<wb-resource deploy-path="/" source-path="/module-utilities/src/test/java"/>
+</wb-module>
+</project-modules>

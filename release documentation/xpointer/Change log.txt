@@ -1,0 +1,14 @@
+July 29, 2007
+Updated release number to keep in line with other modules.
+
+March 23, 2007 [shuetrim]
+New release to bring into line with
+release numbers for other packages
+for the XBRLAPI.
+
+September 14, 2006 [shuetrim]
+Minor refinements made.
+No changes in functionality.
+
+December 11, 2005 [shuetrim]
+Version 1.0 released.

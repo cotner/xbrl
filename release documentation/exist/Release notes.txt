@@ -1,0 +1,23 @@
+Release details:
+The eXist data store implementation
+for XBRLAPI.
+
+Release 3.1
+Feb 28, 2008
+Point release to include various bug-fixes. 
+
+Release 3.0
+July 29, 2007
+This release only does bug fixes.
+
+Release 2.0
+March 23, 2006
+Created the eXist module by splitting 
+it out from the xbrlapi. This limits 
+XBRLAPI dependencies on eXist to those 
+users choosing to use eXist as the data 
+store implementation.
+
+Release 1.0 was the version of the eXist 
+data store that was bundled with the XBRLAPI.
+

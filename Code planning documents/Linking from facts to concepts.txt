@@ -1,0 +1,27 @@
+Current logic involves:
+
+1. Get a vector of IDs of all facts using a metadata class attribute criteria
+2. For each fact in the vector of fact IDs:
+	1. Get the fact fragment
+	2. Get the document element of the fact
+	3. Get the localname of the document element
+	4. Get the namespace of the document element
+	5. Build up an XPath expression that finds IDs of all concepts with the given localname
+
+
+			xpath = "/xsd:element[@name='" + localName + "']";
+			Vector v = getStore().findDataFragments(xpath);
+			for (int i=0; i<v.size(); i++) {
+				Concept concept = (Concept) getStore().getFragment((String) v.get(i));
+				if (concept.getName().equals(localName) && concept.getSchema().getTargetNamespaceURI().equals(namespace)) {
+					fact.setConceptIndex(concept.getFragmentIndex());
+					System.out.println(concept.getFragmentIndex());
+				}
+			}
+		}
+		
+Improve performance by:
+
+1. Processing each type of fact separately, thus possibly making the 
+indexing based on the type attribute more effective.
+2. Indexing the attribute @name in fragments to make concepts easier to find.

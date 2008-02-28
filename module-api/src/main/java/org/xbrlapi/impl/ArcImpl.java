@@ -1,0 +1,362 @@
+package org.xbrlapi.impl;
+
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.xbrlapi.Arc;
+import org.xbrlapi.ArcEnd;
+import org.xbrlapi.ExtendedLink;
+import org.xbrlapi.FragmentList;
+import org.xbrlapi.utilities.Constants;
+import org.xbrlapi.utilities.XBRLException;
+
+/**
+ * Used as a base class for specialist arcs and as a 
+ * fragment type for arcs that are not recognised as 
+ * specially defined arcs (eg the presentation,
+ * calculation and definition arcs of the XBRL
+ * 2.1 specification).
+ * @author Geoffrey Shuetrim (geoff@galexy.net)
+ */
+
+public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
+
+    /**
+     * Set the xlink:show attribute value.
+     *
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#setShow(String) 
+     */
+    public void setShow(String value) throws XBRLException {
+    	throw new XBRLException("Data update methods are not yet implemented.");
+    }
+	
+    /**
+     * Set the xlink:actuate attribute value.
+     *
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#setActuate(String) 
+     */
+    public void setActuate(String value) throws XBRLException {
+    	throw new XBRLException("Data update methods are not yet implemented.");
+    }
+
+    /**
+     * Get the xlink:show attribute value.
+     * @return the value of the xlink:show value or null if the attribute is not there.
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#getShow() 
+     */
+    public String getShow() throws XBRLException {
+    	Element root = getDataRootElement();
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"show")) return null;
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"show");
+    }
+	
+    /**
+     * Get the xlink:actuate attribute value.
+     * @return the value of the xlink:actuate value or null if the attribute is not there.
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#getActuate() 
+     */
+    public String getActuate() throws XBRLException {
+    	Element root = getDataRootElement();
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"actuate")) return null;
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"actuate");
+    }
+	
+    /**
+     * Get the xlink:from attribute value.
+     * @return the value of the xlink:from value or null if the attribute is not there.
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#getFrom() 
+     */
+    public String getFrom() throws XBRLException {
+    	Element root = getDataRootElement();
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"from")) return null;
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"from");
+    }
+    
+    /**
+     * Set the xlink:from attribute value.
+     *
+     * @param from The value of the from attribute
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#setFrom(String) 
+     */
+    public void setFrom(String from) throws XBRLException {
+    	throw new XBRLException("Data update methods are not yet implemented.");
+
+    }
+
+    /**
+     * Get the xlink:to attribute value.
+     * @return the value of the xlink:to value or null if the attribute is not there.
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#getTo() 
+     */
+    public String getTo() throws XBRLException {
+    	Element root = getDataRootElement();
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"to")) return null;
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"to");
+    }
+    
+    /**
+     * @see org.xbrlapi.Arc#getArcrole() 
+     */
+    public String getArcrole() throws XBRLException {
+    	Element root = getDataRootElement();
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"arcrole")) return null;
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"arcrole");
+    }
+    
+    /**
+     * Set the xlink:to attribute value.
+     *
+     * @param to The value of the to attribute
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#setTo(String) 
+     */
+    public void setTo(String to) throws XBRLException {
+    	throw new XBRLException("Data update methods are not yet implemented.");
+    }
+	
+    /**
+     * Get the order attribute value.
+     * @return the value of the order attribute or default value of 1 if none is provided.
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#getOrder() 
+     */
+    public String getOrder() throws XBRLException {
+    	Element root = getDataRootElement();
+    	if (! root.hasAttribute("order")) return "1";
+    	return getDataRootElement().getAttribute("order");    
+    }
+    
+    /**
+     * Set the order attribute value.
+     *
+     * @param order The value of the order attribute
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#setOrder(String) 
+     */
+    public void setOrder(String order) throws XBRLException {
+    	throw new XBRLException("Data update methods are not yet implemented.");
+    }
+    
+    /**
+     * Get the list of ArcEnd fragments that the arc runs from.
+     * @return the list of ArcEnd fragments that the arc runs from.
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#getSourceFragments() 
+     */
+    public <E extends ArcEnd> FragmentList<E> getSourceFragments() throws XBRLException {
+    	ExtendedLink link = getExtendedLink();
+    	FragmentList<E> ends = link.<E>getArcEndsByLabel(this.getFrom()); 
+    	logger.debug("Link "+ link.getFragmentIndex() + " has " + ends.getLength() + " ends with label " + this.getFrom());
+    	return ends;
+    }
+    
+    /**
+     * Get the list of ArcEnd fragments that the arc runs to.
+     * @return the list of ArcEnd fragment that the arc runs to.
+     * @throws XBRLException
+     * @see org.xbrlapi.Arc#getTargetFragments() 
+     */
+    public <E extends ArcEnd> FragmentList<E> getTargetFragments() throws XBRLException {
+    	ExtendedLink link = getExtendedLink();
+    	FragmentList<E> ends = link.<E>getArcEndsByLabel(this.getTo());
+    	logger.debug("Link "+ link.getFragmentIndex() + " has " + ends.getLength() + " ends with label " + this.getTo());
+    	return ends;
+    }
+    
+    /**
+     * @see org.xbrlapi.Arc#getSemanticAttributes()
+     */
+    public NamedNodeMap getSemanticAttributes() throws XBRLException {
+
+    	// Clone the node to stop the attribute removal from impacting on the XML.
+    	NamedNodeMap attributes = this.getDataRootElement().cloneNode(true).getAttributes();    	
+    	
+    	try {
+    		attributes.removeNamedItemNS(Constants.XLinkNamespace,"arcrole");
+    	} catch (DOMException e) {}
+    	try {
+    		attributes.removeNamedItemNS(Constants.XLinkNamespace,"type");
+    	} catch (DOMException e) {}
+    	try {
+    		attributes.removeNamedItemNS(Constants.XLinkNamespace,"from");
+    	} catch (DOMException e) {}
+    	try {
+			attributes.removeNamedItemNS(Constants.XLinkNamespace, "to");
+		} catch (DOMException e) {
+		}
+		try {
+			attributes.removeNamedItemNS(Constants.XLinkNamespace, "show");
+		} catch (DOMException e) {
+		}
+		try {
+			attributes.removeNamedItemNS(Constants.XLinkNamespace, "actuate");
+		} catch (DOMException e) {
+		}
+		try {
+			attributes.removeNamedItemNS(Constants.XLinkNamespace, "title");
+		} catch (DOMException e) {
+		}
+		try {
+			attributes.removeNamedItem("use");
+		} catch (DOMException e) {
+		}
+		try {
+			attributes.removeNamedItem("priority");
+		} catch (DOMException e) {
+		}
+    	try {
+    		attributes.removeNamedItemNS(Constants.XMLNamespace,"lang");
+    	} catch (DOMException e) {}
+    	try {
+    		attributes.removeNamedItemNS(Constants.XMLNamespace,"base");
+    	} catch (DOMException e) {}
+		return attributes;
+	}
+
+    /**
+     * @see org.xbrlapi.Arc#getSemanticKey() 
+     */
+    public String getSemanticKey() throws XBRLException {
+    	NamedNodeMap attributes = getSemanticAttributes();
+    	SortedMap<String,String> map = new TreeMap<String,String>();
+    	
+    	// Handle the order attribute which takes a default value of 1 when not specified.
+    	String order = "1";
+    	if (attributes.getNamedItem("order") != null) {
+    		order = attributes.getNamedItem("order").getNodeValue();
+    		attributes.removeNamedItem("order");
+    	}
+    	map.put("order",order);
+    	for (int i=0; i<attributes.getLength(); i++) {
+    		Node node = attributes.item(i);
+			String namespace = node.getNamespaceURI();
+	    	String key = null;
+    		if (namespace == null) {
+    			key = node.getNodeName();
+    		} else {
+    			key = namespace + ":" + node.getLocalName();
+    		}
+    		map.put(key,node.getNodeValue());
+    	}
+    	
+    	String semanticKey = "";
+    	while (! map.isEmpty()) {
+    		String key = map.firstKey();
+    		semanticKey += key + "=" + map.get(key) + "|";
+    		map.remove(key);
+    	}
+    	
+    	return semanticKey;
+
+    }    
+    
+    /**
+     * @param other The other arc to compare against.
+     * @return true if and only if the maps have the same attributes and the same
+     * attribute values.
+     * @throws XBRLException
+     */
+    private boolean semanticAttributesEqual(Arc other) throws XBRLException {
+    	NamedNodeMap a = getSemanticAttributes();
+    	NamedNodeMap b = other.getSemanticAttributes();
+
+    	// Handle the order attribute which takes a default value of 1 when not specified.
+    	String aOrder = "1";
+    	String bOrder = "1";
+    	if (a.getNamedItem("order") != null) {
+    		aOrder = a.getNamedItem("order").getNodeValue();
+    		a.removeNamedItem("order");
+    	}
+    	if (b.getNamedItem("order") != null) { 
+    		bOrder = b.getNamedItem("order").getNodeValue();
+    		b.removeNamedItem("order");
+    	}
+    	if (! aOrder.equals(bOrder)) {
+    		return false;
+    	}
+    	
+    	for (int i=0; i<a.getLength(); i++) {
+    		Node aNode = a.item(i);
+			String aNamespace = aNode.getNamespaceURI();
+    		if (aNamespace == null) {
+    			String aName = aNode.getNodeName();
+        		Node bNode = b.getNamedItem(aName);
+        		if (bNode == null) { 
+        			return false;
+        		} else {
+        			b.removeNamedItem(aName);
+        		}
+    		} else {
+    			String aName = aNode.getLocalName();
+        		Node bNode = b.getNamedItemNS(aNamespace,aName);
+        		if (bNode == null) {
+        			return false;
+        		} else {
+        			b.removeNamedItemNS(aNamespace,aName);
+        		}
+    		}
+    	}
+		if (b.getLength() == 0)  return true;
+		
+		return false;
+    	
+    }    
+    
+    /**
+     * @see org.xbrlapi.Arc#semanticEquals(Arc)
+     */
+    public boolean semanticEquals(Arc other) throws XBRLException {
+    	
+    	if (! this.getNamespaceURI().equals(other.getNamespaceURI())) return false;
+    	if (! this.getLocalname().equals(other.getLocalname())) return false;
+
+    	ExtendedLink aLink = this.getExtendedLink();
+    	ExtendedLink bLink = other.getExtendedLink();
+    	
+    	if (! aLink.getNamespaceURI().equals(bLink.getNamespaceURI())) return false;
+    	if (! aLink.getLocalname().equals(bLink.getLocalname())) return false;
+    	if (! aLink.getLinkRole().equals(bLink.getLinkRole())) return false;
+    	
+    	if (! semanticAttributesEqual(other)) return false;
+    	
+    	return true;
+    }
+    
+    /**
+     * @see org.xbrlapi.Arc#getPriority()
+     */
+    public Integer getPriority() throws XBRLException {
+    	Element root = getDataRootElement();
+    	if (! root.hasAttribute("priority")) return new Integer(1);
+    	return new Integer(getDataRootElement().getAttribute("priority"));    
+    }
+    
+    
+    /**
+     * @see org.xbrlapi.Arc#getUse()
+     */
+    public String getUse() throws XBRLException {
+    	Element root = getDataRootElement();
+    	if (! root.hasAttribute("use")) return "optional";
+    	return getDataRootElement().getAttribute("use");    
+    }
+    
+    /**
+     * @see org.xbrlapi.Arc#isProhibited()
+     */
+    public boolean isProhibited() throws XBRLException {
+    	return (getUse().equals("prohibited"));
+    }    
+    
+}

@@ -1,0 +1,41 @@
+<project 
+xmlns="http://maven.apache.org/POM/4.0.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>XBRLAPI</name>
+  <url>http://www.xbrlapi.org</url>
+  <groupId>org.xbrlapi</groupId>
+  <artifactId>xbrlapi</artifactId>
+  <version>3.0</version>
+  <packaging>pom</packaging>
+
+  <description>The XBRLAPI Java API for XBRL</description>
+
+  <licenses>
+    <license>
+      <name>The GNU Lesser General Public License</name>
+      <url>http://www.gnu.org/licenses/lgpl.html</url>
+      <distribution>repo</distribution>
+    </license>  
+  </licenses>
+
+  <scm>
+    <connection>scm:cvs:pserver:anonymous@xbrlapi.cvs.sourceforge.net:/cvsroot/xbrlapi:xbrlapi-alpha</connection>
+    <developerConnection>scm:cvs:ext:xbrlapi.cvs.sourceforge.net:/cvsroot/xbrlapi:xbrlapi-alpha</developerConnection>
+    <url>http://xbrlapi.cvs.sourceforge.net/xbrlapi/</url>
+  </scm>
+
+  <modules>
+    <module>module-utilities</module>
+    <module>module-api</module>
+    <module>module-xlink</module>
+    <module>module-xmlbase</module>
+    <module>module-xpointer</module>
+    <module>module-xindice</module>
+    <module>module-exist</module>
+    <module>module-bdb-xml</module>
+  </modules>
+
+</project>

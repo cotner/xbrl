@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+  <title>XBRLAPI Implementation data abstraction package.</title>
+</head>
+<body bgcolor="white">
+
+	Defines the contract to be met by data storage implementations.
+	
+	<p>
+	This package contains a set of interfaces that define 
+    the contract that is expected of all underlying XBRL data
+    representations that can work with the XBRLAPI Java 
+    implementation.
+    </p>
+	
+	<h2>Package Specification</h2>
+	
+    <p>
+    By defining appropriate classes that fully implement these 
+    interfaces for a particular XBRL data storage solution, that 
+    data storage solution can be used with this XBRLAPI Java 
+    implementation.
+    </p>    
+
+    <p>
+	The API implementation classes all use the functions 
+	defined in these interfaces rather than functions specific to
+	a particular data structure.
+    </p>
+
+	<p>
+	The functions defined in these interfaces are defined as methods
+	of that DataManagement class.  Each discoverable taxonomy set will
+	utilise an implementation of the Data instance to handle all 
+	interactions with the underlying data structure.
+	</p>
+
+	<p>
+	The data interface defines a marshalling operation that returns, given
+	a fragment, that fragment and the fragments that it contains, recombined
+	into a single XML tree structure.
+	</p>
+
+	<p>The base store implementation is an abstract class
+	that provides some of the basic store functionality 
+	that will be generic across many of the different 
+	underlying data representation approaches.  In particular
+	the DTS serialization functionality is provided.  Implementations
+	should consider extending this base class.</p>
+
+	<!-- Put @see and @since tags down here. -->
+
+	<p>
+	xbrlapi.org Java library providing XBRL functionality
+	</p>
+
+	<p>
+	Copyright (C) 2005, Geoffrey Shuetrim (geoff@galexy.net)
+	</p>
+	
+	
+	<p>
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
+	</p>
+	
+	<p>
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+	<a href="http://www.gnu.org/copyleft/lesser.html">
+	GNU Lesser General Public License for more details.
+	</a>
+	</p>
+	
+	<p>
+	You should have received a copy of the GNU Lesser General Public
+	License along with this library; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+	</p>
+
+</body>
+</html>

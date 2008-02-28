@@ -1,0 +1,69 @@
+<project name="xlinkapi" default="doc" basedir=".">
+	<description>
+  	Build the XBRLAPI Release
+  </description>
+
+	<property name="root" location="../.."/>
+	<property name="build" location="${root}/bin"/>
+	<property name="dist"  location="${root}/dist"/>
+	<property name="manifest"  location="${root}/module-api/src/main/resources/META-INF"/>
+
+    <path id="classpath">
+      <fileset id="libFiles" dir="../../java/lib">
+        <include name="**/**/*.jar"/>
+       </fileset>
+    </path>	
+	
+	<target name="dist" depends="doc" description="generate the executable JAR file." >
+		<tstamp/>
+		<jar  compress="yes" 
+    	jarfile="${dist}/xbrlapi-${DSTAMP}.jar"
+    	manifest="${manifest}/MANIFEST.MF">
+			<fileset dir="${build}" includes="**/*"/>
+			<fileset dir="${root}" includes="module*/src/*/java/**/*"/>
+		</jar>
+	</target>
+
+	<target name="doc" depends="src" description="generate the javadoc" >
+		<tstamp/>
+		<delete>
+			<fileset dir="${root}/docs/xbrlapi" includes="**/*"/>
+		</delete>
+		<javadoc
+             destdir="../../docs/xbrlapi"
+			 classpathRef="classpath"
+    		 doctitle="&lt;h1&gt;&lt;a href='http://www.xbrlapi.org/'&gt;XBRLAPI project&lt;/a&gt;&lt;/h1&gt;"
+  	         header="&lt;h3&gt; &lt;a href='http://www.xbrlapi.org/' target='_top' &gt; XBRLAPI &lt;/a&gt; &lt;/h3&gt; &lt;h3&gt;A Java API for &lt;a href='http://www.xbrl.org/' target='_top'&gt;XBRL&lt;/a&gt;&lt;/h3&gt;"
+    	     footer="&lt;p&gt;&lt;a target='_top' href='http://sourceforge.net'&gt;&lt;img src='http://sourceforge.net/sflogo.php?group_id=135539&amp;type=1' width='88' height='31' border='0' align='right' alt='SourceForge Logo' /&gt;&lt;/a&gt;&lt;/p&gt;"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="XBRLAPI Documentation">
+
+			<fileset dir="${root}/" includes="module*/src/main/java/**/*.java" />
+			<!--fileset dir="${root}/" includes="module*/src/test/java/**/*.java" /-->
+
+			<link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+			<link href="http://www.junit.org/junit/javadoc/4.3/" />
+			<link href="http://xerces.apache.org/xerces2-j/javadocs/api/" />
+			<link href="http://xmldb-org.sourceforge.net/xapi/api/" />
+			<link href="http://www.oracle.com/technology/documentation/berkeley-db/xml/java/" />
+			
+		</javadoc>
+		<tstamp/>
+		<zip destfile="${dist}/xbrlapi-javadoc-${DSTAMP}.zip">
+			<fileset dir="${root}/docs/xbrlapi" includes="**/*"/>
+		</zip>
+	</target>
+
+	<target name="src" description="generate the source zip" >
+		<tstamp/>
+		<zip destfile="${dist}/xbrlapi-source-${DSTAMP}.zip">
+			<fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
+			<fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
+		</zip>
+	</target>
+
+</project>
+
+

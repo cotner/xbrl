@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+  <title>XBRLAPI XLink handler for XBRL DTS discovery.</title>
+</head>
+<body bgcolor="white">
+
+	Defines XLink event handling required for XBRL DTS discovery.
+	
+    <p>
+    This package contains a custom XBRL XLink handler
+    and a custom link recogniser tailored to the requirements
+    of XBRL DTS discovery.
+    </p>
+	
+	<h2>Package Specification</h2>
+	
+    <p>
+    The key steps involved in XLink handling to
+    discover an XBRL DTS are set out below:
+    </p>
+    
+    <ul>
+	<li>
+	Take, as input, one or more URI's that can be resolved to
+	an XML document. These constitute the discovery starting points.
+	</li>
+	<li>
+	Traverse all XLinks and custom links in those documents, 
+	identifying any link destinations that are external to the 
+	starting point XML documents.
+	</li>
+	<li>
+	Augment the initial set of starting point documents with the newly
+	discovered XML documents to get the set of discovered documents.
+	</li>
+	<li>
+	Traverse all XLinks and custom links in the newly discovered XML
+	documents, again identifying any link destinations external to the
+	existing set of discovered documents.
+	</li>
+	<li>
+	Continue the above discovery process until the resulting set of
+	discovered XML documents is closed in the sense that none of the 
+	XLinks or other custom links in them resolve to destinations that 
+	are not internal to one of the discovered XML documents.
+	</li>
+	</ul>
+	
+	<p>
+		Once the DTS has been discovered, augment the information
+		in the DTS to ensure that the DTS has a signature (the URLs
+		of the XML documents used to seed the discovery process) and
+		to ensure that the links in it are easily navigated by software
+		that is not XLink enabled.  Specifically the XBRL XLink handler 
+		needs to:</p>
+	
+	<ul>
+		
+	<li>Augment the XML documents in the DTS with XML markup (in a 
+		new namespace "http://xbrlapi.org/linking") that documents 
+		the absolute URI's that were used to obtain each XML 
+		document (providing a signature for the DTS).</li>
+		
+	<li>Augment the XML nodes that are either XLink elements or custom-links 
+		or XML fragments that are linked to by XLinks or custom links, 
+		with an attribute, in the new namespace, "http://xbrlapi.org/linking", 
+		that is unique within the XML structure that results from XLink 
+		processing (to enable ID-based O(1) link traversal operations 
+		within the resulting XML structure).</li>
+		
+	<li>Augment the XLink locators with a child element for each XLink arc
+		that connects to or from it.  The child element must be in the 
+		"http://xbrlapi.org/linking" namespace and must contain the unique
+		XLink id attribute of the the arc.  This aids in the 
+		efficiency of navigation from the locators to the arcs.</li>
+
+	<li>Augment the XLink arcs with a child element for each locator or 
+		resource that it connects to.  The child element in the new 
+		namespace needs to contain an attribute equal to the unique id
+		given in the new namespace to the relevant locator or resource.</li>
+
+	<li>Augment each local or remote resource with an element in the new 
+		namespace, containing an attribute equal to the new unique id
+		of the locator (for remote resources) or arc (for local resources)
+		that connects to it.</li>
+
+	</ul>
+
+	<p>All of these new id attribute values and elements enable ID-based 
+		O(1) link traversal operations within the DTS.</p>
+
+	<h2>Tricky issues</h2>
+	<ul>
+		<li>What to do about simple links to fragments of XML documents?  
+			Do the entire XML documents get included in the DTS or just
+			the fragments that are addressed by the simple links?</li>
+		<li>What to do about locators that reference resources in linkbases
+			that are external to the extended link that contains the
+			locators?  Should the entire extended link containing the 
+			resources be included in the DTS?</li>
+		<li>The whole system of additional markup to assist in
+			efficient relationship navigation would be nice to
+			replace by some kind of XLink/XPointer handling
+			software that deals with the relationship navigation
+			directly.  This is tough at the moment because it is
+			hard, for example, to find from the remote resources
+			the locators that reference them. Vat to do? Vat to do?</li>
+	</ul>
+		
+
+	<!-- Put @see and @since tags down here. -->
+
+	<p>
+	xbrlapi.org Java library providing XBRL functionality
+	Copyright (C) 2005, Geoffrey Shuetrim (geoff@galexy.net)
+	</p>
+	
+	<p>
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
+	</p>
+	
+	<p>
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+	<a href="http://www.gnu.org/copyleft/lesser.html">
+	GNU Lesser General Public License for more details.
+	</a>
+	</p>
+	
+	<p>
+	You should have received a copy of the GNU Lesser General Public
+	License along with this library; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+	</p>
+
+</body>
+</html>

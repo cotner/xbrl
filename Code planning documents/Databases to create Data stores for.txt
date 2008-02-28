@@ -1,0 +1,16 @@
+Databases to create Data stores for.
+
+1. Mysql relational database: http://sourceforge.net/projects/myxmldb/
+2. XHive DB. www.x-hive.com
+3. Tamino (Software AG)
+4. DB-XML
+5. Data Direct systems. http://www.datadirect.com/
+6. MonetDB Open source XML Query capable database: http://monetdb.cwi.nl/
+7. Ipedo XML Database http://www.ipedo.com/html/ipedo_xml_database.html
+8. Microsoft SQL Server
+9. IBM DB2 (XML Extender)
+10. Oracle : http://www.oracle.com/technology/tech/xml/index.html (XML:DB see http://www.oracle.com/technology/tech/xml/xmldb/index.html)
+
+See also:
+
+http://www.rpbourret.com/xml/XMLDatabaseProds.htm#native

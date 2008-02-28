@@ -1,0 +1,113 @@
+on Local document caching mechanism.
+
+Desired outcomes
+----------------
+
+Documents are obtained from their original URLs 
+when they are first required.  On their first usage
+they are saved into a local document cache to speed 
+up access and to support future usage in off-line 
+mode.
+
+Documents are cached in a file structure that mirrors URLs
+so each URL corresponds to a unique file in the cache.
+
+Documents are cached in their original format enabling 
+reading of the source XML files by humans.
+
+The existing local caching system needs to be replaced with 
+the XML Catalog system in Apache Commons.
+
+See:
+1. http://www.oasis-open.org/committees/entity/spec-2001-08-06.html 
+for a specification of XML Catalogs.
+
+2. http://www.xml.com/pub/a/2004/03/03/catalogs.html for a tutorial 
+on XML Catalogs and JAXP.
+
+3. http://xml.apache.org/commons/components/resolver/index.html for the 
+Apache Commons Resolver that uses the Oasis XML Catalogs specification.
+
+It may also be worth exploring "Entity management systems".  These are systems 
+for managing the process of associating names of entities with the locations
+of the entities themselves.
+
+Handling of URLs passed to the loader to be loaded into the data store.
+-----------------------------------------------------------------------
+1. Use the custom entity resolver to do two things: retrieve the file at
+the original URL and store it in the cache; and then provide an 
+input source that points to the file in the cache.  This input source is
+what gets parsed by SAX to drive the data storage process.
+
+2. Create a content handler to drive the SAX parsing.  Pass in the original URL 
+for the document being parsed to become a property of the content handler.  The
+content handler uses this original URL as the starting point for construction of
+an XML Schema grammar model if the document being parsed is an XML Schema schema.
+
+Note that, as yet, the parsing involved in the construction of the XML Schema grammar
+model is not drawing on the files in the local cache.  This is why the original
+URL is required by the content handler.
+
+When a file is being loaded, URLs of new files to be explored can also be found.  
+These URLs get stashed by the loader for later loading.  URLs can be found in 
+simple links, locators in extended links and in custom simple links (XML Schema
+import and include elements).  These URLs can be absolute or relative.  Relative 
+URLs in XLink href attributes can be resolved relative to a base 
+URL specified by the XML Base attribute if one occurs.  Otherwise the 
+base URL is the original URL (as opposed to the cache URL) of the document 
+that contains the element with the XLink href attribute on it. Relative URLs in 
+XML Schema import and include elements are not resolved relative to URLs 
+in XML Base attributes.
+
+The discovery of new URLs for loading is done in the XBRL Xlink handler.  New URLs
+can be found in extended link locators or in simple links or in custom links (XML Schema
+import and include elements).
+
+For locators, the URL provided by the XLink href attribute is resolved against the base URL
+to get an absolute URL.  This URL is then passed back to the loader for stashing in the 
+queue of documents to be loaded.
+
+For simple links and custom links (that are all treated as simple links), the URL provided 
+is resolved against the base URL to get an absolute URL.  This URL is then passed back to 
+the loader for stashing in the queue of documents to be loaded.
+
+By resolving all URLs against the base URL resolver, the content handler (and its XLink handler)
+ensure that the URLs are not being resolved against the URL of the locally cached version of 
+files.  This exploits the fact that the base URL resolver is initialised with the original 
+URL for the file being SAX parsed rather than the local cache URL that is being used to actually
+retrieve the document content to trigger the SAX parsing events.
+
+Handling of URLs for building XML Schema models
+-----------------------------------------------
+Some files that are loaded into data stores are XML Schema schemas.  For these
+files, it is necessary to build an XML Schema grammar model to understand how
+to fragment them.  This XML Schema grammar model is built by parsing the schema
+file using the original URL.  Note that this original URL is NOT the URL of the 
+local cache document.  Thus, XML Schema grammar models are not leveraging the local
+cache.  THIS NEEDS TO CHANGE.
+
+Base URL resolution.
+--------------------
+The newDocument event in the SAX parsing content handler sets up a new
+BaseURLSAXResolver.  This handles the resolution of relative URLs against
+the URLs provided by the original URL of the document and the information
+provided in XML Base attributes.
+The Base URL resolver is initialised with the original absolute URL of the
+document that is being parsed by the SAX parser.
+The base URL resolver is then passed along to the the XBRL XLink handler so
+that the XLink handler can use it for resolving URLs as they are discovered
+in XLink hrefs.
+
+The startElement method in the SAX content handler always begins by checking for
+any XLink processing requirements.  This checking for XLink processing
+requirements begins by updating the base URL resolver for any XML base 
+attributes on the element being started.
+
+New features required for this process
+--------------------------------------
+1. Enable the loader to be called after providing it with a map from 
+original URLs to local URLs.  This needs to be more sophisticated than 
+just substituting variant files for original files in the local 
+document cache.
+
+2. The local cache needs to be used for the XML Grammar model builder also.

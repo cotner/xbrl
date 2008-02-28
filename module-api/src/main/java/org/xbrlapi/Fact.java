@@ -1,0 +1,58 @@
+package org.xbrlapi;
+
+import org.xbrlapi.utilities.XBRLException;
+
+
+/**
+ * @author Geoffrey Shuetrim (geoff@galexy.net)
+ */
+
+public interface Fact extends Fragment {
+
+    /**
+     * Return true if the fact is a tuple and false otherwise
+     */
+    public boolean isTuple() throws XBRLException;
+    
+	/**
+	 * Get the instance that this fact is a part of
+	 * @return the xbrl instance fragment
+	 * @throws XBRLException
+	 */
+	public Instance getInstance() throws XBRLException;
+
+	/**
+	 * Set the instance that this fact is a part of
+	 * @param instance the xbrl instance fragment
+	 * @throws XBRLException
+	 */
+	public void setInstance(Instance instance) throws XBRLException;	
+	
+	/**
+	 * Get the tuple that this fact is a part of
+	 * @return the xbrl tuple fragment or null if this 
+	 * @throws XBRLException
+	 */
+	public Tuple getTuple() throws XBRLException;
+
+	/**
+	 * Set the tuple that this fact is a part of 
+	 * @param tuple the xbrl tuple fragment
+	 * @throws XBRLException
+	 */
+	public void setTuple(Tuple tuple) throws XBRLException;
+
+	/**
+	 * Get the concept that defines the syntax for this fact.
+	 * @return the appropriate concept fragment from the data store.
+	 * @throws XBRLException if the concept cannot be found.
+	 */
+	public Concept getConcept() throws XBRLException;
+
+	/**
+	 * @return true if the fact is reported with units and false otherwise.
+	 * @throws XBRLException
+	 */
+	public boolean isNumeric() throws XBRLException;
+
+}

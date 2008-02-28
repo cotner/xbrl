@@ -1,0 +1,24 @@
+Current logic involves:
+
+Get all locator fragments and for each:
+	1. Get the absolute URL that it locates
+	2. Get the XPointer part of the absolute URL
+	3. Get the absolute URL without the XPointer part
+	4. Set the url used by the XPointer resolver to the absolute URL without the XPointer part
+	4. Resolve the XPointer to determine the fragment ID that the locator is pointing to
+	5. Add the fragment ID to the metadata about XPointer
+
+The XPointer is resolved by:
+	1. Parse the pointer into parts with the XPointer parser
+	2. Iterate the pointer parts from left to right and for each:
+		1. Get the unescaped data for the part
+		2. If the pointer part is an xmlns scheme part then add the namespace declaration to the namespace map
+		3. If the pointer part is an element scheme part then
+			1. Build up the xpath that will find the necessary fragment:
+				It is of the form /metadata[@url='URL' and xpointer/@expression='DATA']
+			2. Find a vector of IDs of fragments matching the given metadata XPath expression.  
+				There should only be one.  If this is the case, return it.
+
+The costly part of this process is the xpath expression evaluation against the collection of metadata documents.
+It can be sped up by:
+	1. Getting the indexing of the metadata to work.

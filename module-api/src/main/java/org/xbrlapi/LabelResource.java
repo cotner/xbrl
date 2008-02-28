@@ -1,0 +1,22 @@
+package org.xbrlapi;
+
+import org.xbrlapi.utilities.XBRLException;
+
+/**
+ * @author Geoffrey Shuetrim (geoff@galexy.net)
+ */
+
+
+public interface LabelResource extends MixedContentResource {
+
+	/**
+	 * Get the value of the XHTML resource as a text string,
+	 * @return the value of the XHTML resource as a text string
+	 * with the XHTML markup replaced by spaces and with leading, trailing
+	 * and double spaces removed.
+	 * @throws XBRLException
+	 */
+	public String getStringValue() throws XBRLException;
+	
+
+}

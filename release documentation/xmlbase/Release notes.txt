@@ -1,0 +1,40 @@
+Release details:
+
+Release 3.1
+Feb 28, 2008
+Point release to include various bug-fixes. 
+
+Release 3.0
+Date July 29, 2007
+Updated release number to keep in line with other modules.
+
+Release 2.0
+Date March 23, 2007
+New release to bring into line with
+release numbers for other packages
+for the XBRLAPI.
+
+
+Release: 1.1
+Date: September 14, 2006
+
+Release: 1.0
+Date: May 6, 2005
+
+XBRLAPI XML Base Resolver
+
+The XML Base resolver is a lightweight 
+but complete XML Base resolution library 
+to be used with a SAX parsing process or
+a XML DOM document.
+
+Installation instructions.
+
+1. Make sure you have Java 1.42 installed 
+(this has not been tested with other versions)
+2. Install the binary jar file on 
+your classpath.
+3. Make sure you have a recent version of 
+the Xerces JARs installed
+4. Review the javadoc API documentation and the 
+JUnit test cases if you need examples.

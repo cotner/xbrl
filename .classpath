@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="module-api/src/main/java"/>
+	<classpathentry kind="src" path="conf"/>
+	<classpathentry kind="src" path="module-xindice/src/test/java"/>
+	<classpathentry kind="src" path="module-bdb-xml/src/main/java"/>
+	<classpathentry kind="src" path="module-xlink/src/main/java"/>
+	<classpathentry kind="src" path="module-exist/src/main/java"/>
+	<classpathentry kind="src" path="module-api/src/test/java"/>
+	<classpathentry kind="src" path="module-xlink/src/test/java"/>
+	<classpathentry kind="src" path="module-xpointer/src/test/java"/>
+	<classpathentry kind="src" path="module-utilities/src/main/java"/>
+	<classpathentry kind="src" path="module-xindice/src/main/java"/>
+	<classpathentry kind="src" path="module-bdb-xml/src/test/java"/>
+	<classpathentry kind="src" path="module-xmlbase/src/main/java"/>
+	<classpathentry kind="src" path="module-exist/src/test/java"/>
+	<classpathentry kind="src" path="module-xmlbase/src/test/java"/>
+	<classpathentry kind="src" path="module-utilities/src/test/java"/>
+	<classpathentry kind="src" path="module-xpointer/src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/xbrlapi"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

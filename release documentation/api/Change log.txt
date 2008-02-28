@@ -1,0 +1,111 @@
+28. Feb. 2008
+Fixed up a bug in Xindice store to DOM construction.
+
+25 Feb. 2008
+Discovery of documents provided as a string now works correctly.
+QName lookups for fragments is faster and always works.
+Network construction works for networks of various types of labels.
+
+25. Oct. 2007
+Fixed up a bug in Arc instantiation that was preventing
+them from being stored in the database.  The bug was
+introduced during the redesign of the fragment constructors.
+
+24 Oct. 2007
+Added the getFacts method to the concept implementation.
+Added the isNumeric method to the fact implementation.
+
+16 Oct. 2007
+Modified the fragment factory to call the setFragmentIndex method
+when generating new fragments.
+
+17 Sep. 2007
+Modified fragment implementations to make all fragments JavaBeans.
+Serialization of fragments, builders, and stores is yet to be implemented.
+
+5 Sep. 2007
+
+Eliminated non-working attempts to insert DTD declarations into data store fragments.
+
+Added a new getDeclaration method for reference part fragments.
+
+Fixed a bug in the removeFragment implementation for the DOM data store whereby the
+removed fragments were not getting taken out of the XML DOM structure, only the maps onto
+that DOM structure.
+
+Added the deleteDocument and deleteRelated document methods to the store interface.  Provided
+implementations of these methods in the BaseStoreImpl class.  Created tests of the methods using 
+the DOM data store.
+
+4 Sep. 2007
+
+Added BDB XML indexing of the arcroleType and roleType URI attributes.
+
+Added ability to recognise generic labels and references as 
+standard labels and references, respectively.
+
+Added the isProhibited method to arcs.
+
+1 Sep. 2007
+
+Added a method to get linkroles that contain arcs using a specified arcrole.
+
+15 Aug. 2007
+
+Added getSimpleLinks method to the fragment interface to get the child simple links of any fragment.
+
+Checked unit tests against the latest cut of the XBRL 2.1 conformance suite.
+
+Enabled caching for documents provided to a loader as a string rather than a URL.
+This fixed a bug in the XML Schema grammar construction for schemas provided as a
+string to the loader.
+
+Fixed a database deletion problem in the Xindice tests that arose because of 
+multiple simultaneous stores using the same database.
+
+Provided a new getChildFragments method of the data store to enable retrieval of all
+child fragments with a given data type.
+
+14 Aug. 2007
+
+Enabled the discovery processes to optionally include analysis of XSI schema 
+location attributes.
+
+Added schema method to enable discovery of extended links contained within the schema.
+
+11 Aug 2007
+
+Added new discoverNext method to the loader implementation to enable intervention 
+in the load process between each document that gets parsed.
+
+Added unit tests of the discoverNext method using in-memory and persistent data stores.
+
+9 August, 2007
+
+Added unit tests to cover discovery of reference part declarations.
+
+8 Aug. 2007
+
+Fixed bug in the SimpleLink#getTargetFragment where href attributes without an XPointer
+ would generate a query that did not restrict matching fragments to the document root.
+
+Extended the set of nodes in a data store that are indexed for equality matching for the 
+BDB XML database implementation.
+
+Added getImports and getIncludes methods to the Schema fragment API.
+
+Added unit tests to cover schema imports.
+
+July 29, 2007
+Added new objects to provide functionality at the level
+of individual relationships and networks of relationships.
+
+May 21, 2007
+Fixed up omission of class files from the JAR file.
+
+March 23, 2007
+Created the api module by splitting 
+out the non-DOM data store implementations
+and by splitting out the XLink, XMLBase and
+XPointer packages.
+

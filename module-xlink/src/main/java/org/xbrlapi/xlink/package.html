@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+  <title>XBRLAPI XLink processor.</title>
+</head>
+<body bgcolor="white">
+
+	Defines the contract to be met by the XLink processor.
+	
+    <p>
+    This package contains a set of interfaces that define 
+    the contract for the XLink functionality required to
+    compile an XBRL discoverable taxonomy set.
+    </p>
+	
+	<h2>Package Specification</h2>
+	
+    <p>
+	The XLink functionality are intended to provide 
+	a comprehensive set of functions relating to the processing
+	of simple and extended (3rd party) extended links.
+    </p>    
+
+    <p>
+	Because XLinking can often (as is seen in the case of XBRL)
+	be augmented with other kinds of linking syntaxes, the
+	XLink interfaces also provide a means for the XLink syntax
+	to be augmented with a set of custom linking syntaxes.
+    </p>
+
+	<p>
+	For example, XBRL treats XML Schema import and include
+	elements as simple links from the perspective of a
+	link processor that is required to compile an XBRL 
+	discoverable taxonomy set.
+	</p>
+
+	<p>
+	Because the XLink specification only sets out the
+	syntax and semantics for X-links but is silent on what
+	should be produced by an XLink processor, the XLink 
+	processor has been implemented in much the same way that
+	the SAX parser has been implemented.  It recognises XLink
+	events (the start and end of XLink elements) and the content
+	of XLink Title elements and then triggers XLink events that
+	are handled by an XLinkHandler.  The XLink Handler is 
+	responsible for making the desired responses to XLink 
+	syntax explicit.
+	</p>
+	
+	<p>
+	This user responsiveness extends to handling of XLink
+	errors.  Any XLink specification violations result in
+	an error message being passed to the error event handler
+	in the XLinkHandler.  This give the XLink handler control
+	over how the error is to be dealt with, stopping the parsing
+	process or continuing in some way.
+	</p>
+
+	<!-- Put @see and @since tags down here. -->
+
+	<p>
+	xbrlapi.org Java library providing XBRL functionality
+	Copyright (C) 2005, Geoffrey Shuetrim (geoff@galexy.net)
+	</p>
+	
+	<p>
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
+	</p>
+	
+	<p>
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+	<a href="http://www.gnu.org/copyleft/lesser.html">
+	GNU Lesser General Public License for more details.
+	</a>
+	</p>
+	
+	<p>
+	You should have received a copy of the GNU Lesser General Public
+	License along with this library; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+	</p>
+
+</body>
+</html>

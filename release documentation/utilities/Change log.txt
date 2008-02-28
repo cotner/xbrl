@@ -1,0 +1,2 @@
+July 29, 2006
+Created the core utilities module that is required by all other modules.
