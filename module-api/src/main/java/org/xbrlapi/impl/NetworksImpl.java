@@ -117,11 +117,11 @@ public class NetworksImpl implements Networks {
 		FragmentList<F> fragments = new FragmentListImpl<F>();
 		
     	List<Network> selectedNetworks = this.getNetworks(arcRole);
-    	logger.info("There are " + selectedNetworks.size() + " networks with arcrole " + arcRole);
+    	logger.debug("There are " + selectedNetworks.size() + " networks with arcrole " + arcRole);
     	for (Network network: selectedNetworks) {
-            logger.info("A network has linkrole " + network.getLinkRole());
+            logger.debug("A network has linkrole " + network.getLinkRole());
     		List<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
-            logger.info("The network contains " + relationships.size() + " relationships from " + sourceIndex);
+            logger.debug("The network contains " + relationships.size() + " relationships from " + sourceIndex);
         	for (Relationship relationship: relationships) {
         		fragments.addFragment(relationship.<F>getTarget());
         	}

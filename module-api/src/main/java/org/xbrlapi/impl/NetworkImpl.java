@@ -269,9 +269,7 @@ public class NetworkImpl implements Network {
 		HashMap<String,EquivalentRelationships> sr = sourceRelationships.get(index);
 		logger.info("There are " + sr.size() + " source relationships.");
 		for (String key: sr.keySet()) {
-            logger.info("Semantic key = "+ key);
 			EquivalentRelationships er = sr.get(key);
-			logger.info("# of equivalent relationships = "+ er.getLength());
 			activeRelationships.add(er.getActiveRelationship());
 		}
 		return activeRelationships;
