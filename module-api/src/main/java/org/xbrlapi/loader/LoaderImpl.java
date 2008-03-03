@@ -185,6 +185,7 @@ public class LoaderImpl implements Loader {
      */
     public void cancelInterrupt() {
         interrupt = false;
+        logger.info("Cancelled the discovery interrupt.");
     }
     
     /**
@@ -634,10 +635,7 @@ public class LoaderImpl implements Loader {
             url = getNextDocumentToExplore();
         }
 
-        getStore().storeLoaderState(this.getCurrentFragmentId(),this.getDocumentsStillToAnalyse());
-
-        getStore().serialize(getStore().getStoreState().getMetadataRootElement());
-        
+        getStore().storeLoaderState(this.getCurrentFragmentId(),this.getDocumentsStillToAnalyse());        
         setDiscovering(false);
 
     }
@@ -963,11 +961,11 @@ public class LoaderImpl implements Loader {
 
         // Make sure that the URL is a valid URI and is absolute
         try {
-            if (!new URI(url.toString()).isAbsolute())
-                throw new XBRLException(
-                        "The URL: "
-                                + url
-                                + " needs to be resolved against a base URL prior to stashing.");
+            if (!new URI(url.toString()).isAbsolute()) {
+                logger.info("Failing to stash " + url);
+                throw new XBRLException("The URL: " + url + " needs to be resolved against a base URL prior to stashing.");                
+            }
+                
         } catch (URISyntaxException e) {
             throw new XBRLException("The URL: " + url + " is not a valid URI.",
                     e);
