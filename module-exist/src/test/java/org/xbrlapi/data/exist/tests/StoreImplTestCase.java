@@ -49,51 +49,9 @@ public class StoreImplTestCase extends BaseTestCase {
 		}
 	}
 
-	public void testUpdateFragments() {
-		try {
-			String index = store.getNextFragmentId();
-			store.storeFragment(new MockFragmentImpl(index));
 
-			String xupdate = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-				+ "<xu:modifications version=\"1.0\" "
-                + "xmlns:xbrlapi=\"http://xbrlapi.org/\" "
-				+ "xmlns:xu=\"http://www.xmldb.org/xupdate\">"
-				+ "<xu:append select=\"/*\" child=\"1\">"
-				+ "<xu:element name=\"child\"><xu:attribute "
-				+ "name=\"type\">home</xu:attribute>value</xu:element>"
-				+ "</xu:append>" + "</xu:modifications>";
 
-	        store.updateFragments(xupdate);
-	        Fragment f = store.getFragment(index);
-			assertEquals(1, f.getMetadataRootElement().getElementsByTagName("child").getLength());
-			store.removeFragment(index);
-		} catch (XBRLException e) {
-			fail("Unexpected exception. " + e.getMessage());
-		}
-	}
 
-	public void testUpdateFragment() {
-		try {
-			String index = store.getNextFragmentId();
-			store.storeFragment(new MockFragmentImpl(index));
-
-			String xupdate = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-					+ "<xu:modifications version=\"1.0\" "
-	                + "xmlns:xbrlapi=\"http://xbrlapi.org/\" "
-					+ "xmlns:xu=\"http://www.xmldb.org/xupdate\">"
-					+ "<xu:append select=\"/*\" child=\"1\">"
-					+ "<xu:element name=\"child\"><xu:attribute "
-					+ "name=\"type\">home</xu:attribute>value</xu:element>"
-					+ "</xu:append>" + "</xu:modifications>";
-
-			store.updateFragment(index, xupdate);
-			Fragment f = store.getFragment(index);
-			assertEquals(1, f.getMetadataRootElement().getElementsByTagName("child").getLength());
-			store.removeFragment(index);
-		} catch (XBRLException e) {
-			fail("Unexpected exception. " + e.getMessage());
-		}
-	}
 	
 	public void testQueryData() {
 		try {			
@@ -101,7 +59,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			store.storeFragment(new MockFragmentImpl(index));
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
 	        FragmentList<Fragment> fragments = store.<Fragment>query(xpathQuery);
-			assertEquals("609",(new Long(fragments.getLength())).toString());
+			assertEquals("610",(new Long(fragments.getLength())).toString());
 	        Fragment fragment = fragments.getFragment(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
 		} catch (XBRLException e) {
@@ -128,7 +86,7 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testGetNextFragmentId() {
 		try {
-			assertEquals("609",store.getNextFragmentId());
+			assertEquals("610",store.getNextFragmentId());
 		} catch (XBRLException e) {
 			fail("Unexpected " + e.getMessage());
 		}

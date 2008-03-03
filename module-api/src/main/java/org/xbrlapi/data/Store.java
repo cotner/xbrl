@@ -70,14 +70,7 @@ public interface Store {
 	 */
 	public void removeFragment(String index) throws XBRLException;
 	
-    /**
-     * Modify the content of the fragment using a string containing
-     * the XUpdate declaration defining the changes to be made.
-     * @param updateDeclaration The declaration of the update to be done.
-     * @return the number of fragments that were updated
-     * @throws XBRLException if the fragment cannot be updated.
-     */
-    public long updateFragments(String updateDeclaration) throws XBRLException;
+
     
     /**
      * This deletion method does not ensure that all other documents that
@@ -101,14 +94,7 @@ public interface Store {
     
 
 
-	/**
-	 * Updates the fragment specified by the provided index.
-	 * @param index The index of the fragment to be updated.
-	 * @param updateDeclaration The XUpdate markup describing the changes to make to
-	 * the fragments.
-	 * @return the number of fragments affected by the update.
-	 */
-	public long updateFragment(String index, String updateDeclaration) throws XBRLException;
+
 
 	/**
 	 * Run a query against the collection of all fragments in the store.
@@ -155,6 +141,13 @@ public interface Store {
      * @throws XBRLException
      */
     public void serialize(Element what) throws XBRLException;
+    
+    /**
+     * Serialize the specified fragment
+     * @param fragment The fragment to be serialised.
+     * @throws XBRLException
+     */
+    public void serialize(Fragment fragment) throws XBRLException;
     
     /**
      * Serialize the specified XML DOM node.
@@ -261,12 +254,16 @@ public interface Store {
      */
     public boolean hasDocument(String url) throws XBRLException;
     
+
+    
     /**
-     * Stores the next fragment ID to use if the DTS is ever extended
+     * Stores the state of the document discovery process.
      * @param id  The next ID to use for the next fragment to be added to the DTS.
+     * @param documents The list of URLs of the documents remaining to be
+     * discovered.
      * @throws XBRLException
      */
-    public void storeNextFragmentId(String id) throws XBRLException;
+    public void storeLoaderState(String id,List<String> documents) throws XBRLException;    
 
     /**
      * Get the next fragment ID to use when extending a DTS, instead of starting at 1 again
@@ -275,6 +272,21 @@ public interface Store {
      * @throws XBRLException
      */
     public String getNextFragmentId() throws XBRLException;
+    
+    /**
+     * @return the list of URLs of the documents remaining to be analysed.
+     * @throws XBRLException if any of the document URLs are malformed.
+     */
+    public List<URL> getDocumentsToDiscover() throws XBRLException;
+    
+    /**
+     * @return a fragment summarising the state of the data store.
+     * The fragment provides information about the next fragment index
+     * and the documents that remain to be analysed/discovered.
+     * The summary is only accurate if the store is not currently being
+     * operated on by a data loader.
+     */
+    public Fragment getStoreState() throws XBRLException;
     
 
 

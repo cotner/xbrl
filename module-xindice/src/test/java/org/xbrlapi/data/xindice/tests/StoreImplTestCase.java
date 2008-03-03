@@ -56,55 +56,16 @@ public class StoreImplTestCase extends BaseTestCase {
 		}
 	}
 
-	/**
-	 * Test the updating of a fragment in the store
-	 * using XUpdate features of the Xindice store.
-	 */
-	public void testUpdateFragments() {
-		try {
-			String index = store.getNextFragmentId();
-			store.storeFragment(new MockFragmentImpl(index));
-	        String xupdate =
-	            "<xu:modifications version=\"1.0\""
-                    + "      xmlns:xbrlapi=\"http://xbrlapi.org/\" "
-	                + "      xmlns:xu=\"http://www.xmldb.org/xupdate\">"
-	                + "   <xu:rename select=\"/" + Constants.XBRLAPIPrefix + ":" + "fragment\">quirky</xu:rename>"
-	                + "</xu:modifications>";
-	        store.updateFragments(xupdate);
-	        Fragment f = store.getFragment(index);
-			assertEquals("quirky",f.getMetadataRootElement().getLocalName());
-			store.removeFragment(index);
-		} catch (XBRLException e) {
-			fail("Unexpected exception. " + e.getMessage());
-		}
-	}
 
-	public void testUpdateFragment() {
-		try {
-			String index = store.getNextFragmentId();
-			store.storeFragment(new MockFragmentImpl(index));
-	        String xupdate =
-	            "<xu:modifications version=\"1.0\""
-                    + "      xmlns:xbrlapi=\"http://xbrlapi.org/\" "
-	                + "      xmlns:xu=\"http://www.xmldb.org/xupdate\">"
-	                + "   <xu:rename select=\"/" + Constants.XBRLAPIPrefix + ":" + "fragment\">quirky</xu:rename>"
-	                + "</xu:modifications>";
-	        store.updateFragment(index,xupdate);
-	        Fragment f = store.getFragment(index);
-			assertEquals("quirky",f.getDataRootElement().getOwnerDocument().getDocumentElement().getLocalName());
-			store.removeFragment(index);
-		} catch (XBRLException e) {
-		    e.printStackTrace();
-			fail("Unexpected exception. " + e.getMessage());
-		}
-	}
+
+
 	
 	public void testQueryData() {
 		try {			
 			String index = store.getNextFragmentId();
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
 	        FragmentList<Fragment> fragments = store.<Fragment>query(xpathQuery);
-			assertEquals("608",(new Long(fragments.getLength())).toString());
+			assertEquals("609",(new Long(fragments.getLength())).toString());
 	        Fragment fragment = fragments.getFragment(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
 		} catch (XBRLException e) {
@@ -149,7 +110,7 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testGetNextFragmentId() {
 		try {
-			assertEquals("609",store.getNextFragmentId());
+			assertEquals("610",store.getNextFragmentId());
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail("Unexpected " + e.getMessage());

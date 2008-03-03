@@ -744,6 +744,7 @@ public class FragmentImpl implements Fragment {
      * @param id The value of the ID.
      * @throws XBRLException.
      * @see org.xbrlapi.Fragment#appendID(String)
+     * TODO Eliminate the ID metadata element given the existence of the xptr elements.
      */
     public void appendID(String id) throws XBRLException {
     	HashMap<String,String> attributes = new HashMap<String,String>();

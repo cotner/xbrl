@@ -53,7 +53,7 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 	 * @return the new store.
 	 * @throws XBRLException
 	 */
-	public StoreImpl createStore() {
+	public StoreImpl createStore() throws XBRLException {
 		return new StoreImpl();
 	}
 

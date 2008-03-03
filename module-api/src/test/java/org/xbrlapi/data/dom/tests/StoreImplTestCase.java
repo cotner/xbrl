@@ -83,7 +83,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		}
 		
 		try {
-			assertEquals("1",(new Long(fragments.getLength())).toString());
+			assertEquals("2",(new Long(fragments.getLength())).toString());
 	        assertEquals("fragment",fragments.getFragment(0).getDataRootElement().getLocalName());
 			store.removeFragment(index);
 		} catch (Exception e) {

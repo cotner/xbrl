@@ -175,11 +175,13 @@ public class LoaderImpl implements Loader {
      * has been requested and false otherwise.
      */
     private boolean interruptRequested() {
+        List<String> documents = this.getDocumentsStillToAnalyse();
+        
         return interrupt;
     }
 
     /**
-     * Cancels a request for an interrupt.
+     * @see org.xbrlapi.loader.Loader#cancelInterrupt()
      */
     public void cancelInterrupt() {
         interrupt = false;
@@ -595,13 +597,7 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Begin the XBRL DTS discovery process with the URLs that are already in
-     * the loading/discovery queue. The discovery process can extend this queue.
-     * The store is checked for URLs in the queue before processing them to make
-     * sure that already processed URLs are not reprocessed.
-     * 
-     * @throws XBRLException
-     *             if the discovery process fails.
+     * @see org.xbrlapi.loader.Loader#discover()
      */
     public void discover() throws XBRLException {
 
@@ -609,6 +605,9 @@ public class LoaderImpl implements Loader {
         setDiscovering(true);
 
         this.setNextFragmentId(getStore().getNextFragmentId());
+        for (URL url: getStore().getDocumentsToDiscover()) {
+            this.stashURL(url);
+        }
 
         URL url = getNextDocumentToExplore();
         while (url != null) {
@@ -635,8 +634,10 @@ public class LoaderImpl implements Loader {
             url = getNextDocumentToExplore();
         }
 
-        getStore().storeNextFragmentId(this.getCurrentFragmentId());
+        getStore().storeLoaderState(this.getCurrentFragmentId(),this.getDocumentsStillToAnalyse());
 
+        getStore().serialize(getStore().getStoreState().getMetadataRootElement());
+        
         setDiscovering(false);
 
     }
@@ -649,8 +650,7 @@ public class LoaderImpl implements Loader {
         if (isDiscovering()) return;
         setDiscovering(true);
 
-        logger.debug("The next fragment ID is: "
-                + getStore().getNextFragmentId());
+        logger.debug("The next fragment ID is: " + getStore().getNextFragmentId());
         this.setNextFragmentId(getStore().getNextFragmentId());
 
         URL url = getNextDocumentToExplore();
@@ -673,7 +673,7 @@ public class LoaderImpl implements Loader {
                     + " milliseconds");
         }
 
-        getStore().storeNextFragmentId(this.getCurrentFragmentId());
+        getStore().storeLoaderState(this.getCurrentFragmentId(),this.getDocumentsStillToAnalyse());
 
         setDiscovering(false);
 
@@ -743,7 +743,7 @@ public class LoaderImpl implements Loader {
      * setDocumentURL(url.toString()); parse(url, inputSource); } url =
      * getNextDocumentToExplore(); }
      * 
-     * getStore().storeNextFragmentId(this.getCurrentFragmentId());
+     * getStore().storeLoaderState(this.getCurrentFragmentId(),this.getDocumentsStillToAnalyse());
      *  }
      */
 

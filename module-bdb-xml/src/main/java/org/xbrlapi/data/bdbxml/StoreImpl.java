@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.LinkedList;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -171,6 +172,12 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 				throw new XBRLException("The default index could not be set.", e);
 			}
 			
+            try {
+                this.getStoreState();
+            } catch (XBRLException e) {
+                this.storeLoaderState("0",new LinkedList<String>());
+            }			
+			
 	    } catch (XmlException e) {
 			throw new XBRLException("The BDB XML database container could not be opened.", e);
 	    }
@@ -287,8 +294,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		String index = fragment.getFragmentIndex();
 		
 		if (hasFragment(index)) {
-        	throw new XBRLException("A fragment with index " + index + " already exists.");
-        }
+		    this.removeFragment(index);
+		}
 
 		try {
 
@@ -403,19 +410,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		}	
 	}
 
-	/**
-	 * @see org.xbrlapi.data.Store#updateFragment(String, String)
-	 */
-	public long updateFragment(String index, String updateDeclaration) throws XBRLException {
-		throw new XBRLException("Update functionality is not implemented.");
-	}
 
-	/**
-	 * @see org.xbrlapi.data.Store#updateFragments(String)
-	 */
-	public long updateFragments(String updateDeclaration) throws XBRLException {
-		throw new XBRLException("Update functionality is not implemented.");
-	}
+
+
 
 	/**
 	 * @see org.xbrlapi.data.Store#query(String)
@@ -487,51 +484,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	
 
 
-	/**
-	 * @see org.xbrlapi.data.Store#storeNextFragmentId(String)
-	 */
-	public void storeNextFragmentId(String id) throws XBRLException {
-		try {
 
-			String xmlString = "<summary maximumFragmentId='" + id + "'/>";
-			
-			try {
-				XmlDocument xmlDocument = dataContainer.getDocument("summary");
-				xmlDocument.setContent(xmlString);
-				dataContainer.updateDocument(xmlDocument, xmlUpdateContext);
-				xmlDocument.delete();
-			} catch (XmlException documentNotFoundException) {
-				InputStream inputStream = new ByteArrayInputStream(xmlString.getBytes());			
-				XmlInputStream xmlInputStream = dataManager.createInputStream(inputStream);
-				dataContainer.putDocument("summary", xmlInputStream, xmlUpdateContext, documentConfiguration);
-				xmlInputStream.delete();
-			}
-			
-		} catch (XmlException e) {
-    		throw new XBRLException("The next fragment ID could not be stored.",e);
-        }
-	}
 
-	/**
-	 * @see org.xbrlapi.data.Store#getNextFragmentId()
-	 */
-	public String getNextFragmentId() throws XBRLException {
-		try {
-			XmlDocument xmlDocument = null;
-			try {
-				xmlDocument = dataContainer.getDocument("summary");
-			} catch (XmlException noDocumentException) {
-				return "1";
-			}
-			Document document = XMLDOMBuilder.newDocument(xmlDocument.getContentAsInputStream());
-			xmlDocument.delete();
-			Element root = document.getDocumentElement();
-			String maxId = root.getAttribute("maximumFragmentId");
-			if (maxId.equals("")) return "1";
-			return maxId;
-		} catch (XmlException e) {
-			throw new XBRLException("The summary document could not be retrieved from the store.",e);
-		}
-	}
+
 
 }

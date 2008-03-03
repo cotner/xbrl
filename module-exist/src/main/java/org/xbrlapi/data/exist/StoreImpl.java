@@ -1,5 +1,7 @@
 package org.xbrlapi.data.exist;
 
+import java.util.LinkedList;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,7 +21,6 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
 import org.xmldb.api.modules.XPathQueryService;
-import org.xmldb.api.modules.XUpdateQueryService;
 
 /**
  * Implementation of the XBRL data store using eXist
@@ -91,7 +92,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		if (! storeAlreadyExisted) {
 
 			// Initialise the store fragment counter.
-			this.storeNextFragmentId("1");
+			this.storeLoaderState("0",new LinkedList<String>());
 			
 			// Add the collection configuration (indexing information) if the store uses a new collection.
 			Collection configParentCollection = connection.getCollection("system/config");
@@ -202,7 +203,10 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
 		if (fragment == null) throw new XBRLException("The fragment is null so it cannot be added.");
 		String index = fragment.getFragmentIndex();
-		if (hasFragment(index)) throw new XBRLException("A fragment with index " + index + " already exists.");
+		
+		if (hasFragment(index)) {
+            this.removeFragment(index);
+        }
 
         if (fragment.getStore() != null) {
 	    	try {
@@ -302,36 +306,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         }
 	}
 	
-	/**
-	 * Updates the fragment within the DTS specified by the provided index.
-	 * @param index The index of the fragment to be updated.
-	 * @param updateDeclaration The XUpdate markup describing the changes to make to
-	 * the fragments in the DTS.
-	 * @return the number of fragments affected by the update.
-	 */
-	public long updateFragment(String index, String updateDeclaration) throws XBRLException {
-        try {
-            XUpdateQueryService service = (XUpdateQueryService) collection.getService("XUpdateQueryService", "1.0");         
-            return service.updateResource(index, new String(updateDeclaration));
-        } catch (XMLDBException e) {
-        	throw new XBRLException("The XUpdate of the DTS failed.",e);
-        }
-	}
 
-	/**
-	 * Updates fragments within the DTS
-	 * @param updateDeclaration The XUpdate markup describing the changes to make to
-	 * the fragments in the DTS.
-	 * @return the number of fragments affected by the update.
-	 */
-	public long updateFragments(String updateDeclaration) throws XBRLException {
-        try {
-            XUpdateQueryService service = (XUpdateQueryService) collection.getService("XUpdateQueryService", "1.0");
-            return service.update(updateDeclaration);
-        } catch (XMLDBException e) {
-        	throw new XBRLException("The XUpdate of the DTS failed.",e);
-        }
-	}
+
+
 	
 
 	
@@ -389,43 +366,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		return fragments;		
 	}*/
 	
-    /**
-     * Stores the maximum fragment ID, to use if the DTS is ever extended.
-     * @param id  The next ID to use for the next fragment to be added to the DTS.
-     * @throws XBRLException
-     */
-    public void storeNextFragmentId(String id) throws XBRLException {
-    	try {
-			XMLResource data = (XMLResource) collection.createResource("summary", XMLResource.RESOURCE_TYPE);
-	        data.setContent("<summary maximumFragmentId='" + id + "'/>");
-	        collection.storeResource(data);
-    		    		
-    	} catch (XMLDBException e) {
-    		throw new XBRLException("The next Fragment ID could not be stored.",e);
-    	}
-    }
-
-    /**
-     * Get the maximum fragment ID, to use when extending a DTS, instead of starting at 1 again
-     * and corrupting the DTS data store with duplicate fragment IDs.
-     * @return The next ID to use for the next fragment to be added to the DTS.  Returns 1 if the 
-     * DTS data store is empty.
-     * @throws XBRLException if the maximum fragment ID cannot be retrieved.
-     */
-    public String getNextFragmentId() throws XBRLException {
-    	try {
-    		XMLResource summary = (XMLResource) collection.getResource("summary");
-    		Element documentElement = getDocumentNode(summary).getDocumentElement();
-    		String maxId = documentElement.getAttribute("maximumFragmentId");
-    		if (maxId.equals("")) {
-    			return "1";
-    		} else {
-    			return maxId;
-    		}
-    	} catch (XMLDBException e) {
-    		throw new XBRLException("The next Fragment ID could not be retrieved.",e);
-    	}
-    }
     
 	/**
 	 * @param resource The XMLResource to be used to get the DOM document node.

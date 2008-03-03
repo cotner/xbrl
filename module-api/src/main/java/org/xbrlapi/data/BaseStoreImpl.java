@@ -38,6 +38,7 @@ import org.xbrlapi.Tuple;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.impl.FragmentComparator;
 import org.xbrlapi.impl.FragmentListImpl;
+import org.xbrlapi.impl.MockFragmentImpl;
 import org.xbrlapi.impl.NetworksImpl;
 import org.xbrlapi.impl.RelationshipImpl;
 import org.xbrlapi.utilities.Constants;
@@ -73,6 +74,26 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	public void close() throws XBRLException {
 
 	}
+	
+    /**
+     * @see org.xbrlapi.data.Store#storeLoaderState(String,List<String>)
+     */
+    public void storeLoaderState(String id, List<String> documents) throws XBRLException {
+        try {
+
+            Fragment summary = new MockFragmentImpl("summary");
+            summary.setMetaAttribute("maximumFragmentId",id);
+            for (String document: documents) {
+                HashMap<String,String> values = new HashMap<String,String>();
+                values.put("url",document);
+                summary.appendMetadataElement("document",values);
+            }
+            this.storeFragment(summary);
+            
+        } catch (XBRLException e) {
+            throw new XBRLException("The loader state could not be stored.",e);
+        }
+    }	
 
     /**
      * Serialize the specified XML DOM to the specified destination.
@@ -103,6 +124,15 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public void serialize(Element what) throws XBRLException {
 		serialize(what,System.out);
     }
+    
+    /**
+     * Serialize the specified fragment.
+     * @param what The fragment to be serialised.
+     * @throws XBRLException
+     */
+    public void serialize(Fragment fragment) throws XBRLException {
+        serialize(fragment.getMetadataRootElement(),System.out);
+    }    
     
     /**
      * Serialize the specified XML DOM node.
@@ -466,6 +496,47 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     	storeDOM.appendChild(root);
     	return storeDOM;
     	
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getNextFragmentId()
+     */
+    public String getNextFragmentId() throws XBRLException {
+        Fragment summary = this.getFragment("summary");
+        String maxId = summary.getMetaAttribute("maximumFragmentId");
+        if (maxId == null) {
+            return "1";
+        } else {
+            int value = (new Integer(maxId)).intValue();
+            return (new Integer(value+1)).toString();
+        }
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getStoreState()
+     */
+    public Fragment getStoreState() throws XBRLException {
+        Fragment summary = this.getFragment("summary");
+        return summary;
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getDocumentsToDiscover()
+     */
+    public List<URL> getDocumentsToDiscover() throws XBRLException {
+        Fragment state = getStoreState();
+        NodeList documents = state.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"document");
+        LinkedList<URL> list = new LinkedList<URL>();
+        for (int i=0; i< documents.getLength(); i++) {
+            Element document = (Element) documents.item(i);
+            String url = document.getAttribute("url");
+            try {
+                list.add(new URL(url));
+            } catch (MalformedURLException e) {
+                throw new XBRLException("URL " + url + " is malformed", e);
+            }
+        }
+        return list;
     }
     
 	/**

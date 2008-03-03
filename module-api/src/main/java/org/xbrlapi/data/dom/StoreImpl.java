@@ -5,6 +5,7 @@ package org.xbrlapi.data.dom;
  */
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -57,12 +58,13 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	
 	/**
 	 * Initialise the data store.
-	 * @throws XBRLException if the dom cannot be initialised.
+	 * @throws XBRLException if the loader state cannot be initialised.
 	 */
-	public StoreImpl() {
+	public StoreImpl() throws XBRLException {
 		dom = XMLDOMBuilder.newDocument();
 		store = dom.createElement(ROOT_NAME);
 		dom.appendChild(store);
+		this.storeLoaderState("0",new LinkedList<String>());
 	}
 
 	/**
@@ -97,21 +99,22 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			return;
 		}
 		
-		// Get the fragment index to check that we are not overwriting an existing fragment.
+		// Get the fragment index to delete existing fragments with the same index.
 		String index = fragment.getFragmentIndex();
 		if (hasFragment(index)) {
-        	throw new XBRLException("A fragment with index " + index + " already exists.");
+		    this.removeFragment(index);
         }
-	
+
 		// TODO Eliminate this importNode call.
-		Element element = (Element) dom.importNode(fragment.getBuilder().getMetadata(),true);
-		store.appendChild(element);
-		fragmentMap.put(index, element);
-		indexMap.put(element, index);
-		
+        Element element = (Element) dom.importNode(fragment.getBuilder().getMetadata(),true);
+        store.appendChild(element);
+        fragmentMap.put(index, element);
+        indexMap.put(element, index);
+        
         // Finalise the fragment, ready for use
         fragment.setResource(element);
         fragment.setStore(this);
+
 	}
 
 	/**
@@ -178,30 +181,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         d.getParentNode().removeChild(d);
 	}
 
-	/**
-	 * Updates a fragment in the store.
-	 * 
-	 * @param index
-	 *            The index of the fragment to be updated.
-	 * @param updateDeclaration
-	 *            The XUpdate declaration.
-	 * @return the number of fragments affected by the update.
-	 */
-	public long updateFragment(String index, String updateDeclaration)
-			throws XBRLException {
-		throw new XBRLException("XUpdate functionality is not implemented.");
-	}
 
-	/**
-	 * Updates fragments in the store.
-	 * 
-	 * @param updateDeclaration
-	 *            The XUpdate declaration.
-	 * @return the number of fragments affected by the update.
-	 */
-	public long updateFragments(String updateDeclaration) throws XBRLException {
-		throw new XBRLException("XUpdate functionality is not implemented.");
-	}
+
+
 	
     /**
      * Get the actual DOM that is used to hold the data store.
@@ -271,29 +253,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		}
 	}
 
-	/**
-	 * Stores the maximum fragment ID, to use if the DTS is ever extended.
-	 * 
-	 * @param id
-	 *            The next ID to use for the next fragment to be added to the
-	 *            DTS.
-	 * @throws XBRLException
-	 */
-	public void storeNextFragmentId(String id) throws XBRLException {
-		nextId = id;
-	}
 
-	/**
-	 * Get the next ID, to use when adding the next fragment
-	 * to a data store.
-	 * 
-	 * @return The next ID to use for the next fragment to be added to the DTS.
-	 *         Returns 1 if the DTS data store is empty.
-	 * @throws XBRLException
-	 *             if the next fragment ID cannot be retrieved.
-	 */
-	public String getNextFragmentId() throws XBRLException {
-		return nextId;
-	}
+
+
 
 }

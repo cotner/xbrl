@@ -360,33 +360,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	
 
 
-	/**
-	 * @see org.xbrlapi.data.Store#storeNextFragmentId(String)
-	 */
-	public void storeNextFragmentId(String id) throws XBRLException {
-		try {
 
-			XmlUpdateContext xmlUpdateContext = dataManager.createUpdateContext();
-		
-			String xmlString = "<summary maximumFragmentId='" + id + "'/>";
-			
-			try {
-				XmlDocument xmlDocument = dataContainer.getDocument("summary");
-				xmlDocument.setContent(xmlString);
-				dataContainer.updateDocument(xmlDocument, xmlUpdateContext);
-				xmlDocument.delete();
-			} catch (XmlException documentNotFoundException) {
-				XmlDocumentConfig documentConfiguration = new XmlDocumentConfig();
-				documentConfiguration.setWellFormedOnly(true);
-				InputStream inputStream = new ByteArrayInputStream(xmlString.getBytes());			
-				XmlInputStream xmlInputStream = dataManager.createInputStream(inputStream);
-				dataContainer.putDocument("summary", xmlInputStream, xmlUpdateContext, documentConfiguration);
-			}
-					
-		} catch (XmlException e) {
-    		throw new XBRLException("The next fragment ID could not be stored.",e);
-        }
-	}
 
 	/**
 	 * @see org.xbrlapi.data.Store#getNextFragmentId()
