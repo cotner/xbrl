@@ -703,14 +703,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     	return getItemsFromInstances(instances);
     }
     
-    /**
-     * @return a list of all of the tuples in the data store.
-     * @throws XBRLException
-     */
-    public FragmentList<Tuple> getTuples() throws XBRLException {
-    	FragmentList<Instance> instances = this.<Instance>getFragments("Instance");
-    	return this.getTuplesFromInstances(instances);
-    }
+
 
     /**
      * @param url The URL of the document to get the facts from.
@@ -732,15 +725,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     	return this.getItemsFromInstances(instances);
     }
     
-    /**
-     * @param url The URL of the document to get the facts from.
-     * @return a list of all of the root-level tuples in the specified document.
-     * @throws XBRLException
-     */
-    public FragmentList<Tuple> getTuples(URL url) throws XBRLException {
-    	FragmentList<Instance> instances = this.<Instance>getFragmentsFromDocument(url,"Instance");
-    	return this.getTuplesFromInstances(instances);
-    }
+
 
     /**
      * @see org.xbrlapi.data.Store#getRootFragmentForDocument(String)
