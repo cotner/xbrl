@@ -36,14 +36,8 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
             Thread t1 = new Thread(d1);
             t1.start();
 
-            List<URL> r2 = resources.subList(cnt,2*cnt);
-            DiscoveryManager d2 = new DiscoveryManager(loader, r2);
-            Thread t2 = new Thread(d2);
-            t2.start();
-
-            while (t1.isAlive() || t2.isAlive()) {
-                Thread.sleep(20000);
-                loader.requestInterrupt();
+            while (t1.isAlive()) {
+                Thread.sleep(2000);
             }
             
             logger.info("Discovery was interrupted.");
