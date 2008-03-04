@@ -1,6 +1,7 @@
 package org.xbrlapi.data.dom.tests;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,10 +68,22 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 		XBRLCustomLinkRecogniserImpl clr = new XBRLCustomLinkRecogniserImpl(); 
 		XLinkProcessor xlinkProcessor = new XLinkProcessorImpl(xlinkHandler ,clr);
 		File cacheFile = new File(cache);
-		EntityResolver entityResolver = new EntityResolverImpl(cacheFile);
+		
+		// Rivet errors in the SEC XBRL data require these remappings.
+        HashMap<String,String> map = new HashMap<String,String>();
+        map.put("http://www.xbrl.org/2003/linkbase/xbrl-instance-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/instance/xbrl-instance-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/linkbase/xbrl-linkbase-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/instance/xbrl-linkbase-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/instance/xl-2003-12-31.xsd","http://www.xbrl.org/2003/xl-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/linkbase/xl-2003-12-31.xsd","http://www.xbrl.org/2003/xl-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/instance/xlink-2003-12-31.xsd","http://www.xbrl.org/2003/xlink-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/linkbase/xlink-2003-12-31.xsd","http://www.xbrl.org/2003/xlink-2003-12-31.xsd");
+
+        EntityResolver resolver = new EntityResolverImpl(cacheFile,map);
 		Loader myLoader = new LoaderImpl(store,xlinkProcessor);
 		myLoader.setCache(new CacheImpl(cacheFile));
-		myLoader.setEntityResolver(entityResolver);
+		myLoader.setEntityResolver(resolver);
 		xlinkHandler.setLoader(myLoader);
 		return myLoader;
 	}
