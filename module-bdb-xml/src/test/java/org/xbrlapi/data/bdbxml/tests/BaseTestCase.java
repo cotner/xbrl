@@ -1,10 +1,12 @@
 package org.xbrlapi.data.bdbxml.tests;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.xbrlapi.SAXHandlers.EntityResolverImpl;
+import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.loader.Loader;
@@ -77,8 +79,24 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 		XBRLXLinkHandlerImpl xlinkHandler = new XBRLXLinkHandlerImpl();
 		XBRLCustomLinkRecogniserImpl clr = new XBRLCustomLinkRecogniserImpl(); 
 		XLinkProcessor xlinkProcessor = new XLinkProcessorImpl(xlinkHandler ,clr);
-		EntityResolver entityResolver = new EntityResolverImpl(new File(cache));
+		
+        File cacheFile = new File(cache);
+        
+        // Rivet errors in the SEC XBRL data require these remappings.
+        HashMap<String,String> map = new HashMap<String,String>();
+        map.put("http://www.xbrl.org/2003/linkbase/xbrl-instance-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/instance/xbrl-instance-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/linkbase/xbrl-linkbase-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/instance/xbrl-linkbase-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/instance/xl-2003-12-31.xsd","http://www.xbrl.org/2003/xl-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/linkbase/xl-2003-12-31.xsd","http://www.xbrl.org/2003/xl-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/instance/xlink-2003-12-31.xsd","http://www.xbrl.org/2003/xlink-2003-12-31.xsd");
+        map.put("http://www.xbrl.org/2003/linkbase/xlink-2003-12-31.xsd","http://www.xbrl.org/2003/xlink-2003-12-31.xsd");
+
+        EntityResolver entityResolver = new EntityResolverImpl(cacheFile,map);		
+		
 		Loader myLoader = new LoaderImpl(store,xlinkProcessor);
+        myLoader.setCache(new CacheImpl(cacheFile));
 		myLoader.setEntityResolver(entityResolver);
 		xlinkHandler.setLoader(myLoader);
 		return myLoader;
