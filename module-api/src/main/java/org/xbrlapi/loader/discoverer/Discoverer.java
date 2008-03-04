@@ -16,21 +16,23 @@ public class Discoverer implements Runnable {
             this.loader = loader;
         } catch (XBRLException e) {
             e.printStackTrace();
-            logger.error("The discoverer could not be instantiated.");
+            logger.error(Thread.currentThread().getName() + ": The discoverer could not be instantiated.");
         }
     }
 
     public void run() {
         try {
+            logger.info(Thread.currentThread().getName() + ": Successfully began.");
             if (loader == null) {
-                logger.error("Discovery failed because the discoverer does not have a loader.");
+                logger.error(Thread.currentThread().getName() + ": Discovery failed because the discoverer does not have a loader.");
             } else {
-                logger.info("Starting the discovery process in the separate thread.");
+                logger.info(Thread.currentThread().getName() + ": Starting the discovery process in the separate thread.");
                 loader.discover();
             }
+            logger.info(Thread.currentThread().getName() + ": Successfully exited.");
         } catch (XBRLException e) {
             e.printStackTrace();
-            logger.error("Error doing the data discovery.");
+            logger.error(Thread.currentThread().getName() + ": Error doing the data discovery.");
         }
     }
 

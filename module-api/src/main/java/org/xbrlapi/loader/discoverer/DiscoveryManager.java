@@ -13,7 +13,9 @@ public class DiscoveryManager implements Runnable {
 
     static Logger logger = Logger.getLogger(DiscoveryManager.class);
     
-    Loader loader = null;
+    private Loader loader = null;
+    private long interval = 10000;
+    private String name = "";
     
     public DiscoveryManager(Loader loader) {
         try {
@@ -21,10 +23,24 @@ public class DiscoveryManager implements Runnable {
             this.loader = loader;
         } catch (XBRLException e) {
             e.printStackTrace();
-            logger.error("The discoverer could not be instantiated.");
+            logger.error(Thread.currentThread().getName() + ": The discoverer could not be instantiated.");
         }
     }
 
+    public DiscoveryManager(Loader loader, String name) {
+        this(loader);
+        if (name != null) this.name = name;
+    }
+    
+    public DiscoveryManager(Loader loader, long interval) {
+        this(loader);
+        this.interval = interval;
+    }
+    
+    public DiscoveryManager(Loader loader, long interval, String name) {
+        this(loader,interval);
+        if (name != null) this.name = name;
+    }
 
     List<URL> resources = new LinkedList<URL>();
     
@@ -39,27 +55,27 @@ public class DiscoveryManager implements Runnable {
         }
     }
     
-    
     public void run() {
         try {
+            logger.info(Thread.currentThread().getName() + ": Successfully began.");            
             if (loader == null) {
-                logger.error("Discovery failed because the discoverer does not have a loader.");
+                logger.error(Thread.currentThread().getName() + ": Discovery failed because the discoverer does not have a loader.");
             } else {
                 
                 for (URL resource: resources) {
                     loader.stashURL(resource);
                 }                
-                
+
                 Store store = loader.getStore();
                 Discoverer discoverer = new Discoverer(loader);
                 Thread thread = new Thread(discoverer);
                 thread.start();
                 
                 while (thread.isAlive()) {
-                    Thread.sleep(20000);
+                    Thread.sleep(interval);
                     loader.requestInterrupt();
                     while (thread.isAlive()) {
-                        Thread.sleep(100);
+                        Thread.sleep(200);
                     }
                     discoverer = new Discoverer(loader);
                     thread = new Thread(discoverer);
@@ -67,9 +83,11 @@ public class DiscoveryManager implements Runnable {
                 }
                 
             }
+            logger.info(Thread.currentThread().getName() + ": Successfully exited."); 
+            
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("The discovery manager experienced an Exception.");
+            logger.error(Thread.currentThread().getName() + ": The discovery manager experienced an Exception.");
         }
     }
 
