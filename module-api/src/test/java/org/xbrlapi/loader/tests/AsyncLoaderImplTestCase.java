@@ -31,13 +31,14 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
 	 */
 	public void testInterruption() {
 		try {
-            Discoverer d1 = new Discoverer(loader);
-            Thread t1 = new Thread(d1);
             loader.stashURL(this.url1);
             loader.stashURL(this.url2);
+            
+            Discoverer d1 = new Discoverer(loader);
+            Thread t1 = new Thread(d1);
             t1.start();
 
-            Thread.sleep(20);
+            Thread.sleep(200);
             loader.requestInterrupt();
             
             while (t1.isAlive()) {
