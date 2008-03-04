@@ -14,6 +14,7 @@ public class AllTests {
 		suite.addTestSuite(AddToExistingStoreTestCase.class);
 		suite.addTestSuite(StoreImplConstructorTestCase.class);
 		suite.addTestSuite(DTDDeclarationHandlerTestCase.class);
+        suite.addTestSuite(SecAsyncGrabberImplTest.class);
 		
 		suite.addTest(org.xbrlapi.data.bdbxml.framework.tests.AllTests.suite());
 		//$JUnit-END$
