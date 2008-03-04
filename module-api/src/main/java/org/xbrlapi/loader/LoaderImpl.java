@@ -962,7 +962,7 @@ public class LoaderImpl implements Loader {
         // Make sure that the URL is a valid URI and is absolute
         try {
             if (!new URI(url.toString()).isAbsolute()) {
-                logger.info("Failing to stash " + url);
+                logger.info("Failed to stash " + url);
                 throw new XBRLException("The URL: " + url + " needs to be resolved against a base URL prior to stashing.");                
             }
                 
@@ -982,6 +982,7 @@ public class LoaderImpl implements Loader {
 
         // Stash the URL if it has not already been stashed
         if (!documentQueue.containsKey(dereferencedURL.toString())) {
+            logger.info(Thread.currentThread().getName() + " stashing " + url);            
             documentQueue.put(dereferencedURL.toString(), new Integer(0));
         }
 
