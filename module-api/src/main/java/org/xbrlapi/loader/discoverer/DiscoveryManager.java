@@ -14,7 +14,7 @@ public class DiscoveryManager implements Runnable {
     static Logger logger = Logger.getLogger(DiscoveryManager.class);
     
     private Loader loader = null;
-    private long interval = 10000;
+    private long interval = 20000;
     private String name = "";
     
     public DiscoveryManager(Loader loader) {
