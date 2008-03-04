@@ -73,13 +73,15 @@ public class DiscoveryManager implements Runnable {
                 
                 while (thread.isAlive()) {
                     Thread.sleep(interval);
-                    loader.requestInterrupt();
-                    while (thread.isAlive()) {
-                        Thread.sleep(200);
+                    if (thread.isAlive()) {
+                        loader.requestInterrupt();
+                        while (thread.isAlive()) {
+                            Thread.sleep(200);
+                        }
+                        discoverer = new Discoverer(loader);
+                        thread = new Thread(discoverer);
+                        thread.start();
                     }
-                    discoverer = new Discoverer(loader);
-                    thread = new Thread(discoverer);
-                    thread.start();
                 }
                 
             }
