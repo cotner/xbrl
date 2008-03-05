@@ -83,7 +83,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	        environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
 	        environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
 	        environmentConfiguration.setInitializeCache(true);
-	        environmentConfiguration.setCacheSize(1024 * 1024 * 50);
+	        environmentConfiguration.setCacheSize(1024 * 1024 * 25);
 	        environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
 	        environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
 		    environment = new Environment(new File(location), environmentConfiguration);
@@ -120,7 +120,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
         // Define the checkpointing configuration (check points force the log to be written into the database)
         checkpointConfig = new CheckpointConfig();
-        checkpointConfig.setKBytes(1000); // Do a checkpoint if more than 1000 KB have been logged.
+        checkpointConfig.setKBytes(10000); // Do a checkpoint if more than 1000 KB have been logged.
 	    
         // Generate the XQuery context (defining NS prefixes and specifying the return type)
         try {
@@ -224,12 +224,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			}
 		} catch (XmlException e) {
 			throw new XBRLException("The BDB XML database manager could not be closed cleanly.",e);
-		}
-
-		try {
-		    environment.close();
-		} catch (DatabaseException e) {
-		    throw new XBRLException("The database environment could not be closed.",e);
 		}
 
 	}
@@ -359,7 +353,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @see org.xbrlapi.data.Store#getFragment(String)
 	 */
 	public Fragment getFragment(String index) throws XBRLException {
-		
+	    
         XmlDocument xmlDocument = null;
         Document document = null;
 	    try {
