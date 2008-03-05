@@ -243,6 +243,13 @@ public interface Loader {
 	 */
 	public String getNextFragmentId() throws XBRLException;
 	
+    /**
+     * Returns the current fragment index (the one before the next fragment index)
+     * @return the next unique fragment index
+     * @throws XBRLException
+     */
+    public String getCurrentFragmentId() throws XBRLException;	
+	
 	/**
 	 * Get the URL for the document being parsed. 
 	 * @return The original (non-cache) URL of the document being parsed.

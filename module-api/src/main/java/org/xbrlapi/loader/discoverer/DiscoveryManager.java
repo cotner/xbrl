@@ -14,7 +14,7 @@ public class DiscoveryManager implements Runnable {
     static Logger logger = Logger.getLogger(DiscoveryManager.class);
     
     private Loader loader = null;
-    private long interval = 20000;
+    private long interval = 120000;
     
     public DiscoveryManager(Loader loader) {
         try {
@@ -72,7 +72,7 @@ public class DiscoveryManager implements Runnable {
                     if (thread.isAlive()) {
                         loader.requestInterrupt();
                         while (thread.isAlive()) {
-                            Thread.sleep(200);
+                            Thread.sleep(1000);
                         }
                         discoverer = new Discoverer(loader);
                         thread = new Thread(discoverer);

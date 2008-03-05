@@ -618,12 +618,12 @@ public class LoaderImpl implements Loader {
                 logger.info("Up to fragment " + this.fragmentId + ". Now parsing " + url);
                 setDocumentURL(url.toString());
                 parse(url);
-                String time = (new Double(
+/*                String time = (new Double(
                         (System.currentTimeMillis() - startTime)
                                 / (fragmentId - startIndex))).toString();
                 if (time.length() > 4) time = time.substring(0, 4);
                 logger.info("Average time taken per fragment = " + time + " milliseconds");
-            } else {
+*/            } else {
                 logger.info("The document is already in the data store.");
             }
 
@@ -1005,7 +1005,7 @@ public class LoaderImpl implements Loader {
         return id;
     }
 
-    private String getCurrentFragmentId() {
+    public String getCurrentFragmentId() {
         return (new Integer(fragmentId)).toString();
     }
 
