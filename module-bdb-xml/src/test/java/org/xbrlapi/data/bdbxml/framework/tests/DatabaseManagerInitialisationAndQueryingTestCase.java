@@ -8,6 +8,7 @@ import com.sleepycat.db.Environment;
 import com.sleepycat.db.EnvironmentConfig;
 import com.sleepycat.dbxml.XmlContainer;
 import com.sleepycat.dbxml.XmlDocument;
+import com.sleepycat.dbxml.XmlException;
 import com.sleepycat.dbxml.XmlManager;
 import com.sleepycat.dbxml.XmlManagerConfig;
 import com.sleepycat.dbxml.XmlQueryContext;
@@ -149,6 +150,39 @@ public class DatabaseManagerInitialisationAndQueryingTestCase extends BaseTestCa
 	
 	}
 
+    /**
+     * Test document retrieval
+     */
+    public final void testDocumentRetrieval() {
+
+        try {
+
+            xmlUpdateContext = myManager.createUpdateContext();
+            xmlContainer.putDocument(docName,docString,xmlUpdateContext,null);
+
+            XmlDocument doc = null;
+            
+            doc = xmlContainer.getDocument(docName);
+            doc.delete();
+
+            try {
+                doc = xmlContainer.getDocument("garbage");
+            } catch (XmlException e) {
+                //Expected exception
+            } catch (Exception e) {
+                fail("Unexpected exception.");
+            } finally {
+                doc.delete();
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("The database operations failed.");
+        }       
+    
+    }
+	
+	
 }
 
            
