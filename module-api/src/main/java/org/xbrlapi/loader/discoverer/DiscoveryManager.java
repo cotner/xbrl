@@ -15,7 +15,6 @@ public class DiscoveryManager implements Runnable {
     
     private Loader loader = null;
     private long interval = 20000;
-    private String name = "";
     
     public DiscoveryManager(Loader loader) {
         try {
@@ -27,21 +26,11 @@ public class DiscoveryManager implements Runnable {
         }
     }
 
-    public DiscoveryManager(Loader loader, String name) {
-        this(loader);
-        if (name != null) this.name = name;
-    }
-    
     public DiscoveryManager(Loader loader, long interval) {
         this(loader);
         this.interval = interval;
     }
     
-    public DiscoveryManager(Loader loader, long interval, String name) {
-        this(loader,interval);
-        if (name != null) this.name = name;
-    }
-
     List<URL> resources = new LinkedList<URL>();
     
     /**
@@ -54,6 +43,13 @@ public class DiscoveryManager implements Runnable {
             this.resources = resources;
         }
     }
+    
+    public DiscoveryManager(Loader loader, List<URL> resources, long interval) {
+        this(loader,interval);
+        if (resources != null) {
+            this.resources = resources;
+        }
+    }    
     
     public void run() {
         try {
