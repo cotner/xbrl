@@ -1,6 +1,6 @@
 package org.xbrlapi.loader.discoverer.tests;
 
-import org.xbrlapi.data.bdbxml.discoverer.tests.SecAsyncGrabberImplTest;
+import org.xbrlapi.data.bdbxml.tests.SecAsyncGrabberImplTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
