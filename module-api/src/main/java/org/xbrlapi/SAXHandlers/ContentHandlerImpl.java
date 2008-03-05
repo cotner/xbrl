@@ -240,7 +240,6 @@ public class ContentHandlerImpl extends DefaultHandler {
      */
     public void endDocument() throws SAXException 
     {
-    	;
     }
     
     /**
@@ -692,7 +691,7 @@ public class ContentHandlerImpl extends DefaultHandler {
     	
     	// Revert to Namespace declarations of the parent element.
         nsStack.pop();
-    	
+
     }
     
     /**
