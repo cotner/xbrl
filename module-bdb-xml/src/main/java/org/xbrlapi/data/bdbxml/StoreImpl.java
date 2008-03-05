@@ -52,19 +52,13 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	private XmlContainer dataContainer = null;
     private XmlUpdateContext xmlUpdateContext = null;
     private XmlDocumentConfig documentConfiguration = null;
+    
+
 	private XmlQueryContext xmlQueryContext = null;
 	private CheckpointConfig checkpointConfig = null;
 	
-	/**
-	 * The next fragmentId.
-	 */
-	String nextId = "1";
 
-    /**
-     * Fragment storage counter
-     */
-    private int inserts = 0;
-    private int MAX_INSERTS = 10000;
+
 	
 	/**
 	 * Initialise the BDB XML database data store.
@@ -73,19 +67,25 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException
 	 */
 	public StoreImpl(String location, String container) throws XBRLException {
-		
-	    EnvironmentConfig environmentConfiguration = new EnvironmentConfig();
-	    environmentConfiguration.setAllowCreate(true);         // If the environment does not exist, create it.
-        environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
-        environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
-        environmentConfiguration.setInitializeCache(true);
-        environmentConfiguration.setCacheSize(1024 * 1024 * 50);
-        environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
-	    environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
-	    //environmentConfiguration.setPrivate(true);
-	    //environmentConfiguration.setSystemMemory(true);
 
+        // Set the log level for the database manager
+        try {
+            XmlManager.setLogLevel(XmlManager.LEVEL_ALL, false);
+            XmlManager.setLogCategory(XmlManager.CATEGORY_ALL, false);          
+        } catch (XmlException e) {
+            throw new XBRLException("The BDB XML log levels could not be initialised.", e);
+        }
+
+	    // Generate the database environment
 	    try {
+	        EnvironmentConfig environmentConfiguration = new EnvironmentConfig();
+	        environmentConfiguration.setAllowCreate(true);         // If the environment does not exist, create it.
+	        environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
+	        environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
+	        environmentConfiguration.setInitializeCache(true);
+	        environmentConfiguration.setCacheSize(1024 * 1024 * 50);
+	        environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
+	        environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
 		    environment = new Environment(new File(location), environmentConfiguration);
 		} catch (FileNotFoundException e) {
 			throw new XBRLException("The physical location of the BDB XML database could not be found.", e);
@@ -93,21 +93,37 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			throw new XBRLException("The BDB XML database environment could not be set up.", e);
 		} 
 		
-		managerConfiguration = new XmlManagerConfig();
-	    managerConfiguration.setAdoptEnvironment(true);
-	    managerConfiguration.setAllowExternalAccess(true);
-		
+		// Generate the database manager
 	    try {
-	    	dataManager = new XmlManager(environment, managerConfiguration);
-/*		    XmlManager.setLogLevel(XmlManager.LEVEL_ALL, true);
-		    XmlManager.setLogCategory(XmlManager.CATEGORY_ALL, true);		    
-*/	    
-			// Set up the database document write configuration for the store
-			xmlUpdateContext = dataManager.createUpdateContext();
-			documentConfiguration = new XmlDocumentConfig();
-			documentConfiguration.setWellFormedOnly(true);
-			checkpointConfig = new CheckpointConfig();
-			
+
+            // Generate the database manager configuration
+	        managerConfiguration = new XmlManagerConfig();
+	        managerConfiguration.setAdoptEnvironment(true);
+	        managerConfiguration.setAllowExternalAccess(true);
+	        
+	        dataManager = new XmlManager(environment, managerConfiguration);
+
+	    } catch (XmlException e) {
+            throw new XBRLException("The BDB XML database manager could not be set up.", e);
+        }
+
+        // Set up the XML Update context required for updating XML in the database.
+	    try {
+	        xmlUpdateContext = dataManager.createUpdateContext();
+        } catch (XmlException e) {
+            throw new XBRLException("The XML update context could not be set up.", e);
+        }
+
+        // Define the document configuration to use for documents stored in the database
+        documentConfiguration = new XmlDocumentConfig();
+        documentConfiguration.setWellFormedOnly(true);
+
+        // Define the checkpointing configuration (check points force the log to be written into the database)
+        checkpointConfig = new CheckpointConfig();
+        checkpointConfig.setKBytes(1000); // Do a checkpoint if more than 1000 KB have been logged.
+	    
+        // Generate the XQuery context (defining NS prefixes and specifying the return type)
+        try {
 			xmlQueryContext = dataManager.createQueryContext();
 			xmlQueryContext.setReturnType(XmlQueryContext.DeadValues);
 			xmlQueryContext.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace);
@@ -116,12 +132,11 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			xmlQueryContext.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace);
 			xmlQueryContext.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace);
 			xmlQueryContext.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
-
 	    } catch (XmlException e) {
-			throw new XBRLException("The BDB XML database manager could not be set up.", e);
+			throw new XBRLException("The BDB XML XQuery context could not be defined.", e);
 		}
 
-    	// Create or open the data container and check its storage approach is node based (not document based).
+    	// Get the data container and check its storage approach is node based (not document based).
 	    try {
 			if (dataManager.existsContainer(container) != 0) {
 				dataContainer = dataManager.openContainer(container);
@@ -130,81 +145,57 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			} else {
 				dataContainer = dataManager.createContainer(container);
 				
+		        // Set the indexes for the new container.
+		        try {
+		            XmlIndexSpecification indexSpecification = dataContainer.getIndexSpecification();
+		            indexSpecification.addDefaultIndex("node-element-presence-none");
+		            indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"data");
+		            indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"fragment");
+		            indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"xptr");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","parentIndex");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","url");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","type");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","id");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","targetDocumentURL");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","targetPointerValue");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","absoluteHref");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","value");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","arcroleURI");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","roleURI");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","name");
+		            indexSpecification.addIndex("node-attribute-equality-string", "","targetNamespace");
+		            indexSpecification.addIndex("node-attribute-equality-string", Constants.XMLNamespace,"lang");
+		            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"label");
+		            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"from");
+		            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"to");
+		            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"type");
+		            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"arcrole");
+		            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"role");
+		            indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPILanguagesNamespace,"language");
+		            indexSpecification.addIndex("node-element-equality-string", Constants.XBRLAPILanguagesNamespace,"code");
+		            indexSpecification.addIndex("node-element-equality-string", Constants.XBRLAPILanguagesNamespace,"value");
+		            indexSpecification.addIndex("node-element-equality-string", Constants.XBRLAPILanguagesNamespace,"encoding");
+		            // TODO: Should the indexSpecification be deleted here?
+		        } catch (XmlException e) {
+		            throw new XBRLException("The default index could not be set.", e);
+		        }
+		        
 			}
-
-		    // Configure the indexes for the data store if not done already.
-			addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"data");
-			addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"fragment");
-            addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"xptr");
-			addIndex("node-attribute-equality-string", "","parentIndex");
-			addIndex("node-attribute-equality-string", "","url");
-			addIndex("node-attribute-equality-string", "","type");
-			addIndex("node-attribute-equality-string", "","id");
-			addIndex("node-attribute-equality-string", "","targetDocumentURL");
-			addIndex("node-attribute-equality-string", "","targetPointerValue");
-			addIndex("node-attribute-equality-string", "","absoluteHref");
-			addIndex("node-attribute-equality-string", "","value");
-			addIndex("node-attribute-equality-string", "","arcroleURI");
-			addIndex("node-attribute-equality-string", "","roleURI");
-			addIndex("node-attribute-equality-string", "","name");
-			addIndex("node-attribute-equality-string", "","targetNamespace");
-			addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"label");
-			addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"from");
-			addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"to");
-			addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"type");
-			addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"arcrole");
-			addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"role");
-
-			addIndex("node-element-presence-none", Constants.XBRLAPILanguagesNamespace,"language");
-			addIndex("node-element-equality-string", Constants.XBRLAPILanguagesNamespace,"code");
-			addIndex("node-element-equality-string", Constants.XBRLAPILanguagesNamespace,"value");
-			addIndex("node-element-equality-string", Constants.XBRLAPILanguagesNamespace,"encoding");
-
-			// Set the default element presence index.
-			try {
-				XmlIndexSpecification indexSpecification = dataContainer.getIndexSpecification();
-				indexSpecification.addDefaultIndex("node-element-presence-none");			
-				XmlUpdateContext xmlUpdateContext = dataManager.createUpdateContext();
-			    dataContainer.setIndexSpecification(indexSpecification, xmlUpdateContext);
-			    indexSpecification.delete();
-			    xmlUpdateContext.delete();
-			} catch (XmlException e) {
-				throw new XBRLException("The default index could not be set.", e);
-			}
-			
-            try {
-                this.getStoreState();
-            } catch (XBRLException e) {
-                this.storeLoaderState("0",new LinkedList<String>());
-            }			
-			
-	    } catch (XmlException e) {
-			throw new XBRLException("The BDB XML database container could not be opened.", e);
-	    }
-	    
+        } catch (XmlException e) {
+            throw new XBRLException("The BDB XML database container could not be created or opened.", e);
+        }
+		
+        try {
+            this.getStoreState();
+        } catch (XBRLException e) {
+            this.storeLoaderState("0",new LinkedList<String>());
+        }			
+				    
 	}
 	
-	private void addIndex(int indexType, int syntaxType, String namespace, String localname) throws XBRLException {
-		try {
-			XmlIndexSpecification indexSpecification = dataContainer.getIndexSpecification();
-			indexSpecification.addIndex(namespace, localname, indexType, syntaxType);
-		    dataContainer.setIndexSpecification(indexSpecification, xmlUpdateContext);
-		    indexSpecification.delete();
-		} catch (XmlException e) {
-			throw new XBRLException("The index could not be set.", e);
-		}
-	}
+
 	
-	private void addIndex(String type, String namespace, String localname) throws XBRLException {
-		try {
-			XmlIndexSpecification indexSpecification = dataContainer.getIndexSpecification();
-			indexSpecification.addIndex(namespace, localname, type);
-		    dataContainer.setIndexSpecification(indexSpecification, xmlUpdateContext);
-		    indexSpecification.delete();
-		} catch (XmlException e) {
-			throw new XBRLException("The index could not be set.", e);
-		}
-	}	
+	
 
 	/**
 	 * The closure operation entails closing the XML container and the XML data manager
@@ -215,7 +206,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		super.close();
 		try {
 			if (dataContainer != null) {
-				logger.debug("Closing a store with name " + dataContainer.getName());
+				logger.info("Closing a store with name " + dataContainer.getName());
 	            xmlQueryContext.delete();
 	            xmlUpdateContext.delete();
 				dataContainer.sync();
@@ -225,6 +216,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		} catch (XmlException e) {
 			throw new XBRLException("The BDB XML database container could not be closed cleanly.",e);
 		}
+		
 		try {
 			if (dataManager != null) {
 				dataManager.close();
@@ -233,6 +225,13 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		} catch (XmlException e) {
 			throw new XBRLException("The BDB XML database manager could not be closed cleanly.",e);
 		}
+
+		try {
+		    environment.close();
+		} catch (DatabaseException e) {
+		    throw new XBRLException("The database environment could not be closed.",e);
+		}
+
 	}
 	
 	/**
@@ -288,37 +287,37 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	public void storeFragment(Fragment fragment) throws XBRLException {
 		
 		if (fragment.getStore() != null) {
-			return;
+			return; // The fragment is already in the store.
 		}
 		
 		String index = fragment.getFragmentIndex();
 		
 		if (hasFragment(index)) {
-		    this.removeFragment(index);
+		    removeFragment(index);
 		}
 
+		XmlInputStream xmlInputStream = null;
 		try {
 
+		    // Store the XML 
 			String xmlString = serializeToString(fragment.getMetadataRootElement());
 			InputStream inputStream = new ByteArrayInputStream(xmlString.getBytes());			
-			XmlInputStream xmlInputStream = dataManager.createInputStream(inputStream);
+			xmlInputStream = dataManager.createInputStream(inputStream);
 			dataContainer.putDocument(index, xmlInputStream, xmlUpdateContext, documentConfiguration);
-			xmlInputStream.delete();
-			this.inserts++;
-			if (inserts > this.MAX_INSERTS) {
-			    try {
-			        this.environment.checkpoint(checkpointConfig);
-			    } catch (DatabaseException e) {
-		            throw new XBRLException("The database checkpoint operation failed.", e);
-			    }
-			}
-			
+
+			// Do a checkpoint if enough data has been logged.
+            environment.checkpoint(checkpointConfig);
+
             // Finalise the fragment, ready for use
             fragment.setResource(fragment.getBuilder().getMetadata());
             fragment.setStore(this);
 		
-		} catch (XmlException e) {
-        	throw new XBRLException("The fragment could not be added to the BDB XML data store.", e);
+        } catch (XmlException e) {
+            throw new XBRLException("The fragment could not be added to the BDB XML data store.", e);
+        } catch (DatabaseException e) {
+            throw new XBRLException("The database checkpoint operation failed.", e);
+        } finally {
+            if (xmlInputStream != null) xmlInputStream.delete();
         }
 
 	}
@@ -327,17 +326,15 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @see org.xbrlapi.data.Store#hasFragment(String)
 	 */
 	public boolean hasFragment(String index) throws XBRLException {
+        XmlDocument xmlDocument = null;
 		try {
-			XmlDocument xmlDocument = dataContainer.getDocument(index);
-			if (xmlDocument != null) {
-				xmlDocument.delete();
-				return true;
-			}
-			xmlDocument.delete();
-			return false;
-		} catch (XmlException e) {
-			return false;
-		}
+			xmlDocument = dataContainer.getDocument(index);
+			return true;
+        } catch (XmlException e) {
+            return false;
+        } finally {
+            if (xmlDocument != null) xmlDocument.delete();
+        }
 	}
 	
     /**
@@ -346,15 +343,15 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * @see org.xbrlapi.data.Store#hasDocument(String)
      */
     public boolean hasDocument(String url) throws XBRLException {
-    	XmlResults results = performQuery("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + url + "']");
-    	
-    	try {
-    		boolean result = (results.size() > 0); 
-    		results.delete();
+        XmlResults results = null;
+        try {
+            results = performQuery("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + url + "' and @parentIndex='none']");
+    		boolean result = (results.size() == 1); 
         	return  result;
     	} catch (XmlException e) {
     		throw new XBRLException("The size of the result set for the query could not be determined.", e);
     	} finally {
+            if (results != null) results.delete();
     	}
     }    	
 
@@ -363,24 +360,25 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 */
 	public Fragment getFragment(String index) throws XBRLException {
 		
-		// Get the Document from the container.
-		XmlDocument xmlDocument = null;
-		try {
-			xmlDocument = dataContainer.getDocument(index);
-		} catch (XmlException e) {
-			throw new XBRLException("The fragment " + index + " could not be retrieved from the store.",e);
+        XmlDocument xmlDocument = null;
+        Document document = null;
+	    try {
+	        // Get the document from the container.
+	        try {
+	            xmlDocument = dataContainer.getDocument(index);
+	        } catch (XmlException e) { // Thrown if the document is not found
+	            throw new XBRLException("The fragment " + index + " could not be retrieved from the store.",e);
+	        }
+	        
+	        // Generate the DOM representation of the fragment, setting the root to the root element thereof.
+	        try {
+	            document = XMLDOMBuilder.newDocument(xmlDocument.getContentAsInputStream());
+	        } catch (XmlException e) {
+	            throw new XBRLException("The fragment content was not available as an input stream from the store.",e);
+	        }
+		} finally {
+	        if (xmlDocument != null) xmlDocument.delete();
 		}
-		if (xmlDocument == null) throw new XBRLException("The fragment " + index + " could not be retrieved from the store.");
-		
-		// Generate the DOM representation of the fragment, setting the root to the root element thereof.
-		Document document = null;
-		try {
-			document = XMLDOMBuilder.newDocument(xmlDocument.getContentAsInputStream());
-		} catch (XmlException e) {
-			xmlDocument.delete();
-			throw new XBRLException("The fragment content was not available as an input stream from the store.",e);
-		}
-		xmlDocument.delete();
 
 		// Build the fragment using the fragment factory
 		return FragmentFactory.newFragment(this, document.getDocumentElement());
@@ -394,18 +392,12 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 
 	/**
-	 * Remove a fragment from the store.
-	 * 
-	 * @param index
-	 *            The index of the fragment to be removed from the store.
-	 * @throws XBRLException
-	 *             if the fragment exists but cannot be removed from the store.
+	 * @see org.xbrlapi.data.Store@removeFragment(String)
 	 */
 	public void removeFragment(String index) throws XBRLException {
 		try {
 			dataContainer.deleteDocument(index,xmlUpdateContext);
 		} catch (XmlException e) {
-			e.printStackTrace();
 			throw new XBRLException("The fragment removal failed.", e);
 		}	
 	}
@@ -415,41 +407,43 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
 
 	/**
+     * TODO Make sure that queries finding a node within a fragment return the fragment itself.         
 	 * @see org.xbrlapi.data.Store#query(String)
 	 */
     @SuppressWarnings(value = "unchecked")
 	public <F extends Fragment> FragmentList<F> query(String myQuery) throws XBRLException {
-		try {
-			
+
+        XmlResults xmlResults = null;
+        XmlValue xmlValue = null;
+
+        try {
 			double startTime = System.currentTimeMillis();
 
-			// TODO Make sure that queries finding a node within a fragment return the fragment itself.
-			
-			XmlResults results = performQuery(myQuery);
-			
+			xmlResults = performQuery(myQuery);
+
 			Double time = new Double((System.currentTimeMillis()-startTime));
 			logger.debug(myQuery);
 			logger.debug("Average time for query = " + time + " milliseconds");
 
-			XmlValue value = results.next();
+            xmlValue = xmlResults.next();
 			FragmentList<F> fragments = new FragmentListImpl<F>();
-		    while (value != null) {
-		        XmlDocument theDoc = value.asDocument();
-		        // TODO determine why the BDB XML query result cannot be accessed as an input stream.
-		        //Document document = builder.newDocument(theDoc.getContentAsInputStream());
-		        Document document = XMLDOMBuilder.newDocument(value.asString());
+		    while (xmlValue != null) {
+		        Document document = XMLDOMBuilder.newDocument(xmlValue.asString());
+		        xmlValue.delete();
 		        Element root = document.getDocumentElement();
 				fragments.addFragment((F) FragmentFactory.newFragment(this, root));
-		        value = results.next();
-		     }
+		        xmlValue = xmlResults.next();
+		    }
 	    	
-			// Clean up
-			results.delete();
 			return fragments;
 
 		} catch (XmlException e) {
 			throw new XBRLException("Failed query: " + myQuery,e);
+		} finally {
+		    if (xmlValue != null) xmlValue.delete();
+            if (xmlResults != null) xmlResults.delete();
 		}
+		
 	}
     
     /**
@@ -460,24 +454,18 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * @throws XBRLException if the query fails to execute.
      */
 	private XmlResults performQuery(String myQuery) throws XBRLException {
-		
+        // TODO provide a means of adding additional namespaces for querying.
+        // TODO provide a means of investigating namespace bindings for the query configuration.
+	    
+	    XmlResults results = null;
 		try {
 			
 		    String query = "collection('" + dataContainer.getName() + "')" + myQuery;
-		    // TODO provide a means of adding additional namespaces for querying.
-		    // TODO provide a means of investigating namespace bindings for the query configuration.
-			
-		    long startTime = System.currentTimeMillis();
-		    
-		    XmlResults results = dataManager.query(query,xmlQueryContext);
-		    
-		    long endTime = System.currentTimeMillis();
-		    
-		    logger.debug((endTime-startTime) + " milliseconds to run: " + query);
-
+		    results = dataManager.query(query,xmlQueryContext);
 			return results;
 
 		} catch (XmlException e) {
+		    if (results != null) results.delete();
 			throw new XBRLException("Failed query: " + myQuery,e);
 		}
 	}
