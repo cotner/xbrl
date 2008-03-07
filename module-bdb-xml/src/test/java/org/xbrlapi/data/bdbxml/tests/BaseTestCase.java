@@ -35,7 +35,7 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		store = createStore(location,containerName);
+		store = createStore();
 		stores.add(store);
 		loader = createLoader(store);
 	}

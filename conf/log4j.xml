@@ -41,6 +41,12 @@
         <appender-ref ref="null"/>
     </category>
 
+    <category name="org.xbrlapi.data" additivity="false">
+        <priority value="info"/>
+        <appender-ref ref="console"/>
+    </category>
+
+
     <category name="org.xbrlapi.SAXHandlers" additivity="false">
         <priority value="info"/>
         <appender-ref ref="console"/>

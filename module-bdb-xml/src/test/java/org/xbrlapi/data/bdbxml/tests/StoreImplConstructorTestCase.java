@@ -26,11 +26,13 @@ public class StoreImplConstructorTestCase extends BaseTestCase {
 	 * Test the creation of a data store.
 	 */
 	public void testStoreImplConstructor() {
+	    logger.info("Done with the setup.");
 		assertNotNull(store);
+        logger.info("Starting to tear down.");
 	}
 
 	/**
-	 * Test the a new store that uses existing collections for 
+	 * Test a new store that uses existing collections for 
 	 * data and metadata instead of creating them.
 	 */
 	public void testStoreImplConnectsToAnExistingStore() {

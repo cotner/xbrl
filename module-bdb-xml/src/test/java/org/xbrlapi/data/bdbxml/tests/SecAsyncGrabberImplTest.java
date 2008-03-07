@@ -33,19 +33,17 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
     public void testSecGrabberResourceRetrieval() {
         try {
 
-            int cnt = 30;
+            int cnt = 1;
             List<URL> r1 = resources.subList(0,cnt);
             DiscoveryManager d1 = new DiscoveryManager(loader, r1, 20000);
             Thread t1 = new Thread(d1);
             t1.start();
 
             Store newStore = this.createStore();
-            
-            List<String> ids = new LinkedList<String>();
-            
+                        
             while (t1.isAlive()) {
                 Thread.sleep(2000);
-                String id = loader.getCurrentFragmentId();
+/*                String id = loader.getCurrentFragmentId();
                 Thread.sleep(30000);
                 try {
                     Fragment fragment = newStore.getFragment(id);
@@ -53,9 +51,11 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
                 } catch (Exception e) {
                     logger.info("failed to serialise " + id);
                 }
-            }
+*/            }
             
             logger.info("Discovery was interrupted.");
+
+            newStore.close();
             
         } catch (Exception e) {
             e.printStackTrace();
