@@ -100,7 +100,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         Fragment stub = new MockFragmentImpl(documentId);
         stub.setFragmentIndex(documentId);
         stub.setURL(document);
-        stub.setMetaAttribute("stub","yes");
+        stub.setMetaAttribute("stub","");
         this.storeFragment(stub);
     }
 
@@ -591,14 +591,14 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getStubs()
      */
     public FragmentList<Fragment> getStubs() throws XBRLException {
-        return this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@stub='yes']");
+        return this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@stub]");
     }
     
     /**
      * @see org.xbrlapi.data.Store#getStub(String url)
      */
     public Fragment getStub(String url) throws XBRLException {
-        FragmentList<Fragment> stubs = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@url='" + url + "' and @stub='yes']");        
+        FragmentList<Fragment> stubs = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@stub and @url='" + url + "']");        
         if (stubs.getLength() == 0) return null;
         if (stubs.getLength() > 1) throw new XBRLException("There are " + stubs.getLength() + " stubs for " + url);
         return stubs.get(0);

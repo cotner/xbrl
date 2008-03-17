@@ -31,7 +31,7 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
     public void testSecGrabberResourceRetrieval() {
         try {
 
-            int cnt = 1;
+            int cnt = 2;
             List<URL> r1 = resources.subList(0,cnt);
             DiscoveryManager d1 = new DiscoveryManager(loader, r1, 20000);
             Thread t1 = new Thread(d1);
@@ -51,8 +51,6 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
                 }
 */            }
             
-            logger.info("Discovery was interrupted.");
-
             newStore.close();
             
         } catch (Exception e) {

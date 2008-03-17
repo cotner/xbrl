@@ -631,12 +631,11 @@ public class LoaderImpl implements Loader {
                 setDocumentURL(url.toString());
                 this.setNextFragmentId("1");
                 parse(url);
-/*                String time = (new Double(
+                String time = (new Double(
                         (System.currentTimeMillis() - startTime)
                                 / (fragmentId - startIndex))).toString();
                 if (time.length() > 4) time = time.substring(0, 4);
                 logger.info("Average time taken per fragment = " + time + " milliseconds");
-*/
                 logger.info(this.fragmentId + " fragments in " + url);
             } else {
                 logger.info(url + " is already in the data store.");

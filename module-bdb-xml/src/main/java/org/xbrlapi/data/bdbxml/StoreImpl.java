@@ -27,6 +27,7 @@ import com.sleepycat.dbxml.XmlIndexSpecification;
 import com.sleepycat.dbxml.XmlManager;
 import com.sleepycat.dbxml.XmlManagerConfig;
 import com.sleepycat.dbxml.XmlQueryContext;
+import com.sleepycat.dbxml.XmlQueryExpression;
 import com.sleepycat.dbxml.XmlResults;
 import com.sleepycat.dbxml.XmlUpdateContext;
 import com.sleepycat.dbxml.XmlValue;
@@ -165,40 +166,62 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             dataContainer = dataManager.createContainer(containerName);
         } catch (XmlException e) {
             throw new XBRLException("The data container could not be created.", e);
-        } try {
-            XmlIndexSpecification indexSpecification = dataContainer.getIndexSpecification();
-            indexSpecification.addDefaultIndex("node-element-presence-none");
-            indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"data");
-            indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"fragment");
-            indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"xptr");
-            indexSpecification.addIndex("node-attribute-equality-string", "","parentIndex");
-            indexSpecification.addIndex("node-attribute-equality-string", "","stub");
-            indexSpecification.addIndex("node-attribute-equality-string", "","url");
-            indexSpecification.addIndex("node-attribute-equality-string", "","type");
-            indexSpecification.addIndex("node-attribute-equality-string", "","id");
-            indexSpecification.addIndex("node-attribute-equality-string", "","targetDocumentURL");
-            indexSpecification.addIndex("node-attribute-equality-string", "","targetPointerValue");
-            indexSpecification.addIndex("node-attribute-equality-string", "","absoluteHref");
-            indexSpecification.addIndex("node-attribute-equality-string", "","value");
-            indexSpecification.addIndex("node-attribute-equality-string", "","arcroleURI");
-            indexSpecification.addIndex("node-attribute-equality-string", "","roleURI");
-            indexSpecification.addIndex("node-attribute-equality-string", "","name");
-            indexSpecification.addIndex("node-attribute-equality-string", "","targetNamespace");
-            indexSpecification.addIndex("node-attribute-equality-string", Constants.XMLNamespace,"lang");
-            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"label");
-            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"from");
-            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"to");
-            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"type");
-            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"arcrole");
-            indexSpecification.addIndex("node-attribute-equality-string", Constants.XLinkNamespace,"role");
-            indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPILanguagesNamespace,"language");
-            indexSpecification.addIndex("node-element-equality-string", Constants.XBRLAPILanguagesNamespace,"code");
-            indexSpecification.addIndex("node-element-equality-string", Constants.XBRLAPILanguagesNamespace,"value");
-            indexSpecification.addIndex("node-element-equality-string", Constants.XBRLAPILanguagesNamespace,"encoding");
-            // TODO: Should the indexSpecification be deleted here?
+        } 
+        
+        XmlIndexSpecification xmlIndexSpecification = null;
+        XmlUpdateContext xmlUpdateContext = null;
 
+        try {
+
+            xmlIndexSpecification = dataContainer.getIndexSpecification();
+
+            xmlIndexSpecification.addDefaultIndex("node-element-presence");
+
+            xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"fragment","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"data","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"xptr","node-element-presence");
+
+            
+            xmlIndexSpecification.addIndex("","stub","node-attribute-presence");
+
+            xmlIndexSpecification.addIndex("","index", "unique-node-attribute-equality-string");
+
+            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","url", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","type", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","targetDocumentURL", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","targetPointerValue", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","absoluteHref", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","id","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","value", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","arcroleURI", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","roleURI", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","name", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","targetNamespace", "node-attribute-equality-string");
+
+            xmlIndexSpecification.addIndex(Constants.XMLNamespace,"lang","node-attribute-equality-string");
+
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"label","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"from","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"to","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"type","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"arcrole","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"role","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"label","node-attribute-equality-string");
+
+            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace,"language","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace,"code","node-element-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace,"value","node-element-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace,"encoding","node-element-equality-string");
+
+            xmlUpdateContext = dataManager.createUpdateContext();
+            dataContainer.setIndexSpecification(xmlIndexSpecification,xmlUpdateContext);
+            
         } catch (XmlException e) {
             throw new XBRLException("The indexes could not be configured.", e);
+        } finally {
+            if (xmlUpdateContext != null) xmlUpdateContext.delete();
+            if (xmlIndexSpecification != null) xmlIndexSpecification.delete();
         }
         
     }        
@@ -317,7 +340,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * @see org.xbrlapi.data.Store#hasDocument(String)
      */
 	synchronized public boolean hasDocument(String url) throws XBRLException {
-        this.incrementCallCount();
         XmlResults results = null;
         try {
             results = performQuery("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + url + "' and @parentIndex='none']");
@@ -400,7 +422,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     			xmlResults = performQuery(myQuery);
     
     			Double time = new Double((System.currentTimeMillis()-startTime));
-    			logger.debug(time + " milliseconds for: " + myQuery);
+    			logger.info(time + " milliseconds for: " + myQuery);
     
                 xmlValue = xmlResults.next();
     			FragmentList<F> fragments = new FragmentListImpl<F>();
@@ -436,8 +458,33 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         // TODO provide a means of investigating namespace bindings for the query configuration.
 	    
 	    XmlQueryContext xmlQueryContext = null;
-		try {
+	    XmlQueryExpression xmlExpression = null;
+	    try {
             String query = "collection('" + dataContainer.getName() + "')" + myQuery;
+            xmlQueryContext = createQueryContext();
+
+/*            xmlExpression = dataManager.prepare(myQuery,xmlQueryContext);
+            logger.info(xmlExpression.getQueryPlan());
+*/
+            XmlResults xmlResults = dataManager.query(query,xmlQueryContext);
+			return xmlResults;
+
+		} catch (XmlException e) {
+			throw new XBRLException("Failed query: " + myQuery,e);
+		} finally {
+            if (xmlQueryContext != null) xmlQueryContext.delete();
+            if (xmlExpression != null) xmlExpression.delete();
+		}
+    		
+	}
+	
+	/**
+	 * @return a XQuery context, prepared with namespace declarations etc.
+	 * @throws XBRLException
+	 */
+	private XmlQueryContext createQueryContext() throws XBRLException {
+        XmlQueryContext xmlQueryContext = null;
+        try {
             xmlQueryContext = dataManager.createQueryContext();
             xmlQueryContext.setReturnType(XmlQueryContext.DeadValues);
             xmlQueryContext.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace);
@@ -446,15 +493,10 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             xmlQueryContext.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace);
             xmlQueryContext.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace);
             xmlQueryContext.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
-            XmlResults xmlResults = dataManager.query(query,xmlQueryContext);
-			return xmlResults;
-
-		} catch (XmlException e) {
-			throw new XBRLException("Failed query: " + myQuery,e);
-		} finally {
-            if (xmlQueryContext != null) xmlQueryContext.delete();
-		}
-    		
+            return xmlQueryContext;
+        } catch (XmlException e) {
+            throw new XBRLException("Failed to create query context.",e);
+        }
 	}
 
 }
