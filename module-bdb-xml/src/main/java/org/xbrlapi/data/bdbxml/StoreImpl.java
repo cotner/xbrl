@@ -48,8 +48,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     private String locationName = null;
     private String containerName = null;
 	private Environment environment = null;
-	private XmlManager dataManager = null;
-	private XmlContainer dataContainer = null;
+	public XmlManager dataManager = null;
+	public XmlContainer dataContainer = null;
 
     /**
      * Initialise the BDB XML database data store.
@@ -175,12 +175,11 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
             xmlIndexSpecification = dataContainer.getIndexSpecification();
 
-            xmlIndexSpecification.addDefaultIndex("node-element-presence");
+            xmlIndexSpecification.replaceDefaultIndex("node-element-presence");
 
             xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"fragment","node-element-presence");
             xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"data","node-element-presence");
             xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"xptr","node-element-presence");
-
             
             xmlIndexSpecification.addIndex("","stub","node-attribute-presence");
 
