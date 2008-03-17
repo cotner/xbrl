@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 
 /**
@@ -29,112 +30,119 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	 * Test getting contexts.
 	 */
 	public void testGetContexts() {
-
-		try {
-			Instance fragment = (Instance) store.getFragment("1");
-			assertEquals(1, fragment.getContexts().getLength());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+	    try {
+	        FragmentList<Instance> instances = store.<Instance>getFragments("Instance");
+	        assertTrue(instances.getLength() > 0);
+	        for (Instance instance: instances) {
+	            assertEquals(1, instance.getContexts().getLength());    
+	        }
+	    } catch (Exception e) {
+	        fail(e.getMessage());
+	    }
 	}
 	
 	/**
 	 * Test getting a specific context.
 	 */
 	public void testGetSpecificContext() {
-
-		try {
-			Instance fragment = (Instance) store.getFragment("1");
-			assertEquals("context", fragment.getContext("ci").getLocalname());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+	    try {
+	        FragmentList<Instance> instances = store.<Instance>getFragments("Instance");
+	        assertTrue(instances.getLength() > 0);
+	        for (Instance instance: instances) {
+	            assertEquals("context", instance.getContext("ci").getLocalname());
+	        }
+	    } catch (Exception e) {
+	        fail(e.getMessage());
+	    }
 	}
 	
 	/**
 	 * Test getting units.
 	 */
 	public void testGetUnits() {
-
-		try {
-			Instance fragment = (Instance) store.getFragment("1");
-			assertEquals(2, fragment.getUnits().getLength());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+	    try {
+	        FragmentList<Instance> instances = store.<Instance>getFragments("Instance");
+	        assertTrue(instances.getLength() > 0);
+	        for (Instance instance: instances) {
+	            assertEquals(2, instance.getUnits().getLength());            }
+	    } catch (Exception e) {
+	        fail(e.getMessage());
+	    }
 	}
 	
 	/**
 	 * Test getting a specific unit.
 	 */
 	public void testGetSpecificUnit() {
-
-		try {
-			Instance fragment = (Instance) store.getFragment("1");
-			assertEquals("unit", fragment.getUnit("u1").getLocalname());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}
+	    try {
+	        FragmentList<Instance> instances = store.<Instance>getFragments("Instance");
+	        assertTrue(instances.getLength() > 0);
+	        for (Instance instance: instances) {
+	            assertEquals("unit", instance.getUnit("u1").getLocalname());
+	        }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
 	
 	/**
 	 * Test getting schemaRefs.
 	 */
 	public void testGetSchemaRefs() {
-
-		try {
-			Instance fragment = (Instance) store.getFragment("1");
-			assertEquals(1, fragment.getSchemaRefs().getLength());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Instance> instances = store.<Instance>getFragments("Instance");
+            assertTrue(instances.getLength() > 0);
+            for (Instance instance: instances) {
+                assertEquals(1, instance.getSchemaRefs().getLength());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
 	 * Test getting linkbaseRefs.
 	 */
 	public void testGetLinkbaseRefs() {
-
-		try {
-			Instance fragment = (Instance) store.getFragment("1");
-			assertEquals(0, fragment.getLinkbaseRefs().getLength());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Instance> instances = store.<Instance>getFragments("Instance");
+            assertTrue(instances.getLength() > 0);
+            for (Instance instance: instances) {
+                assertEquals(0, instance.getLinkbaseRefs().getLength());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
 	 * Test getting facts.
 	 */
 	public void testGetFacts() {
-
-		try {
-			Instance fragment = (Instance) store.getFragment("1");
-			assertEquals(2, fragment.getFacts().getLength());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Instance> instances = store.<Instance>getFragments("Instance");
+            assertTrue(instances.getLength() > 0);
+            for (Instance instance: instances) {
+                assertEquals(2, instance.getFacts().getLength());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
 	 * Test getting footnote links.
 	 */
 	public void testGetFootnoteLinks() {
-
-		try {
-			Instance fragment = (Instance) store.getFragment("1");
-			assertEquals(0, fragment.getFootnoteLinks().getLength());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Instance> instances = store.<Instance>getFragments("Instance");
+            assertTrue(instances.getLength() > 0);
+            for (Instance instance: instances) {
+                assertEquals(0, instance.getFootnoteLinks().getLength());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}	
 		
 }

@@ -5,7 +5,6 @@ package org.xbrlapi.data.dom;
  */
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -60,11 +59,10 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * Initialise the data store.
 	 * @throws XBRLException if the loader state cannot be initialised.
 	 */
-	public StoreImpl() throws XBRLException {
+	public StoreImpl() {
 		dom = XMLDOMBuilder.newDocument();
 		store = dom.createElement(ROOT_NAME);
 		dom.appendChild(store);
-		this.storeLoaderState("0",new LinkedList<String>());
 	}
 
 	/**
@@ -94,6 +92,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 */
 	public void storeFragment(Fragment fragment) throws XBRLException {
 		
+	    logger.debug("Storing " + fragment.getFragmentIndex());
+	    
 		// If the fragment is already stored we are done.
 		if (fragment.getStore() != null) {			
 			return;

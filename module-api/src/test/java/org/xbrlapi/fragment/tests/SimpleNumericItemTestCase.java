@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.SimpleNumericItem;
 
 /**
@@ -29,28 +30,30 @@ public class SimpleNumericItemTestCase extends DOMLoadingTestCase {
 	 * Test getting value
 	 */
 	public void testGetValue() {
-
-		try {
-			SimpleNumericItem fact = (SimpleNumericItem) store.getFragment("3");
-			assertEquals("5.6", fact.getValue());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<SimpleNumericItem> items = store.<SimpleNumericItem>getFragments("SimpleNumericItem");
+            assertTrue(items.getLength() > 0);
+            for (SimpleNumericItem item: items) {
+                assertEquals("5.6", item.getValue());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
 	 * Test getting inferred precision.
 	 */
 	public void testGetInferredPrecision() {
-
-		try {
-			SimpleNumericItem fact = (SimpleNumericItem) store.getFragment("3");
-			assertEquals("5", fact.getInferredPrecision());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<SimpleNumericItem> items = store.<SimpleNumericItem>getFragments("SimpleNumericItem");
+            assertTrue(items.getLength() > 0);
+            for (SimpleNumericItem item: items) {
+                assertEquals("5", item.getInferredPrecision());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
@@ -58,13 +61,15 @@ public class SimpleNumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetPrecisionAdjustedValue() {
 
-		try {
-			SimpleNumericItem fact = (SimpleNumericItem) store.getFragment("3");
-			assertEquals("5.6", fact.getPrecisionAdjustedValue());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<SimpleNumericItem> items = store.<SimpleNumericItem>getFragments("SimpleNumericItem");
+            assertTrue(items.getLength() > 0);
+            for (SimpleNumericItem item: items) {
+                assertEquals("5.6", item.getPrecisionAdjustedValue());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 }

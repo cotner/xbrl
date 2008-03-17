@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.SimpleLink;
 
 /**
@@ -29,56 +30,69 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	 * Test get Href
 	 */
 	public void testGetHref() {	
-
-		try {
-			SimpleLink link = (SimpleLink) store.getFragment("2");
-			assertEquals("RoleE.xsd#newExtendedRoleType",link.getHref());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
+            assertTrue(links.getLength() > 0);
+            for (SimpleLink link: links) {
+                if (link.getLocalname().equals("roleTypeRef")) {
+                    assertEquals("RoleE.xsd#newExtendedRoleType",link.getHref());
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }     	    
 	}	
 	
 	/**
 	 * Test get absolute Href
 	 */
 	public void testGetAbsoluteHref() {	
-
-		try {
-			SimpleLink link = (SimpleLink) store.getFragment("2");
-			assertEquals(configuration.getProperty("test.data.baseURL") + "Common/linkbase/RoleE.xsd#newExtendedRoleType",link.getAbsoluteHref().toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
+            assertTrue(links.getLength() > 0);
+            for (SimpleLink link: links) {
+                if (link.getLocalname().equals("roleTypeRef")) {
+                    assertEquals(configuration.getProperty("test.data.baseURL") + "Common/linkbase/RoleE.xsd#newExtendedRoleType",link.getAbsoluteHref().toString());
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }           
 	}
 
 	/**
 	 * Test get absolute target fragment
 	 */
 	public void testGetTargetFragment() {	
-
-		try {
-			SimpleLink link = (SimpleLink) store.getFragment("2");
-			assertEquals("roleType",link.getTargetFragment().getLocalname());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
+            assertTrue(links.getLength() > 0);
+            for (SimpleLink link: links) {
+                if (link.getLocalname().equals("roleTypeRef")) {
+                    assertEquals("roleType",link.getTargetFragment().getLocalname());
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }  
 	}
 	
 	/**
 	 * Test get arcrole
 	 */
 	public void testGetArcrole() {	
+        try {
+            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
+            assertTrue(links.getLength() > 0);
+            for (SimpleLink link: links) {
+                if (link.getLocalname().equals("roleTypeRef")) {
+                    assertEquals("http://www.w3.org/1999/xlink/properties/linkbase",link.getArcrole());
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }    
 
-		try {
-			SimpleLink link = (SimpleLink) store.getFragment("10");
-			assertEquals("http://www.w3.org/1999/xlink/properties/linkbase",link.getArcrole());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
 	}	
 	
 }

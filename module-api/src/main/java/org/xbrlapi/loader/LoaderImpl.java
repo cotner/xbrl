@@ -100,6 +100,11 @@ public class LoaderImpl implements Loader {
     private String documentURL = null;
 
     /**
+     * The document Id (including the document hash and its counter)
+     */
+    private String documentId = null;
+
+    /**
      * Stack of vectors used to track children.
      */
     private Stack<Vector<Long>> childrenStack = new Stack<Vector<Long>>();
@@ -287,8 +292,17 @@ public class LoaderImpl implements Loader {
      *            The URL of the document now being parsed.
      * @throws XBRLException.
      */
-    private void setDocumentURL(String url) {
+    private void setDocumentURL(String url) throws XBRLException {
         this.documentURL = url;
+        this.documentId = getStore().getDocumentId(url);
+    }
+    
+    /**
+     * @return the document ID for the document being analysed or
+     * null if no document is being analysed.
+     */
+    private String getDocumentId() {
+        return documentId;
     }
 
     /**
@@ -605,7 +619,6 @@ public class LoaderImpl implements Loader {
         if (isDiscovering()) return;
         setDiscovering(true);
 
-        this.setNextFragmentId(getStore().getNextFragmentId());
         for (URL url: getStore().getDocumentsToDiscover()) {
             this.stashURL(url);
         }
@@ -615,27 +628,28 @@ public class LoaderImpl implements Loader {
             if (!getStore().hasDocument(url.toString())) {
                 double startTime = System.currentTimeMillis();
                 int startIndex = this.fragmentId;
-                logger.info("Up to fragment " + this.fragmentId + ". Now parsing " + url);
                 setDocumentURL(url.toString());
+                this.setNextFragmentId("1");
                 parse(url);
 /*                String time = (new Double(
                         (System.currentTimeMillis() - startTime)
                                 / (fragmentId - startIndex))).toString();
                 if (time.length() > 4) time = time.substring(0, 4);
                 logger.info("Average time taken per fragment = " + time + " milliseconds");
-*/            } else {
-                logger.info("The document is already in the data store.");
+*/
+                logger.info(this.fragmentId + " fragments in " + url);
+            } else {
+                logger.info(url + " is already in the data store.");
             }
 
             if (interruptRequested()) {
                 cancelInterrupt();
                 break;
             }
-            
+
             url = getNextDocumentToExplore();
         }
 
-        getStore().storeLoaderState(this.getCurrentFragmentId(),this.getDocumentsStillToAnalyse());        
         setDiscovering(false);
 
     }
@@ -645,33 +659,22 @@ public class LoaderImpl implements Loader {
      */
     public void discoverNext() throws XBRLException {
 
+        Store store = this.getStore();
+        
         if (isDiscovering()) return;
         setDiscovering(true);
 
-        logger.debug("The next fragment ID is: " + getStore().getNextFragmentId());
-        this.setNextFragmentId(getStore().getNextFragmentId());
-
         URL url = getNextDocumentToExplore();
-        while (getStore().hasDocument(url.toString()) && (url != null)) {
+        while (store.hasDocument(url.toString()) && (url != null)) {
             url = getNextDocumentToExplore();
         }
 
         if (url != null) {
-            double startTime = System.currentTimeMillis();
-            int startIndex = this.fragmentId;
-            logger.info("Up to fragment " + this.fragmentId + ". Now parsing "
-                    + url);
+            logger.info("Up to fragment " + this.fragmentId + ". Now parsing " + url);
             setDocumentURL(url.toString());
+            this.setNextFragmentId("1");
             parse(url);
-            String time = (new Double((System.currentTimeMillis() - startTime)
-                    / (fragmentId - startIndex))).toString();
-            if (time.length() > 4)
-                time = time.substring(0, 4);
-            logger.debug("Average time taken per fragment = " + time
-                    + " milliseconds");
         }
-
-        getStore().storeLoaderState(this.getCurrentFragmentId(),this.getDocumentsStillToAnalyse());
 
         setDiscovering(false);
 
@@ -909,6 +912,10 @@ public class LoaderImpl implements Loader {
             throw new XBRLException("IO exception thrown when parsing " + url,
                     e);
         }
+
+        // Remove any document stub from the data store once parsing is complete.
+        getStore().removeStub(url.toString());
+        
     }
 
     /**
@@ -974,7 +981,7 @@ public class LoaderImpl implements Loader {
         URL dereferencedURL = null;
         try {
             dereferencedURL = new URL(url.getProtocol(), url.getHost(), url
-                    .getPort(), url.getFile());
+                    .getPort(), url.getPath());
         } catch (MalformedURLException e) {
             throw new XBRLException(
                     "Malformed URL found in DTS discovery process: " + url, e);
@@ -1006,7 +1013,7 @@ public class LoaderImpl implements Loader {
     }
 
     public String getCurrentFragmentId() {
-        return (new Integer(fragmentId)).toString();
+        return getDocumentId() + "_" + (new Integer(fragmentId)).toString();
     }
 
     public void incrementFragmentId() {
@@ -1048,5 +1055,12 @@ public class LoaderImpl implements Loader {
      */
     public void setSchemaLocationAttributeUsage(boolean useThem) {
         this.useSchemaLocationAttributes = useThem;
+    }
+
+    /**
+     * @see org.xbrlapi.loader.Loader#storeDocumentsToAnalyse()
+     */
+    public void storeDocumentsToAnalyse() throws XBRLException {
+        getStore().storeLoaderState(getDocumentsStillToAnalyse());
     }
 }

@@ -2,6 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.DefinitionArc;
+import org.xbrlapi.FragmentList;
 /**
  * Tests the implementation of the org.xbrlapi.DefinitionArc interface.
  * Uses the DOM-based data store to ensure rapid testing.
@@ -27,28 +28,30 @@ public class DefinitionArcTestCase extends DOMLoadingTestCase {
 	 * Test getting show value.
 	 */
 	public void testGetShow() {	
-
-		try {
-			DefinitionArc arc = (DefinitionArc) store.getFragment("83");
-			assertNull(arc.getShow());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<DefinitionArc> fragments = store.<DefinitionArc>getFragments("DefinitionArc");
+            assertTrue(fragments.getLength() > 0);
+            for (DefinitionArc fragment: fragments) {
+                assertNull(fragment.getShow());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
 	 * Test getting actuate value.
 	 */
 	public void testGetActuate() {	
-
-		try {
-			DefinitionArc arc = (DefinitionArc) store.getFragment("83");
-			assertNull(arc.getActuate());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<DefinitionArc> fragments = store.<DefinitionArc>getFragments("DefinitionArc");
+            assertTrue(fragments.getLength() > 0);
+            for (DefinitionArc fragment: fragments) {
+                assertNull(fragment.getActuate());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 }

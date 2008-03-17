@@ -38,20 +38,19 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 * TODO Decide if the Fragment setStore method should be protected rather than public.
 	 */
 	public void testExceptionExpectedChangingTheFragmentStore() {
-		Fragment f = null;
-		
 		try {
-			f = store.getFragment("3");
-		} catch (XBRLException e) {
+		    FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
+		    for (Fragment fragment: fragments) {
+		        Fragment f = store.getFragment(fragment.getFragmentIndex());
+		        try {
+		            f.setStore(store);
+	                fail("The store for a fragment cannot be changed once it is set.");
+		        } catch (Exception e) {
+		            ; // Expected
+		        }
+		    }
+		} catch (Exception e) {
 			fail(e.getMessage());
-		}
-			
-		try {
-			f.setStore(store);
-			fail("The store for a fragment cannot be changed once it is set.");
-			
-		} catch (XBRLException e) {
-			; // Expected
 		}
 	}
 	
@@ -60,15 +59,16 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetFragmentTypeForAStoredFragment() {
 
-		Fragment f = null;
-		
-		try {
-			f = store.getFragment("3");
-		} catch (XBRLException e) {
-			fail(e.getMessage());
-		}
-		
-		assertEquals("org.xbrlapi.impl.SimpleLinkImpl",f.getType());
+        try {
+            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            assertTrue(fragments.getLength() > 0);
+            for (Fragment fragment: fragments) {
+                assertEquals("org.xbrlapi.impl.SchemaImpl",fragment.getType());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+	    
 	}	
 
 	/**
@@ -76,23 +76,12 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 * TODO Figure out how to test operations on an unstored fragment using the mockfragmentimpl.
 	 */
 	public void testGetURLOfAStoredFragment() {
-
-		Fragment f = null;
-		
-		try {
-			f = store.getFragment("1");
-		} catch (XBRLException e) {
-			fail(e.getMessage());
-		}
-
-		try {
-			String u = f.getURL();
-			assertEquals(this.getURL(STARTING_POINT), u);
-			
-		} catch (XBRLException e) {
-			fail(e.getMessage());
-		}
-
+        try {
+            Fragment fragment = store.getRootFragmentForDocument(this.getURL(STARTING_POINT));
+            assertEquals(this.getURL(STARTING_POINT), fragment.getURL());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }	    
 	}	
 
 	/**
@@ -101,22 +90,15 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetNamespaceURIOfAStoredFragmentWithANamespace() {
 
-		Fragment f = null;
-		
-		try {
-			f = store.getFragment("1");
-		} catch (XBRLException e) {
-			fail(e.getMessage());
-		}
-
-		try {
-			String n = f.getNamespaceURI();
-			assertEquals(Constants.XMLSchemaNamespace, n);
-			
-		} catch (XBRLException e) {
-			fail(e.getMessage());
-		}
-
+        try {
+            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            assertTrue(fragments.getLength() > 0);
+            for (Fragment fragment: fragments) {
+                assertEquals(Constants.XMLSchemaNamespace,fragment.getNamespaceURI());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }	    
 	}
 	
 	/**
@@ -124,21 +106,15 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetLocalNameOfAStoredFragment() {
 
-		Fragment f = null;
-		
-		try {
-			f = store.getFragment("1");
-		} catch (XBRLException e) {
-			fail(e.getMessage());
-		}
-
-		try {
-			String n = f.getLocalname();
-			assertEquals("schema", n);
-			
-		} catch (XBRLException e) {
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            assertTrue(fragments.getLength() > 0);
+            for (Fragment fragment: fragments) {
+                assertEquals("schema",fragment.getLocalname());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 
 	}	
 	
@@ -149,13 +125,22 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetSequenceToParentElement() {
 
-		try {
-			Fragment child = store.getFragment("2");
-			assertEquals("1 1",child.getSequenceToParentElementAsString());		
-		} catch (XBRLException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            assertTrue(fragments.getLength() > 0);
+            for (Fragment fragment: fragments) {
+                FragmentList<Fragment> children = fragment.getAllChildren();
+                for (Fragment child: children) {
+                    String required = "";
+                    if (child.getMetaAttribute("SequenceToParentElement") != null) {
+                        required = child.getMetaAttribute("SequenceToParentElement");
+                    }
+                    assertEquals(required,child.getSequenceToParentElementAsString());
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }	    
 		
 	}
 	
@@ -185,12 +170,16 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetParentFragment() {
 
-		try {
-			Fragment child = store.getFragment("2");
-			Fragment parent = child.getParent();
-			assertEquals("schema",parent.getLocalname());		
-		} catch (XBRLException e) {
-			e.printStackTrace();
+        try {
+            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            assertTrue(fragments.getLength() > 0);
+            for (Fragment fragment: fragments) {
+                FragmentList<Fragment> children = fragment.getAllChildren();
+                for (Fragment child: children) {
+                    assertEquals(fragment.getFragmentIndex(),child.getParent().getFragmentIndex());
+                }
+            }    
+		} catch (Exception e) {
 			fail(e.getMessage());
 		}
 
@@ -200,29 +189,39 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 * Test retrieval of XPath to parent element.
 	 */
 	public void testGetXPathToParentElement() {
-		try {
-			Fragment child = store.getFragment("2");
-			String xpath = child.getXPath();
-			assertEquals("./*[1]/*[1]",xpath);		
-		} catch (XBRLException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+	    
+        try {
+            FragmentList<Schema> fragments = store.<Schema>query("/*[@url='" + this.getURL(STARTING_POINT) + "' and @parentIndex='none']");
+            assertTrue(fragments.getLength() > 0);
+            for (Fragment fragment: fragments) {
+                FragmentList<Fragment> children = fragment.getAllChildren();
+                Fragment child = children.get(0);
+                assertEquals("./*[1]/*[1]",child.getXPath());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }   	    
+
 	}	
 	
 	/**
 	 * Test retrieval of parent element.
 	 */
 	public void testGetParentElement() {
-		try {
-			Fragment child = store.getFragment("2");
-			Fragment parent = child.getParent();
-			Element parentElement = child.getParentElement(parent.getDataRootElement());
-			assertEquals("appinfo",parentElement.getLocalName());		
-		} catch (XBRLException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Schema> fragments = store.<Schema>query("/*[@url='" + this.getURL(STARTING_POINT) + "' and @parentIndex='none']");
+            assertTrue(fragments.getLength() > 0);
+            for (Fragment fragment: fragments) {
+                FragmentList<Fragment> children = fragment.getAllChildren();
+                Fragment child = children.get(0);
+                Fragment parent = child.getParent();
+                Element parentElement = child.getParentElement(parent.getDataRootElement());
+                assertEquals("appinfo",parentElement.getLocalName());       
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }           
+
 	}
 	
 	

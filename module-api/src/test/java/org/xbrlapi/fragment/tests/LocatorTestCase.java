@@ -66,7 +66,7 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 			FragmentList<Locator> fragments = store.<Locator>getFragments("Locator");
 			Locator fragment = fragments.getFragment(0);
 			Fragment target = fragment.getTargetFragment();
-			assertEquals("4", target.getFragmentIndex());
+			assertEquals(fragment.getTargetDocumentURL().toString(), target.getURL().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

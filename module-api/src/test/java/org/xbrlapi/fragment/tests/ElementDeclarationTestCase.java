@@ -8,9 +8,9 @@ package org.xbrlapi.fragment.tests;
 
 import java.net.URL;
 
+import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.ElementDeclaration;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -186,20 +186,25 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetTypeInformation() {		
 		try {
-			Fragment f = store.getFragment("5");
-			ElementDeclaration ed = (ElementDeclaration) f;
+		    
+            FragmentList<Concept> fragments = store.getFragments("Concept");
+            assertTrue(fragments.getLength() > 0);
+            for (Concept fragment: fragments) {
 
-			String value = ed.getTypeQName();
-			assertEquals(Constants.XBRL21Prefix + ":monetaryItemType", value);
+                String type = fragment.getDataRootElement().getAttribute("type");
+                assertEquals(type, fragment.getTypeQName());
 
-			value = ed.getTypeNamespaceAlias();
-			assertEquals(Constants.XBRL21Prefix , value);
+                String prefix = fragment.getPrefixFromQName(type);
+                assertEquals(Constants.XBRL21Prefix , fragment.getTypeNamespaceAlias());
 
-			value = ed.getTypeNamespace();
-			assertEquals(Constants.XBRL21Namespace, value);
-			
-			value = ed.getTypeLocalname();
-			assertEquals("monetaryItemType", value);
+                String namespace = fragment.getNamespaceFromQName(type,fragment.getDataRootElement());
+                assertEquals(namespace, fragment.getTypeNamespace());
+                
+                String localname = fragment.getLocalnameFromQName(type);
+                assertEquals(fragment.getTypeLocalname(), localname);
+                
+            }
+
 			
 		} catch (XBRLException e) {
 			fail(e.getMessage());
@@ -210,21 +215,27 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	 * Test getting the information about the substitution group.
 	 */
 	public void testGetSubstitutionGroupInformation() {		
-		try {
-			Fragment f = store.getFragment("5");
-			ElementDeclaration ed = (ElementDeclaration) f;
 
-			String value = ed.getSubstitutionGroupQName();
-			assertEquals(Constants.XBRL21Prefix + ":item", value);
+	    
+	    try {
+	        
+            FragmentList<Concept> fragments = store.getFragments("Concept");
+            assertTrue(fragments.getLength() > 0);
+            for (Concept fragment: fragments) {
 
-			value = ed.getSubstitutionGroupNamespaceAlias();
-			assertEquals(Constants.XBRL21Prefix , value);
-			
-			value = ed.getSubstitutionGroupNamespace();
-			assertEquals(Constants.XBRL21Namespace, value);
-			
-			value = ed.getSubstitutionGroupLocalname();
-			assertEquals("item", value);
+                String sg = fragment.getDataRootElement().getAttribute("substitutionGroup");
+                assertEquals(sg, fragment.getSubstitutionGroupQName());
+
+                String prefix = fragment.getPrefixFromQName(sg);
+                assertEquals(Constants.XBRL21Prefix , fragment.getSubstitutionGroupNamespaceAlias());
+
+                String namespace = fragment.getNamespaceFromQName(sg,fragment.getDataRootElement());
+                assertEquals(namespace, fragment.getSubstitutionGroupNamespace());
+                
+                String localname = fragment.getLocalnameFromQName(sg);
+                assertEquals(fragment.getSubstitutionGroupLocalname(), localname);
+                
+            }
 			
 		} catch (XBRLException e) {
 			fail(e.getMessage());

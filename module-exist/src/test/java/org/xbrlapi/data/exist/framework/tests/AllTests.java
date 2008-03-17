@@ -9,12 +9,11 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"Test for org.xbrlapi.data.exist.framework.tests");
 		//$JUnit-BEGIN$
+        suite.addTestSuite(CollectionCreationAndDeletionTestCase.class);
+        suite.addTestSuite(DatabaseManagerInitialisationTestCase.class);
+        suite.addTestSuite(DatabaseManagerTestCase.class);
+        suite.addTestSuite(GetContentAsDOMTestCase.class);
 		suite.addTestSuite(SetContentAsDOMTestCase.class);
-		suite.addTestSuite(CollectionCreationAndDeletionTestCase.class);
-		suite.addTestSuite(DatabaseManagerInitialisationTestCase.class);
-		suite.addTestSuite(DatabaseManagerTestCase.class);
-		suite.addTestSuite(GetContentAsDOMTestCase.class);
-		suite.addTestSuite(XUpdateTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

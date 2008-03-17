@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.NonNumericItem;
 
 /**
@@ -28,12 +29,15 @@ public class NonNumericItemTestCase extends DOMLoadingTestCase {
 	 * Test getting all child facts.
 	 */
 	public void testGetAllChildFacts() {
-
 		try {
-			NonNumericItem fact = (NonNumericItem) store.getFragment("10");
-			assertEquals("My Family Name2", fact.getValue());
+		    FragmentList<NonNumericItem> items = store.<NonNumericItem>getFragments("NonNumericItem");
+		    assertTrue(items.getLength() > 0);
+		    for (NonNumericItem fact: items) {
+		        if (fact.getLocalname().equals("managementTitle") ) {
+		            assertEquals("My Title", fact.getValue().substring(0,fact.getValue().length()-1));
+		        }
+		    }
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}

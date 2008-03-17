@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.Period;
 
 /**
@@ -29,15 +30,18 @@ public class PeriodTestCase extends DOMLoadingTestCase {
 	 */
 	public void testPeriodTypeDetermination() {
 
-		try {
-			Period fragment = (Period) store.getFragment("7");
-			assertTrue(fragment.isFiniteDuration());
-			assertFalse(fragment.isForever());
-			assertFalse(fragment.isInstant());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Period> periods = store.<Period>getFragments("Period");
+            assertTrue(periods.getLength() > 0);
+            for (Period period: periods) {
+                assertTrue(period.isFiniteDuration());
+                assertFalse(period.isForever());
+                assertFalse(period.isInstant());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+        
 	}
 	
 	/**
@@ -45,21 +49,21 @@ public class PeriodTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetPeriodInformation() {
 
-		try {
-			Period fragment = (Period) store.getFragment("7");
-			assertEquals("2001-08-01",fragment.getStartDate());
-			assertEquals("2001-08-31",fragment.getEndDate());
-			try {
-				String instant = fragment.getInstant();
-				fail("An exception should have been thrown because the period is not an instant.");
-			} catch (Exception e) {
-				;
-			}		
-			} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Period> periods = store.<Period>getFragments("Period");
+            assertTrue(periods.getLength() > 0);
+            for (Period period: periods) {
+                assertEquals("2001-08-01",period.getStartDate());
+                assertEquals("2001-08-31",period.getEndDate());
+                try {
+                    String instant = period.getInstant();
+                    fail("An exception should have been thrown because the period is not an instant.");
+                } catch (Exception e) {
+                    ;
+                }       
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
-	
-
 }

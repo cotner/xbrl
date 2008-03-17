@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.Unit;
 
 /**
@@ -31,10 +32,12 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testHasDenominator() {
 
 		try {
-			Unit fragment = (Unit) store.getFragment("9");
-			assertFalse(fragment.hasDenominator());
+		    FragmentList<Unit> units = store.<Unit>getFragments("Unit");
+		    assertTrue(units.getLength() > 0);
+		    for (Unit unit: units) {
+	            assertFalse(unit.hasDenominator());
+		    }
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
@@ -45,10 +48,13 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testGetNumeratorMeasures() {
 
 		try {
-			Unit fragment = (Unit) store.getFragment("9");
-			assertEquals(2,fragment.getNumeratorMeasures().getLength());
+            FragmentList<Unit> units = store.<Unit>getFragments("Unit");
+            assertTrue(units.getLength() > 0);
+            for (Unit unit: units) {
+                assertFalse(unit.hasDenominator());
+                assertEquals(2,unit.getNumeratorMeasures().getLength());
+            }
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
@@ -58,13 +64,15 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetDenominatorMeasures() {
 
-		try {
-			Unit fragment = (Unit) store.getFragment("9");
-			assertNull(fragment.getDenominatorMeasures());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Unit> units = store.<Unit>getFragments("Unit");
+            assertTrue(units.getLength() > 0);
+            for (Unit unit: units) {
+                assertNull(unit.getDenominatorMeasures());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
@@ -72,12 +80,14 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	 */
 	public void testCheckEquality() {
 
-		try {
-			Unit fragment = (Unit) store.getFragment("9");
-			assertTrue(fragment.equals(fragment));
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Unit> units = store.<Unit>getFragments("Unit");
+            assertTrue(units.getLength() > 0);
+            for (Unit unit: units) {
+                assertTrue(unit.equals(unit));
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}	
 }

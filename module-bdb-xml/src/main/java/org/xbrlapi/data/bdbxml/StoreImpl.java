@@ -2,7 +2,6 @@ package org.xbrlapi.data.bdbxml;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -173,6 +172,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"fragment");
             indexSpecification.addIndex("node-element-presence-none", Constants.XBRLAPIPrefix,"xptr");
             indexSpecification.addIndex("node-attribute-equality-string", "","parentIndex");
+            indexSpecification.addIndex("node-attribute-equality-string", "","stub");
             indexSpecification.addIndex("node-attribute-equality-string", "","url");
             indexSpecification.addIndex("node-attribute-equality-string", "","type");
             indexSpecification.addIndex("node-attribute-equality-string", "","id");
@@ -200,8 +200,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         } catch (XmlException e) {
             throw new XBRLException("The indexes could not be configured.", e);
         }
-        
-        this.storeLoaderState("0",new LinkedList<String>());
         
     }        
 

@@ -30,42 +30,36 @@ public class CustomTypeTestCase extends DOMLoadingTestCase {
 	 * Test getting the roleType definition.
 	 */
 	public void testGetCustomRoleTypeDefinition() {
-
-		try {
-			CustomType fragment = (CustomType) store.getFragment("8");
-			assertEquals("Test variation for defining a new role on a presentationLink", fragment.getDefinition());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<CustomType> fragments = store.<CustomType>getFragments("RoleType");
+            assertTrue(fragments.getLength() > 0);
+            for (CustomType fragment: fragments) {
+                if (fragment.getCustomURI().equals("http://mycompany.com/xbrl/roleE/newExtendedRoleType")) {
+                    assertEquals("Test variation for defining a new role on a presentationLink", fragment.getDefinition());
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}	
 
-	/**
-	 * Test getting the custom URI.
-	 */
-	public void testGetCustomRoleURI() {
-
-		try {
-			CustomType fragment = (CustomType) store.getFragment("8");
-			assertEquals("http://mycompany.com/xbrl/roleE/newExtendedRoleType", fragment.getCustomURI());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}	
+	
 
 	/**
 	 * Test getting the custom type ID.
 	 */
 	public void testGetCustomTypeId() {
-
-		try {
-			CustomType fragment = (CustomType) store.getFragment("8");
-			assertEquals("newExtendedRoleType", fragment.getCustomTypeId());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<CustomType> fragments = store.<CustomType>getFragments("RoleType");
+            assertTrue(fragments.getLength() > 0);
+            for (CustomType fragment: fragments) {
+                if (fragment.getCustomURI().equals("http://mycompany.com/xbrl/roleE/newExtendedRoleType")) {
+                    assertEquals("newExtendedRoleType", fragment.getCustomTypeId());
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}		
 	
 	/**

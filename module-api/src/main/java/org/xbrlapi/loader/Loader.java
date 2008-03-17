@@ -288,5 +288,12 @@ public interface Loader {
      * Cancels a request for an interrupt.
      */
     public void cancelInterrupt();
+    
+    /**
+     * Stores the stubs for the documents still to be analysed in
+     * the data store being used by the loader.
+     * @throws XBRLException
+     */
+    public void storeDocumentsToAnalyse() throws XBRLException;
 	
 }

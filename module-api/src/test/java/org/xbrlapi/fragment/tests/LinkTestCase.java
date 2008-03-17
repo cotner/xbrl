@@ -1,7 +1,10 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.ExtendedLink;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.Link;
+import org.xbrlapi.utilities.Constants;
 
 /**
  * Tests the implementation of the org.xbrlapi.Link interface.
@@ -27,11 +30,17 @@ public class LinkTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test getting link role value when it is missing.
 	 */
-	public void testGetLinkRoleWhenItIsMissing() {	
+	public void testGetLinkRoles() {	
 
 		try {
-			Link link = (Link) store.getFragment("2");
-			assertNull(link.getLinkRole());
+		    FragmentList<ExtendedLink> links = store.<ExtendedLink>getFragments("ExtendedLink");
+		    for (Link link: links) {
+    		    String role = link.getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"role");
+    		    if (! role.equals(""))
+    		        assertEquals(role,link.getLinkRole());
+    		    else
+                    assertNull(link.getLinkRole());
+		    }
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -42,28 +51,20 @@ public class LinkTestCase extends DOMLoadingTestCase {
 	 * Test getting link role value when it is provided.
 	 */
 	public void testGetLinkRoleWhenItProvided() {	
-
-		try {
-			Link link = (Link) store.getFragment("10");
-			assertEquals("http://www.xbrl.org/2003/role/presentationLinkbaseRef",link.getLinkRole());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Link> fragments = store.<Link>getFragments("ExtendedLink");
+            assertTrue(fragments.getLength() > 0);
+            for (Link fragment: fragments) {
+                store.serialize(fragment);
+                if (fragment.getLocalname().equals("presentationLink")) {
+                    assertEquals("http://mycompany.com/xbrl/roleE/newExtendedRoleType",fragment.getLinkRole());
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
-	/**
-	 * Test getting link role value for a custom link.
-	 */
-	public void testGetLinkRoleForCustomLink() {	
-
-		try {
-			Link link = (Link) store.getFragment("67");
-			assertNull(link.getLinkRole());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}		
+		
 	
 }

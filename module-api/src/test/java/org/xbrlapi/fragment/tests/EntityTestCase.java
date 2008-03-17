@@ -2,6 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Entity;
+import org.xbrlapi.FragmentList;
 /**
  * Tests the implementation of the org.xbrlapi.Entity interface.
  * Uses the DOM-based data store to ensure rapid testing.
@@ -27,28 +28,31 @@ public class EntityTestCase extends DOMLoadingTestCase {
 	 * Test getting the scenario.
 	 */
 	public void testGetScenario() {
-
-		try {
-			Entity fragment = (Entity) store.getFragment("4");
-			assertEquals("org.xbrlapi.impl.SegmentImpl", fragment.getSegment().getType());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Entity> entities = store.<Entity>getFragments("Entity");
+            assertTrue(entities.getLength() > 0);
+            for (Entity entity: entities) {
+                assertEquals("org.xbrlapi.impl.SegmentImpl", entity.getSegment().getType());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
 	 * Test getting the identifier information.
 	 */
-	public void testGetScheme() {
+	public void testGetSchemeAndValue() {
 
-		try {
-			Entity fragment = (Entity) store.getFragment("4");
-			assertEquals("www.dnb.com", fragment.getIdentifierScheme());
-			assertEquals("121064880", fragment.getIdentifierValue());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Entity> entities = store.<Entity>getFragments("Entity");
+            assertTrue(entities.getLength() > 0);
+            for (Entity entity: entities) {
+                assertEquals("www.dnb.com", entity.getIdentifierScheme());
+                assertEquals("121064880", entity.getIdentifierValue());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 }

@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.UsedOn;
 
 /**
@@ -29,17 +30,18 @@ public class UsedOnTestCase extends DOMLoadingTestCase {
 	 * Test analysis of the content of a UsedOn fragment.
 	 */
 	public void testUsedOnContentAnalysis() {
-
-		try {
-			UsedOn fragment = (UsedOn) store.getFragment("9");
-			assertEquals("presentationLink", fragment.getLocalname());
-			assertEquals("http://www.xbrl.org/2003/linkbase", fragment.getURI());
-			assertEquals(true, fragment.isUsedOn("http://www.xbrl.org/2003/linkbase", "presentationLink"));
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}	
-	
-	
+	    try {
+	        FragmentList<UsedOn> fragments = store.<UsedOn>getFragments("UsedOn");
+	        assertTrue(fragments.getLength() > 0);
+	        for (UsedOn fragment: fragments) {
+	            if (fragment.getParent().getDataRootElement().getAttribute("id").equals("newExtendedRoleType")) {
+                    assertEquals("http://www.xbrl.org/2003/linkbase",fragment.getURI());
+                    assertEquals("presentationLink", fragment.getLocalname());
+                    assertTrue(fragment.isUsedOn("http://www.xbrl.org/2003/linkbase", "presentationLink"));
+	            }
+	        }
+	    } catch (Exception e) {
+	        fail(e.getMessage());
+	    }
+	}
 }

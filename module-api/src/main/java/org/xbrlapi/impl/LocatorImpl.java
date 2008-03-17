@@ -62,10 +62,9 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
     }
     
     /**
-     * @return the document URL for the target fragment.
-     * @throws XBRLException.
+     * @see org.xbrlapi.Locator#getTargetDocumentURL()
      */
-    private URL getTargetDocumentURL() throws XBRLException {
+    public URL getTargetDocumentURL() throws XBRLException {
     	try {
     		return new URL(this.getMetadataRootElement().getAttribute("targetDocumentURL"));
     	} catch (MalformedURLException e) {
@@ -74,10 +73,9 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
     }
     
     /**
-     * @return the string value of the XPointer element scheme expression from the xlink:href attribute.
-     * @throws XBRLException.
+     * @see org.xbrlapi.Locator#getTargetPointerValue()
      */
-    private String getTargetPointerValue() throws XBRLException {
+    public String getTargetPointerValue() throws XBRLException {
     	return this.getMetadataRootElement().getAttribute("targetPointerValue");
     }
     

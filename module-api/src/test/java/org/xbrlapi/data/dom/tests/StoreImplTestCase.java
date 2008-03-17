@@ -71,19 +71,15 @@ public class StoreImplTestCase extends BaseTestCase {
 		
 		String index = store.getNextFragmentId();
 		FragmentList<Fragment> fragments = null;
-		try {			
-		    Fragment mock = new MockFragmentImpl(index);
-		    store.serialize(mock.getMetadataRootElement());
-			store.storeFragment(mock);
+		try {
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XBRLAPIPrefix + ":fragment";
 	        fragments = store.<Fragment>query(xpathQuery);
 		} catch (Exception e) {
-		    e.printStackTrace();
 			fail(e.getMessage());
 		}
 		
 		try {
-			assertEquals("2",(new Long(fragments.getLength())).toString());
+			assertEquals("1",(new Long(fragments.getLength())).toString());
 	        assertEquals("fragment",fragments.getFragment(0).getDataRootElement().getLocalName());
 			store.removeFragment(index);
 		} catch (Exception e) {

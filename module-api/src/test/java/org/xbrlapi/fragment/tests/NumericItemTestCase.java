@@ -2,6 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.NumericItem;
 
 /**
@@ -30,49 +31,52 @@ public class NumericItemTestCase extends DOMLoadingTestCase {
 	 * Test getting units
 	 */
 	public void testGetUnits() {
-
-		try {
-			NumericItem fact = (NumericItem) store.getFragment("13");
-			assertEquals("unit", fact.getUnits().getLocalname());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<NumericItem> items = store.<NumericItem>getFragments("SimpleNumericItem");
+            assertTrue(items.getLength() > 0);
+            for (NumericItem item: items) {
+                assertEquals("unit", item.getUnits().getLocalname());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 
 	/**
 	 * Test getting precision
 	 */
 	public void testGetPrecision() {
-
-		try {
-			NumericItem fact = (NumericItem) store.getFragment("13");
-			assertEquals("2", fact.getPrecision());
-			assertEquals(true, fact.hasPrecision());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<NumericItem> items = store.<NumericItem>getFragments("SimpleNumericItem");
+            assertTrue(items.getLength() > 0);
+            for (NumericItem item: items) {
+                assertEquals("2", item.getPrecision());
+                assertEquals(true, item.hasPrecision());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
 	 * Test getting decimals
 	 */
 	public void testGetDecimals() {
-
-		try {
-			NumericItem fact = (NumericItem) store.getFragment("13");
-			assertEquals(false, fact.hasDecimals());
-			try {
-				assertEquals("1", fact.getDecimals());
-				fail("Exception expected when getting decimals for a fact without them");
-			} catch (Exception e) {
-				;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<NumericItem> items = store.<NumericItem>getFragments("SimpleNumericItem");
+            assertTrue(items.getLength() > 0);
+            for (NumericItem item: items) {
+                assertEquals(false, item.hasDecimals());
+                try {
+                    assertEquals("1", item.getDecimals());
+                    fail("Exception expected when getting decimals for a fact without them");
+                } catch (Exception e) {
+                    ;
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}	
 	
 }

@@ -15,7 +15,7 @@ import com.sleepycat.dbxml.XmlUpdateContext;
  * basic testing that the Berkeley DB XML implementation is working OK.
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
 */
-public class DatabaseDeletionTest extends BaseTestCase {
+public class DatabaseDeletionTestCase extends BaseTestCase {
 
 	private String docString = "<a_node><b_node>Some text</b_node></a_node>";
 	private String docName = "testDocumentName";	
@@ -114,7 +114,7 @@ public class DatabaseDeletionTest extends BaseTestCase {
     
     }    
     
-	public DatabaseDeletionTest(String arg0) {
+	public DatabaseDeletionTestCase(String arg0) {
 		super(arg0);
 	}
 

@@ -30,35 +30,44 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 
 	public void testGetPeriodType() {	
 
-		try {
-			Concept concept = (Concept) store.getFragment("18");
-			assertEquals("duration", concept.getPeriodType());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
+            assertTrue(concepts.getLength() > 0);
+            for (Concept concept: concepts) {
+                if (concept.getName().equals("CurrentAsset"))
+                    assertEquals("duration", concept.getPeriodType());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	public void testGetBalance() {	
 
 		try {
-			Concept concept = (Concept) store.getFragment("18");
-			assertNull(concept.getBalance());
+            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
+            assertTrue(concepts.getLength() > 0);
+            for (Concept concept: concepts) {
+                if (concept.getName().equals("CurrentAsset"))
+                    assertNull(concept.getBalance());
+            }
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
 
 	public void testGetLocators() {	
 
-		try {
-			Concept concept = (Concept) store.getFragment("18");
-			assertEquals(0,concept.getReferencingLocators().getLength());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
+            assertTrue(concepts.getLength() > 0);
+            for (Concept concept: concepts) {
+                if (concept.getName().equals("CurrentAsset"))
+                    assertEquals(0,concept.getReferencingLocators().getLength());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}	
 	
 	public void testGetLabels() {
@@ -72,7 +81,6 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 			}
 
 		} catch (XBRLException e) {
-			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}

@@ -6,8 +6,9 @@ import java.util.List;
  * Tests of performance with larger data sets.
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
  */
-public abstract class LoadPerformanceTestCase extends BaseTestCase {
-	private final String STARTING_POINT = "real.data.large.schema";
+public abstract class LoadLargeDTSTestCase extends BaseTestCase {
+
+    private final String STARTING_POINT = "real.data.large.schema";
 	
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -18,7 +19,7 @@ public abstract class LoadPerformanceTestCase extends BaseTestCase {
 		super.tearDown();
 	}
 
-	public LoadPerformanceTestCase(String arg0) {
+	public LoadLargeDTSTestCase(String arg0) {
 		super(arg0);
 	}
 
@@ -27,17 +28,14 @@ public abstract class LoadPerformanceTestCase extends BaseTestCase {
 	 */
 	public void testLargerStore() {
 		try {
-			
 			List<String> urls = store.getStoredURLs();
-			assertEquals(23,urls.size());
-			
+			assertEquals(28,urls.size());
 			File databaseFile = new File(new File(location),containerName);
 			if (databaseFile.exists()) {
 				logger.info("The final database contains " + databaseFile.length() + " bytes.");
 			} else {
 				logger.info("The final database does not exist.");
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

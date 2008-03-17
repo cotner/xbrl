@@ -10,6 +10,8 @@ public class AllTests {
 				"Test for org.xbrlapi.data.bdbxml.framework.tests");
 		//$JUnit-BEGIN$
 		suite.addTestSuite(DatabaseManagerInitialisationAndQueryingTestCase.class);
+        suite.addTestSuite(DatabaseDeletionTestCase.class);
+        suite.addTestSuite(LoadTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

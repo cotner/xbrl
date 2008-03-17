@@ -1,10 +1,8 @@
 package org.xbrlapi.data.bdbxml.tests;
 
 import java.net.URL;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.xbrlapi.Fragment;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.grabber.Grabber;
 import org.xbrlapi.grabber.SecGrabberImpl;

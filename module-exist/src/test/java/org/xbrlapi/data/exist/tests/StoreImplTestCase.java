@@ -56,10 +56,9 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testQueryData() {
 		try {			
 			String index = store.getNextFragmentId();
-			store.storeFragment(new MockFragmentImpl(index));
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
 	        FragmentList<Fragment> fragments = store.<Fragment>query(xpathQuery);
-			assertEquals("610",(new Long(fragments.getLength())).toString());
+			assertEquals("608",(new Long(fragments.getLength())).toString());
 	        Fragment fragment = fragments.getFragment(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
 		} catch (XBRLException e) {
@@ -84,12 +83,6 @@ public class StoreImplTestCase extends BaseTestCase {
 		}
 	}
 
-	public void testGetNextFragmentId() {
-		try {
-			assertEquals("610",store.getNextFragmentId());
-		} catch (XBRLException e) {
-			fail("Unexpected " + e.getMessage());
-		}
-	}
+
 
 }

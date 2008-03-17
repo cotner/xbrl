@@ -1,7 +1,5 @@
 package org.xbrlapi.data.xindice;
 
-import java.util.LinkedList;
-
 import org.apache.xindice.client.xmldb.services.CollectionManager;
 import org.apache.xindice.xml.dom.DocumentImpl;
 import org.w3c.dom.Document;
@@ -115,9 +113,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         }
 
         if (! storeExists) {
-            
-            this.storeLoaderState("0", new LinkedList<String>());
-            
+            this.addIndex("stub","value","@stub");
             this.addIndex("name","value","@name");
             this.addIndex("type","value","@type");
             this.addIndex("id","value","@id");
@@ -281,13 +277,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         	throw new XBRLException("The fragment removal from the underlying Xindice store failed.", e);
         }
 	}
-	
 
-
-
-	
-
-	
 	/**
 	 * Run a query against the collection of all fragments in the DTS.
 	 * @param query The XPath query to run against the set of fragments in the
@@ -420,10 +410,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		deleteIndex(manager,name);
 	}
 
-
-
-
-    
 	/**
 	 * @param resource The XMLResource to be used to get the DOM document node.
 	 * @return the org.w3.Document node from an XMLResource returned by the
@@ -443,9 +429,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     	} else {
     		return ((Element) node).getOwnerDocument();  // May return a null value!
     	}
-	}    
-
-
-    
+	}
     
 }

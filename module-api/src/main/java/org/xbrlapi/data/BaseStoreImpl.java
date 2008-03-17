@@ -78,22 +78,89 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     /**
      * @see org.xbrlapi.data.Store#storeLoaderState(String,List<String>)
      */
-    public void storeLoaderState(String id, List<String> documents) throws XBRLException {
+    public void storeLoaderState(List<String> documents) throws XBRLException {
         try {
-
-            Fragment summary = new MockFragmentImpl("summary");
-            summary.setMetaAttribute("maximumFragmentId",id);
             for (String document: documents) {
-                HashMap<String,String> values = new HashMap<String,String>();
-                values.put("url",document);
-                summary.appendMetadataElement("document",values);
+                storeStub(document);
             }
-            this.storeFragment(summary);
-            
         } catch (XBRLException e) {
             throw new XBRLException("The loader state could not be stored.",e);
         }
-    }	
+    }
+
+    /**
+     * @see org.xbrlapi.data.Store#storeStub(String)
+     */
+    public void storeStub(String document) throws XBRLException {
+
+        if (this.hasDocument(document)) return;
+        if (this.getStub(document) != null) return;
+        
+        String documentId = getDocumentId(document);
+        Fragment stub = new MockFragmentImpl(documentId);
+        stub.setFragmentIndex(documentId);
+        stub.setURL(document);
+        stub.setMetaAttribute("stub","yes");
+        this.storeFragment(stub);
+    }
+
+    /**
+     * @see org.xbrlapi.data.Store#getDocumentId(String)
+     */    
+    public String getDocumentId(String document) throws XBRLException {
+
+        Fragment stub = getStub(document);
+        if (stub != null) {
+            return stub.getFragmentIndex();
+        } else {
+            int i = 1;
+            String iString = (new Integer(i)).toString();
+            String randomString = random();
+            while (this.hasFragment(randomString + "_" + iString + "_1")) {
+                i++;
+                iString = (new Integer(i)).toString();
+            }
+            return (randomString + "_" + iString);
+        }
+    }
+    
+    /**
+     * Generate a random string.
+     * @return a randomly generated string consisting of digits and
+     * a-z or A-Z only.
+     */
+    private String random() {
+        String random = "";
+        for (int i=0; i<6; i++) {
+            int code = (new Long(Math.round(Math.random()*61))).intValue();
+            code = code + 48;
+            if (code < 58) {
+                random = random + new Character((char)code).toString();
+            } else {
+                code = code + 7;
+                if (code < 91) {
+                    random = random + new Character((char)code).toString();
+                } else {
+                    code = code + 6;
+                    random = random + new Character((char)code).toString();
+                }
+            }
+        }
+        return random;
+    }
+    
+    /**
+     * @param bs The given byte array.
+     * @return a hex string representation of the given byte array.
+     */
+    private String bytesToHex(byte[] bs) {
+        StringBuffer ret = new StringBuffer(bs.length);
+        for (int i = 0; i < bs.length; i++) {
+            String hex = Integer.toHexString(0x0100 + (bs[i] & 0x00FF)).substring(1);
+            ret.append((hex.length() < 2 ? "0" : "") + hex);
+        }
+        return ret.toString();
+    }    
 
     /**
      * Serialize the specified XML DOM to the specified destination.
@@ -502,7 +569,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getNextFragmentId()
      */
     public String getNextFragmentId() throws XBRLException {
-        Fragment summary = this.getFragment("summary");
+        return "1";
+/*        Fragment summary = this.getFragment("summary");
         String maxId = summary.getMetaAttribute("maximumFragmentId");
         if (maxId == null) {
             return "1";
@@ -510,26 +578,49 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             int value = (new Integer(maxId)).intValue();
             return (new Integer(value+1)).toString();
         }
-    }
+*/    }
     
     /**
      * @see org.xbrlapi.data.Store#getStoreState()
      */
-    public Fragment getStoreState() throws XBRLException {
-        Fragment summary = this.getFragment("summary");
-        return summary;
+    public FragmentList<Fragment> getStoreState() throws XBRLException {
+        return getStubs();
     }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getStubs()
+     */
+    public FragmentList<Fragment> getStubs() throws XBRLException {
+        return this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@stub='yes']");
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getStub(String url)
+     */
+    public Fragment getStub(String url) throws XBRLException {
+        FragmentList<Fragment> stubs = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@url='" + url + "' and @stub='yes']");        
+        if (stubs.getLength() == 0) return null;
+        if (stubs.getLength() > 1) throw new XBRLException("There are " + stubs.getLength() + " stubs for " + url);
+        return stubs.get(0);
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getStub(String url)
+     */
+    public void removeStub(String url) throws XBRLException {
+        String stubId = getDocumentId(url);
+        if (hasFragment(stubId)) removeFragment(stubId);
+    }            
+    
     
     /**
      * @see org.xbrlapi.data.Store#getDocumentsToDiscover()
      */
     public List<URL> getDocumentsToDiscover() throws XBRLException {
-        Fragment state = getStoreState();
-        NodeList documents = state.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"document");
+        FragmentList<Fragment> stubs = getStoreState();
         LinkedList<URL> list = new LinkedList<URL>();
-        for (int i=0; i< documents.getLength(); i++) {
-            Element document = (Element) documents.item(i);
-            String url = document.getAttribute("url");
+        for (Fragment stub: stubs) {
+            String url = stub.getMetaAttribute("url");
             try {
                 list.add(new URL(url));
             } catch (MalformedURLException e) {

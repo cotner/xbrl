@@ -1,7 +1,5 @@
 package org.xbrlapi.data.exist;
 
-import java.util.LinkedList;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -90,9 +88,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		}
 				
 		if (! storeAlreadyExisted) {
-
-			// Initialise the store fragment counter.
-			this.storeLoaderState("0",new LinkedList<String>());
 			
 			// Add the collection configuration (indexing information) if the store uses a new collection.
 			Collection configParentCollection = connection.getCollection("system/config");
@@ -118,6 +113,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@parentIndex\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@url\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@absoluteHref\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@stub\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "xptr/@value\" type=\"xs:string\"/>\n"
 		        + "</index>\n"
 		        + "</collection>";

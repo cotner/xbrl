@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.Segment;
 
 /**
@@ -29,27 +30,29 @@ public class SegmentTestCase extends DOMLoadingTestCase {
 	 * Test getting complex content for the segment.
 	 */
 	public void testGetComplexContent() {
-
-		try {
-			Segment fragment = (Segment) store.getFragment("5");
-			assertEquals(3, fragment.getComplexContent().getLength());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Segment> fragments = store.<Segment>getFragments("Segment");
+            assertTrue(fragments.getLength() > 0);
+            for (Segment fragment: fragments) {
+                assertEquals(3, fragment.getComplexContent().getLength());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 	/**
 	 * Test getting the segment entity.
 	 */
 	public void testGetEntity() {
-
-		try {
-			Segment fragment = (Segment) store.getFragment("5");
-			assertEquals("org.xbrlapi.impl.EntityImpl", fragment.getEntity().getType());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Segment> fragments = store.<Segment>getFragments("Segment");
+            assertTrue(fragments.getLength() > 0);
+            for (Segment fragment: fragments) {
+                assertEquals("org.xbrlapi.impl.EntityImpl", fragment.getEntity().getType());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 }

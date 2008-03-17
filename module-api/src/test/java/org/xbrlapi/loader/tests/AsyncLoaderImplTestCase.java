@@ -44,6 +44,7 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
             while (t1.isAlive()) {
                 Thread.sleep(100);
             }
+            loader.storeDocumentsToAnalyse();
             assertTrue(store.getStoredURLs().size() < 14);
             assertTrue(store.getDocumentsToDiscover().size() > 0);
 			loader.discover();

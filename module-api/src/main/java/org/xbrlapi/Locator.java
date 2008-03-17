@@ -47,4 +47,15 @@ public interface Locator extends ArcEnd {
      */
     public URL getAbsoluteHref() throws XBRLException;   
     
+    /**
+     * @return the document URL for the target fragment.
+     * @throws XBRLException.
+     */
+    public URL getTargetDocumentURL() throws XBRLException;    
+    
+    /**
+     * @return the string value of the XPointer element scheme expression from the xlink:href attribute.
+     * @throws XBRLException.
+     */
+    public String getTargetPointerValue() throws XBRLException;    
 }

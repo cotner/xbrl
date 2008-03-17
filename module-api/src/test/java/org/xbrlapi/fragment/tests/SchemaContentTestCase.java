@@ -1,8 +1,10 @@
 package org.xbrlapi.fragment.tests;
 
+import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
+import org.xbrlapi.Locator;
 import org.xbrlapi.Schema;
-import org.xbrlapi.SchemaContent;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -32,36 +34,45 @@ public class SchemaContentTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetSchema() {		
 		try {
-			SchemaContent sc = (SchemaContent) store.getFragment("5");
-			Schema s = sc.getSchema();
-			assertEquals("http://xbrl.example.com/397/ABC", s.getTargetNamespaceURI());
+		    FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
+		    assertTrue(concepts.getLength() > 0);
+		    for (Concept concept: concepts) {
+	            assertEquals(concept.getParent().getFragmentIndex(), concept.getSchema().getFragmentIndex());
+		    }
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}
-		
 	}
 	
 	/**
 	 * Test getting the schema target namespace URI.
 	 */
 	public void testGetSchemaTargetNamespaceURI() {		
-		try {
-			SchemaContent sc = (SchemaContent) store.getFragment("5");
-			assertEquals("http://xbrl.example.com/397/ABC", sc.getTargetNamespaceURI());
-		} catch (XBRLException e) {
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
+            assertTrue(concepts.getLength() > 0);
+            for (Concept concept: concepts) {
+                Schema schema = concept.getSchema();
+                assertEquals(concept.getTargetNamespaceURI(), schema.getDataRootElement().getAttribute("targetNamespace"));
+            }
+        } catch (XBRLException e) {
+            fail(e.getMessage());
+        }
 	}	
 
 	/**
 	 * Test getting the locators that target a schema component.
 	 */
-	public void testGetLocators() {		
-		try {
-			SchemaContent sc = (SchemaContent) store.getFragment("5");
-			assertEquals(1, sc.getReferencingLocators().getLength());
-		} catch (XBRLException e) {
-			fail(e.getMessage());
-		}
+	public void testGetLocators() {
+        try {
+            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
+            assertTrue(concepts.getLength() > 0);
+            for (Concept concept: concepts) {
+                FragmentList<Locator> locators = concept.getReferencingLocators();
+                assertTrue(locators.getLength() > 0);
+            }
+        } catch (XBRLException e) {
+            fail(e.getMessage());
+        }
 	}	
 }

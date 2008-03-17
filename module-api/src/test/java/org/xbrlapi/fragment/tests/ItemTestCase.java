@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 
 /**
@@ -29,28 +30,30 @@ public class ItemTestCase extends DOMLoadingTestCase {
 	 * Test getting context.
 	 */
 	public void testGetContext() {
-
-		try {
-			Item fragment = (Item) store.getFragment("10");
-			assertEquals("org.xbrlapi.impl.ContextImpl", fragment.getContext().getType());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Item> fragments = store.<Item>getFragments("SimpleNumericItem");
+            assertTrue(fragments.getLength() > 0);
+            for (Item fragment: fragments) {
+                assertEquals("org.xbrlapi.impl.ContextImpl", fragment.getContext().getType());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}	
 	
 	/**
 	 * Test is the item nill.
 	 */
 	public void testIsNill() {
-
-		try {
-			Item fragment = (Item) store.getFragment("10");
-			assertEquals(false, fragment.isNill());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<Item> fragments = store.<Item>getFragments("SimpleNumericItem");
+            assertTrue(fragments.getLength() > 0);
+            for (Item fragment: fragments) {
+                assertEquals(false, fragment.isNill());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}	
 		
 }

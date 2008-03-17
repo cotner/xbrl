@@ -1,8 +1,10 @@
 package org.xbrlapi.fragment.tests;
 
 
+import org.w3c.dom.NodeList;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.OpenContextComponent;
+import org.xbrlapi.FragmentList;
+import org.xbrlapi.Scenario;
 
 /**
  * Tests the implementation of the org.xbrlapi.OpenContextComponent interface.
@@ -31,8 +33,12 @@ public class OpenContextComponentTestCase extends DOMLoadingTestCase {
 	public void testGetComplexContent() {
 
 		try {
-			OpenContextComponent fragment = (OpenContextComponent) store.getFragment("6");
-			assertEquals(4, fragment.getComplexContent().getLength());
+            FragmentList<Scenario> scenarios = store.getFragments("Scenario");
+            assertTrue(scenarios.getLength() > 0);
+            for (Scenario scenario: scenarios) {
+                NodeList children = scenario.getDataRootElement().getChildNodes();
+                assertEquals(children.getLength(), scenario.getComplexContent().getLength());
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -45,8 +51,11 @@ public class OpenContextComponentTestCase extends DOMLoadingTestCase {
 	public void testGetCEquality() {
 
 		try {
-			OpenContextComponent fragment = (OpenContextComponent) store.getFragment("6");
-			assertTrue(fragment.equals(fragment));
+            FragmentList<Scenario> scenarios = store.getFragments("Scenario");
+            assertTrue(scenarios.getLength() > 0);
+            for (Scenario scenario: scenarios) {
+                assertTrue(scenario.equals(scenario));
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

@@ -71,6 +71,8 @@ public interface Store {
 	public void removeFragment(String index) throws XBRLException;
 	
 
+	
+
     
     /**
      * This deletion method does not ensure that all other documents that
@@ -263,7 +265,7 @@ public interface Store {
      * discovered.
      * @throws XBRLException
      */
-    public void storeLoaderState(String id,List<String> documents) throws XBRLException;    
+    public void storeLoaderState(List<String> documents) throws XBRLException;    
 
     /**
      * Get the next fragment ID to use when extending a DTS, instead of starting at 1 again
@@ -280,13 +282,32 @@ public interface Store {
     public List<URL> getDocumentsToDiscover() throws XBRLException;
     
     /**
-     * @return a fragment summarising the state of the data store.
-     * The fragment provides information about the next fragment index
-     * and the documents that remain to be analysed/discovered.
-     * The summary is only accurate if the store is not currently being
-     * operated on by a data loader.
+     * @return a list of stub fragments (Those fragments indicating a 
+     * document that needs to be added to the data store).
+     * @throws XBRLException
      */
-    public Fragment getStoreState() throws XBRLException;
+    public FragmentList<Fragment> getStubs() throws XBRLException;
+
+    /**
+     * @param url The string value of the URL of the document to get the stub for.
+     * @return the stub fragment or null if none exists.
+     * @throws XBRLException if there is more than one stub.
+     */
+    public Fragment getStub(String url) throws XBRLException;
+    
+    /**
+     * @param document The document to store a stub for.
+     * @throws XBRLException
+     */
+    public void storeStub(String document) throws XBRLException;    
+    
+    /**
+     * @param url The URL of the document to remove the stub for if the stub
+     * exists in the database.
+     * @throws XBRLException
+     */
+    public void removeStub(String url) throws XBRLException;
+    
     
 
 
@@ -364,5 +385,11 @@ public interface Store {
      * @throws XBRLException if the data store cannot be deleted.
      */
     public void delete() throws XBRLException;    
-    
+
+    /**
+     * @param hashString The hash of the document
+     * @return
+     * @throws XBRLException
+     */
+    public String getDocumentId(String document) throws XBRLException;
 }

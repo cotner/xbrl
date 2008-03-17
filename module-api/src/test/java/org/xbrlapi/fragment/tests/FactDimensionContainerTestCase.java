@@ -1,7 +1,9 @@
 package org.xbrlapi.fragment.tests;
 
+import org.xbrlapi.Context;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FactDimensionContainer;
+import org.xbrlapi.FragmentList;
+import org.xbrlapi.Unit;
 
 /**
  * Tests the implementation of the org.xbrlapi.FactDimensionContainer interface.
@@ -31,8 +33,10 @@ public class FactDimensionContainerTestCase extends DOMLoadingTestCase {
 	public void testGetContextId() {
 
 		try {
-			FactDimensionContainer container = (FactDimensionContainer) store.getFragment("16");
-			assertEquals("ci", container.getId());
+		    FragmentList<Context> contexts = store.getFragments("Context");
+		    for (Context context: contexts) {
+	            assertEquals(context.getId(), context.getDataRootElement().getAttribute("id"));		        
+		    }
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -45,8 +49,10 @@ public class FactDimensionContainerTestCase extends DOMLoadingTestCase {
 	public void testGetUnitId() {
 
 		try {
-			FactDimensionContainer container = (FactDimensionContainer) store.getFragment("14");
-			assertEquals("u1", container.getId());
+            FragmentList<Unit> units= store.getFragments("Unit");
+            for (Unit unit: units) {
+                assertEquals(unit.getId(), unit.getDataRootElement().getAttribute("id"));             
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

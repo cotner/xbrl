@@ -2,6 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.Context;
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 
 /**
@@ -10,7 +11,8 @@ import org.xbrlapi.FragmentList;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 public class ContextTestCase extends DOMLoadingTestCase {
-	private final String STARTING_POINT = "test.data.tuple.instance";
+    
+	private final String STARTING_POINT = "test.data.scenarios";
 	
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -31,10 +33,12 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testGetEntity() {
 
 		try {
-			Context fragment = (Context) store.getFragment("16");
-			assertEquals("org.xbrlapi.impl.EntityImpl", fragment.getEntity().getType());
+		    FragmentList<Context> contexts = store.<Context>getFragments("Context");
+		    assertTrue(contexts.getLength() > 0);
+		    for (Context context: contexts) {
+	            assertEquals("org.xbrlapi.impl.EntityImpl", context.getEntity().getType());
+		    }
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
@@ -45,10 +49,12 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testGetPeriod() {
 
 		try {
-			Context fragment = (Context) store.getFragment("16");
-			assertEquals("org.xbrlapi.impl.PeriodImpl", fragment.getPeriod().getType());
+            FragmentList<Context> contexts = store.<Context>getFragments("Context");
+            assertTrue(contexts.getLength() > 0);
+            for (Context context: contexts) {
+                assertEquals("org.xbrlapi.impl.PeriodImpl", context.getPeriod().getType());
+            }
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
@@ -59,10 +65,22 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testGetScenario() {
 
 		try {
-			Context fragment = (Context) store.getFragment("16");
-			assertNull(fragment.getScenario());
+            FragmentList<Context> contexts = store.<Context>getFragments("Context");
+            assertTrue(contexts.getLength() > 0);
+            int scenarios = 0;
+            for (Context context: contexts) {
+                store.serialize(context);
+                FragmentList<Fragment> children = context.getAllChildren();
+                for (Fragment child: children) {
+                    store.serialize(child);
+                }
+                if (context.getScenario() != null) {
+                    assertEquals("org.xbrlapi.impl.ScenarioImpl", context.getScenario().getType());                    
+                    scenarios++;
+                }
+            }
+            assertTrue(scenarios > 0);
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}

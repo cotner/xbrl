@@ -2,6 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.FootnoteArc;
+import org.xbrlapi.FragmentList;
 
 /**
  * Tests the implementation of the org.xbrlapi.FootnoteArc interface.
@@ -28,29 +29,31 @@ public class FootnoteArcTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test getting show value.
 	 */
-	public void testGetShow() {	
-
-		try {
-			FootnoteArc arc = (FootnoteArc) store.getFragment("8");
-			assertEquals("replace", arc.getShow());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+	public void testGetShow() {
+        try {
+            FragmentList<FootnoteArc> fragments = store.<FootnoteArc>getFragments("FootnoteArc");
+            assertTrue(fragments.getLength() > 0);
+            for (FootnoteArc fragment: fragments) {
+                assertEquals("replace", fragment.getShow());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }        
 	}
 	
 	/**
 	 * Test getting actuate value.
 	 */
 	public void testGetActuate() {	
-
-		try {
-			FootnoteArc arc = (FootnoteArc) store.getFragment("8");
-			assertEquals("onRequest", arc.getActuate());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+        try {
+            FragmentList<FootnoteArc> fragments = store.<FootnoteArc>getFragments("FootnoteArc");
+            assertTrue(fragments.getLength() > 0);
+            for (FootnoteArc fragment: fragments) {
+                assertEquals("onRequest", fragment.getActuate());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 	}
 	
 }
