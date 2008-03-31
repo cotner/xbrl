@@ -10,18 +10,38 @@ import org.xbrlapi.utilities.XBRLException;
 public interface Arc extends ExtendedLinkContent {
 
     /**
-     * Set the xlink:show attribute value.
-     *
-     * @throws XBRLException
+     * @param namespace The namespace of the attribute
+     * @param name The local name of the attribute
+     * @return the value of the attribute
+     * @throws XBRLException if the arc does not have the attribute.
      */
-    public void setShow(String value) throws XBRLException;
-	
+    public String getAttribute(String namespace, String name) throws XBRLException;
+    
     /**
-     * Set the xlink:actuate attribute value.
-     *
+     * @param namespace The namespace of the attribute
+     * @param name The local name of the attribute
+     * @return true if the arc has the attribute
      * @throws XBRLException
      */
-    public void setActuate(String value) throws XBRLException;
+    public boolean hasAttribute(String namespace, String name) throws XBRLException;
+    
+    /**
+     * @param name The name of the attribute
+     * @return the value of the attribute
+     * @throws XBRLException if the arc does not have the attribute.
+     */
+    public String getAttribute(String name) throws XBRLException;
+    
+    /**
+     * @param name The name of the attribute
+     * @return true if the arc has the attribute
+     * @throws XBRLException
+     */
+    public boolean hasAttribute(String name) throws XBRLException;
+    
+
+	
+
 
     /**
      * Get the xlink:show attribute value.
@@ -44,13 +64,7 @@ public interface Arc extends ExtendedLinkContent {
      */
     public String getFrom() throws XBRLException;
     
-    /**
-     * Set the xlink:from attribute value.
-     *
-     * @param from The value of the from attribute
-     * @throws XBRLException
-     */
-    public void setFrom(String from) throws XBRLException;
+
 
     /**
      * Get the xlink:to attribute value.
@@ -65,13 +79,7 @@ public interface Arc extends ExtendedLinkContent {
      */
     public String getArcrole() throws XBRLException;
     
-    /**
-     * Set the xlink:to attribute value.
-     *
-     * @param to The value of the to attribute
-     * @throws XBRLException
-     */
-    public void setTo(String to) throws XBRLException;
+
 	
     /**
      * Get the order attribute value.
@@ -80,13 +88,7 @@ public interface Arc extends ExtendedLinkContent {
      */
     public String getOrder() throws XBRLException;
     
-    /**
-     * Set the order attribute value.
-     *
-     * @param order The value of the order attribute
-     * @throws XBRLException
-     */
-    public void setOrder(String order) throws XBRLException;
+
 
     /**
      * Get the list of ArcEnd fragments that the arc runs from.

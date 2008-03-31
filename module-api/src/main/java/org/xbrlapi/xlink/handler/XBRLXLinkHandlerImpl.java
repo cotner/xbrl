@@ -12,16 +12,10 @@ import org.xbrlapi.SimpleLink;
 import org.xbrlapi.Title;
 import org.xbrlapi.SAXHandlers.ElementState;
 import org.xbrlapi.impl.ArcImpl;
-import org.xbrlapi.impl.CalculationArcImpl;
-import org.xbrlapi.impl.DefinitionArcImpl;
 import org.xbrlapi.impl.ExtendedLinkImpl;
-import org.xbrlapi.impl.FootnoteArcImpl;
 import org.xbrlapi.impl.FootnoteResourceImpl;
-import org.xbrlapi.impl.LabelArcImpl;
 import org.xbrlapi.impl.LabelResourceImpl;
 import org.xbrlapi.impl.LocatorImpl;
-import org.xbrlapi.impl.PresentationArcImpl;
-import org.xbrlapi.impl.ReferenceArcImpl;
 import org.xbrlapi.impl.ReferenceResourceImpl;
 import org.xbrlapi.impl.ResourceImpl;
 import org.xbrlapi.impl.SimpleLinkImpl;
@@ -239,7 +233,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 				}
 			} else if (namespaceURI.equals(Constants.GenericLabelNamespace)) {
 				if (lName.equals("label")) {
-					resource = new LabelResourceImpl();				
+					resource = new LabelResourceImpl();			
 				}
 			} else if (namespaceURI.equals(Constants.GenericReferenceNamespace)) {
 				if (lName.equals("reference")) {
@@ -322,28 +316,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			String show, 
 			String actuate) throws XLinkException {
 		try {
-
-			// TODO Eliminate the specialisation of arcs at the object level.
-			Arc arc = null;
-			if (namespaceURI.equals(Constants.XBRL21LinkNamespace)) {
-				if (lName.equals("calculationArc")) {
-					arc = new CalculationArcImpl();
-				} else if (lName.equals("presentationArc")) {
-					arc = new PresentationArcImpl();
-				} else if (lName.equals("definitionArc")) {
-					arc = new DefinitionArcImpl();
-				} else if (lName.equals("labelArc")) {
-					arc = new LabelArcImpl();
-				} else if (lName.equals("referenceArc")) {
-					arc = new ReferenceArcImpl();
-				} else if (lName.equals("footnoteArc")) {
-					arc = new FootnoteArcImpl();
-				} else {
-					arc = new ArcImpl();				
-				}
-			} else {
-				arc = new ArcImpl();
-			}
+			Arc arc = new ArcImpl();				
     		arc.setFragmentIndex(getLoader().getNextFragmentId());
 			getLoader().addFragment(arc,depth, state);
 		} catch (XBRLException e) {

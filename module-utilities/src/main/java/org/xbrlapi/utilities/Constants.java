@@ -36,6 +36,16 @@ public interface Constants {
 	 * XBRLLinkNamespace is the namespace for the XBRL Link elements
 	 */
 	final static String XBRL21LinkNamespace = "http://www.xbrl.org/2003/linkbase";
+	
+    /**
+     * The namespace of the generic link and generic arc elements
+     */
+    final static String GenericLinkNamespace = " http://xbrl.org/2008/generic";	
+    
+    /**
+     * The prefix for the generic link and generic arc elements
+     */
+    final static String GenericLinkPrefix = "gnl";
 	final static String XBRL21LinkPrefix = "link";
 
 	final static String GenericLabelNamespace = "http://xbrl.org/2007/label";
@@ -101,7 +111,9 @@ public interface Constants {
 	 * XBRL 2.1 arcroles
 	 */
 	final static String LabelArcRole = "http://www.xbrl.org/2003/arcrole/concept-label";
+    final static String GenericLabelArcRole = "http://xbrl.org/arcrole/2008/element-label";
 	final static String ReferenceArcRole = "http://www.xbrl.org/2003/arcrole/concept-reference";
+    final static String GenericReferenceArcRole = "http://xbrl.org/arcrole/2008/element-reference";
 	final static String CalculationArcRole = "http://www.xbrl.org/2003/arcrole/summation-item";
 	final static String PresentationArcRole = "http://www.xbrl.org/2003/arcrole/parent-child";
 	final static String GeneralSpecialArcRole = "http://www.xbrl.org/2003/arcrole/general-special";

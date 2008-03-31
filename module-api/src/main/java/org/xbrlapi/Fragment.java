@@ -293,15 +293,7 @@ public interface Fragment {
      */
     public String getNamespaceURI() throws XBRLException;
     
-    /**
-     * Set the namespace of the fragment root element. I am not sure that this
-     * method is appropriate because it could lead to inconsistencies between 
-     * the XML fragment and the Fragment instance.
-     *
-     * @param namespaceURI The namespace URI of the fragment's root element
-     * @throws XBRLException
-     */
-    public void setNamespaceURI(String namespaceURI) throws XBRLException;
+
 
     /**
      * Get the local name of the fragment's root element
@@ -310,15 +302,7 @@ public interface Fragment {
      */
     public String getLocalname() throws XBRLException;
     
-    /**
-     * Set the namespace of the fragment root element. I am not sure that this
-     * method is appropriate because it could lead to inconsistencies between 
-     * the XML fragment and the Fragment instance.
-     *
-     * @param localname The local name of the fragment's root element
-     * @throws XBRLException
-     */
-    public void setLocalname(String localname) throws XBRLException;
+
 
     /**
      * Get the element in the parent fragment that has this fragment as its child.

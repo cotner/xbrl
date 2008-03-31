@@ -15,40 +15,45 @@ import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * Used as a base class for specialist arcs and as a 
- * fragment type for arcs that are not recognised as 
- * specially defined arcs (eg the presentation,
- * calculation and definition arcs of the XBRL
- * 2.1 specification).
+ * Used for all extended link arcs.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
 public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
 
     /**
-     * Set the xlink:show attribute value.
-     *
-     * @throws XBRLException
-     * @see org.xbrlapi.Arc#setShow(String) 
+     * @see org.xbrlapi.Arc#getAttribute(String,String)
      */
-    public void setShow(String value) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
+    public String getAttribute(String namespace, String name) throws XBRLException {
+        Element root = getDataRootElement();
+        if (! root.hasAttributeNS(namespace,name)) throw new XBRLException("The arc does not have the attribute: " + namespace + ":" + name);
+        return root.getAttributeNS(namespace,name);
     }
-	
+    
     /**
-     * Set the xlink:actuate attribute value.
-     *
-     * @throws XBRLException
-     * @see org.xbrlapi.Arc#setActuate(String) 
+     * @see org.xbrlapi.Arc#hasAttribute(String,String)
+     */    
+    public boolean hasAttribute(String namespace, String name) throws XBRLException {
+        return getDataRootElement().hasAttributeNS(namespace,name);
+    }    
+    
+    /**
+     * @see org.xbrlapi.Arc#getAttribute(String)
      */
-    public void setActuate(String value) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
+    public String getAttribute(String name) throws XBRLException {
+        Element root = getDataRootElement();
+        if (! root.hasAttribute(name)) throw new XBRLException("The arc does not have the attribute: " + name);
+        return root.getAttribute(name);
     }
-
+    
     /**
-     * Get the xlink:show attribute value.
-     * @return the value of the xlink:show value or null if the attribute is not there.
-     * @throws XBRLException
+     * @see org.xbrlapi.Arc#hasAttribute(String)
+     */
+    public boolean hasAttribute(String name) throws XBRLException {
+        return getDataRootElement().hasAttribute(name);
+    }
+    
+    /**
      * @see org.xbrlapi.Arc#getShow() 
      */
     public String getShow() throws XBRLException {
@@ -58,9 +63,6 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     }
 	
     /**
-     * Get the xlink:actuate attribute value.
-     * @return the value of the xlink:actuate value or null if the attribute is not there.
-     * @throws XBRLException
      * @see org.xbrlapi.Arc#getActuate() 
      */
     public String getActuate() throws XBRLException {
@@ -70,9 +72,6 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     }
 	
     /**
-     * Get the xlink:from attribute value.
-     * @return the value of the xlink:from value or null if the attribute is not there.
-     * @throws XBRLException
      * @see org.xbrlapi.Arc#getFrom() 
      */
     public String getFrom() throws XBRLException {
@@ -82,21 +81,6 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     }
     
     /**
-     * Set the xlink:from attribute value.
-     *
-     * @param from The value of the from attribute
-     * @throws XBRLException
-     * @see org.xbrlapi.Arc#setFrom(String) 
-     */
-    public void setFrom(String from) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-
-    }
-
-    /**
-     * Get the xlink:to attribute value.
-     * @return the value of the xlink:to value or null if the attribute is not there.
-     * @throws XBRLException
      * @see org.xbrlapi.Arc#getTo() 
      */
     public String getTo() throws XBRLException {
@@ -115,20 +99,6 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     }
     
     /**
-     * Set the xlink:to attribute value.
-     *
-     * @param to The value of the to attribute
-     * @throws XBRLException
-     * @see org.xbrlapi.Arc#setTo(String) 
-     */
-    public void setTo(String to) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
-	
-    /**
-     * Get the order attribute value.
-     * @return the value of the order attribute or default value of 1 if none is provided.
-     * @throws XBRLException
      * @see org.xbrlapi.Arc#getOrder() 
      */
     public String getOrder() throws XBRLException {
@@ -138,20 +108,32 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     }
     
     /**
-     * Set the order attribute value.
-     *
-     * @param order The value of the order attribute
-     * @throws XBRLException
-     * @see org.xbrlapi.Arc#setOrder(String) 
+     * @see org.xbrlapi.Arc#getPriority()
      */
-    public void setOrder(String order) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
+    public Integer getPriority() throws XBRLException {
+        Element root = getDataRootElement();
+        if (! root.hasAttribute("priority")) return new Integer(1);
+        return new Integer(getDataRootElement().getAttribute("priority"));    
+    }
+    
+    
+    /**
+     * @see org.xbrlapi.Arc#getUse()
+     */
+    public String getUse() throws XBRLException {
+        Element root = getDataRootElement();
+        if (! root.hasAttribute("use")) return "optional";
+        return getDataRootElement().getAttribute("use");    
     }
     
     /**
-     * Get the list of ArcEnd fragments that the arc runs from.
-     * @return the list of ArcEnd fragments that the arc runs from.
-     * @throws XBRLException
+     * @see org.xbrlapi.Arc#isProhibited()
+     */
+    public boolean isProhibited() throws XBRLException {
+        return (getUse().equals("prohibited"));
+    }    
+    
+    /**
      * @see org.xbrlapi.Arc#getSourceFragments() 
      */
     public <E extends ArcEnd> FragmentList<E> getSourceFragments() throws XBRLException {
@@ -162,9 +144,6 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     }
     
     /**
-     * Get the list of ArcEnd fragments that the arc runs to.
-     * @return the list of ArcEnd fragment that the arc runs to.
-     * @throws XBRLException
      * @see org.xbrlapi.Arc#getTargetFragments() 
      */
     public <E extends ArcEnd> FragmentList<E> getTargetFragments() throws XBRLException {
@@ -263,8 +242,8 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     
     /**
      * @param other The other arc to compare against.
-     * @return true if and only if the maps have the same attributes and the same
-     * attribute values.
+     * @return true if and only if the maps have the 
+     * same attributes and the same attribute values.
      * @throws XBRLException
      */
     private boolean semanticAttributesEqual(Arc other) throws XBRLException {
@@ -332,31 +311,5 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     	
     	return true;
     }
-    
-    /**
-     * @see org.xbrlapi.Arc#getPriority()
-     */
-    public Integer getPriority() throws XBRLException {
-    	Element root = getDataRootElement();
-    	if (! root.hasAttribute("priority")) return new Integer(1);
-    	return new Integer(getDataRootElement().getAttribute("priority"));    
-    }
-    
-    
-    /**
-     * @see org.xbrlapi.Arc#getUse()
-     */
-    public String getUse() throws XBRLException {
-    	Element root = getDataRootElement();
-    	if (! root.hasAttribute("use")) return "optional";
-    	return getDataRootElement().getAttribute("use");    
-    }
-    
-    /**
-     * @see org.xbrlapi.Arc#isProhibited()
-     */
-    public boolean isProhibited() throws XBRLException {
-    	return (getUse().equals("prohibited"));
-    }    
-    
+
 }
