@@ -16,15 +16,7 @@ public interface Entity extends ContextComponent {
      */
     public String getIdentifierScheme() throws XBRLException;
     
-    /**
-     * Set the scheme for the entity identifier.
-     * Throws an exception if the scheme is not
-     * a valid URI.
-     *
-     * @param scheme the scheme for the entity identifier
-     * @throws XBRLException 
-     */
-    public void setIdentifierScheme(String scheme) throws XBRLException;
+
 
     /**
      * Get the entity identifier
@@ -36,14 +28,7 @@ public interface Entity extends ContextComponent {
      */
     public String getIdentifierValue() throws XBRLException;
     
-    /**
-     * Set the entity identifier
-     *
-     * @param identifierValue the local value identifying the entity 
-     * within the specified scheme
-     * @throws XBRLException 
-     */
-    public void setIdentifierValue(String identifierValue) throws XBRLException;
+
     
     /**
      * Get the segment of the entity
@@ -54,19 +39,8 @@ public interface Entity extends ContextComponent {
      */
     public Segment getSegment() throws XBRLException;
     
-    /**
-     * Set the segment in the entity
-     *
-     * @param segment the segment to be added
-     * @throws XBRLException 
-     */
-    public void setSegment(Segment segment) throws XBRLException;    
+    
 
-    /**
-     * Remove the segment from the entity.
-     *
-     * @throws XBRLException 
-     */
-    public void removeSegment() throws XBRLException;      
+      
 
 }

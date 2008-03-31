@@ -16,12 +16,7 @@ public interface ReferencePart extends Fragment {
      */
     public String getValue() throws XBRLException;
     
-    /**
-     * Set the value of the reference part.
-     * @param value The value of the reference part.
-     * @throws XBRLException
-     */
-    public void setValue(String value) throws XBRLException;
+
 
     /**
      * Currently implemented by a brute force search of the 

@@ -26,15 +26,7 @@ public class ItemImpl extends FactImpl implements Item {
 		throw new XBRLException("The contextRef is missing on an item.");
 	}
 	
-	/** 
-	 * Set the context for this item.
-	 * @param context The context for the item.
-	 * @throws XBRLException
-	 * @see org.xbrlapi.Item#setContext(Context)
-	 */
-	public void setContext(Context context) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-	}
+
 	
 	/** 
 	 * Return true if the item has a nill value.

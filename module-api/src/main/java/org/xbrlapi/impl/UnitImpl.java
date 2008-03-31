@@ -86,14 +86,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
     	return null;
     }
 
-    /**
-     * Removes the denominator set of measures from the unit
-     * @throws XBRLException
-     * @see org.xbrlapi.Unit#removeDenominator()
-     */
-    public void removeDenominator() throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Tests if the unit is u-equal to another unit

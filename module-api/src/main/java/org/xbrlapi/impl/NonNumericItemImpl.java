@@ -21,14 +21,6 @@ public class NonNumericItemImpl extends ItemImpl implements NonNumericItem {
 		return getDataRootElement().getTextContent().trim();
 	}
 	
-	/** 
-	 * Set the value of the fact.
-	 * @param value The value of the fact
-	 * @throws XBRLException
-	 * @see org.xbrlapi.NonNumericItem#setValue(String)
-	 */
-	public void setValue(String value) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-	}
+
 	
 }

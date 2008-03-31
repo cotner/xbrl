@@ -25,15 +25,7 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
     	throw new XBRLException("XLink arc ends must have an xlink:label attribute");
     }
     
-    /**
-     * Set the xlink:label attribute.
-     * @param label The label value.
-     * @throws XBRLException.
-     * @see org.xbrlapi.ArcEnd#setLabel(String)
-     */
-    public void setLabel(String label) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Get the xlink:role attribute value.
@@ -49,16 +41,7 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
     	return null;
     }
     
-    /**
-     * Set the role.
-     *
-     * @param role The URI value of the locator role.
-     * @throws XBRLException
-     * @see org.xbrlapi.ArcEnd#setRole(String)
-     */
-    public void setRole(String role) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
     /**
      * Get the list of arcs that are from the arc end.
@@ -82,15 +65,7 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
     	return getExtendedLink().getArcsByToLabel(this.getLabel());
     }
 
-    /**
-     * Remove the xlink:role attribute.
-     *
-     * @throws XBRLException
-     * @see org.xbrlapi.ArcEnd#removeRole()
-     */
-    public void removeRole() throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
         
     /**
      * Get the id attribute value.
@@ -106,24 +81,8 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
     	return null;
     }
     
-    /**
-     * Set the id attribute value.
-     *
-     * @param id The value of the id attribute
-     * @throws XBRLException
-     * @see org.xbrlapi.ArcEnd#setArcEndId(String)
-     */
-    public void setArcEndId(String id) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
-    /**
-     * Remove the id attribute value.
-     * @throws XBRLException
-     * @see org.xbrlapi.ArcEnd#removeArcEndId()
-     */
-    public void removeArcEndId() throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
 }

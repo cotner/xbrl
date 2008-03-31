@@ -17,13 +17,7 @@ public interface Xlink extends Fragment {
      */
     public String getXlinkType() throws XBRLException;
     
-    /**
-     * Set the xlink type (The xxlink:type attribute value).
-     *
-     * @param type One of simple or extended
-     * @throws XBRLException
-     */
-    public void setXlinkType(String type) throws XBRLException;
+
 
     /**
      * Get the  title (The xlink:title attribute value).
@@ -32,12 +26,7 @@ public interface Xlink extends Fragment {
      */
     public String getTitleAttribute() throws XBRLException;    
 
-    /**
-     * Set the title (The xlink:title attribute value).
-     * @param title The value of the title attribute
-     * @throws XBRLException
-     */
-    public void setTitleAttribute(String title) throws XBRLException;
+
 
     /**
      * Get a list of titles (The xlink:title children elements).
@@ -79,14 +68,6 @@ public interface Xlink extends Fragment {
      */
     public String getAttribute(String name) throws XBRLException;
     
-    /**
-     * Set a non-xlink attribute value
-     *
-     * @param namespaceURI The namespace of the attribute to set
-     * @param qName The qualified local name of the attribute to set
-     * @param value The value of the attribute to set
-     * @throws XBRLException
-     */
-    public void setAttribute(String namespaceURI, String qName, String value) throws XBRLException;
+
     
 }

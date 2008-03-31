@@ -25,16 +25,7 @@ public class ArcroleTypeImpl extends CustomTypeImpl implements ArcroleType {
     	throw new XBRLException("A cyclesAllowed attribute must be specified.");
     }
     
-    /**
-     * Set the cycles allowed attribute value to one of three values:
-     * any, none, or directed.
-     * @param cyclesAllowed The cyclesAllowed attribute value
-     * @throws XBRLException if the value to be set is not one of any, none or directed.
-     * @see org.xbrlapi.ArcroleType#setCyclesAllowed(String)
-     */
-    public void setCyclesAllowed(String cyclesAllowed) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
     /**
      * get the collection of networks expressed using arcs that involve this 

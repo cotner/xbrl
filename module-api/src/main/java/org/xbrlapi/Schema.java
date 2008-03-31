@@ -8,14 +8,7 @@ import org.xbrlapi.utilities.XBRLException;
 
 public interface Schema extends SchemaContent {
     
-    /**
-     * Set the target namespace URI of the schema.
-     *
-     * @param namespaceURI The new target namespace for the schema.
-     * 
-     * @throws XBRLException
-     */
-    public void setTargetNamespaceURI(String namespaceURI) throws XBRLException;
+
 
     /**
      * Checks if the element form is qualified.
@@ -86,24 +79,9 @@ public interface Schema extends SchemaContent {
      */
     public FragmentList<Concept> getConceptsBySubstitutionGroup(String namespaceURI, String localName) throws XBRLException;
 
-    /**
-     * Remove a specific concept identified by its name.
-     * Throws an exception if the concept does not exist.
-     *
-     * @param name The name of the concept
-     * @throws XBRLException
-     */
-    public void removeConceptByName(String name) throws XBRLException; 		
+ 		
 
-    /**
-     * Add a concept to a schema.
-     * Throws an exception if the schema already contains a 
-     * concept with the same name or id. 
-     *
-     * @param concept The concept to be added to the schema.
-     * @throws XBRLException
-     */
-    public void addConcept(Concept concept) throws XBRLException;
+
 
     /**
      * Get a reference part declaration in a schema.
@@ -121,71 +99,20 @@ public interface Schema extends SchemaContent {
      */
     public FragmentList<ReferencePartDeclaration> getReferencePartDeclarations() throws XBRLException;    
     
-    /**
-     * Add a reference part declaration to a schema.
-     * Throws an exception if the reference part already exists in the schema.
-     *
-     * @param referencePartDeclaration The concept to be added to the schema.
-     * @throws XBRLException
-     */
-    public void addReferencePartDeclaration(ReferencePartDeclaration referencePartDeclaration) throws XBRLException;
-    
-    /**
-     * Remove a reference part declaration from a schema.
-     *
-     * @param referencePartDeclaration The reference part declaration to be removed.
-     * @throws XBRLException
-     */
-    public void removeReferencePartDeclaration(ReferencePartDeclaration referencePartDeclaration) throws XBRLException;
 
-    /**
-     * Adds an linkbaseRef to a schema.  More methods are required to
-     * give greater control over document order.
-     *
-     * @param linkbaseRef The linkbaseRef to be added to the schema.
-     * @throws XBRLException
-     */
-    public void addLinkbaseRef(SimpleLink linkbaseRef) throws XBRLException;
     
-    /**
-     * Remove a linkbaseRef from a schema.
-     * Throws an error if the linkbaseRef is not contained in the schema.
-     *
-     * @param linkbaseRef The linkbaseRef to be removed.
-     * @throws XBRLException
-     */
-    public void removeLinkbaseRef(SimpleLink linkbaseRef) throws XBRLException;
 
-    /**
-     * Adds a roleType to a schema.
-     *
-     * @param roleType The roleType to be added to the schema.
-     * @throws XBRLException
-     */
-    public void addRoleType(RoleType roleType) throws XBRLException;
-    
-    /**
-     * Remove a roleType from a schema.
-     *
-     * @param roleType The roleType to be removed.
-     * @throws XBRLException  if the roleType is not contained in the schema.
-     */
-    public void removeRoleType(RoleType roleType) throws XBRLException;
 
-    /**
-     * Adds an arcroleType to a schema.
-     *
-     * @param arcroleType The arcroleType to be added to the schema.
-     * @throws XBRLException
-     */
-    public void addArcroleType(ArcroleType arcroleType) throws XBRLException;
+
     
-    /**
-     * Remove a arcroleType from a schema.
-     *
-     * @param arcroleType The arcroleType to be removed.
-     * @throws XBRLException if the arcroleType is not contained in the schema.
-     */
-    public void removeArcroleType(ArcroleType arcroleType) throws XBRLException;
+
+
+
+    
+
+
+
+    
+
 
 }

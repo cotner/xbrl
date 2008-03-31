@@ -50,24 +50,7 @@ public class TupleImpl extends FactImpl implements Tuple {
 		return getStore().query(query);
 	}
 	
-	/**
-	 * Add a child fact, conforming to the sequencing requirements 
-	 * of the tuple syntax definition, if any is specified.
-	 * TODO resolve the compliance with XML Schema ordering rules.
-	 * @throws XBRLException
-	 * @see org.xbrlapi.Tuple#addChild(Fact)
-	 */
-	public void addChild(Fact child) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-	}
+
 	
-	/**
-	 * Remove a child fact
-	 * TODO Implement validation against the XML Schema syntax rules.
-	 * @throws XBRLException if the removal invalidates the syntax rules for the tuple.
-	 * @see org.xbrlapi.Tuple#removeChild(Fact)
-	 */
-	public void removeChild(Fact child) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-	}	
+	
 }

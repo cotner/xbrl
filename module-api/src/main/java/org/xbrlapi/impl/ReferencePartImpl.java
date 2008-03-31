@@ -23,15 +23,7 @@ public class ReferencePartImpl extends FragmentImpl implements ReferencePart {
     	return this.getDataRootElement().getTextContent().trim();
     }
 
-    /**
-     * Set the value of the reference part.
-     * @param value The value of the reference part.
-     * @throws XBRLException
-     * @see org.xbrlapi.ReferencePart#setValue(String)
-     */
-    public void setValue(String value) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * @see org.xbrlapi.ReferencePart#getDeclaration()

@@ -41,26 +41,8 @@ public class ReferenceResourceImpl extends MixedContentResourceImpl implements R
     	return null;
     }
     
-    /**
-     * Add a reference part to a reference.  The reference part 
-     * is added as the last reference part in document order, within
-     * the reference.
-     * @param referencePart The reference part to be inserted into the reference.
-     * @throws XBRLException
-     * @see org.xbrlapi.ReferenceResource#addReferencePart(ReferencePart)
-     */
-    public void addReferencePart(ReferencePart referencePart) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
-    /**
-     * Remove a reference part.
-     * @param referencePart The reference part to remove.
-     * @throws XBRLException
-     * @see org.xbrlapi.ReferenceResource#removeReferencePart(ReferencePart)
-     */
-    public void removeReferencePart(ReferencePart referencePart) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 	
 }

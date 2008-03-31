@@ -40,21 +40,9 @@ public interface ExtendedLink extends Link {
      */
     public FragmentList<Locator> getLocatorsByHref(String href) throws XBRLException;
     
-    /**
-     * Add a locator to the end of the extended link
-     *
-     * @param locator locator to be added to the end of extended link
-     * @throws XBRLException
-     */
-    public void addLocator(Locator locator) throws XBRLException;
 
-    /**
-     * Remove a locator from the extended link
-     *
-     * @param locator locator to be removed
-     * @throws XBRLException
-     */
-    public void removeLocator(Locator locator) throws XBRLException;
+
+
 
     /**
      * Get the list of arcs contained by the extended link.
@@ -80,21 +68,9 @@ public interface ExtendedLink extends Link {
     public FragmentList<Arc> getArcsByToLabel(String to) throws XBRLException;
     
     
-    /**
-     * Add a arc to the end of the extended link
-     *
-     * @param arc arc to be added to the end of extended link
-     * @throws XBRLException
-     */
-    public void addArc(Arc arc) throws XBRLException;
 
-    /**
-     * Remove an arc from the extended link
-     *
-     * @param arc arc to be removed
-     * @throws XBRLException
-     */
-    public void removeArc(Arc arc) throws XBRLException;
+
+
 
     /**
      * Get the list of resources contained by the extended link.
@@ -111,21 +87,9 @@ public interface ExtendedLink extends Link {
      */
     public FragmentList<Resource> getResourcesByLabel(String label) throws XBRLException;    
     
-    /**
-     * Add a resource to the end of the extended link
-     *
-     * @param resource resource to be added to the end of extended link
-     * @throws XBRLException
-     */
-    public void addResource(Resource resource) throws XBRLException;
 
-    /**
-     * Remove a resource from the extended link
-     *
-     * @param resource resource to be removed
-     * @throws XBRLException
-     */
-    public void removeResource(Resource resource) throws XBRLException;
+
+
 
     /**
      * Get the list of documentation fragments contained by the extended link.
@@ -134,18 +98,8 @@ public interface ExtendedLink extends Link {
      */
     public FragmentList<XlinkDocumentation> getDocumentations() throws XBRLException;
     
-    /**
-     * Add a link documentation fragment to the end of the extended link.
-     * @param documentation documentation to be added to the end of extended link
-     * @throws XBRLException
-     */
-    public void addDocumentation(XlinkDocumentation documentation) throws XBRLException;
 
-    /**
-     * Remove a link documentation from the extended link.
-     * @param documentation The documentation fragment to be removed.
-     * @throws XBRLException
-     */
-    public void removeDocumentation(XlinkDocumentation documentation) throws XBRLException;
+
+
 
 }

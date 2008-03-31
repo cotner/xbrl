@@ -34,15 +34,7 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
     	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"href");
     }
     
-    /**
-     * Set the link HREF attribute value.
-     * @param href The value of the href attribute
-     * @throws XBRLException
-     * @see org.xbrlapi.SimpleLink#setHref(String)
-     */
-    public void setHref(String href) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Get the absolute value of the HREF to the metadata.
@@ -88,16 +80,7 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
     	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"arcrole");
     }
     
-    /**
-     * TODO Make the simple link arcrole a URI input parameter
-     * Set the link arcrole attribute value.
-     * @param arcrole The value of the arcrole attribute
-     * @throws XBRLException
-     * @see org.xbrlapi.SimpleLink#setArcrole(String)
-     */
-    public void setArcrole(String arcrole) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
     /**
      * @return the single fragment referenced by the simple link.

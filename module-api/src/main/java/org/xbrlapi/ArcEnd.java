@@ -16,13 +16,6 @@ public interface ArcEnd extends ExtendedLinkContent {
     public String getLabel() throws XBRLException;
     
     /**
-     * Set the xlink:label attribute.
-     * @param label The label value.
-     * @throws XBRLException.
-     */
-    public void setLabel(String label) throws XBRLException;
-
-    /**
      * Get the xlink:role attribute value.
      * @return the value of the id attribute or null if no
      * such attribute exists.
@@ -31,42 +24,12 @@ public interface ArcEnd extends ExtendedLinkContent {
     public String getRole() throws XBRLException;
     
     /**
-     * Set the role.
-     *
-     * @param role The URI value of the locator role.
-     * @throws XBRLException
-     */
-    public void setRole(String role) throws XBRLException;
-
-    /**
-     * Remove the xlink:role attribute.
-     *
-     * @throws XBRLException
-     */
-    public void removeRole() throws XBRLException;
-        
-    /**
      * Get the id attribute value.
      * @return the value of the id attribute or null if no
      * such attribute exists.
      * @throws XBRLException
      */
     public String getArcEndId() throws XBRLException;
-    
-    /**
-     * Set the id attribute value.
-     *
-     * @param id The value of the id attribute
-     * @throws XBRLException
-     */
-    public void setArcEndId(String id) throws XBRLException;
-    
-    /**
-     * Remove the id attribute value.
-     *
-     * @throws XBRLException
-     */
-    public void removeArcEndId() throws XBRLException;
     
     /**
      * Get the list of arcs that are from the arc end.

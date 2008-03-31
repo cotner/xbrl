@@ -29,27 +29,11 @@ public interface Period extends ContextComponent {
      */
     public boolean isForever() throws XBRLException;
 
-    /**
-     * Set the period using a moment.
-     * @param moment The string value of the moment.
-     * @throws XBRLException
-     */
-    public void setInstant(String moment) throws XBRLException;    
     
-    /**
-     * Set the period using a start date and end date.
-     * @param startDate The start date
-     * @param endDate The end date
-     * @throws XBRLException
-     */
-    public void setFiniteDuration(String startDate, String endDate) throws XBRLException;
+    
 
-    /**
-     * Set the period to being forever.
-     *
-     * @throws XBRLException
-     */
-    public void setForever() throws XBRLException;
+
+
     
     /**
      * Get the instant.

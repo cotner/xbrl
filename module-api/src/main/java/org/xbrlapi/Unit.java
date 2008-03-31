@@ -32,12 +32,7 @@ public interface Unit extends FactDimensionContainer {
      */
     public NodeList getDenominatorMeasures() throws XBRLException;
     
-    /**
-     * Removes the denominator set of measures from the unit
-     * 
-     * @throws XBRLException
-     */
-    public void removeDenominator() throws XBRLException;
+
     
     /**
      * Tests if the unit is u-equal to another unit

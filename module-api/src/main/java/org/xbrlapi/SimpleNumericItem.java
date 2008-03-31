@@ -16,12 +16,7 @@ public interface SimpleNumericItem extends NumericItem {
 	 */
 	public String getValue() throws XBRLException;
 	
-	/** 
-	 * Set the value of the fact.
-	 * @param value The value of the fact
-	 * @throws XBRLException
-	 */
-	public void setValue(String value) throws XBRLException;
+
 
 	/** 
 	 * Get the value of the fact after adjusting for the specified precision.

@@ -37,15 +37,7 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
     	return root.getAttributeNS(Constants.XLinkNamespace,"href");
     }
     
-    /**
-     * Set the link HREF attribute value.
-     * @param href The value of the href attribute
-     * @throws XBRLException
-     * @see org.xbrlapi.Locator#setHref(String)
-     */
-    public void setHref(String href) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
     
     /**
      * Get the absolute value of the HREF to the metadata.

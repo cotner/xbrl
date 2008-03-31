@@ -15,13 +15,7 @@ public interface Title extends Xlink {
      */
     public String getValue() throws XBRLException;
     
-    /**
-     * Set the documentation text.
-     *
-     * @param value
-     * @throws XBRLException
-     */
-    public void setValue(String value) throws XBRLException;
+
 
     /**
      * Get the documentation language code.
@@ -32,11 +26,6 @@ public interface Title extends Xlink {
      */
     public String getLanguage() throws XBRLException;
     
-    /**
-     * Set the documentation language code.
-     * @param language The language code to use.
-     * @throws XBRLException
-     */
-    public void setLanguage(String language) throws XBRLException;
+
 
 }

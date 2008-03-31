@@ -67,25 +67,9 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     	return getStore().<Locator>query(xpath);
     }
     
-    /**
-     * Add a locator to the end of the extended link.
-     * @param locator locator to be added to the end of extended link.
-     * @throws XBRLException
-     * @see org.xbrlapi.ExtendedLink#addLocator(Locator)
-     */
-    public void addLocator(Locator locator) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
 
-    /**
-     * Remove a locator from the extended link
-     * @param locator locator to be removed
-     * @throws XBRLException
-     * @see org.xbrlapi.ExtendedLink#removeLocator(Locator)
-     */
-    public void removeLocator(Locator locator) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
+
 
     /**
      * Get the list of arcs contained by the extended link.
@@ -123,25 +107,9 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     	return arcs;
     }
 
-    /**
-     * Add a arc to the end of the extended link.
-     * @param arc arc to be added to the end of extended link.
-     * @throws XBRLException
-     * @see org.xbrlapi.ExtendedLink#addArc(Arc)
-     */
-    public void addArc(Arc arc) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
 
-    /**
-     * Remove an arc from the extended link.
-     * @param arc arc to be removed
-     * @throws XBRLException
-     * @see org.xbrlapi.ExtendedLink#removeArc(Arc)
-     */
-    public void removeArc(Arc arc) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
+
 
     /**
      * Get the list of resources contained by the extended link.
@@ -167,26 +135,9 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     	return getStore().<Resource>query(xpath);
     }
     
-    /**
-     * Add a resource to the end of the extended link
-     *
-     * @param resource resource to be added to the end of extended link
-     * @throws XBRLException
-     * @see org.xbrlapi.ExtendedLink#addResource(Resource)
-     */
-    public void addResource(Resource resource) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
 
-    /**
-     * Remove a resource from the extended link.
-     * @param resource resource to be removed.
-     * @throws XBRLException
-     * @see org.xbrlapi.ExtendedLink#removeResource(Resource)
-     */
-    public void removeResource(Resource resource) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
+
 
     /**
      * Get the list of documentation fragments contained by the extended link.
@@ -198,24 +149,8 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     	return this.<XlinkDocumentation>getChildren("org.xbrlapi.impl.XlinkDocumentationImpl");
     }
     
-    /**
-     * Add a link documentation fragment to the end of the extended link
-     * @param documentation The documentation resource to be added to the end of extended link
-     * @throws XBRLException
-     * @see org.xbrlapi.ExtendedLink#addDocumentation(XlinkDocumentation)
-     */
-    public void addDocumentation(XlinkDocumentation documentation) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
 
-    /**
-     * Remove a link documentation from the extended link
-     * @param documentation The documentation fragment to be removed.
-     * @throws XBRLException
-     * @see org.xbrlapi.ExtendedLink#removeDocumentation(XlinkDocumentation)
-     */
-    public void removeDocumentation(XlinkDocumentation documentation) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
+
 
 }

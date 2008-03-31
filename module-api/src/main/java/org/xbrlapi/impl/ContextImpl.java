@@ -25,15 +25,7 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     	throw new XBRLException("There is more than one entity in this context.");
     }
 
-    /**
-     * Set the entity of the context.
-     * @param entity The entity to set
-     * @throws XBRLException
-     * @see org.xbrlapi.Context#setEntity(Entity)
-     */
-    public void setEntity(Entity entity) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Get the period of the context.
@@ -49,15 +41,7 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     	throw new XBRLException("There is more than one period in this context.");
     }
 
-    /**
-     * Set the period of the context.
-     * @param period The period to set
-     * @throws XBRLException
-     * @see org.xbrlapi.Context#setPeriod(Period)
-     */
-    public void setPeriod(Period period) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Get the scenario of the context.
@@ -72,25 +56,9 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     	throw new XBRLException("There is more than one scenario in this context.");
     }
 
-    /**
-     * Set the scenario of the context.
-     *
-     * @param scenario The scenario to set
-     * @throws XBRLException
-     * @see org.xbrlapi.Context#setScenario(Scenario)
-     */
-    public void setScenario(Scenario scenario) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
-    /**
-     * Remove the scenario.
-     * @throws XBRLException
-     * @see org.xbrlapi.Context#removeScenario()
-     */
-    public void removeScenario() throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
     /**
      * Tests if the context is c-equal to another context

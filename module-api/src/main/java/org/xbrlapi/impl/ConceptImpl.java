@@ -27,15 +27,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     	throw new XBRLException("The period attribute is mandatory on XBRL concepts.");
     }
     
-    /**
-     * Set the periodType of the concept, one of instant or duration
-     * @param periodType The periodType value for the concept.
-     * @throws XBRLException
-     * @see org.xbrlapi.Concept#setPeriodType(String)
-     */
-    public void setPeriodType(String periodType) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Get the concept's balance, one of debit or credit
@@ -50,15 +42,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     	return null;
     }
     
-    /**
-     * Set the balance of the concept, one of debit or credit
-     * @param balance The balance value for the concept.
-     * @throws XBRLException
-     * @see org.xbrlapi.Concept#setBalance(String)
-     */
-    public void setBalance(String balance) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Retrieves the fragment that is the schema for this concept.

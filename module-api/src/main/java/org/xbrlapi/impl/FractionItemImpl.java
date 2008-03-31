@@ -26,15 +26,7 @@ public class FractionItemImpl extends NumericItemImpl implements FractionItem {
     	return candidates.item(0).getTextContent().trim();
     }
 	
-	/**
-	 * Set the fraction numerator
-	 * @param numerator The fraction numerator
-	 * @throws XBRLException
-	 * @see org.xbrlapi.FractionItem#setNumerator(double)
-	 */
-    public void setNumerator(double numerator) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 	
 	/**
 	 * Get the fraction denominator.
@@ -50,15 +42,6 @@ public class FractionItemImpl extends NumericItemImpl implements FractionItem {
     	return candidates.item(0).getTextContent().trim();
     }
 	
-	/**
-	 * Set the fraction denominator
-	 * Throws an exception if the denominator is zero.
-	 * @param denominator The fraction denominator
-	 * @throws XBRLException
-	 * @see org.xbrlapi.FractionItem#setDenominator(double)
-	 */
-    public void setDenominator(double denominator) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 	
 }

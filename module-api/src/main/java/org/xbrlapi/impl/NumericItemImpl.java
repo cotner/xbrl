@@ -21,17 +21,7 @@ public class NumericItemImpl extends ItemImpl implements NumericItem {
 		return getInstance().getUnit(unitRef);
 	}
 	
-	/** 
-	 * Set the units for this item
-	 * @param units The unit fragment that the  item
-	 * is being associated with.
-	 * @throws XBRLException if the unit is not in the XBRL instance
-	 * containing the item.
-	 * @see org.xbrlapi.NumericItem#setUnits(Unit)
-	 */
-	public void setUnits(Unit units) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-	}
+
 
 	/** 
 	 * Get the decimals attribute for this item.
@@ -46,15 +36,7 @@ public class NumericItemImpl extends ItemImpl implements NumericItem {
 		throw new XBRLException("The numeric item does not explicitly specify decimals");
 	}
 	
-	/** 
-	 * Set the decimals attribute on the item.
-	 * @param decimals The decimals attribute on the item
-	 * @throws XBRLException
-	 * @see org.xbrlapi.NumericItem#setDecimals(int)
-	 */
-	public void setDecimals(int decimals) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-	}
+
 
 	/** 
 	 * Get the precision attribute for this item.
@@ -96,14 +78,6 @@ public class NumericItemImpl extends ItemImpl implements NumericItem {
 		return false;
 	}	
 	
-	/** 
-	 * Set the precision attribute on the item.
-	 * @param precision The precision attribute on the item
-	 * @throws XBRLException
-	 * @see org.xbrlapi.NumericItem#setPrecision(int)
-	 */
-	public void setPrecision(int precision) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-	}
+
 	
 }

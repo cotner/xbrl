@@ -21,11 +21,6 @@ public class LinkImpl extends XlinkImpl implements Link {
     	return null;
     }
     
-    /**
-     * @see org.xbrlapi.Link#setLinkRole(String)
-     */
-    public void setLinkRole(String role) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }    
+    
     
 }

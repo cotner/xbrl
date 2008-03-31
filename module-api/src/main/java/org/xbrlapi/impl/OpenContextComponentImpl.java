@@ -26,16 +26,7 @@ class OpenContextComponentImpl extends ContextComponentImpl implements OpenConte
     	return getDataRootElement().getChildNodes();
     }
 
-    /**
-     * Sets the complex content fragment.
-     * @param complexContent The collection of complex content nodes
-     * making up the content of the open content model context component.
-     * @throws XBRLException
-     * @see org.xbrlapi.OpenContextComponent#setComplexContent(Vector)
-     */
-    public void setComplexContent(Vector<Node> complexContent) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
 	/**
 	 * Test c-equality of this open context component and another.

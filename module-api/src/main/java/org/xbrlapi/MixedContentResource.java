@@ -21,14 +21,7 @@ public interface MixedContentResource extends Resource {
      */
     public NodeList getContent() throws XBRLException;
 	
-    /**
-     * Set the content of a resource using a vector
-     * of DOM nodes as the input.
-     * @param nodes The vector of child nodes to insert in
-     * the same order as they appear in the supplied vector.
-     * @throws XBRLException
-     */
-    public void setContent(Vector<Node> nodes) throws XBRLException;
+
 
     /**
      * Get the value of the xml:lang attribute on the resource.
@@ -38,13 +31,6 @@ public interface MixedContentResource extends Resource {
      */
     public String getLanguage() throws XBRLException;
     
-    /**
-     * Set the value of xml:lang attribute on the resource
-     * @param language the language code conforming to the requirements
-     * set out in <a href="http://www.w3.org/TR/2000/REC-xml-20001006#sec-lang-tag">the XML
-     * specification</a>.
-     * @throws XBRLException
-     */
-    public void setLanguage(String language) throws XBRLException;
+
 
 }

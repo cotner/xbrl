@@ -22,15 +22,6 @@ public class FactDimensionContainerImpl extends FragmentImpl implements FactDime
     	throw new XBRLException("The id attribute is missing on a unit or context.");
     }
 
-    /**
-     * Set the id attribute value.
-     * @param id The new value for the id attribute.
-     * @throws XBRLException if the id
-     * is not unique in the XML document.
-     * @see org.xbrlapi.FactDimensionContainer#setId(String)
-     */
-    public void setId(String id) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
 }

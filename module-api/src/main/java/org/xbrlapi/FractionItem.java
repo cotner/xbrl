@@ -16,13 +16,7 @@ public interface FractionItem extends NumericItem {
 	 */
     public String getNumerator() throws XBRLException;
 	
-	/**
-	 * Set the fraction numerator
-	 * 
-	 * @param numerator The fraction numerator
-	 * @throws XBRLException
-	 */
-    public void setNumerator(double numerator) throws XBRLException;
+
 	
 	/**
 	 * Get the fraction denominator.
@@ -32,13 +26,6 @@ public interface FractionItem extends NumericItem {
 	 */
     public String getDenominator() throws XBRLException;
 	
-	/**
-	 * Set the fraction denominator
-	 * Throws an exception if the denominator is zero.
-	 * 
-	 * @param denominator The fraction denominator
-	 * @throws XBRLException
-	 */
-    public void setDenominator(double denominator) throws XBRLException;
+
 
 }

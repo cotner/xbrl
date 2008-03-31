@@ -16,10 +16,5 @@ public interface NonNumericItem extends Item {
 	 */
 	public String getValue() throws XBRLException;
 	
-	/** 
-	 * Set the value of the fact.
-	 * @param value The value of the fact
-	 * @throws XBRLException
-	 */
-	public void setValue(String value) throws XBRLException;	
+	
 }

@@ -24,13 +24,7 @@ public interface Locator extends ArcEnd {
      */
     public String getHref() throws XBRLException;
     
-    /**
-     * Set the link HREF attribute value.
-     *
-     * @param href The value of the href attribute
-     * @throws XBRLException
-     */
-    public void setHref(String href) throws XBRLException;
+
     
     /**
      * Get the single fragment that this locator references.

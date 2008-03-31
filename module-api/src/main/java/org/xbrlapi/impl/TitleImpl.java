@@ -21,15 +21,7 @@ public class TitleImpl extends XlinkImpl implements Title {
     	return getDataRootElement().getTextContent().trim();
     }
     
-    /**
-     * Set the documentation text.
-     * @param value
-     * @throws XBRLException
-     * @see org.xbrlapi.Title#setValue(String)
-     */
-    public void setValue(String value) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Get the xlink title language code.
@@ -47,15 +39,6 @@ public class TitleImpl extends XlinkImpl implements Title {
     	return null;
     }
     
-    /**
-     * TODO Ensure that the language string is a value coding.
-     * Set the xlink title language code.
-     * @param language The language code to use.
-     * @throws XBRLException
-     * @see org.xbrlapi.Title#setLanguage(String)
-     */
-    public void setLanguage(String language) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
 }

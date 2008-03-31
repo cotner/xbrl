@@ -15,12 +15,7 @@ public interface Item extends Fact {
 	 */
 	public Context getContext() throws XBRLException;
 	
-	/** 
-	 * Set the context for this item.
-	 * @param context The context for the item.
-	 * @throws XBRLException
-	 */
-	public void setContext(Context context) throws XBRLException;
+
 	
 	/** 
 	 * Return true if the item has a nill value.

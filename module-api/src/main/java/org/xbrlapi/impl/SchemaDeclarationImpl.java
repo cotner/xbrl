@@ -29,15 +29,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return getDataRootElement().getAttribute("name");
     }
     
-    /**
-     * Set the name of the concept.
-     * @param name The name of the concept.
-     * @throws XBRLException
-     * @see org.xbrlapi.SchemaDeclaration#setName(String)
-     */
-    public void setName(String name) throws XBRLException {
-    	getDataRootElement().setAttribute("name",name);
-    }
+
 
     /**
      * Determine if a concept is abstract.
@@ -52,19 +44,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return false;
     }
     
-    /**
-     * Sets the abstract attribute for the concept.
-     * @param abstractProperty The abstract attribute value.
-     * @throws XBRLException
-     * @see org.xbrlapi.SchemaDeclaration#setAbstract(boolean)
-     */
-    public void setAbstract(boolean abstractProperty) throws XBRLException {
-		if (abstractProperty) {
-			getDataRootElement().setAttribute("abstract","true");
-		} else {
-			getDataRootElement().setAttribute("abstract","false");
-		}
-    }
+
 
 
     /**
@@ -77,16 +57,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace,"block");
     }
     
-    /**
-     * Sets the block attribute for the concept
-     * One of #all or a list of extension, restriction, substitution.
-     * @param block The block attribute value
-     * @throws XBRLException
-     * @see org.xbrlapi.SchemaDeclaration#setBlock(String)
-     */
-    public void setBlock(String block) throws XBRLException {
-    	getDataRootElement().setAttributeNS(Constants.XMLSchemaNamespace,Constants.XMLSchemaPrefix + ":block",block);
-    }
+
 
 
     
@@ -102,16 +73,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace,"final");
     }
     
-    /**
-     * Sets the default attribute for the concept.
-     * One of #all or list of extension and restriction.
-     * @param value The final attribute value
-     * @throws XBRLException
-     *  @see org.xbrlapi.SchemaDeclaration#setFinal(String)
-     */
-    public void setFinal(String value) throws XBRLException {
-    	getDataRootElement().setAttributeNS(Constants.XMLSchemaNamespace,Constants.XMLSchemaPrefix + ":final",value);
-    }
+
 
     /**
      * Get the id attribute value.
@@ -122,15 +84,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace,"id");
     }
     
-    /**
-     * Sets the id attribute for the concept.
-     * @param id The id attribute value
-     * @throws XBRLException
-     * @see org.xbrlapi.SchemaDeclaration#setSchemaDeclarationId(String)
-     */
-    public void setSchemaDeclarationId(String id) throws XBRLException {
-    	getDataRootElement().setAttributeNS(Constants.XMLSchemaNamespace,Constants.XMLSchemaPrefix + ":id",id);
-    }
+
     
     /**
      * Get the collection of other non-schema non-xbrl attributes.
@@ -150,30 +104,9 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return otherAttributes;
     }
     
-    /**
-     * Set a non-schema non-xbrl attribute value.
-     * Mirrors the setAttributeNS method of the org.w3c.dom.Element class.
-     * @param namespaceURI
-     * @param qualifiedName
-     * @param value
-     * @throws XBRLException
-     * @see org.xbrlapi.SchemaDeclaration#setOtherAttribute(String, String, String)
-     */
-    public void setOtherAttribute(String namespaceURI, String qualifiedName, String value) throws XBRLException {
-    	getDataRootElement().setAttributeNS(namespaceURI,qualifiedName,value);
-    }
 
-    /**
-     * Set a non-schema non-xbrl attribute value.
-     * Mirrors the setAttributeNode method of the org.w3c.dom.Element class.
-     * @param attribute
-     * @throws XBRLException
-     * @see org.w3c.dom.Element#setAttributeNode(Attr)
-     * @see org.xbrlapi.SchemaDeclaration#setOtherAttribute(Attr)
-     */
-    public void setOtherAttribute(Attr attribute) throws XBRLException {
-    	getDataRootElement().appendChild(attribute);
-    }    
+
+    
     
     /**
      * Determines if concept has a non-schema non-xbrl attribute value.
@@ -192,29 +125,9 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return false;
     }
 
-    /**
-     * Removes a non-schema non-xbrl attribute value.
-     * Mirrors the removeAttributeNS method of the org.w3c.dom.Element class.
-     * @param namespaceURI The namespace of the attribute to be removed
-     * @param localname The local name of the attribute to be removed
-     * @throws XBRLException
-     * @see org.xbrlapi.SchemaDeclaration#removeOtherAttribute(String, String)
-     */
-    public void removeOtherAttribute(String namespaceURI, String localname) throws XBRLException {
-    	getDataRootElement().removeAttributeNS(namespaceURI,localname);
-    }
 
-    /**
-     * Removes a non-schema non-xbrl attribute value.
-     * Mirrors the removeAttributeNode method of the org.w3c.dom.Element class.
-     * @param attribute The attribute to be removed.
-     * @throws XBRLException
-     * @see org.w3c.dom.Element#removeAttributeNode(Attr)
-     * @see org.xbrlapi.SchemaDeclaration#removeOtherAttribute(Attr)
-     */
-    public void removeOtherAttribute(Attr attribute) throws XBRLException {
-    	getDataRootElement().removeAttributeNode(attribute);
-    }
+
+
     
     /**
      * TODO Implement the getAnnotations Method for schema declarations.
@@ -244,14 +157,6 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	}
     }
 
-    /**
-     * @see org.xbrlapi.SchemaDeclaration#setComplexContent(Element)
-     */
-    public void setComplexContent(Element complexContent) throws XBRLException {
-    	if (getDataRootElement().getElementsByTagNameNS(Constants.XMLSchemaNamespace,"complexContent").getLength() > 0) {
-    		throw new XBRLException("The element already has complexContent");
-    	}
-    	getDataRootElement().appendChild(complexContent);
-    }
+
 
 }

@@ -30,12 +30,7 @@ public class FactImpl extends FragmentImpl implements Fact {
 		return (Instance) this.getAncestorOrSelf("org.xbrlapi.impl.InstanceImpl");
 	}
 
-	/**
-	 * @see org.xbrlapi.Fact#setInstance(Instance)
-	 */
-	public void setInstance(Instance instance) throws XBRLException {
-		throw new XBRLException("The data update methods have not yet been implemented.");
-	}
+
 	
 	/**
 	 * @see org.xbrlapi.Fact#getTuple()
@@ -46,12 +41,7 @@ public class FactImpl extends FragmentImpl implements Fact {
 		return null;
 	}
 
-	/**
-	 * @see org.xbrlapi.Fact#setTuple(Tuple)
-	 */
-	public void setTuple(Tuple tuple) throws XBRLException {
-		throw new XBRLException("The data update methods have not yet been implemented.");
-	}
+
 
 	/**
 	 * @see org.xbrlapi.Fact#getConcept()

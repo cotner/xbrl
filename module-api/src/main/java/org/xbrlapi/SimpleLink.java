@@ -25,13 +25,7 @@ public interface SimpleLink extends Link {
      */
     public String getHref() throws XBRLException;
     
-    /**
-     * Set the link HREF attribute value.
-     *
-     * @param href The value of the href attribute
-     * @throws XBRLException
-     */
-    public void setHref(String href) throws XBRLException;
+
 
     /**
      * Get the link arcrole attribute value, before any resolution.
@@ -40,13 +34,7 @@ public interface SimpleLink extends Link {
      */
     public String getArcrole() throws XBRLException;
     
-    /**
-     * Set the link arcrole attribute value.
-     *
-     * @param arcrole The value of the arcrole attribute
-     * @throws XBRLException
-     */
-    public void setArcrole(String arcrole) throws XBRLException;
+
     
     /**
      * @return the single fragment referenced by the simple link 

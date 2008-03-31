@@ -19,13 +19,7 @@ public interface ElementDeclaration extends SchemaDeclaration {
      */
     public boolean isNillable() throws XBRLException;
     
-    /**
-     * Sets the nillable attribute for the concept
-     *
-     * @param nillable The nillable attribute value
-     * @throws XBRLException
-     */
-    public void setNillable(boolean nillable) throws XBRLException;
+
 
     /**
      * Retrieve the type namespace.
@@ -58,14 +52,7 @@ public interface ElementDeclaration extends SchemaDeclaration {
      */    
     public String getTypeLocalname() throws XBRLException;
 
-    /**
-     * Set the type
-     *
-     * @param namespaceURI The namespace in which the type has been defined
-     * @param localname The localname of the type
-     * @throws XBRLException
-     */
-    public void setType(String namespaceURI, String localname) throws XBRLException;
+
 
     /**
      * Retrieve the substitution group namespace.
@@ -97,14 +84,7 @@ public interface ElementDeclaration extends SchemaDeclaration {
      */
     public String getSubstitutionGroupLocalname() throws XBRLException;
 
-    /**
-     * Set the substitution group
-     *
-     * @param namespaceURI The namespace in which the substitution group has been defined
-     * @param localname The localname of the substitution group 
-     * @throws XBRLException
-     */
-    public void setSubstitutionGroup(String namespaceURI, String localname) throws XBRLException;
+
 
     /**
      * Get the default attribute value for the element
@@ -113,14 +93,7 @@ public interface ElementDeclaration extends SchemaDeclaration {
      */
     public String getDefault() throws XBRLException;
     
-    /**
-     * Sets the default attribute for the concept.
-     * The default value of the concept element
-     *
-     * @param value The default attribute value
-     * @throws XBRLException
-     */
-    public void setDefault(String value) throws XBRLException;
+
 
     /**
      * Get the fixed attribute value for the element
@@ -129,13 +102,6 @@ public interface ElementDeclaration extends SchemaDeclaration {
      */
     public String getFixed() throws XBRLException;
     
-    /**
-     * Sets the fixed attribute for the concept.
-     * The fixed value of the concept element
-     *
-     * @param fixed The default attribute value
-     * @throws XBRLException
-     */
-    public void setFixed(String fixed) throws XBRLException;
+
 
 }

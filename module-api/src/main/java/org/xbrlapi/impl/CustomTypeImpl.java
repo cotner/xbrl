@@ -28,16 +28,7 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
     	return null;
     }
     
-    /**
-     * Set the id of the arcroleType.
-     * TODO Throw an error if the id is used anywhere else in the schema containing the custom type.
-     * @param id The id of the custom type
-     * @throws XBRLException
-     * @see org.xbrlapi.CustomType#setCustomTypeId(String)
-     */
-    public void setCustomTypeId(String id) throws XBRLException {
-    	throw new XBRLException("Data update methods are yet to be implemented.");
-    }
+
 
     /**
      * Get the custom URI being defined.
@@ -55,15 +46,7 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
     	throw new XBRLException("The value of the custom URI is not provided.");
     }
     
-    /**
-     * Set the custom URI being defined.
-     * @param uri The URI value
-     * @throws XBRLException
-     * @see org.xbrlapi.CustomType#setCustomURI(String)
-     */
-    public void setCustomURI(String uri) throws XBRLException {
-    	throw new XBRLException("Data update methods are yet to be implemented.");
-    }
+
 
 	/**
 	 * Get the string value of the role Definition.
@@ -79,15 +62,7 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
 		return definition.getTextContent().trim();		 	
     }
     
-    /**
-     * Set the definition of the custom URI.
-     * @param definitionValue The definition of the custom URI
-     * @throws XBRLException
-     * @see org.xbrlapi.CustomType#setDefinition(String)
-     */
-    public void setDefinition(String definitionValue) throws XBRLException {
-    	throw new XBRLException("Data update methods are yet to be implemented.");
-    }
+
     
     /**
      * @see org.xbrlapi.CustomType#isUsedCorrectly(Fragment)
@@ -120,25 +95,9 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
     	return false;
     }
     
-    /**
-     * Add a usedOn declaration to the custom URI definition.
-     * @param usedOn the usedOn fragment to be added 
-     * @throws XBRLException
-     * @see org.xbrlapi.CustomType#addUsedOn(UsedOn)
-     */
-    public void addUsedOn(UsedOn usedOn) throws XBRLException {
-    	throw new XBRLException("Data update methods are yet to be implemented.");
-    }
 
-    /**
-     * Remove a usedOn declaration from the custom URI definition.
-     * @param usedOn the usedOn fragment to be added 
-     * @throws XBRLException.
-     * @see org.xbrlapi.CustomType#removeUsedOn(UsedOn)
-     */
-    public void removeUsedOn(UsedOn usedOn) throws XBRLException {
-    	throw new XBRLException("Data update methods are yet to be implemented.");
-    }
+
+
 	
 	/**
 	 * @see org.xbrlapi.CustomType#getUsedOns()

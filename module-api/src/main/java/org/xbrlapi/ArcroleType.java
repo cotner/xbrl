@@ -15,14 +15,7 @@ public interface ArcroleType extends CustomType {
      */
     public String getCyclesAllowed() throws XBRLException;
     
-    /**
-     * Set the cycles allowed attribute value to one of three values:
-     * any, none, or undirected (I think).
-     *
-     * @param cyclesAllowed The cyclesAllowed attribute value
-     * @throws XBRLException
-     */
-    public void setCyclesAllowed(String cyclesAllowed) throws XBRLException;
+
     
 
 }

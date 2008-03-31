@@ -30,15 +30,7 @@ class XlinkImpl extends FragmentImpl implements Xlink {
     	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"type");
     }
     
-    /**
-     * Set the xlink type (The xxlink:type attribute value).
-     * @param type One of simple or extended
-     * @throws XBRLException
-     * @see org.xbrlapi.Xlink#setXlinkType(String)
-     */
-    public void setXlinkType(String type) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Get the  title (The xlink:title attribute value).
@@ -53,15 +45,7 @@ class XlinkImpl extends FragmentImpl implements Xlink {
     	return null;
     }
     
-    /**
-     * Set the title (The xlink:title attribute value).
-     * @param title The value of the title attribute
-     * @throws XBRLException
-     * @see org.xbrlapi.Xlink#setTitleAttribute(String)
-     */
-    public void setTitleAttribute(String title) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Get a list of titles (The xlink:title children elements).
@@ -111,12 +95,7 @@ class XlinkImpl extends FragmentImpl implements Xlink {
     	return getDataRootElement().getAttribute(name);
     }
     
-    /**
-     * @see org.xbrlapi.Xlink#setAttribute(String, String, String)
-     */
-    public void setAttribute(String namespaceURI, String qName, String value) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
 	/** 
 	 * Get the URL of the document containing the fragment targetted

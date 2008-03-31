@@ -22,16 +22,7 @@ public class SimpleNumericItemImpl extends NumericItemImpl implements SimpleNume
 		return getDataRootElement().getTextContent().trim();
 	}
 	
-	/** 
-	 * TODO Provide means of setting numeric item values this with typed input parameters.
-	 * Set the value of the fact.
-	 * @param value The value of the fact
-	 * @throws XBRLException
-	 * @see org.xbrlapi.SimpleNumericItem#setValue(String)
-	 */
-	public void setValue(String value) throws XBRLException {
-		throw new XBRLException("Data update methods are not yet implemented.");
-	}
+
 
 	/** 
 	 * Get the value of the fact after adjusting for the specified precision.

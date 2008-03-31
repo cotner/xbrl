@@ -32,29 +32,9 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     	return candidates;
     }
     
-    /**
-     * Add a schemaRef to the XBRL instance
-     * @param schemaRef the schemaRef to add to the XBRL instance
-     * @throws XBRLException if the schemaRef is already part of the
-     * XBRL instance.
-     * TODO Make sure that the XBRLException for the getSchemaRefs method is kosher.
-     * @see org.xbrlapi.Instance#addSchemaRef(SimpleLink)
-     */
-    public void addSchemaRef(SimpleLink schemaRef) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
-    /**
-     * Remove a schemaRef from the XBRL instance.
-     * Throws an exception if the schema ref is not a part of the 
-     * XBRL instance.
-     * @param schemaRef the schemaRef to remove from the XBRL instance
-     * @throws XBRLException
-     * @see org.xbrlapi.Instance#removeSchemaRef(SimpleLink)
-     */
-    public void removeSchemaRef(SimpleLink schemaRef) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
 
     /**
      * Get the list of linkbaseRef fragments in the instance
@@ -72,29 +52,9 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     	}
     	return candidates;
     }
-    /**
-     * Add a linkbaseRef to the XBRL instance
-     * Throws an exception if the linkbaseRef is already part of the
-     * XBRL instance. (I am not sure if this is really required)
-     * @param linkbaseRef the linkbaseRef to add to the XBRL instance
-     * @throws XBRLException
-     * @see org.xbrlapi.Instance#addLinkbaseRef(SimpleLink)
-     */
-    public void addLinkbaseRef(SimpleLink linkbaseRef) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
     
-    /**
-     * Remove a linkbaseRef from the XBRL instance.
-     * Throws an exception if the linkbase ref is not a part of the 
-     * XBRL instance.
-     * @param linkbaseRef the linkbaseRef to remove from the XBRL instance
-     * @throws XBRLException
-     * @see org.xbrlapi.Instance#removeLinkbaseRef(SimpleLink)
-     */
-    public void removeLinkbaseRef(SimpleLink linkbaseRef) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
 
     /**
      * Get the list of contexts contained in the instance.
@@ -121,28 +81,9 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     	return (list.getFragment(0));
     }
     
-    /**
-     * Add a context to the XBRL instance.
-     * TODO Decide if this exception is really required.
-     * @param context the context to add to the XBRL instance
-     * @throws XBRLException if the context is already part of the
-     * XBRL instance.
-     * @see org.xbrlapi.Instance#addContext(Context)
-     */
-    public void addContext(Context context) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
     
-    /**
-     * Remove a context from the XBRL instance.
-     * @param context the context to remove from the XBRL instance
-     * @throws XBRLException if the context is not a part of the 
-     * XBRL instance.
-     * @see org.xbrlapi.Instance#removeContext(Context)
-     */
-    public void removeContext(Context context) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
 
     /**
      * Get the list of units contained in the instance.
@@ -168,28 +109,9 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     	return list.getFragment(0);
     }
     
-    /**
-     * Add a unit to the XBRL instance
-     * @param unit the unit to add to the XBRL instance
-     * @throws XBRLException if the unit is already part of the
-     * XBRL instance.
-     * TODO Determine if this exception is warranted.
-     * @see org.xbrlapi.Instance#addUnit(Unit)
-     */
-    public void addUnit(Unit unit) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
     
-    /**
-     * Remove a unit from the XBRL instance.
-     * @param unit the unit to remove from the XBRL instance
-     * @throws XBRLException if the unit is not a part of the 
-     * XBRL instance.
-     * @see org.xbrlapi.Instance#removeUnit(Unit)
-     */
-    public void removeUnit(Unit unit) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
     
     /**
      * Get a list of footnote link fragments.
@@ -200,28 +122,9 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     public FragmentList<ExtendedLink> getFootnoteLinks() throws XBRLException {
     	return this.<ExtendedLink>getChildren("org.xbrlapi.impl.ExtendedLinkImpl");
     }
-    /**
-     * Add a footnoteLink to the XBRL instance
-     * @param footnoteLink the footnoteLink to add to the XBRL instance
-     * @throws XBRLException if the footnoteLink is already part of the
-     * XBRL instance.
-     * TODO is this exception required?
-     * @see org.xbrlapi.Instance#addFootnoteLink(ExtendedLink)
-     */
-    public void addFootnoteLink(ExtendedLink footnoteLink) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
     
-    /**
-     * Remove a footnoteLink from the XBRL instance.
-     * @param footnoteLink the footnoteLink to remove from the XBRL instance
-     * @throws XBRLException if the footnoteLink is not a part of the 
-     * XBRL instance.
-     * @see org.xbrlapi.Instance#removeFootnoteLink(ExtendedLink)
-     */
-    public void removeFootnoteLink(ExtendedLink footnoteLink) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
     
     /**
      * Get the list of facts that are children of the instance.
@@ -234,27 +137,8 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     	return getStore().<Fact>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getFragmentIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
     }    
 
-    /**
-     * Add a fact to the XBRL instance
-     * @param fact the fact to add to the XBRL instance
-     * @throws XBRLException if the fact is already part of the
-     * XBRL instance.
-     * TODO Is this exception OK?
-     * @see org.xbrlapi.Instance#addFact(Fact)
-     */
-    public void addFact(Fact fact) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
     
-    /**
-     * Remove a fact from the XBRL instance.
-     * @param fact the fact to remove from the XBRL instance
-     * @throws XBRLException if the fact is not a part of the 
-     * XBRL instance.
-     * @see org.xbrlapi.Instance#removeFact(Fact)
-     */
-    public void removeFact(Fact fact) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    } 
+ 
 
 }

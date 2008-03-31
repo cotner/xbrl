@@ -16,13 +16,7 @@ public interface NumericItem extends Item {
 	 */
 	public Unit getUnits() throws XBRLException;
 	
-	/** 
-	 * Set the units for this item
-	 * @param unit The unit fragment that the numeric item
-	 * is being associated with.
-	 * @throws XBRLException
-	 */
-	public void setUnits(Unit unit) throws XBRLException;
+
 	
 
 	/** 
@@ -33,12 +27,7 @@ public interface NumericItem extends Item {
 	 */
 	public String getDecimals() throws XBRLException;
 	
-	/** 
-	 * Set the decimals attribute on the item.
-	 * @param decimals The decimals attribute on the item
-	 * @throws XBRLException
-	 */
-	public void setDecimals(int decimals) throws XBRLException;	
+	
 
 	/** 
 	 * Get the precision attribute for this item.
@@ -48,12 +37,7 @@ public interface NumericItem extends Item {
 	 */
 	public String getPrecision() throws XBRLException;
 	
-	/** 
-	 * Set the precision attribute on the item.
-	 * @param precision The precision attribute on the item
-	 * @throws XBRLException
-	 */
-	public void setPrecision(int precision) throws XBRLException;
+
 	
 	/** 
 	 * Returns true if the fact has a precision attribute.

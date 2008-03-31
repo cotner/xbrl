@@ -15,12 +15,6 @@ public interface FactDimensionContainer extends Fragment {
      */
     public String getId() throws XBRLException;
 
-    /**
-     * Set the id attribute value.
-     * @param id The new value for the id attribute.
-     * @throws XBRLException if the id
-     * is not unique in the XML document.
-     */
-    public void setId(String id) throws XBRLException;
+
 
 }

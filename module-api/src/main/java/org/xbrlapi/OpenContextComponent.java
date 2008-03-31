@@ -22,14 +22,7 @@ public interface OpenContextComponent extends ContextComponent {
      */
     public NodeList getComplexContent() throws XBRLException;
 
-    /**
-     * Sets the complex content fragment
-     *
-     * @param complexContent The ordered collection of complex content nodes
-     * making up the content of the open content model context component.
-     * @throws XBRLException
-     */
-    public void setComplexContent(Vector<Node> complexContent) throws XBRLException;
+
     
 	/**
 	 * Test c-equality of this open context component and another.

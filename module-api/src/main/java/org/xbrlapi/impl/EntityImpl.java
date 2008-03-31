@@ -29,16 +29,7 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     	return identifier.getAttribute("scheme");
     }
     
-    /**
-     * Set the scheme for the entity identifier.
-     * @param scheme the scheme for the entity identifier
-     * @throws XBRLException if the scheme is not
-     * a valid URI.
-     * @see org.xbrlapi.Entity#setIdentifierScheme(String)
-     */
-    public void setIdentifierScheme(String scheme) throws XBRLException {
-		throw new XBRLException("The data update methods are not yet implemented.");
-    }
+
 
     /**
      * Get the entity identifier value
@@ -57,16 +48,7 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     	return identifier.getTextContent();
     }
     
-    /**
-     * Set the entity identifier value
-     * @param identifierValue the local value identifying the entity 
-     * within the specified scheme
-     * @throws XBRLException 
-     * @see org.xbrlapi.Entity#setIdentifierValue(String)
-     */
-    public void setIdentifierValue(String identifierValue) throws XBRLException {
-		throw new XBRLException("The data update methods are not yet implemented.");
-	}
+
     
     /**
      * Get the segment of the entity
@@ -81,15 +63,7 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     	return candidates.getFragment(0);
     }
     
-    /**
-     * Set the segment in the entity
-     * @param segment the segment to be added
-     * @throws XBRLException
-     * @see org.xbrlapi.Entity#setSegment(Segment)
-     */
-    public void setSegment(Segment segment) throws XBRLException {
-		throw new XBRLException("The data update methods are not yet implemented.");
-    }
+
 
     /**
      * Remove the segment from the entity.

@@ -25,22 +25,8 @@ public interface ReferenceResource extends MixedContentResource {
      */
     public ReferencePart getReferencePart(String namespaceURI, String localName) throws XBRLException;
     
-    /**
-     * Add a reference part to a reference.  The reference part 
-     * is added as the last reference part in document order, within
-     * the reference.
-     *
-     * @param referencePart The reference part to be inserted into the reference text node or XHTML fragment root node
-     * @throws XBRLException
-     */
-    public void addReferencePart(ReferencePart referencePart) throws XBRLException;
+
     
-    /**
-     * Remove a reference part
-     *
-     * @param referencePart The reference part to remove
-     * @throws XBRLException
-     */
-    public void removeReferencePart(ReferencePart referencePart) throws XBRLException;
+
 
 }

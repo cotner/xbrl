@@ -14,13 +14,7 @@ public interface Context extends FactDimensionContainer {
      */
     public Entity getEntity() throws XBRLException;
 
-    /**
-     * Set the entity of the context.
-     *
-     * @param entity The entity to set
-     * @throws XBRLException
-     */
-    public void setEntity(Entity entity) throws XBRLException;
+
 
     /**
      * Get the period of the context.
@@ -29,13 +23,7 @@ public interface Context extends FactDimensionContainer {
      */
     public Period getPeriod() throws XBRLException;
 
-    /**
-     * Set the period of the context.
-     *
-     * @param period The period to set
-     * @throws XBRLException
-     */
-    public void setPeriod(Period period) throws XBRLException;
+
 
     /**
      * Get the scenario of the context.
@@ -45,20 +33,9 @@ public interface Context extends FactDimensionContainer {
      */
     public Scenario getScenario() throws XBRLException;
 
-    /**
-     * Set the scenario of the context.
-     *
-     * @param scenario The scenario to set
-     * @throws XBRLException
-     */
-    public void setScenario(Scenario scenario) throws XBRLException;
+
     
-    /**
-     * Remove the scenario
-     *
-     * @throws XBRLException
-     */
-    public void removeScenario() throws XBRLException;
+
     
     /**
      * Tests if the context is c-equal to another context

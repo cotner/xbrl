@@ -16,16 +16,7 @@ public interface UsedOn extends Fragment {
      */
     public String getURI() throws XBRLException;
     
-    /**
-     * Set the value of the usedOn fragment.
-     *
-     * @param uri The namespace URI of the element that can
-     * be used on
-     * @param prefix The prefix to be used in the qName
-     * @param localname The local name to be used in the qName 
-     * @throws XBRLException
-     */
-    public void setValue(String uri, String prefix, String localname) throws XBRLException;
+
 	
     /**
      * Get the localname for the element that can be used on.

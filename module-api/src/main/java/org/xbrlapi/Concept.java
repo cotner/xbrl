@@ -16,13 +16,7 @@ public interface Concept extends ElementDeclaration {
      */
     public String getPeriodType() throws XBRLException;
     
-    /**
-     * Set the periodType of the concept, one of instant or duration
-     *
-     * @param periodType The periodType value for the concept.
-     * @throws XBRLException
-     */
-    public void setPeriodType(String periodType) throws XBRLException;
+
 
     /**
      * Get the concept's balance, one of debit or credit
@@ -31,13 +25,7 @@ public interface Concept extends ElementDeclaration {
      */
     public String getBalance() throws XBRLException;
     
-    /**
-     * Set the balance of the concept, one of debit or credit
-     *
-     * @param balance The balance value for the concept.
-     * @throws XBRLException
-     */
-    public void setBalance(String balance) throws XBRLException;
+
 
     /**
      * @return the list of facts in the data store giving values for this concept

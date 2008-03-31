@@ -32,15 +32,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     	return null;
     }
     
-    /**
-     * Set the target namespace URI of the schema.
-     * @param namespaceURI
-     * @throws XBRLException
-     * @see org.xbrlapi.Schema#setTargetNamespaceURI(String)
-     */
-    public void setTargetNamespaceURI(String namespaceURI) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
 
     /**
      * Checks if the element form is qualified.
@@ -167,28 +159,9 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
 		return matches;
     }
 
-    /**
-     * Remove a specific concept identified by its name.
-     * Throws an exception if the concept does not exist.
-     * @param name The name of the concept
-     * @throws XBRLException
-     * @see org.xbrlapi.Schema#removeConceptByName(String)
-     */
-    public void removeConceptByName(String name) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
 
-    /**
-     * Add a concept to a schema.
-     * Throws an exception if the schema already contains a 
-     * concept with the same name or id. 
-     * @param concept The concept to be added to the schema.
-     * @throws XBRLException
-     * @see org.xbrlapi.Schema#addConcept(Concept)
-     */
-    public void addConcept(Concept concept) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }	
+
+	
 
     /**
      * Get a reference part declaration in a schema.
@@ -215,87 +188,22 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     	return this.getChildren("org.xbrlapi.impl.ReferencePartDeclarationImpl");
     }
     
-    /**
-     * Add a reference part declaration to a schema.
-     * @param referencePartDeclaration The concept to be added to the schema.
-     * @throws XBRLException if the reference part already exists in the schema.
-     * @see org.xbrlapi.Schema#addReferencePartDeclaration(ReferencePartDeclaration)
-     */
-    public void addReferencePartDeclaration(ReferencePartDeclaration referencePartDeclaration) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }    
+    
 
-    /**
-     * Remove a reference part declaration from a schema.
-     * @param referencePartDeclaration The reference part declaration to be removed.
-     * @throws XBRLException
-     * @see org.xbrlapi.Schema#removeReferencePartDeclaration(ReferencePartDeclaration)
-     */
-    public void removeReferencePartDeclaration(ReferencePartDeclaration referencePartDeclaration) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
 
-    /**
-     * Adds an linkbaseRef to a schema.  More methods are required to
-     * give greater control over document order.
-     * @param linkbaseRef The linkbaseRef to be added to the schema.
-     * @throws XBRLException
-     * @see org.xbrlapi.Schema#addLinkbaseRef(SimpleLink)
-     */
-    public void addLinkbaseRef(SimpleLink linkbaseRef) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
+
 
     
-    /**
-     * Remove a linkbaseRef from a schema.
-     * @param linkbaseRef The linkbaseRef to be removed.
-     * @throws XBRLException if the linkbaseRef is not contained in the schema.
-     * @see org.xbrlapi.Schema#removeLinkbaseRef(SimpleLink)
-     */
-    public void removeLinkbaseRef(SimpleLink linkbaseRef) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
 
-    /**
-     * Adds a roleType to a schema.
-     * @param roleType The roleType to be added to the schema.
-     * @throws XBRLException
-     * @see org.xbrlapi.Schema#addRoleType(RoleType)
-     */
-    public void addRoleType(RoleType roleType) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
-    
-    /**
-     * Remove a roleType from a schema.
-     * @param roleType The roleType to be removed.
-     * @throws XBRLException  if the roleType is not contained in the schema.
-     * @see org.xbrlapi.Schema#removeRoleType(RoleType)
-     */
-    public void removeRoleType(RoleType roleType) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
 
-    /**
-     * Adds an arcroleType to a schema.
-     * @param arcroleType The arcroleType to be added to the schema.
-     * @throws XBRLException
-     * @see org.xbrlapi.Schema#addArcroleType(ArcroleType)
-     */
-    public void addArcroleType(ArcroleType arcroleType) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
 
     
-    /**
-     * Remove a arcroleType from a schema.
-     * @param arcroleType The arcroleType to be removed.
-     * @throws XBRLException if the arcroleType is not contained in the schema.
-     * @see org.xbrlapi.Schema#removeArcroleType(ArcroleType)
-     */
-    public void removeArcroleType(ArcroleType arcroleType) throws XBRLException {
-    	throw new XBRLException("Data update methods have not yet been implemented.");
-    }
+
+
+
+
+    
+
 
 }

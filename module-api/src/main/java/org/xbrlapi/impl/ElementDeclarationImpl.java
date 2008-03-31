@@ -24,15 +24,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     	return false;
     }
     
-    /**
-     * Sets the nillable attribute for the concept.
-     * @param nillable The nillable attribute value.
-     * @throws XBRLException
-     * @see org.xbrlapi.ElementDeclaration#setNillable(boolean)
-     */
-    public void setNillable(boolean nillable) throws XBRLException {
-    	throw new XBRLException("Data update methods are not implemented."); 
-	}
+
 
 
     /**
@@ -88,17 +80,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     	return getLocalnameFromQName(type);
     }
 
-    /**
-     * Set the datatype attribute on the element declaration.
-     * TODO Decide if a third attribute is required to specify the namespace prefix on XML Schema datatypes.
-     * @param namespaceURI The namespace in which the type has been defined
-     * @param localname The localname of the type
-     * @throws XBRLException
-     * @see org.xbrlapi.ElementDeclaration#setType(String,String)
-     */
-    public void setType(String namespaceURI, String localname) throws XBRLException {
-    	throw new XBRLException("Data update methods are not implemented.");
-    }
+
 
     /**
      * Retrieve the substitution group namespace.
@@ -153,17 +135,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     	return getLocalnameFromQName(sg);
     }
 
-    /**
-     * Set the substitution group
-     * TODO Decide if a third attribute is required to specify the namespace prefix on XML Schema substitution groups.
-     * @param namespaceURI The namespace in which the substitution group has been defined
-     * @param localname The localname of the substitution group 
-     * @throws XBRLException
-     * @see org.xbrlapi.ElementDeclaration#setSubstitutionGroup(String,String)
-     */
-    public void setSubstitutionGroup(String namespaceURI, String localname) throws XBRLException {
-    	throw new XBRLException("Data update methods are not implemented.");    	
-    }
+
 
 
     /**
@@ -178,15 +150,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     	return root.getAttribute("default");
     }
     
-    /**
-     * Sets the default attribute for the concept.
-     * @param value The default attribute value
-     * @throws XBRLException
-     * @see org.xbrlapi.ElementDeclaration#setDefault(String)
-     */
-    public void setDefault(String value) throws XBRLException {
-    	throw new XBRLException("Data update methods are not implemented."); 
-    }
+
 
     /**
      * Get the fixed attribute value for the element
@@ -200,16 +164,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     	return root.getAttribute("fixed");    	
     }
     
-    /**
-     * Sets the fixed attribute for the concept which specifies 
-     * the fixed value of the concept element
-     * @param fixed The fixed attribute value
-     * @throws XBRLException
-     * @see org.xbrlapi.ElementDeclaration#setFixed(String)
-     */
-    public void setFixed(String fixed) throws XBRLException {
-    	throw new XBRLException("Data update methods are not implemented."); 
-    }
+
 
 
 }

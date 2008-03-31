@@ -21,12 +21,7 @@ public interface Fact extends Fragment {
 	 */
 	public Instance getInstance() throws XBRLException;
 
-	/**
-	 * Set the instance that this fact is a part of
-	 * @param instance the xbrl instance fragment
-	 * @throws XBRLException
-	 */
-	public void setInstance(Instance instance) throws XBRLException;	
+	
 	
 	/**
 	 * Get the tuple that this fact is a part of
@@ -35,12 +30,7 @@ public interface Fact extends Fragment {
 	 */
 	public Tuple getTuple() throws XBRLException;
 
-	/**
-	 * Set the tuple that this fact is a part of 
-	 * @param tuple the xbrl tuple fragment
-	 * @throws XBRLException
-	 */
-	public void setTuple(Tuple tuple) throws XBRLException;
+
 
 	/**
 	 * Get the concept that defines the syntax for this fact.
