@@ -1,6 +1,5 @@
 package org.xbrlapi;
 
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -61,6 +60,6 @@ public interface Entity extends ContextComponent {
      * for any equivalent identifiers.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getAllEntityLabels() throws XBRLException    
+    public FragmentList<LabelResource> getAllEntityLabels() throws XBRLException;   
     
 }

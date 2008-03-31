@@ -4,9 +4,6 @@ package org.xbrlapi;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-import java.util.Vector;
-
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.utilities.XBRLException;
 

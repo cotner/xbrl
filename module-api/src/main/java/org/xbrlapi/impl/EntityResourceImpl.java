@@ -57,8 +57,8 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      */
     protected FragmentList<EntityResource> getDirectEquivalents() throws XBRLException {
         Networks networks = this.getNetworks();
-        FragmentList<EntityResource> result = networks.<EntityResource>getTargetFragments(this.getFragmentIndex(),Constants.GalexyEquivalentEntitiesArcrole);
-        result.addAll(networks.<EntityResource>getSourceFragments(this.getFragmentIndex(),Constants.GalexyEquivalentEntitiesArcrole));
+        FragmentList<EntityResource> result = networks.<EntityResource>getTargetFragments(this.getFragmentIndex(),Constants.XBRLAPIEquivalentEntitiesArcrole);
+        result.addAll(networks.<EntityResource>getSourceFragments(this.getFragmentIndex(),Constants.XBRLAPIEquivalentEntitiesArcrole));
         return result;
     }
     

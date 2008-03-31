@@ -12,6 +12,7 @@ import org.xbrlapi.SimpleLink;
 import org.xbrlapi.Title;
 import org.xbrlapi.SAXHandlers.ElementState;
 import org.xbrlapi.impl.ArcImpl;
+import org.xbrlapi.impl.EntityResourceImpl;
 import org.xbrlapi.impl.ExtendedLinkImpl;
 import org.xbrlapi.impl.FootnoteResourceImpl;
 import org.xbrlapi.impl.LabelResourceImpl;
@@ -243,7 +244,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 				} else {
 	                resource = new ResourceImpl();
 	            }
-            } else if (namespaceURI.equals(Constants.GalexyEntitiesNamespace)) {
+            } else if (namespaceURI.equals(Constants.XBRLAPIEntitiesNamespace)) {
                 if (lName.equals("entity")) {
                     resource = new EntityResourceImpl();             
                 } else {

@@ -1,12 +1,10 @@
 package org.xbrlapi.impl;
 
-import org.xbrlapi.ArcroleType;
 import org.xbrlapi.Concept;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Linkbase;
 import org.xbrlapi.ReferencePartDeclaration;
-import org.xbrlapi.RoleType;
 import org.xbrlapi.Schema;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.utilities.Constants;

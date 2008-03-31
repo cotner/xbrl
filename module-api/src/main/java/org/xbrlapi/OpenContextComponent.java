@@ -1,8 +1,5 @@
 package org.xbrlapi;
 
-import java.util.Vector;
-
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.utilities.XBRLException;
 
