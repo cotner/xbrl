@@ -41,11 +41,15 @@ public interface Constants {
      * The namespace of the generic link and generic arc elements
      */
     final static String GenericLinkNamespace = " http://xbrl.org/2008/generic";	
-    
+
     /**
      * The prefix for the generic link and generic arc elements
      */
-    final static String GenericLinkPrefix = "gnl";
+    final static String GenericLinkPrefix = "gen";
+    
+    /**
+     * The prefix for the XBRL 2.1 link elements
+     */
 	final static String XBRL21LinkPrefix = "link";
 
 	final static String GenericLabelNamespace = "http://xbrl.org/2007/label";
