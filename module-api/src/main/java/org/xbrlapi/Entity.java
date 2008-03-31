@@ -1,5 +1,6 @@
 package org.xbrlapi;
 
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -39,8 +40,27 @@ public interface Entity extends ContextComponent {
      */
     public Segment getSegment() throws XBRLException;
     
+    /**
+     * @return a list of all the entity resources with the entity scheme and value 
+     * of this entity fragment.
+     * @throws XBRLException
+     */
+    public FragmentList<EntityResource> getEntityResources() throws XBRLException;
     
-
-      
-
+    /**
+     * @return the list of labels for the entity identified by this fragment,
+     * NOT taking into account the labels for the given identifier and the labels
+     * for any equivalent identifiers.
+     * @throws XBRLException
+     */
+    public FragmentList<LabelResource> getEntityLabels() throws XBRLException;
+    
+    /**
+     * @return the list of labels for the entity identified by this fragment,
+     * taking into account the labels for the given identifier and the labels
+     * for any equivalent identifiers.
+     * @throws XBRLException
+     */
+    public FragmentList<LabelResource> getAllEntityLabels() throws XBRLException    
+    
 }

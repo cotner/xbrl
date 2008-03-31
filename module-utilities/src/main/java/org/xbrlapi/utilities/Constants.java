@@ -65,12 +65,20 @@ public interface Constants {
 	final static String XBRLAPINamespace = "http://xbrlapi.org/";
 	final static String XBRLAPIPrefix = "xbrlapi";
 
+    /**
+     * XBRLAPI Namespace is the namespace for the elements and attributes
+     * specific to DTSImpl composite documents
+     */
+    final static String XBRLAPIEntitiesNamespace = "http://xbrlapi.org/entities";
+    final static String XBRLAPIEntitiesPrefix = "entity";
+    final static String XBRLAPIEquivalentEntitiesArcrole = "http://xbrlapi.org/arcrole/equivalent-entity";
+
 	/**
 	 * Namespace for the XBRLAPI defined language codes namespace.
 	 */
 	final static String XBRLAPILanguagesNamespace = "http://xbrlapi.org/rfc1766/languages";
 	final static String XBRLAPILanguagesPrefix = "lang";	
-	
+
 	/**
 	 * Composite document namespace as used by the composite documents
 	 * produced by <a href="http://www.sourceforge.net/xbrlcomposer/">XBRLComposer</a>.

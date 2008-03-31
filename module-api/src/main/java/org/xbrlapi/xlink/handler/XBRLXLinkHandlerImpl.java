@@ -234,11 +234,21 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			} else if (namespaceURI.equals(Constants.GenericLabelNamespace)) {
 				if (lName.equals("label")) {
 					resource = new LabelResourceImpl();			
-				}
+				} else {
+	                resource = new ResourceImpl();
+	            }
 			} else if (namespaceURI.equals(Constants.GenericReferenceNamespace)) {
 				if (lName.equals("reference")) {
 					resource = new ReferenceResourceImpl();				
-				}
+				} else {
+	                resource = new ResourceImpl();
+	            }
+            } else if (namespaceURI.equals(Constants.GalexyEntitiesNamespace)) {
+                if (lName.equals("entity")) {
+                    resource = new EntityResourceImpl();             
+                } else {
+                    resource = new ResourceImpl();
+                }
 			} else {
 				resource = new ResourceImpl();
 			}

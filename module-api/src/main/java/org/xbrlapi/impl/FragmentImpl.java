@@ -393,6 +393,7 @@ public class FragmentImpl implements Fragment {
     }
     
     /**
+     * TODO Add methods to get labels based on language and role.
      * @see org.xbrlapi.Fragment#getLabels()
      */
     public FragmentList<LabelResource> getLabels() throws XBRLException {
@@ -403,6 +404,7 @@ public class FragmentImpl implements Fragment {
     }
     
     /**
+     * TODO Add methods to get references based on language and role.
      * @see org.xbrlapi.Fragment#getReferences()
      */
     public FragmentList<ReferenceResource> getReferences() throws XBRLException {

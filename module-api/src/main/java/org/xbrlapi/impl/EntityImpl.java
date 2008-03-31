@@ -1,9 +1,13 @@
 package org.xbrlapi.impl;
 
+import java.util.HashMap;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Entity;
+import org.xbrlapi.EntityResource;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.LabelResource;
 import org.xbrlapi.Segment;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -15,9 +19,6 @@ import org.xbrlapi.utilities.XBRLException;
 public class EntityImpl extends ContextComponentImpl implements Entity {
 
     /**
-     * Get the entity identifier scheme.
-     * @return the entity identifier scheme URI 
-     * @throws XBRLException if any information is missing or provided too often.
      * @see org.xbrlapi.Entity#getIdentifierScheme()
      */
     public String getIdentifierScheme() throws XBRLException {
@@ -28,15 +29,8 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     	if (! identifier.hasAttribute("scheme")) throw new XBRLException("The entity identifier scheme is not specified.");
     	return identifier.getAttribute("scheme");
     }
-    
-
 
     /**
-     * Get the entity identifier value
-     * @return the string corresponding to the entity from
-     * among the full set of valid entity identifiers in the
-     * nominated scheme.
-     * @throws XBRLException
      * @see org.xbrlapi.Entity#getIdentifierValue()
      */
     public String getIdentifierValue() throws XBRLException {
@@ -51,10 +45,6 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
 
     
     /**
-     * Get the segment of the entity
-     * @return the segment information for the entity
-     * or null if the entity does not include segment information.
-     * @throws XBRLException
      * @see org.xbrlapi.Entity#getSegment()
      */
     public Segment getSegment() throws XBRLException {
@@ -63,14 +53,58 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     	return candidates.getFragment(0);
     }
     
-
-
     /**
-     * Remove the segment from the entity.
-     * @throws XBRLException 
-     * @see org.xbrlapi.Entity#removeSegment()
+     * @see org.xbrlapi.Entity#getEntityResources()
      */
-    public void removeSegment() throws XBRLException {
-		throw new XBRLException("The data update methods are not yet implemented.");
+    public FragmentList<EntityResource> getEntityResources() throws XBRLException {
+        String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[@type='org.xbrlapi.impl.EntityResourceImpl' and " + Constants.XBRLAPIPrefix + ":" + "data[@scheme='"+ this.getIdentifierScheme() +"' and @value='"+ this.getIdentifierValue() +"']" + "]";
+        return getStore().<EntityResource>query(query);
     }
+    
+    /**
+     * TODO unit test retrieval of labels for a given entity identifier
+     * @see org.xbrlapi.Entity#getEntityLabels()
+     */
+    public FragmentList<LabelResource> getEntityLabels() throws XBRLException {
+        FragmentList<EntityResource> resources = this.getEntityResources();
+        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
+        for (EntityResource resource: resources) {
+            labels.addAll(resource.getLabels());
+        }
+        return labels;
+    }
+    
+    /**
+     * TODO Unit test retrieval of all entity labels
+     * @see org.xbrlapi.Entity#getAllEntityLabels()
+     */
+    public FragmentList<LabelResource> getAllEntityLabels() throws XBRLException {
+        FragmentList<EntityResource> resources = this.getEntityResources();
+        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
+        for (EntityResource resource: resources) {
+            FragmentList<EntityResource> equivalents = resource.getEquivalents();
+            for (EntityResource equivalent: equivalents) {
+                labels.addAll(equivalent.getLabels());
+            }
+        }
+
+        // Find unique labels
+        HashMap<String,LabelResource> map = new HashMap<String,LabelResource>();
+        for (LabelResource label: labels) {
+            if (!map.containsKey(label.getFragmentIndex())) {
+                map.put(label.getFragmentIndex(),label);
+            }
+        }
+        
+        // Convert map to a fragment list
+        labels = new FragmentListImpl<LabelResource>();
+        for (LabelResource label: map.values()) {
+            labels.add(label);
+        }
+        
+        return labels;
+    }
+
+    
+
 }
