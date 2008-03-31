@@ -302,8 +302,7 @@ public interface Store {
     public void storeStub(String document) throws XBRLException;    
     
     /**
-     * @param url The URL of the document to remove the stub for if the stub
-     * exists in the database.
+     * @param stubId The id of the stub fragment to be removed.
      * @throws XBRLException
      */
     public void removeStub(String url) throws XBRLException;

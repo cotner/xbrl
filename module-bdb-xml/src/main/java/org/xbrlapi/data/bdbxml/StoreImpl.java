@@ -416,13 +416,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         try {
     
             try {
-    			double startTime = System.currentTimeMillis();
-    
     			xmlResults = performQuery(myQuery);
-    
-    			Double time = new Double((System.currentTimeMillis()-startTime));
-    			logger.info(time + " milliseconds for: " + myQuery);
-    
                 xmlValue = xmlResults.next();
     			FragmentList<F> fragments = new FragmentListImpl<F>();
     		    while (xmlValue != null) {
@@ -457,22 +451,22 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         // TODO provide a means of investigating namespace bindings for the query configuration.
 	    
 	    XmlQueryContext xmlQueryContext = null;
-	    XmlQueryExpression xmlExpression = null;
+	    XmlQueryExpression xmlQueryExpression = null;
 	    try {
             String query = "collection('" + dataContainer.getName() + "')" + myQuery;
             xmlQueryContext = createQueryContext();
-
-/*            xmlExpression = dataManager.prepare(myQuery,xmlQueryContext);
-            logger.info(xmlExpression.getQueryPlan());
-*/
-            XmlResults xmlResults = dataManager.query(query,xmlQueryContext);
+            xmlQueryExpression = dataManager.prepare(query,xmlQueryContext);
+            double startTime = System.currentTimeMillis();
+            XmlResults xmlResults = xmlQueryExpression.execute(xmlQueryContext);
+            Double time = new Double((System.currentTimeMillis()-startTime));
+            logger.info(time + " milliseconds to evaluate " + myQuery);
 			return xmlResults;
 
 		} catch (XmlException e) {
 			throw new XBRLException("Failed query: " + myQuery,e);
 		} finally {
             if (xmlQueryContext != null) xmlQueryContext.delete();
-            if (xmlExpression != null) xmlExpression.delete();
+            if (xmlQueryExpression != null) xmlQueryExpression.delete();
 		}
     		
 	}

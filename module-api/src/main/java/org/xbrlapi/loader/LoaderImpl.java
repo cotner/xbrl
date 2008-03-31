@@ -294,7 +294,7 @@ public class LoaderImpl implements Loader {
      */
     private void setDocumentURL(String url) throws XBRLException {
         this.documentURL = url;
-        this.documentId = getStore().getDocumentId(url);
+        this.documentId = getStore().getDocumentId(url.toString());
     }
     
     /**
@@ -626,10 +626,10 @@ public class LoaderImpl implements Loader {
         URL url = getNextDocumentToExplore();
         while (url != null) {
             if (!getStore().hasDocument(url.toString())) {
-                double startTime = System.currentTimeMillis();
-                int startIndex = this.fragmentId;
                 setDocumentURL(url.toString());
                 this.setNextFragmentId("1");
+                double startTime = System.currentTimeMillis();
+                int startIndex = this.fragmentId;
                 parse(url);
                 String time = (new Double(
                         (System.currentTimeMillis() - startTime)
@@ -781,16 +781,13 @@ public class LoaderImpl implements Loader {
     private void parse(URL url) throws XBRLException {
 
         try {
-            InputSource inputSource = this.entityResolver.resolveEntity("", url
-                    .toString());
+            InputSource inputSource = this.entityResolver.resolveEntity("", url.toString());
             ContentHandler contentHandler = new ContentHandlerImpl(this, url);
             parse(url, inputSource, contentHandler);
         } catch (SAXException e) {
-            throw new XBRLException("SAX exception thrown when parsing " + url,
-                    e);
+            throw new XBRLException("SAX exception thrown when parsing " + url,e);
         } catch (IOException e) {
-            throw new XBRLException("IO exception thrown when parsing " + url,
-                    e);
+            throw new XBRLException("IO exception thrown when parsing " + url,e);
         }
     }
 
@@ -913,7 +910,7 @@ public class LoaderImpl implements Loader {
         }
 
         // Remove any document stub from the data store once parsing is complete.
-        getStore().removeStub(url.toString());
+        getStore().removeStub(documentId);
         
     }
 
@@ -988,7 +985,7 @@ public class LoaderImpl implements Loader {
 
         // Stash the URL if it has not already been stashed
         if (!documentQueue.containsKey(dereferencedURL.toString())) {
-            logger.info(Thread.currentThread().getName() + " stashing " + url);            
+            //logger.info(Thread.currentThread().getName() + " stashing " + url);            
             documentQueue.put(dereferencedURL.toString(), new Integer(0));
         }
 

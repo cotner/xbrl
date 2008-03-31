@@ -605,10 +605,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.Store#getStub(String url)
+     * @see org.xbrlapi.data.Store#getStub(String stubId)
      */
-    public void removeStub(String url) throws XBRLException {
-        String stubId = getDocumentId(url);
+    public void removeStub(String stubId) throws XBRLException {
         if (hasFragment(stubId)) removeFragment(stubId);
     }            
     
