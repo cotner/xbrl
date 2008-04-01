@@ -57,12 +57,12 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
      * @see org.xbrlapi.Entity#getEntityResources()
      */
     public FragmentList<EntityResource> getEntityResources() throws XBRLException {
-        String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[@type='org.xbrlapi.impl.EntityResourceImpl' and " + Constants.XBRLAPIPrefix + ":" + "data[@scheme='"+ this.getIdentifierScheme() +"' and @value='"+ this.getIdentifierValue() +"']" + "]";
+        String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[@type='org.xbrlapi.impl.EntityResourceImpl' and " + Constants.XBRLAPIPrefix + ":" + "data[*/@scheme='"+ this.getIdentifierScheme() +"' and */@value='"+ this.getIdentifierValue() +"']" + "]";
+        logger.info(query);
         return getStore().<EntityResource>query(query);
     }
     
     /**
-     * TODO unit test retrieval of labels for a given entity identifier
      * @see org.xbrlapi.Entity#getEntityLabels()
      */
     public FragmentList<LabelResource> getEntityLabels() throws XBRLException {
@@ -75,7 +75,6 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     }
     
     /**
-     * TODO Unit test retrieval of all entity labels
      * @see org.xbrlapi.Entity#getAllEntityLabels()
      */
     public FragmentList<LabelResource> getAllEntityLabels() throws XBRLException {
@@ -92,17 +91,17 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
         HashMap<String,LabelResource> map = new HashMap<String,LabelResource>();
         for (LabelResource label: labels) {
             if (!map.containsKey(label.getFragmentIndex())) {
-                map.put(label.getFragmentIndex(),label);
+                map.put(label.getFragmentIndex(), label);
             }
         }
         
         // Convert map to a fragment list
-        labels = new FragmentListImpl<LabelResource>();
+        FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
         for (LabelResource label: map.values()) {
-            labels.add(label);
+            result.add(label);
         }
         
-        return labels;
+        return result;
     }
 
     

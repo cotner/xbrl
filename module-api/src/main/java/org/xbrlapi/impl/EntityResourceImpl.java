@@ -31,9 +31,10 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
     }
 
     /**
-     * @see org.xbrlapi.EntityResource#getEquivalents(
+     * @see org.xbrlapi.EntityResource#getEquivalents()
      */
     public FragmentList<EntityResource> getEquivalents() throws XBRLException { 
+        logger.info("Getting equivalents to " + this.getStringIdentifier());
         HashMap<String,EntityResource> map = new HashMap<String,EntityResource>();
         getEquivalentsMap(map);
         FragmentList<EntityResource> result = new FragmentListImpl<EntityResource>();
@@ -64,22 +65,25 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
     }
     
     /**
-     * TODO Data and unit tests are needed to cover equivalent entity discovery.
      * Augments a map of equivalent entities
      * @throws XBRLException
      */
     protected void getEquivalentsMap(HashMap<String,EntityResource> map) throws XBRLException {
 
+        logger.info("Getting equivalents map for " + this.getStringIdentifier());
+        
         String id = this.getStringIdentifier();
         if (map.isEmpty()) {
             map.put(id,this);
         } else {
             if(! map.containsKey(id)) {
+                logger.info("Adding " + id + " to the equivalents map.");
                 map.put(id,this);
             }
         }
         
         FragmentList<EntityResource> directEquivalents = this.getDirectEquivalents();
+        logger.info(id + " has " + directEquivalents.getLength() + " direct equivalents.");
         for (EntityResource candidate: directEquivalents) {
             EntityResourceImpl impl = (EntityResourceImpl) candidate;
             String implId = impl.getStringIdentifier();
@@ -93,7 +97,7 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      * @see org.xbrlapi.EntityResource#getEntities()
      */
     public FragmentList<Entity> getEntities() throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and *[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
+        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
         FragmentList<Entity> entities = getStore().<Entity>query(query);
         return entities;
     }
@@ -102,7 +106,7 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      * @see org.xbrlapi.EntityResource#getEntities(String)
      */
     public FragmentList<Entity> getEntities(String url) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and @url='" + url + "' and *[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
+        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and @url='" + url + "' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
         FragmentList<Entity> entities = getStore().<Entity>query(query);
         return entities;
     }

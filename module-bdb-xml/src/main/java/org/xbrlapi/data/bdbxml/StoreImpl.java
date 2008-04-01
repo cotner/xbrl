@@ -198,6 +198,11 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             xmlIndexSpecification.addIndex("","name", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","targetNamespace", "node-attribute-equality-string");
 
+            // Entity identification indexes
+            xmlIndexSpecification.addIndex("","scheme", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","value", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XBRL21Namespace,"identifier", "node-element-equality-string");            
+            
             xmlIndexSpecification.addIndex(Constants.XMLNamespace,"lang","node-attribute-equality-string");
 
             xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"label","node-attribute-equality-string");

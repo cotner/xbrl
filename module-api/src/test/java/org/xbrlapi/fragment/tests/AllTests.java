@@ -13,6 +13,7 @@ public class AllTests {
 		suite.addTestSuite(FactDimensionContainerTestCase.class);
 		suite.addTestSuite(ReferencePartTestCase.class);
 		suite.addTestSuite(ElementDeclarationTestCase.class);
+        suite.addTestSuite(EntityResourceTestCase.class);
 		suite.addTestSuite(Fragment_LoaderDependentTestCase.class);
 		suite.addTestSuite(ReferenceResourceTestCase.class);
 		suite.addTestSuite(SchemaContentTestCase.class);

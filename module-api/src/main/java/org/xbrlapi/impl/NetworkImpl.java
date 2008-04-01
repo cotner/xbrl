@@ -260,14 +260,14 @@ public class NetworkImpl implements Network {
 	 */
 	public List<Relationship> getActiveRelationshipsFrom(String index) throws XBRLException {
 
-	    logger.info("Getting active relationships from " + index + " for " + this);
+	    logger.debug("Getting active relationships from " + index + " for " + this);
 	    
 		List<Relationship> activeRelationships = new LinkedList<Relationship>();
 
 		if (! sourceRelationships.containsKey(index)) return activeRelationships;
 		
 		HashMap<String,EquivalentRelationships> sr = sourceRelationships.get(index);
-		logger.info("There are " + sr.size() + " source relationships.");
+		logger.debug("There are " + sr.size() + " source relationships.");
 		for (String key: sr.keySet()) {
 			EquivalentRelationships er = sr.get(key);
 			activeRelationships.add(er.getActiveRelationship());

@@ -397,9 +397,10 @@ public class FragmentImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getLabels()
      */
     public FragmentList<LabelResource> getLabels() throws XBRLException {
-    	Networks networks = this.getNetworks();
+        Networks networks = this.getNetworks();
     	FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.LabelArcRole);
-    	labels.addAll(networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole));
+        FragmentList<LabelResource> genericLabels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole);
+    	labels.addAll(genericLabels);
     	return labels;
     }
     

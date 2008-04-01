@@ -52,10 +52,10 @@ public interface Constants {
      */
 	final static String XBRL21LinkPrefix = "link";
 
-	final static String GenericLabelNamespace = "http://xbrl.org/2007/label";
+	final static String GenericLabelNamespace = "http://xbrl.org/2008/label";
 	final static String GenericLabelPrefix = "genlab";
 	
-	final static String GenericReferenceNamespace = "http://xbrl.org/2007/reference";
+	final static String GenericReferenceNamespace = "http://xbrl.org/2008/reference";
 	final static String GenericReferencePrefix = "genref";
 	
 	/**

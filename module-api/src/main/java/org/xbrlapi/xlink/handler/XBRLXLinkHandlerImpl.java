@@ -245,7 +245,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	                resource = new ResourceImpl();
 	            }
             } else if (namespaceURI.equals(Constants.XBRLAPIEntitiesNamespace)) {
-                if (lName.equals("entity")) {
+                if (lName.equals("identifier")) {
                     resource = new EntityResourceImpl();             
                 } else {
                     resource = new ResourceImpl();

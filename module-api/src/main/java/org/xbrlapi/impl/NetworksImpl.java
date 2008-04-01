@@ -160,7 +160,7 @@ public class NetworksImpl implements Networks {
 	 * @see org.xbrlapi.Networks#addRelationship(Relationship)
 	 */
 	public void addRelationship(Relationship relationship) throws XBRLException {
-		logger.info("Networks being augmented with relationship: " + relationship.toString());
+		logger.debug("Networks being augmented with relationship: " + relationship.toString());
 		String arcRole = relationship.getArcRole();
 		String linkRole = relationship.getLinkRole();
 		
@@ -168,7 +168,7 @@ public class NetworksImpl implements Networks {
 			getNetwork(arcRole,linkRole).addRelationship(relationship);
 			return;
 		}
-		logger.info("A new network is required for relationship with linkrole " + linkRole + " and arcrole " + arcRole);
+		logger.debug("A new network is required for relationship with linkrole " + linkRole + " and arcrole " + arcRole);
 		Network network = new NetworkImpl(linkRole,arcRole);
 		network.addRelationship(relationship);
 		addNetwork(network);
