@@ -2,6 +2,7 @@ package org.xbrlapi.impl;
 
 import java.util.HashMap;
 
+import org.xbrlapi.Entity;
 import org.xbrlapi.EntityResource;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Networks;
@@ -86,6 +87,24 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
                 impl.getEquivalentsMap(map);
             }
         }
+    }
+    
+    /**
+     * @see org.xbrlapi.EntityResource#getEntities()
+     */
+    public FragmentList<Entity> getEntities() throws XBRLException {
+        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and *[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
+        FragmentList<Entity> entities = getStore().<Entity>query(query);
+        return entities;
+    }
+
+    /**
+     * @see org.xbrlapi.EntityResource#getEntities(String)
+     */
+    public FragmentList<Entity> getEntities(String url) throws XBRLException {
+        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and @url='" + url + "' and *[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
+        FragmentList<Entity> entities = getStore().<Entity>query(query);
+        return entities;
     }
     
 }
