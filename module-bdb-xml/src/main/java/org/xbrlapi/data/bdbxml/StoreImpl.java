@@ -113,7 +113,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
             environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
             environmentConfiguration.setInitializeCache(true);
-            environmentConfiguration.setCacheSize(1024 * 1024 * 25);
+            environmentConfiguration.setCacheSize(1024 * 1024 * 500);
             environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
             environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
             environment = new Environment(new File(locationName), environmentConfiguration);
@@ -180,11 +180,14 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"fragment","node-element-presence");
             xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"data","node-element-presence");
             xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"xptr","node-element-presence");
-            
+
             xmlIndexSpecification.addIndex("","stub","node-attribute-presence");
 
             xmlIndexSpecification.addIndex("","index", "unique-node-attribute-equality-string");
 
+            xmlIndexSpecification.addIndex(Constants.XBRL21LinkNamespace,"label","node-element-substring-string");
+            xmlIndexSpecification.addIndex(Constants.GenericLabelNamespace,"label","node-element-substring-string");
+            
             xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","url", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","type", "node-attribute-equality-string");
@@ -464,7 +467,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             double startTime = System.currentTimeMillis();
             XmlResults xmlResults = xmlQueryExpression.execute(xmlQueryContext);
             Double time = new Double((System.currentTimeMillis()-startTime));
-            logger.info(time + " milliseconds to evaluate " + myQuery);
+            //logger.debug(time + " milliseconds to evaluate " + myQuery);
 			return xmlResults;
 
 		} catch (XmlException e) {
