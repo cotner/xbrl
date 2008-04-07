@@ -329,6 +329,7 @@ public class CacheImpl {
     	URL originalURL = getOriginalURL(url);
 		File file = this.getCacheFile(url);
 		file.delete();
+        logger.info("Purged " + file);
     }
     
 }
