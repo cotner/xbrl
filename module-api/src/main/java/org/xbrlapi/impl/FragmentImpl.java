@@ -408,6 +408,7 @@ public class FragmentImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getLabelsWithRole(String)
      */
     public FragmentList<LabelResource> getLabelsWithRole(String role) throws XBRLException {
+        logger.info("Getting labels for role: " + role);
         Networks networks = this.getNetworks();
         FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
 
@@ -420,6 +421,7 @@ public class FragmentImpl implements Fragment {
         
         labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole);
         for (LabelResource label: labels) {
+            
             if (label.getResourceRole().equals(role)) {
                 result.add(label);
             }
@@ -845,7 +847,7 @@ public class FragmentImpl implements Fragment {
      * @see org.xbrlapi.Fragment#hashCode()
      */
 	public int hashCode() {
-		return new Integer(getFragmentIndex()).intValue();
+	    return getFragmentIndex().hashCode();
 	}
 	
 	/**

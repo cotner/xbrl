@@ -15,4 +15,11 @@ public interface Resource extends ArcEnd {
 	 * @throws XBRLException.
 	 */
 	public String getResourceRole() throws XBRLException;
+	
+	/**
+	 * @return the XML language code for the resource or null
+	 * if none is specified.
+	 * @throws XBRLException
+	 */
+    public String getLanguage() throws XBRLException;	
 }

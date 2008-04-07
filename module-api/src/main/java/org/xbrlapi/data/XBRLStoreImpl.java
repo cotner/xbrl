@@ -406,6 +406,5 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	}
     	return roles;
     }    
-    
-    
+        
 }
