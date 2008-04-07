@@ -21,5 +21,13 @@ public interface Resource extends ArcEnd {
 	 * if none is specified.
 	 * @throws XBRLException
 	 */
-    public String getLanguage() throws XBRLException;	
+    public String getLanguage() throws XBRLException;
+    
+    /**
+     * @return the Language for the specified language encoding
+     * for the resource or null if none is specified or none is 
+     * available.
+     * @throws XBRLException
+     */
+    public Language getLanguage(String language) throws XBRLException;    
 }

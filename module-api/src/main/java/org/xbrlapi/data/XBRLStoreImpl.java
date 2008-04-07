@@ -15,7 +15,6 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
-import org.xbrlapi.Language;
 import org.xbrlapi.Resource;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Tuple;
@@ -307,14 +306,7 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	return roles;
     }
     
-    /**
-     * @see org.xbrlapi.data.XBRLStore#getLanguage(String, String)
-     */
-    public Language getLanguage(String encoding, String code) throws XBRLException {
-		String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.LanguageImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/lang:language/lang:encoding='" + encoding + "' and " + Constants.XBRLAPIPrefix + ":" + "data/lang:language/lang:code='" + code + "']";
-    	FragmentList<Language> languages = this.<Language>query(query);
-    	return languages.get(0);
-    }
+
     
     /**
      * @see org.xbrlapi.data.XBRLStore#getArcRoles()

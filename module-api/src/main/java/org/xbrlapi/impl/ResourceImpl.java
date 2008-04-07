@@ -1,6 +1,7 @@
 package org.xbrlapi.impl;
 
 import org.w3c.dom.Element;
+import org.xbrlapi.Language;
 import org.xbrlapi.Resource;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -28,6 +29,13 @@ public class ResourceImpl extends ArcEndImpl implements Resource {
         if (! root.hasAttributeNS(Constants.XMLNamespace,"lang")) return null;
         return getDataRootElement().getAttributeNS(Constants.XMLNamespace,"lang");        
     }
+    
+    /**
+     * @see org.xbrlapi.Resource#getLanguage(String)
+     */
+    public Language getLanguage(String language) throws XBRLException {
+        return getStore().getLanguage(language,this.getLanguage());
+    }    
 	
 	
 }

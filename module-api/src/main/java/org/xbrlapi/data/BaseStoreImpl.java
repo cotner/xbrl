@@ -31,6 +31,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
+import org.xbrlapi.Language;
 import org.xbrlapi.Locator;
 import org.xbrlapi.Networks;
 import org.xbrlapi.Relationship;
@@ -905,5 +906,17 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public <F extends Fragment> FragmentList<F> getRootFragments() throws XBRLException {
     	return this.<F>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='none']");
     }
+
+    /**
+     * @see org.xbrlapi.data.Store#getLanguage(String, String)
+     */
+    public Language getLanguage(String encoding, String code) throws XBRLException {
+        if (encoding == null) return null;
+        if (code == null) return null;
+        String query = "/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@type='org.xbrlapi.impl.LanguageImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/lang:language/lang:encoding='" + encoding.toUpperCase() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/lang:language/lang:code='" + code.toUpperCase() + "']";
+        FragmentList<Language> languages = this.<Language>query(query);
+        if (languages.getLength() == 0) return null;
+        return languages.get(0);
+    }    
     
 }

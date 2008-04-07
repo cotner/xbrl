@@ -9,7 +9,6 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
-import org.xbrlapi.Language;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.utilities.XBRLException;
@@ -128,15 +127,7 @@ public interface XBRLStore extends Store {
      */
     public FragmentList<RoleType> getRoleTypes() throws XBRLException;
     
-    /**
-     * @param encoding The code identifying the language that the name of the
-     * language is expressed in.
-     * @param code The code that identifies the language being named.
-     * @return the Language fragment that specifies the name of the language
-     * for the given code, expressed in the language identified by the encoding.
-     * @throws XBRLException
-     */
-    public Language getLanguage(String encoding, String code) throws XBRLException;
+
     
     /**
      * @return a list of RoleType fragments with a given role

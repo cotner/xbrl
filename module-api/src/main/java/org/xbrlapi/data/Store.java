@@ -9,6 +9,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.Language;
 import org.xbrlapi.Networks;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -391,4 +392,17 @@ public interface Store {
      * @throws XBRLException
      */
     public String getDocumentId(String document) throws XBRLException;
+    
+    /**
+     * @param encoding The code identifying the language that the name of the
+     * language is expressed in.
+     * @param code The code that identifies the language being named.
+     * @return the Language fragment that specifies the name of the language
+     * for the given code, expressed in the language identified by the encoding or
+     * null if either parameter is null or if there is no matching language name 
+     * in the data store.  The input parameters are converted to upper case before
+     * processing.
+     * @throws XBRLException
+     */
+    public Language getLanguage(String encoding, String code) throws XBRLException;
 }
