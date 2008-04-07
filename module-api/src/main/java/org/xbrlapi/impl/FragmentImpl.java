@@ -414,16 +414,17 @@ public class FragmentImpl implements Fragment {
 
         FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.LabelArcRole);
         for (LabelResource label: labels) {
-            if (label.getResourceRole().equals(role)) {
-                result.add(label);
+            String r = label.getResourceRole();
+            if (r != null) {
+                if (r.equals(role)) result.add(label);
             }
         }
         
         labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole);
         for (LabelResource label: labels) {
-            
-            if (label.getResourceRole().equals(role)) {
-                result.add(label);
+            String r = label.getResourceRole();
+            if (r != null) {
+                if (r.equals(role)) result.add(label);
             }
         }
         
@@ -439,15 +440,17 @@ public class FragmentImpl implements Fragment {
 
         FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.LabelArcRole);
         for (LabelResource label: labels) {
-            if (label.getLanguage().equals(language)) {
-                result.add(label);
+            String l = label.getLanguage();
+            if (l != null) {
+                if (label.getLanguage().equals(language)) result.add(label);
             }
         }
         
         labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole);
         for (LabelResource label: labels) {
-            if (label.getLanguage().equals(language)) {
-                result.add(label);
+            String l = label.getLanguage();
+            if (l != null) {
+                if (label.getLanguage().equals(language)) result.add(label);
             }
         }
         
@@ -463,15 +466,19 @@ public class FragmentImpl implements Fragment {
 
         FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.LabelArcRole);
         for (LabelResource label: labels) {
-            if (label.getLanguage().equals(language)) {
-                if (label.getResourceRole().equals(role)) result.add(label);
+            String l = label.getLanguage();
+            String r = label.getResourceRole();
+            if (l != null && r != null) {
+                if (l.equals(language) && r.equals(role)) result.add(label);
             }
         }
         
         labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole);
         for (LabelResource label: labels) {
-            if (label.getLanguage().equals(language)) {
-                if (label.getResourceRole().equals(role)) result.add(label);
+            String l = label.getLanguage();
+            String r = label.getResourceRole();
+            if (l != null && r != null) {
+                if (l.equals(language) && r.equals(role)) result.add(label);
             }
         }
         
