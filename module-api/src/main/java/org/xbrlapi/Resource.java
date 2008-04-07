@@ -29,5 +29,5 @@ public interface Resource extends ArcEnd {
      * available.
      * @throws XBRLException
      */
-    public Language getLanguage(String language) throws XBRLException;    
+    public String getLanguage(String language) throws XBRLException;    
 }

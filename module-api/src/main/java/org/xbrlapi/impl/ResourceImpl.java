@@ -33,8 +33,10 @@ public class ResourceImpl extends ArcEndImpl implements Resource {
     /**
      * @see org.xbrlapi.Resource#getLanguage(String)
      */
-    public Language getLanguage(String language) throws XBRLException {
-        return getStore().getLanguage(language,this.getLanguage());
+    public String getLanguage(String language) throws XBRLException {
+        Language l  = getStore().getLanguage(language,this.getLanguage());
+        if (l == null) return null;
+        return l.getName();
     }    
 	
 	
