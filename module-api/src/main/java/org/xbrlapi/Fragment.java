@@ -373,10 +373,32 @@ public interface Fragment {
     public String getPrefixFromQName(String qname);
  
     /**
-     * @return a list of labels for the fragment based on XBRL 2.1 label arcs.
+     * @return a list of label resources for the fragment.
      * @throws XBRLException
      */
     public FragmentList<LabelResource> getLabels() throws XBRLException;
+    
+    /**
+     * @param role The XLink role value
+     * @return the list of labels for this fragment with the specified XLink role.
+     * @throws XBRLException
+     */
+    public FragmentList<LabelResource> getLabelsWithRole(String role) throws XBRLException;
+    
+    /**
+     * @param role The xml:lang language codevalue
+     * @return the list of labels for this fragment with the specified language code.
+     * @throws XBRLException
+     */
+    public FragmentList<LabelResource> getLabelsWithLanguage(String language) throws XBRLException;
+
+    /**
+     * @param role The xml:lang language codevalue
+     * @param role The XLink role value
+     * @return the list of labels for this fragment with the specified language code and XLink role.
+     * @throws XBRLException
+     */
+    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(String language, String role) throws XBRLException;    
     
     /**
      * @return a list of references for the fragment based on XBRL 2.1 reference arcs.

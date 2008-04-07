@@ -405,6 +405,79 @@ public class FragmentImpl implements Fragment {
     }
     
     /**
+     * @see org.xbrlapi.Fragment#getLabelsWithRole(String)
+     */
+    public FragmentList<LabelResource> getLabelsWithRole(String role) throws XBRLException {
+        Networks networks = this.getNetworks();
+        FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
+
+        FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.LabelArcRole);
+        for (LabelResource label: labels) {
+            if (label.getResourceRole().equals(role)) {
+                result.add(label);
+            }
+        }
+        
+        labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole);
+        for (LabelResource label: labels) {
+            if (label.getResourceRole().equals(role)) {
+                result.add(label);
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * @see org.xbrlapi.Fragment#getLabelsWithLanguage(String)
+     */
+    public FragmentList<LabelResource> getLabelsWithLanguage(String language) throws XBRLException {
+        Networks networks = this.getNetworks();
+        FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
+
+        FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.LabelArcRole);
+        for (LabelResource label: labels) {
+            if (label.getLanguage().equals(language)) {
+                result.add(label);
+            }
+        }
+        
+        labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole);
+        for (LabelResource label: labels) {
+            if (label.getLanguage().equals(language)) {
+                result.add(label);
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndRole(String, String)
+     */
+    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(String language, String role) throws XBRLException {
+        Networks networks = this.getNetworks();
+        FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
+
+        FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.LabelArcRole);
+        for (LabelResource label: labels) {
+            if (label.getLanguage().equals(language)) {
+                if (label.getResourceRole().equals(role)) result.add(label);
+            }
+        }
+        
+        labels = networks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole);
+        for (LabelResource label: labels) {
+            if (label.getLanguage().equals(language)) {
+                if (label.getResourceRole().equals(role)) result.add(label);
+            }
+        }
+        
+        return result;
+    }
+
+    
+    /**
      * TODO Add methods to get references based on language and role.
      * @see org.xbrlapi.Fragment#getReferences()
      */
