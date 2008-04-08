@@ -21,6 +21,7 @@ import java.util.Map;
 import org.apache.xml.utils.PrefixResolver;
 import org.w3c.dom.xpath.XPathNSResolver;
 import org.xbrlapi.utilities.Constants;
+import org.xbrlapi.utilities.XBRLException;
 
 public class XPathNSResolverImpl implements XPathNSResolver, PrefixResolver {
 
@@ -39,6 +40,12 @@ public class XPathNSResolverImpl implements XPathNSResolver, PrefixResolver {
 		map.put(Constants.XLinkPrefix,Constants.XLinkNamespace);
 		map.put(Constants.XMLPrefix,Constants.XMLNamespace);
 		map.put(Constants.XMLSchemaPrefix,Constants.XMLSchemaNamespace);
+	}
+	
+	public void setNamespaceBinding(String namespace, String prefix) throws XBRLException {
+	    if (namespace == null) throw new XBRLException("Null namespace being bound.");
+        if (prefix == null) throw new XBRLException("Null prefix being bound.");
+	    map.put(prefix,namespace);
 	}
 
 	/**

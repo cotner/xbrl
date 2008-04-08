@@ -71,7 +71,12 @@ public interface Store {
 	 */
 	public void removeFragment(String index) throws XBRLException;
 	
-
+	/**
+	 * @param namespace The namespace to bind a prefix to for querying
+	 * @param prefix The prefix to bind to the namespace for querying
+	 * @throws XBRLException if either argument is null.
+	 */
+    public void setNamespaceBinding(String namespace, String prefix) throws XBRLException;
 	
 
     

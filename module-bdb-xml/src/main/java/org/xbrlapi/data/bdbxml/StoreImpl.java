@@ -50,7 +50,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	private Environment environment = null;
 	public XmlManager dataManager = null;
 	public XmlContainer dataContainer = null;
-
+	
+	
     /**
      * Initialise the BDB XML database data store.
      * @param location The location of the database (The path to where the database exists)
@@ -177,9 +178,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
             xmlIndexSpecification.replaceDefaultIndex("node-element-presence");
 
-            xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"fragment","node-element-presence");
-            xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"data","node-element-presence");
-            xmlIndexSpecification.addIndex(Constants.XBRLAPIPrefix,"xptr","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"fragment","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"data","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"xptr","node-element-presence");
 
             xmlIndexSpecification.addIndex("","stub","node-attribute-presence");
 
@@ -468,7 +469,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             double startTime = System.currentTimeMillis();
             XmlResults xmlResults = xmlQueryExpression.execute(xmlQueryContext);
             Double time = new Double((System.currentTimeMillis()-startTime));
-            //logger.debug(time + " milliseconds to evaluate " + myQuery);
+            logger.info(time + " milliseconds to evaluate " + myQuery);
 			return xmlResults;
 
 		} catch (XmlException e) {
@@ -495,10 +496,15 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             xmlQueryContext.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace);
             xmlQueryContext.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace);
             xmlQueryContext.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
+            for (String namespace: this.namespaceBindings.keySet()) 
+                xmlQueryContext.setNamespace(this.namespaceBindings.get(namespace),namespace);
             return xmlQueryContext;
         } catch (XmlException e) {
             throw new XBRLException("Failed to create query context.",e);
         }
 	}
+	
+	
+
 
 }

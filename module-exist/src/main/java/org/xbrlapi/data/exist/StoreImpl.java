@@ -147,14 +147,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		}		
 		
 	}
-
-
-    
-  
-
-
-    
-
     
 	/**
 	 * Close the data store.
@@ -314,8 +306,11 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     @SuppressWarnings(value = "unchecked")
 	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
 		
+        
 		ResourceSet resources = null;
 		try {
+	        for (String namespace: this.namespaceBindings.keySet()) 
+	            xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
 			resources = xpathService.query(query);
 		} catch (XMLDBException e) {
 			throw new XBRLException("The XPath query service failed.", e);

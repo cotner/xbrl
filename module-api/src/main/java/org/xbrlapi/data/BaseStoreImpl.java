@@ -64,6 +64,11 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */    
     protected Document storeDOM = null;
 
+    /**
+     * Namespace bindings
+     */
+    protected HashMap<String,String> namespaceBindings = new HashMap<String,String>();    
+    
 	public BaseStoreImpl() {
 		super();
 	}
@@ -918,5 +923,12 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         if (languages.getLength() == 0) return null;
         return languages.get(0);
     }    
+    
+    /**
+     * @see org.xbrlapi.data.Store#setNamespaceBinding(String,String)
+     */
+    public void setNamespaceBinding(String namespace, String prefix) throws XBRLException {
+        this.namespaceBindings.put(namespace,prefix);
+    }
     
 }

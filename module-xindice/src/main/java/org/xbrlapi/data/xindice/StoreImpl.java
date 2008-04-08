@@ -290,6 +290,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         
 		ResourceSet resources = null;
 		try {
+            for (String namespace: this.namespaceBindings.keySet()) 
+                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
 			resources = xpathService.query(query);
 		} catch (XMLDBException e) {
 			throw new XBRLException("The XPath query service failed.", e);

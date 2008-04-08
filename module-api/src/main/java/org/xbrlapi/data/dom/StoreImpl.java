@@ -14,7 +14,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.xpath.XPathEvaluator;
-import org.w3c.dom.xpath.XPathNSResolver;
 import org.w3c.dom.xpath.XPathResult;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
@@ -181,10 +180,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         d.getParentNode().removeChild(d);
 	}
 
-
-
-
-	
     /**
      * Get the actual DOM that is used to hold the data store.
      * @return the XML DOM that is the data store.  Note that this
@@ -217,7 +212,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			
 		// Create an XPath evaluator and pass in the document.
 		XPathEvaluator evaluator = new XPathEvaluatorImpl(dom);
-		XPathNSResolver resolver = new XPathNSResolverImpl();
+		XPathNSResolverImpl resolver = new XPathNSResolverImpl();
+        for (String namespace: this.namespaceBindings.keySet()) 
+            resolver.setNamespaceBinding(this.namespaceBindings.get(namespace),namespace);
 		XPathResult result = (XPathResult) evaluator.evaluate(query, dom, resolver, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
 		FragmentList<F> fragments = new FragmentListImpl<F>();
 		Node n;
@@ -252,9 +249,5 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			return getIndex(parent);
 		}
 	}
-
-
-
-
 
 }
