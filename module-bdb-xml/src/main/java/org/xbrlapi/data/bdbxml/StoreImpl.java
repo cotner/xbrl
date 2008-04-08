@@ -187,6 +187,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
             xmlIndexSpecification.addIndex(Constants.XBRL21LinkNamespace,"label","node-element-substring-string");
             xmlIndexSpecification.addIndex(Constants.GenericLabelNamespace,"label","node-element-substring-string");
+            xmlIndexSpecification.addIndex("","name","node-attribute-substring-string");
             
             xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","url", "node-attribute-equality-string");
