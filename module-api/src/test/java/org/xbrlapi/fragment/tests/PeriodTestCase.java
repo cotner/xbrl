@@ -34,9 +34,9 @@ public class PeriodTestCase extends DOMLoadingTestCase {
             FragmentList<Period> periods = store.<Period>getFragments("Period");
             assertTrue(periods.getLength() > 0);
             for (Period period: periods) {
-                assertTrue(period.isFiniteDuration());
-                assertFalse(period.isForever());
-                assertFalse(period.isInstant());
+                assertTrue(period.isFiniteDurationPeriod());
+                assertFalse(period.isForeverPeriod());
+                assertFalse(period.isInstantPeriod());
             }
         } catch (Exception e) {
             fail(e.getMessage());
@@ -53,8 +53,8 @@ public class PeriodTestCase extends DOMLoadingTestCase {
             FragmentList<Period> periods = store.<Period>getFragments("Period");
             assertTrue(periods.getLength() > 0);
             for (Period period: periods) {
-                assertEquals("2001-08-01",period.getStartDate());
-                assertEquals("2001-08-31",period.getEndDate());
+                assertEquals("2001-08-01",period.getStart());
+                assertEquals("2001-08-31",period.getEnd());
                 try {
                     String instant = period.getInstant();
                     fail("An exception should have been thrown because the period is not an instant.");

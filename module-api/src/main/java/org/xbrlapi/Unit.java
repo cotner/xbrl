@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.util.List;
+
 import org.w3c.dom.NodeList;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -44,4 +46,20 @@ public interface Unit extends FactDimensionContainer {
      */
     public boolean equals(Unit unit) throws XBRLException;
 
+    /**
+     * @return a list of resolved numerator measure qname values each of which 
+     * is the namespace followed by the separator string |:|:| followed by the local name.
+     * @throws XBRLException
+     */
+    public List<String> getResolvedNumeratorMeasures() throws XBRLException;
+    
+    /**
+     * @return a list of resolved denominator measure qname values each of which 
+     * is the namespace followed by the separator string |:|:| followed by the local name.
+     * If there is no denominator then it returns an empty list.
+     * @throws XBRLException
+     */
+    public List<String> getResolvedDenominatorMeasures() throws XBRLException;
+    
+    
 }

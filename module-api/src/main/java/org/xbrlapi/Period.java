@@ -13,28 +13,22 @@ public interface Period extends ContextComponent {
      *
      * @throws XBRLException
      */
-    public boolean isFiniteDuration() throws XBRLException;
+    public boolean isFiniteDurationPeriod() throws XBRLException;
 
     /**
      * Returns true if the period is an instant.
      *
      * @throws XBRLException
      */
-    public boolean isInstant() throws XBRLException;
+    public boolean isInstantPeriod() throws XBRLException;
 
     /**
      * Returns true if the period is forever.
      *
      * @throws XBRLException
      */
-    public boolean isForever() throws XBRLException;
+    public boolean isForeverPeriod() throws XBRLException;
 
-    
-    
-
-
-
-    
     /**
      * Get the instant.
      * @return the string value of the instant.
@@ -43,17 +37,15 @@ public interface Period extends ContextComponent {
     public String getInstant() throws XBRLException;    
     
     /**
-     * Get the start date.
-     * @return the start date value.
-     * @throws XBRLException if the date is not a duration that is not a finite duration.
+     * @return the start of the period.
+     * @throws XBRLException if the period is not a finite duration.
      */
-    public String getStartDate() throws XBRLException;
+    public String getStart() throws XBRLException;
 
     /**
-     * Get the end date.
-     * @return the end date value.
-     * @throws XBRLException if the date is not a duration that is not a finite duration.
+     * @return the end of the period.
+     * @throws XBRLException if the period is not a finite duration.
      */
-    public String getEndDate() throws XBRLException;
+    public String getEnd() throws XBRLException;
     
 }

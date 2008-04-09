@@ -42,7 +42,7 @@ public class XPathNSResolverImpl implements XPathNSResolver, PrefixResolver {
 		map.put(Constants.XMLSchemaPrefix,Constants.XMLSchemaNamespace);
 	}
 	
-	public void setNamespaceBinding(String namespace, String prefix) throws XBRLException {
+	public void setNamespaceBinding(String prefix,String namespace) throws XBRLException {
 	    if (namespace == null) throw new XBRLException("Null namespace being bound.");
         if (prefix == null) throw new XBRLException("Null prefix being bound.");
 	    map.put(prefix,namespace);

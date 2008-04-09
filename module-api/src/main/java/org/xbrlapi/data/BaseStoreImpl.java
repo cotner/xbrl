@@ -225,9 +225,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public void deleteDocument(String url) throws XBRLException {
     	logger.debug("Deleting document " + url);
-    	FragmentList<Fragment> fragments = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='"+ url + "']");
+        FragmentList<Fragment> fragments = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "url/@value='"+ url + "']");    	
     	for (Fragment fragment: fragments) {
-        	this.removeFragment(fragment.getFragmentIndex());   		
+	        this.removeFragment(fragment.getFragmentIndex());
     	}
     }
     
@@ -240,9 +240,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     	deleteDocument(url);
     	FragmentList<Fragment> fragments = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@targetDocumentURL='"+ url + "']");
     	for (Fragment fragment: fragments) {
-    		if (! documentsToDelete.containsKey(fragment.getURL())) {
-    			documentsToDelete.put(fragment.getURL(),new Boolean(true));
-    		}
+            if (! documentsToDelete.containsKey(fragment.getURL())) {
+                documentsToDelete.put(fragment.getURL(),new Boolean(true));
+            }
     		Iterator<String> iterator = documentsToDelete.keySet().iterator();
     		while (iterator.hasNext()) {
     			String myURL = iterator.next();

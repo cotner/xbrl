@@ -360,26 +360,19 @@ public class FragmentImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getURL()
      */
     public String getURL() throws XBRLException {
-    	return getMetaAttribute("url");
-    } 
+        return this.getMetaAttribute("url");
+    }
+    
+
     
     /**
      * @see org.xbrlapi.Fragment#setURL(String)
      */
     public void setURL(String url) throws XBRLException {
-        HashMap<String,String> attributes = new HashMap<String,String>();
-        attributes.put("value",url);
-        appendMetadataElement("url",attributes);    
+        this.setMetaAttribute("url",url);
     }
     
-    /**
-     * @see org.xbrlapi.Fragment#removeURL(String)
-     */
-    public void removeURL(String url) throws XBRLException {
-        HashMap<String,String> attributes = new HashMap<String,String>();
-        attributes.put("value",url);
-        removeMetadataElement("url",attributes);
-    }    
+    
     
     /**
      * @see org.xbrlapi.Fragment#getReferencingLocators()

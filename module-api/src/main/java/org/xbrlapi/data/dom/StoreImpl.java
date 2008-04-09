@@ -213,8 +213,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		// Create an XPath evaluator and pass in the document.
 		XPathEvaluator evaluator = new XPathEvaluatorImpl(dom);
 		XPathNSResolverImpl resolver = new XPathNSResolverImpl();
-        for (String namespace: this.namespaceBindings.keySet()) 
+        for (String namespace: this.namespaceBindings.keySet()) {
             resolver.setNamespaceBinding(this.namespaceBindings.get(namespace),namespace);
+        }
 		XPathResult result = (XPathResult) evaluator.evaluate(query, dom, resolver, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
 		FragmentList<F> fragments = new FragmentListImpl<F>();
 		Node n;

@@ -2,6 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.Fact;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -41,6 +42,25 @@ public class ConceptTestCase extends DOMLoadingTestCase {
             fail(e.getMessage());
         }
 	}
+	
+    public void testGetFacts() {   
+
+        boolean testDone = false;
+        try {
+            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
+            assertTrue(concepts.getLength() > 0);
+            for (Concept concept: concepts) {
+                FragmentList<Fact> facts = concept.getFacts();
+                for (Fact fact: facts) {
+                    assertEquals(fact.getLocalname(), fact.getConcept().getName());
+                    testDone = true;
+                }
+            }
+            assertTrue(testDone);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }	
 	
 	public void testGetBalance() {	
 

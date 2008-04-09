@@ -164,6 +164,8 @@ public interface Fragment {
      * @throws XBRLException
      */
     public String getURL() throws XBRLException;
+    
+
 	
     /**
      * Set the URL of the fragment's document.
@@ -272,12 +274,7 @@ public interface Fragment {
      */
     public void removeID(String id) throws XBRLException;
     
-    /**
-     * Remove a URL from the metadata.
-     * @param url The URL to remove.
-     * @throws XBRLException
-     */
-    public void removeURL(String url) throws XBRLException;    
+    
     
     /**
      * Add an element Scheme XPointer Expression to the metadata.

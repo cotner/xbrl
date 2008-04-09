@@ -1,6 +1,8 @@
 package org.xbrlapi.impl;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -15,15 +17,36 @@ import org.xbrlapi.utilities.XBRLException;
 public class UnitImpl extends FactDimensionContainerImpl implements Unit {
 
     /**
-     * Get the numerator set of measures for the unit
-     * @return the numerator measure set
-     * @throws XBRLException
      * @see org.xbrlapi.Unit#getNumeratorMeasures()
      */
     public NodeList getNumeratorMeasures() throws XBRLException {
     	Element numerator = this.getNumeratorContainer();
     	return numerator.getElementsByTagNameNS(Constants.XBRL21Namespace,"measure");
     }
+    
+    /**
+     * @see org.xbrlapi.Unit#getResolvedNumeratorMeasures()
+     */
+    public List<String> getResolvedNumeratorMeasures() throws XBRLException {
+        NodeList measures = getNumeratorMeasures();
+        List<String> result = new Vector<String>();
+        for (int i=0; i<measures.getLength(); i++) {
+            result.add(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)) + "|:|:|" + this.getLocalnameFromQName(measures.item(i).getTextContent()));
+        }
+        return result;
+    }
+    
+    /**
+     * @see org.xbrlapi.Unit#getResolvedDenominatorMeasures()
+     */
+    public List<String> getResolvedDenominatorMeasures() throws XBRLException {
+        List<String> result = new Vector<String>();
+        NodeList measures = getDenominatorMeasures();
+        for (int i=0; i<measures.getLength(); i++) {
+            result.add(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)) + "|:|:|" + this.getLocalnameFromQName(measures.item(i).getTextContent()));
+        }
+        return result;
+    }    
 
     /**
      * Determines if the unit has a denominator

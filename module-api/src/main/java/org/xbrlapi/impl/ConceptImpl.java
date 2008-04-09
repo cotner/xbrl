@@ -58,7 +58,8 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     * @see org.xbrlapi.Concept#getFacts()
     */
     public FragmentList<Fact> getFacts() throws XBRLException {
-    	return getStore().<Fact>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/*[local-name()='"+ this.getName() +"' and namespace-uri()='"+this.getTargetNamespaceURI()+"']]");
+        getStore().setNamespaceBinding(this.getTargetNamespaceURI(),"xbrlapi_concept");
+    	return getStore().<Fact>query("/*[*/xbrlapi_concept:"+ this.getName() + "]");
     }
 
 }
