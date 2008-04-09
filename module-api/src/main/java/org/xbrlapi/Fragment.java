@@ -268,9 +268,16 @@ public interface Fragment {
     /**
      * Remove an ID from the metadata.
      * @param id The id to remove.
-     * @throws XBRLException.
+     * @throws XBRLException
      */
-    public void removeID(String id) throws XBRLException;    
+    public void removeID(String id) throws XBRLException;
+    
+    /**
+     * Remove a URL from the metadata.
+     * @param url The URL to remove.
+     * @throws XBRLException
+     */
+    public void removeURL(String url) throws XBRLException;    
     
     /**
      * Add an element Scheme XPointer Expression to the metadata.

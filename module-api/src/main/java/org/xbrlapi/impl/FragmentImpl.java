@@ -364,12 +364,22 @@ public class FragmentImpl implements Fragment {
     } 
     
     /**
-     * TODO Add check that the URL is a valid.
      * @see org.xbrlapi.Fragment#setURL(String)
      */
     public void setURL(String url) throws XBRLException {
-    	setMetaAttribute("url",url);
+        HashMap<String,String> attributes = new HashMap<String,String>();
+        attributes.put("value",url);
+        appendMetadataElement("url",attributes);    
     }
+    
+    /**
+     * @see org.xbrlapi.Fragment#removeURL(String)
+     */
+    public void removeURL(String url) throws XBRLException {
+        HashMap<String,String> attributes = new HashMap<String,String>();
+        attributes.put("value",url);
+        removeMetadataElement("url",attributes);
+    }    
     
     /**
      * @see org.xbrlapi.Fragment#getReferencingLocators()
