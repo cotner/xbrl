@@ -41,6 +41,7 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
      */
     public URL getMatch(URL url) throws XBRLException {
         String signature = this.getSignature(url);
+        if (signature == null) return url;
         if (getMap().containsKey(signature)) {
             List<URL> matches = getMap().get(signature);
             if (! matches.contains(url))

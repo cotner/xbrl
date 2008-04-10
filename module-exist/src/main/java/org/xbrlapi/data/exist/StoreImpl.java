@@ -63,6 +63,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			String dataCollectionName
 			) throws XBRLException {
 		
+	    super();
+	    
 		storeParentPath = (storeParentPath.charAt(storeParentPath.length()-1) != '/') ? storeParentPath + "/" : storeParentPath;
 
 		if (connection == null) throw new XBRLException("The Exist database connection is null so no data store can be established.");

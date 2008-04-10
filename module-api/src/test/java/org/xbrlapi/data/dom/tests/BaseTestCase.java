@@ -10,6 +10,7 @@ import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.dom.StoreImpl;
+import org.xbrlapi.data.resource.InMemoryMatcherImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
 import org.xbrlapi.utilities.XBRLException;
@@ -26,14 +27,16 @@ import org.xml.sax.EntityResolver;
 public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 
 	protected String cache = configuration.getProperty("local.cache");
-	
+    protected File cacheFile = new File(cache);
+    protected CacheImpl cacheImpl = null;
 	protected XBRLStore store = null;
 	protected Loader loader = null;
-
+	
 	protected List<Store> stores = new LinkedList<Store>();
 	
 	protected void setUp() throws Exception {
 		super.setUp();
+        cacheImpl = new CacheImpl(cacheFile);
 		store = createStore();
 		stores.add(store);
 		loader = createLoader(store);
@@ -54,8 +57,10 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 	 * @return the new store.
 	 * @throws XBRLException
 	 */
-	public StoreImpl createStore() {
-		return new StoreImpl();
+	public StoreImpl createStore() throws XBRLException {
+	    StoreImpl store = new StoreImpl();
+	    store.setMatcher(new InMemoryMatcherImpl(cacheImpl));
+	    return store;
 	}
 
 	/**
@@ -67,7 +72,6 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 		XBRLXLinkHandlerImpl xlinkHandler = new XBRLXLinkHandlerImpl();
 		XBRLCustomLinkRecogniserImpl clr = new XBRLCustomLinkRecogniserImpl(); 
 		XLinkProcessor xlinkProcessor = new XLinkProcessorImpl(xlinkHandler ,clr);
-		File cacheFile = new File(cache);
 		
 		// Rivet errors in the SEC XBRL data require these remappings.
         HashMap<String,String> map = new HashMap<String,String>();
@@ -82,7 +86,7 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 
         EntityResolver resolver = new EntityResolverImpl(cacheFile,map);
 		Loader myLoader = new LoaderImpl(store,xlinkProcessor);
-		myLoader.setCache(new CacheImpl(cacheFile));
+		myLoader.setCache(cacheImpl);
 		myLoader.setEntityResolver(resolver);
 		xlinkHandler.setLoader(myLoader);
 		return myLoader;

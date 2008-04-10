@@ -215,12 +215,13 @@ public class CacheImpl {
     }
     
     /**
-     * Copy the original resource into the local cache.
+     * Copy the original resource into the local cache if the resource exists and is
+     * able to be copied into the cache and does nothing otherwise.  Thus, caching fails
+     * silently.
      * @param originalURL the URL of the resource to be copied into the cache.
      * @param cacheFile The file to be used to store the cache version of the resource.
-     * @throws XBRLException if the resource cannot be copied into the local cache.
      */
-    public void copyToCache(URL originalURL, File cacheFile) throws XBRLException {
+    public void copyToCache(URL originalURL, File cacheFile) {
     	
     	logger.info("Attempting to cache: " + originalURL);
     	
@@ -252,11 +253,11 @@ public class CacheImpl {
 		    bos.close();
     
 		} catch (java.net.NoRouteToHostException e) {
-			 throw new XBRLException("The resource could not be cached.",e);
+		    ;
 		} catch (FileNotFoundException e) {
-			 throw new XBRLException("The resource could not be cached.",e);
+			 ;
 		} catch (IOException e) {
-			 throw new XBRLException("The resource could not be cached.",e);
+			 ;
 		}
     }
     

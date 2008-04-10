@@ -81,7 +81,7 @@ public class PointerResolverImpl implements PointerResolver {
 	 */
 	@SuppressWarnings("unchecked")
 	public Fragment resolveXPointer(String pointer) throws XBRLException {
-	
+
 	  	java.io.StringReader stringReader = new java.io.StringReader(pointer);
 		java.io.Reader reader = new java.io.BufferedReader(stringReader);
 		PointerGrammar grammar = new PointerGrammar(reader);

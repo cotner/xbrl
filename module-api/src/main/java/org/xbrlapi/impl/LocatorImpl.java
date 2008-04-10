@@ -58,7 +58,8 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
      */
     public URL getTargetDocumentURL() throws XBRLException {
     	try {
-    		return new URL(this.getMetadataRootElement().getAttribute("targetDocumentURL"));
+    	    URL originalURL = new URL(this.getMetadataRootElement().getAttribute("targetDocumentURL"));
+    		return this.getStore().getMatcher().getMatch(originalURL);
     	} catch (MalformedURLException e) {
     		throw new XBRLException("Absolute URL in the HREF of the locator is malformed.",e);
     	}

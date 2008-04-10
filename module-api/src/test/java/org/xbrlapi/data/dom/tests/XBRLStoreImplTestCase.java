@@ -49,7 +49,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	public void testGetArcRoles() throws Exception {
 		try {
 			HashMap<String,String> roles = store.getArcRoles();
-			assertEquals(7, roles.size());
+			assertTrue(roles.size() > 7);
 		} catch (Exception e) {
 		    e.printStackTrace();
 			fail(e.getMessage());

@@ -64,8 +64,12 @@ public abstract class BaseMatcherImpl implements Matcher {
     public String getSignature(URL url) throws XBRLException {
         URL cacheURL = cache.getCacheURL(url); // Caches if not already cached.
         File cacheFile = cache.getCacheFile(url);
-        List<String> lines = getResourceContent(cacheFile);
-        return getSignature().getSignature(lines);
+        if (cacheFile.exists()) {
+            List<String> lines = getResourceContent(cacheFile);
+            return getSignature().getSignature(lines);
+        } else {
+            return null;
+        }
     }
 
     protected List<String> getResourceContent(File file) throws XBRLException {

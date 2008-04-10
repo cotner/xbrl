@@ -59,7 +59,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * @throws XBRLException
      */
     public StoreImpl(String location, String container) throws XBRLException {
-
+        super();
         if (location != null) this.locationName = location;
         else throw new XBRLException("The Berkeley DB XML database location must be specified.");
         

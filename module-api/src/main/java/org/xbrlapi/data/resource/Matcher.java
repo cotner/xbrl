@@ -21,7 +21,8 @@ public interface Matcher {
     
     /**
      * @param url The URL of the resource to obtain the signature for.
-     * @return the signature for the resource specified by the URL.
+     * @return the signature for the resource specified by the URL or null
+     * if the resource could not be cached (generally because it does not exist).
      * @throws XBRLException if the signature cannot be constructed.
      */
     public String getSignature(URL url) throws XBRLException;

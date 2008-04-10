@@ -59,6 +59,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException if the loader state cannot be initialised.
 	 */
 	public StoreImpl() {
+	    super();
 		dom = XMLDOMBuilder.newDocument();
 		store = dom.createElement(ROOT_NAME);
 		dom.appendChild(store);

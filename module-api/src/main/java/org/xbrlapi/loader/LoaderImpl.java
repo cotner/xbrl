@@ -970,8 +970,7 @@ public class LoaderImpl implements Loader {
             }
                 
         } catch (URISyntaxException e) {
-            throw new XBRLException("The URL: " + url + " is not a valid URI.",
-                    e);
+            throw new XBRLException("The URL: " + url + " is not a valid URI.",e);
         }
 
         URL dereferencedURL = null;
@@ -985,8 +984,16 @@ public class LoaderImpl implements Loader {
 
         // Stash the URL if it has not already been stashed
         if (!documentQueue.containsKey(dereferencedURL.toString())) {
-            //logger.info(Thread.currentThread().getName() + " stashing " + url);            
-            documentQueue.put(dereferencedURL.toString(), new Integer(0));
+
+            // Only stash if the document does not already have a match.
+            URL matchURL = getStore().getMatcher().getMatch(dereferencedURL);
+            if (matchURL.equals(dereferencedURL)) {
+                logger.info(Thread.currentThread().getName() + " stashing " + url);
+                documentQueue.put(dereferencedURL.toString(), new Integer(0));
+            } else {
+                logger.info("No need to stash " + dereferencedURL + " because it has match " + matchURL);
+            }
+            
         }
 
     }

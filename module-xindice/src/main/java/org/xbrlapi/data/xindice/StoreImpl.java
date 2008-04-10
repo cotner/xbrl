@@ -63,6 +63,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			String dataCollectionName
 			) throws XBRLException {
 
+	    super();
+	    
 		this.connection = connection;
 		
 		if (storeParentPath.charAt(storeParentPath.length()-1) != '/') {

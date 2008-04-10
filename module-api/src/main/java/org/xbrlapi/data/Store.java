@@ -11,6 +11,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Language;
 import org.xbrlapi.Networks;
+import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -410,4 +411,17 @@ public interface Store {
      * @throws XBRLException
      */
     public Language getLanguage(String encoding, String code) throws XBRLException;
+    
+    /**
+     * Sets the matcher for the store to use.  Care should be taken to ensure
+     * that the one matcher is used for all documents in the store.
+     * @param Matcher the matcher to use to identify identical resources.
+     * @throws XBRLException if the matcher is null;
+     */
+    public void setMatcher(Matcher matcher) throws XBRLException;
+    
+    /**
+     * @return the matcher used by the store to identify identical resources.
+     */
+    public Matcher getMatcher();
 }

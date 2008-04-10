@@ -37,6 +37,8 @@ import org.xbrlapi.Networks;
 import org.xbrlapi.Relationship;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.cache.CacheImpl;
+import org.xbrlapi.data.resource.DefaultMatcherImpl;
+import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.impl.FragmentComparator;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.impl.MockFragmentImpl;
@@ -45,6 +47,7 @@ import org.xbrlapi.impl.RelationshipImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
+
 
 /**
  * Abstract base implementation of the data store
@@ -64,6 +67,26 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */    
     protected Document storeDOM = null;
 
+    /**
+     * Resource matcher
+     */
+    protected Matcher matcher = new DefaultMatcherImpl();
+    
+    /**
+     * @see org.xbrlapi.data.Store#setMatcher(Matcher)
+     */
+    public void setMatcher(Matcher matcher) throws XBRLException {
+        if (matcher == null) throw new XBRLException("The matcher cannot be null");
+        this.matcher = matcher;
+    }
+
+    /**
+     * @see org.xbrlapi.data.Store#getMatcher()
+     */
+    public Matcher getMatcher() {
+        return this.matcher;
+    }    
+    
     /**
      * Namespace bindings
      */
@@ -224,10 +247,15 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	  * @see org.xbrlapi.data.Store#deleteDocument(String)
      */
     public void deleteDocument(String url) throws XBRLException {
-    	logger.debug("Deleting document " + url);
-        FragmentList<Fragment> fragments = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "url/@value='"+ url + "']");    	
-    	for (Fragment fragment: fragments) {
-	        this.removeFragment(fragment.getFragmentIndex());
+    	try {
+    	    URL matchURL = this.getMatcher().getMatch(new URL(url));
+    	    String query = "/*[@url='"+ matchURL + "']";
+            FragmentList<Fragment> fragments = this.<Fragment>query(query);      
+            for (Fragment fragment: fragments) {
+                this.removeFragment(fragment.getFragmentIndex());
+            }
+    	} catch (MalformedURLException e) {
+    	    throw new XBRLException("Malformed URL.",e);
     	}
     }
     
@@ -310,8 +338,13 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#hasDocument(String)
      */
     public boolean hasDocument(String url) throws XBRLException {
-    	FragmentList<Fragment> rootFragments = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + url + "' and @parentIndex='none']");
-    	return (rootFragments.getLength() > 0) ? true : false;
+        try {
+            URL matchURL = getMatcher().getMatch(new URL(url));
+            FragmentList<Fragment> rootFragments = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + matchURL + "' and @parentIndex='none']");
+            return (rootFragments.getLength() > 0) ? true : false;
+        } catch (MalformedURLException e) {
+            throw new XBRLException("Malformed URL.",e);
+        }
     }
 
     
@@ -343,13 +376,18 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * the supplied URL.
      */
     private Element getAnnotatedDocumentAsDOM(String url) throws XBRLException {
-    	FragmentList<Fragment> fragments = query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + url + "' and @parentIndex='none']");
-    	if (fragments.getLength() > 1) throw new XBRLException("More than one document was found in the data store.");
-    	if (fragments.getLength() == 0) throw new XBRLException("No documents were found in the data store.");
-    	Fragment fragment = fragments.getFragment(0);
-    	Element document = this.getAnnotatedSubtree(fragment);
-    	document.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",fragment.getFragmentIndex());
-    	return document;
+        try {
+            URL matchURL = getMatcher().getMatch(new URL(url));
+            FragmentList<Fragment> fragments = query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + matchURL + "' and @parentIndex='none']");
+            if (fragments.getLength() > 1) throw new XBRLException("More than one document was found in the data store.");
+            if (fragments.getLength() == 0) throw new XBRLException("No documents were found in the data store.");
+            Fragment fragment = fragments.getFragment(0);
+            Element document = this.getAnnotatedSubtree(fragment);
+            document.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",fragment.getFragmentIndex());
+            return document;
+        } catch (MalformedURLException e) {
+            throw new XBRLException("Malformed URL.",e);
+        }
     }
     
 	/**
@@ -604,10 +642,15 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getStub(String url)
      */
     public Fragment getStub(String url) throws XBRLException {
-        FragmentList<Fragment> stubs = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@stub and @url='" + url + "']");        
-        if (stubs.getLength() == 0) return null;
-        if (stubs.getLength() > 1) throw new XBRLException("There are " + stubs.getLength() + " stubs for " + url);
-        return stubs.get(0);
+        try {
+            URL matchURL = getMatcher().getMatch(new URL(url));
+            FragmentList<Fragment> stubs = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@stub and @url='" + matchURL + "']");        
+            if (stubs.getLength() == 0) return null;
+            if (stubs.getLength() > 1) throw new XBRLException("There are " + stubs.getLength() + " stubs for " + url);
+            return stubs.get(0);
+        } catch (MalformedURLException e) {
+            throw new XBRLException("Malformed URL.",e);
+        }
     }
     
     /**
@@ -797,7 +840,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public <F extends Fragment> FragmentList<F> getFragmentsFromDocument(URL url, String interfaceName) throws XBRLException {
-    	return this.<F>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='"+ url + "' and @type='org.xbrlapi.impl." + interfaceName + "Impl']");
+        URL matchURL = getMatcher().getMatch(url);
+        return this.<F>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='"+ matchURL + "' and @type='org.xbrlapi.impl." + interfaceName + "Impl']");
     }    
     
     /**

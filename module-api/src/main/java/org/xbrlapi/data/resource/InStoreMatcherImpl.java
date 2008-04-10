@@ -54,6 +54,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
     public URL getMatch(URL url) throws XBRLException {
         logger.info("Getting match for " + url);
         String signature = this.getSignature(url);
+        if (signature == null) return url;
         Fragment match = null;
         if (getStore().hasFragment(signature)) {
             logger.info(url + " has a match already");

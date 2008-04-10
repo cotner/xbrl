@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 
 import org.xbrlapi.Entity;
@@ -106,9 +108,14 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      * @see org.xbrlapi.EntityResource#getEntities(String)
      */
     public FragmentList<Entity> getEntities(String url) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and @url='" + url + "' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
-        FragmentList<Entity> entities = getStore().<Entity>query(query);
-        return entities;
+        try {
+            URL matchURL = getStore().getMatcher().getMatch(new URL(url));
+            String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and @url='" + matchURL + "' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
+            FragmentList<Entity> entities = getStore().<Entity>query(query);
+            return entities;
+        } catch (MalformedURLException e) {
+            throw new XBRLException("Malformed URL.",e);
+        }
     }
     
 }

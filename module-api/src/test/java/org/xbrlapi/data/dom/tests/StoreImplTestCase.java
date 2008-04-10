@@ -69,6 +69,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	
 	public void testQueryData() throws Exception {
 		
+	    store.storeFragment(new MockFragmentImpl("WooHoo"));
 		String index = store.getNextFragmentId();
 		FragmentList<Fragment> fragments = null;
 		try {
