@@ -52,26 +52,29 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URL)
      */
     public URL getMatch(URL url) throws XBRLException {
+        logger.info("Getting match for " + url);
         String signature = this.getSignature(url);
         Fragment match = null;
         if (getStore().hasFragment(signature)) {
+            logger.info(url + " has a match already");
             String query = "/*[*/@url='" + url + "']";
             FragmentList<Fragment> matches = getStore().query(query);
             if (matches.getLength() == 0) {
                 HashMap<String,String> attr = new HashMap<String,String>();
                 attr.put("url",url.toString());
+                match = getStore().getFragment(signature);
+                match.appendMetadataElement("resource",attr);
+            } else {
                 match = matches.get(0);
-                match.appendMetadataElement("match",attr);
             }
-            match = matches.get(0);
         } else {
+            logger.info(url + " has no existing matches");
             match = new MockFragmentImpl(signature);
             HashMap<String,String> attr = new HashMap<String,String>();
             attr.put("url",url.toString());
-            match.appendMetadataElement("url",attr);
-            attr = new HashMap<String,String>();
-            attr.put("url",url.toString());
             match.appendMetadataElement("match",attr);
+            match.appendMetadataElement("resource",attr);
+            store.storeFragment(match);
         }
         NodeList nodes = match.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match");
         Element element = (Element) nodes.item(0);

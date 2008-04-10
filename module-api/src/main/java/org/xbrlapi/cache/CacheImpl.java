@@ -141,6 +141,8 @@ public class CacheImpl {
         }
     }
     
+
+    
     /**
      * @param url The URL to be translated into an original URL (if necessary).
      * @return the original (non-cache) URL corresponding to the provided URL.
@@ -224,7 +226,6 @@ public class CacheImpl {
     	// If necessary, create the directory to contain the cached resource
 		File parent = cacheFile.getParentFile();
 		if (parent != null) parent.mkdirs();
-
 		
 		try {
 
