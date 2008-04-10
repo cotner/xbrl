@@ -302,8 +302,8 @@ public class FragmentImpl implements Fragment {
 
     	Element root = getMetadataRootElement();
     	Document document = root.getOwnerDocument();
-		Element child = document.createElement(eName);
-		
+		Element child = document.createElementNS(Constants.XBRLAPINamespace,Constants.XBRLAPIPrefix + ":" + eName);
+
     	for (String aName: attributes.keySet()) {
 			String aValue = attributes.get(aName);
 			if (aName != null) {
@@ -312,7 +312,6 @@ public class FragmentImpl implements Fragment {
 			} else throw new XBRLException("A metadata element is being added with an attribute with a null name.");
     	}
     	root.appendChild(child);
-		
 		updateStore();
     }
     
