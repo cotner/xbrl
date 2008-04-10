@@ -42,19 +42,22 @@ public class CacheImplTestCase extends BaseTestCase {
 			fail("Unexpected exception. " + e.getMessage());
 		}
 	}
+	
+	
 
 	public final void examineURL(URL originalURL) {
 		try {
-			
+
 			CacheImpl cache = new CacheImpl(new File(cacheRoot));
 			assertFalse(cache.isCacheURL(originalURL));
 			File cacheFile = cache.getCacheFile(originalURL);
 			URL cacheURL = cache.getCacheURL(originalURL);
 			assertTrue(cache.isCacheURL(cacheURL));
 			URL newURL = cache.getOriginalURL(cacheURL);
-			assertEquals(originalURL, newURL);
+			assertEquals(originalURL.toString(), newURL.toString());
 			
 		} catch (Exception e) {
+		    e.printStackTrace();
 			fail("Unexpected exception was thrown. " + e.getMessage());
 		}
 	}	

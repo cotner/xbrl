@@ -176,6 +176,7 @@ public class CacheImpl {
 		String[] components = path.split("/");
 		String protocol = components[0];
 		String authority = components[1];
+		if (authority.equals("null")) authority = null;
 		int port = new Integer(components[2]).intValue();
 		path = "";
 		for (int i=3; i<components.length; i++) {
@@ -300,7 +301,10 @@ public class CacheImpl {
     	
 		String protocol = url.getProtocol();
 		String authority = url.getAuthority();
-		if (authority.contains(":")) authority = authority.substring(0,authority.indexOf(":"));
+		if (authority != null) {
+	        if (authority.contains(":")) 
+	            authority = authority.substring(0,authority.indexOf(":"));
+		}
 		int port = url.getPort();
 		String path = url.getPath().substring(1);
 		
