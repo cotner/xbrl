@@ -95,47 +95,50 @@ public class CacheImpl {
     }
     
     /**
+     * TODO Modify to use the java.net.URLEncoder and java.net.URLDecoder classes.
      * Adds the resource at the original URL to the cache if it is not already cached.
      * @param url The URL to be translated into a cache URL (if necessary).
-     * TODO Modify to use the java.net.URLEncoder and java.net.URLDecoder classes.
      * @return the cache URL corresponding to the provided URL.
      * @throws MalformedURLException if the cache file does not map to a URL.
      * @throws XBRLException if the resource cannot be cached.
      */
-    public URL getCacheURL(URL url) throws XBRLException, MalformedURLException {
+    public URL getCacheURL(URL url) throws XBRLException {
 
     	logger.debug(System.currentTimeMillis() + " About to get the cache URL for " + url);
     	
-    	// First determine the original URL
-    	URL originalURL = url;
-    	if (isCacheURL(url)) {
-    		originalURL = getOriginalURL(url);
-		} else {
-			if (urlMap != null) {
-	         	logger.debug(System.currentTimeMillis() + " About to check URL against URL map.");
-	        	if (urlMap.containsKey(url.toString())) {
-	        		originalURL = new URL(urlMap.get(url.toString()));  	
-	        	}
-	        	logger.debug(System.currentTimeMillis() + " Done checking URL against URL map.");
-			}
-		}
-    	
-    	// Second determine the cache file from the original URL
-    	// so that the caching status can be checked.
-    	File cacheFile = getCacheFile(originalURL);
-		if (! cacheFile.exists()) {
-			copyToCache(originalURL,cacheFile);
-		}
-
-		logger.debug(System.currentTimeMillis() + " Got the cache URL " + cacheFile.toURI().toURL());
-
-		if (! cacheFile.exists()) {
-			logger.info(System.currentTimeMillis() + " " + originalURL + " could not be cached.");
-			return originalURL;
-		} else {
-			return cacheFile.toURI().toURL();
-		}
-		
+        try {
+        	// First determine the original URL
+        	URL originalURL = url;
+        	if (isCacheURL(url)) {
+        		originalURL = getOriginalURL(url);
+    		} else {
+    			if (urlMap != null) {
+    	         	logger.debug(System.currentTimeMillis() + " About to check URL against URL map.");
+    	        	if (urlMap.containsKey(url.toString())) {
+	        	        originalURL = new URL(urlMap.get(url.toString()));
+    	        	}
+    	        	logger.debug(System.currentTimeMillis() + " Done checking URL against URL map.");
+    			}
+    		}
+        	
+        	// Second determine the cache file from the original URL
+        	// so that the caching status can be checked.
+        	File cacheFile = getCacheFile(originalURL);
+    		if (! cacheFile.exists()) {
+    			copyToCache(originalURL,cacheFile);
+    		}
+    
+    		logger.debug(System.currentTimeMillis() + " Got the cache URL " + cacheFile.toURI().toURL());
+    
+    		if (! cacheFile.exists()) {
+    			logger.info(System.currentTimeMillis() + " " + originalURL + " could not be cached.");
+    			return originalURL;
+    		} else {
+    			return cacheFile.toURI().toURL();
+    		}
+        } catch (MalformedURLException e) {
+            throw new XBRLException(url + " is a malformed URL.", e);
+        }
     }
     
     /**
