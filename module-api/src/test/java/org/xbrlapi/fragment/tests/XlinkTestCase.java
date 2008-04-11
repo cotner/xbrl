@@ -54,7 +54,8 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetXLinkType() {		
 		try {
-			FragmentList<Xlink> fragments = store.<Xlink>getFragments("CalculationArc");
+			FragmentList<Xlink> fragments = store.<Xlink>getFragments("Arc");
+            assertTrue(fragments.getLength() > 0);
 			Xlink fragment = fragments.getFragment(0);
 			assertEquals("arc", fragment.getXlinkType());
 		} catch (XBRLException e) {
@@ -69,7 +70,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 
 		// Case where none exists
 		try {
-			FragmentList<Xlink> fragments = store.<Xlink>getFragments("CalculationArc");
+			FragmentList<Xlink> fragments = store.<Xlink>getFragments("Arc");
 			Xlink fragment = fragments.getFragment(0);
 			assertNull(fragment.getTitleAttribute());
 		} catch (XBRLException e) {
@@ -95,7 +96,8 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 
 		// Case where none exists
 		try {
-			FragmentList<Xlink> fragments = store.<Xlink>getFragments("CalculationArc");
+			FragmentList<Xlink> fragments = store.<Xlink>getFragments("Arc");
+			assertTrue(fragments.getLength() > 0);
 			Xlink fragment = fragments.getFragment(0);
 			assertEquals(0,fragment.getTitleElements().getLength());
 		} catch (XBRLException e) {
