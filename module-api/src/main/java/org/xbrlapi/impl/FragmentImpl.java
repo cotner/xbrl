@@ -410,7 +410,6 @@ public class FragmentImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getLabelsWithRole(String)
      */
     public FragmentList<LabelResource> getLabelsWithRole(String role) throws XBRLException {
-        logger.info("Getting labels for role: " + role);
         Networks networks = this.getNetworks();
         FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
 

@@ -58,7 +58,6 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
      */
     public FragmentList<EntityResource> getEntityResources() throws XBRLException {
         String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[@type='org.xbrlapi.impl.EntityResourceImpl' and " + Constants.XBRLAPIPrefix + ":" + "data[*/@scheme='"+ this.getIdentifierScheme() +"' and */@value='"+ this.getIdentifierValue() +"']" + "]";
-        logger.info(query);
         return getStore().<EntityResource>query(query);
     }
     
