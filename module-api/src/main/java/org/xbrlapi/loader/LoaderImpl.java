@@ -154,8 +154,8 @@ public class LoaderImpl implements Loader {
     private boolean discovering = false;
 
     private void setDiscovering(boolean value) {
-        if (value) logger.info(Thread.currentThread().getName() + " starting discovery.");
-        else logger.info(Thread.currentThread().getName() + " stopping discovery.");
+        if (value) logger.debug(Thread.currentThread().getName() + " starting discovery.");
+        else logger.debug(Thread.currentThread().getName() + " stopping discovery.");
         discovering = value;
     }
     private boolean isDiscovering() {
@@ -965,7 +965,7 @@ public class LoaderImpl implements Loader {
         // Make sure that the URL is a valid URI and is absolute
         try {
             if (!new URI(url.toString()).isAbsolute()) {
-                logger.info("Failed to stash " + url);
+                logger.warn("Failed to stash " + url);
                 throw new XBRLException("The URL: " + url + " needs to be resolved against a base URL prior to stashing.");                
             }
                 
@@ -988,10 +988,10 @@ public class LoaderImpl implements Loader {
             // Only stash if the document does not already have a match.
             URL matchURL = getStore().getMatcher().getMatch(dereferencedURL);
             if (matchURL.equals(dereferencedURL)) {
-                logger.info(Thread.currentThread().getName() + " stashing " + url);
+                logger.debug(Thread.currentThread().getName() + " stashing " + url);
                 documentQueue.put(dereferencedURL.toString(), new Integer(0));
             } else {
-                logger.info("No need to stash " + dereferencedURL + " because it has match " + matchURL);
+                logger.debug("No need to stash " + dereferencedURL + " because it has match " + matchURL);
             }
             
         }
