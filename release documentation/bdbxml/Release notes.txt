@@ -2,6 +2,11 @@ Release details:
 The Oracle Berkeley Database XML data store implementation
 for XBRLAPI.
 
+Release 3.2
+Apr 21, 2008
+Point release to upgrade data store performance via improved
+indexing and improved memory management.
+
 Release 3.1
 Feb 28, 2008
 Point release to include various bug-fixes. 

@@ -1,3 +1,7 @@
+April 16 2008
+Fixed up unit testing to reflect changes in the
+XBRLAPI itself.
+
 July 29, 2007
 Fixed up NPE bug in the hasFragment method.
 

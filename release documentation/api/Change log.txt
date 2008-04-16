@@ -1,5 +1,10 @@
-28. Feb. 2008
-Fixed up a bug in Xindice store to DOM construction.
+
+10. Apr. 2008
+Added resource matcher facility.
+
+12 Mar. 2008
+Changed the fragment index generation system.  This makes it 
+easier to work across several data stores.
 
 25 Feb. 2008
 Discovery of documents provided as a string now works correctly.
