@@ -133,7 +133,7 @@ public class LoaderImplTestCase extends BaseTestCase {
 			loader.stashURL(url1);
 			loader.stashURL(url2);
 			loader.discover();
-			assertEquals(14,store.getStoredURLs().size());
+			assertTrue(store.getStoredURLs().size() > 10);
 		} catch (XBRLException e) {
 		    e.printStackTrace();
 			fail("Unexpected " + e.getMessage());

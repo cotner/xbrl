@@ -48,7 +48,7 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
             assertTrue(store.getStoredURLs().size() < 14);
             assertTrue(store.getDocumentsToDiscover().size() > 0);
 			loader.discover();
-			assertEquals(14,store.getStoredURLs().size());
+			assertTrue(store.getStoredURLs().size() > 14);
 		} catch (Exception e) {
 		    e.printStackTrace();
 			fail("Unexpected " + e.getMessage());
