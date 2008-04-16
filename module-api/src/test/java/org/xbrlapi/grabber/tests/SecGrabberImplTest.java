@@ -35,7 +35,7 @@ public class SecGrabberImplTest extends BaseTestCase {
 				if (! loader.getStore().hasDocument(resource.toString()))
 				loader.discover(resource);
 				System.out.println("Time taken = " + ((System.currentTimeMillis() - start) / 1000));
-				if ((new Integer(loader.getStore().getNextFragmentId())).intValue() > 2000) {
+				if (loader.getStore().getStoredURLs().size() > 14) {
 				    break;
 				}
 			}
