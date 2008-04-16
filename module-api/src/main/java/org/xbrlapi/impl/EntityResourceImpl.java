@@ -36,7 +36,7 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      * @see org.xbrlapi.EntityResource#getEquivalents()
      */
     public FragmentList<EntityResource> getEquivalents() throws XBRLException { 
-        logger.info("Getting equivalents to " + this.getStringIdentifier());
+        logger.debug("Getting equivalents to " + this.getStringIdentifier());
         HashMap<String,EntityResource> map = new HashMap<String,EntityResource>();
         getEquivalentsMap(map);
         FragmentList<EntityResource> result = new FragmentListImpl<EntityResource>();
@@ -72,20 +72,20 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      */
     protected void getEquivalentsMap(HashMap<String,EntityResource> map) throws XBRLException {
 
-        logger.info("Getting equivalents map for " + this.getStringIdentifier());
+        logger.debug("Getting equivalents map for " + this.getStringIdentifier());
         
         String id = this.getStringIdentifier();
         if (map.isEmpty()) {
             map.put(id,this);
         } else {
             if(! map.containsKey(id)) {
-                logger.info("Adding " + id + " to the equivalents map.");
+                logger.debug("Adding " + id + " to the equivalents map.");
                 map.put(id,this);
             }
         }
         
         FragmentList<EntityResource> directEquivalents = this.getDirectEquivalents();
-        logger.info(id + " has " + directEquivalents.getLength() + " direct equivalents.");
+        logger.debug(id + " has " + directEquivalents.getLength() + " direct equivalents.");
         for (EntityResource candidate: directEquivalents) {
             EntityResourceImpl impl = (EntityResourceImpl) candidate;
             String implId = impl.getStringIdentifier();
