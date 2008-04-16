@@ -54,7 +54,7 @@ public class CacheImplTestCase extends BaseTestCase {
 			URL cacheURL = cache.getCacheURL(originalURL);
 			assertTrue(cache.isCacheURL(cacheURL));
 			URL newURL = cache.getOriginalURL(cacheURL);
-			assertEquals(originalURL.toString(), newURL.toString());
+			assertEquals(originalURL, newURL);
 			
 		} catch (Exception e) {
 		    e.printStackTrace();
