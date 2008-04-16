@@ -6,7 +6,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <groupId>org.xbrlapi</groupId>
   <artifactId>xbrlapi-xpointer</artifactId>
   <packaging>jar</packaging>
-  <version>3.1</version>
+  <version>3.2</version>
   <name>XBRLAPI XPointer processor</name>
   <url>http://www.xbrlapi.org</url>
   <description>The XBRLAPI XPointer processor</description>
@@ -30,7 +30,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     <dependency>
         <groupId>org.xbrlapi</groupId>
         <artifactId>xbrlapi-utilities</artifactId>
-        <version>3.0</version>
+        <version>3.2</version>
     </dependency>
 
   </dependencies>
