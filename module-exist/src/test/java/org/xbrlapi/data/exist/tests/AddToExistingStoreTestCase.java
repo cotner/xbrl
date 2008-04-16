@@ -34,18 +34,18 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 			
 			DBConnectionImpl secondConnection = createConnection();
 			connections.add(secondConnection);
-			
+
 			Store secondStore = createStore(secondConnection);
 			stores.add(secondStore);
-			
+
 			Loader secondLoader = createLoader(secondStore);
 
 			assertTrue(secondStore.getStoredURLs().size() >= 12);
-			
+
 			secondLoader.discover(this.getURL("test.data.small.instance"));
 
 			assertTrue(secondStore.getStoredURLs().size() >= 14);
-						
+
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
