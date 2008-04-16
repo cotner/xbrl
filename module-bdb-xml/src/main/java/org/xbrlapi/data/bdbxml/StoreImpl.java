@@ -469,7 +469,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             double startTime = System.currentTimeMillis();
             XmlResults xmlResults = xmlQueryExpression.execute(xmlQueryContext);
             Double time = new Double((System.currentTimeMillis()-startTime));
-            logger.info(time + " milliseconds to evaluate " + myQuery);
+            logger.debug(time + " milliseconds to evaluate " + myQuery);
 			return xmlResults;
 
 		} catch (XmlException e) {
