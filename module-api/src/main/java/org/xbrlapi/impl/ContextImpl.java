@@ -3,6 +3,7 @@ package org.xbrlapi.impl;
 import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.Item;
 import org.xbrlapi.Period;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.utilities.XBRLException;
@@ -24,6 +25,15 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     	if (fs.getLength() == 1) return fs.getFragment(0);
     	throw new XBRLException("There is more than one entity in this context.");
     }
+    
+    /**
+     * @see org.xbrlapi.Context#getReferencingItems()
+     */
+    public FragmentList<Item> getReferencingItems() throws XBRLException {
+        String query = "/*[*/*/@contextRef='" + this.getId() + "']";
+        return getStore().<Item>query(query);
+    }
+    
 
 
 
