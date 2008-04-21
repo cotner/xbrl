@@ -19,8 +19,6 @@ public interface SchemaDeclaration extends SchemaContent {
      */
     public String getName() throws XBRLException; 
     
-
-
     /**
      * Determine if a concept is abstract
      *
