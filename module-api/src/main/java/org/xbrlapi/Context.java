@@ -15,20 +15,11 @@ public interface Context extends FactDimensionContainer {
     public Entity getEntity() throws XBRLException;
 
     /**
-     * @return the list of items in the instance that reference this context.
-     * The list is empty if no facts in the instance reference this context.
-     * @throws XBRLException
-     */
-    public FragmentList<Item> getReferencingItems() throws XBRLException;
-
-    /**
      * Get the period of the context.
      *
      * @throws XBRLException
      */
     public Period getPeriod() throws XBRLException;
-
-
 
     /**
      * Get the scenario of the context.
@@ -38,10 +29,6 @@ public interface Context extends FactDimensionContainer {
      */
     public Scenario getScenario() throws XBRLException;
 
-
-    
-
-    
     /**
      * Tests if the context is c-equal to another context
      * returning true if they are c-equal.

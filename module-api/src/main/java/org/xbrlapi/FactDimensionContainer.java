@@ -15,6 +15,11 @@ public interface FactDimensionContainer extends Fragment {
      */
     public String getId() throws XBRLException;
 
-
+    /**
+     * @return the list of items in the instance that reference this context.
+     * The list is empty if no facts in the instance reference this context.
+     * @throws XBRLException
+     */
+    public FragmentList<Item> getReferencingItems() throws XBRLException;
 
 }

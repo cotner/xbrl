@@ -2,6 +2,8 @@ package org.xbrlapi.impl;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.FactDimensionContainer;
+import org.xbrlapi.FragmentList;
+import org.xbrlapi.Item;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -22,6 +24,12 @@ public class FactDimensionContainerImpl extends FragmentImpl implements FactDime
     	throw new XBRLException("The id attribute is missing on a unit or context.");
     }
 
-
+    /**
+     * @see org.xbrlapi.FaceDimensionContainer#getReferencingItems()
+     */
+    public FragmentList<Item> getReferencingItems() throws XBRLException {
+        String query = "/*[*/*/@contextRef='" + this.getId() + "']";
+        return getStore().<Item>query(query);
+    }
 
 }
