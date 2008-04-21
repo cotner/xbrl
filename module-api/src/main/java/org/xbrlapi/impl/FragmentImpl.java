@@ -114,7 +114,7 @@ public class FragmentImpl implements Fragment {
      * @throws XBRLException
      */
     protected <F extends Fragment> FragmentList<F> getChildren(String type) throws XBRLException {
-    	String query = "/" + Constants.XBRLAPIPrefix + ":fragment[@parentIndex='" + getFragmentIndex() + "' and @type='" + type + "']";
+    	String query = "/*[@parentIndex='" + getFragmentIndex() + "' and @type='" + type + "']";
     	FragmentList<F> fragments = getStore().<F>query(query);
     	return fragments;
     }
