@@ -68,10 +68,6 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     }
 
     /**
-     * Get a specified context from the instance based on its id.
-     * @param id The id of the context fragment
-     * @return the context fragment
-     * @throws XBRLException if the context does not exist or there is more than one.
      * @see org.xbrlapi.Instance#getContext(String)
      */
     public Context getContext(String id) throws XBRLException {
