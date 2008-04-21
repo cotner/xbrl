@@ -203,6 +203,10 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             xmlIndexSpecification.addIndex("","name", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","targetNamespace", "node-attribute-equality-string");
 
+            xmlIndexSpecification.addIndex("","contextRef", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","unitRef", "node-attribute-equality-string");
+            
+            
             // Entity identification indexes
             xmlIndexSpecification.addIndex("","scheme", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","value", "node-attribute-equality-string");
@@ -469,7 +473,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             double startTime = System.currentTimeMillis();
             XmlResults xmlResults = xmlQueryExpression.execute(xmlQueryContext);
             Double time = new Double((System.currentTimeMillis()-startTime));
-            logger.debug(time + " milliseconds to evaluate " + myQuery);
+            logger.info(time + " milliseconds to evaluate " + myQuery);
 			return xmlResults;
 
 		} catch (XmlException e) {
