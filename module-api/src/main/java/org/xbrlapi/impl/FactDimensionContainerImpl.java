@@ -28,7 +28,7 @@ public class FactDimensionContainerImpl extends FragmentImpl implements FactDime
      * @see org.xbrlapi.FaceDimensionContainer#getReferencingItems()
      */
     public FragmentList<Item> getReferencingItems() throws XBRLException {
-        String query = "/*[*/*/@contextRef='" + this.getId() + "']";
+        String query = "/*[*/*/@*='" + this.getId() + "']";
         return getStore().<Item>query(query);
     }
 

@@ -6,6 +6,8 @@ import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xbrlapi.FragmentList;
+import org.xbrlapi.Item;
 import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -16,6 +18,14 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class UnitImpl extends FactDimensionContainerImpl implements Unit {
 
+    /**
+     * @see org.xbrlapi.FaceDimensionContainer#getReferencingItems()
+     */
+    public FragmentList<Item> getReferencingItems() throws XBRLException {
+        String query = "/*[*/*/@unitRef='" + this.getId() + "']";
+        return getStore().<Item>query(query);
+    }
+    
     /**
      * @see org.xbrlapi.Unit#getNumeratorMeasures()
      */
