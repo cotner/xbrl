@@ -23,7 +23,7 @@ public class PeriodImpl extends ContextComponentImpl implements Period {
 	 * @see org.xbrlapi.Period#isInstantPeriod()
 	 */
 	public boolean isInstantPeriod() throws XBRLException {
-		if (this.getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace,"instant").getLength() == 1) return true;
+		if (this.getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace,"instant").getLength() > 0) return true;
 		return false;
 	}
 
