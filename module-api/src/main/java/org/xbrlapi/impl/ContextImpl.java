@@ -3,6 +3,7 @@ package org.xbrlapi.impl;
 import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.Item;
 import org.xbrlapi.Period;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.utilities.XBRLException;
@@ -25,11 +26,6 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     	throw new XBRLException("There is more than one entity in this context.");
     }
     
-
-    
-
-
-
     /**
      * Get the period of the context.
      *
@@ -44,8 +40,6 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     	throw new XBRLException("There is more than one period in this context.");
     }
 
-
-
     /**
      * Get the scenario of the context.
      * @return the scenario if one exists or null if there is no scenario.
@@ -59,10 +53,6 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     	throw new XBRLException("There is more than one scenario in this context.");
     }
 
-
-    
-
-    
     /**
      * Tests if the context is c-equal to another context
      * See the XBRL 2.1 specification for a definition of c-equal. 
@@ -87,5 +77,12 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     	return true;
     }
     
-
+    /**
+     * @see org.xbrlapi.FaceDimensionContainer#getReferencingItems()
+     */
+    public FragmentList<Item> getReferencingItems() throws XBRLException {
+        String query = "/*[@url=" + this.getURL() + " and */*/@contextRef='" + this.getId() + "']";
+        return getStore().<Item>query(query);
+    }    
+    
 }
