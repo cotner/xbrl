@@ -22,7 +22,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
      * @see org.xbrlapi.FaceDimensionContainer#getReferencingItems()
      */
     public FragmentList<Item> getReferencingItems() throws XBRLException {
-        String query = "/*[@url=" + this.getURL() + " and */*/@unitRef='" + this.getId() + "']";
+        String query = "/*[@url='" + this.getURL() + "' and */*/@unitRef='" + this.getId() + "']";
         return getStore().<Item>query(query);
     }
     
