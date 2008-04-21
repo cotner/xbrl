@@ -86,7 +86,14 @@ public interface Instance extends Fragment {
      * @return the list of facts that are children of the instance.
      * @throws XBRLException
      */
-    public FragmentList<Fact> getFacts() throws XBRLException;    
+    public FragmentList<Fact> getFacts() throws XBRLException;
+    
+    /**
+     * @return the list of all items that are children of the instance.
+     * Tuples are not included in the list.
+     * @throws XBRLException
+     */
+    public FragmentList<Item> getItems() throws XBRLException;    
 
     
     

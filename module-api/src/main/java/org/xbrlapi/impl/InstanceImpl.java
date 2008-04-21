@@ -5,6 +5,7 @@ import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
+import org.xbrlapi.Item;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.Constants;
@@ -127,14 +128,17 @@ public class InstanceImpl extends FragmentImpl implements Instance {
 
     
     /**
-     * Get the list of facts that are children of the instance.
-     * Facts that are within tuples are not included in this list.
-     * @return the list of facts that are children of the instance.
-     * @throws XBRLException
      * @see org.xbrlapi.Instance#getFacts()
      */
     public FragmentList<Fact> getFacts() throws XBRLException {
     	return getStore().<Fact>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getFragmentIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
+    }
+    
+    /**
+     * @see org.xbrlapi.Instance#getItems()
+     */
+    public FragmentList<Item> getItems() throws XBRLException {
+        return getStore().<Item>query("/*[@parentIndex='" + this.getFragmentIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl')]");
     }    
 
 
