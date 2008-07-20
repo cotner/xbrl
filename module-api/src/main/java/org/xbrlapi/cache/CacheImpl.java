@@ -82,14 +82,26 @@ public class CacheImpl {
         	logger.debug(System.currentTimeMillis() + " Protocol is wrong so not in cache.");
     		return false;
     	}
+
     	try {
     	    // TODO Make this test work for windows paths.
     	    logger.debug("The canonical path to the cache root is: " + cacheRoot.getCanonicalPath());
             logger.debug("The path for the URL being tested is: " + url.getPath());
-        	if (url.getPath().startsWith(cacheRoot.getCanonicalPath().toString())) {
-            	logger.debug(System.currentTimeMillis() + " Path is right so is in cache.");
-        		return true;
-        	}
+
+            String urlPath = "";
+            try {
+                urlPath = new File(url.getPath()).getCanonicalPath();
+                logger.debug("Canonicalised URL path is: " + urlPath);
+            } catch (Exception couldNotCanonicaliseURLPath) {
+                logger.debug(System.currentTimeMillis() + " Could not canonicalise URL Path " + url.getPath() + " so we do not have a cache URL.");
+                return false;
+            }
+
+            if (urlPath.startsWith(cacheRoot.getCanonicalPath().toString())) {
+                logger.debug(System.currentTimeMillis() + " Path is right so is in cache.");
+                return true;
+            }
+
     	} catch (Exception e) {
     		throw new XBRLException("The cannonical cache root path cannot be determined.",e);
     	}
