@@ -60,7 +60,10 @@ public class EntityResolverTestCase extends BaseTestCase {
 			InputSource is = resolver.resolveEntity("",originalURL);
 			assertNull("Public ID for the input source is not null.",is.getPublicId());
 			try {
+			    System.out.println(new File(cachePath + "/http/www.xbrl.org/80/2003/xbrl-instance-2003-12-31.xsd").toURI().toURL().toString());			    
+                System.out.println(new File(is.getSystemId().toString()));
 				assertEquals("System ID is wrong.",new File(cachePath + "/http/www.xbrl.org/80/2003/xbrl-instance-2003-12-31.xsd").toURI().toURL().toString(),is.getSystemId());
+				
 			} catch (MalformedURLException me) {
 				fail(me.getMessage());
 			}

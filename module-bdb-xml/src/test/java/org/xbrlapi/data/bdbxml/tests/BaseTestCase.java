@@ -69,7 +69,6 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 		return createStore(location, containerName);
 	}
 	
-
 	/**
 	 * @param store The store to use for the loader.
 	 * @return the loader
