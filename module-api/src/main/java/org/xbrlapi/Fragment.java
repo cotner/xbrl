@@ -425,7 +425,20 @@ public interface Fragment {
      * nodes that are then used to gather further relationships. 
      * @throws XBRLException
      */
-    public Networks getNetworks() throws XBRLException;    
+    public Networks getNetworks() throws XBRLException;
+    
+    /**
+     * @param arcrole the required arcrole value.
+     * @return the collection of networks including
+     * relationships that involve this node as a source 
+     * or a target and that are expressed by arcs with the given
+     * arcrole value.  Note that the networks are not 
+     * completed in the sense that arcs are followed to
+     * nodes that are then used to gather further relationships. 
+     * @throws XBRLException
+     */
+    public Networks getNetworksWithArcrole(String arcrole) throws XBRLException;
+    
     
 	/**
 	 * Override the Object equals method to base equality on the

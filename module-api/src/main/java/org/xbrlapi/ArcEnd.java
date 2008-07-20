@@ -32,19 +32,31 @@ public interface ArcEnd extends ExtendedLinkContent {
     public String getArcEndId() throws XBRLException;
     
     /**
-     * Get the list of arcs that are from the arc end.
-     * @return the list of arcs from the arc end.  The list is empty 
-     * if there are no arcs from the arc end.
-     * @see org.xbrlapi.ArcEnd#getArcsFrom()
+     * @return Get the list of arcs that are from the arc end.  
+     * The list is empty if there are no arcs from the arc end.
      */
     public FragmentList<Arc> getArcsFrom() throws XBRLException;
 
     /**
-     * Get the list of arcs that are to the arc end.
-     * @return the list of arcs to the arc end.  The list is empty 
-     * if there are no arcs to the arc end.
-     * @see org.xbrlapi.ArcEnd#getArcsTo()
+     * @return Get the list of arcs that are to the arc end.  
+     * The list is empty if there are no arcs to the arc end.
      */
     public FragmentList<Arc> getArcsTo() throws XBRLException;
+    
+    /**
+     * @param arcrole the required arcrole.
+     * @return Get the list of arcs with the given arcrole 
+     * that are from the arc end.  
+     * The list is empty if there are no matching arcs.
+     */
+    public FragmentList<Arc> getArcsFromWithArcrole(String arcrole) throws XBRLException;
+
+    /**
+     * @param arcrole the required arcrole.
+     * @return Get the list of arcs with the given arcrole 
+     * that are to the arc end.  
+     * The list is empty if there are no matching arcs.
+     */
+    public FragmentList<Arc> getArcsToWithArcrole(String arcrole) throws XBRLException;
     
 }

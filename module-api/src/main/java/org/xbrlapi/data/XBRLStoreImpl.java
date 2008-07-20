@@ -162,7 +162,6 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	
     	// Get the links that contain the network declaring arcs.
     	String linkQuery = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ExtendedLinkImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*[namespace-uri()='" + linkNamespace + "' and local-name()='" + linkName + "' and @xlink:role='" + linkRole + "']]";
-    	System.out.println(linkQuery);
     	FragmentList<ExtendedLink> links = this.<ExtendedLink>query(linkQuery);
     	
     	// Get the arcs that declare the relationships in the network.

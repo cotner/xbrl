@@ -79,6 +79,7 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
     		logger.warn(systemId + " is a malformed URL.");
     		return new InputSource(systemId);
     	}
+
     }
     
     

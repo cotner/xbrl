@@ -44,15 +44,26 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
 
     
     /**
-     * Get the list of arcs that are from the arc end.
-     * @return the list of arcs from the arc end.  The list is empty 
-     * if there are no arcs from the arc end.
      * @see org.xbrlapi.ArcEnd#getArcsFrom()
      */
     public FragmentList<Arc> getArcsFrom() throws XBRLException {
-    	logger.debug("Getting the arcs from arc-end with label " + getLabel());
     	return getExtendedLink().getArcsByFromLabel(this.getLabel());
     }
+
+    /**
+     * @see org.xbrlapi.ArcEnd#getArcsFromWithArcrole(String)
+     */
+    public FragmentList<Arc> getArcsFromWithArcrole(String arcrole) throws XBRLException {
+        return getExtendedLink().getArcsByFromLabelAndArcrole(this.getLabel(),arcrole);
+    }
+
+    /**
+     * @see org.xbrlapi.ArcEnd#getArcsToWithArcrole(String)
+     */
+    public FragmentList<Arc> getArcsToWithArcrole(String arcrole) throws XBRLException {
+        return getExtendedLink().getArcsByToLabelAndArcrole(this.getLabel(),arcrole);
+    }
+    
 
     /**
      * Get the list of arcs that are to the arc end.

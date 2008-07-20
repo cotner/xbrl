@@ -39,10 +39,6 @@ public interface ExtendedLink extends Link {
      * @throws XBRLException
      */
     public FragmentList<Locator> getLocatorsByHref(String href) throws XBRLException;
-    
-
-
-
 
     /**
      * Get the list of arcs contained by the extended link.
@@ -52,25 +48,38 @@ public interface ExtendedLink extends Link {
     public FragmentList<Arc> getArcs() throws XBRLException;
     
     /**
-     * Get the list of arcs with a given xlink:from label in extended link.
      * @param from The required value of the xlink:from attribute of the arcs.
-     * @return the list of matching arc fragments or the empty list if none are found.
+     * @return the list of arcs with a given xlink:from label in extended link.
+     * or the empty list if none are found.
      * @throws XBRLException
      */
     public FragmentList<Arc> getArcsByFromLabel(String from) throws XBRLException;
 
     /**
-     * Get the list of arcs with a given xlink:from label in extended link.
+     * @param from The required value of the xlink:from attribute of the arcs.
+     * @param arcrole The arcrole value for the arcs being sought.
+     * @return the list of arcs in the extended link starting at the given xlink label 
+     * and arcrole value or the empty list if none are found.
+     * @throws XBRLException
+     */
+    public FragmentList<Arc> getArcsByFromLabelAndArcrole(String from, String arcrole) throws XBRLException;
+    
+    /**
      * @param to The required value of the xlink:to attribute of the arcs.
-     * @return the list of matching arc fragments or the empty list if none are found.
+     * @return the list of arcs with a given xlink:from label in extended link
+     * or the empty list if none are found.
      * @throws XBRLException
      */
     public FragmentList<Arc> getArcsByToLabel(String to) throws XBRLException;
     
-    
-
-
-
+    /**
+     * @param to The required value of the xlink:to attribute of the arcs.
+     * @param arcrole The arcrole value for the arcs being sought.
+     * @return the list of arcs in the extended link ending at the given xlink label 
+     * and arcrole value or the empty list if none are found.
+     * @throws XBRLException
+     */
+    public FragmentList<Arc> getArcsByToLabelAndArcrole(String to, String arcrole) throws XBRLException;
 
     /**
      * Get the list of resources contained by the extended link.

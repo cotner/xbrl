@@ -95,10 +95,6 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
 	}
 
 	/**
-     * Get the list of arcs with a given xlink:from label in extended link.
-     * @param from The required value of the xlink:from attribute of the arcs.
-     * @return the list of matching arc fragments or the empty list if none are found.
-     * @throws XBRLException
      * @see org.xbrlapi.ExtendedLink#getArcsByFromLabel(String)
      */
     public FragmentList<Arc> getArcsByFromLabel(String from) throws XBRLException {
@@ -106,6 +102,25 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     	FragmentList<Arc> arcs = getStore().<Arc>query(xpath);
     	return arcs;
     }
+    
+    /**
+     * @see org.xbrlapi.ExtendedLink#getArcsByFromLabelWithArcrole(String,String)
+     */
+    public FragmentList<Arc> getArcsByFromLabelAndArcrole(String from, String arcrole) throws XBRLException {
+        String xpath = "/*[@parentIndex='" + getFragmentIndex() + "' and */*[@xlink:from='" + from + "' and @xlink:arcrole='" + arcrole + "']]";
+        FragmentList<Arc> arcs = getStore().<Arc>query(xpath);
+        return arcs;
+    }
+    
+    /**
+     * @see org.xbrlapi.ExtendedLink#getArcsByToLabelWithArcrole(String,String)
+     */
+    public FragmentList<Arc> getArcsByToLabelAndArcrole(String to, String arcrole) throws XBRLException {
+        String xpath = "/*[@parentIndex='" + getFragmentIndex() + "' and */*[@xlink:to='" + to + "' and @xlink:arcrole='" + arcrole + "']]";
+        FragmentList<Arc> arcs = getStore().<Arc>query(xpath);
+        return arcs;
+    }
+    
 
 
 
