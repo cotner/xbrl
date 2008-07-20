@@ -83,6 +83,9 @@ public class CacheImpl {
     		return false;
     	}
     	try {
+    	    // TODO Make this test work for windows paths.
+    	    logger.debug("The canonical path to the cache root is: " + cacheRoot.getCanonicalPath());
+            logger.debug("The path for the URL being tested is: " + url.getPath());
         	if (url.getPath().startsWith(cacheRoot.getCanonicalPath().toString())) {
             	logger.debug(System.currentTimeMillis() + " Path is right so is in cache.");
         		return true;
