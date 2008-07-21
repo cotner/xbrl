@@ -174,11 +174,13 @@ public class CacheImpl {
     		return url;
     	}
 
-		String path = url.getPath().substring(1);
-		String filename = url.getFile();
-
-		// Translate file separator into slashes 
-		path = path.replace(File.separatorChar,'/');
+		String path = url.getPath();
+		
+		try {
+		    path = (new File(path)).getCanonicalPath();
+		} catch (IOException e) {
+		    throw new XBRLException("Canonical path could not be obtained from the URL.",e);
+		}
 
 		// Eliminate the cacheRoot part of the path
 		try {
@@ -186,7 +188,14 @@ public class CacheImpl {
 		} catch (IOException e) {
 			throw new XBRLException("The original URL could not be determined for " + url);
 		}
+
+        // Translate file separator into slashes 
+        path = path.replace(File.separatorChar,'/');
 		
+        path = path.substring(1);
+        
+        String filename = url.getFile();
+
 		// Retrieve the protocol
 		String[] components = path.split("/");
 		String protocol = components[0];
