@@ -80,7 +80,10 @@ abstract public class BaseTestCase extends TestCase {
 			
 			// Base URL for test data
 			baseURL = configuration.getProperty("test.data.baseURL");
-			
+
+		} catch (NullPointerException e) {
+		    // This additional error handling was contributed by Walter Hamscher (25 July 2008)
+            fail("Null system property xbrlapi.test.configuration");			
 		} catch (FileNotFoundException e) {
 			fail("The test suite configuration properties file was not found.");			
 		} catch (IOException e) {
