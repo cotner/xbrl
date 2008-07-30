@@ -1,2 +1,7 @@
+30 Jul. 2008
+Eliminated several memory leaks.
+Forced regular database reconnections.
+Released version 3.1
+
 July 29, 2006
 Created the Oracle Berkeley Database XML data store module.

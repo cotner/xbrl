@@ -1,7 +1,7 @@
 Release details:
 
 Release 3.2
-Apr 21, 2008
+Jul 30, 2008
 No changes since the last release.
 Updated release number to keep in line with other modules.
 

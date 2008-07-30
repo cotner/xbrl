@@ -1,10 +1,10 @@
-September 14, 2006 [shuetrim]
+September 14, 2006
 No changes required in the previous 12 months.
 Software promoted to 1.1 to reflect its production
 ready state.
 
-May 6, 2005 [shuetrim]
+May 6, 2005
 Initial cut of XML Base resolver.
 
-July 23, 2005 [shuetrim]
+July 23, 2005
 Operational version of the XML Base resolver.

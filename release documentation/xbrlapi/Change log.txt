@@ -1,3 +1,9 @@
+30 Jul. 2008
+Fixed bug in queries to get network roots.
+Fixed bug in caching on Windows.
+Removed non-functional set methods
+Released version 3.1
+
 July 29, 2007
 Added new objects to provide functionality at the level
 of individual relationships and networks of relationships.

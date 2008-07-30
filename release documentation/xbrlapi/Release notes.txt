@@ -1,7 +1,7 @@
 Release details:
 
 Release 3.2
-Apr 21, 2008
+Jul 30, 2008
 Point release to upgrade data store performance and
 to incorporate changes to document indexing system
 and changes to the document identification system.

@@ -3,7 +3,7 @@ The Xindice data store implementation
 for XBRLAPI.
 
 Release 3.2
-Apr 21, 2008
+Jul 30, 2008
 Point release to improve unit testing.
 
 Release 3.1
