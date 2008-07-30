@@ -14,7 +14,6 @@ import org.xml.sax.XMLReader;
 public class DTDDeclarationTestCase extends BaseTestCase {
 	private final String url = this.getURL("real.data.schema.with.dtd");
 
-	
 	private SAXParser saxParser = null;
 	
 	private Handler handler = null;
@@ -54,8 +53,7 @@ public class DTDDeclarationTestCase extends BaseTestCase {
 	
 	public void testHandlingOfDTDEntities() {
 		try {
-			xmlReader.parse("file:/home/geoff/eclipse/xbrl-mime-type/test.xml");
-			//xmlReader.parse(url);
+			xmlReader.parse(url);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
