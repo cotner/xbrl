@@ -105,7 +105,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	}
 	
     /**
-     * @see org.xbrlapi.data.Store#storeLoaderState(String,List<String>)
+     * @see org.xbrlapi.data.Store#storeLoaderState(List)
      */
     public void storeLoaderState(List<String> documents) throws XBRLException {
         try {
@@ -223,7 +223,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     
     /**
      * Serialize the specified fragment.
-     * @param what The fragment to be serialised.
+     * @param fragment The fragment to be serialised.
      * @throws XBRLException
      */
     public void serialize(Fragment fragment) throws XBRLException {
@@ -624,12 +624,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         }
 */    }
     
-    /**
-     * @see org.xbrlapi.data.Store#getStoreState()
-     */
-    public FragmentList<Fragment> getStoreState() throws XBRLException {
-        return getStubs();
-    }
+
     
     /**
      * @see org.xbrlapi.data.Store#getStubs()
@@ -665,7 +660,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getDocumentsToDiscover()
      */
     public List<URL> getDocumentsToDiscover() throws XBRLException {
-        FragmentList<Fragment> stubs = getStoreState();
+        FragmentList<Fragment> stubs = getStubs();
         LinkedList<URL> list = new LinkedList<URL>();
         for (Fragment stub: stubs) {
             String url = stub.getMetaAttribute("url");

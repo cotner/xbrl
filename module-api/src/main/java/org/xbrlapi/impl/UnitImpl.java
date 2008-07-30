@@ -19,7 +19,7 @@ import org.xbrlapi.utilities.XBRLException;
 public class UnitImpl extends FactDimensionContainerImpl implements Unit {
 
     /**
-     * @see org.xbrlapi.FaceDimensionContainer#getReferencingItems()
+     * @see org.xbrlapi.FactDimensionContainer#getReferencingItems()
      */
     public FragmentList<Item> getReferencingItems() throws XBRLException {
         String query = "/*[@url='" + this.getURL() + "' and */*/@unitRef='" + this.getId() + "']";

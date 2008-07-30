@@ -401,7 +401,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store@removeFragment(String)
+	 * @see org.xbrlapi.data.Store#removeFragment(String)
 	 */
     synchronized public void removeFragment(String index) throws XBRLException {
 	    incrementCallCount();

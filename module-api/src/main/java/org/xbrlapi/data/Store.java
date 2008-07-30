@@ -267,7 +267,6 @@ public interface Store {
     
     /**
      * Stores the state of the document discovery process.
-     * @param id  The next ID to use for the next fragment to be added to the DTS.
      * @param documents The list of URLs of the documents remaining to be
      * discovered.
      * @throws XBRLException
@@ -309,15 +308,11 @@ public interface Store {
     public void storeStub(String document) throws XBRLException;    
     
     /**
-     * @param stubId The id of the stub fragment to be removed.
+     * @param url The URL of the document for which 
+     * the stub fragment is to be removed from the data store.
      * @throws XBRLException
      */
     public void removeStub(String url) throws XBRLException;
-    
-    
-
-
-
 
     /**
      * Utility method to return a list of fragments in a data store
@@ -393,8 +388,9 @@ public interface Store {
     public void delete() throws XBRLException;    
 
     /**
-     * @param hashString The hash of the document
-     * @return
+     * @param document The string representation of the document content.
+     * @return the hash value for the string representing the 
+     * content of the document.
      * @throws XBRLException
      */
     public String getDocumentId(String document) throws XBRLException;
@@ -415,7 +411,7 @@ public interface Store {
     /**
      * Sets the matcher for the store to use.  Care should be taken to ensure
      * that the one matcher is used for all documents in the store.
-     * @param Matcher the matcher to use to identify identical resources.
+     * @param matcher the matcher to use to identify identical resources.
      * @throws XBRLException if the matcher is null;
      */
     public void setMatcher(Matcher matcher) throws XBRLException;

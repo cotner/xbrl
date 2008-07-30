@@ -390,14 +390,14 @@ public interface Fragment {
     public FragmentList<LabelResource> getLabelsWithRole(String role) throws XBRLException;
     
     /**
-     * @param role The xml:lang language codevalue
+     * @param language The xml:lang language codevalue
      * @return the list of labels for this fragment with the specified language code.
      * @throws XBRLException
      */
     public FragmentList<LabelResource> getLabelsWithLanguage(String language) throws XBRLException;
 
     /**
-     * @param role The xml:lang language codevalue
+     * @param language The xml:lang language codevalue
      * @param role The XLink role value
      * @return the list of labels for this fragment with the specified language code and XLink role.
      * @throws XBRLException

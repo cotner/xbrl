@@ -2,7 +2,6 @@ package org.xbrlapi.impl;
 
 import java.util.LinkedList;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -116,7 +115,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
      * @return true if the attribute exists
      * @throws XBRLException
      * @see org.w3c.dom.Element#hasAttributeNS(String, String)
-     * @see org.xbrlapi.SchemaDeclaration#setOtherAttribute(Attr)
+     * @see org.xbrlapi.SchemaDeclaration#hasOtherAttribute(String,String)
      */
     public boolean hasOtherAttribute(String namespaceURI, String localname) throws XBRLException {
     	if (getDataRootElement().hasAttributeNS(namespaceURI, localname)) {

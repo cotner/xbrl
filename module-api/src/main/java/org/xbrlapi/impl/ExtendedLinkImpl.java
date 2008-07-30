@@ -104,7 +104,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     }
     
     /**
-     * @see org.xbrlapi.ExtendedLink#getArcsByFromLabelWithArcrole(String,String)
+     * @see org.xbrlapi.ExtendedLink#getArcsByFromLabelAndArcrole(String,String)
      */
     public FragmentList<Arc> getArcsByFromLabelAndArcrole(String from, String arcrole) throws XBRLException {
         String xpath = "/*[@parentIndex='" + getFragmentIndex() + "' and */*[@xlink:from='" + from + "' and @xlink:arcrole='" + arcrole + "']]";
@@ -113,7 +113,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     }
     
     /**
-     * @see org.xbrlapi.ExtendedLink#getArcsByToLabelWithArcrole(String,String)
+     * @see org.xbrlapi.ExtendedLink#getArcsByToLabelAndArcrole(String,String)
      */
     public FragmentList<Arc> getArcsByToLabelAndArcrole(String to, String arcrole) throws XBRLException {
         String xpath = "/*[@parentIndex='" + getFragmentIndex() + "' and */*[@xlink:to='" + to + "' and @xlink:arcrole='" + arcrole + "']]";
