@@ -51,6 +51,7 @@ public class CacheImplTestCase extends BaseTestCase {
 			CacheImpl cache = new CacheImpl(new File(cacheRoot));
 			assertFalse(cache.isCacheURL(originalURL));
 			File cacheFile = cache.getCacheFile(originalURL);
+			assertNotNull(cacheFile);
 			URL cacheURL = cache.getCacheURL(originalURL);
 			assertTrue(cache.isCacheURL(cacheURL));
 			URL newURL = cache.getOriginalURL(cacheURL);

@@ -89,7 +89,6 @@ public class PointerResolverImpl implements PointerResolver {
 			Vector pointerParts = grammar.Pointer();
 			
 			// TODO Iterate pointer parts until X pointer is resolved to a specific fragment.
-			Fragment fragment = null;
 			HashMap<String,String> namespaces = new HashMap<String,String>();
 			for (int i=0; i<pointerParts.size(); i++) {
 				PointerPart part = (PointerPart) pointerParts.get(i);

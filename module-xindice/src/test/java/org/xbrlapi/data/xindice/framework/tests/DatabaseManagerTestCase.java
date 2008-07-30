@@ -17,14 +17,12 @@ package org.xbrlapi.data.xindice.framework.tests;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-import org.apache.xindice.client.xmldb.services.CollectionManager;
 import org.xbrlapi.data.xindice.DBConnectionImpl;
 import org.xbrlapi.utilities.BaseTestCase;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
 import org.xmldb.api.base.XMLDBException;
-import org.xmldb.api.modules.CollectionManagementService;
 
 public class DatabaseManagerTestCase extends BaseTestCase {
 
@@ -101,7 +99,7 @@ public class DatabaseManagerTestCase extends BaseTestCase {
 	 */
 	public final void testInstantiationOfACollectionManagerService() {
         try {
-            CollectionManager service = (CollectionManager) collection.getService("CollectionManager", "1.0");
+            collection.getService("CollectionManager", "1.0");
         } catch (XMLDBException e) {
         	fail("Collection manager service could not be instantiated. " + e.getMessage());
         }
@@ -112,7 +110,7 @@ public class DatabaseManagerTestCase extends BaseTestCase {
 	 */
 	public final void testInstantiationOfACollectionManagementService() {
         try {
-            CollectionManagementService service = (CollectionManagementService) collection.getService("CollectionManagementService", "1.0");
+            collection.getService("CollectionManagementService", "1.0");
         } catch (XMLDBException e) {
         	fail("Collection management service could not be instantiated. " + e.getMessage());
         }

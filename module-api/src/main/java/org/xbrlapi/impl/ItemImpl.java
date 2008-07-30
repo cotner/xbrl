@@ -17,7 +17,6 @@ public class ItemImpl extends FactImpl implements Item {
 	 * @see org.xbrlapi.Item#getContext()
 	 */
 	public Context getContext() throws XBRLException {
-		Element root = getDataRootElement();
 		return getInstance().getContext(this.getContextId());
 	}
 	
@@ -36,7 +35,6 @@ public class ItemImpl extends FactImpl implements Item {
      * @see org.xbrlapi.Item#getUnit()
      */
     public Unit getUnit() throws XBRLException {
-        Element root = getDataRootElement();
         return getInstance().getUnit(this.getUnitId());
     }
     

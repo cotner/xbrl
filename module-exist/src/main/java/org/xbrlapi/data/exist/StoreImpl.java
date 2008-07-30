@@ -267,9 +267,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		Node node = resource.getContentAsDOM();
     	if (node.getNodeType() == Element.DOCUMENT_NODE) {
     		return ((Document) node).getDocumentElement();
-    	} else {
-    		return (Element) node;
     	}
+		return (Element) node;
     }
     
 
@@ -376,9 +375,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		
     	if (node.getNodeType() == Element.DOCUMENT_NODE) {
     		return (Document) node;
-    	} else {
-    		return ((Element) node).getOwnerDocument();  // May return a null value!
     	}
+		return ((Element) node).getOwnerDocument();  // May return a null value!
 	}    
  
     

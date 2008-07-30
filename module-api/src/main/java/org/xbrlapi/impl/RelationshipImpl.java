@@ -229,7 +229,6 @@ public class RelationshipImpl implements Relationship {
 	 * @see org.xbrlapi.Relationship#getLinkRole()
 	 */
 	public String getLinkRole() throws XBRLException {
-		ExtendedLink l = getLink();
 		return getLink().getLinkRole();
 	}
 

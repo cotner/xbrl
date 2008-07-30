@@ -60,6 +60,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			store.storeFragment(new MockFragmentImpl(index));
 			assertTrue(store.hasFragment(index));
 			MockFragmentImpl document = (MockFragmentImpl) store.getFragment(index);
+			assertNotNull(document);
 			store.removeFragment(index);
 			assertFalse(store.hasFragment(index));
 		} catch (XBRLException e) {

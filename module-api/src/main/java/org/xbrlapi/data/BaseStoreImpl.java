@@ -141,16 +141,16 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         Fragment stub = getStub(document);
         if (stub != null) {
             return stub.getFragmentIndex();
-        } else {
-            int i = 1;
-            String iString = (new Integer(i)).toString();
-            String randomString = random();
-            while (this.hasFragment(randomString + "_" + iString + "_1")) {
-                i++;
-                iString = (new Integer(i)).toString();
-            }
-            return (randomString + "_" + iString);
         }
+        int i = 1;
+        String iString = (new Integer(i)).toString();
+        String randomString = random();
+        while (this.hasFragment(randomString + "_" + iString + "_1")) {
+            i++;
+            iString = (new Integer(i)).toString();
+        }
+        return (randomString + "_" + iString);
+
     }
     
     /**
@@ -423,39 +423,38 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 		if (fs.getLength() == 0) {
 			return d;
 
-		} else {
+		}
 
-			// Sort the child fragments into insertion order
-			Comparator<Fragment> comparator = new FragmentComparator();
-			TreeSet<Fragment> fragments = new TreeSet<Fragment>(comparator);
-        	for (int i=0; i<fs.getLength(); i++) {
-        		fragments.add(fs.getFragment(i));
-        	}
-        	
-        	// Iterate child fragments in insertion order, inserting them
-        	Iterator<Fragment> iterator = fragments.iterator();
-        	while (iterator.hasNext()) {
+		// Sort the child fragments into insertion order
+		Comparator<Fragment> comparator = new FragmentComparator();
+		TreeSet<Fragment> fragments = new TreeSet<Fragment>(comparator);
+    	for (int i=0; i<fs.getLength(); i++) {
+    		fragments.add(fs.getFragment(i));
+    	}
+    	
+    	// Iterate child fragments in insertion order, inserting them
+    	Iterator<Fragment> iterator = fragments.iterator();
+    	while (iterator.hasNext()) {
 
-        		//Get child fragment
-        		Fragment childFragment = iterator.next();
+    		//Get child fragment
+    		Fragment childFragment = iterator.next();
 
-        		// Get XML DOM for child fragment using recursion
-        		Element child = getSubtree(childFragment);
+    		// Get XML DOM for child fragment using recursion
+    		Element child = getSubtree(childFragment);
 
-        		// Get parent element of child fragment in current fragment
-        		Element parentElement = childFragment.getParentElement(d);
+    		// Get parent element of child fragment in current fragment
+    		Element parentElement = childFragment.getParentElement(d);
 
-        		// Determine the number of preceding siblings
-        		int precedingSiblings = (new Integer(childFragment.getPrecedingSiblings())).intValue();
-        		
-        		// Get the following sibling of this child fragment
-        		Element followingSibling = getFollowingSibling(parentElement, precedingSiblings);
+    		// Determine the number of preceding siblings
+    		int precedingSiblings = (new Integer(childFragment.getPrecedingSiblings())).intValue();
+    		
+    		// Get the following sibling of this child fragment
+    		Element followingSibling = getFollowingSibling(parentElement, precedingSiblings);
 
-        		// Do the fragment insertion
-                parentElement.insertBefore(child, followingSibling);
-        		
-        	}
-        }
+    		// Do the fragment insertion
+            parentElement.insertBefore(child, followingSibling);
+    		
+    	}
 		return d;
 	}
 	
@@ -510,39 +509,38 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 		if (fs.getLength() == 0) {
 			return d;
 
-		} else {
+		}
 
-			// Sort the child fragments into insertion order
-			TreeSet<Fragment> fragments = new TreeSet<Fragment>(new FragmentComparator());
-			for (int i=0; i<fs.getLength(); i++) {
-        		fragments.add(fs.getFragment(i));
-        	}
-        	
-        	// Iterate child fragments in insertion order, inserting them
-        	Iterator<Fragment> iterator = fragments.iterator();
-        	while (iterator.hasNext()) {
-        		
-        		// Get child fragment
-        		Fragment childFragment = iterator.next();
+		// Sort the child fragments into insertion order
+		TreeSet<Fragment> fragments = new TreeSet<Fragment>(new FragmentComparator());
+		for (int i=0; i<fs.getLength(); i++) {
+    		fragments.add(fs.getFragment(i));
+    	}
+    	
+    	// Iterate child fragments in insertion order, inserting them
+    	Iterator<Fragment> iterator = fragments.iterator();
+    	while (iterator.hasNext()) {
+    		
+    		// Get child fragment
+    		Fragment childFragment = iterator.next();
 
-        		// Get XML DOM for child fragment using recursion
-        		Element child = getAnnotatedSubtree(childFragment);
-    	    	child.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",childFragment.getFragmentIndex());
+    		// Get XML DOM for child fragment using recursion
+    		Element child = getAnnotatedSubtree(childFragment);
+	    	child.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",childFragment.getFragmentIndex());
 
-        		// Get parent element of child fragment in current fragment
-        		Element parentElement = childFragment.getParentElement(d);
+    		// Get parent element of child fragment in current fragment
+    		Element parentElement = childFragment.getParentElement(d);
 
-        		// Determine the number of preceding siblings
-        		int precedingSiblings = (new Integer(childFragment.getPrecedingSiblings())).intValue();
-        		
-        		// Get the following sibling of this child fragment
-        		Element followingSibling = getFollowingSibling(parentElement, precedingSiblings);
+    		// Determine the number of preceding siblings
+    		int precedingSiblings = (new Integer(childFragment.getPrecedingSiblings())).intValue();
+    		
+    		// Get the following sibling of this child fragment
+    		Element followingSibling = getFollowingSibling(parentElement, precedingSiblings);
 
-        		// Do the fragment insertion
-                parentElement.insertBefore(child, followingSibling);
-        		
-        	}
-        }
+    		// Do the fragment insertion
+            parentElement.insertBefore(child, followingSibling);
+    		
+    	}
 		return d;
 	}
 	
@@ -860,7 +858,6 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     	FragmentList<Fact> facts = new FragmentListImpl<Fact>();
     	for (int i=0; i<instances.getLength(); i++) {
     		Instance instance = instances.getFragment(i);
-    		FragmentList<Fact> instanceFacts = instance.getFacts();
     		facts.addAll(instance.getFacts());
     	}
     	return facts;

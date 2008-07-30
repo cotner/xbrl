@@ -53,7 +53,6 @@ public class StoreImplTestCase extends BaseTestCase {
 	
 	public void testQueryData() {
 		try {
-			String index = store.getNextFragmentId();
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
 	        FragmentList<Fragment> fragments = store.<Fragment>query(xpathQuery);
 			assertTrue(fragments.getLength() > 600);

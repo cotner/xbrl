@@ -180,8 +180,6 @@ public class LoaderImpl implements Loader {
      * has been requested and false otherwise.
      */
     private boolean interruptRequested() {
-        List<String> documents = this.getDocumentsStillToAnalyse();
-        
         return interrupt;
     }
 

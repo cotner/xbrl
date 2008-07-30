@@ -46,7 +46,7 @@ public class EntityResolverTestCase extends BaseTestCase {
 		try {
 			String cache = configuration.getProperty("nonexistent.cache");
 			logger.info("Trying to create an entity resolver using cache " + cache);
-			EntityResolverImpl e = new EntityResolverImpl(new File(cache));
+			new EntityResolverImpl(new File(cache));
 			fail("The entity resolver failed to detect a non-existent cache root");
 		} catch (XBRLException expected) {
 		}

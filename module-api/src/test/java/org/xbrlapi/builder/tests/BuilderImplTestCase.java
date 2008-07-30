@@ -35,8 +35,7 @@ public class BuilderImplTestCase extends BaseTestCase {
 		try {
 			Builder b = new BuilderImpl();
 			b.appendElement("http://my.namespace.com/","root","my:root");
-			Object ip = b.getInsertionPoint();
-			System.out.println(b.getInsertionPoint().getClass().getName());
+			logger.info(b.getInsertionPoint().getClass().getName());
 			assertEquals("org.apache.xerces.dom.ElementNSImpl",b.getInsertionPoint().getClass().getName());
 		} catch (Exception e) {
 			fail(e.getMessage());

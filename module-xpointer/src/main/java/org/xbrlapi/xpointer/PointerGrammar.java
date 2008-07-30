@@ -21,7 +21,7 @@ public class PointerGrammar implements PointerGrammarConstants {
         java.io.StringReader sr = new java.io.StringReader(pointer);
         java.io.Reader r = new java.io.BufferedReader(sr);
         PointerGrammar parser = new PointerGrammar(r);
-    java.util.Vector pointerParts = parser.Pointer();
+        parser.Pointer();
   }
 
   final public java.util.Vector Pointer() throws ParseException {
@@ -384,8 +384,7 @@ public class PointerGrammar implements PointerGrammarConstants {
   final private int jj_ntk() {
     if ((jj_nt=token.next) == null)
       return (jj_ntk = (token.next=token_source.getNextToken()).kind);
-    else
-      return (jj_ntk = jj_nt.kind);
+    return (jj_ntk = jj_nt.kind);
   }
 
   private java.util.Vector jj_expentries = new java.util.Vector();

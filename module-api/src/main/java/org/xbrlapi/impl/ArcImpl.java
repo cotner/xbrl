@@ -273,17 +273,15 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
         		Node bNode = b.getNamedItem(aName);
         		if (bNode == null) { 
         			return false;
-        		} else {
-        			b.removeNamedItem(aName);
         		}
+    			b.removeNamedItem(aName);
     		} else {
     			String aName = aNode.getLocalName();
         		Node bNode = b.getNamedItemNS(aNamespace,aName);
         		if (bNode == null) {
         			return false;
-        		} else {
-        			b.removeNamedItemNS(aNamespace,aName);
         		}
+    			b.removeNamedItemNS(aNamespace,aName);
     		}
     	}
 		if (b.getLength() == 0)  return true;

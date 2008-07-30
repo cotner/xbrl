@@ -870,9 +870,8 @@ public class FragmentImpl implements Fragment {
             
             if (element.isSameNode(this.getMetadataRootElement())) {
                 throw new XBRLException("the QName prefix is not declared for " + qname);
-            } else {
-                return getNamespaceFromQName(qname, element.getParentNode());
             }
+            return getNamespaceFromQName(qname, element.getParentNode());
             
         } else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
             Node parent = node.getParentNode();

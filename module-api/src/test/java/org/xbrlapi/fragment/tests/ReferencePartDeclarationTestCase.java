@@ -3,7 +3,6 @@ package org.xbrlapi.fragment.tests;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.ReferencePartDeclaration;
-import org.xbrlapi.Schema;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -35,14 +34,11 @@ public class ReferencePartDeclarationTestCase extends DOMLoadingTestCase {
 	public void testGetReferencePartDeclarations() {	
 
 		try {
-			FragmentList<Schema> schemas = store.<Schema>getFragments("Schema");
-			for (Schema schema: schemas) {
-				FragmentList<ReferencePartDeclaration> rpds = store.<ReferencePartDeclaration>getFragments("ReferencePartDeclaration");
-				for (ReferencePartDeclaration rpd: rpds) {
-					logger.info(rpd.getName() + " is a reference part");
-					assertEquals(Constants.XBRL21LinkNamespace,rpd.getSubstitutionGroupNamespace());
-					assertEquals("part",rpd.getSubstitutionGroupLocalname());
-				}
+			FragmentList<ReferencePartDeclaration> rpds = store.<ReferencePartDeclaration>getFragments("ReferencePartDeclaration");
+			for (ReferencePartDeclaration rpd: rpds) {
+				logger.info(rpd.getName() + " is a reference part");
+				assertEquals(Constants.XBRL21LinkNamespace,rpd.getSubstitutionGroupNamespace());
+				assertEquals("part",rpd.getSubstitutionGroupLocalname());
 			}
 		} catch (XBRLException e) {
 			e.printStackTrace();

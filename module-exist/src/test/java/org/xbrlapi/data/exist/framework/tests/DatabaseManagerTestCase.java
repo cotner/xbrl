@@ -24,7 +24,6 @@ import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
 import org.xmldb.api.base.XMLDBException;
-import org.xmldb.api.modules.CollectionManagementService;
 
 public class DatabaseManagerTestCase extends BaseTestCase {
 
@@ -118,7 +117,7 @@ public class DatabaseManagerTestCase extends BaseTestCase {
 	 */
 	public final void testInstantiationOfACollectionManagementService() {
         try {
-            CollectionManagementService service = (CollectionManagementService) collection.getService("CollectionManagementService", "1.0");
+            collection.getService("CollectionManagementService", "1.0");
         } catch (XMLDBException e) {
         	fail("Collection management service could not be instantiated. " + e.getMessage());
         }

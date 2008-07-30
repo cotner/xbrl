@@ -101,8 +101,7 @@ abstract public class BaseTestCase extends TestCase {
 		String myProperty = configuration.getProperty(property);
 		if (myProperty.startsWith("http://"))
 			return myProperty;
-		else
-			return baseURL + configuration.getProperty(property);
+		return baseURL + configuration.getProperty(property);
 	}	
 
 	/**

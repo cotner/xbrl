@@ -15,7 +15,7 @@ import org.xbrlapi.Locator;
 
 public class ArcEndTestCase extends DOMLoadingTestCase {
 
-	private final String STARTING_POINT = "test.data.tuple.instance";
+	private final String STARTING_POINT = "test.data.multi.concept.schema";
 
 	String url = null;
 	String document = 
@@ -30,7 +30,7 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		url = getURL("test.data.multi.concept.schema");
+		url = getURL(STARTING_POINT);
 		String myURL = Pattern.compile("397-ABC.xsd").matcher(url.toString()).replaceAll("string.xml");
 		loader.discover(new URL(myURL), document);
 	}

@@ -49,6 +49,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	public void testGetDOM() {
 		try {
 			Document d = store.getStoreAsDOM();
+			assertNotNull(d);
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}

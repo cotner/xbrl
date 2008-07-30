@@ -62,7 +62,7 @@ public class PointerGrammarTestCase extends TestCase {
 		java.io.Reader r = new java.io.BufferedReader(sr);
 		PointerGrammar parser = new PointerGrammar(r);
 		try {
-			Vector pointerParts = parser.Pointer();
+			parser.Pointer();
 			fail("X Pointer, " + pointer + ", is not valid.");
 		} catch (TokenMgrError e) {
 		} catch (ParseException e) {
@@ -76,7 +76,7 @@ public class PointerGrammarTestCase extends TestCase {
 		java.io.Reader r = new java.io.BufferedReader(sr);
 		PointerGrammar parser = new PointerGrammar(r);
 		try {
-			Vector pointerParts = parser.Pointer();
+			parser.Pointer();
 			fail("X Pointer, " + pointer + ", is not valid.");
 		} catch (TokenMgrError e) {
 		} catch (ParseException e) {

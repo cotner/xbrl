@@ -56,7 +56,7 @@ public class PeriodTestCase extends DOMLoadingTestCase {
                 assertEquals("2001-08-01",period.getStart());
                 assertEquals("2001-08-31",period.getEnd());
                 try {
-                    String instant = period.getInstant();
+                    period.getInstant();
                     fail("An exception should have been thrown because the period is not an instant.");
                 } catch (Exception e) {
                     ;

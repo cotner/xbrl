@@ -43,7 +43,7 @@ public class LoaderImplTestCase extends BaseTestCase {
 	 */
 	public void testLoaderImplStoreXLinkProcessor_FailOnNullStore() throws Exception {
 		try {
-			Loader l = new LoaderImpl(null,loader.getXlinkProcessor());
+			new LoaderImpl(null,loader.getXlinkProcessor());
 			fail("Null data stores are not allowed for loaders.");
 		} catch (XBRLException expected) {
 			;
@@ -57,7 +57,7 @@ public class LoaderImplTestCase extends BaseTestCase {
 	 */
 	public void testLoaderImplStoreXLinkProcessor_FailOnNullXLinkProcessor() {
 		try {
-			Loader l = new LoaderImpl(store,null);
+			new LoaderImpl(store,null);
 			fail("Null XLink processors are not allowed for loaders.");
 		} catch (XBRLException expected) {
 			;
@@ -70,8 +70,8 @@ public class LoaderImplTestCase extends BaseTestCase {
 	 */
 	public void testLoaderImplStoreXLinkProcessorList() {
 		try {
-			Loader l = new LoaderImpl(store,loader.getXlinkProcessor(),urls);
-			Loader l2 = new LoaderImpl(store,loader.getXlinkProcessor(),new LinkedList<URL>());
+			new LoaderImpl(store,loader.getXlinkProcessor(),urls);
+			new LoaderImpl(store,loader.getXlinkProcessor(),new LinkedList<URL>());
 		} catch (XBRLException e) {
 			fail("Unexpected exception creating a loader using a list of URLs.");
 		}
@@ -80,7 +80,7 @@ public class LoaderImplTestCase extends BaseTestCase {
 	public void testLoaderImplStoreXLinkProcessorList_FailOnNullList() {
 		try {
 			List<URL> list = null;//URL right?
-			Loader l = new LoaderImpl(store,loader.getXlinkProcessor(),list);
+			new LoaderImpl(store,loader.getXlinkProcessor(),list);
 			fail("Null list is not allowed for loaders.");
 		} catch (XBRLException expected) {
 			;

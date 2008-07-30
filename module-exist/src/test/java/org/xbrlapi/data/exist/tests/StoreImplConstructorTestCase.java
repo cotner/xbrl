@@ -50,7 +50,7 @@ public class StoreImplConstructorTestCase extends BaseTestCase {
 	 */
 	public void testStoreImplFailsOnNonexistentContainer() {
 		try {
-			Store store = new StoreImpl((DBConnectionImpl) connection,"/nonexistentStoreParent/", dataCollectionName);
+			new StoreImpl((DBConnectionImpl) connection,"/nonexistentStoreParent/", dataCollectionName);
 			fail("The store should have failed to be created because no parent exists for the store collection.");
 		} catch (XBRLException expected) {
 			;

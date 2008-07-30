@@ -3,7 +3,6 @@ package org.xbrlapi.data.exist.framework.tests;
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
 */
 
-import org.xbrlapi.data.exist.DBConnectionImpl;
 import org.xbrlapi.utilities.BaseTestCase;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
@@ -13,7 +12,6 @@ import org.xmldb.api.modules.CollectionManagementService;
 
 public class CollectionCreationAndDeletionTestCase extends BaseTestCase {
 
-	private DBConnectionImpl connection;
 	private Collection collection;
 	private CollectionManagementService service;
 	

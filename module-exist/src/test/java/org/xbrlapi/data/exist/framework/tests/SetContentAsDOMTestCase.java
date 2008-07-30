@@ -141,6 +141,7 @@ public class SetContentAsDOMTestCase extends BaseTestCase {
 		String content = null;
 		try {
 			content = (String) resource.getContent();
+			assertTrue(content.length() > 0);
 		} catch (XMLDBException e) {
 			fail("Getting content of resource as a string failed. " + e.getMessage());
 		}
@@ -213,6 +214,7 @@ public class SetContentAsDOMTestCase extends BaseTestCase {
 		String content = null;
 		try {
 			content = (String) resource.getContent();
+            assertTrue(content.length() > 0);
 		} catch (XMLDBException e) {
 			fail("Getting content of resource as a string failed. " + e.getMessage());
 		}

@@ -10,6 +10,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+/**
+ * Implementation of an XBRL document URL grabber for the SEC
+ * RSS feed.
+ * @author Geoff Shuetrim (geoff@galexy.net)
+ */
 public class SecGrabberImpl extends AbstractGrabberImpl implements Grabber {
 	
 	Logger logger = Logger.getLogger(this.getClass());

@@ -55,7 +55,7 @@ public class DBConnectionImpl implements DBConnection {
 		// Force a failure if the root collection is a dud.
 		Collection rootCollection = this.getRootCollection();
 		try {
-			int children = rootCollection.getChildCollectionCount();
+			rootCollection.getChildCollectionCount();
 		} catch (XMLDBException e) {
 			throw new XBRLException("Check the EXIST database URI.  The connection failed.", e);
 		}

@@ -3,7 +3,6 @@ package org.xbrlapi.data;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
@@ -189,7 +188,6 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	
     	// Get the root resources in the network
     	FragmentList<Fragment> roots = new FragmentListImpl<Fragment>();
-    	Set<String> ids = sourceIds.keySet();
     	Iterator<String> iterator = sourceIds.keySet().iterator();
     	while (iterator.hasNext()) {
     		String id = iterator.next();
@@ -249,7 +247,6 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	
     	// Get the root resources in the network
     	FragmentList<Fragment> roots = new FragmentListImpl<Fragment>();
-    	Set<String> ids = sourceIds.keySet();
     	Iterator<String> iterator = sourceIds.keySet().iterator();
     	while (iterator.hasNext()) {
     		String id = iterator.next();

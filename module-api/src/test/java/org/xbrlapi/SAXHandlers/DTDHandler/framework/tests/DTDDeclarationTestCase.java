@@ -12,7 +12,8 @@ import org.xml.sax.XMLReader;
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
 */
 public class DTDDeclarationTestCase extends BaseTestCase {
-	private final String url = this.getURL("real.data.schema.with.dtd");
+	
+    private final String url = this.getURL("real.data.schema.with.dtd");
 
 	private SAXParser saxParser = null;
 	

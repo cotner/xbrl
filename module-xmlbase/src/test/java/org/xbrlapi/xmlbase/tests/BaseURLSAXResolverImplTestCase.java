@@ -15,7 +15,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class BaseURLSAXResolverImplTestCase extends BaseTestCase {
 	
-	private String xmlS1, xmlS2, xmlS3;
+	private String xml;
 	private BaseURLSAXResolver baseURLResolver, nullBaseURLResolver;
 
 	/*
@@ -24,27 +24,10 @@ public class BaseURLSAXResolverImplTestCase extends BaseTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		// Create the XML documents to analyse
-		xmlS1 = 
-			"<?xml version=\"1.0\" ?>\n"
-			+ "<root xml:base=\"http://www.xbrlapi.org/root.xml\">"
-			+ "<child1 xml:base=\"http://www.xbrlapi.org/child1.xml\"/>"
-			+ "<child2 xml:base=\"child2.xml\"/>"
-			+ "<child3 />"
-			+ "<child4 xml:base=\"\"/>"
-			+ "</root>";
-		
-		xmlS2 = 
+
+		xml = 
 			"<?xml version=\"1.0\" ?>\n"
 			+ "<my:root xml:base=\"http://www.xbrlapi.org/root.xml\" xmlns:my=\"http://www.xbrlapi.org/ns/\">"
-			+ "<my:child1 xml:base=\"http://www.xbrlapi.org/child1.xml\"/>"
-			+ "<my:child2 xml:base=\"child2.xml\"/>"
-			+ "<my:child3 />"
-			+ "<my:child4 xml:base=\"\"/>"
-			+ "</my:root>";
-
-		xmlS3 = 
-			"<?xml version=\"1.0\" ?>\n"
-			+ "<my:root xmlns:my=\"http://www.xbrlapi.org/ns/\">"
 			+ "<my:child1 xml:base=\"http://www.xbrlapi.org/child1.xml\"/>"
 			+ "<my:child2 xml:base=\"child2.xml\"/>"
 			+ "<my:child3 />"
@@ -81,16 +64,17 @@ public class BaseURLSAXResolverImplTestCase extends BaseTestCase {
 	 * Test SAX parser XML Base resolver
 	 */
 	public final void testSAXBaseURLResolution() throws Exception {
-		// Set up the SAX parser
-        BaseTestHandler handler = new BaseTestHandler(this,nullBaseURLResolver);
+        new BaseTestHandler(this,nullBaseURLResolver);
 		XMLReader reader = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
 		reader.setFeature("http://xml.org/sax/features/namespaces",true);
-		reader.parse(new InputSource(new StringReader(xmlS2)));
+		reader.parse(new InputSource(new StringReader(xml)));
 	}
 
-	protected final void checkSAXBaseURLHandling(String expected, Attributes attrs,String inheritedURL) {
+	protected final void checkSAXBaseURLHandling(String expected, Attributes attrs, String inheritedURL) {
 		try {
 			assertEquals(expected,baseURLResolver.getBaseURL());
+			assertNotNull(attrs);
+            assertNotNull(inheritedURL);
 		} catch (Exception e) {
 			fail("Unexpected Exception when testing SAX Base URL handling. " + e.getMessage());
 		}

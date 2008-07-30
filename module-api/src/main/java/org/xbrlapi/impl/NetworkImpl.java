@@ -205,7 +205,8 @@ public class NetworkImpl implements Network {
 
 		// Store the relationship itself
 		String semanticKey = relationship.getSemanticKey();
-		Integer priority = relationship.getPriority();
+
+		//Integer priority = relationship.getPriority();
 
 		String sourcesSemanticKey = semanticKey + targetIndex;
 		String targetsSemanticKey = semanticKey + sourceIndex;

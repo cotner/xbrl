@@ -9,7 +9,8 @@ public class PointerGrammarTokenManager implements PointerGrammarConstants
   public  java.io.PrintStream debugStream = System.out;
   public  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
 private final int jjStopStringLiteralDfa_0(int pos, long active0)
-{
+{ 
+    
    switch (pos)
    {
       default :
@@ -195,12 +196,12 @@ static final long[] jjbitVec39 = {
 };
 private final int jjMoveNfa_0(int startState, int curPos)
 {
-   int[] nextStates;
+   //int[] nextStates;
    int startsAt = 0;
    jjnewStateCnt = 3;
    int i = 1;
    jjstateSet[0] = startState;
-   int j, kind = 0x7fffffff;
+   int kind = 0x7fffffff;
    for (;;)
    {
       if (++jjround == 0x7fffffff)
@@ -330,12 +331,12 @@ static final long[] jjbitVec41 = {
 };
 private final int jjMoveNfa_1(int startState, int curPos)
 {
-   int[] nextStates;
+   //int[] nextStates;
    int startsAt = 0;
    jjnewStateCnt = 5;
    int i = 1;
    jjstateSet[0] = startState;
-   int j, kind = 0x7fffffff;
+   int kind = 0x7fffffff;
    for (;;)
    {
       if (++jjround == 0x7fffffff)
@@ -606,8 +607,7 @@ public void SwitchTo(int lexState)
 {
    if (lexState >= 2 || lexState < 0)
       throw new TokenMgrError("Error: Ignoring invalid lexical state : " + lexState + ". State unchanged.", TokenMgrError.INVALID_LEXICAL_STATE);
-   else
-      curLexState = lexState;
+   curLexState = lexState;
 }
 
 protected Token jjFillToken()
@@ -632,8 +632,6 @@ int jjmatchedKind;
 
 public Token getNextToken() 
 {
-  int kind;
-  Token specialToken = null;
   Token matchedToken;
   int curPos = 0;
 
@@ -702,6 +700,9 @@ public Token getNextToken()
 
 void TokenLexicalActions(Token matchedToken)
 {
+    
+   matchedToken.toString();
+    
    switch(jjmatchedKind)
    {
       case 3 :

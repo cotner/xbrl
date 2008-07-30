@@ -17,7 +17,6 @@ import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xml.sax.EntityResolver;
-import org.xmldb.api.base.Collection;
 
 /**
  * Provides a base test case for tests using the Xindice data store.
@@ -96,7 +95,7 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 		if (! connection.hasCollection(storeParentPath)) {
 			throw new XBRLException("The parent collection for the data store does not exist.");
 		}
-		Collection parentCollection = connection.getCollection(storeParentPath);
+		//Collection parentCollection = connection.getCollection(storeParentPath);
 
 		return new StoreImpl((DBConnectionImpl) connection, storeParentPath, dataCollectionName);		
 	}	

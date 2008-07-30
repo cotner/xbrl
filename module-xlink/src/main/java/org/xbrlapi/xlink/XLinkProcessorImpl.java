@@ -157,9 +157,9 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 					xlinkHandler.error(namespaceURI,lName,qName,attrs,"Attributes in the XLink namespace must be accompanied by xlink:type or xlink:href");
 				}
 				return;
-			} else { // XLink 1.1 says we default to 'simple' if xlink:type is missing but xlink:href is present
-				xlType = "simple";
-			}
+			} 
+			// XLink 1.1 says we default to 'simple' if xlink:type is missing but xlink:href is present
+			xlType = "simple";
 		}
 		
 		// We have a potential XLink candidate

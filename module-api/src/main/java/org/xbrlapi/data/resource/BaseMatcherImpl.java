@@ -62,14 +62,13 @@ public abstract class BaseMatcherImpl implements Matcher {
      * @see org.xbrlapi.data.resource.Matcher#getSignature(URL)
      */
     public String getSignature(URL url) throws XBRLException {
-        URL cacheURL = cache.getCacheURL(url); // Caches if not already cached.
+        cache.getCacheURL(url); // Caches if not already cached.
         File cacheFile = cache.getCacheFile(url);
         if (cacheFile.exists()) {
             List<String> lines = getResourceContent(cacheFile);
             return getSignature().getSignature(lines);
-        } else {
-            return null;
         }
+        return null;
     }
 
     protected List<String> getResourceContent(File file) throws XBRLException {
@@ -77,7 +76,6 @@ public abstract class BaseMatcherImpl implements Matcher {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             List<String> lines = new Vector<String>();
             String line = null;
-            String document = "";
             while ((line=reader.readLine()) != null) {
                 lines.add(line);
             }

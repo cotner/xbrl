@@ -48,7 +48,7 @@ public class Fragment_LoaderIndependentTestCase extends BaseTestCase {
 	public void testExpectedExceptionCreatingFragmentWithNullIndex() {
 
 		try {
-			Fragment f = new MockFragmentImpl(null);
+			new MockFragmentImpl(null);
 			fail("An exception should be thrown if you create a fragment with a null index.");
 		} catch (XBRLException expected) {
 		}

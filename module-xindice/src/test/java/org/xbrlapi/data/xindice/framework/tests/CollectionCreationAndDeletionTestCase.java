@@ -3,7 +3,6 @@ package org.xbrlapi.data.xindice.framework.tests;
 import org.apache.xindice.client.xmldb.services.CollectionManager;
 import org.apache.xindice.util.XindiceException;
 import org.apache.xindice.xml.dom.DOMParser;
-import org.xbrlapi.data.xindice.DBConnectionImpl;
 import org.xbrlapi.utilities.BaseTestCase;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
@@ -15,7 +14,6 @@ import org.xmldb.api.base.XMLDBException;
 */
 public class CollectionCreationAndDeletionTestCase extends BaseTestCase {
 
-	private DBConnectionImpl connection;
 	private Collection collection;
 	private CollectionManager service;
 	

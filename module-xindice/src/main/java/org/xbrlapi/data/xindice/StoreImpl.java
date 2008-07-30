@@ -253,9 +253,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		Node node = resource.getContentAsDOM();
     	if (node.getNodeType() == Element.DOCUMENT_NODE) {
     		return ((Document) node).getDocumentElement();
-    	} else {
-    		return (Element) node;
     	}
+		return (Element) node;
     }    
     
 
@@ -340,9 +339,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             // Specify the index name
             if (name == null) {
             	throw new XBRLException("The index name was null.");
-            } else {
-            	element.setAttribute("name", name);
             }
+        	element.setAttribute("name", name);
             
             // Specify the type of index
             if (type.equalsIgnoreCase("name")) {
@@ -356,9 +354,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             // Specify the index pattern
             if (pattern == null) {
             	throw new XBRLException("The index pattern was null.");
-            } else {
-            	element.setAttribute("pattern", pattern);
             }
+        	element.setAttribute("pattern", pattern);
 
 	        // Create the indexer for this collection manager
             if (m == null) {
@@ -430,9 +427,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		
     	if (node.getNodeType() == Element.DOCUMENT_NODE) {
     		return (Document) node;
-    	} else {
-    		return ((Element) node).getOwnerDocument();  // May return a null value!
     	}
+		return ((Element) node).getOwnerDocument();  // May return a null value!
 	}
     
 }

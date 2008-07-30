@@ -113,7 +113,7 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 		
 		try {
 
-			Network network = networks.getNetwork(Constants.LabelArcRole,Constants.StandardLinkRole);
+			//Network network = networks.getNetwork(Constants.LabelArcRole,Constants.StandardLinkRole);
 			FragmentList<LabelResource> labels = networks.getTargetFragments(concept.getFragmentIndex(),Constants.LabelArcRole);
 			assertEquals(1,labels.getLength());
 			assertEquals(label.getStringValue(),labels.getFragment(0).getStringValue());

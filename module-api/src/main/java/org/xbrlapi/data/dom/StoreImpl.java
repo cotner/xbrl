@@ -247,9 +247,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		Element parent = (Element) parentNode;
     	if (parent.getTagName().equals(ROOT_NAME)) {
     		return indexMap.get(n);
-		} else {
-			return getIndex(parent);
 		}
+		return getIndex(parent);
 	}
 
 }

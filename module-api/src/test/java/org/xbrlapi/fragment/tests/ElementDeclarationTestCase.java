@@ -24,8 +24,6 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 		loader.discover(this.getURL(STARTING_POINT));		
 	}
 
-	private URL smallSchemaURL = null;
-
 	private String documentStart = 
 		"<?xml version=\"1.0\"?>\n"
 		+"<schema targetNamespace=\"http://www.xbrlapi.org/targetNamespace/\"\n"
@@ -195,6 +193,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
                 assertEquals(type, fragment.getTypeQName());
 
                 String prefix = fragment.getPrefixFromQName(type);
+                assertNotNull(prefix);
                 assertEquals(Constants.XBRL21Prefix , fragment.getTypeNamespaceAlias());
 
                 String namespace = fragment.getNamespaceFromQName(type,fragment.getDataRootElement());
@@ -227,6 +226,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
                 assertEquals(sg, fragment.getSubstitutionGroupQName());
 
                 String prefix = fragment.getPrefixFromQName(sg);
+                assertNotNull(prefix);
                 assertEquals(Constants.XBRL21Prefix , fragment.getSubstitutionGroupNamespaceAlias());
 
                 String namespace = fragment.getNamespaceFromQName(sg,fragment.getDataRootElement());

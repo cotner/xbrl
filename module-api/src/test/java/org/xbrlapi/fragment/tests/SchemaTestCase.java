@@ -37,6 +37,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 				Schema schema = fragments.getFragment(i);
 				if (schema.getTargetNamespaceURI().equals("schema.getTargetNamespaceURI")) {
 					FragmentList<Concept> concepts = schema.getConcepts();
+					assertTrue(concepts.getLength() > 0);
 					Concept concept = (Concept) fragments.getFragment(0);
 					assertEquals(4, schema.getConceptsBySubstitutionGroup(concept.getSubstitutionGroupNamespace(),concept.getSubstitutionGroupLocalname()).getLength());
 				}

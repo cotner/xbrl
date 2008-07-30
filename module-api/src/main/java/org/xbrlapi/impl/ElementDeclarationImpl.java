@@ -62,9 +62,10 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
      * @see org.xbrlapi.ElementDeclaration#getTypeQName()
      */
     public String getTypeQName() throws XBRLException {
-    	if (getDataRootElement().hasAttribute("type"))
+    	if (getDataRootElement().hasAttribute("type")) {
     		return getDataRootElement().getAttribute("type");
-    	else return null;
+    	}
+    	return null;
     }
 
     /**
@@ -119,7 +120,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     public String getSubstitutionGroupQName() throws XBRLException {
     	if (getDataRootElement().hasAttribute("substitutionGroup"))
     		return getDataRootElement().getAttribute("substitutionGroup");
-    	else return null;
+    	return null;
     }
 
     /**

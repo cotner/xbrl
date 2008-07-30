@@ -90,11 +90,11 @@ public class Handler extends DefaultHandler implements DTDHandler, DeclHandler {
     }
     
     public void characters(char buf[], int offset, int len) throws SAXException {
-	    String s = new String(buf, offset, len);
+	    //String s = new String(buf, offset, len);
     }
 
     public void ignorableWhitespace(char buf[], int offset, int len) throws SAXException {
-	    String s = new String(buf, offset, len).trim();
+	    //String s = new String(buf, offset, len).trim();
     }
 
     /**

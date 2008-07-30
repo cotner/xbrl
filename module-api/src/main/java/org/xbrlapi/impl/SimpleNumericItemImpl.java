@@ -39,7 +39,7 @@ public class SimpleNumericItemImpl extends NumericItemImpl implements SimpleNume
 		Matcher matcher = pattern.matcher(getValue());
         String digitsBeforeDecimal = "";
         String digitsAfterDecimal = "";
-        String exponent = "";
+        // String exponent = "";
         if (matcher.matches()) {
     		digitsBeforeDecimal = matcher.group(2);
     		digitsAfterDecimal= matcher.group(4);
@@ -71,7 +71,7 @@ public class SimpleNumericItemImpl extends NumericItemImpl implements SimpleNume
 		String decimals = getDecimals();
 		if (decimals.equals("INF")) return "INF";
 				
-		int d = new Integer(decimals).intValue();
+		//int d = new Integer(decimals).intValue();
 
 		// Parse the value into its components
 		Pattern pattern = Pattern.compile("^-?(\\d*)\\.?(\\d*)(e?(-?\\d*))?$", Pattern.CASE_INSENSITIVE);

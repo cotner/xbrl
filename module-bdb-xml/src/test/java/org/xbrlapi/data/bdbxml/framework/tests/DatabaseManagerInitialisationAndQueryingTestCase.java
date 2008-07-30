@@ -135,6 +135,7 @@ public class DatabaseManagerInitialisationAndQueryingTestCase extends BaseTestCa
 		    while (value != null) {
 		        XmlDocument theDoc = value.asDocument();
 		        String docName = theDoc.getName();
+		        assertNotNull(docName);
 		        String message = "Document ";
 		        message += theDoc.getName() + ":\n";
 		        message += value.asString();

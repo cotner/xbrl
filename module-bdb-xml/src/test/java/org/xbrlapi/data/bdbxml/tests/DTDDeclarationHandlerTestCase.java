@@ -31,6 +31,7 @@ public class DTDDeclarationHandlerTestCase extends BaseTestCase {
 	public void testStorageOfDocumentsWithDTDs() {
 		try {
 			List<String> urls = store.getStoredURLs();
+			assertTrue(urls.size() > 0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

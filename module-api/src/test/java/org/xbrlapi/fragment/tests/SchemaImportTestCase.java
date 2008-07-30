@@ -38,6 +38,7 @@ public class SchemaImportTestCase extends DOMLoadingTestCase {
 			for (SimpleLink link: links) {
 				try {
 					Fragment targetFragment = link.getTargetFragment();
+					assertNotNull(targetFragment);
 				} catch (XBRLException e) {
 					store.serialize(link.getMetadataRootElement());
 					e.printStackTrace();

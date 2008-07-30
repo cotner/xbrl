@@ -3,8 +3,6 @@ package org.xbrlapi.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.helpers.Loader;
 import org.w3c.dom.Element;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.data.Store;
@@ -18,7 +16,7 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class FragmentFactory<F> {
 
-	private static Logger logger = Logger.getLogger(Loader.class);
+	// private static Logger logger = Logger.getLogger(Loader.class);
 	
 	/**
 	 * Get the class for the specified class name.
@@ -36,9 +34,8 @@ public class FragmentFactory<F> {
                 } catch (Exception e) {
                     return Class.forName(className);
                 }
-            } else {
-                return Class.forName(className);
             }
+            return Class.forName(className);
         }
         catch (Exception e) {
             throw new XBRLException("Failed to load fragment class " + className,e);

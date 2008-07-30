@@ -14,7 +14,7 @@ import org.xmldb.api.modules.XMLResource;
 public class DBConnectionTestCase extends BaseTestCase {
 
 	private DBConnectionImpl connection;
-	private DBConnectionImpl failedConnection;
+	//private DBConnectionImpl failedConnection;
 
 	private final String scheme = configuration.getProperty("xindice.scheme");
 	private final String domain = configuration.getProperty("xindice.domain");
@@ -54,7 +54,7 @@ public class DBConnectionTestCase extends BaseTestCase {
 	 */
 	public final void testDBConnection() {
 		try {
-			DBConnectionImpl c = new DBConnectionImpl(domain,port,database);
+			new DBConnectionImpl(domain,port,database);
 		} catch (XBRLException e) {
 			fail("Failed to create a new database connection.");
 		}
@@ -65,7 +65,7 @@ public class DBConnectionTestCase extends BaseTestCase {
 	 */
 	public final void testDBConnection_FailsOnBadDomain() throws Exception {
 		try {
-			DBConnectionImpl failedConnection = new DBConnectionImpl("rubbish.xbrlapi.org", port, database);
+			new DBConnectionImpl("rubbish.xbrlapi.org", port, database);
 			fail("DB Connection was established despite incorrect host name for DB server.");
 		} catch (XBRLException expected) {
 		}
@@ -77,7 +77,7 @@ public class DBConnectionTestCase extends BaseTestCase {
 	 */
 	public final void testDBConnection_FailsOnPortError() throws Exception {
 		try {
-			DBConnectionImpl failedConnection = new DBConnectionImpl(domain, "8780", database);
+			new DBConnectionImpl(domain, "8780", database);
 			fail("DB Connection was established despite incorrect port.");
 		} catch (XBRLException expected) {			
 		}
@@ -89,7 +89,7 @@ public class DBConnectionTestCase extends BaseTestCase {
 	 */
 	public final void testDBConnection_FailsOnDatabaseName() throws Exception {
 		try {
-			DBConnectionImpl failedConnection = new DBConnectionImpl(domain, port, "wrongDBName");
+			new DBConnectionImpl(domain, port, "wrongDBName");
 			fail("DB Connection was established despite incorrect name for database.");
 		} catch (XBRLException expected) {
 		}

@@ -17,7 +17,7 @@ import org.xmldb.api.modules.XMLResource;
 public class DBConnectionTestCase extends BaseTestCase {
 
 	private DBConnectionImpl connection;
-	private DBConnectionImpl failedConnection;
+	//private DBConnectionImpl failedConnection;
 
 	private String scheme = configuration.getProperty("exist.scheme");
 	private String domain = configuration.getProperty("exist.domain");
@@ -68,7 +68,7 @@ public class DBConnectionTestCase extends BaseTestCase {
 	 */
 	public final void testDBConnection() {
 		try {
-			DBConnectionImpl c = new DBConnectionImpl(domain,port,database, username, password);
+			new DBConnectionImpl(domain,port,database, username, password);
 		} catch (XBRLException e) {
 			fail("No XBRLAPI exception was expected on this eXist DB connection test.  " + e.getMessage());
 		}

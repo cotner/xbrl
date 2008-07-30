@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.data.Store;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -62,7 +61,7 @@ public class DiscoveryManager implements Runnable {
                     loader.stashURL(resource);
                 }                
 
-                Store store = loader.getStore();
+                //Store store = loader.getStore();
                 Discoverer discoverer = new Discoverer(loader);
                 Thread thread = new Thread(discoverer);
                 thread.start();

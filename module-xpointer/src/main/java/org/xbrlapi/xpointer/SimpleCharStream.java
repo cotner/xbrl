@@ -110,8 +110,7 @@ public class SimpleCharStream
            inputStream.close();
            throw new java.io.IOException();
         }
-        else
-           maxNextCharInd += i;
+        maxNextCharInd += i;
         return;
      }
      catch(java.io.IOException e) {
@@ -289,7 +288,7 @@ public class SimpleCharStream
   public SimpleCharStream(java.io.InputStream dstream, int startline,
   int startcolumn, int buffersize)
   {
-     this(new java.io.InputStreamReader(dstream), startline, startcolumn, 4096);
+     this(new java.io.InputStreamReader(dstream), startline, startcolumn, buffersize);
   }
 
   public SimpleCharStream(java.io.InputStream dstream, int startline,
@@ -306,7 +305,7 @@ public class SimpleCharStream
   public void ReInit(java.io.InputStream dstream, int startline,
                           int startcolumn, int buffersize)
   {
-     ReInit(new java.io.InputStreamReader(dstream), startline, startcolumn, 4096);
+     ReInit(new java.io.InputStreamReader(dstream), startline, startcolumn, buffersize);
   }
 
   public void ReInit(java.io.InputStream dstream)
@@ -322,9 +321,8 @@ public class SimpleCharStream
   {
      if (bufpos >= tokenBegin)
         return new String(buffer, tokenBegin, bufpos - tokenBegin + 1);
-     else
-        return new String(buffer, tokenBegin, bufsize - tokenBegin) +
-                              new String(buffer, 0, bufpos + 1);
+     return new String(buffer, tokenBegin, bufsize - tokenBegin) +
+                           new String(buffer, 0, bufpos + 1);
   }
 
   public char[] GetSuffix(int len)

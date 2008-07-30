@@ -88,7 +88,6 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
         logger.debug(id + " has " + directEquivalents.getLength() + " direct equivalents.");
         for (EntityResource candidate: directEquivalents) {
             EntityResourceImpl impl = (EntityResourceImpl) candidate;
-            String implId = impl.getStringIdentifier();
             if(! map.containsKey(impl.getStringIdentifier())) {
                 impl.getEquivalentsMap(map);
             }

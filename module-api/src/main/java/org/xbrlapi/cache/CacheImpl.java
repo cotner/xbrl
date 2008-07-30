@@ -1,17 +1,5 @@
 package org.xbrlapi.cache;
 
-/**
- * Translates 
- * 1. original URLs into cache File objects or cache URL objects
- * 2. cache URLs into original URL objects
- * The translation from cache URLs to original URLs is a hack that
- * enables relative URLs in cached files to be identified as such an
- * resolved to obtain the original URL of the resource identified
- * by the relative URL.
- * This class also provides a method for testing if a URL is a cache URL.
- * @author Geoffrey Shuetrim (geoff@galexy.net) 
- */
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -27,6 +15,17 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.xbrlapi.utilities.XBRLException;
 
+/**
+ * Translates 
+ * 1. original URLs into cache File objects or cache URL objects
+ * 2. cache URLs into original URL objects
+ * The translation from cache URLs to original URLs is a hack that
+ * enables relative URLs in cached files to be identified as such an
+ * resolved to obtain the original URL of the resource identified
+ * by the relative URL.
+ * This class also provides a method for testing if a URL is a cache URL.
+ * @author Geoffrey Shuetrim (geoff@galexy.net) 
+ */
 public class CacheImpl {
 
 	Logger logger = Logger.getLogger(CacheImpl.class);
@@ -148,9 +147,8 @@ public class CacheImpl {
     		if (! cacheFile.exists()) {
     			logger.info(System.currentTimeMillis() + " " + originalURL + " could not be cached.");
     			return originalURL;
-    		} else {
-    			return cacheFile.toURI().toURL();
     		}
+			return cacheFile.toURI().toURL();
         } catch (MalformedURLException e) {
             throw new XBRLException(url + " is a malformed URL.", e);
         }
@@ -194,8 +192,6 @@ public class CacheImpl {
 		
         path = path.substring(1);
         
-        String filename = url.getFile();
-
 		// Retrieve the protocol
 		String[] components = path.split("/");
 		String protocol = components[0];
@@ -356,10 +352,9 @@ public class CacheImpl {
     /**
      * Delete a resource from the cache.
      * @param url The original or the cache URL.
-     * @throws XBRLException
      */
-    public void purge(URL url) throws XBRLException {
-    	URL originalURL = getOriginalURL(url);
+    public void purge(URL url) {
+    	//URL originalURL = getOriginalURL(url);
 		File file = this.getCacheFile(url);
 		file.delete();
         logger.info("Purged " + file);

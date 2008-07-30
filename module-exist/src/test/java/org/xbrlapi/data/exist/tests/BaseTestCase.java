@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.xbrlapi.SAXHandlers.EntityResolverImpl;
-import org.xbrlapi.data.exist.DBConnection;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.data.exist.DBConnection;
 import org.xbrlapi.data.exist.DBConnectionImpl;
 import org.xbrlapi.data.exist.StoreImpl;
 import org.xbrlapi.loader.Loader;
@@ -17,7 +17,6 @@ import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xml.sax.EntityResolver;
-import org.xmldb.api.base.Collection;
 
 /**
  * Provides a base test case for tests involving the eXist database.
@@ -101,7 +100,7 @@ abstract public class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 		if (! connection.hasCollection(storeParentPath)) {
 			throw new XBRLException("The parent collection for the data store does not exist.");
 		}
-		Collection parentCollection = connection.getCollection(storeParentPath);
+		//Collection parentCollection = connection.getCollection(storeParentPath);
 	
 		return new StoreImpl((DBConnectionImpl) connection, storeParentPath, dataCollectionName);
 
