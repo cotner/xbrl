@@ -94,7 +94,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
           <systemProperties>
             <property>
               <name>xbrlapi.test.configuration</name>
-              <value>/home/geoff/eclipse/xbrlapi/test.configuration.properties</value>
+              <value>../test.configuration.properties</value>
             </property>
           </systemProperties>
         </configuration>
@@ -106,6 +106,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <testResource><!-- Specified to ensure that the log4j configuration file is found. -->
         <directory>../conf</directory>
         <includes>
+          <include>log4j.dtd</include>
           <include>log4j.xml</include>
         </includes>
       </testResource>

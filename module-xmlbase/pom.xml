@@ -70,7 +70,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
           <systemProperties>
             <property>
               <name>xbrlapi.test.configuration</name>
-              <value>/home/geoff/eclipse/xbrlapi/test.configuration.properties</value>
+              <value>../test.configuration.properties</value>
             </property>
           </systemProperties>
         </configuration>
