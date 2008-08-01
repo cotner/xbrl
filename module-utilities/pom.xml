@@ -6,7 +6,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <groupId>org.xbrlapi</groupId>
   <artifactId>xbrlapi-utilities</artifactId>
   <packaging>jar</packaging>
-  <version>3.2</version>
+  <version>3.3</version>
   <name>XBRLAPI Utilities</name>
   <url>http://www.xbrlapi.org</url>
   <description>The XBRLAPI utilities</description>
