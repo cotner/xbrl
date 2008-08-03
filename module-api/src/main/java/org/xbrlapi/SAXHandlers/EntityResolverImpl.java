@@ -19,8 +19,9 @@ import org.xml.sax.InputSource;
 
 /**
  * Entity resolver that dynamically adds to the local document
- * cache and that gives preference to the local cache as resources
- * are identified by the resolution process.
+ * cache if it is set up and that gives preference to the local 
+ * cache (if it is set up) as resources are identified by the 
+ * resolution process.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
@@ -32,6 +33,14 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
      * The local document cache.
      */
     private CacheImpl cache = null;
+
+    /**
+     * Construct the entity resolver without a cache.
+     */
+    public EntityResolverImpl() {
+        ;
+    }
+    
     
     /**
      * Construct the entity resolver by storing the cache root.
@@ -70,8 +79,11 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
     	
     	try {
     		URL url = new URL(systemId);
-    		URL cacheURL = cache.getCacheURL(url);
-    		return new InputSource(cacheURL.toString());
+    		if (hasCache()) { 
+    		    url = cache.getCacheURL(url);
+    		}
+    		return new InputSource(url.toString());
+
     	} catch (XBRLException e) {
     		logger.warn("Cache handling for " + systemId + "failed.");
     		return new InputSource(systemId);
@@ -81,11 +93,18 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
     	}
 
     }
-    
+
+    /**
+     * @return true if the resolver has a cache and false otherwise.
+     */
+    private boolean hasCache() {
+        if (cache == null) return false;
+        return true;
+    }
     
 	/**
 	 * Implements the resolveEntity method defined in the org.apache.xerces.xni.parser.XMLEntityResolver
-	 * interface, incorporating interactions with the local document cache to ensure that any
+	 * interface, incorporating interactions with the local document cache (if it exists) to ensure that any
 	 * new documents are cached and any documents already in the cache are sourced from the cache.
 	 * @param resource The XML Resource Identifier used to identify the XML resource to be converted
 	 * into an XML input source and to be cached if it is not already cached.
@@ -96,11 +115,12 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
 		try {
 			
 			URL url = new URL(resource.getExpandedSystemId());
-			URL cacheURL = cache.getCacheURL(url);
-
-			logger.debug(System.currentTimeMillis() + " SCHEMA: Resolving the entity for " + cacheURL);
+			if (hasCache()) {
+			    url = cache.getCacheURL(url);
+			}
+			logger.debug(System.currentTimeMillis() + " SCHEMA: Resolving the entity for " + url);
 			
-			return new XMLInputSource(resource.getPublicId(),cacheURL.toString(), cacheURL.toString());
+			return new XMLInputSource(resource.getPublicId(),url.toString(), url.toString());
 			
     	} catch (XBRLException e) {
     		logger.warn("Cache handling for " + resource.getExpandedSystemId() + "failed.");
