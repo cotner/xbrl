@@ -779,7 +779,7 @@ public class LoaderImpl implements Loader {
     private void parse(URL url) throws XBRLException {
 
         try {
-            InputSource inputSource = this.entityResolver.resolveEntity("", url.toString());
+            InputSource inputSource = this.getEntityResolver().resolveEntity("", url.toString());
             ContentHandler contentHandler = new ContentHandlerImpl(this, url);
             parse(url, inputSource, contentHandler);
         } catch (SAXException e) {
