@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.SAXHandlers.ContentHandlerImpl;
 import org.xbrlapi.SAXHandlers.ElementState;
+import org.xbrlapi.SAXHandlers.EntityResolverImpl;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.Constants;
@@ -122,9 +123,9 @@ public class LoaderImpl implements Loader {
 
     /**
      * The entity resolver to use for resolution of entities (URLs etc) during
-     * the loading/discovery process
+     * the loading/discovery process.  Defaults to one without a caching system.
      */
-    private EntityResolver entityResolver;
+    private EntityResolver entityResolver = new EntityResolverImpl();
 
     /**
      * The XPointer resolver
@@ -217,13 +218,14 @@ public class LoaderImpl implements Loader {
 
         // Set the XPointer resolver for this document
         this.setPointerResolver(new PointerResolverImpl(this.getStore()));
-        try {
+
+/*      try {
             this.stashURL(new URL(Constants.ROLES_URL));
         } catch (MalformedURLException e) {
             throw new XBRLException("The XBRL 2.1 roles URL is malformed: "
                     + Constants.ROLES_URL, e);
         }
-
+*/
     }
 
     /**
@@ -771,9 +773,7 @@ public class LoaderImpl implements Loader {
 
     /**
      * Parse an XML Document supplied as a URL the next part of the DTS.
-     * 
-     * @param url
-     *            The URL of the document to parse.
+     * @param url The URL of the document to parse.
      * @throws XBRLException
      */
     private void parse(URL url) throws XBRLException {
