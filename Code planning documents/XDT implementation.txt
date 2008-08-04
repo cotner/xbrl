@@ -1,0 +1,18 @@
+Implementation requirements:
+ 
+1. SAX content handler needs to be able to detect usage of XDT dimensions.
+  
+2.  Need subclasses of concepts to reflect:
+  1. Hypercubes
+  2. Dimensions
+  3. Domain members
+  
+3. Need a new schema content fragment for:
+  1. Typed dimensions
+  
+4. Need to be able handle custom simple links from typed dimensions to 
+their content model specifications.
+
+5. Need to be able to handle XDT definition relationships.
+
+6. Need to be able to work with XDT dimension  
