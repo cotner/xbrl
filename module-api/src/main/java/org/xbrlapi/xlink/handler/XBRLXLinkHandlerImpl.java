@@ -30,15 +30,12 @@ import org.xbrlapi.xmlbase.BaseURLSAXResolver;
 import org.xbrlapi.xmlbase.XMLBaseException;
 import org.xbrlapi.xpointer.resolver.PointerResolver;
 import org.xml.sax.Attributes;
+
 /**
  * XBRL XLink Handler
- * 
  * This class provides a real world example of an XLink handler for XBRL.
- * 
- * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
 */
-
 public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 
 	protected static Logger logger = Logger.getLogger(XBRLXLinkHandlerImpl.class);	
@@ -58,14 +55,6 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	 * The base URL resolver used by the XLink handler
 	 */
 	private BaseURLSAXResolver baseURLResolver;
-		
-	/**
-	 * The depth of the element being examined for XLink 
-	 * characteristics in the containing tree.  This is updated
-	 * by the content handler each time a new element is started
-	 * by the content handler.
-	 */
-	private long depth;
 	
     /**
      * Data required to track the element scheme XPointer 
@@ -130,7 +119,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			title = new TitleImpl();
 			title.setFragmentIndex(getLoader().getNextFragmentId());
 
-			loader.addFragment(title,depth, state);
+			loader.addFragment(title,getState());
 		} catch (XBRLException e) {
 			throw new XLinkException("The title could not be created and stored.",e);
 		}
@@ -192,7 +181,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 				link.appendID(attrs.getValue("id"));
 				state.setId(attrs.getValue("id"));
 			}
-			getLoader().addFragment(link,depth, state);
+			getLoader().addFragment(link,getState());
 		} catch (XBRLException e) {
 			throw new XLinkException("The extended link could not be created.",e);
 		}
@@ -260,7 +249,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 				state.setId(attrs.getValue("id"));
 			}
 
-			getLoader().addFragment(resource,depth, state);
+			getLoader().addFragment(resource,getState());
 		} catch (XBRLException e) {
 			throw new XLinkException("The resource could not be created.",e);
 		}
@@ -293,7 +282,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			Locator locator = new LocatorImpl();
 			locator.setFragmentIndex(loader.getNextFragmentId());
 			locator.setTarget(url);
-			loader.addFragment(locator,depth, state);
+			loader.addFragment(locator,getState());
 			loader.stashURL(url);
 		} catch (MalformedURLException e) {
 			throw new XLinkException("The locator href is malformed.",e);
@@ -329,7 +318,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 		try {
 			Arc arc = new ArcImpl();				
     		arc.setFragmentIndex(getLoader().getNextFragmentId());
-			getLoader().addFragment(arc,depth, state);
+			getLoader().addFragment(arc,getState());
 		} catch (XBRLException e) {
 			throw new XLinkException("The arc could not be created.",e);
 		}
@@ -366,7 +355,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			SimpleLink link = new SimpleLinkImpl();
 			link.setFragmentIndex(getLoader().getNextFragmentId());
 			link.setTarget(url);
-			loader.addFragment(link,depth, state);
+			loader.addFragment(link,getState());
 			loader.stashURL(url);
 			
 		} catch (MalformedURLException e) {
@@ -397,14 +386,6 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 		return loader;
 	}
 
-	public void setDepth(long depth) {
-		this.depth = depth; 
-	}
-	
-	private long getDepth() {
-		return depth; 
-	}
-	
 	public void setState(ElementState state) {
 		this.state = state; 
 	}

@@ -49,14 +49,14 @@ public class ElementState {
 		super();
 	}
 	
-	private boolean hasParent() {
+	public boolean hasParent() {
 		if (parent == null) return false;
 		return true;
 	}
 	
 	private String getOrderAsString() {
 		return (new Long(order)).toString();
-	}	
+	}  	
 	
 	public ElementState getParent() {
 		return parent;
@@ -106,4 +106,5 @@ public class ElementState {
 		return pointers;
 	}
 	
+
 }

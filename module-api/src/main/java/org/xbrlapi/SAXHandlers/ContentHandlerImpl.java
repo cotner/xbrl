@@ -140,31 +140,7 @@ public class ContentHandlerImpl extends DefaultHandler {
      */
     protected void setLocator(Locator locator) {
         this.locator = locator;
-    }
-    
-    /**
-     * Element depth of the tree being parsed.  This is used to 
-     * ensure that the loader knows when a fragment has finished 
-     * being built.  This starts at 0 and is incremented for each
-     * startElement event and decremented for each end element 
-     * event.
-     * TODO eliminate depth from the SAX content handler in favour of the ElementState.
-     */
-    private long depth = 0;
-
-    /**
-     * @return the fragment depth.
-     */
-    protected long getDepth() {
-        return depth;
-    }
-    
-    /**
-     * @param depth The value to set the fragment depth to.
-     */
-    protected void setDepth(long depth) {
-        this.depth = depth;
-    }
+    }    
     
     /**
      * Data required to track the element scheme XPointer 
@@ -217,7 +193,7 @@ public class ContentHandlerImpl extends DefaultHandler {
 		this.loader = loader;
 		this.url = url;
 		
-	    nsStack.push(new HashMap<String,String>());
+	    getNSStack().push(new HashMap<String,String>());
 		
 	}
 	
@@ -234,7 +210,6 @@ public class ContentHandlerImpl extends DefaultHandler {
 	public ContentHandlerImpl(Loader loader, URL url, String xml) throws XBRLException {
 		this(loader, url);
 		this.xml = xml;
-		
 	}	
     
     protected Loader getLoader() {
@@ -280,7 +255,7 @@ public class ContentHandlerImpl extends DefaultHandler {
 
     	// Set the base URL resolver for this document
     	try {
-    		// TODO Can we use the url property of the content handler instead of the loader document URL?
+    		// TODO ???? Can we use the url property of the content handler instead of the loader document URL?
     		String thisDocumentURL = this.getLoader().getDocumentURL();
     		this.baseURLSAXResolver = new BaseURLSAXResolverImpl(new URL(thisDocumentURL));
     		xbrlXlinkHandler.setBaseURLSAXResolver(this.baseURLSAXResolver);
@@ -315,17 +290,14 @@ public class ContentHandlerImpl extends DefaultHandler {
             String qName, 
             Attributes attrs) throws SAXException {
         
-        // Update element depth and child count.
-        setDepth(getDepth()+1);
-        
+        // Update the information about the state of the current element
+        setState(new ElementState(getState()));
+
         try {
             getLoader().incrementChildren();
         } catch (XBRLException e) {
             throw new SAXException("Could not record a new child for the fragment being parsed.",e);
         }
-        
-        // Update the information about the state of the current element
-        setState(new ElementState(getState()));
         
         // Stash new URLs in xsi:schemaLocation attributes if desired
         if (getLoader().useSchemaLocationAttributes()) {
@@ -348,7 +320,6 @@ public class ContentHandlerImpl extends DefaultHandler {
                 }
             }
         }
-
         
         // Try to identify a new fragment
         // This code will replace all following code eventually.
@@ -367,8 +338,7 @@ public class ContentHandlerImpl extends DefaultHandler {
         // Handle XLink fragments
         try {
 
-            // First let the XLink handler know the depth of the element being processed in case it makes a fragment
-            getXLinkHandler().setDepth(getDepth());
+            // First let the XLink handler know the element state in case it makes a fragment
             getXLinkHandler().setState(getState());
             
             // Next pass control to the XLink processor so it can recognise and respond to XLink elements
@@ -486,7 +456,7 @@ public class ContentHandlerImpl extends DefaultHandler {
                         schemaFragment.appendID(fragmentID);
                         getState().setId(fragmentID);
                     }
-                    getLoader().addFragment(schemaFragment,getDepth(),getState());
+                    getLoader().addFragment(schemaFragment,getState());
                 }
             }
             
@@ -526,7 +496,7 @@ public class ContentHandlerImpl extends DefaultHandler {
                         xbrlFragment.appendID(attrs.getValue("id"));
                         getState().setId(attrs.getValue("id"));
                     }
-                    getLoader().addFragment(xbrlFragment,getDepth(),getState());
+                    getLoader().addFragment(xbrlFragment,getState());
                 }
             }
         } catch (XBRLException e) {
@@ -544,7 +514,7 @@ public class ContentHandlerImpl extends DefaultHandler {
 
             if (referencePartFragment != null) {
                 referencePartFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                getLoader().addFragment(referencePartFragment,getDepth(),getState());
+                getLoader().addFragment(referencePartFragment,getState());
             }
             
         } catch (XBRLException e) {
@@ -591,7 +561,7 @@ public class ContentHandlerImpl extends DefaultHandler {
                         xbrlLinkFragment.appendID(attrs.getValue("id"));
                         getState().setId(attrs.getValue("id"));
                     }
-                    getLoader().addFragment(xbrlLinkFragment,getDepth(),getState());          
+                    getLoader().addFragment(xbrlLinkFragment,getState());          
                 }
             }
 
@@ -627,7 +597,7 @@ public class ContentHandlerImpl extends DefaultHandler {
                         factFragment.appendID(attrs.getValue("id"));
                         getState().setId(attrs.getValue("id"));
                     }
-                    getLoader().addFragment(factFragment,getDepth(),getState());
+                    getLoader().addFragment(factFragment,getState());
                 }
 
             } catch (XBRLException e) {
@@ -646,7 +616,7 @@ public class ContentHandlerImpl extends DefaultHandler {
 
             if (languageFragment != null) {
                 languageFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                getLoader().addFragment(languageFragment,getDepth(),getState());
+                getLoader().addFragment(languageFragment,getState());
             }
             
         } catch (XBRLException e) {
@@ -655,11 +625,11 @@ public class ContentHandlerImpl extends DefaultHandler {
         
         // Add a generic fragment for a document root element if we have not already done so
         if (! getLoader().addedAFragment()) {
-            if (getDepth() == 1) {
+            if (! getState().hasParent()) {
                 try {
                     Fragment root = new FragmentImpl();
                     root.setFragmentIndex(getLoader().getNextFragmentId());
-                    getLoader().addFragment(root,1,getState());
+                    getLoader().addFragment(root,getState());
                 } catch (XBRLException e) {
                     throw new SAXException("The default root element fragment could not be created.",e);
                 }
@@ -733,7 +703,7 @@ public class ContentHandlerImpl extends DefaultHandler {
 
         // Give the loader a chance to update its state
         try {
-            getLoader().updateState(getDepth());
+            getLoader().updateState(getState());
         } catch (XBRLException e) {
             throw new SAXException("The state of the loader could not be updated at the end of element " + namespaceURI + ":" + sName + "." + e.getMessage(),e);
         }
@@ -754,7 +724,7 @@ public class ContentHandlerImpl extends DefaultHandler {
                 this.canBeATuple = true;
             } else if (sName.equals("reference")) {
                 this.parsingAReferenceResource = false;
-            }           
+            }
         } else if (namespaceURI.equals(Constants.XBRL21Namespace)) {
             if (sName.equals("context")) {
                 this.canBeATuple = true;    
@@ -763,9 +733,6 @@ public class ContentHandlerImpl extends DefaultHandler {
             }
         }
         
-        // We have finished with an element so move one step up the document tree, reducing the depth of the current element by 1
-        setDepth(getDepth() - 1);
-
         // Update the information about the state of the current element
         setState(getState().getParent());
         
@@ -780,11 +747,13 @@ public class ContentHandlerImpl extends DefaultHandler {
     public void characters(char buf[], int offset, int len) 
         throws SAXException 
     {
+        // TODO ???? Consider deleting this next try statement.  It does nothing.
     	try {
     		getLoader().getXlinkProcessor().titleCharacters(buf, offset, len);
     	} catch (XLinkException e) {
-    		throw new SAXException("The XLink processor startElement failed.",e);
+    		throw new SAXException("The XLink processor title characters handling failed.",e);
     	}
+
 		try {
 		    String s = new String(buf, offset, len);
 		    getLoader().getFragment().getBuilder().appendText(s);

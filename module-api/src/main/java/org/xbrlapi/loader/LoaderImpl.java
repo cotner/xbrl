@@ -41,11 +41,17 @@ import org.xml.sax.XMLReader;
 
 /**
  * Implementation of the XBRL API Loader interface. The loader is responsible
- * for managing the DTS discovery process. It manages the queue of documents to
- * be explored; it provides the XLink Processor that is used to process the
- * links within the documents being explored; and it directs the DTS information
- * to the supplied data store. The loader is also responsible for triggering
- * creation of the XBRL fragments that get placed into the data store.
+ * for managing the DTS discovery process. It manages:
+ * 1. the queue of documents to be explored
+ * 2. the document discovery process
+ * 3. the stack of fragments being built and stored
+ * 4. The fragment naming scheme
+ * 
+ * Features of the loader include:
+ * 1. The ability to interupt the document discovery process
+ * between documents without losing track of the documents
+ * remaining to be discovered.  Interrupts can be requested and 
+ * cancelled.
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
@@ -64,13 +70,23 @@ public class LoaderImpl implements Loader {
      */
     private Stack<Fragment> fragments = new Stack<Fragment>();
 
-    /**
-     * The stack of fragment depths used to decide when a fragment has been
-     * fully built. Each time a new fragment is created, record the depth of its
-     * root element in the stack of depths maintained by the loader.
-     */
-    private Stack<Long> depths = new Stack<Long>();
 
+
+
+    /**
+     * A stack of element states, one per root element
+     * of a fragment currently undergoing construction.
+     */
+    Stack<ElementState> states = new Stack<ElementState>();
+    
+    /**
+     * @return the stack of element states for the root
+     * elements of the fragments currently being built.
+     */
+    private Stack<ElementState> getStates() {
+        return this.states;
+    }    
+    
     /**
      * The cache to use when discovering XML materials specified as a String
      * rather than just via a URL that resolves to the required XML.
@@ -200,18 +216,9 @@ public class LoaderImpl implements Loader {
     public LoaderImpl(Store store, XLinkProcessor xlinkProcessor)
             throws XBRLException {
         super();
-
-        if (store == null) {
-            throw new XBRLException("The data store must not be null.");
-        }
-        this.store = store;
-        if (xlinkProcessor == null) {
-            throw new XBRLException("The XLink processor must not be null.");
-        }
-        this.xlinkProcessor = xlinkProcessor;
-
-        // Set the XPointer resolver for this document
-        this.setPointerResolver(new PointerResolverImpl(this.getStore()));
+        setStore(store);
+        setXlinkProcessor(xlinkProcessor);
+        this.setPointerResolver(new PointerResolverImpl(getStore()));
 
 /*      
  * Do not try to anticipate the URLs that will be part of the DTS to load!
@@ -225,17 +232,10 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Create a loader with a set of URLs of starting points to seed the
-     * discovery process.
-     * 
-     * @param store
-     *            The data store to hold the DTS
-     * @param xlinkProcessor
-     *            The XLink processor to use for link resolution
-     * @param urls
-     *            The array of URLs for loading
-     * @throws XBRLException
-     *             if the loader cannot be instantiated.
+     * @param store The data store to hold the DTS
+     * @param xlinkProcessor The XLink processor to use for link resolution
+     * @param urls The array of URLs for loading.
+     * @throws XBRLException if the loader cannot be instantiated.
      */
     public LoaderImpl(Store store, XLinkProcessor xlinkProcessor, List<URL> urls)
             throws XBRLException {
@@ -243,39 +243,21 @@ public class LoaderImpl implements Loader {
         setStartingURLs(urls);
     }
 
-    /**
-     * Create a loader supplying a file location of a serialised set of
-     * documents to seed the discovery process. TODO Move the loader constructor
-     * that uses a serialised set of documents to a separate class
-     * 
-     * @param store
-     *            The data store to hold the DTS
-     * @param xlinkProcessor
-     *            The XLink processor to use for link resolution
-     * @param file
-     *            The file location of the serialised DTS to load
-     * @throws XBRLException
-     *             if the loader cannot be instantiated.
-     */
-    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor, File file)
-            throws XBRLException {
-        this(store, xlinkProcessor);
-        throw new XBRLException(
-                "Still to implement loading a serialised data set.");
 
-    }
 
     /**
-     * Set the data store to be used by the loader TODO Decide if the loader
-     * setStore method should be private or public
+     * Set the data store to be used by the loader.
+     * @throws XBRLException if the given store is null.
      */
-    private void setStore(Store store) {
+    private void setStore(Store store) throws XBRLException {
+        if (store == null) {
+            throw new XBRLException("The data store must not be null.");
+        }
         this.store = store;
     }
 
     /**
-     * Get the data store used by a loader TODO should the loader getStore
-     * method be public or private
+     * Get the data store used by a loader.
      */
     public Store getStore() {
         return store;
@@ -311,10 +293,13 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Set the XLink processor used by the loader. TODO Should the setter for
-     * the loader Xlink Processor be public?
+     * Set the XLink processor used by the loader.
+     * @throws XBRLException if the given XLink processor is null.
      */
-    private void setXlinkProcessor(XLinkProcessor xlinkProcessor) {
+    private void setXlinkProcessor(XLinkProcessor xlinkProcessor) throws XBRLException {
+        if (xlinkProcessor == null) {
+            throw new XBRLException("The XLink processor must not be null.");
+        }
         this.xlinkProcessor = xlinkProcessor;
     }
 
@@ -419,8 +404,9 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Remove the last element in the children vector. This is done when we are
-     * finished with processing an element or fragment.
+     * Remove the last element in the children vector. 
+     * This is done when we are finished with processing 
+     * an element or fragment.
      * 
      * @throws XBRLException
      */
@@ -428,24 +414,15 @@ public class LoaderImpl implements Loader {
         if (getChildrenVector().size() > 0)
             getChildrenVector().removeElementAt(getChildrenVector().size() - 1);
         else
-            throw new XBRLException(
-                    "The element being completed has a corrupted child count.");
+            throw new XBRLException("The element being completed has a corrupted child count.");
     }
 
     /**
-     * Check for completion of a fragment by comparing the depth parameter with
-     * the depth recorded for the root element of the fragment currently being
-     * built. If a fragment is completed, remove the fragment from the stack
-     * being maintained by the loader, store it in the data store and make the
-     * necessary update to the stack of child counts for the fragments.
-     * 
-     * @param depth
-     *            The depth (in the document being parsed) of the element that
-     *            has just been completed.
-     * @throws XBRLException
+     * @see org.xbrlapi.loader.Loader#updateState(long)
      */
-    public void updateState(long depth) throws XBRLException {
-        if (depth == (depths.peek()).longValue()) {
+    public void updateState(ElementState state) throws XBRLException {
+
+        if (getStates().peek() == state) {
             this.removeFragment();
         } else {
             this.reduceChildren();
@@ -453,11 +430,7 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Get the fragment that is currently being built by the DTS loader
-     * 
-     * @return the fragment being built currently by the DTS loader or null if
-     *         no fragments are being built by the loader.
-     * @throws XBRLException
+     * @see org.xbrlapi.loader.Loader#getFragment()
      */
     public Fragment getFragment() throws XBRLException {
         if (fragments.isEmpty())
@@ -466,18 +439,9 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Push a new fragment onto the stack of fragments that are being built by
-     * the loader. Record the depth of the fragment root element in the document
-     * that is being parsed so that it is possible to decide when that fragment
-     * has finished being parsed.
-     * 
-     * @param fragment
-     *            The fragment to be added to the stack of fragments being built
-     *            by the loader.
-     * @throws XBRLException
-     *             if the fragment cannot be added to the store.
+     * @see org.xbrlapi.loader.Loader#addFragment(Fragment, ElementState)
      */
-    public void addFragment(Fragment fragment, long depth, ElementState state)
+    public void addFragment(Fragment fragment, ElementState state)
             throws XBRLException {
 
         // Get the XPointer expressions that identify the root of this fragment
@@ -487,15 +451,13 @@ public class LoaderImpl implements Loader {
             fragment.appendElementSchemeXPointer(pointer);
         }
 
-        // Set the metadata for the fragment to enable document reconstruction
+        // Set the document reconstruction metadata for the fragment
         Vector<Long> children = getChildrenVector();
         if (children != null) {
             Fragment parent = getFragment();
-            if (parent == null)
-                throw new XBRLException("The parent fragment is missing.");
+            if (parent == null) throw new XBRLException("The parent fragment is missing.");
             String parentIndex = parent.getFragmentIndex();
-            if (parentIndex == null)
-                throw new XBRLException("The parent index is null.");
+            if (parentIndex == null) throw new XBRLException("The parent index is null.");
             fragment.setParentIndex(parentIndex);
             fragment.setSequenceToParentElement(children);
             fragment.setPrecedingSiblings(children);
@@ -508,8 +470,8 @@ public class LoaderImpl implements Loader {
         // Push the fragment onto the stack of fragments
         fragments.add(fragment);
 
-        // Push the depth of the fragment root onto the stack of fragment depths
-        depths.add(new Long(depth));
+        // Push the element state onto the stack of fragment root element states
+        getStates().add(state);
 
         // Push a new child count vector onto the stack of child count vectors
         prepareToTrackChildrenForNewFragment();
@@ -525,7 +487,7 @@ public class LoaderImpl implements Loader {
      * 
      * @return true iff the element that has just been found has triggered the
      *         addition of a fragment.
-     * @throws XBRLException.
+     * TODO ???? Prevent the addedAFragment method from operating via a side-effect.
      */
     public boolean addedAFragment() {
         boolean temp = this.newFragmentAdded;
@@ -535,14 +497,15 @@ public class LoaderImpl implements Loader {
 
     /**
      * Remove a fragment from the stack of fragments that are being built by the
-     * loader. TODO Make this method less public.
-     * 
+     * loader. 
+     * TODO Make Loader.removeFragment() private.
      * @throws XBRLException
      *             if their are no fragments being built.
      */
     public Fragment removeFragment() throws XBRLException {
         try {
-            depths.pop();
+            
+            getStates().pop();
             childrenStack.pop();
             Fragment f = fragments.pop();
             getStore().storeFragment(f);

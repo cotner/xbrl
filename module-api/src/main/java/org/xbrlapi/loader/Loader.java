@@ -202,12 +202,10 @@ public interface Loader {
 	 * by the loader.
 	 * @param fragment The fragment to be added to the stack of fragments
 	 * being built by the loader.
-	 * @param depth The depth in the XML document being parsed
-	 * of the root element of the fragment currently being built.
 	 * @param state The state of the element that is the root of the fragment.
 	 * @throws XBRLException
 	 */
-	public void addFragment(Fragment fragment, long depth, ElementState state) throws XBRLException;
+	public void addFragment(Fragment fragment, ElementState state) throws XBRLException;
 
 	/**
 	 * Tests if the element that has just been found has triggered the addition of a fragment.
@@ -218,15 +216,13 @@ public interface Loader {
 	public boolean addedAFragment();
 	
 	/**
-	 * Check for completion of a fragment by comparing the depth parameter
-	 * with the depth recorded for the root element of the fragment currently
-	 * being built.  If a fragment is completed, remove the fragment from the 
+     * If a fragment is completed, remove the fragment from the 
 	 * stack being maintained by the loader, store it in the data store and
 	 * make the necessary update to the stack of child counts for the fragments.
-	 * @param depth The depth of the element that has just been completed.
+	 * @param state The element state for the element currently being parsed.
 	 * @throws XBRLException
 	 */
-	public void updateState(long depth) throws XBRLException;
+	public void updateState(ElementState state) throws XBRLException;
 	
 	/**
 	 * Remove a fragment from the stack of fragments that are being built

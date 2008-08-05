@@ -1,6 +1,5 @@
 package org.xbrlapi.xdt;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -39,14 +38,7 @@ public class XDTLoaderImpl extends LoaderImpl implements Loader {
         super(store,xlinkProcessor,urls);
     }
 
-    /**
-     * @see org.xbrlapi.loader.LoaderImpl#LoaderImpl(Store, XLinkProcessor, File)
 
-     */
-    public XDTLoaderImpl(Store store, XLinkProcessor xlinkProcessor, File file)
-            throws XBRLException {
-        super(store,xlinkProcessor,file);
-    }
     
     /**
      * @see org.xbrlapi.loader.LoaderImpl#parse(URL)
