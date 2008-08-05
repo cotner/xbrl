@@ -11,10 +11,10 @@ import org.xml.sax.Attributes;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class XBRLXLinkFragmentIdentifier extends FragmentIdentifier {
+public class XBRLXLinkFragmentIdentifier extends BaseFragmentIdentifier implements FragmentIdentifier {
 
     /**
-     * @see org.xbrlapi.SAXHandlers.FragmentIdentifiers.FragmentIdentifier#BaseFragmentIdentifierImpl(Loader)
+     * @see org.xbrlapi.SAXHandlers.FragmentIdentifiers.BaseFragmentIdentifier#BaseFragmentIdentifierImpl(Loader)
      */
     public XBRLXLinkFragmentIdentifier(Loader loader) throws XBRLException {
         super(loader);
@@ -29,7 +29,7 @@ public class XBRLXLinkFragmentIdentifier extends FragmentIdentifier {
     }
 
     /**
-     * @see org.xbrlapi.SAXHandlers.FragmentIdentifiers.FragmentIdentifier#idFragment(String,String,String,Attributes)
+     * @see org.xbrlapi.SAXHandlers.FragmentIdentifiers.BaseFragmentIdentifier#idFragment(String,String,String,Attributes)
      */
     public void idFragment(
             String namespaceURI, 
