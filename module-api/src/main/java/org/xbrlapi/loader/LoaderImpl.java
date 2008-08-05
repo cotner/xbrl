@@ -787,11 +787,8 @@ public class LoaderImpl implements Loader {
 
     /**
      * Parse an XML Document supplied as a string the next part of the DTS.
-     * 
-     * @param url
-     *            The URL to associate with the supplied XML.
-     * @param xml
-     *            The XML document as a string.
+     * @param url The URL to associate with the supplied XML.
+     * @param xml The XML document as a string.
      * @throws XBRLException
      */
     private void parse(URL url, String xml) throws XBRLException {
@@ -802,17 +799,12 @@ public class LoaderImpl implements Loader {
 
     /**
      * Parse the supplied input source.
-     * 
-     * @param url
-     *            The URL to be associated with the supplied input source.
-     * @param inputSource
-     *            The input source to parse.
-     * @param contentHandler
-     *            The content handler to use for SAX parsing.
+     * @param url The URL to be associated with the supplied input source.
+     * @param inputSource The input source to parse.
+     * @param contentHandler The content handler to use for SAX parsing.
      * @throws XBRLException
      */
-    private void parse(URL url, InputSource inputSource,
-            ContentHandler contentHandler) throws XBRLException {
+    protected void parse(URL url, InputSource inputSource, ContentHandler contentHandler) throws XBRLException {
 
         // Create and configure the SAX parser factory
         SAXParserFactory factory = SAXParserFactory.newInstance();
