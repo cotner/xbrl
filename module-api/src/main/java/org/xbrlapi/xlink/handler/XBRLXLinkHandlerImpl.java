@@ -413,4 +413,31 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 		return state; 
 	}	
 	
+    /**
+     * Walter Hamscher has identified documents in the XBRL community that violate the constraint
+     * that attributes not defined in the XLink specification must not be in the XLink namespace.
+     * To accommodate this imperfection, we catch that kind of error and make it a warning.
+     * 
+     * @see org.xbrlapi.xlink.XLinkHandler#warning(java.lang.String,java.lang.String, java.lang.String, org.xml.sax.Attributes, java.lang.String)
+     */
+    public void error(String namespaceURI, String lName, String qName,
+            Attributes attrs,String message) throws XLinkException {
+
+        if (message.endsWith(" is not defined in the XLink namespace.")) {
+            this.warning(namespaceURI, lName, qName, attrs, message);
+            return;
+        }
+
+        throw new XLinkException(message);
+    }
+    
+    /**
+     * Log a warning message
+     * @see org.xbrlapi.xlink.XLinkHandler#warning(java.lang.String,java.lang.String, java.lang.String, org.xml.sax.Attributes, java.lang.String)
+     */
+    public void warning(String namespaceURI, String lName, String qName,
+            Attributes attrs,String message) throws XLinkException {
+        logger.warn(message);
+    }
+	
 }
