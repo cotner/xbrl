@@ -35,9 +35,13 @@ There will also be new fragment types for dimension values in XBRL instances.
     ExplicitDimensionValue
     TypedDimensionValue
 
-2. New custom simple link
-  Subclass the custom link handler to recognise the xbrldt:typedDomainRef 
-  attribute.
+2. Handling for the xbrldt:typedDomainRef 
+  Note that element declarations with this kind of attribute cannot be treated
+  as custom XLink simple links because you need information about attributes to
+  determine if they are simple links or not.  For this reason, a lot of the simple
+  link functionality will be duplicated for the typed dimension implementation.
+  It is a pity that the connection was not handled in some other way - such 
+  as with a real simple link contained within the appinfo of the domain declaration.
 
 3.  New higher-level objects required:
 
