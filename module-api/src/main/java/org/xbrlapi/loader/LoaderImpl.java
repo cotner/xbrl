@@ -193,15 +193,9 @@ public class LoaderImpl implements Loader {
     }
     
     /**
-     * Contruct the loader passing in the data store and the XLink processor to
-     * be used.
-     * 
-     * @param store
-     *            The data store to hold the DTS
-     * @param xlinkProcessor
-     *            The XLink processor to use for link resolution
-     * @throws XBRLException
-     *             if the loader cannot be instantiated.
+     * @param store The data store to hold the DTS
+     * @param xlinkProcessor The XLink processor to use for link resolution
+     * @throws XBRLException if the loader cannot be instantiated.
      */
     public LoaderImpl(Store store, XLinkProcessor xlinkProcessor)
             throws XBRLException {
@@ -219,7 +213,9 @@ public class LoaderImpl implements Loader {
         // Set the XPointer resolver for this document
         this.setPointerResolver(new PointerResolverImpl(this.getStore()));
 
-/*      try {
+/*      
+ * Do not try to anticipate the URLs that will be part of the DTS to load!
+ * try {
             this.stashURL(new URL(Constants.ROLES_URL));
         } catch (MalformedURLException e) {
             throw new XBRLException("The XBRL 2.1 roles URL is malformed: "
