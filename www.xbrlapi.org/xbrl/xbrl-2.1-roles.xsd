@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+  xmlns="http://www.w3.org/2001/XMLSchema" 
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink" 
+  xmlns:generic="http://xbrl.org/2007/generic"
+  targetNamespace="http://www.galexy.net/standardRoles" 
+  xmlns:tns="http://www.galexy.net/standardRoles" 
+  elementFormDefault="qualified">
+
+  <import namespace="http://www.xbrl.org/2003/instance" schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
+
+  <import namespace="http://xbrl.org/2008/generic" schemaLocation="http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/gnl.xsd"/>
+
+  <annotation>
+  <appinfo>
+
+      <link:linkbaseRef xlink:type="simple" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+      xlink:href="xbrl-2.1-roles-labels-en.xml" />
+
+      <link:linkbaseRef xlink:type="simple" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+      xlink:href="reference-part-labels-en.xml" />
+
+      <link:linkbaseRef xlink:type="simple" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+      xlink:href="reference-part-relationships.xml" />
+
+  
+      <link:arcroleType arcroleURI="http://www.xbrl.org/2003/arcrole/concept-label"
+        id="concept-label"
+        cyclesAllowed="any">
+        <link:definition>See section 5.2.2.3 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:labelArc</link:usedOn>
+      </link:arcroleType>
+
+      <link:arcroleType arcroleURI="http://www.xbrl.org/2003/arcrole/concept-reference"
+        id="concept-reference"
+        cyclesAllowed="any">
+        <link:definition>See section 5.2.3.3 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:ReferenceArc</link:usedOn>
+      </link:arcroleType>
+
+      <link:arcroleType arcroleURI="http://www.xbrl.org/2003/arcrole/parent-child"
+        id="parent-child"
+        cyclesAllowed="undirected">
+        <link:definition>See section 5.2.4.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:presentationArc</link:usedOn>
+      </link:arcroleType>
+
+      <link:arcroleType arcroleURI="http://www.xbrl.org/2003/arcrole/summation-item"
+        id="summation-item"
+        cyclesAllowed="none">
+        <link:definition>See section 5.2.5.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:calculationArc</link:usedOn>
+      </link:arcroleType>
+
+      <link:arcroleType arcroleURI="http://www.xbrl.org/2003/arcrole/general-special"
+        id="general-special"
+        cyclesAllowed="undirected">
+        <link:definition>See section 5.2.6.2.1 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:definitionArc</link:usedOn>
+      </link:arcroleType>
+
+      <link:arcroleType arcroleURI="http://www.xbrl.org/2003/arcrole/essence-alias"
+        id="essence-alias"
+        cyclesAllowed="undirected">
+        <link:definition>See section 5.2.6.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:definitionArc</link:usedOn>
+      </link:arcroleType>  
+      
+      <link:arcroleType arcroleURI="http://www.xbrl.org/2003/arcrole/similar-tuples"
+        id="similar-tuples"
+        cyclesAllowed="any">
+        <link:definition>See section 5.2.6.2.3 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:definitionArc</link:usedOn>
+      </link:arcroleType>  
+          
+      <link:arcroleType arcroleURI="http://www.xbrl.org/2003/arcrole/requires-element"
+        id="requires-element"
+        cyclesAllowed="any">
+        <link:definition>See section 5.2.6.2.4 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:definitionArc</link:usedOn>
+      </link:arcroleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/label" id="standard-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/terseLabel" id="terse-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/verboseLabel" id="verbose-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/positiveLabel" id="positive-standard-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/positiveTerseLabel" id="positive-terse-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/positiveVerboseLabel" id="positive-verbose-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/negativeLabel" id="negative-standard-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/negativeTerseLabel" id="negative-terse-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/negativeVerboseLabel" id="negative-verbose-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/zeroLabel" id="zero-standard-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/zeroTerseLabel" id="zero-terse-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/zeroVerboseLabel" id="zero-verbose-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/totalLabel" id="total-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/periodStartLabel" id="period-start-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/periodEndLabel" id="period-end-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/documentation" id="documentation-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>      
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/definitionGuidance" id="definition-guidance-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/disclosureGuidance" id="disclosure-guidance-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/presentationGuidance" id="presentation-guidance-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/measurementGuidance" id="measurement-guidance-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/commentaryGuidance" id="commentary-guidance-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/exampleGuidance" id="example-guidance-label">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:label</link:usedOn>
+      </link:roleType>            
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/reference" id="standard-reference">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/definitionRef" id="definition-reference">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/disclosureRef" id="disclosure-reference">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/mandatoryDisclosureRef" id="mandatory-disclosure-reference">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/recommendedDisclosureRef" id="recommended-disclosure-reference">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/unspecifiedDisclosureRef" id="unspecified-disclosure-reference">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/presentationRef" id="presentation-reference">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/commentaryRef" id="commentary-reference">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/exampleRef" id="example-reference">
+        <link:definition>See section 5.2.2.2.2 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/link" id="standard-link-role">
+        <link:definition>See section 3.5.3.3 of the XBRL 2.1 specification.</link:definition>
+        <link:usedOn>link:reference</link:usedOn>
+      </link:roleType>
+
+    </appinfo>
+  </annotation>
+  
+  <annotation>
+  <appinfo>
+  
+      <link:arcroleType arcroleURI="http://xbrlapi.org/arcrole/contains-part"
+        id="contains-part"
+        cyclesAllowed="any">
+        <link:definition>
+        The reference part at the source of the relationship contains 
+        zero or more reference parts at the target of the relationship.  For
+        example, a book reference part contains zero or more chapter reference
+        parts.  Likewise, a chapter reference part contains zero or more section 
+        reference parts.
+        </link:definition>
+        <link:usedOn>generic:arc</link:usedOn>
+      </link:arcroleType>
+
+      <link:arcroleType arcroleURI="http://xbrlapi.org/arcrole/part-attribute"
+        id="part-attribute"
+        cyclesAllowed="any">
+        <link:definition>
+        The reference part at the source of the relationship has an attribute that is
+        documented by the part at the target of the relationship.
+        </link:definition>
+        <link:usedOn>generic:arc</link:usedOn>
+      </link:arcroleType>
+
+      <link:arcroleType arcroleURI="http://xbrlapi.org/arcrole/equivalent-part"
+        id="equivalent-part"
+        cyclesAllowed="any">
+        <link:definition>
+        The reference part at the source of the relationship is equivalent to the reference part at the target
+        of the relationship.
+        </link:definition>
+        <link:usedOn>generic:arc</link:usedOn>
+      </link:arcroleType>
+
+      <link:arcroleType arcroleURI="http://xbrlapi.org/arcrole/subsequent-part"
+        id="subsequent-part"
+        cyclesAllowed="any">
+        <link:definition>
+        The reference part at the target of the relationship is generally presented subsequent to
+        the reference part at the source of the relationship.
+        </link:definition>
+        <link:usedOn>generic:arc</link:usedOn>
+      </link:arcroleType>
+
+      <link:roleType roleURI="http://xbrlapi.org/role/linking-reference-part" 
+      id="linking-reference-part">
+        <link:definition>Labels with this role are only to be used on reference parts that take values that 
+        can be used to hyperlink to actual reference materials.</link:definition>
+        <link:usedOn>generic:arc</link:usedOn>
+      </link:roleType>
+
+    </appinfo>
+  </annotation>  
+  
+</schema>

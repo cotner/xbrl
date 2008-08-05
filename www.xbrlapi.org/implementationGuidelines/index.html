@@ -1,0 +1,139 @@
+<html>
+<head>
+<title>Java API implementation guidelines</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>
+Requirements for the Java Implementation Plan for the XBRLAPI.ORG XBRL API
+</h1>
+
+<h2>Data representation requirements</h2>
+
+<p>The following requirements impact directly upon the data
+representation choices for the Java implementation of the XBRL
+API:</p>
+
+<ul>
+
+<li>It must be possible to use multiple data representations for the
+information in an XBRL DTS without needing to alter the code
+implementing the XBRL API.  Rather the XBRL API MUST be implemented in
+terms of a series of operations applied to an abstraction of the
+underlying data.  This abstraction layer means that each data
+representation that can underpin the XBRL API implementation only
+needs to provide an implementation of the functions defined in the
+abstraction layer.</li>
+
+<li>The XBRL data underlying the XBRL API
+implementation MUST contain a superset of the information in the
+original XML documents that they are formed from.  In particular, they
+MUST preserve enough information to reconstitute the original
+XML documents with full accuracy in terms of structures like XML
+comments, processor instructions, spacing etc.  The notable exception to this 
+requirement is that document type declarations do not need to be recoverable
+from the data store.  See 
+<a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1788613&group_id=135539&atid=733278">the DTD related bug</a>
+for more details on this issue.</li>
+
+</ul>
+
+<h2>Handling of XML Standards</h2>
+
+<ul>
+<li>The <a href="http://www.w3.org/XML/Linking/">XLink</a> processing
+of the original XML documents, MUST be done by an XLink processor that is separable from the
+rest of the code base.  This is intended to simplify interchanging the
+reference XLink processor implemented as part of XBRLAPI with other commercial and
+non-commercial XLink processors, such as the one released by <a
+href="http://software.fujitsu.com/en/interstage-xwand/activity/xbrltools/othertools/">
+Fujitsu.</a></li>
+
+<li>The <a href="http://www.w3.org/TR/xmlbase/">XML Base</a>
+resolution will be performed by a generic XML Base resolver that fully
+conforms to the XBRL Base 1.0 specification.</li>
+
+<li>The <a href="http://www.w3.org/TR/2003/REC-xptr-framework-20030325/">XPointer</a>
+resolution will be performed by a generic XPointer resolver that fully
+conforms to the XPointer framework 1.0 specification and xmlns and
+element schemes that are W3C recommendations.</li>
+
+<li>XPointer resolution using the element scheme will allow for recognition of
+any id attributes or elements that are identified explicitly to the XPointer
+resolver or that are identified as being of ID type in a DTD declaration or an
+XML Schema declaration.</li>
+
+</ul>
+
+<h2>Data Discovery</h2>
+
+<ul>
+
+<li>The data discovery process MUST not be memory intensive.</li>
+
+<li>The parser MUST be namespace aware.</li>
+
+<li>The parser must allow for both DTD and XML Schema
+validation during the streaming process and it must expose the PSVI 
+resulting from XML Schema validation.</li>
+
+<li>The parser must allow for use of a Lexical Handler to ensure
+preservation of lexical content in the discovered XML</li>
+
+<li>The parser must allow for use of a Declaration handler to
+enable detection of DTD declared ID type attributes (to support
+XPointer resolution).</li>
+
+<li>The data discovery process MUST enable all
+XML documents that are discovered to be written to a local cache,
+making them available on an ongoing basis regardless of changes to
+network topology.  A custom entity resolver for the parser must
+ensure that the parsing is done on the cached documents rather
+than the original documents.</li>
+
+<li>The caching mechanism MUST use the local filesystem to store the
+cached documents in a manner that allows intuitive human exploration
+of the cache for purposes other than usage of the Java XBRL API
+implementation.</li>
+
+<li>The caching of the original XML documents MUST be entirely
+separable from the process of decomposing the discovered documents
+into meta-data for storage in an XML database.</li>
+
+</ul>
+
+<h2>Validation</h2>
+
+<ul>
+
+<li>The documents loaded into the XBRLAPI data store MUST be validated against
+relevant XML-Schema and DTS validation rules.</li>
+
+<li>It must be possible to expose the data in an XBRLAPI data store to a 3rd
+party XBRL validation tool to enable the validation functions of that
+software to be used.</li>
+
+</ul>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<link:linkbase xmlns:entity="http://xbrlapi.org/entities" xmlns:label="http://xbrl.org/2008/label"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:edgar="http://www.sec.gov/Archives/edgar"
+               xmlns:xbrli="http://www.xbrl.org/2003/instance"
+               xmlns:link="http://www.xbrl.org/2003/linkbase"
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               xmlns:generic="http://xbrl.org/2008/generic"
+               xsi:schemaLocation="       http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd       http://xbrl.org/2008/generic http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/gnl.xsd       http://xbrl.org/2008/label http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/generic-label.xsd       http://xbrlapi.org/entities ../entities.xsd       ">
+   <link:arcroleRef xlink:type="simple" arcroleURI="http://xbrl.org/arcrole/2008/element-label"
+                    xlink:href="http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/generic-label.xsd#element-label"/>
+   <link:arcroleRef xlink:type="simple" arcroleURI="http://xbrlapi.org/arcrole/equivalent-entity"
+                    xlink:href="../entities.xsd#equivalent-entity"/>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="796343"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">ADOBE SYSTEMS INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000796343"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000796343</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000008670"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">AUTOMATIC DATA PROCESSING INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000008670"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000008670</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000004281"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">ALCOA INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000004281"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000004281</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000029669"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">RR Donnelley &amp; Sons Co</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000029669"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000029669</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="901491"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">PAPA JOHNS INTERNATIONAL INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000901491"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000901491</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0001045309"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">W R GRACE &amp; CO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001045309"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001045309</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000718573"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">RADYNE CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000718573"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000718573</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000078100"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">PECO ENERGY CO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000078100"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000078100</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001109357"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">COMMONWEALTH EDISON CO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000022606"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000022606</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001109357"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">EXELON GENERATION CO LLC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001168165"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001168165</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001109357"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">EXELON CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001109357"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001109357</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000818686"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">TEVA PHARMACEUTICAL INDUSTRIES LTD</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000818686"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000818686</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.amex.com/"
+                         value="ENG"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">ENGLOBAL CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000933738"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000933738</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000038009"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">FORD MOTOR CREDIT CO LLC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000038009"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000038009</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000037996"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">FORD MOTOR CO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000037996"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000037996</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001080224"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">EDGAR ONLINE INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001080224"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001080224</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="say"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">SATYAM COMPUTER SERVICES LTD</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001106056"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001106056</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000936468"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">LOCKHEED MARTIN CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000936468"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000936468</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000899749"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">HEALTHCARE REALTY TRUST INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000899749"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000899749</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000815556"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">FASTENAL CO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000815556"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000815556</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000820892"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">FIRST AMERICAN INVESTMENT FUNDS INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000820892"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000820892</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000108772"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">XEROX CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000108772"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000108772</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000883984"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">ICU MEDICAL INC/DE</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000883984"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000883984</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001383312"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">BROADRIDGE FINANCIAL SOLUTIONS, INC.</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001383312"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001383312</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0001323648"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">Community Bankers Acquisition Corp.</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001323648"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001323648</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.nyse.com/"
+                         value="PEP"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">PEPSICO INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000077476"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000077476</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000789019"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">MICROSOFT CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000789019"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000789019</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.myurl.com"
+                         value="AGL Resources Inc."/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">AGL RESOURCES INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001004155"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001004155</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0001067491"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">INFOSYS TECHNOLOGIES LTD</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001067491"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001067491</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000806085"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">LEHMAN BROTHERS HOLDINGS INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000806085"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000806085</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000101829"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">UNITED TECHNOLOGIES CORP /DE/</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000101829"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000101829</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="www.sec.gov"
+                         value="908785"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">AMERICAN SELECT PORTFOLIO INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000908785"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000908785</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="www.sec.gov"
+                         value="896161"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">AMERICAN STRATEGIC INCOME PORTFOLIO INC III</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000896161"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000896161</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="www.sec.gov"
+                         value="886984"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">AMERICAN STRATEGIC INCOME PORTFOLIO INC II</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000886984"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000886984</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="www.sec.gov"
+                         value="878930"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">AMERICAN STRATEGIC INCOME PORTFOLIO INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000878930"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000878930</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="www.sec.gov"
+                         value="902748"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">MINNESOTA MUNICIPAL INCOME PORTFOLIO INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000902748"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000902748</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="www.sec.gov"
+                         value="1183829"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">FIRST AMERICAN MINNESOTA MUNICIPAL INCOME FUND II INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001183829"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001183829</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="www.sec.gov"
+                         value="902750"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">AMERICAN MUNICIPAL INCOME PORTFOLIO INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000902750"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000902750</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="www.sec.gov"
+                         value="0000838131"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">AMERICAN INCOME FUND INC /VA</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000838131"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000838131</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000773910"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">ANADARKO PETROLEUM CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000773910"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000773910</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000808013"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">NORTH AMERICAN TECHNOLOGIES GROUP INC /TX/</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000808013"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000808013</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier"
+                         scheme="http://www.petrobras.com.br/ri/"
+                         value="Petroleo Brasileiro SA"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">BRAZILIAN PETROLEUM CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001119639"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001119639</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier"
+                         scheme="http://ri.netservicos.com.br/"
+                         value="Net Servicos de Comunicacao SA"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">NET SERVICOS DE COMUNICACAO S A</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001024446"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001024446</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000769397"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">AUTODESK INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000769397"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000769397</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000009984"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">BARNES GROUP INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000009984"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000009984</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001015780"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">E TRADE FINANCIAL CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001015780"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001015780</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://nic.net"
+                         value="ge.com"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">GENERAL ELECTRIC CO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000040545"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000040545</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0001166691"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">COMCAST CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001166691"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001166691</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.ibm.com"
+                         value="IBMCorp-0000051143"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">INTERNATIONAL BUSINESS MACHINES CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000051143"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000051143</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001368007"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">NYSE Euronext</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001368007"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001368007</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="84-1288730"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">LIBERTY MEDIA CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001355096"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001355096</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000066740"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">3M CO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000066740"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000066740</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.nyse.com/"
+                         value="MO"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">ALTRIA GROUP, INC.</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000764180"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000764180</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000078003"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">PFIZER INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000078003"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000078003</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001156375"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">CME GROUP INC.</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001156375"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001156375</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000013610"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">BOWNE &amp; CO INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000013610"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000013610</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0001160330"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">BANK BRADESCO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001160330"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001160330</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier"
+                         scheme="http://www.londonstockexchange.com"
+                         value="RTR"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">REUTERS GROUP PLC /ADR/</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001056084"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001056084</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000030554"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">DUPONT E I DE NEMOURS &amp; CO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000030554"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000030554</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="000-27441"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">XM SATELLITE RADIO HOLDINGS INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001091530"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001091530</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="000-27441"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">XM SATELLITE RADIO INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001116317"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001116317</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000029915"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">DOW CHEMICAL CO /DE/</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000029915"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000029915</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0001292278"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">Old Mutual Advisor Funds</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001292278"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001292278</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0001113169"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">PRICE T ROWE GROUP INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001113169"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001113169</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000713676"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">PNC FINANCIAL SERVICES GROUP INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000713676"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000713676</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001163302"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">UNITED STATES STEEL CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001163302"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001163302</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0000014272"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">BRISTOL MYERS SQUIBB CO</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000014272"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000014272</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001295230"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">International Securities Exchange Holdings, Inc.</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001295230"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001295230</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000797871"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">SOUTH FINANCIAL GROUP INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000797871"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000797871</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000790070"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">EMC CORP</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000790070"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000790070</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="0001179929"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">MOLINA HEALTHCARE INC</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001179929"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001179929</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.nyse.com"
+                         value="QCOM"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">QUALCOMM INC/DE</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000804328"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000804328</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier"
+                         scheme="http://www.hitachi.co.jp/"
+                         value="Hitachi, Ltd."/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">HITACHI LTD</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000047710"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000047710</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov/CIK"
+                         value="1069322"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">CRYSTAL INTERNATIONAL TRAVEL GROUP, INC.</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0001069322"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0001069322</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier"
+                         scheme="http://www.edgar-online.com/CompanyName"
+                         value="ALLEGIANT ADVANTAGE INSTITUTIONAL MONEY MARKET FUND"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">ALLEGIANT ADVANTAGE FUND</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000908823"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000908823</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <entity:identifier xlink:type="resource" xlink:label="identifier" scheme="http://www.sec.gov"
+                         value="0000928753"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">BUSINESS OBJECTS S.A.</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <entity:identifier xlink:type="resource" xlink:label="cik-identifier" scheme="http://sec.gov/cik"
+                         value="0000928753"/>
+      <label:label xlink:type="resource" xlink:label="cik-label" xml:lang="en"
+                   xlink:role="http://sec.gov/cik">0000928753</label:label>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="cik-label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+      <generic:arc xlink:type="arc" xlink:from="cik-identifier" xlink:to="identifier"
+                   xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+   </generic:link>
+</link:linkbase>

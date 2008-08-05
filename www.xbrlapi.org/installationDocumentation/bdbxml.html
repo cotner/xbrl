@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>XBRLAPI Oracle Berkeley Database XML setup suggestions</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>Oracle Berkeley Database XML data store configuration</h1>
+
+<h2>Overview</h2>
+
+<p>This page is relevant to those looking to use the XBRLAPI with the
+Oracle Berkeley Database XML data store. It provides very terse
+suggestions on the steps required to get the Oracle Berkeley Database
+XML database running in a manner that will permit interaction from the
+XBRLAPI.</p>
+
+<p>You will need to download or otherwise have the xbrlapi-bdbxml module on the
+class path to use the Oracle Berkeley Database XML data store.</p>
+
+<h2>Download the source code from Oracle</h2>
+<p>Get the sources from the 
+<a href="http://www.oracle.com/technology/documentation/berkeley-db/xml/index.html">Oracle website</a>.</p>
+
+<h2>Build the source code and install it</h2>
+
+<p>Unzip the tar.gz download. Change directory to the root directory
+created by the extraction process. Run 
+<code>./buildall.sh --enable-java --prefix=/usr/local/BerkeleyDBXML.2.3.10</code>
+<br/>
+making sure that you use the appropriate version number for the
+installation directory. This command will build the binaries and install
+them in the directory specified by the --prefix parameter. The
+--enable-java parameter ensures that the necessary Java JAR files to
+manage the interface to the database binaries are also created.</p>
+
+<p>See the <a href="http://www.oracle.com/technology/documentation/berkeley-db/xml/intro_xml/resources.html#dbxmlresources">Oracle
+</a> documentation resources for more details.</p>
+
+<h2>Set up Java Virtual Machine to use the database</h2>
+
+<p>Ensure that any JVM that is running code that uses the database is
+called with the JVM parameter: <code>-Djava.library.path=/usr/local/BerkeleyDBXML.2.3.10/lib</code><br/>
+to ensure that the C++ binary libraries are correctly linked to.</p>
+<p>Also ensure that the dbxml.jar and db.jar files are on the class path. You can find these JAR files 
+in the lib directory created as a part of the installation directory.</p>
+
+<h2>Using the database from a Java servlet container</h2>
+
+<p>If using a Java servlet container, adding the library directory
+(/usr/local/BerkeleyDBXML.2.3.10/lib) to the the LD_LIBRARY_PATH
+environment variable on Linux should allow the JVM running the servlet
+container to find the correct libraries.</p>
+<p>Better still, at least on UBUNTU, create a new configuration file
+/etc/ld.so.conf.d/bdbxml.conf and give it the content: <code>/usr/local/BerkeleyDBXML.2.3.10/lib</code> though note
+that this value for the parameter will depend on the path that you chose for installing the database binaries when
+you built them.</p>
+
+<h2>Using with the Maven Surefire plugin for JUnit testing</h2>
+<p>Add an <code>argline</code> element as a child of the configuration
+element for the surefire plugin and give the argline element the value 
+<code>-Djava.library.path=/usr/local/BerkeleyDBXML.2.3.10/lib</code> where
+/usr/local/BerkeleyDBXML.2.3.10/lib is the location of the database binaries.</p>
+
+<h2>Unit testing</h2>
+
+<p>Once the Oracle Berkeley Database XML is installed you should be able
+to run all of the unit tests in the unit testing suite provided by 
+<code>org.xbrlapi.data.bdbxml.tests.AllTests</code>. If you run into
+problems make sure that the Oracle Berkeley Database XML test
+configuration parameters reflect your own Oracle Berkeley Database XML
+installation.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

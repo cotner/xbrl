@@ -1,0 +1,71 @@
+<html>
+<head>
+<title>XBRLAPI Xindice database setup suggestions</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>Xindice data store configuration</h1>
+
+<h2>Overview</h2>
+
+<p>This page is relevant to those looking to use the XBRLAPI with the
+Xindice data store. It provides very terse suggestions on the steps
+required to get the Xindice database running in a manner that will permit
+interaction from the XBRLAPI.</p>
+
+<p>You will need to download or otherwise have the xbrlapi-xindice module on the
+class path to use the Xindice data store.</p>
+
+
+<p><a href="java.html">Install a Java SDK</a></p>
+
+<p>Install <a href="jetty.html">Tomcat</a> or <a href="jetty.html">Jetty</a>.</p>
+
+<p>Install the Xindice database as a web application in the servlet container.  
+Download the most recent stable version of 
+<a href="http://xml.apache.org/xindice/">Xindice</a>. Make sure that you
+download the binary webapp. version of Xindice, which provides the
+necessary xindice-XXX.war file. Note that the XXX part of the war file
+name is likely to differ between releases of Xindice.</p>
+
+<p>Rename the war file that you downloaded to xindice.war</p>
+
+<p>Move the xindice.war file to the webapps directory in your Java
+servlet container.</p>
+
+<p>Start the servlet container to unpack the war.</p>
+
+<p>Check that the Xindice database is running by entering the URL 
+<a href="http://localhost:8080/xindice/">http://localhost:8080/xindice/</a>.
+You should see the ugly debugging tool if Xindice is operating properly.
+You may have to change the port number and the domain to match the
+servlet container configuration.</p>
+
+<p>Once Xindice is installed in the Java servlet container, you should be able
+to run all of the unit tests in the unit testing suite provided by
+<code>org.xbrlapi.data.xindice.tests.AllTests</code>. If you run into
+problems make sure that the Xindice test configuration parameters
+reflect your own Xindice installation.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>XBRLAPI unit test configuration suggestions</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>XBRLAPI Unit testing with JUnit</h1>
+
+<h2>Overview</h2>
+
+<p>A comprehensive test of your XBRLAPI installation is possible using the
+<a href="http://www.junit.org/index.htm">JUnit</a> tests that are distributed 
+with XBRLAPI.</p>
+
+<h2>Install a local version of the XBRL 2.1 conformance suite</h2>
+
+<p>If you want to run the unit tests that are distributed with XBRLAPI,
+then it is necessary to configure the test data environment. A key part
+of this configuration involves installation of the XBRL 2.1 conformance
+suite.</p>
+
+<p>The conformance suite is available as a <a href="http://www.xbrl.org/2007/XBRL-CONF-CR3-2007-03-05.zip">zip 
+file</a> from the XBRL.ORG website.</p>
+
+<p>Download the zip file and extract it to the desired location in your
+local environment. You can either serve up the files in the conformance
+suite directly from your local file system (using the file scheme URLs)
+or you can serve them via a local web server such as <a href="http://httpd.apache.org/">Apache</a> (using http scheme URLs).</p>
+
+<h2>Set up the test configuration file</h2>
+
+<p>It is necessary to set a range of test configuration properties to
+provide information regarding the setup of the underlying data stores
+and the available test data. This is done using a Java properties file
+whose location must be specified by a system property called <code>xbrlapi.test.configuration</code>.</p>
+
+<p>The test configuration file sets a large number of configuration
+properties. These are explained in the <a href="testConfigurationFile.html">test configuration documentation</a>.</p>
+
+<p>Among other possibilities, you can set this system property by adding
+<code>-Dxbrlapi.test.configuration=/path/to/configuration/file/filename</code> to the set of 
+parameters used when running Java.  In Eclipse,  add this as a virtual machine argument for
+your project's java runtime environment. Naturally set the <code>/path/to/configuration/file</code> to a the
+value of the path to the configuration file that you want to use and set <code>filename</code> to the name
+of your configuration file.</p>
+
+<p>
+  You can grab a copy of a complete properties file from the 
+  <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/trunk/test.configuration.properties?view=log">SVN repository</a>.
+</p>
+
+<h2>Execute the Unit Tests</h2>
+
+<p>Unit test execution can be done in a number of ways.  These include:<p>
+
+<ul>
+	<li>Unit testing from the command line</li>
+	<li>Unit testing using the Eclipse IDE</li>
+	<li>Unit testing using Maven</li>
+</ul>
+
+<h2>Unit testing from the command line</h2>
+
+<p>You can use one of the TestRunner classes provided by JUnit to 
+do the unit tests from the command line.  For example, to use the text UI
+test runner, for the full set of tests except those for persistent data stores,
+you could use (presuming all the necessary classes are 
+on the classpath):</p>
+
+<p><code>java -Xmx1g -Dxbrlapi.test.configuration=[PATH.TO.CONFIGURATION.FILE] junit.textui.TestRunner org.xbrlapi.tests.AllTests</code></p>
+
+<p>You would have to replace [PATH.TO.CONFIGURATION.FILE] with the full path to and the file name of 
+the file containing the test configuration properties.</p>
+
+<p>The -Xmx1g parameter is supplied to ensure that you do not run into memory limitations when running some of the 
+more demanding unit tests.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

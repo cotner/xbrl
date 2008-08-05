@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>XBRLAPI Exist database setup suggestions</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>eXist data store configuration</h1>
+
+<p>This page is relevant to those looking to use the XBRLAPI with the
+eXist data store. It provides very terse suggestions on the steps
+required to get the eXist database running in a manner that will permit
+interaction from the XBRLAPI.</p>
+
+<p>eXist can be configured to support the XBRLAPI as either a separate
+Java web application or as an embedded database. Performance is
+significantly improved if you used the embedded approach.</p>
+
+<p>You will need to download or otherwise have the xbrlapi-exist module on the
+class path to use the eXist data store.</p>
+
+<h2>Setting eXist up as an embedded database</h2>
+
+<p>First follow <a href="http://exist.sourceforge.net/deployment.html#N1042E">
+the instructions provided by eXist</a> to get the database set up in embedded mode.
+</p>
+
+<p>Second, realise that you also have to copy the catalog.xml file and
+the entities directory from the same location that you got your copy of
+exist.conf (I get mine from the WEBINF directory of the exist WAR file
+installation) and put them into the same directory that you saved your
+copy of conf.xml.</p>
+
+<p>Third, realise that the URI of the embedded database needs to be
+xmldb:exist:///db so make sure that the eXist database connection is
+instantiated using the empty string for both the host and the connection
+port. Also, set the path to the database to "db". That should be
+sufficient to ensure that the embedded version of eXist is used.</p>
+
+<h2>Setting eXist up within a Java Servlet Container</h2>
+
+<p><a href="java.html">Install a Java SDK</a></p>
+
+<p>Install <a href="jetty.html">Tomcat</a> or <a href="jetty.html">Jetty</a>.</p>
+
+<p>Install the Exist database as a web application in the servlet
+container. Download the most recent version of <a href="http://exist.sourceforge.net/">eXist</a>, 
+which provides the necessary exist-XXX.war file.  Note that the war file 
+name may have components that reflect the version of Exist that you have downloaded.</p>
+
+<p>Rename the war file that you downloaded to exist.war</p>
+
+<p>Move the exist.war file to the webapps directory in your Java servlet container.</p>
+
+<p>Start the servlet container to unpack the exist.war file.</p>
+
+<p>Check that the Exist database is running by entering the URL <a
+	href="http://localhost:8080/exist/">http://localhost:8080/exist/</a>.
+You may need to change the domain and port for this URL depending on the
+configuration of your servlet container. You should see a local homepage
+for Exist if you have successfully installed Exist. Check that you can
+log in as an administrator using the "admin" userid and a empty string
+password "". Browsing the database collections as the administrator will
+fail if the file permissions for the database files are set wrongly in
+the web application. Check the installation instructions for Exist for
+more details on trouble shooting such problems. These files are to be
+found in the webapps/exist directory of the Java servlet container in
+the default installation configuration.</p>
+
+<p>Once eXist is installed in the Java servlet container, you should be able
+to run all of the unit tests in the unit testing suite provided by
+<code>org.xbrlapi.data.exist.tests.AllTests</code>. If you run into
+problems make sure that the eXist test configuration parameters reflect
+your own eXist installation.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

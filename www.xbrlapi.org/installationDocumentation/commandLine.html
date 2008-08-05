@@ -1,0 +1,240 @@
+<html>
+<head>
+<title>XBRLAPI installation suggestions</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+<h1>
+Using the XBRLAPI from the command line
+</h1>
+
+<h2>
+Overview
+</h2>
+
+<p>This page is relevant to those looking to perform some basic command line
+tests that XBRLAPI is available from their commandline.</p>
+
+<h2>Get Java on the command line</h2>
+
+<p>Type <code>java -version</code> at the command line to see if Java is available. 
+You should see a message indicating that the java version is 1.5 or later.  See the 
+<a href="java.html">Java configuration</a> page if you run into troubles.</p> 
+
+<h2>Get the necessary JAR files</h2>
+
+<p>Ensure that the XBRLAPI JAR files are on the class path.  This can be done by
+placing them in the lib/ext directory in the Java installation.  It can also be done
+by modifying the CLASS_PATH environment variable to include the directory that contains
+the XBRLAPI JAR files.  It can also be done by ensuring that the current directory for the 
+command line operations also contains the XBRLAPI JAR files.</p>
+
+<p>At a minimum you will need:</p>
+<ul>
+<li>xbrlapi-api-YYYYMMDD.jar</li>
+<li>xmlbase-api-YYYYMMDD.jar</li>
+<li>xlink-api-YYYYMMDD.jar</li>
+<li>xpointer-api-YYYYMMDD.jar</li>
+</ul>
+
+<p>where YYYYMMDD is the date on which the XBRLAPI JAR files were generated.</p>
+
+<p>Download the necessary XBRLAPI modules as JAR files from 
+<a href="https://sourceforge.net/project/showfiles.php?group_id=135539">Sourceforge</a>.
+You will definitely require the xbrlapi-utilities module, the
+xbrlapi-api module, the xbrlapi-xlink, xbrlapi-xpointer and
+xbrlapi-xmlbase modules. If you want to use a persistent data store,
+then you will also require one of the xbrlapi-bdb-xml, xbrlapi-exist, or
+xbrlapi-xindice modules.</p>
+
+<p>You will also require some third party JAR files. Depending on the
+XBRLAPI modules that you require, you may need to obtain the following
+JAR files:</p>
+
+<table class="xbrlapi">
+<tr>
+	<th>JAR file</th>
+	<th>Version</th>
+	<th>Purpose</th>
+	<th>Requiring modules</th>
+</tr>
+<tr>
+	<td>log4j-1.2.13.jar</td>
+	<td>1.2.13</td>
+	<td>logging framework</td>
+	<td>xbrlapi-utilities</td>
+</tr>
+<tr>
+	<td>xml-apis.jar</td>
+	<td>1.3.04</td>
+	<td>XML API for Xerces</td>
+	<td>xbrlapi-utilities</td>
+</tr>
+<tr>
+	<td>xercesImpl.jar</td>
+	<td>2.8.1</td>
+	<td>Xerces XML Parser</td>
+	<td>xbrlapi-utilities</td>
+</tr>
+<tr>
+	<td>junit.jar</td>
+	<td>3.8.1</td>
+	<td>JUnit unit testing</td>
+	<td>xbrlapi-utilities</td>
+</tr>
+<tr>
+	<td>xalan.jar</td>
+	<td>2.7.0</td>
+	<td>Xalan XSLT 1.0 and XPath 1.0 processor</td>
+	<td>xbrlapi-api</td>
+</tr>
+<tr>
+	<td>exist-1.1.1.jar</td>
+	<td>1.1.1</td>
+	<td>eXist XML database</td>
+	<td>xbrlapi-exist</td>
+</tr>
+<tr>
+	<td>xindice-1.1.jar</td>
+	<td>1.1</td>
+	<td>Xindice XML database</td>
+	<td>xbrlapi-xindice</td>
+</tr>
+<tr>
+	<td>xmldb.jar</td>
+	<td>eXist version</td>
+	<td>XML:DB API as distributed with eXist 1.1.1</td>
+	<td>xbrlapi-exist and xbrlapi-xindice</td>
+</tr>
+<tr>
+	<td>xmlrpc-1.2-patched.jar</td>
+	<td>1.2 patched for eXist</td>
+	<td>XML RPC API as distributed with eXist 1.1.1</td>
+	<td>xbrlapi-exist and xbrlapi-xindice</td>
+</tr>
+<tr>
+	<td>commons-logging-1.0.3.jar</td>
+	<td>1.0.3</td>
+	<td>Apache Commons Logging framework</td>
+	<td>xbrlapi-xindice</td>
+</tr>
+<tr>
+	<td>db.jar</td>
+	<td>2.3.10</td>
+	<td>Berkeley DB Java interface to binaries</td>
+	<td>xbrlapi-bdb-xml</td>
+</tr>
+<tr>
+	<td>dbxml.jar</td>
+	<td>2.3.10</td>
+	<td>Berkeley DB XML overlay: Java interface to binaries</td>
+	<td>xbrlapi-bdb-xml</td>
+</tr>
+
+</table>
+
+<p>To make things easy, these have been included in the SVN repository for the XBRLAPI so
+if you check out the XBRLAPI project from SVN then you should have them all.  Alternatively
+you can download those that you require directly from the 
+<a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/trunk/java/lib/">browseable SVN repository</a> on Sourceforge.</p>
+
+<h2>Put the JAR files on your CLASS_PATH</h2>
+
+<p>Make sure that all of the necessary JAR files (the XBRLAPI ones and the third party 
+dependency ones) are on your Java CLASS_PATH. If you have installed a complete Java SDK, 
+then a very simple way to achieve this outcome is to place them in your $JAVA_HOME/jre/lib/ext 
+directory where $JAVA_HOME is the value of the JAVA_HOME environment variable 
+set when you installed your Java SDK.  If you are identifying the necessary JAR files
+using the -classpath parameter, then be sure not to also use the -jar parameter for the Java
+runtime engine.</p>
+
+<h2>Configure log4j</h2>
+
+<p>You need to configure <a href="http://logging.apache.org/log4j/docs/download.html">log4j</a>. 
+This configuration is specified in an XML file.  A useful starting point for such 
+<a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/trunk/conf/log4j.xml?view=log">a 
+log4j configuration</a> is available from the online SVN browsing facility at Sourceforge. Download 
+the log4j.xml file (or if you have checked out the entire XBRLAPI project, then just use the log4.xml
+file that is in the <code>conf</code> directory of the XBRLAPI project) and store it somewhere 
+convenient, say <code>/configuration/file/path/log4j.xml</code>.  This configuration file
+sends log messages to the output console.</p>
+
+<h2>Configure your local cache for XBRL documents</h2>
+
+<p>The XBRLAPI caches any documents that are loaded into a data store.  You need to set 
+up a writeable folder to store this cache.  When populated, the cache will contain a local
+copy of each of the XML documents that are discovered during the loading process.
+Refer to the directory where the local copies are to be cached as: 
+<code>/xbrl/cache/</code></p>
+
+<h2>Test using the in-memory data store.</h2>
+
+<p>You should now be ready to use the XBRLAPI in conjunction with
+various types of supported data stores. To test that this is indeed the
+case, try using the XBRLAPI from the command line.</p>
+
+<p>A simple test of the XBRLAPI using the in-memory data store
+involves loading the <a href="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"> XBRL
+instance schema</a> using XBRLAPI. An appropriate command is:<br/>
+<code>java -jar xbrlapi-api-YYYYMMDD.jar -logger [LOG4J.CONFIG] -class org.xbrlapi.data.dom.Load -cache [CACHE.LOCATION] [URL]+ </code>
+</p>
+
+<p>Alternatively, if you are identifying the JAR files that you require using the -classpath parameter,
+then something more like the following will be appropriate:<br/>
+<code>java -classpath xerces.jar:xalan.jar:xml-apis.jar:junit.jar:log4j-1.2.13.jar:xbrlapi-api-YYYYMMDD.jar:xbrlapi-xpointer-YYYYMMDD.jar:xbrlapi-xmlbase-YYYYMMDD.jar:xbrlapi-xlink-YYYYMMDD.jar:xbrlapi-utilities-YYYYMMDD.jar \
+org.xbrlapi.Run -logger [LOG4J.CONFIG] -class org.xbrlapi.data.dom.Load -cache [CACHE.LOCATION] [URL]+ </code><br/>
+This of course, assumes that the necessary JAR files are all in the current directory.</p>
+
+<p>Note that you will need to replace YYYYMMDD with the year, month and day values in your copy of
+the XBRLAPI JAR file.</p>
+
+<p>Replace [LOG4J.CONFIG] with the path to (and name of) the log4j configuration file.</p>
+ 
+<p>Replace [CACHE.LOCATION] with the full path to the directory you want to use for local caching.</p>
+
+<p>Replace [URL]+ with one or more URLs specifying the starting points to use for the XBRL data discovery
+and loading process.</p>
+
+<p>For example, if you are working with xbrlapi-api-YYYYMMDD.jar and the log4j.xml file is in the 
+current directory and the current directory is also to be used as the root of the taxonomy cache, then
+the command to load data using the XBRL instance schema as a starting point would be:</p>
+
+<p><code>java -jar xbrlapi-api-YYYYMMDD.jar -logger log4j.xml -class org.xbrlapi.data.dom.Load -cache . http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd</code></p>
+
+<p>Note the <code>-class</code> parameter which specifies the class to execute.  Instead of simply
+performing a load operation using the org.xbrlapi.data.dom.Load class, you can perform 
+a more complex compose operation (merging all of the discovered documents into a single XML 
+composite document) by using the following command:</p>
+
+<p>
+<code>java -jar xbrlapi-api-YYYYMMDD.jar -logger [LOG4J.CONFIG] -class org.xbrlapi.data.dom.Compose -cache [CACHE.LOCATION] -output [OUTPUT.LOCATION] [URL]+ </code>
+</p>
+
+<p>Replace [OUTPUT.LOCATION] with the path to the directory where you want the composite document to be saved.</p>
+
+<h2>Running the Unit tests distributed with XBRLAPI</h2>
+
+<p>A more comprehensive test of your XBRLAPI installation is possible <a href="unitTesting.html">using the
+JUnit tests</a> that are distributed with XBRLAPI.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

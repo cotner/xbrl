@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2007 XBRL International. All Rights Reserved. -->
+<link:linkbase
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:generic="http://xbrl.org/2008/generic"
+  xmlns:label="http://xbrl.org/2008/label"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+  http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
+  http://xbrl.org/2008/generic http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/gnl.xsd
+  http://xbrl.org/2008/label http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/generic-label.xsd
+  ">
+
+  <link:arcroleRef 
+  xlink:type="simple" 
+  arcroleURI="http://xbrl.org/arcrole/2008/element-label" 
+  xlink:href="http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/generic-label.xsd#element-label"/>
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#concept-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      concept-label relationship
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#concept-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      concept-reference relationship
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#parent-child" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      parent-child presentation relationship
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#summation-item" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      summation relationship
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#general-special" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      generalisation relationship
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#essence-alias" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      equivalence relationship
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#similar-tuples" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      similar-tuples relationship
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#requires-element" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      instance co-existence constraint relationship
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#standard-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      standard
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#terse-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+	 terse
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#verbose-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      verbose
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#positive-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      positive values
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#positive-terse-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      positive terse
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#positive-verbose-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      positive verbose
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#negative-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      negative
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#negative-terse-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      negative terse
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#negative-verbose-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      negative verbose
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#zero-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      zero
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#zero-terse-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      zero terse
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#zero-verbose-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      zero verbose
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#total-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      total
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#period-start-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      period start
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#period-end-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      period end
+    </label:label>    
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>  
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#documentation-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      documentation
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link> 
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#definition-guidance-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      definition guidance
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link> 
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#disclosure-guidance-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      disclosure guidance
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>   
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#presentation-guidance-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      presentation guidance
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>  
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#measurement-guidance-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      measurement guidance
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>    
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#commentary-guidance-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      commentary guidance
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#example-guidance-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      example guidance
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+    
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      standard
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>      
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#definition-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      definition
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>  
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#disclosure-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      disclosure
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>  
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#mandatory-disclosure-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      mandatory disclosure
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>     
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#recommended-disclosure-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      recommended disclosure
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>     
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#unspecified-disclosure-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      unspecified disclosure
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>   
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#presentation-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      presentation
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>   
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#commentary-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      commentary
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>   
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#example-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      example
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+    
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#standard-link-role" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      default network
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#contains-part" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      reference part containment
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#part-attribute" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      reference part attribute
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#equivalent-part" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      equivalent reference part
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#subsequent-part" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      subsequent reference part
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/generic-label.xsd#element-label" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      element label
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/generic-reference.xsd#element-reference" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      element reference
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>  
+
+</link:linkbase>

@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>XBRLAPI Installing the Jetty servelet container</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>Installing the Jetty servlet container</h1>
+
+<h2>Overview</h2>
+
+<p>Some of the data store implementations for XBRLAPI are designed to
+run within Java servlet containers. Moreover, XBRLAPI itself is suitable
+for use by Java servlets and so can motivate a need to have an installed
+Java servlet container.</p>
+
+<p>This page gives terse suggestions for setting up the Tomcat servlet
+container to host XML database that can act as data stores for XBRLAPI.
+More details on Tomcat installation and configuration are available from
+the <a href="http://tomcat.apache.org/tomcat-5.5-doc/index.html">Tomcat 5.5 documentation</a>.
+</p>
+
+<h2>Obtaining and installing Tomcat</h2>
+
+<p>XBRLAPI has been tested with XML databases running from within both
+Tomcat and Jetty. This document covers Tomcat 5.5.</p>
+
+<h2>Install Tomcat in the user's home directory for use by a single user</h2>
+
+<p>Note that Tomcat can be installed in other ways, depending on how you
+want to use it. If you are doing development work, then having Tomcat
+installed for the user that is doing the development work can make the
+development process easier, for example, by supporting debugging from
+within IDEs.</p>
+  
+<p>Tomcat 5.5 can be downloaded (get the binary core download) from 
+<a href="http://tomcat.apache.org">tomcat.apache.org</a>.
+The XBRLAPI has been tested with Tomcat 5.5.<p>Download <a href="">Tomcat</a>.</p>
+
+<p>Extract the archive file that you downloaded to a folder in the
+user's home directory, such as (on Linux) <code>/home/username/programs/</code> to
+create <code>/home/username/programs/tomcat</code> or some such.</p>
+
+<h2>Configure Tomcat for use by the single user</h2>
+
+<p>Consider changing the ports specified in the <code>server.xml</code>
+configuration file to ensure that the ports for the single user version
+of Tomcat does not collide with the ports being used by other servlet
+container installations that are also being run.</p>
+
+<h2>Set the environment variables for JAVA_HOME and CATALINA_HOME</h2>
+
+<p>The environment variable, JAVA_HOME, should be set equal to the root
+directory of the JAVA SDK installation that you want to use to run
+Tomcat. For example: <code>/usr/lib/jvm/java-1.5.0-sun</code>.</p>
+
+<p>The environment variable, CATALINA_HOME, should be set equal to the
+root directory of the Tomcat installation that you want to use. For
+example: <code>/home/username/programs/tomcat</code></p>
+  
+<h2>Testing the installation</h2>
+
+<p>Change to the CATALINA_HOME/bin directory and make sure that the
+permissions of the shell scripts allow them to be executed by the user
+that will be running Tomcat.</p>
+
+
+<p>Start Tomcat with startup shell script (<code>.s/startup.sh</code> on
+*NIX) and stop Tomcat with the stop shell script (<code>./shutdown.sh</code>
+on *NIX) once the permissions have been set correctly.</p>
+
+
+<p>Test if Tomcat is running correctly by opening a web browser to 
+<a href="http://localhost:8280/">the Tomcat home page</a> assuming that 8280 
+is the port that you specified when you modified the <code>server.xml</code> 
+configuration file.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

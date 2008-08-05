@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<link:linkbase
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:generic="http://xbrl.org/2008/generic"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+  http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
+  http://xbrl.org/2008/generic http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/gnl.xsd
+  ">
+
+  <link:arcroleRef 
+  xlink:type="simple" 
+  arcroleURI="http://xbrlapi.org/arcrole/contains-part" 
+  xlink:href="xbrl-2.1-roles.xsd#contains-part"/> 
+
+  <link:arcroleRef 
+  xlink:type="simple" 
+  arcroleURI="http://xbrlapi.org/arcrole/part-attribute" 
+  xlink:href="xbrl-2.1-roles.xsd#part-attribute"/> 
+
+  <link:arcroleRef 
+  xlink:type="simple" 
+  arcroleURI="http://xbrlapi.org/arcrole/equivalent-part" 
+  xlink:href="xbrl-2.1-roles.xsd#equivalent-part"/> 
+  
+  <link:arcroleRef 
+  xlink:type="simple" 
+  arcroleURI="http://xbrlapi.org/arcrole/subsequent-part" 
+  xlink:href="xbrl-2.1-roles.xsd#subsequent-part"/> 
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Publisher" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Name" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Publisher" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Article" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="2.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Publisher" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Note" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="3.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Article" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="2.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Note" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="3.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Name" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="c1"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_IssueDate" xlink:type="locator" xlink:label="c2"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/part-attribute"
+      xlink:from="a" xlink:to="b" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Chapter" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Example" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="2.0"/>
+  </generic:link>  
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Exhibit" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="3.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Chapter" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Section" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Section" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subsection" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subsection" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Paragraph" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Paragraph" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subparagraph" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subparagraph" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Clause" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Clause" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subclause" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Chapter" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Appendix" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Chapter" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Appendix" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/subsequent-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Article" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Note" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Chapter" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Appendix" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Section" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subsection" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Paragraph" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subparagraph" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Clause" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subclause" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Exhibit" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Example" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Footnote" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/part-attribute"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>  
+  
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Article" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Note" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Chapter" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Appendix" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Section" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subsection" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Paragraph" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subparagraph" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Clause" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subclause" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Exhibit" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Example" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Footnote" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Sentence" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/contains-part"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Article" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Publisher" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Number" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Chapter" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Appendix" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Section" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subsection" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Paragraph" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subparagraph" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Clause" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Subclause" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Exhibit" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Example" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Footnote" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Sentence" xlink:type="locator" xlink:label="p"/>
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_URI" xlink:type="locator" xlink:label="c"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/part-attribute"
+      xlink:from="p" xlink:to="c" order="1.0"/>
+
+    <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_URIDate" xlink:type="locator" xlink:label="cc"/>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrlapi.org/arcrole/part-attribute"
+      xlink:from="c" xlink:to="cc" order="1.0"/>
+
+  </generic:link>
+
+</link:linkbase>

@@ -1,0 +1,200 @@
+<html>
+<head>
+<title>XBRLAPI unit test configuration suggestions</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>Unit testing configuration file</h1>
+
+<h2>Overview</h2>
+
+<p>This page documents the properties in the unit test configuration file.</p>
+
+<p>The test configuration file sets a large number of configuration
+properties. These are explained below.</p>
+
+<h2>Caching configuration</h2>
+
+<h3>local.cache</h3>
+<p><code>local.cache = /cache/path</code></p>
+<p>Specify the path to the root directory for the 
+local document cache.  This will be used when running all tests.</p>
+
+<h3>nonexistent.cache</h3>
+<p><code>nonexistent.cache = /rubbish/path/to/nonexistent/cache</code></p>
+<p>Specify a cache location that does not actually exist in the local file system.</p>
+
+<h3>nonexistent.url</h3>
+<p><code>nonexistent.url = http://some.rubbish.org/nonexistent.xml</code></p>
+<p>Specify a valid URL but one that does not resolve.</p>
+
+
+
+<h2>Xindice data store configuration</h2>
+
+<p>These configuration properties are only required if you are unit testing 
+the Xindice data store implementation.</p>
+
+<h3>xindice.xmldb.version</h3>
+<p><code>xindice.xmldb.version = 1.0</code></p>
+<p>Sets the version of XML:DB to use when running Xindice tests.  
+Ghis should always be set to 1.0.</p>
+
+<h3>xindice.scheme</h3>
+<p><code>xindice.scheme = xmldb:xindice</code></p>
+<p>Sets the URL scheme to use for accessing the Xindice database.  
+This should always be <code>xmldb:xindice</code>.</p>
+
+<h3>xindice.domain = localhost</h3>
+<p><code>xindice.domain = localhost</code></p>
+<p>Sets the value of the domain to use in Xindice database URLs.</p>
+
+<h3>xindice.port</h3>
+<p><code>xindice.port = 80</code></p>
+<p>Sets the port to use in Xindice database URLs</p>
+
+<h3>xindice.database</h3>
+<p><code>xindice.database = db</code></p>
+<p>Sets the value of the path to the root of the Xindice database 
+for use in Xindice database URLs.</p>
+<p>The Xindice database URL is formed from:<br/>
+<code>xindice.scheme + "://" + xindice.domain + ":" + xindice.port + "/" + xindice.database</code></p>
+
+<h3>xindice.data.collection.name</h3>
+<p><code>xindice.data.collection.name = collectionName</code></p>
+<p>Sets the name to use for the collection that will hold the data store in Xindice data store tests.</p>
+
+<h3>xindice.store.parent.path</h3>
+<p><code>xindice.store.parent.path = /</code></p>
+<p>The path to the collection that will be the parent collection of the 
+collection that actually holds XBRLAPI data. A value of <code>/</code> specifies 
+that the data store is in a collection that is a child of the database root.  If 
+some other value is used you will also need to ensure that the specified parent 
+collection actually exists.</p>
+
+
+
+<h2>Exist data store configuration</h2>
+
+<p>These configuration properties are only required if you are unit testing 
+the eXist data store implementation.</p>
+
+<h3>exist.xmldb.version</h3>
+<p><code>exist.xmldb.version = 1.0</code></p>
+<p>Sets the version of XML:DB to use when running Exist tests.  
+Generally this should always be set to 1.0.</p>
+
+<h3>xindice.scheme</h3>
+<p><code>exist.scheme = xmldb:exist</code></p>
+<p>Sets the URL scheme to use for accessing the Exist database.  
+This should always be <code>xmldb:exist</code>.</p>
+
+<h3>exist.domain = localhost</h3>
+<p><code>exist.domain = localhost</code></p>
+<p>Sets the value of the domain to use in Exist database URLs.</p>
+
+<h3>exist.port</h3>
+<p><code>exist.port = 80</code></p>
+<p>Sets the port to use in Exist database URLs</p>
+
+<h3>exist.database</h3>
+<p><code>exist.database = exist/xmlrpc/db</code></p>
+<p>Sets the value of the path to the root of the Xindice database for 
+use in Exist database URLs.</p>
+<p>The Exist database URL is formed from:<br/>
+<code>exist.scheme + "://" + exist.domain + ":" + exist.port + "/" + exist.database</code></p>
+
+<h3>exist.username</h3>
+<p><code>exist.username = admin</code></p>
+<p>The user name to use when accessing the Exist database.  In a default installation
+of eXist, the username is "admin".</p>
+
+<h3>exist.password</h3>
+<p><code>exist.password = </code></p>
+<p>The password to use when accessing the Exist database.  In a default installation of
+eXist, the password is "", ie: the empty string.  If this is the case in your test
+environment, just have a new line character (or characters)at the end of the 
+"=" when setting this configuration property.</p>
+
+<h3>exist.data.collection</h3>
+<p><code>exist.data.collection.name = xbrlapiData</code></p>
+<p>Sets the name to use for the collection that will hold 
+the data store in Exist data store tests.</p>
+
+<h3>exist.store.parent.path</h3>
+<p><code>exist.store.parent.path = /</code></p>
+<p>The path to the collection that will be the parent collection of the collection 
+that actually holds XBRLAPI data. A value of <code>/</code> specifies that the data 
+store is in a collection that is a child of the database root.  If some other value is used
+you will also need to ensure that the specified parent collection actually exists.</p>
+
+
+<h2>Oracle Berkeley Database XML data store configuration</h2>
+
+<p>These configuration properties are only required if you are unit testing 
+the Oracle Berkeley Database XML data store implementation.</p>
+
+<h3>bdbxml.store.location</h3>
+<p><code>bdbxml.store.location = /path/to/directory/for/database/files</code></p>
+<p>The directory specified needs to be writeable.</p>
+
+<h3>bdbxml.container.name</h3>
+<p><code>bdbxml.container.name = xbrlapiContainer</code></p>
+<p>The container name needs to be a valid file name for the
+file system that you are using.</p>
+
+
+
+<h2>XBRL 2.1 conformance suite configuration</h2>
+
+<h3>test.data.baseURL</h3>
+<p><code>test.data.baseURL = http://localhost/conformance/</code></p>
+<p>The base URL for the XBRL 2.1 conformance suite.</p>
+
+<h3>test.data.baseURL.cacheRepresentation</h3>
+<p><code>test.data.baseURL.cacheRepresentation = /http/localhost/80/conformance</code></p>
+<p>The cache representation of the XBRL 2.1 conformance suite URL. This
+involves replacing the <code>://</code>, 
+<code>/</code> and <code>:</code> character groups with a single slash.  It also requires inclusion of the port information
+even if that is not explicit in the URL.  If you are using a <code>file</code> scheme URL then the port value is 
+<code>null</code>.</p>
+
+
+<h2>Conformance suite test data configuration</h2>
+
+<p>These properties all have names that are prefixed with <code>test.data</code>.</p>
+
+<p>The values of these properties are all paths to specific documents in
+the conformance suite. These paths are resolved relative to the base URL
+of the conformance suite.  They should not be changed.</p>
+
+
+<h2>real data set test configuration</h2>
+
+<p>These properties all have names that are prefixed with <code>real.data</code>.</p>
+
+<p>The values of these properties are all absolute paths to specific 
+documents.  They should not be changed.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

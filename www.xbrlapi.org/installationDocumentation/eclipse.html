@@ -1,0 +1,107 @@
+<html>
+<head>
+<title>XBRLAPI installation suggestions</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>Using Eclipse with XBRLAPI</h1>
+
+<h2>Install Eclipse</h2>
+
+<p>Download and install <a href="http://www.eclipse.org/downloads/">Eclipse version 3.1.2</a>
+or later. You can use the normal or the much larger EE version. Extract
+it to create, say, the ~/programs/eclipse folder. Open Eclipse and and
+set the workspace to, say, the ~/eclipse directory.</p>
+
+<h2>Check out the XBRLAPI project from the Sourceforge Subversion repository.</h2>
+
+<p>
+Create a new project by checking it out from the XBRLAPI Sourceforge Subversion repository.
+First install Eclipse <a href="http://subclipse.tigris.org/">Subclipse</a>.
+</p>
+
+<p>
+Open the Subversion repository exploring perspective in Eclipse via the windows/perspectives menu.
+</p>
+
+<p>
+Set up the Subversion repository in Eclipse using URL: <code>https://xbrlapi.svn.sourceforge.net/svnroot/xbrlapi</code>
+</p>
+
+<p>
+Open the XBRLAPI subversion repository to show the branches, tags trunk and www.xbrlapi.org folders.
+</p>
+
+<p>
+Select the trunk and choose check-out from the context menu to check it out as a project in Eclipse.
+That should set up the project more or less correctly.
+</p>
+
+
+<p>In the "Java build path" project properties, add two libraries,
+one for the Java runtime library (if it is not there already) and one
+for the XBRLAPI project. (Use: ALT-ENTER =&gt; Java Build Path -&gt; Add
+Library -&gt; User Library) The one for the XBRLAPI project should contain
+all of the JAR files in the java/lib directory that is contained in the
+XBRLAPI project directory. This will ensure that the necessary third
+party JAR files are also on the class path.</p>
+
+<h2>Enable unit testing from Eclipse</h2>
+
+<p>Specify the location of the test configuration file. Under
+Windows-&gt;Preferences-&gt;Java-&gt;Installed JREs, for the JRE that you use for
+unit testing, edit the configuration and add the following parameter to
+the set of default virtual machine (VM) arguments:</p>
+
+<p><code>-Dxbrlapi.test.configuration=/home/geoff/eclipse/xbrlapi/test.configuration.properties</code></p>
+
+<p>You should now be able to run the full set of tests in the suite provided by
+<code>org.xbrlapi.tests.AllTests</code>. This can be run by finding that
+source file in the package explorer, right mouse clicking on it to
+access the context menu, and then choosing to run the file as a JUnit test.</p>
+
+<h2>Set up specific run jobs to test the basics of the XBRLAPI installation.</h2>
+
+<h3>DOM data store creation, population and usage to build an XML
+representation of a DTS</h3>
+
+<p>Create a run job called "XBRLAPI DOM data store Compose operation"</p>
+<p>The job is for the xbrlapi project and the main class is org.xbrlapi.Run</p>
+<p>The program arguments (on *NIX) are:</p>
+<code>
+-class org.xbrlapi.data.dom.Compose<br/>
+-logger /home/username/eclipse/xbrlapi/conf/log4j.xml<br/>
+-cache /home/username/taxonomy_cache<br/>
+-output /home/username/dts.xml<br/>
+URL<br/>
+</code>
+<p>Note that this requires you to create a directory for the taxonomy cache at ~/taxonomy_cache</p>
+<p>Note also that this requires you to specify the necessary URL to use as a starting point for 
+the discovery process in place of "URL".</p>
+
+<p>The virtual machine arguments are: <code>-Xmx1g</code> to ensure that you have adequate memory allocated.</p>
+
+<p>All other settings for the run job should be set to their default values.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

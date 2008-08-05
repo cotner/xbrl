@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>XBRLAPI Installing the Jetty servelet container</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>Installing the Jetty servlet container</h1>
+
+<h2>
+Overview
+</h2>
+
+<p>
+Some of the data store implementations for XBRLAPI are designed to
+run within Java servlet containers.  Moreover, XBRLAPI itself is suitable 
+for use by Java servlets and so can motivate a need to have an installed 
+Java servlet container.
+</p>
+
+<p>
+This page gives terse suggestions for setting up the Jetty servlet 
+container to host XML database that can act as data stores for XBRLAPI.
+More details on Jetty installation and configuration are available from
+<a href="http://docs.codehaus.org/display/JETTY/Downloading+and+Installing">Jetty documentation</a>.
+</p>
+
+<h2>Obtaining and installing Jetty</h2>
+
+<p>XBRLAPI has been tested with XML databases running from within both
+Tomcat and Jetty. This document covers Jetty which can be downloaded
+from <a href="http://jetty.mortbay.org">jetty.mortbay.org</a>.  Go to the download page
+and get the zip file that contains the latest version of Jetty.
+</p>
+
+<p>Unpack the zip file into the location that you want Jetty to be
+installed. Generally, at this point Jetty will be installed and running
+from http://localhost:8080/. Open that URL (or another if you have
+configured Jetty to use a different port or domain name) to see if it
+worked. If it failed, follow the Jetty configuration instructions that
+are available on the Jetty website.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>

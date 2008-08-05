@@ -1,0 +1,144 @@
+<html>
+<head>
+<title>XBRLAPI installation suggestions</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div id="navcontainer">
+<ul id="navlist">
+<li><a href="/">Home</a></li>
+<li><a href="commandLine.html">Installation</a></li>
+<li><a href="java.html">Java</a></li>
+<li><a href="jetty.html">Jetty</a></li>
+<li><a href="tomcat.html">Tomcat</a></li>
+<li><a href="bdbxml.html">Oracle Berkeley DB</a></li>
+<li><a href="exist.html">eXist</a></li>
+<li><a href="xindice.html">Xindice</a></li>
+<li><a href="unitTesting.html">Unit testing</a></li>
+<li><a href="maven.html">Maven</a></li>
+<li><a href="eclipse.html">Eclipse</a></li>
+</ul>
+</div>
+
+<div class="content">
+<h1>
+XBRLAPI installation and configuration
+</h1>
+
+<h2>
+Overview
+</h2>
+
+<p>This page is relevant to those looking to use XBRLAPI in
+their own environment. XBRLAPI can appear daunting but the first steps 
+are not difficult and most of the challenges relate to getting the 
+underlying data stores that XBRLAPI relies upon up and running.</p>
+
+<p>Many of the suggestions put forward in this document only cover one
+way of achieving the desired result, an operational XBRLAPI
+installation. Please follow the suggestions at your own discretion. None
+of the contributors to XBRLAPI accept responsibility for adverse results
+of any kind caused by following these suggestions or using the XBRLAPI.
+</p>
+
+<p>For those looking for examples showing how to exercise the API provided by
+XBRLAPI, the best place to look is in the unit-testing code.  This is distributed
+in the source code archive available as a file release from 
+<a href="http://sourceforge.net/project/showfiles.php?group_id=135539">Sourceforge.</a>
+
+<h2>JAR file-naming conventions</h2>
+
+<p>All XBRLAPI modules are released as compiled binaries in the form of JAR files.
+Each JAR file has a name that identifies the module and the date on which it was 
+generated.  The source code for each module is also made available for download in
+a ZIP archive.  ZIP archives follow an identical naming convention to the JAR files.</p>
+
+<h2>Modularisation</h2>
+
+<p>The XBRLAPI is now configured in a modular fashion to minimise the number
+of third party JAR dependencies for a particular installation.  Thus, if you are
+setting up the XBRLAPI to use the in memory XML DOM representation of the data
+store, then you do not have to install the JAR files for the eXist, Xindice or
+the Oracle Berkeley Database XML data stores.  This considerably simplifies setup 
+and limits the potential for conflicts between the JAR files required as dependencies
+by different data store implementations.</p>
+
+<p>Modularisation has also split out the code for the handling
+of the XML Base, the XML Pointer and the XLink specifications.  The modules for
+these specifications will always need to be installed, along with the core XBRLAPI
+module and the XBRLAPI utilities module if you are intending to using XBRLAPI.  They have been
+split out to ensure that those with an interest in their functionality alone can avoid the rest
+of the XBRLAPI.</p>
+
+The modules and their dependencies are as follows:
+
+<table class="xbrlapi">
+<tr>
+	<th>Module</th>
+	<th>Purpose</th>
+	<th>Required by:</th>
+</tr>
+<tr>
+	<td>module-utilities</td>
+	<td>Provides common functionality across all other modules</td>
+	<td>all other XBRLAPI modules</td>
+</tr>
+<tr>
+	<td>module-xmlbase</td>
+	<td>Provides an <a href="http://www.w3.org/TR/xmlbase/">XML Base</a> implementation</td>
+	<td>xbrlapi-api module</td>
+</tr>
+<tr>
+	<td>module-xlink</td>
+	<td>Provides an <a href="http://www.w3.org/TR/xlink11/">XLink 1.1</a> implementation</td>
+	<td>xbrlapi-api module</td>
+</tr>
+<tr>
+	<td>module-xpointer</td>
+	<td>Provides an <a href="http://www.w3.org/TR/2003/REC-xptr-framework-20030325/">XML Pointer</a> implementation</td>
+	<td>xbrlapi-api module</td>
+</tr>
+<tr>
+	<td>module-api</td>
+	<td>Provides the XBRLAPI API and implementation.</td>
+	<td>all XBRLAPI data store modules</td>
+</tr>
+<tr>
+	<td>module-bdb-xml</td>
+	<td>Provides the <a href="http://www.oracle.com/technology/documentation/berkeley-db/xml/index.html">
+	Oracle Berkeley Database XML</a> persistent data store implementation.</td>
+	<td>no modules</td>
+</tr>
+<tr>
+	<td>module-exist</td>
+	<td>Provides the <a href="http://exist.sourceforge.net/">
+	eXist</a> persistent data store implementation.</td>
+	<td>no modules</td>
+</tr>
+<tr>
+	<td>module-xindice</td>
+	<td>Provides the <a href="http://xml.apache.org/xindice/">
+	Xindice</a> persistent data store implementation.</td>
+	<td>no modules</td>
+</tr>
+</table>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+</div>
+
+</body>
+</html>

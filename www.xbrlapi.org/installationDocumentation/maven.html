@@ -1,0 +1,214 @@
+<html>
+<head>
+<title>XBRLAPI installation suggestions</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div class="content">
+
+<h1>Using Maven with XBRLAPI</h1>
+
+<h2>Overview</h2>
+
+<p>Maven is a build management tool that can be used to simplify the process
+of building XBRLAPI, managing the dependencies on third party JAR files, and 
+automating the process of running unit tests.</p>
+
+<h2>Check the XBRLAPI source code out from the SVN repository</h2>
+
+<p>See the <a href="https://sourceforge.net/svn/?group_id=135539">
+Sourceforge instructions</a> on getting a 
+copy of the XBRLAPI SVN repository.  At its simplest you should use the
+following command at the command line if you have an appropriate SVN client 
+installed in your own environment:<br/>
+<code> svn co https://xbrlapi.svn.sourceforge.net/svnroot/xbrlapi xbrlapi</code></p>
+
+<h2>Install Maven 2.0 or later</h2>
+
+<p>Download <a href="http://maven.apache.org/">Maven 2.0</a> or later.</p>
+
+<p>You download an archive file that needs to be extracted to the local file system.  Once the
+archive file is extracted, there is no additional installation process as such.  However, you may
+want to configure your environment to find the <code>mvn</code> command regardless of the current
+directory.</p>
+
+<p>Verify the installation by running <code>mvn --version</code>.</p>
+
+<h2>Sort out dependencies that are not supported by online Maven repositories</h2>
+
+<p>Maven does a great job of providing the necessary JAR files based upon the 
+dependencies documented in the Maven program object models (POM files).  However, 
+some of the JAR files that XBRLAPI has dependencies on are not yet available from
+the online Maven repositories.  These dependencies have to be addressed manually by 
+placing the appropriate JAR files into the local Maven repository.</p>
+
+<p>Adding a new custom JAR to the local MAVEN repository is done as follows (using eXist 1.1.1 as an example):</p>
+<p><code>mvn install:install-file -DgroupId=exist -DartifactId=exist -Dversion=1.1.1 -Dpackaging=jar -Dfile=exist-1.1.1.jar</code><br/>
+This needs to be run from the directory containing the JAR file to be added to the local repository.
+</p>
+
+<p>Depending on the modules that you want to use, the following third party JAR files 
+need to be inserted into the local MAVEN repository using the approach
+described above.  Note that, if you do not want to use a persistent data store then none of these
+JAR files are required in the local MAVEN repository.</p>
+
+<table class="xbrlapi">
+	<tr>
+		<th>Dependency for</th>
+		<th>Jar file</th>
+		<th>Group ID</th>
+		<th>Artifact ID</th>
+		<th>Version</th>
+		<th>Download</th>
+		<th>Notes</th>
+	</tr>
+
+	<tr>
+		<td>xbrlapi-exist</td>
+		<td>exist-1.1.1.jar</td>
+		<td>exist</td>
+		<td>exist</td>
+		<td>1.1.1</td>
+		<td><a href="http://exist.sourceforge.net/">eXist</a></td>
+		<td>This JAR contains the eXist implementation.  It must be obtained from
+		the eXist distribution. See
+		<a href="http://exist.sourceforge.net/devguide.html#N10D58">eXist required library 
+		documentation</a> for details.</td>
+	</tr>
+
+	<tr>
+		<td>xbrlapi-exist and xbrlapi-xindice</td>
+		<td>xmldb.jar</td>
+		<td>exist</td>
+		<td>xmldb-api</td>
+		<td>custom</td>
+		<td><a href="http://exist.sourceforge.net/">eXist</a>.</td>
+		<td>This JAR contains the XML:DB API.  It must be obtained from
+		the eXist distribution where it has been modified for eXist if you intend
+		to use it with an eXist data store.  Otherwise it may be obtained from
+		either the Xindice distribution or the <a href="xmldb-org.sourceforge.net">XML:DB project</a>.
+		Xindice appears to work with the version provided by the eXist distribution. See
+		<a href="http://exist.sourceforge.net/devguide.html#N10D58">eXist required library 
+		documentation</a> for details.</td>
+	</tr>
+
+	<tr>
+		<td>xbrlapi-exist and xbrlapi-xindice</td>
+		<td>xmlrpc-1.2-patched.jar</td>
+		<td>exist</td>
+		<td>xmlrpc</td>
+		<td>1.2-patched</td>
+		<td><a href="http://exist.sourceforge.net/">eXist</a></td>
+		<td>This JAR contains the XML RPC API.  It must be obtained from
+		the eXist distribution where it has been patched for eXist if you intend
+		to use it with an eXist data store.  This version also appears to work with Xindice.</td>
+	</tr>
+
+	<tr>
+		<td>xbrlapi-xindice</td>
+		<td>xindice-1.1.jar</td>
+		<td>org.apache</td>
+		<td>xindice</td>
+		<td>1.1</td>
+		<td><a href="http://xml.apache.org/xindice/">Xindice</a></td>
+		<td>This JAR contains the Xindice implementation.  It must be obtained 
+		from the Xindice installation.</td>
+	</tr>
+
+	<tr>
+		<td>xbrlapi-bdbxml</td>
+		<td>db.jar</td>
+		<td>com.oracle.berkeley</td>
+		<td>db</td>
+		<td>2.3.10</td>
+		<td><a href="http://www.oracle.com/technology/documentation/berkeley-db/xml/ref_xml/xml_unix/intro.html">Build documentation</a></td>
+		<td>After downloading the source, you need to run 
+		<code>./buildall.sh --enable-java --prefix=/usr/local/BerkeleyDBXML.2.3.10</code><br/>
+  		making sure that you use the appropriate version number for the installation directory.  
+  		db.jar can be found in the lib directory of the installation.<td>
+	</tr>
+
+	<tr>
+		<td>xbrlapi-bdbxml</td>
+		<td>dbxml.jar</td>
+		<td>com.oracle.berkeley</td>
+		<td>dbxml</td>
+		<td>2.3.10</td>
+		<td><a href="http://www.oracle.com/technology/documentation/berkeley-db/xml/ref_xml/xml_unix/intro.html">Build documentation</a></td>
+		<td>After downloading the source, you need to run 
+		<code>./buildall.sh --enable-java --prefix=/usr/local/BerkeleyDBXML.2.3.10</code><br/>
+  		making sure that you use the appropriate version number for the installation directory.  
+  		dbxml.jar can be found in the lib directory of the installation.<td>
+	</tr>
+
+</table>
+
+<h2>Modify the POM files for your own environment</h2>
+
+<p>The XBRLAPI source has been divided into a number of different modules.  Each module
+has its own POM.xml file.  These module POM files are all referenced by the POM file in the
+root directory of the XBRLAPI source code.  These POM files contain some information about the
+structure of the local file system that you will need to tailor to your own environment.</p>
+
+<p>The POM files for each module (found in the module-xxx) directories) all define a 
+surefire-plugin property, called <code>xbrlapi.test.configuration</code> that identifies 
+the location of the test configuration properties file.  This location needs to specify 
+the location of the test properties file that you want to use.</p>
+
+<p>The POM files also specify the location of the log4j.xml logging configuration file that
+should be used in your own environment.  This file location is specified at the end of the POM
+files in the test properties section.  In most cases, if you have checked out the full XBRLAPI 
+source tree, then a workable log4j.xml file will have been checked out into a conf directory.
+In such cases, the POM files will already refer to this log4j configuration file and no POM
+file modifications will be necessary.</p>
+
+<p>The POM file for the bdb-xml project, contained in the <code>module-bdb-xml</code> directory
+also specifies the location of the Oracle Berkeley DB XML database binaries.  This needs to be
+set to the appropriate location in your own environment.  See the <code>argLine</code> element
+in the surefire plugin configuration.  Without setting this correctly, it will not be possible
+to run the unit testing for the data store based on the Oracle Berkeley DB XML database.</p>
+
+<p>If you have ideas on how to make the POM files more portable across platforms and 
+environments then please put them forward.</p>
+
+<h2>Running Maven</h2>
+
+<p>The XBRLAPI source has been divided into a number of different modules.  Each module
+has its own POM.xml file.  These module POM files are all referenced by the POM file in the
+root directory of the XBRLAPI source code.  To perform a Maven operation on the entire XBRLAPI
+installation, issue the Maven command from the root directory of the XBRLAPI checked out from
+the SVN repository.  For example, to build and test all modules, run <code>mvn test</code>
+from the command line when the current directory is the XBRLAPI root directory.
+To build, test and install all modules, run <code>mvn install</code> from the command 
+line when the current directory is the XBRLAPI root directory.</p>
+
+<p>The same commands can be run from the <code>module-xxx</code> directory to just operate 
+on that specific module.  This is the approach that will need to be taken if you decide 
+not to install the necessary custom JAR files required by the persistent data store modules.</p>
+
+<p>Note that installation involves copying the generated JAR file(s) into the local Maven repository, ready
+to be referenced as dependencies by other projects or modules.</p>
+
+<p>See the <a href="http://maven.apache.org/guides/index.html">Maven documentation</a> for more 
+details on what can be done with Maven.</p>
+
+<p>
+<a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=135539&type=1" width="88" height="31" border="0" align="right" alt="SourceForge Logo" />
+</a>
+</p>
+
+</div>
+
+</body>
+</html>
