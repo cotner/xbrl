@@ -2,7 +2,7 @@ package org.xbrlapi.xlink;
 
 /**
  * Implementation of the XLinkProcessor.
- * Includes XLink1.1 support.
+ * Includes XLink 1.1 support.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  * @author Henry S. Thompson (ht@w3.org)
  */
@@ -110,14 +110,12 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 
         // Complain about any unexpected attributes in the XLink namespace.
         // Added by Henry S Thompson
-        // Walter Hamscher has identified documents in the XBRL community that violate this constraint.
-        // To accommodate this issue, Geoff Shuetrim has changed the error signal to a warning. (5 Aug. 2008).
         boolean hasSomeXLinkAttributes = false;
         for (int i=0; i<attrs.getLength(); i++) {
             if (attrs.getURI(i).equals(Constants.XLinkNamespace)) {
                 String aName = attrs.getLocalName(i);
                 if ( XLINKATTRS.get(aName) == null ) {
-                    xlinkHandler.warning(namespaceURI, lName, qName, attrs, aName + " is not defined in the XLink namespace.");
+                    xlinkHandler.error(namespaceURI, lName, qName, attrs, aName + " is not defined in the XLink namespace.");
                 } else {
                     hasSomeXLinkAttributes = true;
                 }
