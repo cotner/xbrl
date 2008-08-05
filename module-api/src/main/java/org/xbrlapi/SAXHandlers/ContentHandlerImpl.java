@@ -66,7 +66,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * The content handler needs to be supplied with a variety of helpers
  * to assist with data storage and XLink processing. These are 
- * supplied to the constructor by the loader.
+ * supplied by the loader.
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
