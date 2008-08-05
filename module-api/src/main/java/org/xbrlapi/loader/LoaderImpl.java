@@ -786,24 +786,6 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * HJU Modification Property that is designed to hold a string with space
-     * delimited pairs of namespaces and the corresponding URLs of files to be
-     * loaded from a local source rather than from the original URL. This mimics
-     * the xsi:schemaLocation attribute. This property is used to substitute a
-     * local URL for a DTS discovered one when stashing URLs for later
-     * discovery. HJU
-     */
-    // private String _namespaceLocations = null;
-    /**
-     * HJU Modification Allow the user to specify local file locations for
-     * schema urls. HJU
-     */
-    /*
-     * public void setNamespaceLocations(String namespaceLocations) {
-     * _namespaceLocations = namespaceLocations; }
-     */
-
-    /**
      * Parse an XML Document supplied as a string the next part of the DTS.
      * 
      * @param url
