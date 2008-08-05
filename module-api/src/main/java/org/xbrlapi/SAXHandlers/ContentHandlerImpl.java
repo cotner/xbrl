@@ -298,7 +298,13 @@ public class ContentHandlerImpl extends DefaultHandler {
     {
         ;
     }
-    
+
+    /**
+     * List of the fragment identifiers to use in parsing the document.
+     * Load these in order of frequency of fragment occurrence for optimum performance.
+     */
+/*    private List<FragmentIdentifier> identifiers = new LinkedList<FragmentIdentifier>();
+*/    
     /**
      * Identifies fragments.
      */
@@ -308,7 +314,7 @@ public class ContentHandlerImpl extends DefaultHandler {
             String lName, 
             String qName, 
             Attributes attrs) throws SAXException {
-
+        
         // Update element depth and child count.
         setDepth(getDepth()+1);
         
@@ -342,6 +348,21 @@ public class ContentHandlerImpl extends DefaultHandler {
                 }
             }
         }
+
+        
+        // Try to identify a new fragment
+        // This code will replace all following code eventually.
+/*        for (FragmentIdentifier identifier: identifiers) {
+            try {
+                identifier.idFragment(namespaceURI,lName,qName,attrs);
+                if (loader.addedAFragment()) {
+                    break;
+                }
+            } catch (XBRLException e) {
+                throw new SAXException("Fragment identification failed.",e);
+            }
+        }
+*/        
         
         // Handle XLink fragments
         try {
@@ -573,6 +594,7 @@ public class ContentHandlerImpl extends DefaultHandler {
                     getLoader().addFragment(xbrlLinkFragment,getDepth(),getState());          
                 }
             }
+
         } catch (XBRLException e) {
             throw new SAXException("The XBRL Link fragment could not be processed.",e);
         }

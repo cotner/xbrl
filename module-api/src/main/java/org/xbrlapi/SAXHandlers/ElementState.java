@@ -15,12 +15,12 @@ import java.util.Vector;
  * 
  * The state keeps track of ancestor element states, the id of the current
  * element, if any, and the order which is set equal to the number of children 
- * so far for the found parent element state.
+ * so far for the parent element state.
  */
 public class ElementState {
 
 	/**
-	 * The parent element state (if a parent exists)
+	 * The parent element state if a parent exists and null otherwise
 	 */
 	private ElementState parent = null;
 
@@ -28,6 +28,9 @@ public class ElementState {
 	
 	private long childrenSoFar = 0;
 	
+	/**
+	 * The ID for the element - if one is supplied
+	 */
 	private String id = null;
 		
 	/**
