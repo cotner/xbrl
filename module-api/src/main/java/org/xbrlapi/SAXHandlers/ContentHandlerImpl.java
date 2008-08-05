@@ -300,11 +300,14 @@ public class ContentHandlerImpl extends DefaultHandler {
     }
     
     /**
-     * Identifies various kinds of fragments.
+     * Identifies fragments.
      */
     @SuppressWarnings("unchecked")
-    public void startElement( String namespaceURI, String lName, String qName, Attributes attrs) throws SAXException 
-    {
+    public void startElement( 
+            String namespaceURI, 
+            String lName, 
+            String qName, 
+            Attributes attrs) throws SAXException {
 
         // Update element depth and child count.
         setDepth(getDepth()+1);
