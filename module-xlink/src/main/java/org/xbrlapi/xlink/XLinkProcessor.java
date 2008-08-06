@@ -53,15 +53,18 @@ public interface XLinkProcessor {
      * Respond to the end of an element, 
      * examining the element for XLink features
      * 
-     * @param namespaceURI
-     * @param lName
-     * @param qName
+     * @param namespaceURI The namespace of the element being ended.
+     * @param lName The local name of the element being ended.
+     * @param qName The QName of the element being ended.
+     * @param attrs The attributes of the element being ended.
      * @throws XLinkException
      */
 	public void endElement(
 			String namespaceURI, 
 			String lName, 
-			String qName) throws XLinkException;
+			String qName,
+			Attributes attrs) throws XLinkException;
+
 
 	/**
 	 * Handles the character content for a title element 

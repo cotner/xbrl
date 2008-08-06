@@ -124,7 +124,7 @@ public class XLinkProcessorImpl implements XLinkProcessor {
         
 		// Handle any custom links
 		if (! (customLinkRecogniser == null))
-			if (customLinkRecogniser.isLink(namespaceURI, lName, qName)) {
+			if (customLinkRecogniser.isLink(namespaceURI, lName, qName, attrs)) {
 				
 				String href = customLinkRecogniser.getHref(namespaceURI, lName, qName, attrs);
 				String role = customLinkRecogniser.getRole(namespaceURI, lName, qName, attrs);
@@ -472,16 +472,16 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 	}
 
 	/**
-	 * @see org.xbrlapi.xlink.XLinkProcessor#endElement(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xbrlapi.xlink.XLinkProcessor#endElement(String, String, String, Attributes)
 	 */
-	public void endElement(String namespaceURI, String lName, String qName) throws XLinkException {
+	public void endElement(String namespaceURI, String lName, String qName, Attributes attrs) throws XLinkException {
 
 		xlinkHandler.xmlBaseEnd();
 		Integer parentType = ancestorTypes.pop();
 		
 		// Handle any custom links
 		if (! (customLinkRecogniser == null))
-			if (customLinkRecogniser.isLink(namespaceURI, lName, qName)) {
+			if (customLinkRecogniser.isLink(namespaceURI, lName, qName, attrs)) {
 				xlinkHandler.endSimpleLink(namespaceURI, lName, qName);
 				return;
 			}
