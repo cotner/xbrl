@@ -8,6 +8,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -133,7 +134,24 @@ public class LoaderImplTestCase extends BaseTestCase {
 			loader.stashURL(url1);
 			loader.stashURL(url2);
 			loader.discover();
-			assertTrue(store.getStoredURLs().size() > 10);
+			
+            List<String> urls = store.getStoredURLs();
+            assertTrue(urls.size() > 0);
+            
+            boolean foundStartingPoint = false;
+            boolean foundBothStartingPoints = false;
+            for (String url: urls) {
+                if (url.equals(url1.toString())) {
+                    foundStartingPoint = true;
+                }
+                if (foundStartingPoint)
+                    if (url.equals(url2.toString())) {
+                        foundBothStartingPoints = true;
+                    }
+                    
+            }
+            assertTrue(foundBothStartingPoints);
+			
 		} catch (XBRLException e) {
 		    e.printStackTrace();
 			fail("Unexpected " + e.getMessage());

@@ -33,7 +33,15 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	public void testGettingURLList() {
 		try {
 			List<String> urls = store.getStoredURLs();
-			assertTrue(urls.size() > 10);
+			assertTrue(urls.size() > 0);
+			
+			boolean foundStartingPoint = false;
+			for (String url: urls) {
+			    if (url.equals(getURL(this.STARTING_POINT))) {
+			        foundStartingPoint = true;
+			    }
+			}
+			assertTrue(foundStartingPoint);
 			
 			Element e = store.getDocumentAsDOM(urls.get(0));
 			assertNotNull(e);

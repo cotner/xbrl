@@ -1,7 +1,8 @@
 package org.xbrlapi.data.dom.tests;
 
+import java.net.URL;
 import java.util.HashMap;
- 
+
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcroleType;
 import org.xbrlapi.FragmentList;
@@ -23,6 +24,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
+	    loader.stashURL(new URL(Constants.ROLES_URL));
 		loader.discover(this.getURL(STARTING_POINTA));
 		loader.discover(this.getURL(STARTING_POINTB));	
 		loader.discover(this.getURL(STARTING_POINTC));	

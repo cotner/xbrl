@@ -4,6 +4,7 @@ import java.net.URL;
 
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 import org.xbrlapi.loader.discoverer.Discoverer;
+import org.xbrlapi.utilities.Constants;
 
 /**
  * Test the loader implementation.
@@ -31,6 +32,7 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
 	 */
 	public void testInterruption() {
 		try {
+	        loader.stashURL(new URL(Constants.ROLES_URL));
             loader.stashURL(this.url1);
             loader.stashURL(this.url2);
             

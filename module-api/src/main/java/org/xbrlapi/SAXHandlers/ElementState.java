@@ -37,11 +37,11 @@ public class ElementState {
 	 * Initialise the own order using information about children of parent element.
 	 */
 	public ElementState(ElementState parent) {
-		super();
+		//super();
 		this.parent = parent;
 		if (hasParent()) {
 			parent.addChild();
-			order = parent.getChildrenSoFar();
+			this.order = parent.getChildrenSoFar();
 		}
 	}
 

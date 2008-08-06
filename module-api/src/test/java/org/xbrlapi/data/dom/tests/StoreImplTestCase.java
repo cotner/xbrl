@@ -120,7 +120,7 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testHasDocument() {
 		try {
-			assertTrue(store.hasDocument("http://www.xbrlapi.org/xbrl/xbrl-2.1-roles.xsd"));
+			assertTrue(store.hasDocument(getURL(STARTING_POINT)));
 			assertFalse(store.hasDocument("http://www.rubbish.gcs/crazy.xyz"));
 		} catch (XBRLException e) {
 			fail("Unexpected " + e.getMessage());

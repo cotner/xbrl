@@ -70,9 +70,6 @@ public class LoaderImpl implements Loader {
      */
     private Stack<Fragment> fragments = new Stack<Fragment>();
 
-
-
-
     /**
      * A stack of element states, one per root element
      * of a fragment currently undergoing construction.

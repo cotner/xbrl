@@ -146,7 +146,7 @@ public class ContentHandlerImpl extends DefaultHandler {
      * Data required to track the element scheme XPointer 
      * expressions that can be used to identify XBRL fragments.
      */
-    private ElementState state = new ElementState();
+    private ElementState state = null; // new ElementState();
     
     /**
      * @param state The element state
@@ -154,6 +154,13 @@ public class ContentHandlerImpl extends DefaultHandler {
     protected void setState(ElementState state) {
         this.state = state;
     }
+    
+    /**
+     * @return the state for the element currently being parsed.
+     */
+    protected ElementState getState() {
+        return state;
+    }    
     
     /**
      * String representation of the XML document - for documents supplied as such.
@@ -216,9 +223,7 @@ public class ContentHandlerImpl extends DefaultHandler {
     	return loader;
     }
     
-    protected ElementState getState() {
-    	return state;
-    }
+
     
     /**
      * The locator for a document is stored as part of the DTSImpl object
