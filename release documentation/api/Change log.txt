@@ -1,3 +1,11 @@
+6 Aug. 2008
+Removed the element depth from the set of 
+state information tracked by the SAX content
+handler for the loader, the loader itself and
+the XBRL XLink handler.  This was done by relying
+instead on tracking the ElementState during SAX
+parsing.
+
 30 Jul. 2008
 Fixed bug in queries to get network roots.
 Fixed bug in caching on Windows.
