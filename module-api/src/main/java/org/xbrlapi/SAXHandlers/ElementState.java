@@ -2,6 +2,8 @@ package org.xbrlapi.SAXHandlers;
 
 import java.util.Vector;
 
+import org.xml.sax.Attributes;
+
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  * Assists in the tracking of document state information
@@ -24,6 +26,27 @@ public class ElementState {
 	 */
 	private ElementState parent = null;
 
+	/**
+	 * The set of attributes on the element.
+	 * These need to be tracked so that they are available
+	 * to the SAX Handler's endElement method.
+	 */
+	private Attributes attributes = null;
+	
+	/**
+	 * @return the attributes of the element.
+	 */
+	public Attributes getAttributes() {
+	    return attributes;
+	}
+	
+	/**
+	 * @param attributes The attributes of the element.
+	 */
+	public void setAttributes(Attributes attributes) {
+	    this.attributes = attributes;
+	}
+	
 	private long order = 1;
 	
 	private long childrenSoFar = 0;
