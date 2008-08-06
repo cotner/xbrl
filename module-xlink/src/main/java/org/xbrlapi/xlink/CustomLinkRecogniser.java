@@ -25,13 +25,14 @@ public abstract class CustomLinkRecogniser {
 	 * a SAX start element event and from a SAX end 
 	 * element event.
 	 *
-	 * @param namespaceURI The namespace of the element
-	 * @param lName The localname of the element
-	 * @param qName The QName of the element
+	 * @param namespaceURI The namespace of the element.
+	 * @param lName The localname of the element.
+	 * @param qName The QName of the element.
+	 * @param attrs The attributes of the element.
 	 * @return true if the element is a custom simple link and false
 	 * otherwise.
 	 */
-	public abstract boolean isLink(String namespaceURI, String lName, String qName);	
+	public abstract boolean isLink(String namespaceURI, String lName, String qName, Attributes attrs);	
 	
 	/**
 	 * Get the href equivalent for the link
