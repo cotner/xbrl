@@ -1,5 +1,15 @@
 Release details:
 
+Release 3.3
+Added Attributes to the endElement method because some custom
+links can only be recognisable given their attributes rather than
+the element name.
+Added the ElementState class to the org.xbrlapi.xlink package
+to provide basic infrastructure for tracking attributes and making
+them available to the endElement method in SAX content handlers that
+are using the XLink processor. 
+
+
 Release 3.2
 Jul 30, 2008
 No changes since the last release.

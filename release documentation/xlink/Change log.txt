@@ -1,3 +1,10 @@
+August 6, 2008
+Added Attributes to the endElement method.
+Added the ElementState class to the org.xbrlapi.xlink package
+to provide basic infrastructure for tracking attributes and making
+them available to the endElement method in SAX content handlers that
+are using the XLink processor. 
+
 September 14, 2006
 Added in the patch from Henry S Thompson 
 to support XLink 1.1
