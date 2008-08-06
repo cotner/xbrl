@@ -46,6 +46,7 @@ import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.GrammarCacheImpl;
 import org.xbrlapi.utilities.XBRLException;
+import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkException;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xbrlapi.xmlbase.BaseURLSAXResolver;
@@ -146,7 +147,7 @@ public class ContentHandlerImpl extends DefaultHandler {
      * Data required to track the element scheme XPointer 
      * expressions that can be used to identify XBRL fragments.
      */
-    private ElementState state = null; // new ElementState();
+    private ElementState state = null;
     
     /**
      * @param state The element state
@@ -296,7 +297,7 @@ public class ContentHandlerImpl extends DefaultHandler {
             Attributes attrs) throws SAXException {
         
         // Update the information about the state of the current element
-        setState(new ElementState(getState()));
+        setState(new ElementState(getState(),attrs));
 
         try {
             getLoader().incrementChildren();
@@ -691,6 +692,9 @@ public class ContentHandlerImpl extends DefaultHandler {
             String namespaceURI, 
             String sName, 
             String qName) throws SAXException {
+
+        // Get the attributes of the element being ended.
+        Attributes attrs = getState().getAttributes();
         
         // Handle the ending of an element in the fragment builder
         try {
@@ -701,7 +705,7 @@ public class ContentHandlerImpl extends DefaultHandler {
 
         // Handle the ending of an element in the XLink processor
         try {
-            getLoader().getXlinkProcessor().endElement(namespaceURI, sName, qName);
+            getLoader().getXlinkProcessor().endElement(namespaceURI, sName, qName, attrs);
         } catch (XLinkException e) {
             throw new SAXException("The XLink processor endElement failed.",e);
         }

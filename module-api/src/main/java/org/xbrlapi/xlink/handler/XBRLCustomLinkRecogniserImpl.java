@@ -21,10 +21,9 @@ public class XBRLCustomLinkRecogniserImpl extends CustomLinkRecogniser {
 	}
 
 	/**
-	 * Only XML Schema include and import elements are
-	 * to be treated as simple links.  
+	 * @see org.xbrlapi.xlink.CustomLinkRecogniser#isLink(String, String, String, Attributes)
 	 */
-	public boolean isLink(String namespaceURI, String lName, String qName) {
+	public boolean isLink(String namespaceURI, String lName, String qName, Attributes attrs) {
 		if (namespaceURI.equals(Constants.XMLSchemaNamespace))
 			if (lName.equals("import") || lName.equals("include"))
 				return true;

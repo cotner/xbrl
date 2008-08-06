@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Vector;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.SAXHandlers.ElementState;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
+import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xml.sax.EntityResolver;
 

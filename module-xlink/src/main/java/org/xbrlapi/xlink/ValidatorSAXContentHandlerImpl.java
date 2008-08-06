@@ -9,14 +9,32 @@ package org.xbrlapi.xlink;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-import org.xbrlapi.xlink.XLinkException;
-import org.xbrlapi.xlink.XLinkProcessor;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ValidatorSAXContentHandlerImpl extends DefaultHandler {
 
+    /**
+     * Data required to track the element scheme XPointer 
+     * expressions that can be used to identify XBRL fragments.
+     */
+    private ElementState state = null;
+    
+    /**
+     * @param state The element state
+     */
+    protected void setState(ElementState state) {
+        this.state = state;
+    }
+    
+    /**
+     * @return the state for the element currently being parsed.
+     */
+    protected ElementState getState() {
+        return state;
+    }    
+        
 	/**
 	 * The XLinkProcessor to use in processing
 	 * the XLinks found in parsed documents
@@ -36,6 +54,9 @@ public class ValidatorSAXContentHandlerImpl extends DefaultHandler {
      */
     public void startElement( String namespaceURI, String lName, String qName, Attributes attrs) throws SAXException 
 	{
+        
+        setState(new ElementState(getState(),attrs));
+        
     	try {
     		xlinkProcessor.startElement(namespaceURI, lName, qName, attrs);
     	} catch (XLinkException e) {
@@ -48,11 +69,19 @@ public class ValidatorSAXContentHandlerImpl extends DefaultHandler {
      */
     public void endElement( String namespaceURI, String lName, String qName) throws SAXException 
 	{
-    	try {
-    		xlinkProcessor.endElement(namespaceURI, lName, qName);
+
+        // Get the attributes of the element being ended.
+        Attributes attrs = getState().getAttributes();
+        
+        try {
+    		xlinkProcessor.endElement(namespaceURI, lName, qName, attrs);
     	} catch (XLinkException e) {
     		throw new SAXException("The XLink processor startElement failed.",e);
     	}
+    	
+        // Update the information about the state of the current element
+        setState(getState().getParent());
+
 	}
 
     /**

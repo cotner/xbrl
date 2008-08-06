@@ -8,7 +8,6 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
