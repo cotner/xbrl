@@ -11,6 +11,7 @@ import org.xml.sax.Attributes;
  * to ensure that only actual XLink are triggering XLink events.
  * Note that the XLink specification is pretty persnicketty regarding
  * nested XLink structures.
+ * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
@@ -50,8 +51,16 @@ public interface XLinkProcessor {
 			Attributes attrs) throws XLinkException;
 	
     /**
-     * Respond to the end of an element, 
-     * examining the element for XLink features
+     * Respond to the end of an element, examining the element 
+     * for XLink features.
+     * 
+     * The SAX content handler that uses this XLink processor 
+     * will need to keep track of the attributes of the element being ended
+     * and will need to access these attributes from within the endElement
+     * method in the content handler that then calls the end element
+     * method in this XLink processor.
+     * 
+     * @see org.xbrlapi.xlink.ElementState#ElementState(ElementState, Attributes)
      * 
      * @param namespaceURI The namespace of the element being ended.
      * @param lName The local name of the element being ended.
