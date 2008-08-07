@@ -4,13 +4,13 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.xbrlapi.SAXHandlers.EntityResolverImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.xindice.DBConnection;
 import org.xbrlapi.data.xindice.DBConnectionImpl;
 import org.xbrlapi.data.xindice.StoreImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
+import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
