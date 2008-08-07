@@ -1,5 +1,6 @@
 package org.xbrlapi.sax.identifiers;
 
+import org.xbrlapi.Fragment;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.ContentHandler;
 import org.xbrlapi.utilities.XBRLException;
@@ -34,6 +35,16 @@ import org.xml.sax.Attributes;
 public interface Identifier {
 
     /**
+     * Determines if the element starts a new fragment and if so:
+     * 
+     * <ul>
+     * <li>creates the fragment</li>
+     * <li>sets the fragment index</li>
+     * <li>stores any ID attributes on the fragment root in the fragment metadata
+     * and in the element state object</li>
+     * <li>adds the fragment to the loader</li>
+     * </ul>
+     * 
      * @param namespaceURI the namespace of the element
      * @param lName the local name of the element 
      * @param qName the qname of the element
@@ -60,6 +71,15 @@ public interface Identifier {
             String lName, 
             String qName,
             Attributes attrs) throws XBRLException;
+
+    /**
+     * Set up the fragment index, handle ID metadata for the fragment and
+     * add it to the loader.
+     * @param fragment The fragment that has been identified.
+     * @param attrs The attributes of the root element of the fragment.
+     * @throws XBRLException
+     */
+    public void processFragment(Fragment fragment,Attributes attrs) throws XBRLException;
     
     /**
      * @return the SAX content handler using 

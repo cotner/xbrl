@@ -49,6 +49,7 @@ public class XBRLXLinkIdentifier extends BaseIdentifier implements Identifier {
             throw new XBRLException("The XBRLXLinkIdentifier must be used with an XBRLXLinkHandler.",e);
         }
             
+        // Pass control through to the XLink processor to detect XLink structures
         try {
             getXLinkProcessor().startElement(namespaceURI,lName,qName,attrs);
         } catch (XLinkException e) {

@@ -1,5 +1,6 @@
 package org.xbrlapi.sax.identifiers;
 
+import org.xbrlapi.Fragment;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.ContentHandler;
 import org.xbrlapi.utilities.XBRLException;
@@ -68,7 +69,6 @@ public class BaseIdentifier implements Identifier {
         ;
     }
     
-    
     /**
      * @see Identifier#endElement(String, String, String, Attributes)
      */
@@ -79,5 +79,21 @@ public class BaseIdentifier implements Identifier {
             Attributes attrs) throws XBRLException {
         ;
     }
+    
+    /**
+     * Override this base implementation if the ID of the fragment root element is
+     * expressed by an attribute other than "id".
+     * @see Identifier#processFragment(Fragment, Attributes)
+     */
+    public void processFragment(Fragment fragment,Attributes attrs) throws XBRLException {
+        Loader loader = this.getLoader();
+        fragment.setFragmentIndex(getLoader().getNextFragmentId());
+        if (attrs.getValue("id") != null) {
+            fragment.appendID(attrs.getValue("id"));
+            this.getElementState().setId(attrs.getValue("id"));
+        }
+        loader.addFragment(fragment,getElementState());
+    }
+    
     
 }

@@ -1,49 +1,18 @@
 package org.xbrlapi.sax;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Stack;
+import java.util.List;
 
-import org.apache.xerces.parsers.XMLGrammarPreparser;
-import org.apache.xerces.util.XMLResourceIdentifierImpl;
-import org.apache.xerces.xni.XMLResourceIdentifier;
-import org.apache.xerces.xni.grammars.XMLGrammarDescription;
-import org.apache.xerces.xni.grammars.XSGrammar;
-import org.apache.xerces.xni.parser.XMLEntityResolver;
-import org.apache.xerces.xni.parser.XMLInputSource;
-import org.apache.xerces.xs.StringList;
-import org.apache.xerces.xs.XSElementDeclaration;
-import org.apache.xerces.xs.XSModel;
-import org.apache.xerces.xs.XSNamespaceItem;
-import org.apache.xerces.xs.XSNamespaceItemList;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.impl.ArcroleTypeImpl;
-import org.xbrlapi.impl.ConceptImpl;
-import org.xbrlapi.impl.ContextImpl;
-import org.xbrlapi.impl.ElementDeclarationImpl;
-import org.xbrlapi.impl.EntityImpl;
 import org.xbrlapi.impl.FragmentImpl;
-import org.xbrlapi.impl.InstanceImpl;
-import org.xbrlapi.impl.LanguageImpl;
-import org.xbrlapi.impl.LinkbaseImpl;
-import org.xbrlapi.impl.NonNumericItemImpl;
-import org.xbrlapi.impl.PeriodImpl;
-import org.xbrlapi.impl.ReferencePartDeclarationImpl;
-import org.xbrlapi.impl.ReferencePartImpl;
-import org.xbrlapi.impl.RoleTypeImpl;
-import org.xbrlapi.impl.ScenarioImpl;
-import org.xbrlapi.impl.SchemaImpl;
-import org.xbrlapi.impl.SegmentImpl;
-import org.xbrlapi.impl.SimpleNumericItemImpl;
-import org.xbrlapi.impl.TupleImpl;
-import org.xbrlapi.impl.UnitImpl;
-import org.xbrlapi.impl.UsedOnImpl;
-import org.xbrlapi.impl.XlinkDocumentationImpl;
 import org.xbrlapi.loader.Loader;
+import org.xbrlapi.sax.identifiers.Identifier;
+import org.xbrlapi.sax.identifiers.LanguageIdentifier;
+import org.xbrlapi.sax.identifiers.XBRLXLinkIdentifier;
+import org.xbrlapi.sax.identifiers.XMLSchemaIdentifier;
 import org.xbrlapi.utilities.Constants;
-import org.xbrlapi.utilities.GrammarCacheImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkException;
@@ -72,193 +41,55 @@ import org.xml.sax.SAXException;
 public class ContentHandlerImpl extends BaseContentHandlerImpl implements ContentHandler {
 
     /**
-     * The XML Schema model if parsing an XML Schema.
-     */
-    private XSModel model = null;
-    
-    /**
-     * The target namespace of an XML Schema.
-     */
-    private String targetNamespace = null;
-    
-    /**
-     * @param targetNamespace The targetNamespace value
-     */
-    protected void setTargetNamespace(String targetNamespace) {
-        this.targetNamespace = targetNamespace;
-    }
-    
-    /**
-     * @return the target namespace
-     */
-    protected String getTargetNamespace() {
-        return this.targetNamespace;
-    }
-    
-    /**
-     * State information to help find tuples in XBRL instances.
-     */
-    protected boolean parsingAnXBRLInstance = false;
-    protected boolean canBeATuple = false;
-
-    /**
-     * State information to help find reference parts.
-     * TODO Find reference parts using XML Schema substitution group information.
-     */
-    protected boolean parsingAReferenceResource = false;
-    
-    /**
-     * SAX parsing locator - providing information for use in
-     * error reporting.
-     */
-    private Locator locator = null;
-
-    /**
-     * @param locator The locator to set.
-     */
-    protected void setLocator(Locator locator) {
-        this.locator = locator;
-    }    
-    
-
-    
-
-    
-    
-    
-    /**
-     * String representation of the XML document - for documents supplied as such.
-     */
-    private String xml = null;
-    
-    /**
-     * @param xml The XML stored as a string, that is to be parsed.
-     * @throws XBRLException if the XML string is null.
-     */
-    private void setXML(String xml) throws XBRLException {
-        if (xml == null) throw new XBRLException("The string of XML to be parsed must not be null.");  
-        this.xml = xml;        
-    }
-
-    /**
-     * The namespace map stack for tracking namespaces.
-     */
-    private Stack<HashMap<String,String>> nsStack = new Stack<HashMap<String,String>>();
-    
-    /**
-     * @return the stack of namespaces.
-     */
-    protected Stack<HashMap<String,String>> getNSStack() {
-        return nsStack;
-    }    
-    
-    /**
-     * Creates the content handler, starting out by
-     * identifying the DTS structure that the content
-     * handler is discovering.
-     * @param loader The DTS loader that is using this content handler.
-     * @param url The URL of the document being parsed.
-     * @throws XBRLException if any of the parameters
-     * are null.
-     */
-	public ContentHandlerImpl(Loader loader, URL url) throws XBRLException {
-		super(loader, url);		
-	    getNSStack().push(new HashMap<String,String>());
-		
-	}
-	
-    /**
-     * Creates the content handler, starting out by
-     * identifying the data structure that the content
-     * handler is discovering.
-     * @param loader The data loader that is using this content handler.
-     * @param url The URL of the document being parsed.
-     * @param xml The string representation of the XML document being parsed.
-     * @throws XBRLException if any of the parameters
-     * are null.
-     */
-	public ContentHandlerImpl(Loader loader, URL url, String xml) throws XBRLException {
-		this(loader, url);
-		setXML(xml);
-	}	
-    
-
-    
-
-    
-    /**
-     * The locator for a document is stored as part of the DTSImpl object
-     * to facilitate resolution of CacheURLImpl's relative to that location.
-     */
-    public void setDocumentLocator(Locator l) {
-    	this.locator = l;
-    }
-    
-    protected XBRLXLinkHandlerImpl getXLinkHandler() throws SAXException {
-    	try {
-    		return (XBRLXLinkHandlerImpl) this.getLoader().getXlinkProcessor().getXLinkHandler();
-    	} catch (ClassCastException e) {
-    		throw new SAXException("The XBRL API is not using the XBRL XLink Handler implementation.");
-    	}
-    }
-    
-    private BaseURLSAXResolver baseURLSAXResolver = null;
-
-    /**
-     * @return the base URL resolver for SAX parsing.
-     */
-    protected BaseURLSAXResolver getBaseURLSAXResolver() {
-        return baseURLSAXResolver;
-    }
-    
-    /**
      * On starting to parse a document the Base URL resolver is set up with the document's system ID;
      */
     public void startDocument() throws SAXException 
-	{
-    	// Get the XLink handler
-    	XBRLXLinkHandlerImpl xbrlXlinkHandler = getXLinkHandler();
+    {
+        // Get the XLink handler
+        XBRLXLinkHandlerImpl xbrlXlinkHandler = getXLinkHandler();
 
-    	// Set the base URL resolver for this document
-    	try {
-    		// TODO ???? Can we use the url property of the content handler instead of the loader document URL?
-    		String thisDocumentURL = this.getLoader().getDocumentURL();
-    		this.baseURLSAXResolver = new BaseURLSAXResolverImpl(new URL(thisDocumentURL));
-    		xbrlXlinkHandler.setBaseURLSAXResolver(this.baseURLSAXResolver);
-    	} catch (MalformedURLException e) {
-    		throw new SAXException("The docment has a malformed URL specified by the locator's System ID.");
-    	}
-    	
+        // Set the base URL resolver for this document
+        try {
+            // TODO ???? Can we use the url property of the content handler instead of the loader document URL?
+            String thisDocumentURL = this.getLoader().getDocumentURL();
+            this.baseURLSAXResolver = new BaseURLSAXResolverImpl(new URL(thisDocumentURL));
+            xbrlXlinkHandler.setBaseURLSAXResolver(this.baseURLSAXResolver);
+        } catch (MalformedURLException e) {
+            throw new SAXException("The document has a malformed URL specified by the locator's System ID.");
+        }
+
+        // Instantiate the fragment identifiers
+        try {
+            List<Identifier> identifiers = this.getIdentifiers();
+            identifiers.add(new XBRLXLinkIdentifier(this));
+            identifiers.add(new XMLSchemaIdentifier(this));
+            identifiers.add(new LanguageIdentifier(this));
+        } catch (XBRLException e) {
+            throw new SAXException("A fragment identifier could not be instantiated.",e);
+        }
+        
     }
     
     /**
-     * The end of the document triggers stepping out of the document's 
-     * container element
-     */
-    public void endDocument() throws SAXException 
-    {
-        ;
-    }
-
-    /**
-     * List of the fragment identifiers to use in parsing the document.
-     * Load these in order of frequency of fragment occurrence for optimum performance.
-     */
-/*    private List<FragmentIdentifier> identifiers = new LinkedList<FragmentIdentifier>();
-*/    
-
-    /**
-     * Identifies fragments.
+     * Sets the element state.
+     * Increment the fragment children via the loader ????
+     * Stash xsi:schemaLocation attribute URLs for discovery if required.
+     * Identifies any new fragment.
+     * Adds the fragment, if one is found, to the stack of fragments being built by the loader.
+     * Update the map of defined namespaces.
+     * Add the element to the current fragment.
+     * 
+     * @see org.xml.sax.ContentHandler#startElement(String, String, String, Attributes)
      */
     @SuppressWarnings("unchecked")
-    public void startElement( 
+    public void startElement(
             String namespaceURI, 
             String lName, 
             String qName, 
             Attributes attrs) throws SAXException {
         
         // Update the information about the state of the current element
-        setState(new ElementState(getState(),attrs));
+        setElementState(new ElementState(getElementState(),attrs));
 
         try {
             getLoader().incrementChildren();
@@ -288,316 +119,34 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             }
         }
         
-        // Try to identify a new fragment
-        // This code will replace all following code eventually.
-/*        for (FragmentIdentifier identifier: identifiers) {
+        // Update the namespace data structure and insert namespace mappings into metadata.
+        HashMap<String,String> inheritedMap = getNamespaceMaps().peek();
+        HashMap<String,String> myMap = (HashMap<String,String>) inheritedMap.clone();
+        for (int i = 0; i < attrs.getLength(); i++) {
+            if ((attrs.getQName(i).equals("xmlns") || attrs.getQName(i).startsWith("xmlns:"))) {
+                myMap.put(attrs.getValue(i),attrs.getQName(i));
+            }
+        }
+        getNamespaceMaps().push(myMap);
+        
+        for (Identifier identifier: getIdentifiers()) {
             try {
-                identifier.idFragment(namespaceURI,lName,qName,attrs);
-                if (loader.addedAFragment()) {
+                identifier.startElement(namespaceURI,lName,qName,attrs);
+                if (getLoader().addedAFragment()) {
                     break;
                 }
             } catch (XBRLException e) {
                 throw new SAXException("Fragment identification failed.",e);
             }
         }
-*/        
-        
-        // Handle XLink fragments
-        try {
-
-            // First let the XLink handler know the element state in case it makes a fragment
-            getXLinkHandler().setState(getState());
-            
-            // Next pass control to the XLink processor so it can recognise and respond to XLink elements
-            getLoader().getXlinkProcessor().startElement(namespaceURI,lName,qName,attrs);
-            
-        } catch (XLinkException e) {
-            throw new SAXException("XLink processing of the start of an element failed.",e);
-        }
-
-        // Handle XML Schema fragments
-        try {
-
-            Fragment schemaFragment = null;
-            String fragmentID = null; // The ID attribute value for the fragment if it exists
-
-            if (namespaceURI.equals(Constants.XMLSchemaNamespace)) {
-                
-                if (lName.equals("schema")) {
-                    schemaFragment = new SchemaImpl();
-
-                    setXSModel(constructXSModel());
-                    setTargetNamespace(attrs.getValue("targetNamespace"));
-                    
-                } else if (lName.equals("element")) {
-                    
-                    fragmentID = attrs.getValue("id");
-                    
-                    String elementName = attrs.getValue("name");
-                    
-                    if (getXSModel() == null) {
-                        throw new XBRLException("An XML Schema element was found outside of an XML Schema.");
-                    }
-
-                    if (getTargetNamespace() == null) {
-                        throw new XBRLException("An XML Schema element was found where the target namespace was not initialised.");
-                    }
-
-                    // Find the XS model element declaration for the element that has been started - if one can be found
-                    XSElementDeclaration declaration = null;
-                    
-                    // Handle anonymous schemas first - these are the tough case
-                    if (getTargetNamespace().equals("")) {
-                        
-                        // Get the list of namespaces declared in the model
-                        XSNamespaceItemList nsItemList = getXSModel().getNamespaceItems();
-                        
-                        // For each namespace ...
-                        for (int i=0; i<nsItemList.getLength(); i++) {
-                            XSNamespaceItem nsItem = nsItemList.item(i);
-                            
-                            // Get a candidate element declaration if one exists
-                            XSElementDeclaration candidateDeclaration = nsItem.getElementDeclaration(elementName);
-                            if (candidateDeclaration != null) {
-                                
-                                // Get the URIs of the documents that were used to create elements in this namespace
-                                StringList locations = nsItem.getDocumentLocations();
-                                
-                                // Check to see if the current document URL is one of those documents and if so, the candidate could be good
-                                for (int j=0; j<locations.getLength(); j++) {
-                                    String location = locations.item(j);
-                                    if (location.equals(getURL().toString())) {
-                                        // Throw an exception if we find two feasible candidate element declarations in the Schema model
-                                        if (declaration != null) throw new XBRLException("Potentially ambiguous anonymous Schema problem.");
-                                        declaration = candidateDeclaration;
-                                    }
-                                }
-                            }
-                        }
-                        
-                        // TODO Handle anonymous schemas without throwing an exception.
-                        if (declaration == null) throw new XBRLException("An anonymous XML Schema was found that could not be handled.");
-                        
-                    // Handle the easy case where the schema specifies its target namespace
-                    } else if (elementName != null) {
-                            declaration = getXSModel().getElementDeclaration(elementName, getTargetNamespace());
-                    }
-                    
-                    // Determine what substitution groups the element is in - if any.
-                    boolean isItemConcept = false;
-                    boolean isTupleConcept = false;
-                    boolean isReferencePartDeclaration = false;
-                    if (declaration != null) {
-                        XSElementDeclaration sgDeclaration = declaration.getSubstitutionGroupAffiliation();
-                        while (sgDeclaration != null) {
-                            
-                            if (sgDeclaration.getNamespace().equals(Constants.XBRL21Namespace)) {
-                                if (sgDeclaration.getName().equals("item"))
-                                    isItemConcept = true;
-                                else if (sgDeclaration.getName().equals("tuple"))
-                                    isTupleConcept = true;
-                            }
-                            if (sgDeclaration.getNamespace().equals(Constants.XBRL21LinkNamespace)) {
-                                if (sgDeclaration.getName().equals("part"))
-                                    isReferencePartDeclaration = true;
-                            }
-                            sgDeclaration = sgDeclaration.getSubstitutionGroupAffiliation();
-                        }
-                    }
-                    // TODO Decide if the element declarations need to keep track of their whole substitution group stack.
-                    
-                    // If the element has a periodType attribute it is an XBRL concept
-                    if (isItemConcept || isTupleConcept) {
-                        schemaFragment = new ConceptImpl();
-                        
-                    } else if (isReferencePartDeclaration) {
-                        schemaFragment = new ReferencePartDeclarationImpl();
-                    } else if (elementName != null) {
-                        schemaFragment = new ElementDeclarationImpl();
-                    }                   
-                    
-                }
-                
-                if (schemaFragment != null) {
-                    schemaFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                    if (fragmentID != null) {
-                        schemaFragment.appendID(fragmentID);
-                        getState().setId(fragmentID);
-                    }
-                    getLoader().addFragment(schemaFragment,getState());
-                }
-            }
-            
-        } catch (XBRLException e) {
-            throw new SAXException("The XML Schema fragment could not be processed.",e);
-        }
-        
-        // Handle XBRL fragments
-        Fragment xbrlFragment = null;
-        try {
-
-            if (namespaceURI.equals(Constants.XBRL21Namespace)) {
-
-                if (lName.equals("xbrl")) {
-                    xbrlFragment = new InstanceImpl();
-                    this.parsingAnXBRLInstance = true;
-                    this.canBeATuple = true;
-                } else if (lName.equals("period")) {
-                    xbrlFragment = new PeriodImpl();
-                } else if (lName.equals("entity")) {
-                    xbrlFragment = new EntityImpl();
-                } else if (lName.equals("segment")) {
-                    xbrlFragment = new SegmentImpl();
-                } else if (lName.equals("scenario")) {
-                    xbrlFragment = new ScenarioImpl();
-                } else if (lName.equals("context")) {
-                    xbrlFragment = new ContextImpl();
-                    this.canBeATuple = false;
-                } else if (lName.equals("unit")) {
-                    xbrlFragment = new UnitImpl();
-                    this.canBeATuple = false;
-                }
-                
-                if (xbrlFragment != null) {
-                    xbrlFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                    if (attrs.getValue("id") != null) {
-                        xbrlFragment.appendID(attrs.getValue("id"));
-                        getState().setId(attrs.getValue("id"));
-                    }
-                    getLoader().addFragment(xbrlFragment,getState());
-                }
-            }
-        } catch (XBRLException e) {
-            e.printStackTrace();
-            throw new SAXException("The XBRL fragment could not be processed.",e);
-        }
-
-        // Handle reference part fragments
-        Fragment referencePartFragment = null;
-        try {
-            
-            if (parsingAReferenceResource) {
-                referencePartFragment = new ReferencePartImpl();
-            }
-
-            if (referencePartFragment != null) {
-                referencePartFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                getLoader().addFragment(referencePartFragment,getState());
-            }
-            
-        } catch (XBRLException e) {
-            throw new SAXException("The XBRL fragment could not be processed.",e);
-        }
-        
-        // Handle XBRL Link fragments
-        try {
-            Fragment xbrlLinkFragment = null;
-            if (namespaceURI.equals(Constants.XBRL21LinkNamespace)) {
-                if (lName.equals("roleType")) {
-                    xbrlLinkFragment = new RoleTypeImpl();
-                } else if (lName.equals("arcroleType")) {
-                    xbrlLinkFragment = new ArcroleTypeImpl();
-                } else if (lName.equals("usedOn")) {
-                    xbrlLinkFragment = new UsedOnImpl();
-                } else if (lName.equals("linkbase")) {
-                    xbrlLinkFragment = new LinkbaseImpl();
-                } else if (lName.equals("documentation")) {
-                    xbrlLinkFragment = new XlinkDocumentationImpl();
-                } else if (lName.equals("footnoteLink")) {
-                    // Fragment already created by XLink processor
-                    this.canBeATuple = false;
-                } else if (lName.equals("schemaRef")) {
-                    // Fragment already created by XLink processor
-                    this.canBeATuple = false;
-                } else if (lName.equals("linkbaseRef")) {
-                    // Fragment already created by XLink processor
-                    this.canBeATuple = false;
-                } else if (lName.equals("roleRef")) {
-                    // Fragment already created by XLink processor
-                    this.canBeATuple = false;
-                } else if (lName.equals("arcroleRef")) {
-                    // Fragment already created by XLink processor
-                    this.canBeATuple = false;
-                } else if (lName.equals("reference")) {
-                    // Fragment already created by XLink processor
-                    this.parsingAReferenceResource = true;
-                }
-                
-                if (xbrlLinkFragment != null) {
-                    xbrlLinkFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                    if (attrs.getValue("id") != null) {
-                        xbrlLinkFragment.appendID(attrs.getValue("id"));
-                        getState().setId(attrs.getValue("id"));
-                    }
-                    getLoader().addFragment(xbrlLinkFragment,getState());          
-                }
-            }
-
-        } catch (XBRLException e) {
-            throw new SAXException("The XBRL Link fragment could not be processed.",e);
-        }
-
-        // Handle XBRL facts
-        if ((xbrlFragment == null) && (referencePartFragment == null) && this.parsingAnXBRLInstance) {
-            try {
-                Fragment factFragment = null;
-                
-                // First handle items
-                String contextRef = attrs.getValue("contextRef");
-                if (contextRef != null) {
-                    String unitRef = attrs.getValue("unitRef");
-                    if (unitRef != null) {
-                        // TODO Handle recognition of fraction numeric items - may require reading ahead in SAX - ouch
-                        factFragment = new SimpleNumericItemImpl();
-                    } else {
-                        factFragment = new NonNumericItemImpl();
-                    }
-                }
-                
-                // Next handle XBRL instance tuples
-                if ((factFragment == null) && this.canBeATuple) {
-                    factFragment = new TupleImpl();
-                }
-                
-                if (factFragment != null) {
-                    factFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                    if (attrs.getValue("id") != null) {
-                        factFragment.appendID(attrs.getValue("id"));
-                        getState().setId(attrs.getValue("id"));
-                    }
-                    getLoader().addFragment(factFragment,getState());
-                }
-
-            } catch (XBRLException e) {
-                throw new SAXException("The XBRL Link fragment could not be processed.",e);
-            }
-        }
-        
-        // Handle language fragments
-        Fragment languageFragment = null;
-        try {
-            if (namespaceURI.equals(Constants.XBRLAPILanguagesNamespace)) {
-                if (lName.equals("language")) {
-                    languageFragment = new LanguageImpl();
-                }
-            }
-
-            if (languageFragment != null) {
-                languageFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                getLoader().addFragment(languageFragment,getState());
-            }
-            
-        } catch (XBRLException e) {
-            throw new SAXException("The languages fragment could not be processed.",e);
-        }
         
         // Add a generic fragment for a document root element if we have not already done so
         if (! getLoader().addedAFragment()) {
-            if (! getState().hasParent()) {
+            if (! getElementState().hasParent()) {
                 try {
                     Fragment root = new FragmentImpl();
                     root.setFragmentIndex(getLoader().getNextFragmentId());
-                    getLoader().addFragment(root,getState());
+                    getLoader().addFragment(root,getElementState());
                 } catch (XBRLException e) {
                     throw new SAXException("The default root element fragment could not be created.",e);
                 }
@@ -613,16 +162,6 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             throw new SAXException("Could not handle children tracking at the fragment level.",e);
         }
         
-        // Update the namespace data structure and insert namespace mappings into metadata.
-        HashMap<String,String> inheritedMap = getNSStack().peek();
-        HashMap<String,String> myMap = (HashMap<String,String>) inheritedMap.clone();
-        for (int i = 0; i < attrs.getLength(); i++) {
-            if ((attrs.getQName(i).equals("xmlns") || attrs.getQName(i).startsWith("xmlns:"))) {
-                myMap.put(attrs.getValue(i),attrs.getQName(i));
-            }
-        }
-        getNSStack().push(myMap);
-
         try {
             if (getLoader().getFragment().isNewFragment()) {
                 Fragment f = getLoader().getFragment();
@@ -640,7 +179,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         } catch (XBRLException e) {
             throw new SAXException("The element could not be appended to the fragment.",e);
         }
-        
+
     }
     
     /**
@@ -652,65 +191,233 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
      */
     public void endElement(
             String namespaceURI, 
-            String sName, 
+            String lName, 
             String qName) throws SAXException {
 
         // Get the attributes of the element being ended.
-        Attributes attrs = getState().getAttributes();
-        
+        Attributes attrs = getElementState().getAttributes();
+
         // Handle the ending of an element in the fragment builder
         try {
-            getLoader().getFragment().getBuilder().endElement(namespaceURI, sName, qName);
+            getLoader().getFragment().getBuilder().endElement(namespaceURI, lName, qName);
         } catch (XBRLException e) {
             throw new SAXException("The XBRLAPI fragment endElement failed.",e);
         }
 
         // Handle the ending of an element in the XLink processor
         try {
-            getLoader().getXlinkProcessor().endElement(namespaceURI, sName, qName, attrs);
+            getLoader().getXlinkProcessor().endElement(namespaceURI, lName, qName, attrs);
         } catch (XLinkException e) {
             throw new SAXException("The XLink processor endElement failed.",e);
         }
 
-        // Give the loader a chance to update its state
+        // Update the states of the fragment identifiers
+        for (Identifier identifier: this.getIdentifiers()) {
+            try {
+                identifier.endElement(namespaceURI,lName,qName,attrs);
+            } catch (XBRLException e) {
+                throw new SAXException("Fragment identifier state update failed at the end of an element failed.",e);
+            }
+        }
+
+        // Update the state of the loader.
         try {
-            getLoader().updateState(getState());
+            getLoader().updateState(getElementState());
         } catch (XBRLException e) {
-            throw new SAXException("The state of the loader could not be updated at the end of element " + namespaceURI + ":" + sName + "." + e.getMessage(),e);
+            throw new SAXException("The state of the loader could not be updated at the end of element " + namespaceURI + ":" + lName + "." + e.getMessage(),e);
         }
-        
-        // Identify if an XBRL instance has been finished.
-        if (namespaceURI.equals(Constants.XBRL21Namespace) && sName.equals("xbrl")) {
-                this.parsingAnXBRLInstance = false;
-        } else if (namespaceURI.equals(Constants.XBRL21LinkNamespace)) {
-            if (sName.equals("footnoteLink")) {
-                this.canBeATuple = true;
-            } else if (sName.equals("schemaRef")) {
-                this.canBeATuple = true;
-            } else if (sName.equals("linkbaseRef")) {
-                this.canBeATuple = true;
-            } else if (sName.equals("arcroleRef")) {
-                this.canBeATuple = true;
-            } else if (sName.equals("roleRef")) {
-                this.canBeATuple = true;
-            } else if (sName.equals("reference")) {
-                this.parsingAReferenceResource = false;
-            }
-        } else if (namespaceURI.equals(Constants.XBRL21Namespace)) {
-            if (sName.equals("context")) {
-                this.canBeATuple = true;    
-            } else if (sName.equals("true")) {
-                this.canBeATuple = false;   
-            }
-        }
-        
+                
         // Update the information about the state of the current element
-        setState(getState().getParent());
+        setElementState(getElementState().getParent());
         
         // Revert to Namespace declarations of the parent element.
-        getNSStack().pop();
+        getNamespaceMaps().pop();
 
+    }    
+    
+    /**
+     * Ignore ignorable whitespace
+     */
+    public void ignorableWhitespace(char buf[], int offset, int len)
+    throws SAXException {
+        try {
+            String s = new String(buf, offset, len);
+            if (!s.trim().equals(""))
+                getLoader().getFragment().getBuilder().appendText(s);
+        } catch (XBRLException e) {
+            throw new SAXException("Failed to handle ignorable white space." + getInputErrorInformation());
+        }
+    }    
+
+    /**
+     * Copy across processing instructions to the DTSImpl
+     */
+    public void processingInstruction(String target, String data)
+    throws SAXException
+    {
+        try {
+            if (getLoader().getFragment() != null)
+                getLoader().getFragment().getBuilder().appendProcessingInstruction(target,data);
+            // Figure out how to capture processing instructions that occur before the document root element.
+        } catch (XBRLException e) {
+            e.printStackTrace();
+        }
+    }    
+    
+    /**
+     * SAX parsing locator - provides information for use in
+     * error reporting.
+     */
+    private Locator locator = null;
+    
+    /**
+     * The locator for a document is stored to facilitate resolution 
+     * of CacheURLImpl's relative to that location.
+     */
+    public void setDocumentLocator(Locator locator) {
+        this.locator = locator;
     }
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+
+
+    
+
+
+    /**
+     * @param locator The locator of the current document position.
+     */
+    protected void setLocator(Locator locator) {
+        this.locator = locator;
+    }
+    
+    private String getPublicId() {
+        return getLocator().getPublicId();
+    }
+
+    /**
+     * @return the system ID of the document being parsed.
+     */
+    private String getSystemId() {
+        return getLocator().getSystemId();
+    }
+    
+    private int getLineNumber() {
+        return getLocator().getLineNumber();
+    }
+
+    private int getColumnNumber() {
+        return getLocator().getColumnNumber();
+    }
+    
+    private String getInputErrorInformation() {
+        StringBuffer s = new StringBuffer("  The problem occurred in ");
+        if (!(getSystemId() == null))
+            s.append(getSystemId() + ".  ");
+        else
+            s.append("a document without a URL.  All DTS documents must have a URL but one being parsed into the DTS does not.");
+        s.append("The problem seems to be on line" + getLineNumber() + " at column " + getColumnNumber() + ".");
+        return s.toString();
+    }    
+
+    /**
+     * @return the locator of the current document position.
+     */
+    private Locator getLocator() {
+        return this.locator;
+    }
+    
+    /**
+     * String representation of the XML document - for documents supplied as such.
+     */
+    private String xml = null;
+    
+    /**
+     * @param xml The XML stored as a string, that is to be parsed.
+     * @throws XBRLException if the XML string is null.
+     */
+    private void setXML(String xml) throws XBRLException {
+        if (xml == null) throw new XBRLException("The string of XML to be parsed must not be null.");  
+        this.xml = xml;        
+    }
+
+
+    
+    
+    
+    /**
+     * Creates the content handler, starting out by
+     * identifying the DTS structure that the content
+     * handler is discovering.
+     * @param loader The DTS loader that is using this content handler.
+     * @param url The URL of the document being parsed.
+     * @throws XBRLException if any of the parameters
+     * are null.
+     */
+	public ContentHandlerImpl(Loader loader, URL url) throws XBRLException {
+		super(loader, url);		
+	    getNamespaceMaps().push(new HashMap<String,String>());
+		
+	}
+	
+    /**
+     * Creates the content handler, starting out by
+     * identifying the data structure that the content
+     * handler is discovering.
+     * @param loader The data loader that is using this content handler.
+     * @param url The URL of the document being parsed.
+     * @param xml The string representation of the XML document being parsed.
+     * @throws XBRLException if any of the parameters
+     * are null.
+     */
+	public ContentHandlerImpl(Loader loader, URL url, String xml) throws XBRLException {
+		this(loader, url);
+		setXML(xml);
+	}	
+    
+    private XBRLXLinkHandlerImpl getXLinkHandler() throws SAXException {
+    	try {
+    		return (XBRLXLinkHandlerImpl) this.getLoader().getXlinkProcessor().getXLinkHandler();
+    	} catch (ClassCastException e) {
+    		throw new SAXException("The XBRL API is not using the XBRL XLink Handler implementation.");
+    	}
+    }
+    
+    /**
+     * The  resolver that is used to resolve URLs against
+     * the appropriate base URL during SAX parsing.
+     */
+    private BaseURLSAXResolver baseURLSAXResolver = null;
+
+    /**
+     * @return the base URL resolver for SAX parsing.
+     */
+    protected BaseURLSAXResolver getBaseURLSAXResolver() {
+        return baseURLSAXResolver;
+    }
+    
+
+    
+
+
+
+    
+
+    
+
+
+    
+
     
     /**
      * Copy characters (trimming white space as required) to the DTSImpl.
@@ -729,132 +436,14 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
 		    String s = new String(buf, offset, len);
 		    getLoader().getFragment().getBuilder().appendText(s);
 		} catch (XBRLException e) {
-		    throw new SAXException("The characters could not be appended to the fragment." + inputErrorInformation());
+		    throw new SAXException("The characters could not be appended to the fragment." + getInputErrorInformation());
 		}
-    }
-
-    /**
-     * Ignore ignorable whitespace
-     */
-    public void ignorableWhitespace(char buf[], int offset, int len)
-	throws SAXException {
-    	try {
-		    String s = new String(buf, offset, len);
-		    if (!s.trim().equals(""))
-		    	getLoader().getFragment().getBuilder().appendText(s);
-    	} catch (XBRLException e) {
-    		throw new SAXException("Failed to handle ignorable white space." + inputErrorInformation());
-    	}
-    }
-
-    /**
-     * Copy across processing instructions to the DTSImpl
-     */
-    public void processingInstruction(String target, String data)
-	throws SAXException
-    {
-		try {
-			if (getLoader().getFragment() != null)
-				getLoader().getFragment().getBuilder().appendProcessingInstruction(target,data);
-			// Figure out how to capture processing instructions that occur before the document root element.
-		} catch (XBRLException e) {
-		    e.printStackTrace();
-		}
-    }
-    
+    }    
 
 
 
 
 	
-
-    
-    private String publicId() {
-    	return locator.getPublicId();
-    }
-
-    /**
-     * @return the system ID of the document being parsed.
-     */
-    private String getSystemId() {
-    	return locator.getSystemId();
-    }
-    
-    private int lineNumber() {
-    	return locator.getLineNumber();
-    }
-
-    private int columnNumber() {
-    	return locator.getColumnNumber();
-    }
-    
-    private String inputErrorInformation() {
-    	StringBuffer s = new StringBuffer("  The problem occurred in ");
-    	if (!(getSystemId() == null))
-    		s.append(getSystemId() + ".  ");
-    	else
-    		s.append("a document without a URL.  All DTS documents must have a URL but one being parsed into the DTS does not.  ");
-    	s.append("The problem seems to be on line" + lineNumber() + " at column " + columnNumber() + ".");
-    	return s.toString();
-    }
-
-    /**
-     * @param model The XML Schema grammar model
-     * @throws XBRLException if the model is null
-     */
-    protected void setXSModel(XSModel model) throws XBRLException {
-        if (model == null) throw new XBRLException("The XML Schema model must not be null.");
-        this.model = model;
-    }
-
-    /**
-     * @returns he XML Schema grammar model
-     */
-    protected XSModel getXSModel() {
-        return this.model;
-    }
 	
-	/**
-     * TODO Determine why a static grammar pool is needed to use included anonymous schemas.
-	 * get the XML Schema grammar model for a particular XML Schema.
-	 * Modified on 13 February, 2007 by Howard Ungar to use the static grammar pool 
-	 * provided by the GrammarCache implementation.
-	 * @throws XBRLException
-	 */
-	protected XSModel constructXSModel() throws XBRLException {
-		try {
-
-	        XMLGrammarPreparser preparser = new XMLGrammarPreparser();
-	        preparser.registerPreparser(XMLGrammarDescription.XML_SCHEMA, null);
-	        //preparser.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarCacheImpl.getGrammarPool());
-	        preparser.setGrammarPool(GrammarCacheImpl.getGrammarPool());
-	        preparser.setFeature("http://xml.org/sax/features/namespaces", true);
-	        preparser.setFeature("http://xml.org/sax/features/validation", true);
-	        preparser.setFeature("http://apache.org/xml/features/validation/schema", true);
-	        preparser.setFeature("http://apache.org/xml/features/validation/schema-full-checking", true);
-
-	        XMLEntityResolver entityResolver = (XMLEntityResolver) this.getLoader().getEntityResolver();
-	        preparser.setEntityResolver(entityResolver);
-
-	        // TODO make sure that this XML Resource Identifier is being initialised correctly.
-	        XMLResourceIdentifier xri = new XMLResourceIdentifierImpl("", getURL().toString(), getURL().toString(), getURL().toString());
-	        
-	        XMLInputSource xmlInputSource = entityResolver.resolveEntity(xri);
-	        
-/*			if (xml == null) {
-		        xmlInputSource = new XMLInputSource(null, url.toString(), null);				
-			} else {
-    			xmlInputSource = new XMLInputSource(null, url.toString(), null, new StringReader(xml), null);
-			}
-*/
-			
-	        XSGrammar grammar = (XSGrammar) preparser.preparseGrammar(XMLGrammarDescription.XML_SCHEMA, xmlInputSource);
-
-	        return grammar.toXSModel();	        
-
-		} catch (IOException e) {
-			throw new XBRLException("Grammar model construction for schema at URL: " + getURL() + " failed.",e);
-		}
-	}	
     
 }

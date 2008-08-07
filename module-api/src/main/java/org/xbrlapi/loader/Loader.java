@@ -232,8 +232,8 @@ public interface Loader {
 	public Fragment removeFragment() throws XBRLException;
 	
 	/**
-	 * Returns the next unique fragment index and increments the 
-	 * fragment index.
+	 * Also increments the fragment index as a side-effect.
+	 * TODO eliminate the side-effect of the getNextFragmentId method.
 	 * @return the next unique fragment index
 	 * @throws XBRLException
 	 */

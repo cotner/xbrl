@@ -296,7 +296,7 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
         try {
 
             // First let the XLink handler know the element state in case it makes a fragment
-            getXLinkHandler().setState(getElementState());
+            getXLinkHandler().setElementState(getElementState());
             
             // Next pass control to the XLink processor so it can recognise and respond to XLink elements
             getLoader().getXlinkProcessor().startElement(namespaceURI,lName,qName,attrs);

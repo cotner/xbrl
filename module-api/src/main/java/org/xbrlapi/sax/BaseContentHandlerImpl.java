@@ -1,9 +1,14 @@
 package org.xbrlapi.sax;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.loader.Loader;
+import org.xbrlapi.sax.identifiers.Identifier;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
 import org.xml.sax.SAXException;
@@ -56,6 +61,23 @@ public class BaseContentHandlerImpl extends DefaultHandler implements ContentHan
     private URL url = null;
     
     /**
+     * The namespace map stack for tracking namespaces.
+     * Each stack entry is a map from a namespace to 
+     * a namespace prefix.
+     */
+    private Stack<HashMap<String,String>> nsStack = new Stack<HashMap<String,String>>();
+    
+    /**
+     * @see ContentHandler#getNamespaceMaps()
+     */
+    public Stack<HashMap<String,String>> getNamespaceMaps() {
+        return nsStack;
+    }
+    
+
+
+    
+    /**
      * @see org.xbrlapi.sax.ContentHandler#getURL()
      */
     public URL getURL() {
@@ -90,6 +112,19 @@ public class BaseContentHandlerImpl extends DefaultHandler implements ContentHan
      */
     public ElementState getElementState() {
         return state;
+    }    
+    
+    /**
+     * List of the fragment identifiers to use in parsing the document.
+     * Load these in order of frequency of fragment occurrence for optimum performance.
+     */
+    private List<Identifier> identifiers = new LinkedList<Identifier>();
+    
+    /**
+     * @see ContentHandler#getIdentifiers()
+     */
+    public List<Identifier> getIdentifiers() {
+        return this.identifiers;
     }    
     
     /**
