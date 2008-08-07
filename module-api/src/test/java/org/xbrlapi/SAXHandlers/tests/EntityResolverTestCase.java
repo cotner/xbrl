@@ -9,8 +9,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xbrlapi.SAXHandlers.EntityResolverImpl;
 import org.xbrlapi.cache.CacheImpl;
+import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.BaseTestCase;
 import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.Attributes;
