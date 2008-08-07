@@ -41,12 +41,15 @@ public class XBRLXLinkFragmentIdentifier extends BaseIdentifier implements Ident
             String qName,
             Attributes attrs) throws XBRLException {
 
+        // Set the Element state information in the XBRL XLink handler.
         try {
-            XBRLXLinkHandlerImpl xlinkHandler = (XBRLXLinkHandlerImpl) this.getXLinkHandler()
+            XBRLXLinkHandlerImpl xlinkHandler = (XBRLXLinkHandlerImpl) this.getXLinkHandler();
+            xlinkHandler.setElementState(this.getElementState());
         } catch (ClassCastException e) {
             throw new XBRLException("The XBRLXLinkIdentifier must be used with an XBRLXLinkHandler.",e);
         }
             
+        try {
             getXLinkProcessor().startElement(namespaceURI,lName,qName,attrs);
         } catch (XLinkException e) {
             throw new XBRLException("XLink processing of the start of an element failed.",e);
