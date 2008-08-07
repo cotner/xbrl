@@ -4,12 +4,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.Arc;
-import org.xbrlapi.ExtendedLink;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.Locator;
 import org.xbrlapi.Resource;
 import org.xbrlapi.SimpleLink;
-import org.xbrlapi.Title;
 import org.xbrlapi.impl.ArcImpl;
 import org.xbrlapi.impl.EntityResourceImpl;
 import org.xbrlapi.impl.ExtendedLinkImpl;
@@ -113,18 +111,13 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	 */
 	public void startTitle(String namespaceURI, String lName, String qName,
 			Attributes attrs) throws XLinkException {
-		Title title = null;
 		try {
-			Loader loader = this.getLoader();
-			title = new TitleImpl();
-			title.setFragmentIndex(getLoader().getNextFragmentId());
-
-			loader.addFragment(title,getElementState());
+			setupFragment(new TitleImpl(),attrs);
 		} catch (XBRLException e) {
 			throw new XLinkException("The title could not be created and stored.",e);
 		}
 	}
-	
+
 	/**
 	 * Handle the change of XML Base scope as you step back up the tree
 	 */
@@ -173,15 +166,8 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			String title)
 			throws XLinkException {
 		
-		// Create the extended link fragment
 		try {
-			ExtendedLink link = new ExtendedLinkImpl();
-			link.setFragmentIndex(getLoader().getNextFragmentId());
-			if (attrs.getValue("id") != null) {
-				link.appendID(attrs.getValue("id"));
-				elementState.setId(attrs.getValue("id"));
-			}
-			getLoader().addFragment(link,getElementState());
+            setupFragment(new ExtendedLinkImpl(),attrs);
 		} catch (XBRLException e) {
 			throw new XLinkException("The extended link could not be created.",e);
 		}
@@ -210,46 +196,40 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			String label)
 			throws XLinkException {
 		try {
-			Resource resource = null;
+
+		    Resource fragment = null;
 			if (namespaceURI.equals(Constants.XBRL21LinkNamespace)) {
 				if (lName.equals("label")) {
-					resource = new LabelResourceImpl();
+					fragment = new LabelResourceImpl();
 				} else if (lName.equals("reference")) {
-					resource = new ReferenceResourceImpl();
+					fragment = new ReferenceResourceImpl();
 				} else if (lName.equals("footnote")) {
-					resource = new FootnoteResourceImpl();
+					fragment = new FootnoteResourceImpl();
 				} else {
-					resource = new ResourceImpl();				
+					fragment = new ResourceImpl();				
 				}
 			} else if (namespaceURI.equals(Constants.GenericLabelNamespace)) {
 				if (lName.equals("label")) {
-					resource = new LabelResourceImpl();			
+					fragment = new LabelResourceImpl();			
 				} else {
-	                resource = new ResourceImpl();
+	                fragment = new ResourceImpl();
 	            }
 			} else if (namespaceURI.equals(Constants.GenericReferenceNamespace)) {
 				if (lName.equals("reference")) {
-					resource = new ReferenceResourceImpl();				
+					fragment = new ReferenceResourceImpl();				
 				} else {
-	                resource = new ResourceImpl();
+	                fragment = new ResourceImpl();
 	            }
             } else if (namespaceURI.equals(Constants.XBRLAPIEntitiesNamespace)) {
                 if (lName.equals("identifier")) {
-                    resource = new EntityResourceImpl();             
+                    fragment = new EntityResourceImpl();             
                 } else {
-                    resource = new ResourceImpl();
+                    fragment = new ResourceImpl();
                 }
 			} else {
-				resource = new ResourceImpl();
+				fragment = new ResourceImpl();
 			}
-			resource.setFragmentIndex(getLoader().getNextFragmentId());
-
-			if (attrs.getValue("id") != null) {
-				resource.appendID(attrs.getValue("id"));
-				elementState.setId(attrs.getValue("id"));
-			}
-
-			getLoader().addFragment(resource,getElementState());
+			setupFragment(fragment,attrs);
 		} catch (XBRLException e) {
 			throw new XLinkException("The resource could not be created.",e);
 		}
@@ -259,7 +239,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	 * Handle the end of the resource.
 	 */
 	public void endResource(String namespaceURI, String sName, String qName) throws XLinkException {
-		;// Do Nothing.
+		;
 	}
 	
 	/**
@@ -277,13 +257,14 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			String label) 
 	throws XLinkException {
 		try {
-			URL url = new URL(baseURLResolver.getBaseURL(),href);
-			Loader loader = getLoader();
-			Locator locator = new LocatorImpl();
-			locator.setFragmentIndex(loader.getNextFragmentId());
-			locator.setTarget(url);
-			loader.addFragment(locator,getElementState());
-			loader.stashURL(url);
+            Locator fragment = new LocatorImpl();
+            setupFragment(fragment,attrs);            
+
+            Loader loader = getLoader();
+            URL url = new URL(baseURLResolver.getBaseURL(),href);
+            fragment.setTarget(url);
+            loader.stashURL(url);
+
 		} catch (MalformedURLException e) {
 			throw new XLinkException("The locator href is malformed.",e);
 		} catch (XMLBaseException e) {
@@ -316,9 +297,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			String show, 
 			String actuate) throws XLinkException {
 		try {
-			Arc arc = new ArcImpl();				
-    		arc.setFragmentIndex(getLoader().getNextFragmentId());
-			getLoader().addFragment(arc,getElementState());
+		    setupFragment(new ArcImpl(),attrs);
 		} catch (XBRLException e) {
 			throw new XLinkException("The arc could not be created.",e);
 		}
@@ -350,13 +329,13 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			throws XLinkException {
 		
 		try {
-			URL url = new URL(baseURLResolver.getBaseURL(),href);
+            SimpleLink fragment = new SimpleLinkImpl();
+            setupFragment(fragment,attrs);
+
+            URL url = new URL(baseURLResolver.getBaseURL(),href);
 			Loader loader = getLoader();
-			SimpleLink link = new SimpleLinkImpl();
-			link.setFragmentIndex(getLoader().getNextFragmentId());
-			link.setTarget(url);
-			loader.addFragment(link,getElementState());
-			loader.stashURL(url);
+            fragment.setTarget(url);
+            loader.stashURL(url);
 			
 		} catch (MalformedURLException e) {
 			throw new XLinkException("The URL on a simple link was malformed.",e);
@@ -372,11 +351,10 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	 * Handle the end of the simple link
 	 */
 	public void endSimpleLink(String namespaceURI, String sName, String qName) throws XLinkException {
-		;// Do nothing
+		;
 	}
 		
 	/**
-	 * Returns the XBRL DTS loader that is using this XLink handler.
 	 * @return The XBRL DTS loader that is using this XLink handler.
 	 * @throws XBRLException if the XLink handler has no loader to work with.
 	 */
@@ -386,9 +364,11 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 		return loader;
 	}
 
-
-	public void setElementState(ElementState state) {
-		this.elementState = state; 
+	/**
+	 * @param elementState The state for the current element.
+	 */
+	public void setElementState(ElementState elementState) {
+		this.elementState = elementState; 
 	}
 	
 	private ElementState getElementState() {
@@ -421,5 +401,23 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
             Attributes attrs,String message) throws XLinkException {
         logger.warn(message);
     }
+    
+    /**
+     * Set up the fragment and add it to the loader.
+     * @param fragment The newly identified fragment.
+     * @param attrs The attributes of the root element of the fragment.
+     * @throws XBRLException
+     */
+    private void setupFragment(Fragment fragment,Attributes attrs) throws XBRLException {
+        Loader loader = this.getLoader();
+        fragment.setFragmentIndex(getLoader().getNextFragmentId());
+        if (attrs.getValue("id") != null) {
+            fragment.appendID(attrs.getValue("id"));
+            this.getElementState().setId(attrs.getValue("id"));
+        }
+        loader.addFragment(fragment,getElementState());
+    }
+    
+    
 	
 }
