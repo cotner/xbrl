@@ -6,6 +6,7 @@ import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkException;
 import org.xbrlapi.xlink.XLinkHandler;
 import org.xbrlapi.xlink.XLinkProcessor;
+import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xml.sax.Attributes;
 
 /**
@@ -30,6 +31,8 @@ public class XBRLXLinkFragmentIdentifier extends BaseIdentifier implements Ident
     }
 
     /**
+     * Passes responsibility along to the XLink handler via the XLink Processor.
+     * 
      * @see org.xbrlapi.sax.identifiers.BaseIdentifier#startElement(String,String,String,Attributes)
      */
     public void startElement(
@@ -39,10 +42,12 @@ public class XBRLXLinkFragmentIdentifier extends BaseIdentifier implements Ident
             Attributes attrs) throws XBRLException {
 
         try {
-
-            // Next pass control to the XLink processor so it can recognise and respond to XLink elements
-            getXLinkProcessor().startElement(namespaceURI,lName,qName,attrs);
+            XBRLXLinkHandlerImpl xlinkHandler = (XBRLXLinkHandlerImpl) this.getXLinkHandler()
+        } catch (ClassCastException e) {
+            throw new XBRLException("The XBRLXLinkIdentifier must be used with an XBRLXLinkHandler.",e);
+        }
             
+            getXLinkProcessor().startElement(namespaceURI,lName,qName,attrs);
         } catch (XLinkException e) {
             throw new XBRLException("XLink processing of the start of an element failed.",e);
         }

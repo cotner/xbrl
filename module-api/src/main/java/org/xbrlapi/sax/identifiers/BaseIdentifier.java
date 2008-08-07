@@ -46,7 +46,7 @@ public class BaseIdentifier implements Identifier {
      * @see Identifier#getElementState()
      */
     public ElementState getElementState() {
-        return getContentHandler().getState();
+        return getContentHandler().getElementState();
     }
     
     /**
