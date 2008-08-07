@@ -57,24 +57,18 @@ public class ElementState {
 	 */
 	private String id = null;
 
-    /**
-     * @param parent The state of the parent element
-	 */
-	public ElementState(ElementState parent) {
-		super();
-		this.parent = parent;
-		if (hasParent()) {
-			parent.addChild();
-			this.order = parent.getChildrenSoFar();
-		}
-	}
+
 
 	/**
 	 * @param parent The state of the parent element
 	 * @param attrs The attributes of the element
 	 */
     public ElementState(ElementState parent, Attributes attrs) {
-        this(parent);
+        this.parent = parent;
+        if (hasParent()) {
+            parent.addChild();
+            this.order = parent.getChildrenSoFar();
+        }
         this.setAttributes(attrs);
     }
 	
