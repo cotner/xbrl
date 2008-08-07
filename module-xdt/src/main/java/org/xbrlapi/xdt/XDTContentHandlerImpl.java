@@ -3,8 +3,8 @@ package org.xbrlapi.xdt;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.SAXHandlers.ContentHandlerImpl;
 import org.xbrlapi.loader.Loader;
+import org.xbrlapi.sax.ContentHandlerImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
