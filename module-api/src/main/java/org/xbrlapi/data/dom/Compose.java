@@ -16,10 +16,10 @@ import java.util.LinkedList;
 
 import org.w3c.dom.Document;
 import org.xbrlapi.EntryPoint;
-import org.xbrlapi.SAXHandlers.EntityResolverImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
+import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
