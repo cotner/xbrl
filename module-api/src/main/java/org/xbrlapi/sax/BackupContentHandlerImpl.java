@@ -248,7 +248,7 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
             Attributes attrs) throws SAXException {
         
         // Update the information about the state of the current element
-        setState(new ElementState(getState(),attrs));
+        setElementState(new ElementState(getElementState(),attrs));
 
         try {
             getLoader().incrementChildren();
@@ -296,7 +296,7 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
         try {
 
             // First let the XLink handler know the element state in case it makes a fragment
-            getXLinkHandler().setState(getState());
+            getXLinkHandler().setState(getElementState());
             
             // Next pass control to the XLink processor so it can recognise and respond to XLink elements
             getLoader().getXlinkProcessor().startElement(namespaceURI,lName,qName,attrs);
@@ -412,9 +412,9 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
                     schemaFragment.setFragmentIndex(getLoader().getNextFragmentId());
                     if (fragmentID != null) {
                         schemaFragment.appendID(fragmentID);
-                        getState().setId(fragmentID);
+                        getElementState().setId(fragmentID);
                     }
-                    getLoader().addFragment(schemaFragment,getState());
+                    getLoader().addFragment(schemaFragment,getElementState());
                 }
             }
             
@@ -452,9 +452,9 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
                     xbrlFragment.setFragmentIndex(getLoader().getNextFragmentId());
                     if (attrs.getValue("id") != null) {
                         xbrlFragment.appendID(attrs.getValue("id"));
-                        getState().setId(attrs.getValue("id"));
+                        getElementState().setId(attrs.getValue("id"));
                     }
-                    getLoader().addFragment(xbrlFragment,getState());
+                    getLoader().addFragment(xbrlFragment,getElementState());
                 }
             }
         } catch (XBRLException e) {
@@ -472,7 +472,7 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
 
             if (referencePartFragment != null) {
                 referencePartFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                getLoader().addFragment(referencePartFragment,getState());
+                getLoader().addFragment(referencePartFragment,getElementState());
             }
             
         } catch (XBRLException e) {
@@ -517,9 +517,9 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
                     xbrlLinkFragment.setFragmentIndex(getLoader().getNextFragmentId());
                     if (attrs.getValue("id") != null) {
                         xbrlLinkFragment.appendID(attrs.getValue("id"));
-                        getState().setId(attrs.getValue("id"));
+                        getElementState().setId(attrs.getValue("id"));
                     }
-                    getLoader().addFragment(xbrlLinkFragment,getState());          
+                    getLoader().addFragment(xbrlLinkFragment,getElementState());          
                 }
             }
 
@@ -553,9 +553,9 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
                     factFragment.setFragmentIndex(getLoader().getNextFragmentId());
                     if (attrs.getValue("id") != null) {
                         factFragment.appendID(attrs.getValue("id"));
-                        getState().setId(attrs.getValue("id"));
+                        getElementState().setId(attrs.getValue("id"));
                     }
-                    getLoader().addFragment(factFragment,getState());
+                    getLoader().addFragment(factFragment,getElementState());
                 }
 
             } catch (XBRLException e) {
@@ -574,7 +574,7 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
 
             if (languageFragment != null) {
                 languageFragment.setFragmentIndex(getLoader().getNextFragmentId());
-                getLoader().addFragment(languageFragment,getState());
+                getLoader().addFragment(languageFragment,getElementState());
             }
             
         } catch (XBRLException e) {
@@ -583,11 +583,11 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
         
         // Add a generic fragment for a document root element if we have not already done so
         if (! getLoader().addedAFragment()) {
-            if (! getState().hasParent()) {
+            if (! getElementState().hasParent()) {
                 try {
                     Fragment root = new FragmentImpl();
                     root.setFragmentIndex(getLoader().getNextFragmentId());
-                    getLoader().addFragment(root,getState());
+                    getLoader().addFragment(root,getElementState());
                 } catch (XBRLException e) {
                     throw new SAXException("The default root element fragment could not be created.",e);
                 }
@@ -646,7 +646,7 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
             String qName) throws SAXException {
 
         // Get the attributes of the element being ended.
-        Attributes attrs = getState().getAttributes();
+        Attributes attrs = getElementState().getAttributes();
         
         // Handle the ending of an element in the fragment builder
         try {
@@ -664,7 +664,7 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
 
         // Give the loader a chance to update its state
         try {
-            getLoader().updateState(getState());
+            getLoader().updateState(getElementState());
         } catch (XBRLException e) {
             throw new SAXException("The state of the loader could not be updated at the end of element " + namespaceURI + ":" + sName + "." + e.getMessage(),e);
         }
@@ -695,7 +695,7 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
         }
         
         // Update the information about the state of the current element
-        setState(getState().getParent());
+        setElementState(getElementState().getParent());
         
         // Revert to Namespace declarations of the parent element.
         getNSStack().pop();

@@ -81,14 +81,14 @@ public class BaseContentHandlerImpl extends DefaultHandler implements ContentHan
     /**
      * @param state The element state
      */
-    public void setState(ElementState state) {
+    public void setElementState(ElementState state) {
         this.state = state;
     }
     
     /**
      * @return the state for the element currently being parsed.
      */
-    public ElementState getState() {
+    public ElementState getElementState() {
         return state;
     }    
     

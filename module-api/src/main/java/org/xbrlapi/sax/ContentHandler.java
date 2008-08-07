@@ -40,12 +40,12 @@ public interface ContentHandler extends org.xml.sax.ContentHandler {
     /**
      * @param state The element state
      */
-    public void setState(ElementState state);
+    public void setElementState(ElementState state);
     
     /**
      * @return the state for the element currently being parsed.
      */
-    public ElementState getState();
+    public ElementState getElementState();
 
     /**
      * Handles SAX parsing exceptions.
