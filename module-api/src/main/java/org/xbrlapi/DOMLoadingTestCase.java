@@ -2,12 +2,12 @@ package org.xbrlapi;
 
 import java.io.File;
 
-import org.xbrlapi.SAXHandlers.EntityResolverImpl;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.dom.StoreImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
+import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.BaseTestCase;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
