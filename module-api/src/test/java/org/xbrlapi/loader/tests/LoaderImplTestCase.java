@@ -213,22 +213,8 @@ public class LoaderImplTestCase extends BaseTestCase {
 		}
 	}
 
-	/**
-	 * Test loading of a serialised data set from a serialised
-	 * version of the data in the data set available at the
-	 * specified file.
-	 */
-	public void testLoadFile() {
-		//TODO Implement and test the loading of a serialised data store from a File.
-	}
 
-	/**
-	 * Test loading of a serialised data set from a serialised
-	 * version of the data in the data set available at the
-	 * specified URL.
-	 */
-	public void testLoadURL() {
-		//TODO Implement and test the loading of a serialised DTS from a URL.
-	}
+
+
 
 }

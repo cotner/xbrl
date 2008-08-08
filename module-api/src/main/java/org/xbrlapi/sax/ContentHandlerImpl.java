@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.impl.FragmentImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.identifiers.Identifier;
 import org.xbrlapi.sax.identifiers.LanguageIdentifier;
@@ -41,22 +40,18 @@ import org.xml.sax.SAXException;
 public class ContentHandlerImpl extends BaseContentHandlerImpl implements ContentHandler {
 
     /**
-     * On starting to parse a document the Base URL resolver is set up with the document's system ID;
+     * On starting to parse a document the Base URL resolver is 
+     * set up with the documents absolute URL.  The fragment identifiers
+     * are also instantiated and initialised.  
      */
     public void startDocument() throws SAXException 
     {
-        // Get the XLink handler
-        XBRLXLinkHandlerImpl xbrlXlinkHandler = getXLinkHandler();
-
-        // Set the base URL resolver for this document
-        try {
-            // TODO ???? Can we use the url property of the content handler instead of the loader document URL?
-            String thisDocumentURL = this.getLoader().getDocumentURL();
-            this.baseURLSAXResolver = new BaseURLSAXResolverImpl(new URL(thisDocumentURL));
-            xbrlXlinkHandler.setBaseURLSAXResolver(this.baseURLSAXResolver);
-        } catch (MalformedURLException e) {
-            throw new SAXException("The document has a malformed URL specified by the locator's System ID.");
+        // Set up the base URL resolver for the content handler and the XLink handler.
+        if (getURL() == null) {
+            throw new SAXException("The document URL must not be null when setting up the base URL resolver.");
         }
+        setBaseURLSAXResolver(new BaseURLSAXResolverImpl(this.getURL()));
+        getXLinkHandler().setBaseURLSAXResolver(this.getBaseURLSAXResolver());
 
         // Instantiate the fragment identifiers
         try {
@@ -69,7 +64,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         }
         
     }
-    
+        
     /**
      * Sets the element state.
      * Increment the fragment children via the loader ????
@@ -91,11 +86,8 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         // Update the information about the state of the current element
         setElementState(new ElementState(getElementState(),attrs));
 
-        try {
-            getLoader().incrementChildren();
-        } catch (XBRLException e) {
-            throw new SAXException("Could not record a new child for the fragment being parsed.",e);
-        }
+        // Update the loader information about child elements.
+        getLoader().incrementChildren();
         
         // Stash new URLs in xsi:schemaLocation attributes if desired
         if (getLoader().useSchemaLocationAttributes()) {
@@ -129,6 +121,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         }
         getNamespaceMaps().push(myMap);
         
+        // Identify the fragments
         for (Identifier identifier: getIdentifiers()) {
             try {
                 identifier.startElement(namespaceURI,lName,qName,attrs);
@@ -139,29 +132,18 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
                 throw new SAXException("Fragment identification failed.",e);
             }
         }
-        
-        // Add a generic fragment for a document root element if we have not already done so
-        if (! getLoader().addedAFragment()) {
-            if (! getElementState().hasParent()) {
-                try {
-                    Fragment root = new FragmentImpl();
-                    root.setFragmentIndex(getLoader().getNextFragmentId());
-                    getLoader().addFragment(root,getElementState());
-                } catch (XBRLException e) {
-                    throw new SAXException("The default root element fragment could not be created.",e);
-                }
-            }
-        }
-        
-        // Extend the child count for an new element if we have not started a new fragment
+
+        // Extend the child count for an new element if 
+        // we have not started a new fragment.
         try {
             if (! getLoader().getFragment().isNewFragment()) {
-                getLoader().extendChildren();       
+                getLoader().extendChildren();   
             }
         } catch (XBRLException e) {
             throw new SAXException("Could not handle children tracking at the fragment level.",e);
         }
         
+        // Add the necessary xmlns namespace declarations to the fragment root.
         try {
             if (getLoader().getFragment().isNewFragment()) {
                 Fragment f = getLoader().getFragment();
@@ -173,7 +155,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
            throw new SAXException("The loader is not building a fragment so something is badly amiss.",e);
         }
         
-        // Insert the element into the fragment being built
+        // Insert the current element into the fragment being built
         try {
             getLoader().getFragment().getBuilder().appendElement(namespaceURI, lName, qName, attrs);
         } catch (XBRLException e) {
@@ -265,10 +247,38 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
     }    
     
     /**
+     * Copy characters (trimming white space as required) to the DTSImpl.
+     */
+    public void characters(char buf[], int offset, int len) 
+        throws SAXException 
+    {
+        // TODO ???? Consider deleting this next try statement.  It does nothing.
+        try {
+            getLoader().getXlinkProcessor().titleCharacters(buf, offset, len);
+        } catch (XLinkException e) {
+            throw new SAXException("The XLink processor title characters handling failed.",e);
+        }
+
+        try {
+            String s = new String(buf, offset, len);
+            getLoader().getFragment().getBuilder().appendText(s);
+        } catch (XBRLException e) {
+            throw new SAXException("The characters could not be appended to the fragment." + getInputErrorInformation());
+        }
+    }    
+    
+    /**
      * SAX parsing locator - provides information for use in
      * error reporting.
      */
     private Locator locator = null;
+
+    /**
+     * @return the locator of the current document position.
+     */
+    private Locator getLocator() {
+        return this.locator;
+    }
     
     /**
      * The locator for a document is stored to facilitate resolution 
@@ -278,29 +288,9 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         this.locator = locator;
     }
     
-    
-
-    
-
-    
-
-    
-
-    
-
-
-
-
-    
-
-
     /**
-     * @param locator The locator of the current document position.
+     * @return The public ID of the document.
      */
-    protected void setLocator(Locator locator) {
-        this.locator = locator;
-    }
-    
     private String getPublicId() {
         return getLocator().getPublicId();
     }
@@ -312,14 +302,23 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         return getLocator().getSystemId();
     }
     
+    /**
+     * @return the line that the parser has reached.
+     */
     private int getLineNumber() {
         return getLocator().getLineNumber();
     }
 
+    /**
+     * @return the column that the parser has reached.
+     */
     private int getColumnNumber() {
         return getLocator().getColumnNumber();
     }
     
+    /**
+     * @return the information about the input error.
+     */
     private String getInputErrorInformation() {
         StringBuffer s = new StringBuffer("  The problem occurred in ");
         if (!(getSystemId() == null))
@@ -330,31 +329,6 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         return s.toString();
     }    
 
-    /**
-     * @return the locator of the current document position.
-     */
-    private Locator getLocator() {
-        return this.locator;
-    }
-    
-    /**
-     * String representation of the XML document - for documents supplied as such.
-     */
-    private String xml = null;
-    
-    /**
-     * @param xml The XML stored as a string, that is to be parsed.
-     * @throws XBRLException if the XML string is null.
-     */
-    private void setXML(String xml) throws XBRLException {
-        if (xml == null) throw new XBRLException("The string of XML to be parsed must not be null.");  
-        this.xml = xml;        
-    }
-
-
-    
-    
-    
     /**
      * Creates the content handler, starting out by
      * identifying the DTS structure that the content
@@ -398,7 +372,16 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
      * the appropriate base URL during SAX parsing.
      */
     private BaseURLSAXResolver baseURLSAXResolver = null;
-
+    
+    /**
+     * @param resolver The base URL resolver to use in the SAX parsing.
+     * @throws SAXException if the resolver is null.
+     */
+    private void setBaseURLSAXResolver(BaseURLSAXResolver resolver) throws SAXException {
+        if (resolver == null) throw new SAXException("The base URL SAX resolver must not be null.");
+        this.baseURLSAXResolver = resolver;
+    }
+    
     /**
      * @return the base URL resolver for SAX parsing.
      */
@@ -406,44 +389,18 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         return baseURLSAXResolver;
     }
     
-
-    
-
-
-
-    
-
-    
-
-
-    
-
+    /**
+     * String representation of the XML document - for documents supplied as such.
+     */
+    private String xml = null;
     
     /**
-     * Copy characters (trimming white space as required) to the DTSImpl.
+     * @param xml The XML stored as a string, that is to be parsed.
+     * @throws XBRLException if the XML string is null.
      */
-    public void characters(char buf[], int offset, int len) 
-        throws SAXException 
-    {
-        // TODO ???? Consider deleting this next try statement.  It does nothing.
-    	try {
-    		getLoader().getXlinkProcessor().titleCharacters(buf, offset, len);
-    	} catch (XLinkException e) {
-    		throw new SAXException("The XLink processor title characters handling failed.",e);
-    	}
-
-		try {
-		    String s = new String(buf, offset, len);
-		    getLoader().getFragment().getBuilder().appendText(s);
-		} catch (XBRLException e) {
-		    throw new SAXException("The characters could not be appended to the fragment." + getInputErrorInformation());
-		}
-    }    
-
-
-
-
-	
-	
+    private void setXML(String xml) throws XBRLException {
+        if (xml == null) throw new XBRLException("The string of XML to be parsed must not be null.");  
+        this.xml = xml;    
+    }
     
 }

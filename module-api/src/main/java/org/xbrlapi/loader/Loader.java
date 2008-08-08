@@ -71,9 +71,8 @@ public interface Loader {
 	 * The children vector has an element for each element that has been started and
 	 * that has not yet been ended in the SAX content handler.
 	 * @return The vector of children counts.
-	 * @throws XBRLException
 	 */
-	public Vector<Long> getChildrenVector() throws XBRLException;
+	public Vector<Long> getChildrenVector();
 	
 	/**
 	 * Add a new child tracking vector to the childrenStack to use for the new fragment
@@ -83,10 +82,10 @@ public interface Loader {
 	public void prepareToTrackChildrenForNewFragment() throws XBRLException;
 	
 	/**
-	 * Increment the children tracker to show that a new element has been found.
-	 * @throws XBRLException
+	 * Increment the children tracker to show 
+	 * that a new element has been found.
 	 */
-	public void incrementChildren() throws XBRLException;
+	public void incrementChildren();
 	
 	/**
 	 * Add a new node to the vector of children being tracked for the current fragment.

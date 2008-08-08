@@ -327,17 +327,7 @@ public class LoaderImpl implements Loader {
         return pointerResolver;
     }
 
-    /**
-     * We need to track the number of children for all of the elements being
-     * built for all of the fragments being built. This is required to enable us
-     * to build an XPath expression identifying the element of a parent fragment
-     * that is to contain the root of a child fragment.
-     * 
-     * @throws XBRLException
-     */
-    public void augmentChildren() throws XBRLException {
-        incrementChildren();
-    }
+
 
     /**
      * Add a new child tracking vector to the childrenStack to use for the new
@@ -357,11 +347,9 @@ public class LoaderImpl implements Loader {
      * The children vector contains an item for each element that has been started
      * and that has not yet been ended by the SAX content handler.
      * 
-     * @return The vector of children or null if none exist (implying no parent
-     *         fragments).
-     * @throws XBRLException
+     * @return The vector of children or null if none exist (implying no parent fragments).
      */
-    public Vector<Long> getChildrenVector() throws XBRLException {
+    public Vector<Long> getChildrenVector() {
         if (childrenStack.isEmpty())
             return null;
         Vector<Long> children = childrenStack.peek();
@@ -369,13 +357,9 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Increment the children tracker to show that a new element has been found.
-     * TODO make sure that the Loader incrementChildren method has its
-     * properties initialised.
-     * 
-     * @throws XBRLException
+     * @see Loader#incrementChildren()
      */
-    public void incrementChildren() throws XBRLException {
+    public void incrementChildren() {
 
         // Do nothing if the children stack is empty - we are at the root of a
         // document
@@ -450,7 +434,7 @@ public class LoaderImpl implements Loader {
 
         // Set the document reconstruction metadata for the fragment
         Vector<Long> children = getChildrenVector();
-        if (children != null) {
+        if (children != null) { 
             Fragment parent = getFragment();
             if (parent == null) throw new XBRLException("The parent fragment is missing.");
             String parentIndex = parent.getFragmentIndex();

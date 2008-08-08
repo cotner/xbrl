@@ -250,11 +250,8 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
         // Update the information about the state of the current element
         setElementState(new ElementState(getElementState(),attrs));
 
-        try {
-            getLoader().incrementChildren();
-        } catch (XBRLException e) {
-            throw new SAXException("Could not record a new child for the fragment being parsed.",e);
-        }
+        // Update the loader information about child elements.
+        getLoader().incrementChildren();
         
         // Stash new URLs in xsi:schemaLocation attributes if desired
         if (getLoader().useSchemaLocationAttributes()) {
