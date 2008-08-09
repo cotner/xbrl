@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.loader.Loader;
+import org.xbrlapi.sax.identifiers.GenericDocumentRootIdentifier;
 import org.xbrlapi.sax.identifiers.Identifier;
 import org.xbrlapi.sax.identifiers.LanguageIdentifier;
 import org.xbrlapi.sax.identifiers.XBRLXLinkIdentifier;
@@ -59,6 +60,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             identifiers.add(new XBRLXLinkIdentifier(this));
             identifiers.add(new XMLSchemaIdentifier(this));
             identifiers.add(new LanguageIdentifier(this));
+            identifiers.add(new GenericDocumentRootIdentifier(this));
         } catch (XBRLException e) {
             throw new SAXException("A fragment identifier could not be instantiated.",e);
         }
@@ -136,6 +138,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         // Extend the child count for an new element if 
         // we have not started a new fragment.
         try {
+            logger.info("Fragment: " + getLoader().getFragment());
             if (! getLoader().getFragment().isNewFragment()) {
                 getLoader().extendChildren();   
             }
