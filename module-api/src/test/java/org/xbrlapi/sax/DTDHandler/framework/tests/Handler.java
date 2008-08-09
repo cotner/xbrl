@@ -1,4 +1,4 @@
-package org.xbrlapi.SAXHandlers.DTDHandler.framework.tests;
+package org.xbrlapi.sax.DTDHandler.framework.tests;
 
 import java.io.IOException;
 

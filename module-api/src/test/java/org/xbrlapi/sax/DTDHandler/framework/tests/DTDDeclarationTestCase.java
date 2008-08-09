@@ -1,4 +1,4 @@
-package org.xbrlapi.SAXHandlers.DTDHandler.framework.tests;
+package org.xbrlapi.sax.DTDHandler.framework.tests;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
