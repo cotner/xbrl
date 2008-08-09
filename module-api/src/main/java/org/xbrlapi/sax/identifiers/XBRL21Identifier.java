@@ -89,9 +89,10 @@ public class XBRL21Identifier extends BaseIdentifier implements Identifier {
                 xbrlFragment = new UnitImpl();
                 this.canBeATuple = false;
             }
-            if (xbrlFragment != null) {
-                this.processFragment(xbrlFragment,attrs);
-            }
+        }
+        if (xbrlFragment != null) {
+            this.processFragment(xbrlFragment,attrs);
+            return;
         }
 
         Fragment xbrlLinkFragment = null;
@@ -128,6 +129,7 @@ public class XBRL21Identifier extends BaseIdentifier implements Identifier {
             
             if (xbrlLinkFragment != null) {
                 this.processFragment(xbrlLinkFragment,attrs);
+                return;
             }
         }
 
@@ -137,13 +139,11 @@ public class XBRL21Identifier extends BaseIdentifier implements Identifier {
         }
 
         if (referencePartFragment != null) {
-            referencePartFragment.setFragmentIndex(getLoader().getNextFragmentId());
-            getLoader().addFragment(referencePartFragment,getElementState());
+            processFragment(referencePartFragment,attrs);
+            return;
         }        
         
-        if ((xbrlFragment == null) && 
-            (referencePartFragment == null) && 
-            this.parsingAnXBRLInstance) {
+        if (this.parsingAnXBRLInstance) {
 
             Fragment factFragment = null;
 

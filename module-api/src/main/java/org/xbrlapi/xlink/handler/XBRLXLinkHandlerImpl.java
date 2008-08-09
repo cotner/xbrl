@@ -112,7 +112,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	public void startTitle(String namespaceURI, String lName, String qName,
 			Attributes attrs) throws XLinkException {
 		try {
-			setupFragment(new TitleImpl(),attrs);
+			processFragment(new TitleImpl(),attrs);
 		} catch (XBRLException e) {
 			throw new XLinkException("The title could not be created and stored.",e);
 		}
@@ -167,7 +167,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			throws XLinkException {
 		
 		try {
-            setupFragment(new ExtendedLinkImpl(),attrs);
+            processFragment(new ExtendedLinkImpl(),attrs);
 		} catch (XBRLException e) {
 			throw new XLinkException("The extended link could not be created.",e);
 		}
@@ -229,7 +229,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			} else {
 				fragment = new ResourceImpl();
 			}
-			setupFragment(fragment,attrs);
+			processFragment(fragment,attrs);
 		} catch (XBRLException e) {
 			throw new XLinkException("The resource could not be created.",e);
 		}
@@ -258,7 +258,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	throws XLinkException {
 		try {
             Locator fragment = new LocatorImpl();
-            setupFragment(fragment,attrs);            
+            processFragment(fragment,attrs);            
 
             Loader loader = getLoader();
             URL url = new URL(baseURLResolver.getBaseURL(),href);
@@ -297,7 +297,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			String show, 
 			String actuate) throws XLinkException {
 		try {
-		    setupFragment(new ArcImpl(),attrs);
+		    processFragment(new ArcImpl(),attrs);
 		} catch (XBRLException e) {
 			throw new XLinkException("The arc could not be created.",e);
 		}
@@ -330,7 +330,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 		
 		try {
             SimpleLink fragment = new SimpleLinkImpl();
-            setupFragment(fragment,attrs);
+            processFragment(fragment,attrs);
 
             URL url = new URL(baseURLResolver.getBaseURL(),href);
 			Loader loader = getLoader();
@@ -408,7 +408,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
      * @param attrs The attributes of the root element of the fragment.
      * @throws XBRLException
      */
-    private void setupFragment(Fragment fragment,Attributes attrs) throws XBRLException {
+    private void processFragment(Fragment fragment,Attributes attrs) throws XBRLException {
         Loader loader = this.getLoader();
         fragment.setFragmentIndex(getLoader().getNextFragmentId());
         if (attrs.getValue("id") != null) {

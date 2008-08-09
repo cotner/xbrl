@@ -812,6 +812,7 @@ public class LoaderImpl implements Loader {
         }
 
         try {
+            logger.debug("Parsing " + url);
             reader.parse(inputSource);
         } catch (SAXException e) {
             throw new XBRLException("SAX exception thrown when parsing " + url,
@@ -900,7 +901,6 @@ public class LoaderImpl implements Loader {
             // Only stash if the document does not already have a match.
             URL matchURL = getStore().getMatcher().getMatch(dereferencedURL);
             if (matchURL.equals(dereferencedURL)) {
-                logger.debug(Thread.currentThread().getName() + " stashing " + url);
                 documentQueue.put(dereferencedURL.toString(), new Integer(0));
             } else {
                 logger.debug("No need to stash " + dereferencedURL + " because it has match " + matchURL);

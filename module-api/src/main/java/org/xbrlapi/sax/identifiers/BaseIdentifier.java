@@ -1,5 +1,6 @@
 package org.xbrlapi.sax.identifiers;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.ContentHandler;
@@ -18,6 +19,8 @@ import org.xml.sax.Attributes;
 
 public class BaseIdentifier implements Identifier {
 
+    protected static Logger logger = Logger.getLogger(BaseIdentifier.class);
+    
     /**
      * The content handler that is using this fragment identifier
      */

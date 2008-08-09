@@ -36,6 +36,7 @@ public class GenericDocumentRootIdentifier extends BaseIdentifier implements Ide
         if (! getLoader().addedAFragment()) {
             if (! getElementState().hasParent()) {
                 Fragment root = new FragmentImpl();
+                logger.info("Creating a generic fragment for " + qName);
                 processFragment(root,attrs);
             }
         }        

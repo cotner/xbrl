@@ -10,6 +10,7 @@ import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.identifiers.GenericDocumentRootIdentifier;
 import org.xbrlapi.sax.identifiers.Identifier;
 import org.xbrlapi.sax.identifiers.LanguageIdentifier;
+import org.xbrlapi.sax.identifiers.XBRL21Identifier;
 import org.xbrlapi.sax.identifiers.XBRLXLinkIdentifier;
 import org.xbrlapi.sax.identifiers.XMLSchemaIdentifier;
 import org.xbrlapi.utilities.Constants;
@@ -59,6 +60,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             List<Identifier> identifiers = this.getIdentifiers();
             identifiers.add(new XBRLXLinkIdentifier(this));
             identifiers.add(new XMLSchemaIdentifier(this));
+            identifiers.add(new XBRL21Identifier(this));
             identifiers.add(new LanguageIdentifier(this));
             identifiers.add(new GenericDocumentRootIdentifier(this));
         } catch (XBRLException e) {
@@ -138,7 +140,6 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         // Extend the child count for an new element if 
         // we have not started a new fragment.
         try {
-            logger.info("Fragment: " + getLoader().getFragment());
             if (! getLoader().getFragment().isNewFragment()) {
                 getLoader().extendChildren();   
             }
