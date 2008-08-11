@@ -21,6 +21,4 @@ public class LinkImpl extends XlinkImpl implements Link {
     	return null;
     }
     
-    
-    
 }

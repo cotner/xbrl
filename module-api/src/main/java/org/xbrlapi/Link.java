@@ -14,7 +14,4 @@ public interface Link extends Xlink {
      */
     public String getLinkRole() throws XBRLException;
     
-
-
-    
 }

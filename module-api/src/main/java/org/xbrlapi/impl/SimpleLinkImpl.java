@@ -80,8 +80,6 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
     	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"arcrole");
     }
     
-
-    
     /**
      * @return the single fragment referenced by the simple link.
      * @throws XBRLException if the simple link does not reference exactly one fragment.

@@ -29,8 +29,6 @@ class XlinkImpl extends FragmentImpl implements Xlink {
     public String getXlinkType() throws XBRLException {
     	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"type");
     }
-    
-
 
     /**
      * Get the  title (The xlink:title attribute value).
