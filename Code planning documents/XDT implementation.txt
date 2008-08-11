@@ -27,8 +27,7 @@ in a more useable manner.
   Dimension
     ExplicitDimension
 
-There will also be a new fragment type for typed-dimension content models.
-  TypedDimensionContentModel
+Typed-dimension content models will just be XML Schema element declaration fragments.
 
 There will also be new fragment types for dimension values in XBRL instances.
   DimensionValue
@@ -43,7 +42,7 @@ There will also be new fragment types for dimension values in XBRL instances.
   It is a pity that the connection was not handled in some other way - such 
   as with a real simple link contained within the appinfo of the domain declaration.
 
-3.  New higher-level objects required:
+3.  New higher-level objects possibly required:
 
 Complete aspect model? (being an extension of the notion of a hypercube to take into account "dimensions"
 going beyond those expressed using XDT syntax).  This would go into the xbrlapi module.
