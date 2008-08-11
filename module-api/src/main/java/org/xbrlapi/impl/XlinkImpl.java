@@ -56,18 +56,6 @@ class XlinkImpl extends FragmentImpl implements Xlink {
     public FragmentList<Title> getTitleElements() throws XBRLException {
     	return getChildren("org.xbrlapi.impl.TitleImpl");
     }
-    
-    /**
-     * Append a title element to the XLink fragment
-     * TODO add a removeTitle method to the XLink fragment interface.
-     * TODO Change the append method signature to add to be consistent.
-     * @param title The title to append
-     * @throws XBRLException
-     * @see org.xbrlapi.Xlink#appendTitle(Title)
-     */
-    public void appendTitle(Title title) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
 
     /**
      * Get a specific title fragment 

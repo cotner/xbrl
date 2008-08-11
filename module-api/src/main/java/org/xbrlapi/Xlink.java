@@ -33,15 +33,8 @@ public interface Xlink extends Fragment {
      * @return a fragment list of title elements or null if there are none.
      * @throws XBRLException
      */
-
     public FragmentList<Title> getTitleElements() throws XBRLException;
-    /**
-     * Append a title element to the XLink fragment
-     *
-     * @param title The title to append
-     * @throws XBRLException
-     */
-    public void appendTitle(Title title) throws XBRLException;
+
     /**
      * Get a list of titles (The xlink:title children elements).
      * Returns null if there are no title children elements.
@@ -51,7 +44,6 @@ public interface Xlink extends Fragment {
      * @throws XBRLException
      */
     public Title getTitleElement(int index) throws XBRLException;
-
     
     /**
      * Get a non-xlink attribute value.
