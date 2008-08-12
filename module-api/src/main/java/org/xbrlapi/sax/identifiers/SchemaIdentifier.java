@@ -32,12 +32,12 @@ import org.xml.sax.Attributes;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class XMLSchemaIdentifier extends BaseIdentifier implements Identifier {
+public class SchemaIdentifier extends BaseIdentifier implements Identifier {
 
     /**
      * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(Loader)
      */
-    public XMLSchemaIdentifier(ContentHandler contentHandler) throws XBRLException {
+    public SchemaIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);
     }
 

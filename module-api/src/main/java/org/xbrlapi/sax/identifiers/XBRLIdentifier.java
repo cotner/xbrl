@@ -29,12 +29,12 @@ import org.xml.sax.Attributes;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class XBRL21Identifier extends BaseIdentifier implements Identifier {
+public class XBRLIdentifier extends BaseIdentifier implements Identifier {
 
     /**
      * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(Loader)
      */
-    public XBRL21Identifier(ContentHandler contentHandler) throws XBRLException {
+    public XBRLIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);
     }
 
