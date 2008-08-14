@@ -31,7 +31,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	public void testGettingURLList() {
 		try {
 			List<String> urls = store.getStoredURLs();
-			assertTrue(urls.size() > 10);
+			assertTrue(urls.size() > 1);
 			
 			Element e = store.getDocumentAsDOM(urls.get(0));
 			assertNotNull(e);

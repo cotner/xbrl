@@ -1,5 +1,7 @@
 package org.xbrlapi.data.exist.tests;
 
+import java.util.List;
+
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.impl.MockFragmentImpl;
@@ -64,6 +66,22 @@ public class StoreImplTestCase extends BaseTestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+    public void testFilteredQuery() throws Exception {
+        
+        List<String> urls = store.getStoredURLs();
+        assertTrue(urls.size() > 1);
+        urls.remove(0);
+        try {
+            String xpathQuery = "/*[" + Constants.XBRLAPIPrefix + ":data]";
+            FragmentList<Fragment> filteredFragments = store.<Fragment>query(xpathQuery,urls);
+            FragmentList<Fragment> fragments = store.<Fragment>query(xpathQuery);
+            assertTrue(fragments.getLength() > filteredFragments.getLength());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+    }	
 
 	public void testQueryLoadedFragments() {
 		try {

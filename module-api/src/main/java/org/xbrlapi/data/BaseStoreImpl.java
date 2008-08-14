@@ -970,15 +970,15 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     /**
      * @see org.xbrlapi.data.Store#query(String, List)
      */
-    public <F extends Fragment> FragmentList<F> query(String query, List<URL> urls) throws XBRLException {
+    public <F extends Fragment> FragmentList<F> query(String query, List<String> urls) throws XBRLException {
         
         String urlFilter = "0";
-        for (URL url: urls) {
-            urlFilter = urlFilter + " or @url='" + url.toString() + "'";
+        for (String url: urls) {
+            urlFilter = urlFilter + " or @url='" + url + "'";
         }
         urlFilter = "[" + urlFilter + "]";
         logger.info(urlFilter);
-        return query(query);
+        return query(query + urlFilter);
     }
     
 }
