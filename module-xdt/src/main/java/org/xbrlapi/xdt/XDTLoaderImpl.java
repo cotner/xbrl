@@ -47,7 +47,7 @@ public class XDTLoaderImpl extends LoaderImpl implements Loader {
 
         try {
             InputSource inputSource = this.getEntityResolver().resolveEntity("", url.toString());
-            ContentHandler contentHandler = new XDTContentHandlerImpl(this, url);
+            ContentHandler contentHandler = new ContentHandlerImpl(this, url);
             parse(url, inputSource, contentHandler);
         } catch (SAXException e) {
             throw new XBRLException("SAX exception thrown when parsing " + url,e);
@@ -61,7 +61,7 @@ public class XDTLoaderImpl extends LoaderImpl implements Loader {
      */
     private void parse(URL url, String xml) throws XBRLException {
         InputSource inputSource = new InputSource(new StringReader(xml));
-        ContentHandler contentHandler = new XDTContentHandlerImpl(this, url, xml);
+        ContentHandler contentHandler = new ContentHandlerImpl(this, url, xml);
         super.parse(url, inputSource, contentHandler);
     }
     

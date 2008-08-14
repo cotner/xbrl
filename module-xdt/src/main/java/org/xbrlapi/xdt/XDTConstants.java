@@ -11,5 +11,9 @@ public class XDTConstants {
 
     public final  static String XBRLDINamespace = "http://xbrl.org/2005/xbrldi";
     public final  static String XBRLDIPrefix = "xbrldi";
+    
+    public final static String hypercube = "hypercubeItem";
+    
+    public final static String dimension = "dimensionItem";
 
 }
