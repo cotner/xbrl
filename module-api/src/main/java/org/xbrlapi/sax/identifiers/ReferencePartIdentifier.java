@@ -38,7 +38,6 @@ public class ReferencePartIdentifier extends BaseIdentifier implements Identifie
         // Handle reference part fragments inside reference resources
         Fragment fragment = getLoader().getFragment();
         if (fragment.getType().equals("org.xbrlapi.impl.ReferenceResourceImpl")) {
-            logger.info("Creating a reference part fragment.");
             Fragment referencePartFragment = new ReferencePartImpl();
             processFragment(referencePartFragment,attrs);
         }
