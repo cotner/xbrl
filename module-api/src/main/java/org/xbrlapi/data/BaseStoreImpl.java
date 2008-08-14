@@ -966,5 +966,19 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public void setNamespaceBinding(String namespace, String prefix) throws XBRLException {
         this.namespaceBindings.put(namespace,prefix);
     }
+
+    /**
+     * @see org.xbrlapi.data.Store#query(String, List)
+     */
+    public <F extends Fragment> FragmentList<F> query(String query, List<URL> urls) throws XBRLException {
+        
+        String urlFilter = "0";
+        for (URL url: urls) {
+            urlFilter = urlFilter + " or @url='" + url.toString() + "'";
+        }
+        urlFilter = "[" + urlFilter + "]";
+        logger.info(urlFilter);
+        return query(query);
+    }
     
 }

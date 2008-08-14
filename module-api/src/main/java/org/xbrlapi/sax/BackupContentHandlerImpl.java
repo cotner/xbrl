@@ -579,22 +579,22 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
         }
         
         // Add a generic fragment for a document root element if we have not already done so
-        if (! getLoader().addedAFragment()) {
-            if (! getElementState().hasParent()) {
-                try {
+        try {
+            if (! getLoader().getFragment().isNewFragment()) {
+                if (! getElementState().hasParent()) {
                     Fragment root = new FragmentImpl();
                     root.setFragmentIndex(getLoader().getNextFragmentId());
                     getLoader().addFragment(root,getElementState());
-                } catch (XBRLException e) {
-                    throw new SAXException("The default root element fragment could not be created.",e);
                 }
             }
+        } catch (XBRLException e) {
+            throw new SAXException("The default root element fragment could not be created.",e);
         }
         
         // Extend the child count for an new element if we have not started a new fragment
         try {
             if (! getLoader().getFragment().isNewFragment()) {
-                getLoader().extendChildren();       
+                getLoader().extendChildren();     
             }
         } catch (XBRLException e) {
             throw new SAXException("Could not handle children tracking at the fragment level.",e);
@@ -743,7 +743,7 @@ public class BackupContentHandlerImpl extends BaseContentHandlerImpl implements 
 		try {
 			if (getLoader().getFragment() != null)
 				getLoader().getFragment().getBuilder().appendProcessingInstruction(target,data);
-			// Figure out how to capture processing instructions that occur before the document root element.
+			// TODO Figure out how to capture processing instructions that occur before the document root element.
 		} catch (XBRLException e) {
 		    e.printStackTrace();
 		}

@@ -115,35 +115,31 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                 }
                 
                 // Determine what substitution groups the element is in - if any.
-                boolean isItemConcept = false;
-                boolean isTupleConcept = false;
-                boolean isReferencePartDeclaration = false;
                 if (declaration != null) {
                     XSElementDeclaration sgDeclaration = declaration.getSubstitutionGroupAffiliation();
                     while (sgDeclaration != null) {
                         
                         if (sgDeclaration.getNamespace().equals(Constants.XBRL21Namespace)) {
-                            if (sgDeclaration.getName().equals("item"))
-                                isItemConcept = true;
-                            else if (sgDeclaration.getName().equals("tuple"))
-                                isTupleConcept = true;
+                            if (sgDeclaration.getName().equals("item")) {
+                                fragment = new ConceptImpl();
+                                break;
+                            } else if (sgDeclaration.getName().equals("tuple")) {
+                                fragment = new ConceptImpl();
+                                break;
+                            }
                         }
+
                         if (sgDeclaration.getNamespace().equals(Constants.XBRL21LinkNamespace)) {
                             if (sgDeclaration.getName().equals("part"))
-                                isReferencePartDeclaration = true;
+                                fragment = new ReferencePartDeclarationImpl();
+                                break;
                         }
+                        
                         sgDeclaration = sgDeclaration.getSubstitutionGroupAffiliation();
                     }
                 }
-                // TODO Decide if the element declarations need to keep track of their whole substitution group stack.
                 
-                // If the element has a periodType attribute it is an XBRL concept
-                if (isItemConcept || isTupleConcept) {
-                    fragment = new ConceptImpl();
-                    
-                } else if (isReferencePartDeclaration) {
-                    fragment = new ReferencePartDeclarationImpl();
-                } else if (elementName != null) {
+                if ((fragment == null) && (elementName != null)) {
                     fragment = new ElementDeclarationImpl();
                 }                   
                 
@@ -157,8 +153,10 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
     }
     
     /**
-     * Set the target namespace to null once the schema element is ended.
      * The implementation assumes that XML schemas do not nest XML schemas.
+     * 
+     * Set the target namespace to null once the schema element is ended.
+     * 
      * @see Identifier#endElement(String, String, String, Attributes)
      */
     public void endElement(
@@ -169,8 +167,9 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
         
         // This assumes that XML schemas do not nest XML schemas
         if (lName.equals("schema"))
-            if (namespaceURI.equals(Constants.XMLSchemaNamespace))
+            if (namespaceURI.equals(Constants.XMLSchemaNamespace)) {
                 setTargetNamespace(null);
+            }
 
     }    
     
@@ -182,7 +181,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
     /**
      * @returns The XML Schema grammar model.
      */
-    private XSModel getXSModel() {
+    protected XSModel getXSModel() {
         return this.model;
     }
     
@@ -204,14 +203,14 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
     /**
      * @return the target namespace.
      */
-    private String getTargetNamespace() {
+    protected String getTargetNamespace() {
         return this.targetNamespace;
     }    
     
     /**
      * @param targetNamespace The target namespace of the schema.
      */
-    private void setTargetNamespace(String targetNamespace) {
+    protected void setTargetNamespace(String targetNamespace) {
         this.targetNamespace = targetNamespace;
     }    
     

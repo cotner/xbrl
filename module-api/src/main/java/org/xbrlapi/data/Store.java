@@ -112,7 +112,18 @@ public interface Store {
 	 * exist.
 	 * @throws XBRLException if the query cannot be executed.
 	 */
-	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException;	
+	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException;
+	
+    /**
+     * Run a query against the collection of those fragments in the store
+     * that are parts of documents with URLs in the supplied list of URLs.
+     * @param query The XPath query to run against the set of fragments.
+     * @param urls The list of URLs of the documents to get queries from.
+     * @return a list of matching fragments or the empty list if no matching fragments
+     * exist.
+     * @throws XBRLException if the query cannot be executed.
+     */
+    public <F extends Fragment> FragmentList<F> query(String query, List<URL> urls) throws XBRLException;	
 
     /**
      * Serialize the specified XML DOM to the specified destination.

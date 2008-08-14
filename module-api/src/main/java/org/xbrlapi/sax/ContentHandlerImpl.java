@@ -6,13 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.xbrlapi.Fragment;
+import org.xbrlapi.builder.Builder;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.identifiers.GenericDocumentRootIdentifier;
 import org.xbrlapi.sax.identifiers.Identifier;
 import org.xbrlapi.sax.identifiers.LanguageIdentifier;
-import org.xbrlapi.sax.identifiers.XBRL21Identifier;
+import org.xbrlapi.sax.identifiers.ReferencePartIdentifier;
+import org.xbrlapi.sax.identifiers.SchemaIdentifier;
+import org.xbrlapi.sax.identifiers.XBRLIdentifier;
 import org.xbrlapi.sax.identifiers.XBRLXLinkIdentifier;
-import org.xbrlapi.sax.identifiers.XMLSchemaIdentifier;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
@@ -57,12 +59,12 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
 
         // Instantiate the fragment identifiers
         try {
-            List<Identifier> identifiers = this.getIdentifiers();
-            identifiers.add(new XBRLXLinkIdentifier(this));
-            identifiers.add(new XMLSchemaIdentifier(this));
-            identifiers.add(new XBRL21Identifier(this));
-            identifiers.add(new LanguageIdentifier(this));
-            identifiers.add(new GenericDocumentRootIdentifier(this));
+            addIdentifier(new XBRLXLinkIdentifier(this));
+            addIdentifier(new SchemaIdentifier(this));
+            addIdentifier(new XBRLIdentifier(this));
+            addIdentifier(new LanguageIdentifier(this));
+            addIdentifier(new ReferencePartIdentifier(this));
+            addIdentifier(new GenericDocumentRootIdentifier(this));
         } catch (XBRLException e) {
             throw new SAXException("A fragment identifier could not be instantiated.",e);
         }
@@ -87,14 +89,16 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             String qName, 
             Attributes attrs) throws SAXException {
         
+        Loader loader = getLoader();
+        
         // Update the information about the state of the current element
         setElementState(new ElementState(getElementState(),attrs));
 
         // Update the loader information about child elements.
-        getLoader().incrementChildren();
+        loader.incrementChildren();
         
         // Stash new URLs in xsi:schemaLocation attributes if desired
-        if (getLoader().useSchemaLocationAttributes()) {
+        if (loader.useSchemaLocationAttributes()) {
             String schemaLocations = attrs.getValue(Constants.XMLSchemaInstanceNamespace,"schemaLocation");
             if (schemaLocations != null) {
                 logger.debug("Processing schema locations: " + schemaLocations);
@@ -103,7 +107,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
                     try {
                         URL url = new URL(getBaseURLSAXResolver().getBaseURL(),fields[i]);
                         logger.debug("Working on: " + url);
-                        getLoader().stashURL(url);
+                        loader.stashURL(url);
                     } catch (MalformedURLException e) {
                         logger.warn("Ignoring malformed XSI schemaLocation URL in: " + schemaLocations);
                     } catch (XBRLException e) {
@@ -129,15 +133,22 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         for (Identifier identifier: getIdentifiers()) {
             try {
                 identifier.startElement(namespaceURI,lName,qName,attrs);
-                if (getLoader().addedAFragment()) {
-                    break;
+                if (loader.isBuildingAFragment()) {
+                    if (loader.getFragment().isNewFragment()) {
+                        break;
+                    }
                 }
             } catch (XBRLException e) {
+                e.printStackTrace();
                 throw new SAXException("Fragment identification failed.",e);
             }
         }
 
-        // Extend the child count for an new element if 
+        if (! loader.isBuildingAFragment()) {
+            throw new SAXException("Some element has not been placed in a fragment.");
+        }
+        
+        // Extend the child count for a new element if 
         // we have not started a new fragment.
         try {
             if (! getLoader().getFragment().isNewFragment()) {
@@ -149,7 +160,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         
         // Add the necessary xmlns namespace declarations to the fragment root.
         try {
-            if (getLoader().getFragment().isNewFragment()) {
+            if (getLoader().getFragment().isNewFragment()) { // the element being started is the root of a new fragment.
                 Fragment f = getLoader().getFragment();
                 for (String key: inheritedMap.keySet()) {
                     f.setMetaAttribute(inheritedMap.get(key),key);
@@ -161,7 +172,12 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         
         // Insert the current element into the fragment being built
         try {
-            getLoader().getFragment().getBuilder().appendElement(namespaceURI, lName, qName, attrs);
+            Fragment fragment = getLoader().getFragment();
+            if (fragment == null) throw new SAXException("A fragment should be being built.");
+            Builder builder = fragment.getBuilder();
+            if (builder == null) throw new SAXException("A fragment being built needs a builder.");
+            builder.appendElement(namespaceURI, lName, qName, attrs);
+            
         } catch (XBRLException e) {
             throw new SAXException("The element could not be appended to the fragment.",e);
         }
@@ -244,7 +260,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         try {
             if (getLoader().getFragment() != null)
                 getLoader().getFragment().getBuilder().appendProcessingInstruction(target,data);
-            // Figure out how to capture processing instructions that occur before the document root element.
+            // TODO Figure out how to capture processing instructions that occur before the document root element.
         } catch (XBRLException e) {
             e.printStackTrace();
         }
@@ -256,13 +272,6 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
     public void characters(char buf[], int offset, int len) 
         throws SAXException 
     {
-        // TODO ???? Consider deleting this next try statement.  It does nothing.
-        try {
-            getLoader().getXlinkProcessor().titleCharacters(buf, offset, len);
-        } catch (XLinkException e) {
-            throw new SAXException("The XLink processor title characters handling failed.",e);
-        }
-
         try {
             String s = new String(buf, offset, len);
             getLoader().getFragment().getBuilder().appendText(s);
@@ -397,6 +406,42 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
      * String representation of the XML document - for documents supplied as such.
      */
     private String xml = null;
+    
+    /**
+     * The list of fragment identifiers
+     */
+    protected List<Identifier> identifiers = this.getIdentifiers();
+    
+    /**
+     * @param identifier The identifier to add to the list of
+     * fragment identifiers used by the content handler.
+     */
+    protected void addIdentifier(Identifier identifier) {
+        identifiers.add(identifier);
+    }
+    
+    
+    /**
+     * @param index The index of the position at which
+     * the new identifier is to be inserted in the list of
+     * fragment identifiers.
+     * @param identifier The identifier to add to the list of
+     * fragment identifiers used by the content handler.
+     */
+    protected void addIdentifier(int index, Identifier identifier) {
+        identifiers.add(identifier);
+    }
+    
+    /**
+     * @param index The index of the identifier to remove from the list of
+     * fragment identifiers used by the content handler.
+     */
+    protected void removeIdentifier(int index) throws XBRLException {
+        if (index > identifiers.size()-1) throw new XBRLException("The identifier index was too large.");
+        if (index < 0) throw new XBRLException("The identifier index was too low.");
+        if (identifiers.size() == 0) throw new XBRLException("There are no identifiers to remove.");
+        identifiers.remove(index);
+    }    
     
     /**
      * @param xml The XML stored as a string, that is to be parsed.

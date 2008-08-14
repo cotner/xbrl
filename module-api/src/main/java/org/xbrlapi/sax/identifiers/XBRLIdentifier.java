@@ -8,7 +8,6 @@ import org.xbrlapi.impl.InstanceImpl;
 import org.xbrlapi.impl.LinkbaseImpl;
 import org.xbrlapi.impl.NonNumericItemImpl;
 import org.xbrlapi.impl.PeriodImpl;
-import org.xbrlapi.impl.ReferencePartImpl;
 import org.xbrlapi.impl.RoleTypeImpl;
 import org.xbrlapi.impl.ScenarioImpl;
 import org.xbrlapi.impl.SegmentImpl;
@@ -42,12 +41,6 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
      * Set to true if parsing an XBRL instance.
      */
     private boolean parsingAnXBRLInstance = false;
-    
-    /**
-     * State information to help find reference parts.
-     * TODO Find reference parts inside references using XML Schema substitution group information.
-     */
-    protected boolean parsingAReferenceResource = false;    
     
     /**
      * Set to true if the element can be a tuple.
@@ -107,24 +100,6 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                 xbrlLinkFragment = new LinkbaseImpl();
             } else if (lName.equals("documentation")) {
                 xbrlLinkFragment = new XlinkDocumentationImpl();
-            } else if (lName.equals("footnoteLink")) {
-                // Fragment already created by XLink processor
-                this.canBeATuple = false;
-            } else if (lName.equals("schemaRef")) {
-                // Fragment already created by XLink processor
-                this.canBeATuple = false;
-            } else if (lName.equals("linkbaseRef")) {
-                // Fragment already created by XLink processor
-                this.canBeATuple = false;
-            } else if (lName.equals("roleRef")) {
-                // Fragment already created by XLink processor
-                this.canBeATuple = false;
-            } else if (lName.equals("arcroleRef")) {
-                // Fragment already created by XLink processor
-                this.canBeATuple = false;
-            } else if (lName.equals("reference")) {
-                // Fragment already created by XLink processor
-                this.parsingAReferenceResource = true;
             }
             
             if (xbrlLinkFragment != null) {
@@ -132,16 +107,6 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                 return;
             }
         }
-
-        Fragment referencePartFragment = null;
-        if (parsingAReferenceResource) {
-            referencePartFragment = new ReferencePartImpl();
-        }
-
-        if (referencePartFragment != null) {
-            processFragment(referencePartFragment,attrs);
-            return;
-        }        
         
         if (this.parsingAnXBRLInstance) {
 
@@ -166,12 +131,13 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
             
             if (factFragment != null) {
                 processFragment(factFragment,attrs);
+                return;
             }
 
         }        
         
     }
-    
+
     /**
      * Set the boolean state variables based upon whether the next 
      * element can be a tuple in an XBRL instance and whether the
@@ -207,8 +173,6 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                 this.canBeATuple = true;
             } else if (lName.equals("roleRef")) {
                 this.canBeATuple = true;
-            } else if (lName.equals("reference")) {
-                this.parsingAReferenceResource = false;
             }
         }
         

@@ -198,6 +198,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 		try {
 
 		    Resource fragment = null;
+		    
 			if (namespaceURI.equals(Constants.XBRL21LinkNamespace)) {
 				if (lName.equals("label")) {
 					fragment = new LabelResourceImpl();
@@ -205,31 +206,27 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 					fragment = new ReferenceResourceImpl();
 				} else if (lName.equals("footnote")) {
 					fragment = new FootnoteResourceImpl();
-				} else {
-					fragment = new ResourceImpl();				
 				}
 			} else if (namespaceURI.equals(Constants.GenericLabelNamespace)) {
 				if (lName.equals("label")) {
 					fragment = new LabelResourceImpl();			
-				} else {
-	                fragment = new ResourceImpl();
-	            }
+				}
 			} else if (namespaceURI.equals(Constants.GenericReferenceNamespace)) {
 				if (lName.equals("reference")) {
 					fragment = new ReferenceResourceImpl();				
-				} else {
-	                fragment = new ResourceImpl();
-	            }
+				}
             } else if (namespaceURI.equals(Constants.XBRLAPIEntitiesNamespace)) {
                 if (lName.equals("identifier")) {
                     fragment = new EntityResourceImpl();             
-                } else {
-                    fragment = new ResourceImpl();
                 }
-			} else {
+			}
+			
+			if (fragment == null) {
 				fragment = new ResourceImpl();
 			}
+			
 			processFragment(fragment,attrs);
+			
 		} catch (XBRLException e) {
 			throw new XLinkException("The resource could not be created.",e);
 		}
@@ -359,8 +356,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	 * @throws XBRLException if the XLink handler has no loader to work with.
 	 */
 	private Loader getLoader() throws XBRLException {
-		if (loader == null)
-			throw new XBRLException("The XLink Handler has no XBRL DTS loader to work with.");
+		if (loader == null) throw new XBRLException("The XLink Handler has no XBRL DTS loader to work with.");
 		return loader;
 	}
 
@@ -417,6 +413,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
         }
         loader.addFragment(fragment,getElementState());
     }
+    
     
     
 	

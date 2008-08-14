@@ -1,6 +1,5 @@
 package org.xbrlapi.loader;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
@@ -122,12 +121,6 @@ public class LoaderImpl implements Loader {
      * Stack of vectors used to track children.
      */
     private Stack<Vector<Long>> childrenStack = new Stack<Vector<Long>>();
-
-    /**
-     * Boolean to flag if the element that has just been found by the parser has
-     * triggered the creation of a fragment.
-     */
-    private boolean newFragmentAdded = false;
 
     /**
      * The Xlink processor
@@ -327,8 +320,6 @@ public class LoaderImpl implements Loader {
         return pointerResolver;
     }
 
-
-
     /**
      * Add a new child tracking vector to the childrenStack to use for the new
      * fragment that is being built by the loader. Initialise it with a single
@@ -414,9 +405,14 @@ public class LoaderImpl implements Loader {
      * @see org.xbrlapi.loader.Loader#getFragment()
      */
     public Fragment getFragment() throws XBRLException {
-        if (fragments.isEmpty())
-            return null;
+        if (fragments.isEmpty()) throw new XBRLException("No fragments are available to be retrieved.");
         return fragments.peek();
+    }
+    /**
+     * @see org.xbrlapi.loader.Loader#isBuildingAFragment()
+     */
+    public boolean isBuildingAFragment() {
+        return (!fragments.isEmpty());
     }
 
     /**
@@ -457,33 +453,14 @@ public class LoaderImpl implements Loader {
         // Push a new child count vector onto the stack of child count vectors
         prepareToTrackChildrenForNewFragment();
 
-        this.newFragmentAdded = true;
-
     }
 
     /**
-     * Tests if the element that has just been found has triggered the addition
-     * of a fragment. Sets the flag to false once it has been tested, ready for
-     * the next element to be parsed.
-     * 
-     * @return true iff the element that has just been found has triggered the
-     *         addition of a fragment.
-     * TODO ???? Prevent the addedAFragment method from operating via a side-effect.
+     * Remove a fragment from the stack of fragments that 
+     * are being built by the loader.
+     * @throws XBRLException if their are no fragments being built.
      */
-    public boolean addedAFragment() {
-        boolean temp = this.newFragmentAdded;
-        this.newFragmentAdded = false;
-        return (temp);
-    }
-
-    /**
-     * Remove a fragment from the stack of fragments that are being built by the
-     * loader. 
-     * TODO Make Loader.removeFragment() private.
-     * @throws XBRLException
-     *             if their are no fragments being built.
-     */
-    public Fragment removeFragment() throws XBRLException {
+    private Fragment removeFragment() throws XBRLException {
         try {
             
             getStates().pop();
@@ -815,33 +792,15 @@ public class LoaderImpl implements Loader {
             logger.debug("Parsing " + url);
             reader.parse(inputSource);
         } catch (SAXException e) {
-            throw new XBRLException("SAX exception thrown when parsing " + url,
-                    e);
+            e.printStackTrace();
+            throw new XBRLException("SAX exception thrown when parsing " + url,e);
         } catch (IOException e) {
-            throw new XBRLException("IO exception thrown when parsing " + url,
-                    e);
+            throw new XBRLException("IO exception thrown when parsing " + url,e);
         }
 
         // Remove any document stub from the data store once parsing is complete.
         getStore().removeStub(documentId);
         
-    }
-
-    /**
-     * Load a serialised data store. TODO implement loading of a serialised data
-     * store using a different class to the loader.
-     */
-    public void load(File file) throws XBRLException {
-        throw new XBRLException(
-                "Loading from a serialised store is not yet implemented.");
-    }
-
-    /**
-     * Load a serialised DTS TODO Implement the load URL method for a DTS using
-     * a different class to the loader.
-     */
-    public void load(URL url) throws XBRLException {
-        throw new XBRLException("The load method is not yet implemented.");
     }
 
     /**

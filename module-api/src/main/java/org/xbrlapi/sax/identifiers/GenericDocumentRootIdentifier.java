@@ -33,10 +33,9 @@ public class GenericDocumentRootIdentifier extends BaseIdentifier implements Ide
             String qName,
             Attributes attrs) throws XBRLException {
 
-        if (! getLoader().addedAFragment()) {
+        if (! getLoader().getFragment().isNewFragment()) {
             if (! getElementState().hasParent()) {
                 Fragment root = new FragmentImpl();
-                logger.info("Creating a generic fragment for " + qName);
                 processFragment(root,attrs);
             }
         }        

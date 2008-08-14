@@ -1,6 +1,5 @@
 package org.xbrlapi.loader;
 
-import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.Vector;
@@ -150,21 +149,9 @@ public interface Loader {
 	 */
 	public void discover(String url) throws XBRLException;	
 
-	/**
-	 * Load up a serialised DTS ready for interaction via the XBRL API
-	 * 
-	 * @param file the serialised DTS file location
-	 * @throws XBRLException
-	 */
-	public void load(File file) throws XBRLException;
 
-	/**
-	 * Load up a serialised DTS ready for interaction via the XBRL API
-	 * 
-	 * @param url the serialised DTS URL location
-	 * @throws XBRLException
-	 */
-	public void load(URL url) throws XBRLException;
+
+
 	
 	/**
 	 * Stash a URL to await loading into DTS.
@@ -190,11 +177,16 @@ public interface Loader {
 	
 	/**
 	 * Get the fragment that is currently being built by the DTS loader
-	 * @return the fragment being built currently by the DTS loader or null if 
-	 * no fragments are being built by the loader.
-	 * @throws XBRLException
+	 * @return the fragment being built currently by the DTS loader.
+	 * @throws XBRLException if the loader is not building any fragments.
 	 */
 	public Fragment getFragment() throws XBRLException;
+	
+	/**
+	 * @return true if and only if the loader has one or more fragments
+	 * on the stack of fragments being built.
+	 */
+	public boolean isBuildingAFragment();
 
 	/**
 	 * Push a new fragment onto the stack of fragments that are being built
@@ -212,7 +204,7 @@ public interface Loader {
 	 * @return true iff the element that has just been found has triggered the addition of a fragment.
 	 * @throws XBRLException.
 	 */
-	public boolean addedAFragment();
+/*	public boolean addedAFragment();*/
 	
 	/**
      * If a fragment is completed, remove the fragment from the 
@@ -223,12 +215,7 @@ public interface Loader {
 	 */
 	public void updateState(ElementState state) throws XBRLException;
 	
-	/**
-	 * Remove a fragment from the stack of fragments that are being built
-	 * by the loader.
-	 * @throws XBRLException if their are no fragments being built.
-	 */
-	public Fragment removeFragment() throws XBRLException;
+
 	
 	/**
 	 * Also increments the fragment index as a side-effect.

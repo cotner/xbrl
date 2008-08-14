@@ -84,7 +84,7 @@ public class BaseIdentifier implements Identifier {
     }
     
     /**
-     * Override this base implementation if the ID of the fragment root element is
+     * Override this base implementation if an ID of the fragment root element can be
      * expressed by an attribute other than "id".
      * @see Identifier#processFragment(Fragment, Attributes)
      */
