@@ -99,7 +99,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             throw new XBRLException("The checkpoint operation failed.", e);
         }
 	    
-        if (callCount > this.RESET_CALL_COUNT) resetConnection();
+        // if (callCount > this.RESET_CALL_COUNT) resetConnection();
+        
 	}
 
 	/**
