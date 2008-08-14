@@ -1,5 +1,7 @@
 package org.xbrlapi.data.bdbxml.tests;
 
+import java.util.List;
+
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.impl.MockFragmentImpl;
@@ -55,7 +57,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
 	        FragmentList<Fragment> fragments = store.<Fragment>query(xpathQuery);
-			assertTrue(fragments.getLength() > 600);
+			assertTrue(fragments.getLength() > 1);
 	        Fragment fragment = fragments.getFragment(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
 		} catch (XBRLException e) {
@@ -80,7 +82,11 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testHasDocument() {
 		try {
-			assertTrue(store.hasDocument("http://www.xbrlapi.org/xbrl/xbrl-2.1-roles.xsd"));
+		    List<String> urls = store.getStoredURLs();
+		    assertTrue(urls.size() > 0);
+		    for (String url: urls) {
+	            assertTrue(store.hasDocument(url));
+		    }
 			assertFalse(store.hasDocument("http://www.rubbish.gcs/crazy.xyz"));
 		} catch (XBRLException e) {
 			fail("Unexpected " + e.getMessage());
