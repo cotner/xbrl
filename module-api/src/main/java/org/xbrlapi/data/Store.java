@@ -427,12 +427,22 @@ public interface Store {
      * Override this method in a data store implementation if the data store 
      * implementation supports XQuery (rather than XPath).
      * 
-     * @param url The URL of the referenced document
-     * @return a map indexed by the URLs of the documents directly referencing
+     * @param url The URL of the referenced document.
+     * @return a list of the URLs of the documents directly referencing
      * the specified document as targets of their XLinks (custom or otherwise).
-     * @throws XBRLException if the map of referencing documents cannot be populated.
+     * @throws XBRLException if the list of referencing documents cannot be populated.
      */
     public List<String> getReferencingDocuments(String url) throws XBRLException;
+    
+    /**
+     * Override this method in a data store implementation if the data store 
+     * implementation supports XQuery (rather than XPath).
+     * 
+     * @param url The URL of the referencing document.
+     * @return a list of the documents directly referenced by this document.
+     * @throws XBRLException if the list of referenced documents cannot be populated.
+     */
+    public List<String> getReferencedDocuments(String url) throws XBRLException;    
     
     /**
      * @param urls The list of URLs to restrict query results to coming from.

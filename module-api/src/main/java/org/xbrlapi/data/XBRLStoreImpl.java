@@ -399,6 +399,16 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	return roles;
     }    
 
+
+    /**
+     * @see org.xbrlapi.data.XBRLStore#getMinimumDocumentSet(String)
+     */
+    public List<String> getMinimumDocumentSet(String url) throws XBRLException {
+        List<String> starters = new Vector<String>();
+        starters.add(url);
+        return this.getMinimumDocumentSet(starters);
+    }
+    
     /**
      * @see org.xbrlapi.data.XBRLStore#getMinimumDocumentSet(List)
      */
@@ -418,13 +428,14 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
         while (documentsToCheck.size() > 0) {
             String doc = documentsToCheck.get(0);
             allDocuments.add(doc);
-            List<String> newDocuments = this.getReferencingDocuments(doc);
+            List<String> newDocuments = this.getReferencedDocuments(doc);
             for (String newDocument: newDocuments) {
                 if (! foundDocuments.containsKey(newDocument)) {
                     foundDocuments.put(newDocument,"");
                     documentsToCheck.add(newDocument);
                 }
             }
+            documentsToCheck.remove(0);
         }
 
         return allDocuments;

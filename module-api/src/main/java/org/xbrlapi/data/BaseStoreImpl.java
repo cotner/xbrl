@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.apache.xml.serialize.OutputFormat;
@@ -140,6 +140,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * a query to those from a specific set of URLs.
      */
     protected String getURLFilteringQueryClause() {
+
         if (isFilteringByURLs()) {
             String urlFilter = "0";
             for (String url: this.getFilteringURLs()) {
@@ -147,6 +148,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             }
             urlFilter = "[" + urlFilter + "]";
             logger.debug(urlFilter);
+            return urlFilter;
         }
         return "";
     }
@@ -348,19 +350,38 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@targetDocumentURL='"+ url + "']";
         FragmentList<Fragment> fragments = this.<Fragment>query(query);
 
+        List<String> urls = new Vector<String>();
         HashMap<String,String> map = new HashMap<String,String>(); 
 
         for (Fragment fragment: fragments) {
-            if (!map.containsKey(fragment.getURL())) {
-                map.put(fragment.getURL(),"");
+            String doc = fragment.getURL();
+            if (!map.containsKey(doc)) {
+                map.put(doc,"");
+                urls.add(doc);
             }
         }
         
-        List<String> urls = new LinkedList<String>();
-        Set<String> keys = map.keySet();
-        for (String document: keys) {
-            urls.add(document);
-        }        
+        return urls;
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store.getReferencedDocuments(String)
+     */
+    public List<String> getReferencedDocuments(String url) throws XBRLException {
+        String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + url + "' and @targetDocumentURL]";
+        FragmentList<Fragment> fragments = this.<Fragment>query(query);
+
+        List<String> urls = new Vector<String>();
+        HashMap<String,String> map = new HashMap<String,String>(); 
+
+        for (Fragment fragment: fragments) {
+            String target = fragment.getMetaAttribute("targetDocumentURL");
+            if (!map.containsKey(target)) {
+                map.put(target,"");
+                urls.add(target);
+            }
+        }
+        
         return urls;
     }
     

@@ -153,4 +153,17 @@ public interface XBRLStore extends Store {
      */
     public List<String> getMinimumDocumentSet(List<String> starters) throws XBRLException;
     
+    
+    /**
+     * This is just a convenience method.
+     * @param url The single document URL to use as 
+     * starting points for analysis.
+     * @return list of URLs for the documents in the data store
+     * that are referenced, directly or indirectly, by the document
+     * identified by the supplied URL.  Each entry in the list is a String.
+     * @throws XBRLException if some of the referenced documents are not in
+     * the data store.
+     */
+    public List<String> getMinimumDocumentSet(String url) throws XBRLException;
+    
 }
