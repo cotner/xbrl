@@ -2,6 +2,7 @@ package org.xbrlapi.data;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 import org.xbrlapi.ArcroleType;
 import org.xbrlapi.Concept;
@@ -140,5 +141,16 @@ public interface XBRLStore extends Store {
      * @throws XBRLException
      */
     public HashMap<String,String> getResourceRoles() throws XBRLException;    
+    
+    /**
+     * @param starters The list of URLs of the documents to use as 
+     * starting points for analysis.
+     * @return list of URLs for the documents in the data store
+     * that are referenced, directly or indirectly, by any of the documents
+     * identified by the supplied list of document URLs.  Each entry in the list is a String.
+     * @throws XBRLException if some of the referenced documents are not in
+     * the data store.
+     */
+    public List<String> getMinimumDocumentSet(List<String> starters) throws XBRLException;
     
 }

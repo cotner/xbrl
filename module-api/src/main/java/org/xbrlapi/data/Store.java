@@ -114,16 +114,7 @@ public interface Store {
 	 */
 	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException;
 	
-    /**
-     * Run a query against the collection of those fragments in the store
-     * that are parts of documents with URLs in the supplied list of URLs.
-     * @param query The XPath query to run against the set of fragments.
-     * @param urls The list of URLs (strings) of the documents to get queries from.
-     * @return a list of matching fragments or the empty list if no matching fragments
-     * exist.
-     * @throws XBRLException if the query cannot be executed.
-     */
-    public <F extends Fragment> FragmentList<F> query(String query, List<String> urls) throws XBRLException;	
+	
 
     /**
      * Serialize the specified XML DOM to the specified destination.
@@ -431,4 +422,40 @@ public interface Store {
      * @return the matcher used by the store to identify identical resources.
      */
     public Matcher getMatcher();
+    
+    /**
+     * Override this method in a data store implementation if the data store 
+     * implementation supports XQuery (rather than XPath).
+     * 
+     * @param url The URL of the referenced document
+     * @return a map indexed by the URLs of the documents directly referencing
+     * the specified document as targets of their XLinks (custom or otherwise).
+     * @throws XBRLException if the map of referencing documents cannot be populated.
+     */
+    public List<String> getReferencingDocuments(String url) throws XBRLException;
+    
+    /**
+     * @param urls The list of URLs to restrict query results to coming from.
+     */
+    public void setFilteringURLs(List<String> urls);
+
+    /**
+     * @return the list of URLs to filter query results using or
+     * null if no such list of URLs is being used by the data store.
+     */
+    public List<String> getFilteringURLs();
+    
+    /**
+     * Specify that the data store is not to filter query results to only come
+     * from a specified set of URLs.
+     */
+    public void clearFilteringURLs();
+
+    /**
+     * @return true if the data store is restricting query results to come 
+     * from a specific set of documents and false otherwise.
+     */
+    public boolean isFilteringByURLs();
+    
+    
 }

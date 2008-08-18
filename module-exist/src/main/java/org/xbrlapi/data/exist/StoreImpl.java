@@ -307,6 +307,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     @SuppressWarnings(value = "unchecked")
 	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
 		
+        query = query + this.getURLFilteringQueryClause();
         
 		ResourceSet resources = null;
 		try {

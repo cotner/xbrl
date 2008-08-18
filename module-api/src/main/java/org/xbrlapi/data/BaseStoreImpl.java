@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -91,6 +92,64 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * Namespace bindings
      */
     protected HashMap<String,String> namespaceBindings = new HashMap<String,String>();    
+
+    /**
+     * @see org.xbrlapi.data.Store#setNamespaceBinding(String,String)
+     */
+    public void setNamespaceBinding(String namespace, String prefix) throws XBRLException {
+        this.namespaceBindings.put(namespace,prefix);
+    }
+
+    /**
+     * List of URLs to use when filtering query results to only get matches
+     * to a specific set of documents.
+     */
+    private List<String> urls = null;
+
+    /**
+     * @see org.xbrlapi.data.Store#setFilteringURLs(List)
+     */
+    public void setFilteringURLs(List<String> urls) {
+        this.urls = urls;
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getFilteringURLs()
+     */
+    public List<String> getFilteringURLs() {
+        return this.urls;
+    }    
+    
+    /**
+     * @see org.xbrlapi.data.Store#clearFilteringURLs()
+     */
+    public void clearFilteringURLs() {
+        this.urls = null;
+    }
+
+    /**
+     * @see org.xbrlapi.data.Store#isFilteringByURLs()
+     */
+    public boolean isFilteringByURLs() {
+        if (this.urls == null) return false;
+        return true;
+    }
+    
+    /**
+     * @return an X Query clause that restricts the set of fragments returned by 
+     * a query to those from a specific set of URLs.
+     */
+    protected String getURLFilteringQueryClause() {
+        if (isFilteringByURLs()) {
+            String urlFilter = "0";
+            for (String url: this.getFilteringURLs()) {
+                urlFilter = urlFilter + " or @url='" + url + "'";
+            }
+            urlFilter = "[" + urlFilter + "]";
+            logger.debug(urlFilter);
+        }
+        return "";
+    }
     
 	public BaseStoreImpl() {
 		super();
@@ -280,6 +339,29 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     			}
     		}
     	}
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store.getReferencingDocuments(String)
+     */
+    public List<String> getReferencingDocuments(String url) throws XBRLException {
+        String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@targetDocumentURL='"+ url + "']";
+        FragmentList<Fragment> fragments = this.<Fragment>query(query);
+
+        HashMap<String,String> map = new HashMap<String,String>(); 
+
+        for (Fragment fragment: fragments) {
+            if (!map.containsKey(fragment.getURL())) {
+                map.put(fragment.getURL(),"");
+            }
+        }
+        
+        List<String> urls = new LinkedList<String>();
+        Set<String> keys = map.keySet();
+        for (String document: keys) {
+            urls.add(document);
+        }        
+        return urls;
     }
     
 
@@ -960,25 +1042,6 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         return languages.get(0);
     }    
     
-    /**
-     * @see org.xbrlapi.data.Store#setNamespaceBinding(String,String)
-     */
-    public void setNamespaceBinding(String namespace, String prefix) throws XBRLException {
-        this.namespaceBindings.put(namespace,prefix);
-    }
 
-    /**
-     * @see org.xbrlapi.data.Store#query(String, List)
-     */
-    public <F extends Fragment> FragmentList<F> query(String query, List<String> urls) throws XBRLException {
-        
-        String urlFilter = "0";
-        for (String url: urls) {
-            urlFilter = urlFilter + " or @url='" + url + "'";
-        }
-        urlFilter = "[" + urlFilter + "]";
-        logger.info(urlFilter);
-        return query(query + urlFilter);
-    }
     
 }

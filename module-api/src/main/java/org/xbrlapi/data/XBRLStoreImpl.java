@@ -3,6 +3,9 @@ package org.xbrlapi.data;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
@@ -395,5 +398,37 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	}
     	return roles;
     }    
+
+    /**
+     * @see org.xbrlapi.data.XBRLStore#getMinimumDocumentSet(List)
+     */
+    public List<String> getMinimumDocumentSet(List<String> starters) throws XBRLException {
+        
+        List<String> allDocuments = new Vector<String>();        
+        List<String> documentsToCheck = new Vector<String>();        
+        Map<String,String> foundDocuments = new HashMap<String,String>();
+
+        for (String starter: starters) {
+            if (! foundDocuments.containsKey(starter)) {
+                foundDocuments.put(starter,"");
+                documentsToCheck.add(starter);
+            }
+        }
+        
+        while (documentsToCheck.size() > 0) {
+            String doc = documentsToCheck.get(0);
+            allDocuments.add(doc);
+            List<String> newDocuments = this.getReferencingDocuments(doc);
+            for (String newDocument: newDocuments) {
+                if (! foundDocuments.containsKey(newDocument)) {
+                    foundDocuments.put(newDocument,"");
+                    documentsToCheck.add(newDocument);
+                }
+            }
+        }
+
+        return allDocuments;
+
+    }
         
 }

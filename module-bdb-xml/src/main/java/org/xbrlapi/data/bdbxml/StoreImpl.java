@@ -422,7 +422,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @see org.xbrlapi.data.Store#query(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	synchronized public <F extends Fragment> FragmentList<F> query(String myQuery) throws XBRLException {
+	synchronized public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
+
+        query = query + this.getURLFilteringQueryClause();
         
         this.incrementCallCount();
         
@@ -431,7 +433,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         try {
     
             try {
-    			xmlResults = performQuery(myQuery);
+    			xmlResults = performQuery(query);
                 xmlValue = xmlResults.next();
     			FragmentList<F> fragments = new FragmentListImpl<F>();
     		    while (xmlValue != null) {
@@ -445,7 +447,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     			return fragments;
     
     		} catch (XmlException e) {
-    			throw new XBRLException("Failed query: " + myQuery,e);
+    			throw new XBRLException("Failed query: " + query,e);
     		}
     		
         } finally {

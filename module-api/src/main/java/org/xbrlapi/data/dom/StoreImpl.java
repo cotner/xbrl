@@ -206,11 +206,13 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     @SuppressWarnings(value = "unchecked")
 	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
 
+        query = query + this.getURLFilteringQueryClause();
+        
 		if (query.charAt(0) == '/')
 			query = "/store" + query;
 		else
 			query = "/store/" + query;
-			
+		
 		// Create an XPath evaluator and pass in the document.
 		XPathEvaluator evaluator = new XPathEvaluatorImpl(dom);
 		XPathNSResolverImpl resolver = new XPathNSResolverImpl();

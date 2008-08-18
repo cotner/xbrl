@@ -66,21 +66,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		}
 	}
 	
-    public void testFilteredQuery() throws Exception {
-        
-        List<String> urls = store.getStoredURLs();
-        assertTrue(urls.size() > 1);
-        urls.remove(0);
-        try {
-            String xpathQuery = "/*[" + Constants.XBRLAPIPrefix + ":data]";
-            FragmentList<Fragment> filteredFragments = store.<Fragment>query(xpathQuery,urls);
-            FragmentList<Fragment> fragments = store.<Fragment>query(xpathQuery);
-            assertTrue(fragments.getLength() > filteredFragments.getLength());
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
-
-    }	
+	
 
 	public void testQueryLoadedFragments() {
 		
