@@ -429,7 +429,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
      * fragment identifiers used by the content handler.
      */
     protected void addIdentifier(int index, Identifier identifier) {
-        identifiers.add(identifier);
+        identifiers.add(index,identifier);
     }
     
     /**
