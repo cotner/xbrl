@@ -1,3 +1,8 @@
+18 Aug. 2008
+Changed the query methods for the various store implementations to 
+filter query results if the store knows of a list of URLs to use in
+filtering query results.
+
 30 Jul. 2008
 Eliminated several memory leaks.
 Forced regular database reconnections.

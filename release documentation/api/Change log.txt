@@ -1,3 +1,14 @@
+18 Aug. 2008
+Added methods to the base store implementation to enable a store
+to limit query results to those fragments in the documents with 
+a specified set of URLs.
+Changed the query methods for the various store implementations to 
+filter query results if the store knows of a list of URLs to use in
+filtering query results.
+Implemented new store methods to determine the documents that directly
+reference and that are directly referenced by a given document based
+on link analysis.
+
 7 Aug. 2008
 Changed the org.xbrlapiSAXHandlers package name
 to org.xbrlapi.sax.  This is not a backward compatible 
