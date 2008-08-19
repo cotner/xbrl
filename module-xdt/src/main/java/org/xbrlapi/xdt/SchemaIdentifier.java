@@ -109,7 +109,6 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
                 if (declaration != null) {
                     XSElementDeclaration sgDeclaration = declaration.getSubstitutionGroupAffiliation();
                     while (sgDeclaration != null) {
-
                         if (sgDeclaration.getNamespace().equals(XDTConstants.XBRLDTNamespace)) {
                             if (sgDeclaration.getName().equals(XDTConstants.hypercube)) {
                                 fragment = new HypercubeImpl();
@@ -119,6 +118,7 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
                                     fragment = new ExplicitDimensionImpl();
                                 } else {
                                     fragment = new TypedDimensionImpl();
+                                    logger.info(attrs.getValue(XDTConstants.XBRLDTNamespace,"typedDomainRef"));
                                 }
                                 break;
                             }

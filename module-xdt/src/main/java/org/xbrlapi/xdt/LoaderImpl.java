@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.xbrlapi.data.Store;
 import org.xbrlapi.loader.Loader;
-import org.xbrlapi.loader.LoaderImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xml.sax.ContentHandler;
@@ -20,20 +19,19 @@ import org.xml.sax.SAXException;
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class XDTLoaderImpl extends LoaderImpl implements Loader {
+public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader {
     
     /**
      * @see org.xbrlapi.loader.LoaderImpl#LoaderImpl(Store, XLinkProcessor)
      */
-    public XDTLoaderImpl(Store store, XLinkProcessor xlinkProcessor)
-            throws XBRLException {
+    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor) throws XBRLException {
         super(store,xlinkProcessor);
     }
 
     /**
      * @see org.xbrlapi.loader.LoaderImpl#LoaderImpl(Store, XLinkProcessor, List)
      */
-    public XDTLoaderImpl(Store store, XLinkProcessor xlinkProcessor, List<URL> urls)
+    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor, List<URL> urls)
             throws XBRLException {
         super(store,xlinkProcessor,urls);
     }
@@ -43,8 +41,8 @@ public class XDTLoaderImpl extends LoaderImpl implements Loader {
     /**
      * @see org.xbrlapi.loader.LoaderImpl#parse(URL)
      */
-    private void parse(URL url) throws XBRLException {
-
+    protected void parse(URL url) throws XBRLException {
+        
         try {
             InputSource inputSource = this.getEntityResolver().resolveEntity("", url.toString());
             ContentHandler contentHandler = new ContentHandlerImpl(this, url);
@@ -59,7 +57,7 @@ public class XDTLoaderImpl extends LoaderImpl implements Loader {
     /**
      * @see org.xbrlapi.loader.LoaderImpl#parse(URL, String)
      */
-    private void parse(URL url, String xml) throws XBRLException {
+    protected void parse(URL url, String xml) throws XBRLException {
         InputSource inputSource = new InputSource(new StringReader(xml));
         ContentHandler contentHandler = new ContentHandlerImpl(this, url, xml);
         super.parse(url, inputSource, contentHandler);

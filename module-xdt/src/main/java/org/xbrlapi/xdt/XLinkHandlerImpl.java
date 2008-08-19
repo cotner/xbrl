@@ -23,7 +23,7 @@ import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkException;
-import org.xbrlapi.xlink.XLinkHandlerDefaultImpl;
+import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xbrlapi.xmlbase.BaseURLSAXResolver;
 import org.xbrlapi.xmlbase.XMLBaseException;
 import org.xbrlapi.xpointer.resolver.PointerResolver;
@@ -34,7 +34,7 @@ import org.xml.sax.Attributes;
  * This class provides a real world example of an XLink handler for XBRL.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
 */
-public class XLinkHandlerImpl extends XLinkHandlerDefaultImpl {
+public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 
 	protected static Logger logger = Logger.getLogger(XLinkHandlerImpl.class);	
 	
