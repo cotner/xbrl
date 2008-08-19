@@ -36,22 +36,6 @@
         <appender-ref ref="null"/>
     </category>
 
-    <category name="org.xbrlapi.cache" additivity="false">
-        <priority value="info"/>
-        <appender-ref ref="null"/>
-    </category>
-
-    <category name="org.xbrlapi.sax.EntityResolverImpl" additivity="false">
-        <priority value="info"/>
-        <appender-ref ref="null"/>
-    </category>
-
-    <category name="org.xbrlapi.sax.identifiers" additivity="false">
-        <priority value="info"/>
-        <appender-ref ref="console"/>
-    </category>
-
-
     <category name="org.xbrlapi" additivity="false">
         <priority value="info"/>
         <appender-ref ref="console"/>
