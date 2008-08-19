@@ -118,7 +118,19 @@ public class StoreImplTestCase extends BaseTestCase {
 		} catch (XBRLException e) {
 			fail("Unexpected " + e.getMessage());
 		}
-	}	
+	}
+	
+    public void testGetFragments() {
+        try {
+            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            FragmentList<Fragment> sameFragments = store.<Fragment>getFragments("org.xbrlapi.impl.SchemaImpl");
+            assertTrue(sameFragments.getLength() > 0);
+            assertTrue(fragments.getLength() == sameFragments.getLength());
+        } catch (XBRLException e) {
+            e.printStackTrace();
+            fail("Unexpected " + e.getMessage());
+        }
+    }	
 
 	public void testHasDocument() {
 		try {
