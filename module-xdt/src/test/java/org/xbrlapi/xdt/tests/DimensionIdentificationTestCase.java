@@ -1,6 +1,5 @@
 package org.xbrlapi.xdt.tests;
 
-import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.xdt.ExplicitDimension;
 import org.xbrlapi.xdt.TypedDimension;
