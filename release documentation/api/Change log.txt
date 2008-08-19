@@ -1,3 +1,9 @@
+19 Aug. 2008
+Enabled the getFragments method to use a fragment class name rather than
+just part of the fragment interface name.  This makes the method more able
+to work for fragment classes that are implemented in packages outside
+those in the core XBRLAPI fragment implementation package.
+
 18 Aug. 2008
 Added methods to the base store implementation to enable a store
 to limit query results to those fragments in the documents with 
