@@ -869,7 +869,11 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getFragments(String)
      */
     public <F extends Fragment> FragmentList<F> getFragments(String interfaceName) throws XBRLException {
-    	return this.<F>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl." + interfaceName + "Impl']");
+        String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl." + interfaceName + "Impl']";
+        if (interfaceName.indexOf(".") > -1) {
+            query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='" + interfaceName + "']";
+        }
+    	return this.<F>query(query);
     }
     
     /**
