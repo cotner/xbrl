@@ -60,12 +60,7 @@ public class FragmentFactory<F> {
 
 				String className = root.getAttribute("type");
 		    	Class fragmentClass = getClass(className);
-/*		    	Class arg1 = getClass("org.xbrlapi.data.Store");
-		    	Class arg2 = getClass("org.w3c.dom.Element");
-	        	Class[] arguments = { arg1, arg2 };
 
-	        	Object[] parameters = {store, root};
-*/
 	        	Constructor constructor = fragmentClass.getConstructor();
 		    	Fragment fragment = (Fragment) constructor.newInstance();
 	            fragment.setStore(store);
