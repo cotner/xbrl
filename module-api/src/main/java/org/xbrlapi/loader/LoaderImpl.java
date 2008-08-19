@@ -693,8 +693,7 @@ public class LoaderImpl implements Loader {
      * @param url The URL of the document to parse.
      * @throws XBRLException
      */
-    private void parse(URL url) throws XBRLException {
-
+    protected void parse(URL url) throws XBRLException {
         try {
             InputSource inputSource = this.getEntityResolver().resolveEntity("", url.toString());
             ContentHandler contentHandler = new ContentHandlerImpl(this, url);
@@ -712,7 +711,7 @@ public class LoaderImpl implements Loader {
      * @param xml The XML document as a string.
      * @throws XBRLException
      */
-    private void parse(URL url, String xml) throws XBRLException {
+    protected void parse(URL url, String xml) throws XBRLException {
         InputSource inputSource = new InputSource(new StringReader(xml));
         ContentHandler contentHandler = new ContentHandlerImpl(this, url, xml);
         parse(url, inputSource, contentHandler);
