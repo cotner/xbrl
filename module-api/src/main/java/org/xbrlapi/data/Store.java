@@ -322,9 +322,10 @@ public interface Store {
      * @param interfaceName The name of the interface.  EG: If a list of
      *  org.xbrlapi.impl.ReferenceArcImpl fragments is required then
      *  this parameter would have a value of "ReferenceArc".
-     *  Note that this method does not yet recognise fragment subtypes so 
-     *  a request for an Arc would not return all ReferenceArcs as well as other
-     *  types of arcs.
+     *  Note that if the parameter contains full stops, then it is used directly
+     *  as the value for the fragment type, enabling fragment extensions to exploit this
+     *  method without placing fragment implementations in the org.xbrlapi package.
+     *  
      * @return a list of fragments with the given fragment type.
      * @throws XBRLException
      */
