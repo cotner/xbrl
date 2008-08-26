@@ -23,21 +23,4 @@ public interface DimensionValueAccessor {
      */
     public DimensionValue getValue(Item item, String namespace, String localname) throws XBRLException;
 
-    /**
-     * @param item The item to check for a value for the given dimension.
-     * @param namespace The namespace of the dimension to check the value for.
-     * @param localname The local name of the dimension to check the value for.
-     * @return true if the item does have a value for the specified dimension and false otherwise.
-     */
-    public boolean hasValue(Item item, String namespace, String localname) throws XBRLException;
-
-    /**
-     * @param item The item to check for a value for the given dimension.
-     * @param namespace The namespace of the dimension to check the value for.
-     * @param localname The local name of the dimension to check the value for.
-     * @return true if the item does have an explicit value for the specified dimension 
-     * and false otherwise (no value or a default value).
-     */
-    public boolean hasExplicitValue(Item item, String namespace, String localname) throws XBRLException;
-
 }

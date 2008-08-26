@@ -20,7 +20,8 @@ public class ExplicitDimensionImpl extends DimensionImpl implements ExplicitDime
      * @see org.xbrlapi.xdt.ExplicitDimension#hasDefaultDomainMember()
      */
     public boolean hasDefaultDomainMember() throws XBRLException {
-        throw new XBRLException("This method is not yet implemented.");
+        return false;
+        //throw new XBRLException("This method is not yet implemented.");
     }
     
 }

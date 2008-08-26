@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -17,6 +18,8 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class DimensionValueAccessorImpl implements DimensionValueAccessor {
 
+    protected static Logger logger = Logger.getLogger(DimensionValueAccessorImpl.class);        
+    
     /**
      * Create a dimension value accessor.
      */
@@ -75,14 +78,12 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
         
         Context context = item.getContext();
 
-        Scenario scenario = context.getScenario();
-        Concept dimensionValue = this.getDomainMemberFromOpenContextComponent(scenario, namespace, localname);
+        Concept dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getScenario(), namespace, localname);
         if (dimensionValue != null) {
             return new DimensionValueImpl(dimensionValue);
         }
         
-        Segment segment = context.getEntity().getSegment();
-        dimensionValue = this.getDomainMemberFromOpenContextComponent(segment, namespace, localname);
+        dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getEntity().getSegment(), namespace, localname);
         if (dimensionValue != null) {
             return new DimensionValueImpl(dimensionValue);
         }
@@ -159,24 +160,6 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
             }
         }
         return null;
-    }
-    
-    /**
-     * @see org.xbrlapi.xdt.DimensionValueAccessor#hasExplicitValue(org.xbrlapi.Item, java.lang.String, java.lang.String)
-     */
-    public boolean hasExplicitValue(Item item, String namespace,
-            String localname) throws XBRLException {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    /**
-     * @see org.xbrlapi.xdt.DimensionValueAccessor#hasValue(org.xbrlapi.Item, java.lang.String, java.lang.String)
-     */
-    public boolean hasValue(Item item, String namespace, String localname)
-            throws XBRLException {
-        // TODO Auto-generated method stub
-        return false;
     }
 
 }
