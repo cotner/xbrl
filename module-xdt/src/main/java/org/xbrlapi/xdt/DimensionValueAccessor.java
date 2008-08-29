@@ -23,4 +23,15 @@ public interface DimensionValueAccessor {
      */
     public DimensionValue getValue(Item item, String namespace, String localname) throws XBRLException;
 
+    /**
+     * @param first The first item.
+     * @param second The second item.
+     * @param namespace The dimension namespace.
+     * @param localname The dimension local name.
+     * @return true if the first and second items have equal values for the 
+     * specified dimension and false otherwise.
+     * @throws XBRLException
+     */
+    public boolean equalValues(Item first, Item second, String namespace, String localname) throws XBRLException;
+    
 }

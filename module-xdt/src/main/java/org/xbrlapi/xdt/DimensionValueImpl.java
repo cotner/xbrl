@@ -3,7 +3,12 @@
  */
 package org.xbrlapi.xdt;
 
+import java.util.List;
+import java.util.Vector;
+
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xbrlapi.Concept;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -72,4 +77,55 @@ public class DimensionValueImpl implements DimensionValue {
         return false;
     }
 
+    /**
+     * @see org.xbrlapi.xdt.DimensionValue#equals(org.xbrlapi.xdt.DimensionValue)
+     */
+    public boolean equals(DimensionValue other) throws XBRLException {
+
+        if (this.isExplicitDimension() && other.isTypedDimension()) return false;
+        
+        if (other.isExplicitDimension() && this.isTypedDimension()) return false;
+        
+        if (this.isExplicitDimension()) {
+            if (this.getExplicitDimensionValue().getFragmentIndex().equals(other.getExplicitDimensionValue().getFragmentIndex())) {
+                return true;
+            }
+            return false;
+        }
+        
+        if (this.isTypedDimension()) {
+            
+            List<Element> thisElements = this.getChildElementsOfTypedDimensionValue(this.getTypedDimensionValue());
+            List<Element> otherElements = this.getChildElementsOfTypedDimensionValue(other.getTypedDimensionValue());
+
+            if (thisElements.size() != otherElements.size()) return false;
+            
+            for (int i=0; i<thisElements.size(); i++) {
+                Element thisElement = thisElements.get(i);
+                Element otherElement = otherElements.get(i);
+                // TODO Test that org.w3c.dom.Node#isEqualNode(Node) works for comparing nodes across DOM instances
+                if (! thisElement.isEqualNode(otherElement)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        
+        throw new XBRLException("The equality test failed because the dimension type could not be determined.");
+
+    }
+    
+    private List<Element> getChildElementsOfTypedDimensionValue(Node value) throws XBRLException {
+        NodeList nodes = this.getTypedDimensionValue().getChildNodes();
+        List<Element> elements = new Vector<Element>();
+        for (int i=0; i<nodes.getLength(); i++) {
+            if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                elements.add((Element) nodes.item(i));
+            }
+        }
+        return elements;
+    }
+
+    
 }

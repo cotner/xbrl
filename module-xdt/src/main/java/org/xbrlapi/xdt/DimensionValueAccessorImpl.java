@@ -165,4 +165,17 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
         return null;
     }
 
+    /**
+     * @see org.xbrlapi.xdt.DimensionValueAccessor#equalValues(org.xbrlapi.Item, org.xbrlapi.Item, java.lang.String, java.lang.String)
+     */
+    public boolean equalValues(Item first, Item second, String namespace, String localname) throws XBRLException {
+        DimensionValue firstValue = this.getValue(first,namespace,localname);
+        if (firstValue == null) return false;
+        DimensionValue secondValue = this.getValue(second,namespace,localname);
+        if (secondValue == null) return false;
+        return firstValue.equals(secondValue);
+    }
+
+    
+    
 }

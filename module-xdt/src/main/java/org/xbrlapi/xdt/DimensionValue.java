@@ -42,4 +42,12 @@ public interface DimensionValue {
      */
     public Concept getExplicitDimensionValue() throws XBRLException;    
     
+    /**
+     * @param other The other dimension value
+     * @return true if this dimension value is equal to the other dimension
+     * value.
+     * @throws XBRLException if either dimension value is non-null.
+     */
+    public boolean equals(DimensionValue other) throws XBRLException;
+    
 }
