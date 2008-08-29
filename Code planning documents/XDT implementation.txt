@@ -1,6 +1,5 @@
-Implementation requirements:
-
-0. Assumptions:
+Assumptions
+-----------
 
 The implementation will presume that the instances being loaded are XDT valid.
 
@@ -8,11 +7,12 @@ The implementation will presume that the XDT dimensions reported for all facts a
 unambiguous. i.e.: Users will know for certain which dimensions are reported for each
 fact and what value each dimension has.
 
-The support will be provided by a separate extension module that will generate its own 
+The XDT support will be provided by a separate extension module that will generate its own 
 JAR file.  This will ensure that should the XDT spec ever be deprecated, we have not 
 contaminated the core of the XBRLAPI implementation.
 
-1. New fragment types
+New fragment types
+------------------
  
 SAX content handler needs to be able to detect usage of XDT dimensions and to 
 decorate fragments accordingly.  The Hypercubes and Dimensions will both be new 
@@ -25,41 +25,45 @@ in a more useable manner.
 
   Hypercube
   Dimension
-    ExplicitDimension
+    Explicit dimension
+    Typed dimension
 
-Typed-dimension content models will just be XML Schema element declaration fragments.
+Handling for the xbrldt:typedDomainRef 
+--------------------------------------
+  Containing concept treated as a custom link -> typed dimensions implement the simple link interface.
 
-There will also be new fragment types for dimension values in XBRL instances.
-  DimensionValue
-    ExplicitDimensionValue
-    TypedDimensionValue
+Dimension values
+----------------
 
-2. Handling for the xbrldt:typedDomainRef 
-  Treat as a custom link.
-  Need to update the XLink processor and the custom link recogniser interfaces to
-  accept attributes as part of custom link recognition information.
+Dimension values will not be split out of segment and scenario content as a set of fragments.
 
-3.  New higher-level objects possibly required:
+Dimension values will be accessible using a dimension value accessor class that takes as its 
+argument the fact that the dimension is being accessed for.
 
-Complete aspect model? (being an extension of the notion of a hypercube to take into account "dimensions"
-going beyond those expressed using XDT syntax).  This would go into the xbrlapi module.
+It will be possible to interpret an instance using an aspect model.
 
-Functionality to support:
+ -> Nondimensional aspect model is already basically implemented.
+ -> XDT aspect model needs to be implemented.
+ 
+ For a given aspect model, it will be possible to determine what 
+ aspects each fact has and what value each aspect has.
+ 
+ For dimensions with default values, if a fact does not report a value
+ for that dimension, then fact has the default value for that dimension,
+ regardless of of the hypercube conjunctions associated with the fact's concept.
 
-At a minimum, we need to be able to:
-a) Determine the full set of aspects for any fact (XDT dimensions and others)
-b) Retrieve labels for dimensions and dimension values
-c) Access content for typed dimension values
+XDT aspect documentation
+--------------------
 
+XDT aspects can have labels, as can their values (for explicit dimensions) and their
+domain definitions (for typed dimensions).
 
-4. Complexities
+We need to be able to recover the labels for such objects.
+
+Complexities
+------------
 
 - Handling of xbrldt:targetRole attribute (at least required for default dimension values)
+
 - s-equal2 implementation to identify matching dimension values (requires Saxon library)
-- Handling of default dimension values, requiring:
-  -- determination of concept
-  -- determination of allowed hypercubes
-  -- determination of which hypercube has been used
-  -- determination of dimensions the used hypercube
-  -- determination of default member for each dimension not reported.
 

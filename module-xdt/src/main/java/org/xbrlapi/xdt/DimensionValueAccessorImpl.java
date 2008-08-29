@@ -89,14 +89,17 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
         }
         
         ExplicitDimension dimension = (ExplicitDimension) ((XBRLStore) item.getStore()).getConcept(namespace,localname);
-        if (dimension.hasDefaultDomainMember()) {
-            // TODO make sure that the item can report the default domain member.
-            return new DimensionValueImpl(dimension.getDefaultDomainMember());
+        try {
+            Concept def = dimension.getDefaultDomainMember();
+            if (def != null) {
+                return new DimensionValueImpl(def);
+            }
+        } catch (XBRLException e) {
+            return null;
         }
-        
         return null;
         
-    }    
+    }
     
     /**
      * @param occ The open context component fragment (segment or scenario) to get the dimension value from

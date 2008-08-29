@@ -14,6 +14,8 @@ import org.xbrlapi.xdt.ExplicitDimension;
 public class ExplicitDimensionValueTestCase extends BaseTestCase {
 
     private final String STARTING_POINT = "test.data.xdt.explicit.dimension.values";
+    private final String DEFAULTS_STARTING_POINT = "test.data.xdt.default.dimension.values";
+    
     
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -58,5 +60,37 @@ public class ExplicitDimensionValueTestCase extends BaseTestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+    public void testDefaultDimensionValues() {
+
+        try {
+
+            DimensionValueAccessor dva = new DimensionValueAccessorImpl();
+
+            loader.discover(this.getURL(this.DEFAULTS_STARTING_POINT));
+            FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            assertTrue(dimensions.getLength() > 0);
+            FragmentList<Item> items = store.<Item>getFragments("NonNumericItem");
+            assertTrue(items.getLength() > 0);
+            
+            boolean foundSomeValues = false;
+            for (Item item: items) {
+                for (ExplicitDimension dimension: dimensions) {
+                    DimensionValue value = dva.getValue(item,dimension.getTargetNamespaceURI(),dimension.getName());
+                    if (value != null) {
+                        foundSomeValues = true;
+                        assertTrue(value.isExplicitDimension());
+                        assertTrue(value.getExplicitDimensionValue() != null);
+                        store.serialize(value.getExplicitDimensionValue());
+                    }
+                }
+            }
+            assertTrue(foundSomeValues);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }	
 
 }
