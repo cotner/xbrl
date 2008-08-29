@@ -35,11 +35,11 @@ class OpenContextComponentImpl extends ContextComponentImpl implements OpenConte
     	
     	if (! this.getType().equals(other.getType())) return false;
     	
-    	NodeList myContent = this.getComplexContent();
+    	NodeList thisContent = this.getComplexContent();
     	NodeList otherContent = other.getComplexContent();
-    	if (myContent.getLength() != otherContent.getLength()) return false;
-    	for (int i=0; i<myContent.getLength(); i++) {
-    		if (! myContent.item(i).equals(otherContent.item(i))) return false;
+    	if (thisContent.getLength() != otherContent.getLength()) return false;
+    	for (int i=0; i<thisContent.getLength(); i++) {
+    		if (! thisContent.item(i).isEqualNode(otherContent.item(i))) return false;
     	}
     	return true;
     }
