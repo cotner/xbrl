@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Concept;
+import org.xbrlapi.Item;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -19,24 +20,32 @@ import org.xbrlapi.utilities.XBRLException;
 public class DimensionValueImpl implements DimensionValue {
 
     private Element typedDimensionValue = null;
+    private Item item = null;
+    
     private Concept explicitDimensionValue = null;
 
     /**
      * Construct a typed dimension value.
+     * @param item The item that has the typed dimension value.
      * @param typedDimensionValue The value of the typed dimension.
-     * @throws XBRLException if the value is null.
+     * @throws XBRLException if the item or value is null.
      */
-    public DimensionValueImpl(Element typedDimensionValue) throws XBRLException {
+    public DimensionValueImpl(Item item, Element typedDimensionValue) throws XBRLException {
+        if (item == null) throw new XBRLException("The item must not be null");
+        this.item = item;
         if (typedDimensionValue == null) throw new XBRLException("The typed dimension value must not be null.");
         this.typedDimensionValue = typedDimensionValue;
     }
 
     /**
      * Construct an explicit dimension value.
+     * @param item The item that has the typed dimension value.
      * @param explicitDimensionValue The value of the explicit dimension.
-     * @throws XBRLException if the value is null.
+     * @throws XBRLException if the item or value is null.
      */
-    public DimensionValueImpl(Concept explicitDimensionValue) throws XBRLException {
+    public DimensionValueImpl(Item item, Concept explicitDimensionValue) throws XBRLException {
+        if (item == null) throw new XBRLException("The item must not be null");
+        this.item = item;
         if (explicitDimensionValue == null) throw new XBRLException("The explicit dimension value must not be null.");
         this.explicitDimensionValue = explicitDimensionValue;
     }

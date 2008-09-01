@@ -49,5 +49,7 @@ public interface DimensionValue {
      * @throws XBRLException if either dimension value is non-null.
      */
     public boolean equals(DimensionValue other) throws XBRLException;
+
+
     
 }
