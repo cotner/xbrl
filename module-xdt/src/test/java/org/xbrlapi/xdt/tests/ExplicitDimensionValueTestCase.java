@@ -50,6 +50,7 @@ public class ExplicitDimensionValueTestCase extends BaseTestCase {
 	                    foundSomeValues = true;
 	                    assertTrue(value.isExplicitDimension());
                         assertTrue(value.getExplicitDimensionValue() != null);
+                        assertTrue(value.equals(value));
 	                }
 	            }
 	        }
