@@ -196,12 +196,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
 	/**
 	 * Run a query against the collection of all fragments in the store.
-	 * @param query
-	 *            The XPath query to run.
+	 * @param query The XPath query to run.
 	 * @return a resource set that contains data for each matching fragment.
-	 * @throws XBRLException
-	 *             if the query cannot be executed.
-	 *             
+	 * @throws XBRLException if the query cannot be executed.
 	 */
     @SuppressWarnings(value = "unchecked")
 	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
