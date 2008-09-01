@@ -55,13 +55,13 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
         Scenario scenario = context.getScenario();
         Element typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(scenario, namespace, localname);
         if (typedDimensionValue != null) {
-            return new DimensionValueImpl(typedDimensionValue);
+            return new DimensionValueImpl(item, typedDimensionValue);
         }
         
         Segment segment = context.getEntity().getSegment();
         typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(segment, namespace, localname);
         if (typedDimensionValue != null) {
-            return new DimensionValueImpl(typedDimensionValue);
+            return new DimensionValueImpl(item, typedDimensionValue);
         }
         
         return null;
@@ -80,19 +80,19 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
 
         Concept dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getScenario(), namespace, localname);
         if (dimensionValue != null) {
-            return new DimensionValueImpl(dimensionValue);
+            return new DimensionValueImpl(item, dimensionValue);
         }
         
         dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getEntity().getSegment(), namespace, localname);
         if (dimensionValue != null) {
-            return new DimensionValueImpl(dimensionValue);
+            return new DimensionValueImpl(item, dimensionValue);
         }
         
         ExplicitDimension dimension = (ExplicitDimension) ((XBRLStore) item.getStore()).getConcept(namespace,localname);
         try {
             Concept def = dimension.getDefaultDomainMember();
             if (def != null) {
-                return new DimensionValueImpl(def);
+                return new DimensionValueImpl(item, def);
             }
         } catch (XBRLException e) {
             return null;
