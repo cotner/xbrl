@@ -6,7 +6,8 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * Facilitates sorting of fragments so that they can be organised into 
+ * Facilitates sorting of fragments so that 
+ * they can be organised into 
  * complete XML document in the right order.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
