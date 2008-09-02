@@ -66,11 +66,18 @@ public interface XBRLStore extends Store {
     public FragmentList<Tuple> getTuples(URL url) throws XBRLException;
     
     /**
-     * @param linkNamespace The namespace of the link element.
-     * @param linkName The name of the link element.
+     * This implementation is not as strict as the XBRL 2.1 specification
+     * requires but it is generally faster and delivers sensible results.
+     * It will only fail if people use the same link role and arc role but
+     * rely on arc or link element differences to distinguish networks.<br/><br/>
+     * 
+     * Implementation strategy is:<br/>
+     * 1. Get all extended link elements with the given link role.<br/>
+     * 2. Get all arcs with the given arc role.<br/>
+     * 3. Get all resources at the source of the arcs.<br/>
+     * 4. Return only those source resources that that are not target resources also.<br/>
+     * 
      * @param linkRole the role on the extended links that contain the network arcs.
-     * @param arcNamespace The namespace of the arc element.
-     * @param arcName The name of the arc element.
      * @param arcRole the arcrole on the arcs describing the network.
      * @return The list of fragments for each of the resources that is identified as a root
      * of the specified network (noting that a root resource is defined as a resource that is
@@ -78,7 +85,7 @@ public interface XBRLStore extends Store {
      * of any relationships in the network).
      * @throws XBRLException
      */
-    public FragmentList<Fragment> getNetworkRoots(String linkNamespace, String linkName, String linkRole, String arcNamespace, String arcName, String arcRole) throws XBRLException;
+    public FragmentList<Fragment> getNetworkRoots(String linkRole, String arcRole) throws XBRLException;
    
     /**
      * @param namespace The namespace for the concept.
@@ -165,5 +172,20 @@ public interface XBRLStore extends Store {
      * the data store.
      */
     public List<String> getMinimumDocumentSet(String url) throws XBRLException;
+
+    /**
+     * @param linkNamespace The namespace of the link element.
+     * @param linkName The name of the link element.
+     * @param linkRole the role on the extended links that contain the network arcs.
+     * @param arcNamespace The namespace of the arc element.
+     * @param arcName The name of the arc element.
+     * @param arcRole the arcrole on the arcs describing the network.
+     * @return The list of fragments for each of the resources that is identified as a root
+     * of the specified network (noting that a root resource is defined as a resource that is
+     * at the source of one or more relationships in the network and that is not at the target 
+     * of any relationships in the network).
+     * @throws XBRLException
+     */
+    public FragmentList<Fragment> getNetworkRoots(String linkNamespace, String linkName, String linkRole, String arcNamespace, String arcName, String arcRole) throws XBRLException;
     
 }

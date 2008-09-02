@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -27,6 +28,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
+import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
@@ -915,7 +917,51 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * TODO Index xlink:role and xlink:arcrole attributes.
+     * @see org.xbrlapi.data.Store#getNetworks(String,String)
+     */
+    public Networks getNetworks(String linkrole, String arcrole) throws XBRLException {
+
+        Networks networks = new NetworksImpl();
+
+        Map<String,ExtendedLink> links = new HashMap<String,ExtendedLink>();
+        
+        // First get the set of arcs using the arc role
+        FragmentList<Arc> arcs = getArcs(arcrole);
+        for (Arc arc: arcs) {
+            ExtendedLink link = null;
+            String linkIndex = arc.getParentIndex();
+            if (links.containsKey(linkIndex)) {
+                link = links.get(linkIndex);
+            } else {
+                link = (ExtendedLink) arc.getParent();
+                links.put(link.getFragmentIndex(),link);
+            }
+            String myLinkrole = link.getLinkRole();
+            if (myLinkrole.equals(linkrole)) {
+                FragmentList<ArcEnd> sources = arc.getSourceFragments();
+                FragmentList<ArcEnd> targets = arc.getTargetFragments();
+                for (ArcEnd source: sources) {
+                    for (ArcEnd target: targets) {
+                        Fragment s = null;
+                        Fragment t = null;
+                        if (source.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
+                            s = ((Locator) source).getTargetFragment();
+                        else s = source;
+                        if (target.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
+                            t = ((Locator) target).getTargetFragment();
+                        else t = target;
+                        Relationship relationship = new RelationshipImpl(arc,s,t);
+                        networks.addRelationship(relationship);
+                    }
+                }
+                
+            }
+        }
+        return networks;        
+    }
+
+    
+    /**
      * @param arcrole The arcrole to use to identify the arcs to retrieve.
      * @return the list of arc fragments with a given arc role value.
      * @throws XBRLException
@@ -923,7 +969,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     private FragmentList<Arc> getArcs(String arcrole) throws XBRLException {
     	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]";
     	return this.<Arc>query(query);
-    }    
+    }
+    
+    
     
     /**
      * Utility method to return a list of fragments in a data store

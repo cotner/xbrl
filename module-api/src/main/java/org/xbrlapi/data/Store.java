@@ -346,10 +346,14 @@ public interface Store {
     
     
     /**
-     * get the collection of networks expressed using arcs that involve this 
-     * arc role.
+     * @param linkrole The linkrole of the networks.
+     * @param arcrole The arcrole of the networks.
+     * @return the collection of networks expressed using arcs that involve this 
+     * linkrole and arcrole.
+     * @throws XBRLException
      */
-    public Networks getNetworks(String arcRole) throws XBRLException;  
+    public Networks getNetworks(String linkrole, String arcrole) throws XBRLException;
+    
     
     /**
      * Utility method to return a list of fragments in a data store
