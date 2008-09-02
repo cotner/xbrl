@@ -28,40 +28,38 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
     }
 
     /**
-     * @see org.xbrlapi.xdt.DimensionValueAccessor#getValue(org.xbrlapi.Item, java.lang.String, java.lang.String)
+     * @see org.xbrlapi.xdt.DimensionValueAccessor#getValue(org.xbrlapi.Item, org.xbrlapi.xdt.Dimension)
      */
-    public DimensionValue getValue(Item item, String namespace, String localname) throws XBRLException {
-        Concept concept = ((XBRLStore) item.getStore()).getConcept(namespace,localname);
-        if (concept.getType().equals("org.xbrlapi.xdt.TypedDimensionImpl")) {
-            return getTypedDimensionValue(item, namespace,localname);
-        } else if (concept.getType().equals("org.xbrlapi.xdt.ExplicitDimensionImpl")) {
-            return getExplicitDimensionValue(item, namespace,localname);
+    public DimensionValue getValue(Item item, Dimension dimension) throws XBRLException {
+        if (dimension.getType().equals("org.xbrlapi.xdt.TypedDimensionImpl")) {
+            return getTypedDimensionValue(item, dimension);
+        } else if (dimension.getType().equals("org.xbrlapi.xdt.ExplicitDimensionImpl")) {
+            return getExplicitDimensionValue(item, dimension);
         }
         throw new XBRLException("The dimension QName does not identify a typed or explicit dimension.");
     }    
 
     /**
      * @param item The fact to get the typed dimension value for.
-     * @param namespace The namespace of the dimension.
-     * @param localname The local name of the dimension.
+     * @param dimension The dimension to get the value for.
      * @return the element containing the typed dimension value.  This is a child element of the segment
      * or scenario that contains the typed dimension value.
      * @throws XBRLException
      */
-    private DimensionValue getTypedDimensionValue(Item item, String namespace, String localname) throws XBRLException {
+    private DimensionValue getTypedDimensionValue(Item item, Dimension dimension) throws XBRLException {
 
         Context context = item.getContext();
 
         Scenario scenario = context.getScenario();
-        Element typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(scenario, namespace, localname);
+        Element typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(scenario, dimension);
         if (typedDimensionValue != null) {
-            return new DimensionValueImpl(item, typedDimensionValue);
+            return new DimensionValueImpl(item, dimension, typedDimensionValue);
         }
         
         Segment segment = context.getEntity().getSegment();
-        typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(segment, namespace, localname);
+        typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(segment, dimension);
         if (typedDimensionValue != null) {
-            return new DimensionValueImpl(item, typedDimensionValue);
+            return new DimensionValueImpl(item, dimension, typedDimensionValue);
         }
         
         return null;
@@ -69,30 +67,28 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
     
     /**
      * @param item The fact to get the explicit dimension value for.
-     * @param namespace The namespace of the dimension.
-     * @param localname The local name of the dimension.
+     * @param dimension The dimension to get the value for.
      * @return the value of the explicit dimension or null if there is none.
      * @throws XBRLException
      */
-    private DimensionValue getExplicitDimensionValue(Item item, String namespace, String localname) throws XBRLException {
+    private DimensionValue getExplicitDimensionValue(Item item, Dimension dimension) throws XBRLException {
         
         Context context = item.getContext();
 
-        Concept dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getScenario(), namespace, localname);
+        Concept dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getScenario(), dimension);
         if (dimensionValue != null) {
-            return new DimensionValueImpl(item, dimensionValue);
+            return new DimensionValueImpl(item, dimension, dimensionValue);
         }
         
-        dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getEntity().getSegment(), namespace, localname);
+        dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getEntity().getSegment(), dimension);
         if (dimensionValue != null) {
-            return new DimensionValueImpl(item, dimensionValue);
+            return new DimensionValueImpl(item, dimension, dimensionValue);
         }
         
-        ExplicitDimension dimension = (ExplicitDimension) ((XBRLStore) item.getStore()).getConcept(namespace,localname);
         try {
-            Concept def = dimension.getDefaultDomainMember();
+            Concept def = ((ExplicitDimension) dimension).getDefaultDomainMember();
             if (def != null) {
-                return new DimensionValueImpl(item, def);
+                return new DimensionValueImpl(item, dimension, def);
             }
         } catch (XBRLException e) {
             return null;
@@ -103,13 +99,14 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
     
     /**
      * @param occ The open context component fragment (segment or scenario) to get the dimension value from
-     * @param namespace The namespace of the dimension
-     * @param localname The local name of the dimension
+     * @param dimension The dimension
      * @return The domain member that is the dimension value for the item.
      * @throws XBRLException
      */
-    private Concept getDomainMemberFromOpenContextComponent(OpenContextComponent occ,String namespace, String localname) throws XBRLException {
+    private Concept getDomainMemberFromOpenContextComponent(OpenContextComponent occ, Dimension dimension) throws XBRLException {
         if (occ != null) {
+            String namespace = dimension.getTargetNamespaceURI();
+            String localname = dimension.getName();
             NodeList children = occ.getDataRootElement().getChildNodes();
             for (int i=0; i< children.getLength(); i++) {
                 Node child = children.item(i);
@@ -136,13 +133,14 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
     
     /**
      * @param occ The open context component fragment (segment or scenario) to get the dimension value from
-     * @param namespace The namespace of the dimension
-     * @param localname The local name of the dimension
+     * @param dimension The dimension
      * @return The child element of the OCC that contains the explicit dimension value or null if there is none.
      * @throws XBRLException
      */
-    private Element getTypedDimensionContentFromOpenContextComponent(OpenContextComponent occ,String namespace, String localname) throws XBRLException {
+    private Element getTypedDimensionContentFromOpenContextComponent(OpenContextComponent occ,Dimension dimension) throws XBRLException {
         if (occ != null) {
+            String namespace = dimension.getTargetNamespaceURI();
+            String localname = dimension.getName();
             NodeList children = occ.getDataRootElement().getChildNodes();
             for (int i=0; i< children.getLength(); i++) {
                 Node child = children.item(i);
@@ -166,13 +164,14 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
     }
 
     /**
-     * @see org.xbrlapi.xdt.DimensionValueAccessor#equalValues(org.xbrlapi.Item, org.xbrlapi.Item, java.lang.String, java.lang.String)
+     * @see org.xbrlapi.xdt.DimensionValueAccessor#equalValues(org.xbrlapi.Item, org.xbrlapi.Item, org.xbrlapi.xdt.Dimension)
      */
-    public boolean equalValues(Item first, Item second, String namespace, String localname) throws XBRLException {
-        DimensionValue firstValue = this.getValue(first,namespace,localname);
+    public boolean equalValues(Item first, Item second, Dimension dimension) throws XBRLException {
+        DimensionValue firstValue = this.getValue(first,dimension);
         if (firstValue == null) return false;
-        DimensionValue secondValue = this.getValue(second,namespace,localname);
+        DimensionValue secondValue = this.getValue(second,dimension);
         if (secondValue == null) return false;
+        // TODO verify this comparison.
         return firstValue.equals(secondValue);
     }
 

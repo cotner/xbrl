@@ -1,55 +1,50 @@
 package org.xbrlapi.xdt;
 
-import org.w3c.dom.Element;
-import org.xbrlapi.Concept;
+import org.xbrlapi.Item;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * This inteface defines the methods available to 
- * interact with a dimension value.
- * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
 public interface DimensionValue {
 
     /**
-     * @return true if the value is of an explicit dimension
-     * and false otherwise.
-     * @throws XBRLException
+     * @return the item with this dimension value.
+     * @throws XBRLException if the item is null.
      */
-    public boolean isExplicitDimension() throws XBRLException;
+    public Item getItem() throws XBRLException;
     
     /**
-     * @return true if the value is of a typed dimension and
+     * @return the dimension that the value is for.
+     * @throws XBRLException if the dimension cannot be retrieved.
+     */
+    public Dimension getDimension() throws XBRLException;
+
+    /**
+     * @see org.w3c.dom.Element
+     * @see org.xbrlapi.Concept
+     * @return an XML DOM Element that is the child element
+     * of the open context container (segment or scenario) 
+     * that expresses the dimension value for typed dimensions
+     * and that is the concept that is the domain member, 
+     * for explicit dimensions.
+     * @throws XBRLException if the value cannot be retrieved.
+     */
+    public Object getValue() throws XBRLException;
+
+    /**
+     * @return true if the dimension value is a typed dimension value and
      * false otherwise.
-     * @throws XBRLException
+     * @throws XBRLException.
      */
-    public boolean isTypedDimension() throws XBRLException;
+    public boolean isTypedDimensionValue() throws XBRLException;
 
     /**
-     * @return the element that is the root of the dimension value.
-     * @throws XBRLException if the dimension value is for an 
-     * explicit dimension.
+     * @return true if the dimension value is an explicit dimension value and
+     * false otherwise.
+     * @throws XBRLException.
      */
-    public Element getTypedDimensionValue() throws XBRLException;
-    
-    /**
-     * @return the concept that is the domain member that is 
-     * the explicit dimension value.
-     * @throws XBRLException if the dimension value is for a
-     * typed dimension.
-     */
-    public Concept getExplicitDimensionValue() throws XBRLException;    
-    
-    /**
-     * @param other The other dimension value
-     * @return true if this dimension value is equal to the other dimension
-     * value.
-     * @throws XBRLException if either dimension value is non-null.
-     */
-    public boolean equals(DimensionValue other) throws XBRLException;
+    public boolean isExplicitDimensionValue() throws XBRLException;
 
-
-    
 }

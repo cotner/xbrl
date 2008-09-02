@@ -1,140 +1,116 @@
-/**
- * 
- */
 package org.xbrlapi.xdt;
 
-import java.util.List;
-import java.util.Vector;
-
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Item;
 import org.xbrlapi.utilities.XBRLException;
 
-/**
- * @author geoff
- *
- */
 public class DimensionValueImpl implements DimensionValue {
 
-    private Element typedDimensionValue = null;
+    /**
+     * The item with the value for the dimension.
+     */
     private Item item = null;
-    
-    private Concept explicitDimensionValue = null;
 
     /**
-     * Construct a typed dimension value.
-     * @param item The item that has the typed dimension value.
-     * @param typedDimensionValue The value of the typed dimension.
-     * @throws XBRLException if the item or value is null.
+     * The dimension with the value.
      */
-    public DimensionValueImpl(Item item, Element typedDimensionValue) throws XBRLException {
-        if (item == null) throw new XBRLException("The item must not be null");
-        this.item = item;
-        if (typedDimensionValue == null) throw new XBRLException("The typed dimension value must not be null.");
-        this.typedDimensionValue = typedDimensionValue;
-    }
+    private Dimension dimension = null;
 
     /**
-     * Construct an explicit dimension value.
-     * @param item The item that has the typed dimension value.
-     * @param explicitDimensionValue The value of the explicit dimension.
-     * @throws XBRLException if the item or value is null.
+     * The explicit dimension value.
      */
-    public DimensionValueImpl(Item item, Concept explicitDimensionValue) throws XBRLException {
-        if (item == null) throw new XBRLException("The item must not be null");
-        this.item = item;
-        if (explicitDimensionValue == null) throw new XBRLException("The explicit dimension value must not be null.");
-        this.explicitDimensionValue = explicitDimensionValue;
-    }
+    private Concept member = null;
     
     /**
-     * @see org.xbrlapi.xdt.DimensionValue#getExplicitDimensionValue()
+     * The typed dimension value.
      */
-    public Concept getExplicitDimensionValue() throws XBRLException {
-        if (isExplicitDimension()) {
-            return explicitDimensionValue;
+    private Element value = null;
+    
+    /**
+     * Construct a dimension value.
+     * @param item The item that has the dimension value.
+     * @param dimension The dimension with the value.
+     * @param value The dimension value object (that must be one of
+     * an org.xbrlapi.Concept or a org.w3c.dom.Element) where the 
+     * class of the object matches the type of dimension.
+     * @throws XBRLException.
+     */
+    public DimensionValueImpl(Item item, Dimension dimension, Object value) throws XBRLException {
+        setItem(item);
+        setDimension(dimension);
+        setValue(value);
+    }
+    
+    private void setItem(Item i) throws XBRLException {
+        if (i == null) throw new XBRLException("The item must not be null.");
+        item = i;
+    }
+    
+    private void setDimension(Dimension d) throws XBRLException {
+        if (d == null) throw new XBRLException("The dimension must not be null.");
+        dimension = d;
+    }
+
+    private void setValue(Object o) throws XBRLException {
+        if (o == null) throw new XBRLException("The dimension value must not be null.");
+        try {
+            member = org.xbrlapi.Concept.class.cast(o);
+            if (isTypedDimensionValue()) throw new XBRLException("The dimension type and value type conflict.");
+        } catch (ClassCastException e) {
+            try {
+                value = org.w3c.dom.Element.class.cast(o);
+                if (isExplicitDimensionValue()) throw new XBRLException("The dimension type and value type conflict.");
+            } catch (ClassCastException ee) {
+                throw new XBRLException("The dimension value is not a domain member or a typed dimension value root element.",e);
+            }
         }
-        throw new XBRLException("The dimension is typed, not explicit.");
     }
 
     /**
-     * @see org.xbrlapi.xdt.DimensionValue#getTypedDimensionValue()
+     * @see org.xbrlapi.xdt.DimensionValue#getItem()
      */
-    public Element getTypedDimensionValue() throws XBRLException {
-        if (isTypedDimension()) {
-            return typedDimensionValue;
-        }
-        throw new XBRLException("The dimension is explicit, not typed.");
+    public Item getItem() throws XBRLException {
+        if (item == null) throw new XBRLException("The item is null.");
+        return item;
     }
 
     /**
-     * @see org.xbrlapi.xdt.DimensionValue#isExplicitDimension()
+     * @see org.xbrlapi.xdt.DimensionValue#getDimension()
      */
-    public boolean isExplicitDimension() throws XBRLException {
-        if (explicitDimensionValue != null) return true;
+    public Dimension getDimension() throws XBRLException {
+        if (dimension == null) throw new XBRLException("The dimension is null.");
+        return dimension;
+    }
+
+    /**
+     * @see org.xbrlapi.xdt.DimensionValue#getValue()
+     */
+    public Object getValue() throws XBRLException {
+        if (isExplicitDimensionValue()) {
+            if (member == null) throw new XBRLException("The explicit dimension value is null.");
+            return member;
+        }
+        if (isTypedDimensionValue()) {
+            if (value == null) throw new XBRLException("The typed dimension value is null.");
+            return value;
+        }
+        throw new XBRLException("The type of dimension could not be determined so no value is available.");
+    }
+
+    /**
+     * @see org.xbrlapi.xdt.DimensionValue#isExplicitDimensionValue()
+     */
+    public boolean isExplicitDimensionValue() throws XBRLException {
+        return (!isTypedDimensionValue());
+    }
+
+    /**
+     * @see org.xbrlapi.xdt.DimensionValue#isTypedDimensionValue()
+     */
+    public boolean isTypedDimensionValue() throws XBRLException {
+        if (getDimension().getType().equals("org.xbrlapi.xdt.TypedDimensionImpl")) return true;
         return false;
     }
-
-    /**
-     * @see org.xbrlapi.xdt.DimensionValue#isTypedDimension()
-     */
-    public boolean isTypedDimension() throws XBRLException {
-        if (typedDimensionValue != null) return true;
-        return false;
-    }
-
-    /**
-     * @see org.xbrlapi.xdt.DimensionValue#equals(org.xbrlapi.xdt.DimensionValue)
-     */
-    public boolean equals(DimensionValue other) throws XBRLException {
-
-        if (this.isExplicitDimension() && other.isTypedDimension()) return false;
-        
-        if (other.isExplicitDimension() && this.isTypedDimension()) return false;
-        
-        if (this.isExplicitDimension()) {
-            if (this.getExplicitDimensionValue().getFragmentIndex().equals(other.getExplicitDimensionValue().getFragmentIndex())) {
-                return true;
-            }
-            return false;
-        }
-        
-        if (this.isTypedDimension()) {
-            
-            List<Element> thisElements = this.getChildElementsOfTypedDimensionValue(this.getTypedDimensionValue());
-            List<Element> otherElements = this.getChildElementsOfTypedDimensionValue(other.getTypedDimensionValue());
-
-            if (thisElements.size() != otherElements.size()) return false;
-            
-            for (int i=0; i<thisElements.size(); i++) {
-                Element thisElement = thisElements.get(i);
-                Element otherElement = otherElements.get(i);
-                // TODO Test that org.w3c.dom.Node#isEqualNode(Node) works for comparing nodes across DOM instances
-                if (! thisElement.isEqualNode(otherElement)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        
-        throw new XBRLException("The equality test failed because the dimension type could not be determined.");
-
-    }
-    
-    private List<Element> getChildElementsOfTypedDimensionValue(Node value) throws XBRLException {
-        NodeList nodes = this.getTypedDimensionValue().getChildNodes();
-        List<Element> elements = new Vector<Element>();
-        for (int i=0; i<nodes.getLength(); i++) {
-            if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                elements.add((Element) nodes.item(i));
-            }
-        }
-        return elements;
-    }
-
     
 }
