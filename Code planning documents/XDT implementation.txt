@@ -65,5 +65,46 @@ Complexities
 
 - Handling of xbrldt:targetRole attribute (at least required for default dimension values)
 
-- s-equal2 implementation to identify matching dimension values (requires Saxon library)
+- Testing for equality of two typed dimension values.
+  Requires s-equal2 comparison.
+  
+- Consider providing a method in the API where the user provides their
+own XPath expression for filtering the values for a given dimension. (WH)
+  
+- Consider providing a method to select a set of domain members based upon
+a network of relationships.  IE given a domain member a linkrole and an arcrole,
+get all the domain members that are children/descendants of the given domain member
+or get all of the domain members in the specified network.  This requires testing 
+that the nodes in the network are actually domain members.  An exception must be thrown
+if there are nodes in the network that are not domain members.
+
+Simple rendering use cases
+
+A) Render a list of facts, with each entry in the list being distinguished on the
+basis of its value for a given dimension.  All facts in the list have a value for 
+the dimension.
+
+Process:
+1.  Get the name of the dimension.
+
+2.  Get the set of facts all facts.
+
+3.  Use the getValue method of the DimensionValueAccessor to determine which
+report a value for that dimension and put those facts in a FragmentList.
+
+4.  Order the fragment list based upon some ordering of the dimension values.
+      For explicit dimensions, order based upon an ordering of dimension 
+      members based upon a nominated network.
+      
+      Supply an arcrole and a linkrole value, defaulting the linkrole value to the standard
+      linkrole and defaulting the arcrole value to the domain-member arcrole. 
+      
+      Throw an error if the linkrole and the arcrole are not sufficient to select a single network.
+      
+      The ordering will be the document ordering of the members in the selected network.
+      
+      For typed dimensions, order based upon a specified ordering criteria (or use some
+      sensible default if such can be defined) that applies an XQuery expression to the 
+      element giving the typed dimension value (i.e. the one with the attribute that identifies
+      the typed dimension)
 

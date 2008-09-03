@@ -8,7 +8,7 @@ import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * Facilitates naive sorting of dimension values.
+ * Supports a naive sorting of dimension values.
  * Explicit dimension values come before typed dimension values.
  * Different explicit dimensions are ordered by their namespace and then
  * their local name.
@@ -29,13 +29,10 @@ public abstract class DimensionValueComparator implements Comparator<DimensionVa
     }
     
     /**
-     * Explicit dimension values always higher than typed dimension values.
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
-    public int compare(DimensionValue o1, DimensionValue o2) throws ClassCastException {
+    public int compare(DimensionValue v1, DimensionValue v2) throws ClassCastException {
         try {
-            DimensionValue v1 = o1;
-            DimensionValue v2 = o2;
 
             int result = compareDimensions(v1,v2);
             if (result != 0) return result;
@@ -103,9 +100,9 @@ public abstract class DimensionValueComparator implements Comparator<DimensionVa
      */
     protected int compareDimensions(DimensionValue v1, DimensionValue v2) throws XBRLException {
 
-        if (v1.isTypedDimensionValue() && v2.isExplicitDimensionValue()) return -1;
+        if (v1.isTypedDimensionValue() && v2.isExplicitDimensionValue()) return 1;
 
-        if (v1.isExplicitDimensionValue() && v2.isTypedDimensionValue()) return 1;
+        if (v1.isExplicitDimensionValue() && v2.isTypedDimensionValue()) return -1;
 
         Dimension v1d = v1.getDimension();
         Dimension v2d = v2.getDimension();

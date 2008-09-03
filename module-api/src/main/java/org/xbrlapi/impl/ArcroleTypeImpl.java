@@ -1,8 +1,10 @@
 package org.xbrlapi.impl;
 
+
+import org.xbrlapi.networks.Networks;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.ArcroleType;
-import org.xbrlapi.Networks;
 import org.xbrlapi.utilities.XBRLException;
 
 /**

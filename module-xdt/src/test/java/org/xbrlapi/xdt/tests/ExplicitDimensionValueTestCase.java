@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt.tests;
 
+import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.xdt.DimensionValue;
@@ -45,11 +46,11 @@ public class ExplicitDimensionValueTestCase extends BaseTestCase {
             boolean foundSomeValues = false;
 	        for (Item item: items) {
 	            for (ExplicitDimension dimension: dimensions) {
-	                DimensionValue value = dva.getValue(item,dimension.getTargetNamespaceURI(),dimension.getName());
+	                DimensionValue value = dva.getValue(item,dimension);
 	                if (value != null) {
 	                    foundSomeValues = true;
-	                    assertTrue(value.isExplicitDimension());
-                        assertTrue(value.getExplicitDimensionValue() != null);
+	                    assertTrue(value.isExplicitDimensionValue());
+                        assertTrue(value.getValue() != null);
                         assertTrue(value.equals(value));
 	                }
 	            }
@@ -77,12 +78,12 @@ public class ExplicitDimensionValueTestCase extends BaseTestCase {
             boolean foundSomeValues = false;
             for (Item item: items) {
                 for (ExplicitDimension dimension: dimensions) {
-                    DimensionValue value = dva.getValue(item,dimension.getTargetNamespaceURI(),dimension.getName());
+                    DimensionValue value = dva.getValue(item,dimension);
                     if (value != null) {
                         foundSomeValues = true;
-                        assertTrue(value.isExplicitDimension());
-                        assertTrue(value.getExplicitDimensionValue() != null);
-                        store.serialize(value.getExplicitDimensionValue());
+                        assertTrue(value.isExplicitDimensionValue());
+                        assertTrue(value.getValue() != null);
+                        store.serialize((Fragment) value.getValue());
                     }
                 }
             }

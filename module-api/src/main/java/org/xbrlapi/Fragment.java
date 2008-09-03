@@ -3,6 +3,8 @@ package org.xbrlapi;
 import java.util.HashMap;
 import java.util.Vector;
 
+import org.xbrlapi.networks.Networks;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

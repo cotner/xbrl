@@ -4,10 +4,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
+import org.xbrlapi.networks.Networks;
+
 import org.xbrlapi.Entity;
 import org.xbrlapi.EntityResource;
 import org.xbrlapi.FragmentList;
-import org.xbrlapi.Networks;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 

@@ -9,13 +9,14 @@ package org.xbrlapi.relationships.tests;
 import java.util.List;
 import java.util.Set;
 
+import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.Networks;
+import org.xbrlapi.networks.Relationship;
+
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
-import org.xbrlapi.Network;
-import org.xbrlapi.Networks;
-import org.xbrlapi.Relationship;
 import org.xbrlapi.utilities.Constants;
 
 public class NetworksTestCase extends DOMLoadingTestCase {

@@ -5,12 +5,13 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 
+import org.xbrlapi.networks.Networks;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Language;
-import org.xbrlapi.Networks;
 import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -353,6 +354,14 @@ public interface Store {
      * @throws XBRLException
      */
     public Networks getNetworks(String linkrole, String arcrole) throws XBRLException;
+
+    /**
+     * @param arcRole The XLink arcrole value.
+     * @return the collection of networks expressed using arcs 
+     * that involve this arc role.
+     * @throws XBRLException
+     */
+    public Networks getNetworks(String arcRole) throws XBRLException;  
     
     
     /**

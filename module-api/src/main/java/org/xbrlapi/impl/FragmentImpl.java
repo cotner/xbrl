@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
+
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -15,13 +16,15 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.Locator;
-import org.xbrlapi.Networks;
 import org.xbrlapi.ReferenceResource;
-import org.xbrlapi.Relationship;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.builder.Builder;
 import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.networks.Networks;
+import org.xbrlapi.networks.NetworksImpl;
+import org.xbrlapi.networks.Relationship;
+import org.xbrlapi.networks.RelationshipImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 

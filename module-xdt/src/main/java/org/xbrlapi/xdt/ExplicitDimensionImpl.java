@@ -2,11 +2,12 @@ package org.xbrlapi.xdt;
 
 import java.util.List;
 
+import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.Networks;
+import org.xbrlapi.networks.Relationship;
+
 import org.xbrlapi.Concept;
 import org.xbrlapi.FragmentList;
-import org.xbrlapi.Network;
-import org.xbrlapi.Networks;
-import org.xbrlapi.Relationship;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.utilities.XBRLException;
 
