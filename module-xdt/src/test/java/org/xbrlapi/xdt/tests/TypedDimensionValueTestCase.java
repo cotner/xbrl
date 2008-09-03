@@ -1,5 +1,13 @@
 package org.xbrlapi.xdt.tests;
 
+import org.w3c.dom.Element;
+import org.xbrlapi.FragmentList;
+import org.xbrlapi.Item;
+import org.xbrlapi.xdt.DimensionValue;
+import org.xbrlapi.xdt.DimensionValueAccessor;
+import org.xbrlapi.xdt.DimensionValueAccessorImpl;
+import org.xbrlapi.xdt.TypedDimension;
+
 /**
  * Tests the identification of XDT fragments.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
@@ -24,12 +32,34 @@ public class TypedDimensionValueTestCase extends BaseTestCase {
 	public void testTypedDimensionValue() {
 
 		try {
-	        loader.discover(this.getURL(STARTING_POINT));
-	        fail("Typed dimension value handling has not yet been implemented.");
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
+
+            DimensionValueAccessor dva = new DimensionValueAccessorImpl();
+
+            loader.discover(this.getURL(STARTING_POINT));
+            FragmentList<TypedDimension> dimensions = store.<TypedDimension>getFragments("org.xbrlapi.xdt.TypedDimensionImpl");
+            assertTrue(dimensions.getLength() > 0);
+            FragmentList<Item> items = store.<Item>getFragments("NonNumericItem");
+            assertTrue(items.getLength() > 0);
+            
+            boolean foundSomeValues = false;
+            for (Item item: items) {
+                for (TypedDimension dimension: dimensions) {
+                    DimensionValue value = dva.getValue(item,dimension);
+                    if (value != null) {
+                        foundSomeValues = true;
+                        assertTrue(value.isTypedDimensionValue());
+                        assertTrue(value.getValue() != null);
+                        store.serialize((Element) value.getValue());
+                    }
+                }
+            }
+            assertTrue(foundSomeValues);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }		
+		
 	}
 
 }

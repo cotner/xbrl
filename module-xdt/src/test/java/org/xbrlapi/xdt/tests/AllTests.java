@@ -12,7 +12,6 @@ public class AllTests {
         suite.addTestSuite(HypercubeTestCase.class);
         suite.addTestSuite(ExplicitDimensionValueTestCase.class);
         suite.addTestSuite(TypedDimensionValueTestCase.class);
-        suite.addTestSuite(DefaultDimensionValueTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}
