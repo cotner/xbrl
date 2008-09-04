@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
-
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,7 +32,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class FragmentImpl implements Fragment {
+public class FragmentImpl implements Fragment, Comparable<Fragment> {
 	
 	protected static Logger logger = Logger.getLogger(FragmentImpl.class);	
 	
@@ -957,6 +956,14 @@ public class FragmentImpl implements Fragment {
 		if (this.getFragmentIndex().equals(f1.getFragmentIndex()))
 			return true;
 		return false;
+	}
+	
+	/**
+	 * Comparison is based upon the fragment index.
+	 * @see java.lang.Comparable#compareTo(Object o)
+	 */
+	public int compareTo(Fragment other) throws ClassCastException {
+        return this.getFragmentIndex().compareTo(other.getFragmentIndex());	    
 	}
 
 }
