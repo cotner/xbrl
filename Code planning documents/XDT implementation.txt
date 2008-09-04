@@ -85,26 +85,20 @@ basis of its value for a given dimension.  All facts in the list have a value fo
 the dimension.
 
 Process:
+
 1.  Get the name of the dimension.
 
-2.  Get the set of facts all facts.
+2.  Get the set of all facts.
 
 3.  Use the getValue method of the DimensionValueAccessor to determine which
 report a value for that dimension and put those facts in a FragmentList.
 
 4.  Order the fragment list based upon some ordering of the dimension values.
-      For explicit dimensions, order based upon an ordering of dimension 
-      members based upon a nominated network.
-      
-      Supply an arcrole and a linkrole value, defaulting the linkrole value to the standard
-      linkrole and defaulting the arcrole value to the domain-member arcrole. 
-      
-      Throw an error if the linkrole and the arcrole are not sufficient to select a single network.
-      
-      The ordering will be the document ordering of the members in the selected network.
-      
-      For typed dimensions, order based upon a specified ordering criteria (or use some
+
+      Create a variety of comparators that will support different approaches to 
+      ordering dimension values.
+
+      Order typed dimensions using a specified ordering criteria (or use some
       sensible default if such can be defined) that applies an XQuery expression to the 
       element giving the typed dimension value (i.e. the one with the attribute that identifies
       the typed dimension)
-
