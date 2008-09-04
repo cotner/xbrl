@@ -32,7 +32,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class FragmentImpl implements Fragment, Comparable<Fragment> {
+public class FragmentImpl implements Fragment {
 	
 	protected static Logger logger = Logger.getLogger(FragmentImpl.class);	
 	

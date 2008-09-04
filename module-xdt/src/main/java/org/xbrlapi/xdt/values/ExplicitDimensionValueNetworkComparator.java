@@ -91,14 +91,18 @@ public abstract class ExplicitDimensionValueNetworkComparator extends DimensionV
 
             int result = compareDimensions(v1,v2);
             if (result != 0) return result;
+
             if (v1.isTypedDimensionValue() && v2.isTypedDimensionValue()) {
-                return compareTypedDimensionValues(v1, v2);
+                result = compareTypedDimensionValues(v1, v2);
             }
+            if (result != 0) return result;
+
             if (v1.isExplicitDimensionValue() && v2.isExplicitDimensionValue()) {
-                return compareExplicitDimensionValues(v1, v2);
+                result = compareExplicitDimensionValues(v1, v2);
             }
-                        
-            throw new XBRLException("The dimension types do not permit comparison.");
+            if (result != 0) return result;
+            
+            return compareItems(v1,v2);
             
         } catch (XBRLException e) {
             throw new ClassCastException("Dimension value comparison is not possible." + e.getMessage());

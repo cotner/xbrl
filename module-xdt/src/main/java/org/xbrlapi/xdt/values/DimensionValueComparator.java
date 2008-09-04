@@ -10,16 +10,16 @@ import org.xbrlapi.xdt.Dimension;
 
 /**
  * Supports a naive sorting of dimension values.
- * Explicit dimension values come before typed dimension values.
- * Different explicit dimensions are ordered by their namespace and then
+ * Different dimensions are ordered by their namespace and then
  * their local name.
- * Different typed dimensions are ordered by their namespace and then
- * their local name.
- * Explicit dimension values are ordered based on string comparisons
- * of the namespaces and then if those are equal, based on string
+ * Values for the one explicit dimension are ordered based on string 
+ * comparisons of the namespaces and then, if those are equal, based on string
  * comparisons of their local names.
  * Typed dimension values are ordered based on a string comparison of their
  * serialised representation.
+ * If two dimension values are equal, then the DimensionValue objects
+ * are ordered based upon the fragment index of the items that they are
+ * values for.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
@@ -39,14 +39,16 @@ public class DimensionValueComparator implements Comparator<DimensionValue> {
             if (result != 0) return result;
             
             if (v1.isExplicitDimensionValue() && v2.isExplicitDimensionValue()) {
-                return compareExplicitDimensionValues(v1, v2);
+                result = compareExplicitDimensionValues(v1, v2);
             }
+            if (result != 0) return result;
 
             if (v1.isTypedDimensionValue() && v2.isTypedDimensionValue()) {
-                return compareTypedDimensionValues(v1, v2);
+                result = compareTypedDimensionValues(v1, v2);
             }
-                        
-            throw new XBRLException("The dimension types do not permit comparison.");
+            if (result != 0) return result;
+            
+            return compareItems(v1,v2);
             
         } catch (XBRLException e) {
             throw new ClassCastException("Dimension value comparison is not possible." + e.getMessage());
@@ -118,6 +120,18 @@ public class DimensionValueComparator implements Comparator<DimensionValue> {
         return d1ln.compareTo(d2ln);
         
     }
-        
+    
+    /**
+     * Do a comparison of the items that the dimension values are for, ranking them based on
+     * the string comparison of their index values.
+     * @param v1 The first typed dimension value.
+     * @param v2 The second typed dimension value.
+     * @return a negative integer, zero, or a positive integer 
+     * as the first argument is less than, equal to, or greater than the second.
+     * @throws XBRLException
+     */
+    protected int compareItems(DimensionValue v1, DimensionValue v2) throws XBRLException {
+        return v1.getItem().compareTo(v2.getItem());
+    }
     
 }

@@ -17,7 +17,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 
-public interface Fragment {
+public interface Fragment extends Comparable<Fragment> {
 
 	/**
 	 * Set the data store that manages this fragment.
@@ -449,5 +449,6 @@ public interface Fragment {
 	 * being compared to does not cast to a fragment.
 	 */
 	public boolean equals(Object o1) throws ClassCastException;
+    
     
 }
