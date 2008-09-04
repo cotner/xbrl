@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -99,8 +101,23 @@ abstract public class BaseTestCase extends TestCase {
 	 */
 	public String getURL(String property) {
 		String myProperty = configuration.getProperty(property);
+		
 		if (myProperty.startsWith("http://"))
 			return myProperty;
+		
+		if (myProperty.startsWith("file://"))
+		    return myProperty;
+		
+		if (property.startsWith("test.data.local.")) {
+		    try {
+	            File file = new File(configuration.getProperty(property));
+	            URL url = file.toURL();
+		        return url.toString();
+		    } catch (MalformedURLException e){
+		        fail("Failed to get the URL from configuration property " + property);
+		    }
+		}
+		
 		return baseURL + configuration.getProperty(property);
 	}	
 
