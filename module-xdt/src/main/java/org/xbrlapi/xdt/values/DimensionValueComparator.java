@@ -23,7 +23,7 @@ import org.xbrlapi.xdt.Dimension;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public abstract class DimensionValueComparator implements Comparator<DimensionValue> {
+public class DimensionValueComparator implements Comparator<DimensionValue> {
     
     public DimensionValueComparator() {
         ;
