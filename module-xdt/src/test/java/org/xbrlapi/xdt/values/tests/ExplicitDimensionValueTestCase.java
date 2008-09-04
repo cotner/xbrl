@@ -1,9 +1,10 @@
-package org.xbrlapi.xdt.tests;
+package org.xbrlapi.xdt.values.tests;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.xdt.ExplicitDimension;
+import org.xbrlapi.xdt.tests.BaseTestCase;
 import org.xbrlapi.xdt.values.DimensionValue;
 import org.xbrlapi.xdt.values.DimensionValueAccessor;
 import org.xbrlapi.xdt.values.DimensionValueAccessorImpl;

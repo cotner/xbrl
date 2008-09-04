@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt.tests;
 
+import org.xbrlapi.xdt.values.tests.ExplicitDimensionValueTestCase;
 import org.xbrlapi.xdt.values.tests.TypedDimensionValueTestCase;
 
 import junit.framework.Test;
