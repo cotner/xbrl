@@ -1,16 +1,12 @@
 package org.xbrlapi.xdt.values;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.networks.Network;
-import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.TreeIterator;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -18,8 +14,8 @@ import org.xbrlapi.utilities.XBRLException;
  * Replaces the naive sorting of explicit dimension values
  * for the same explicit dimension with one based upon
  * a tree of domain members.
- * The tree is specified in terms of:
- * The linkrole and arcrole of the network.
+ * The tree is specified in terms of a network and the 
+ * root of the tree in that network to be analysed.
  * If two domain members for the one dimension are not
  * both in the specified tree, then any that are not
  * in the network come after those in the tree.
@@ -30,48 +26,23 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public abstract class ExplicitDimensionValueNetworkComparator extends DimensionValueComparator implements Comparator<DimensionValue> {
-    
-    private XBRLStore store = null;
+public class ExplicitDimensionValueTreeComparator extends DimensionValueComparator implements Comparator<DimensionValue> {
     
     private HashMap<String,Integer> map = null;
-    private URI linkrole = null;
-    private URI arcrole = null;
-    private Network network = null;
     
     /**
-     * @param linkrole The linkrole of the network used to rank domain members.
-     * @param arcrole The arcrole of the network used to rank domain members.
+     * @param network The network to use for the ordering.
+     * @param root The node in the network to use as the root for network analysis
      * @throws XBRLException if any parameters are null or any roles are not a valid URI 
      * or if the network has cycles.
      */
-    public ExplicitDimensionValueNetworkComparator(XBRLStore store, String linkrole, String arcrole)  throws XBRLException {
+    public ExplicitDimensionValueTreeComparator(Network network, Fragment root)  throws XBRLException {
         super();
-        if (linkrole == null) throw new XBRLException("The linkrole must not be null.");
-        try {
-            this.linkrole = new URI(linkrole);
-        } catch (URISyntaxException e) {
-            throw new XBRLException("The linkrole must be a valid absolute URI.",e);
-        }
-        if (arcrole == null) throw new XBRLException("The arcrole must not be null.");
-        try {
-            this.arcrole = new URI(arcrole);
-        } catch (URISyntaxException e) {
-            throw new XBRLException("The arcrole must be a valid absolute URI.",e);
-        }
-        
-        if (store == null) throw new XBRLException("The store must not be null.");
-        this.store = store;
-
-        Networks networks = store.getNetworks(linkrole.toString(),arcrole.toString());
-        if (networks.getSize() > 1) throw new XBRLException("More than one networks match the given linkrole and arcrole.");
-        if (networks.getSize() == 0) throw new XBRLException("No networks match the given linkrole and arcrole.");
-
-        network = networks.getNetwork(arcrole.toString(),linkrole.toString());
+        if (network == null) throw new XBRLException("The network must not be null");
 
         // Traverse the tree generating a map from node fragment indices to an ordering.
         map = new HashMap<String,Integer>();
-        Iterator<Fragment> iterator = new TreeIterator(network);
+        Iterator<Fragment> iterator = new TreeIterator(network,root);
         int order = 1;
         while (iterator.hasNext()) {
             Fragment node = iterator.next();
@@ -80,8 +51,6 @@ public abstract class ExplicitDimensionValueNetworkComparator extends DimensionV
         }
         
     }
-
-
     
     /**
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

@@ -27,15 +27,39 @@ public class TreeIterator implements Iterator<Fragment> {
     // The state of the iterator
     private Fragment root = null;
     private List<List<Relationship>> state = new Vector<List<Relationship>>();
-    
-    public TreeIterator(Network network) throws XBRLException {
-        if (network ==null) throw new XBRLException("The network must not be null.");
+
+    private FragmentList<Fragment> initialise(Network network) throws XBRLException {
+        if (network == null) throw new XBRLException("The network must not be null.");
         this.network = network;
         FragmentList<Fragment> roots = network.getRootFragments();
-        if (roots.getLength() > 1) throw new XBRLException("The network has 2 or more roots.  It must be a tree.");
         if (roots.getLength() == 0) throw new XBRLException("The network no nodes.");
+        return roots;
+    }
+    
+    /**
+     * Use this constructor when the network defines a single tree.
+     * @param network The network to use.
+     * @param start The tree root fragment to use.
+     * @throws XBRLException if the network does not define a single tree.
+     */
+    public TreeIterator(Network network) throws XBRLException {
+        FragmentList<Fragment> roots = initialise(network);
+        if (roots.getLength() == 0) throw new XBRLException("The network no nodes.");
+        if (roots.getLength() > 1) throw new XBRLException("The network has 2 or more roots.  It must be a tree.");
+        this.root = roots.get(0);
+    }    
+
+    /**
+     * Use this constructor when the network defines a number of trees, each distinguished by 
+     * its own root fragment. 
+     * @param network The network to use.
+     * @param start The tree root fragment to use.
+     * @throws XBRLException
+     */
+    public TreeIterator(Network network, Fragment start) throws XBRLException {
+        FragmentList<Fragment> roots = initialise(network);
         for (Fragment root: roots) {
-            this.root = root;
+            if (root.equals(start)) this.root = root;
         }
     }
 

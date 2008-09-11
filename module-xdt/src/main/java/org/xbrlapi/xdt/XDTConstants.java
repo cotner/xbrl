@@ -17,6 +17,6 @@ public class XDTConstants {
     public final static String dimension = "dimensionItem";
 
     public final static String defaultDimensionArcrole= "http://xbrl.org/int/dim/arcrole/dimension-default";
-    
+    public final static String domainMemberArcrole= "http://xbrl.org/int/dim/arcrole/domain-member";
     
 }

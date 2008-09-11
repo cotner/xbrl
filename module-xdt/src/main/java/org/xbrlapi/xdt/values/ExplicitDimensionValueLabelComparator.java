@@ -24,7 +24,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public abstract class ExplicitDimensionValueLabelComparator extends DimensionValueComparator implements Comparator<DimensionValue> {
+public class ExplicitDimensionValueLabelComparator extends DimensionValueComparator implements Comparator<DimensionValue> {
     
     private URI role = null;
     
@@ -94,11 +94,11 @@ public abstract class ExplicitDimensionValueLabelComparator extends DimensionVal
         }
         
         if (m1Labels.getLength() > 0) {
-            return 1;
+            return -1;
         }        
 
         if (m2Labels.getLength() > 0) {
-            return -1;
+            return 1;
         }        
 
         String v1ns = m1.getTargetNamespaceURI();
