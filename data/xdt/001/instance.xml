@@ -35,6 +35,20 @@
     </period>
   </context>
 
+  <context id="c3">
+    <entity>
+      <identifier scheme="http://xbrl.org/entity/identification/scheme">AAA001</identifier>
+      <segment>
+        <xbrldi:explicitMember dimension="eg:dim1">eg:dom1mem3</xbrldi:explicitMember>
+        <xbrldi:explicitMember dimension="eg:dim2">eg:dom2mem3</xbrldi:explicitMember>
+      </segment>
+    </entity>
+    <period>
+      <instant>2007-12-31</instant>
+    </period>
+  </context>
+
   <eg:concept1 contextRef="c1">abc</eg:concept1>
-  <eg:concept2 contextRef="c1">xyz</eg:concept2>
+  <eg:concept1 contextRef="c3">mno</eg:concept1>
+  <eg:concept2 contextRef="c2">xyz</eg:concept2>
 </xbrl>

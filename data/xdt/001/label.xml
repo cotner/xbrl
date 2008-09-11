@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linkbase
+  xmlns="http://www.xbrl.org/2003/linkbase"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xsi:schemaLocation="
+    http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd">
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="domain_member" xlink:href="schema.xsd#dom1mem1" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">dimension 1: first domain member</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="domain_member" xlink:to="label" />
+  </labelLink>
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="domain_member" xlink:href="schema.xsd#dom1mem2" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">dimension 1: second domain member</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="domain_member" xlink:to="label" />
+  </labelLink>
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="domain_member" xlink:href="schema.xsd#dom1mem3" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">dimension 1: a third domain member</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="domain_member" xlink:to="label" />
+  </labelLink>
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="domain_member" xlink:href="schema.xsd#dom2mem2" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">dimension 2: second domain member</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="domain_member" xlink:to="label" />
+  </labelLink>
+
+
+</linkbase>
