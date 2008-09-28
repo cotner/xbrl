@@ -55,7 +55,6 @@ public class PointerGrammarTestCase extends TestCase {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void testInvalidShortHandPointer() {
 		String pointer = "Invalid/Id";
 	  	java.io.StringReader sr = new java.io.StringReader(pointer);
@@ -69,7 +68,7 @@ public class PointerGrammarTestCase extends TestCase {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+
 	public void testInvalidShortHandPointerAfterSchemePointer() {
 		String pointer = "element(/1) qwerty";
 	  	java.io.StringReader sr = new java.io.StringReader(pointer);
