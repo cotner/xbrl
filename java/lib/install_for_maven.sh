@@ -8,6 +8,6 @@ mvn install:install-file -DgroupId=xmlrpc -DartifactId=xmlrpc -Dversion=1.2-patc
 
 mvn install:install-file -DgroupId=exist -DartifactId=exist -Dversion=1.1.1 -Dpackaging=jar -Dfile=exist-1.1.1.jar -DgeneratePom=true
 
-mvn install:install-file -DgroupId=bdbxml -DartifactId=db -Dversion=2.4.13 -Dpackaging=jar -Dfile=db.jar -DgeneratePom=true
+mvn install:install-file -DgroupId=com.oracle.berkeley -DartifactId=db -Dversion=2.4.13 -Dpackaging=jar -Dfile=db.jar -DgeneratePom=true
 
-mvn install:install-file -DgroupId=bdbxml -DartifactId=dbxml -Dversion=2.4.13 -Dpackaging=jar -Dfile=dbxml.jar -DgeneratePom=true
+mvn install:install-file -DgroupId=com.oracle.berkeley -DartifactId=dbxml -Dversion=2.4.13 -Dpackaging=jar -Dfile=dbxml.jar -DgeneratePom=true
