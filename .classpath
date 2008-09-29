@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="module-api/src/main/java"/>
+	<classpathentry kind="src" path="module-examples/src/test/java"/>
+	<classpathentry kind="src" path="module-examples/src/main/java"/>
 	<classpathentry kind="src" path="module-xdt/src/main/java"/>
 	<classpathentry kind="src" path="module-xdt/src/test/java"/>
 	<classpathentry kind="src" path="conf"/>
@@ -19,7 +21,7 @@
 	<classpathentry kind="src" path="module-xmlbase/src/test/java"/>
 	<classpathentry kind="src" path="module-utilities/src/test/java"/>
 	<classpathentry kind="src" path="module-xpointer/src/main/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/xbrlapi"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/xbrlapi.org"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -20,5 +20,7 @@
 <wb-resource deploy-path="/" source-path="/module-utilities/src/test/java"/>
 <wb-resource deploy-path="/" source-path="/module-xdt/src/main/java"/>
 <wb-resource deploy-path="/" source-path="/module-xdt/src/test/java"/>
+<wb-resource deploy-path="/" source-path="/module-examples/src/test/java"/>
+<wb-resource deploy-path="/" source-path="/module-examples/src/main/java"/>
 </wb-module>
 </project-modules>
