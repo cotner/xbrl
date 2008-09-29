@@ -169,10 +169,10 @@ public class InlineFormatter {
 		ArrayList<String> contextList = new ArrayList<String>();
 		TreeMap<String, String> localContexts = new TreeMap<String, String>();
 		for (String context : this.neContexts.keySet()) {
-			Context contextObj = (Context) this.contexts.get(context);
+			Context contextObj = this.contexts.get(context);
 			String date = XBRLFormatter.getContextDate(contextObj);
 			for (String concept : conceptList) {
-				int count = (Integer) this.neContexts.get(context).intValue();
+				int count = this.neContexts.get(context).intValue();
 				String key = context + "|" + concept;
 				if (count > 0 && this.items.get(key) != null) {
 					localContexts.put(date, context);
@@ -370,7 +370,7 @@ public class InlineFormatter {
 					this.neContexts.put(item.getContextId(), new Integer(
 							increment));
 				} else {
-					int count = (Integer) this.neContexts.get(
+					int count = this.neContexts.get(
 							item.getContextId()).intValue();
 					count = count + increment;
 					this.neContexts
