@@ -3,7 +3,7 @@
  * 1. How to load an XBRL instance document
  * 2. How to analyse the presentation networks for that instance
  */
-package org.xbrlapi.examples;
+package simple;
 
 import java.io.File;
 import java.net.MalformedURLException;
