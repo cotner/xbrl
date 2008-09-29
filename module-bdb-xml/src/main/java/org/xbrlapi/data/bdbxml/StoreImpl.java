@@ -234,7 +234,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         } catch (XmlException e) {
             throw new XBRLException("The indexes could not be configured.", e);
         } finally {
-            if (xmlUpdateContext != null) xmlUpdateContext.delete();
+            //if (xmlUpdateContext != null) xmlUpdateContext.delete();
             if (xmlIndexSpecification != null) xmlIndexSpecification.delete();
         }
         
@@ -328,7 +328,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         } catch (XmlException e) {
             throw new XBRLException("The fragment could not be added to the BDB XML data store.", e);
 	    } finally {
-            if (xmlUpdateContext != null) xmlUpdateContext.delete();
+            //if (xmlUpdateContext != null) xmlUpdateContext.delete();
 	    }
 	}
 
@@ -413,7 +413,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         } catch (XmlException e) {
             throw new XBRLException("The fragment removal failed.", e);
         } finally {
-            if (xmlUpdateContext != null) xmlUpdateContext.delete();
+            //if (xmlUpdateContext != null) xmlUpdateContext.delete();
         }
 	}
 
@@ -496,7 +496,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         XmlQueryContext xmlQueryContext = null;
         try {
             xmlQueryContext = dataManager.createQueryContext();
-            xmlQueryContext.setReturnType(XmlQueryContext.DeadValues);
+            xmlQueryContext.setReturnType(XmlQueryContext.LiveValues);
             xmlQueryContext.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace);
             xmlQueryContext.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace);
             xmlQueryContext.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace);
