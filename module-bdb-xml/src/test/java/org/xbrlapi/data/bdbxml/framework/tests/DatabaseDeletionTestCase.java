@@ -109,7 +109,7 @@ public class DatabaseDeletionTestCase extends BaseTestCase {
             e.printStackTrace();
             fail("The database operations failed.");
         } finally  {
-            xmlUpdateContext.delete();
+
         }
     
     }    

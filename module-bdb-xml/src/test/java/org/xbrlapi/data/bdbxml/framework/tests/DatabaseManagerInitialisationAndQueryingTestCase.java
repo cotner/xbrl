@@ -87,11 +87,11 @@ public class DatabaseManagerInitialisationAndQueryingTestCase extends BaseTestCa
 			}
 
 			if (xmlQueryContext != null) {
-				xmlQueryContext.delete();
+				// xmlQueryContext.delete();
 			}
 			
 			if (xmlUpdateContext != null) {
-				xmlUpdateContext.delete();
+
 			}
 			
 			if (xmlContainer != null)  {
@@ -127,7 +127,7 @@ public class DatabaseManagerInitialisationAndQueryingTestCase extends BaseTestCa
 		    
 		    String myQuery = "collection('" + containerName + "')/a_node";
 		    xmlQueryContext = myManager.createQueryContext();		    
-		    xmlQueryContext.setReturnType(XmlQueryContext.DeadValues);
+		    xmlQueryContext.setReturnType(XmlQueryContext.LiveValues);
 		    
 		    queryExpression = myManager.prepare(myQuery, xmlQueryContext);
 		    xmlResults = queryExpression.execute(xmlQueryContext);
