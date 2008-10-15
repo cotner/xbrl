@@ -2,8 +2,10 @@ package org.xbrlapi.data.bdbxml.framework.tests;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Properties;
 
 import junit.framework.TestCase;
 
@@ -26,7 +28,7 @@ public class LoadTestCase extends TestCase {
     
     private final int iterations = 10000;
     private String container = "container";
-    private String location = "/home/geoff/Data/bdbxml";
+    private String location = null;
     private String prefix = "<a_node>";
     private String suffix = "</a_node>";
     private SimpleStore store = null;
@@ -34,6 +36,17 @@ public class LoadTestCase extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        String configurationPropertiesIdentifier = "test.configuration.properties";
+        Properties configuration = new Properties();
+        File configurationFile = new File(System.getProperty("xbrlapi.test.configuration"));
+        if (!configurationFile.exists()) {
+            configurationFile = new File(configurationPropertiesIdentifier);
+        }
+        if (!configurationFile.exists()) {
+            fail("The configuration File " + configurationFile + " does not exist.");
+        }
+        configuration.load(new FileInputStream(configurationFile));
+        location = configuration.getProperty("bdbxml.store.location");
         store = new SimpleStore(location, container);
         //XmlManager.setLogLevel(XmlManager.LEVEL_ALL, true);
         //XmlManager.setLogCategory(XmlManager.CATEGORY_ALL, true);
