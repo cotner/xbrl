@@ -26,7 +26,7 @@ public class LoadTestCase extends TestCase {
     
     private final int iterations = 10000;
     private String container = "container";
-    private String location = "/home/geoff/data/bdbxml";
+    private String location = "/home/geoff/Data/bdbxml";
     private String prefix = "<a_node>";
     private String suffix = "</a_node>";
     private SimpleStore store = null;
