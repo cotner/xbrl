@@ -64,7 +64,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
 	        FragmentList<Fragment> fragments = store.<Fragment>query(xpathQuery);
-			assertTrue(fragments.getLength() > 600);
+			assertTrue(fragments.getLength() > 1);
 	        Fragment fragment = fragments.getFragment(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
 		} catch (XBRLException e) {
