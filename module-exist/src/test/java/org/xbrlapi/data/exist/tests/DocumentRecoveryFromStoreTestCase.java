@@ -34,7 +34,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	public void testGettingURLList() {
 		try {
 			List<String> urls = store.getStoredURLs();
-			assertTrue(urls.size() >= 12);
+			assertTrue(urls.size() >= 1);
 			
 			Element e = store.getDocumentAsDOM(urls.get(0));
 			assertNotNull(e);
@@ -51,7 +51,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 		try {
 			Document dom = store.getStoreAsDOM();
 			NodeList documents = dom.getDocumentElement().getChildNodes();
-			assertTrue(documents.getLength() > 12);
+			assertTrue(documents.getLength() > 1);
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}
