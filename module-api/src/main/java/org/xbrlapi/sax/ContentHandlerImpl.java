@@ -66,7 +66,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             addIdentifier(new ReferencePartIdentifier(this));
             addIdentifier(new GenericDocumentRootIdentifier(this));
         } catch (XBRLException e) {
-            throw new SAXException("A fragment identifier could not be instantiated.",e);
+            throw new SAXException("One of the fragment identifiers could not be instantiated.",e);
         }
         
     }
