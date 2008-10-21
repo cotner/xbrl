@@ -68,7 +68,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         
         try {
             XmlManager.setLogLevel(XmlManager.LEVEL_ALL, false);
-            XmlManager.setLogCategory(XmlManager.CATEGORY_ALL, false);          
+            XmlManager.setLogCategory(XmlManager.CATEGORY_ALL, false);     
         } catch (XmlException e) {
             throw new XBRLException("The BDB XML log levels could not be initialised.", e);
         }
