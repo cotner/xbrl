@@ -1,6 +1,5 @@
 package org.xbrlapi.data.dom.tests;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,16 +20,17 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
     private final String STARTING_POINTA = "test.data.custom.link.role";
 	private final String STARTING_POINTB = "test.data.custom.link.arcrole";
 	private final String STARTING_POINTC = "test.data.custom.resource.role";
+    private final String STARTING_POINTD = "real.data.xbrl.2.1.roles";	
 
     private final String STARTING_POINT_INSTANCE_1 = "test.data.small.instance.1";
     private final String STARTING_POINT_INSTANCE_2 = "test.data.small.instance.2";
 		
 	protected void setUp() throws Exception {
 		super.setUp();
-	    loader.stashURL(new URL(Constants.ROLES_URL));
 		loader.discover(this.getURL(STARTING_POINTA));
 		loader.discover(this.getURL(STARTING_POINTB));	
 		loader.discover(this.getURL(STARTING_POINTC));	
+        loader.discover(this.getURL(STARTING_POINTD));
 	}
 
 	protected void tearDown() throws Exception {

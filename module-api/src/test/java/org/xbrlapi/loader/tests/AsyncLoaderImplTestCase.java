@@ -4,7 +4,6 @@ import java.net.URL;
 
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 import org.xbrlapi.loader.discoverer.Discoverer;
-import org.xbrlapi.utilities.Constants;
 
 /**
  * Test the loader implementation.
@@ -14,13 +13,16 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
 	
 	private final String STARTING_POINT = "test.data.small.schema";
 	private final String STARTING_POINT_2 = "test.data.small.instance";
+    private final String STARTING_POINT_3 = "real.data.xbrl.2.1.roles";	
 	private URL url1 = null;
 	private URL url2 = null;
+    private URL url3 = null;	
 	
 	protected void setUp() throws Exception {
 		super.setUp();
 		url1 = new URL(getURL(this.STARTING_POINT));
 		url2 = new URL(getURL(this.STARTING_POINT_2));
+        url3 = new URL(getURL(this.STARTING_POINT_3));
 	}
 	
 	public AsyncLoaderImplTestCase(String arg0) {
@@ -32,7 +34,7 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
 	 */
 	public void testInterruption() {
 		try {
-	        loader.stashURL(new URL(Constants.ROLES_URL));
+	        loader.stashURL(this.url3);
             loader.stashURL(this.url1);
             loader.stashURL(this.url2);
             
