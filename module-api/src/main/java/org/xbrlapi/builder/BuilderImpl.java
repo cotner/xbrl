@@ -130,7 +130,6 @@ public class BuilderImpl implements Builder {
 	}
 
 	/**
-	 * Returns true iff the builder has not yet added an element to the fragment.
 	 * @return true iff the builder has not yet added an element to the fragment.
 	 */
 	public boolean isNewFragment() {
