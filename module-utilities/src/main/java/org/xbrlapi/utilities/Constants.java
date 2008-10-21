@@ -9,11 +9,6 @@ package org.xbrlapi.utilities;
 public class Constants {
 
     /**
-     * The URL of the Standard XBRL 2.1 role declarations schema.
-     */
-    public final  static String ROLES_URL = "http://www.xbrlapi.org/xbrl/xbrl-2.1-roles.xsd";
-
-    /**
      * XMLNamespace is the namespace for the XML elements and attributes.
      * XMLPrefix is the prefix for XML elements and attributes.
      */
