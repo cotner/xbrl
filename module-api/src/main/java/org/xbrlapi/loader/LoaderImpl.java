@@ -209,16 +209,6 @@ public class LoaderImpl implements Loader {
         setStore(store);
         setXlinkProcessor(xlinkProcessor);
         this.setPointerResolver(new PointerResolverImpl(getStore()));
-
-/*      
- * Do not try to anticipate the URLs that will be part of the DTS to load!
- * try {
-            this.stashURL(new URL(Constants.ROLES_URL));
-        } catch (MalformedURLException e) {
-            throw new XBRLException("The XBRL 2.1 roles URL is malformed: "
-                    + Constants.ROLES_URL, e);
-        }
-*/
     }
 
     /**
