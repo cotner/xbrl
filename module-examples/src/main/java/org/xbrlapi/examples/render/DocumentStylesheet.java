@@ -5,11 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 
 /**
+ * This class simplifies handling of CSS stylesheets.
  * @author Steve Yang (steve2yang@yahoo.com)
- *
  */
 public class DocumentStylesheet {
-	private StringBuffer contents = new StringBuffer();
+
+    private StringBuffer contents = new StringBuffer();
 
 	public String getStylesheet()
 	{

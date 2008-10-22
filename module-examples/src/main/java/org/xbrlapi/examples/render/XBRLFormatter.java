@@ -75,7 +75,9 @@ public class XBRLFormatter {
 				java.util.Locale.US);
 		dfs.setCurrencySymbol(symble);
 
-		if (value != null || value.trim().length() > 0) {
+		// GCS Changed the || to &&
+        //if (value != null || value.trim().length() > 0) {
+		if (value != null && value.trim().length() > 0) {
 			try {
 				Double db = Double.parseDouble(value);
 				value = cf.format(db.doubleValue());

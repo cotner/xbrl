@@ -140,7 +140,7 @@ public class XHTMLFormatter {
 			colgroup.appendChild(cg0);
 		}
 
-		for (String contextStr : contextList) {
+		for (@SuppressWarnings("unused") String contextStr : contextList) {
 			Element cg1 = doc.createElement("col");
 			colgroup.appendChild(cg1);
 		}

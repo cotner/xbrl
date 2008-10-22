@@ -10,10 +10,9 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
@@ -30,22 +29,23 @@ import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xml.sax.EntityResolver;
 
 /**
- * @author YangSt1 Steve Yang (steve2yang@yahoo.com)
- *
+ * @author Steve Yang (steve2yang@yahoo.com) (YangSt1)
+ * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class Run {
 
 	private static XBRLStore store = null;
 
-	public static Logger logger = Logger.getRootLogger();
-
-	public static void main(String[] args) {
+    protected static Logger logger = Logger.getLogger(Run.class);
+    
+	private static double startTime;
+    
+    public static void main(String[] args) {
 
 		try {
-			logger.setLevel(Level.INFO);
 
 			// Process command line arguments
-			List<URL> inputs = new LinkedList<URL>();
+			List<String> inputs = new Vector<String>();
 			HashMap<String, String> arguments = new HashMap<String, String>();
 			int i = 0;
 			if (i >= args.length)
@@ -54,41 +54,57 @@ public class Run {
 				if (i == args.length)
 					break;
 				else if (args[i].charAt(0) == '-') {
-					if (args[i].equals("-database")) {
+
+				    if (args[i].equals("-database")) {
 						i++;
 						arguments.put("database", args[i]);
+
 					} else if (args[i].equals("-container")) {
 						i++;
 						arguments.put("container", args[i]);
+
 					} else if (args[i].equals("-cache")) {
 						i++;
 						arguments.put("cache", args[i]);
+
+					} else if (args[i].equals("-output")) {
+                        i++;
+                        arguments.put("output", args[i]);
+
 					} else if (args[i].equals("-stylesheet")) {
 						i++;
 						arguments.put("stylesheet", args[i]);
+
+					} else if (args[i].equals("-target")) {
+                        i++;
+                        arguments.put("target", args[i]);
+
 					} else
 						badUsage("Unknown argument: " + args[i]);
+
 				} else {
-					try {
-						inputs.add(new URL(args[i]));
-					} catch (MalformedURLException e) {
-						badUsage("Malformed discovery starting point URL: "
-								+ args[i]);
-					}
+					inputs.add(args[i]);
 				}
 				i++;
 			}
 
 			if (!arguments.containsKey("database"))
 				badUsage("You need to specify the database directory.");
+
 			if (!arguments.containsKey("container"))
 				badUsage("You need to specify the database container name.");
-			if (!arguments.containsKey("stylesheet"))
-				badUsage("You need to specify stylesheet location.");
+
 			if (!arguments.containsKey("cache"))
 				badUsage("You need to specify the root of the document cache.");
-			if (inputs.size() < 1)
-				badUsage("You need to specify at least one starting point for discovery.");
+
+			if (!arguments.containsKey("stylesheet"))
+                badUsage("You need to specify stylesheet location.");
+
+            if (!arguments.containsKey("output"))
+                badUsage("You need to specify an output file.");
+
+            if (!arguments.containsKey("target"))
+                badUsage("You need to specify a target XBRL instance.");
 
 			// Make sure that the taxonomy cache exists
 			try {
@@ -101,51 +117,51 @@ public class Run {
 						+ arguments.get("cache"));
 			}
 
-			double startTime = System.currentTimeMillis();
-			for (URL url : inputs) {
-				// Write out XHTML file
-				String filename = url.getFile();
-				filename = filename.replace('\\', '/');
-				String tokens[] = filename.split("/");
-				filename = tokens[tokens.length - 1];
-				filename = filename.replaceAll(".xml", ".html");
+			startTime = System.currentTimeMillis();
 
-				String container = filename.replace(".html", ".dbs");
-				File dbs = new File(container);
-				if(dbs.exists())
-				{
-					dbs.delete();
-				}
+            // Set up the data store to load the data
+            if (store==null) {
+                store = createStore(arguments.get("database"), arguments.get("container"));
+            }
 
-				// Set up the data store to load the data
-				if(store==null)
-					store = createStore(arguments.get("database"), container);
+            // Set up the data loader (does the parsing and data discovery)
+            Loader loader = createLoader(store, arguments.get("cache"));
 
-				// Set up the data loader (does the parsing and data discovery)
-				Loader loader = createLoader(store, arguments.get("cache"));
-
-				// Load the instance data
-				loader.discover(url);
-
-				InlineFormatter fmt = new InlineFormatter(store,
-						arguments.get("stylesheet"), url.toString());
-				fmt.render();
-
-				fmt.transform(filename);
-
-				//store.deleteDocument(url.toString());
-				store.deleteRelatedDocuments(url.toString());
-				
-				String time = (new Double(System.currentTimeMillis()
-						- startTime)).toString();
-				if (time.length() > 4)
-					time = time.substring(0, 4);
-				Logger.getRootLogger().info(
-						"TOTAL TEST TIME: " + time + " milisecond(s)");
-			}
+            // Load the data required to render the XBRL instance.
+            // TODO use a DiscoveryManager so that discovery can be done in a separate thread.
+            // TODO continually report on documents remaining to be loaded into the data store till finished.
+            URL targetURL = null;
+            for (String url : inputs) {
+                try {
+                    loader.stashURL(new URL(url));
+                } catch (MalformedURLException e) {
+                    badUsage("Malformed URL for: " + url);
+                }
+            }
+            try {
+                targetURL = new URL(arguments.get("target"));
+            } catch (MalformedURLException e) {
+                badUsage("Malformed URL for target XBRL instance.");
+            }
+            loader.discover(targetURL);
+            reportTime("Data discovery");
+            
+            // Set document filter to ensure appropriate DTS is used for the rendering            
+            // TODO improve performance of rendering when using the following filtering.
+/*            inputs.add(arguments.get("target"));
+            List<String> dtsURLs = store.getMinimumDocumentSet(inputs);
+            store.setFilteringURLs(dtsURLs);
+            reportTime("URL filter setup");
+*/            
+			// Do the rendering
+			InlineFormatter fmt = new InlineFormatter(store,arguments.get("stylesheet"), targetURL.toString());
+			fmt.render();
+            fmt.transform(arguments.get("output"));
+            reportTime("Rendering");
 
 			// Clean up the data store and exit
 			cleanup(store);
+            reportTime("Database cleanup");
 			System.exit(0);
 
 		} catch (Exception e) {
@@ -154,29 +170,37 @@ public class Run {
 		}
 
 	}
+    
+    /**
+     * Convenience method to report durations required to perform various tasks.
+     * @param task The task being reported on.
+     */
+    private static void reportTime(String task) {
+        // Report on the time taken to do the rendering.
+        String duration = (new Double((System.currentTimeMillis() - startTime)/1000)).toString();
+        logger.info(task + " took " + duration + " second(s).");
+    }
 
 	/**
-	 * Report incorrect usage of the command line, with a list of the arguments
-	 * 
-	 * @param message
-	 *            The error message describing why the command line usage
-	 *            failed.
+	 * Report incorrect usage of the command line, along with instructions on correct usage.
+	 * @param message The error message describing why the command line usage failed.
 	 */
 	private static void badUsage(String message) {
 		if (!"".equals(message)) {
 			System.err.println(message);
 		}
 
-		System.err
-				.println("Command line usage: java org.xbrlapi.ng.eg0001 -database VALUE -container VALUE -cache VALUE URL1 URL2 ...");
+		System.err.println("Command line usage: java org.xbrlapi.examples.render.Run <OPTIONS> <ADDITIONAL URLS>");
 		System.err.println("Mandatory arguments: ");
-		System.err
-				.println(" -database VALUE   directory containing the Oracle BDB XML database");
-		System.err.println(" -container VALUE  name of the data container");
-		System.err
-				.println(" -cache VALUE      directory that is the root of the document cache");
+		System.err.println(" -database VALUE     directory containing the Oracle Berkeley XML database");
+		System.err.println(" -container VALUE    name of the data container");
+		System.err.println(" -cache VALUE        directory that is the root of the document cache");
+        System.err.println(" -output VALUE       the name (and path) of the output file");
+        System.err.println(" -stylesheet VALUE   path to the CSS stylesheet used by the rendered document.");
+        System.err.println(" -target VALUE       The URL of the target XBRL instance to render.");
+        System.err.println(" The optional additional URLs allow control over the DTS supporting the rendering of the XBRL instance.");
 
-		if ("".equals(message)) {
+        if ("".equals(message)) {
 			System.exit(0);
 		} else {
 			System.exit(1);
@@ -187,13 +211,10 @@ public class Run {
 	 * Create an Oracle Berkeley XML database store and return it cast to an
 	 * XBRL data store to expose XBRL store enhancements.
 	 * 
-	 * @param database
-	 *            The location to use for the new store.
-	 * @param container
-	 *            The name to use for the XML container.
+	 * @param database The location to use for the new store.
+	 * @param container The name to use for the XML container.
 	 * @return the new store.
-	 * @throws XBRLException
-	 *             if the store cannot be initialised.
+	 * @throws XBRLException if the store cannot be initialised.
 	 */
 	private static XBRLStore createStore(String database, String container)
 			throws XBRLException {
@@ -202,13 +223,10 @@ public class Run {
 	}
 
 	/**
-	 * @param store
-	 *            The store to use for the loader.
-	 * @param cache
-	 *            The root directory of the document cache.
+	 * @param store The store to use for the loader.
+	 * @param cache The root directory of the document cache.
 	 * @return the loader to use for loading the instance and its DTS
-	 * @throws XBRLException
-	 *             if the loader cannot be initialised.
+	 * @throws XBRLException if the loader cannot be initialised.
 	 */
 	private static Loader createLoader(Store store, String cache)
 			throws XBRLException {
@@ -222,22 +240,14 @@ public class Run {
 		// Rivet errors in the SEC XBRL data require these URL remappings to
 		// prevent discovery process from breaking.
 		HashMap<String, String> map = new HashMap<String, String>();
-		map
-				.put(
-						"http://www.xbrl.org/2003/linkbase/xbrl-instance-2003-12-31.xsd",
-						"http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
-		map
-				.put(
-						"http://www.xbrl.org/2003/instance/xbrl-instance-2003-12-31.xsd",
-						"http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
-		map
-				.put(
-						"http://www.xbrl.org/2003/linkbase/xbrl-linkbase-2003-12-31.xsd",
-						"http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
-		map
-				.put(
-						"http://www.xbrl.org/2003/instance/xbrl-linkbase-2003-12-31.xsd",
-						"http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
+		map.put("http://www.xbrl.org/2003/linkbase/xbrl-instance-2003-12-31.xsd",
+				"http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
+		map.put("http://www.xbrl.org/2003/instance/xbrl-instance-2003-12-31.xsd",
+				"http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
+		map.put("http://www.xbrl.org/2003/linkbase/xbrl-linkbase-2003-12-31.xsd",
+				"http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
+		map.put("http://www.xbrl.org/2003/instance/xbrl-linkbase-2003-12-31.xsd",
+    			"http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
 		map.put("http://www.xbrl.org/2003/instance/xl-2003-12-31.xsd",
 				"http://www.xbrl.org/2003/xl-2003-12-31.xsd");
 		map.put("http://www.xbrl.org/2003/linkbase/xl-2003-12-31.xsd",
@@ -259,10 +269,8 @@ public class Run {
 	/**
 	 * Helper method to clean up and shut down the data store.
 	 * 
-	 * @param store
-	 *            the store for the XBRL data.
-	 * @throws XBRLException
-	 *             if the store cannot be closed.
+	 * @param store The store for the XBRL data.
+	 * @throws XBRLException if the store cannot be closed.
 	 */
 	private static void cleanup(Store store) throws XBRLException {
 		store.close();

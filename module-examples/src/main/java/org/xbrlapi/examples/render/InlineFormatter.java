@@ -72,6 +72,7 @@ public class InlineFormatter {
 	public InlineFormatter(XBRLStore store, String style, String url)
 			throws Exception {
 		this.store = store;
+		// TODO Check Do we need to be more careful about which instance is to be rendered.
 		this.instances = store.<Instance> getFragments("Instance");
 		this.url = url;
 
@@ -191,9 +192,9 @@ public class InlineFormatter {
 				NodeList nl = segment.getComplexContent();
 				for (int i = 0; i < nl.getLength(); i++) {
 					if (nl.item(i).getNamespaceURI() == XBRLFormatter.DimensionRole) {
-						String dimension = nl.item(i).getAttributes()
+                        String dimension = nl.item(i).getAttributes()
 								.getNamedItem("dimension").getNodeValue();
-						String member = nl.item(i).getTextContent();
+                        String member = nl.item(i).getTextContent();
 					}
 				}
 				continue;
