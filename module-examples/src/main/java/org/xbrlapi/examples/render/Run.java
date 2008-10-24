@@ -152,8 +152,9 @@ public class Run {
             List<String> dtsURLs = store.getMinimumDocumentSet(inputs);
             store.setFilteringURLs(dtsURLs);
             reportTime("URL filter setup");
-*/            
-			// Do the rendering
+*/
+
+            // Do the rendering
 			InlineFormatter fmt = new InlineFormatter(store,arguments.get("stylesheet"), targetURL.toString());
 			fmt.render();
             fmt.transform(arguments.get("output"));
@@ -175,7 +176,7 @@ public class Run {
      * Convenience method to report durations required to perform various tasks.
      * @param task The task being reported on.
      */
-    private static void reportTime(String task) {
+    protected static void reportTime(String task) {
         // Report on the time taken to do the rendering.
         String duration = (new Double((System.currentTimeMillis() - startTime)/1000)).toString();
         logger.info(task + " took " + duration + " second(s).");

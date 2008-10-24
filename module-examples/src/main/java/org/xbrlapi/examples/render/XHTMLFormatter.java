@@ -21,8 +21,10 @@ import org.xbrlapi.Unit;
  *
  */
 public class XHTMLFormatter {
+    
+    protected static Logger logger = Logger.getLogger(XHTMLFormatter.class);
 
-	public final static String TAG_TABLE = "table";
+    public final static String TAG_TABLE = "table";
 
 	public final static String TAG_TABLE_CAPTION = "caption";
 
@@ -49,7 +51,10 @@ public class XHTMLFormatter {
 		// xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
 		// xsi:schemaLocation="http://www.w3.org/1999/xhtml
 		// http://schemas.corefiling.com/thirdParty/xbrl.org/iXBRL/IWD/2008-06-27/xhtml-inlinexbrl-0_1.xsd">
-		Element root = doc.createElement("html");
+
+	    logger.info("Creating the XHTML document root.");
+
+	    Element root = doc.createElement("html");
 		root.setAttribute("xmlns:xsi",
 				"http://www.w3.org/2001/XMLSchema-instance");
 		root.setAttribute("version",
@@ -65,8 +70,7 @@ public class XHTMLFormatter {
 		doc.appendChild(root);
 
 		// create a comment and put it in the root element
-		Comment comment = doc
-				.createComment("XBRL Inline Rendering Version, Northrop Grumman Corp");
+		Comment comment = doc.createComment("XBRL Inline Rendering Version");
 		root.appendChild(comment);
 
 		// create head
@@ -314,6 +318,14 @@ public class XHTMLFormatter {
 		return main;
 	}
 
+	/**
+	 * Generates the boilerplate markup to contain the
+	 * non-displaying part of the inline XBRL document.
+	 * @param doc The inline XBRL document
+	 * @param parent The parent element for the hidden information.
+	 * @return The inline XBRL header element.
+	 * @throws Exception
+	 */
 	public static Element createNondisplayBlock(Document doc, Element parent)
 			throws Exception {
 		Element nondisplay = doc.createElement("div");
@@ -349,8 +361,7 @@ public class XHTMLFormatter {
 		return refNode;
 	}
 
-	public static Element createContext(Document doc, Element parent,
-			Context context) throws Exception {
+	public static Element createContext(Document doc, Element parent, Context context) throws Exception {
 		Element contextNode = doc.createElement("xbrli:context");
 		contextNode.setAttribute("id", context.getId());
 		parent.appendChild(contextNode);
@@ -390,6 +401,7 @@ public class XHTMLFormatter {
 
 	public static Element createUnit(Document doc, Element parent, Unit unit)
 			throws Exception {
+	    // TODO Handle ratio units.
 		Element unitNode = doc.createElement("xbrli:unit");
 		unitNode.setAttribute("id", unit.getId());
 		parent.appendChild(unitNode);
@@ -405,8 +417,7 @@ public class XHTMLFormatter {
 
 	public static Element createFooter(Document doc, Element parent,
 			String footerText) throws Exception {
-		// <div class="footer">Thu Jun 12 16:41:19 EDT 2008, Northrop Grumman
-		// Corporation</div>
+		// <div class="footer">Thu Jun 12 16:41:19 EDT 2008</div>
 		Element hr = doc.createElement("hr");
 		parent.appendChild(hr);
 

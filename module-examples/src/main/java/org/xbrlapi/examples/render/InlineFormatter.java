@@ -2,6 +2,8 @@ package org.xbrlapi.examples.render;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -42,6 +45,7 @@ import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.Constants;
+import org.xbrlapi.utilities.XBRLException;
 
 /**
  * @author YangSt1 Steve Yang (steve2yang@yahoo.com)
@@ -49,10 +53,15 @@ import org.xbrlapi.utilities.Constants;
  */
 public class InlineFormatter {
 
-	private XBRLStore store = null;
+    protected static Logger logger = Logger.getLogger(InlineFormatter.class);
+    
+    private XBRLStore store = null;
 
-	private FragmentList<Instance> instances = null;
-
+	/**
+	 * The root fragment of the target XBRL instance.
+	 */
+	private Instance instanceRoot = null;
+	
 	private String url = null;
 
 	private Document doc = null;
@@ -69,27 +78,57 @@ public class InlineFormatter {
 
 	private int maxLevel = 1;
 
-	public InlineFormatter(XBRLStore store, String style, String url)
-			throws Exception {
-		this.store = store;
-		// TODO Check Do we need to be more careful about which instance is to be rendered.
-		this.instances = store.<Instance> getFragments("Instance");
+	/**
+	 * @param store The data store containing the information that drives the rendering.
+	 * @param stylesheet The CSS stylesheet.
+	 * @param url The string representation of the URL of the instance to be rendered.
+	 * @throws Exception
+	 */
+	public InlineFormatter(XBRLStore store, String stylesheet, String url) throws XBRLException {
+
+	    if (store == null) {
+	        throw new XBRLException("The data store must not be null.");
+	    }
+	    this.store = store;
+
+	    // Get the root fragment of the target XBRL instance
+	    try {
+    	    FragmentList<Instance> instances = store.getFragmentsFromDocument(new URL(url),"Instance");
+    	    if (instances.getLength() > 1) throw new XBRLException("The target instance is not a single XBRL instance.");
+            if (instances.getLength() == 0) throw new XBRLException("The target document is not an XBRL instance.");
+            this.instanceRoot = instances.get(0);
+	    } catch (MalformedURLException e) {
+            throw new XBRLException("The target instance URL is malformed.");
+        }
+
+		if (url == null) {
+            throw new XBRLException("The URL of the target instance must not be null.");
+		}
 		this.url = url;
 
-		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-		doc = docBuilder.newDocument();
-
-		this.stylesheet.loadStylesheet(style);
+		try {
+    		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+    		DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
+    		doc = docBuilder.newDocument();
+		} catch (ParserConfigurationException e) {
+		    throw new XBRLException("The parser configuration failed.", e);
+		}
+        if (stylesheet == null) {
+            throw new XBRLException("The CSS stylesheet must be specified.");
+        }
+		this.stylesheet.loadStylesheet(stylesheet);
 	}
 
 	public DocumentStylesheet getDocumentStyle() {
 		return this.stylesheet;
 	}
 
+	/**
+	 * Generate a DOM object representing the 
+	 * XHTML rendering of the XBRL instance.
+	 * @throws Exception
+	 */
 	public void render() throws Exception {
-		// create the base structure
-		double startTime = System.currentTimeMillis();
 
 		Element body = XHTMLFormatter.createRoot(this.doc, this.stylesheet);
 
@@ -98,17 +137,11 @@ public class InlineFormatter {
 		// 1. Needs to be done first to populate context and unit maps.
 		createNondisplaySection(body);
 
-		// 2. Build talbes visible parts organized by extended role types.
+		// 2. Build tables of content, organized by extended role types.
 		createMainSection(body);
 
 		XHTMLFormatter.createFooter(this.doc, body, "");
-
-		String time = (new Double(System.currentTimeMillis() - startTime))
-				.toString();
-		if (time.length() > 4)
-			time = time.substring(0, 4);
-		Logger.getRootLogger().info(
-				"Total time for rendering: " + time + " milisecond(s)");
+		
 	}
 
 	private void createMainSection(Element parent) throws Exception {
@@ -119,19 +152,26 @@ public class InlineFormatter {
 		createFootnotes(main);
 	}
 
+	/**
+	 * Populates the hidden part of the inline XBRL document.
+	 * @param parent The container element for the hidden inline XBRL content.
+	 * @throws Exception
+	 */
 	private void createNondisplaySection(Element parent) throws Exception {
-		Element nondisplay = XHTMLFormatter.createNondisplayBlock(this.doc,
+		Element inlineXBRLHeaderElement = XHTMLFormatter.createNondisplayBlock(this.doc,
 				parent);
-		parseResources(nondisplay);
+		parseResources(inlineXBRLHeaderElement);
 	}
 
 	private void buildFormattingModel(Element parent) throws Exception {
-		// Load all the items to maps
+
 		processItems();
 
-		for (String linkrole : store
-				.getLinkRoles(Constants.PresentationArcRole).keySet()) {
-			FragmentList<Fragment> rootLocators = store.getNetworkRoots(
+		// Iterate the presentation linkroles in the DTS
+		for (String linkrole : store.getLinkRoles(Constants.PresentationArcRole).keySet()) {
+		    // TODO ensure that this getNetworkRoots method returns resources rather than locators.
+		    FragmentList<Fragment> rootLocators = 
+			    store.getNetworkRoots(
 					Constants.XBRL21LinkNamespace, "presentationLink",
 					linkrole, Constants.XBRL21LinkNamespace, "presentationArc",
 					Constants.PresentationArcRole);
@@ -142,14 +182,13 @@ public class InlineFormatter {
 					title = rt.getDefinition();
 				}
 			}
-			Logger.getRootLogger().info(title);
+			logger.info(title);
 
 			this.maxLevel = 1;
 			HashMap<String, String> conceptLabelMap = new HashMap<String, String>();
 			ArrayList<String> conceptList = new ArrayList<String>();
 			for (Fragment rootLocator : rootLocators) {
-				Concept rootConcept = (Concept) ((Locator) rootLocator)
-						.getTargetFragment();
+				Concept rootConcept = (Concept) ((Locator) rootLocator).getTargetFragment();
 
 				Float order = this.getPresentationOrder(linkrole, null,
 						rootConcept, "", conceptLabelMap);
@@ -206,7 +245,7 @@ public class InlineFormatter {
 			}
 			
 			contextList.add(context);
-			Logger.getRootLogger().debug("\tcontext: " + context);
+			logger.debug("\tcontext: " + context);
 		}
 		Collections.reverse(contextList);
 
@@ -236,17 +275,17 @@ public class InlineFormatter {
 		conceptList.add(key);
 
 		if (parent != null) {
-			Logger.getRootLogger().debug(
+			logger.debug(
 					"\tLEVEL:\t" + level + "\tCONCEPT:\t" + concept.getName());
 
-			Logger.getRootLogger().debug(
+			logger.debug(
 					"Arc:\t" + "order:" + order + "\tfrom:\t"
 							+ parent.getName() + "\n\t\t\t\tto:\t"
 							+ concept.getName());
 
 		}
 
-		Logger.getRootLogger().debug(
+		logger.debug(
 				indent + concept.getTargetNamespaceURI() + ":"
 						+ concept.getName());
 		Networks networks = concept
@@ -329,7 +368,7 @@ public class InlineFormatter {
 						try {
 							preOrder = Float.parseFloat(order);
 						} catch (Exception e) {
-							Logger.getRootLogger().info(
+							logger.info(
 									"Invalid order for concept "
 											+ nt.getArcRole());
 						}
@@ -341,42 +380,43 @@ public class InlineFormatter {
 		return preOrder;
 	}
 
+	/**
+	 * Builds the items map of top level items in the XBRL instance, 
+	 * indexed by a combination of the context ID, and the item's QName.
+	 * Builds the neContexts map of numbers of top level items for each context,
+	 * indexed by the context ID.
+	 * @throws Exception
+	 */
 	private void processItems() throws Exception {
-		for (Instance instance : instances) {
-			String url = instance.getURL();
-			if (this.url == null || !url.equals(this.url))
-				continue;
 
-			FragmentList<Item> items = instance.getItems();
-			Logger.getRootLogger().info("Top level items in the instance.");
-			for (Item item : items) {
-				String key = item.getContextId() + "|"
-						+ item.getConcept().getTargetNamespaceURI() + "|"
-						+ item.getConcept().getName();
+		FragmentList<Item> items = instanceRoot.getItems();
+		logger.info("Putting top level items in the target instance into a map.");
+		for (Item item : items) {
+			String key = item.getContextId() + "|"
+					+ item.getConcept().getTargetNamespaceURI() + "|"
+					+ item.getConcept().getName();
 
-				this.items.put(key, item);
-				String value = null;
-				if (item.isNumeric()) {
-					SimpleNumericItem sni = (SimpleNumericItem) item;
-					value = sni.getValue();
-				} else {
-					NonNumericItem nni = (NonNumericItem) item;
-					value = nni.getValue();
-				}
-				int increment = 1;
-				if (value == null || value.length() < 1) {
-					increment = 0;
-				}
-				if (!this.neContexts.containsKey(item.getContextId())) {
-					this.neContexts.put(item.getContextId(), new Integer(
-							increment));
-				} else {
-					int count = this.neContexts.get(
-							item.getContextId()).intValue();
-					count = count + increment;
-					this.neContexts
-							.put(item.getContextId(), new Integer(count));
-				}
+			this.items.put(key, item);
+			
+            // TODO Handle fractions.
+			String value = null;
+			if (item.isNumeric()) {
+				SimpleNumericItem sni = (SimpleNumericItem) item;
+				value = sni.getValue();
+			} else {
+				NonNumericItem nni = (NonNumericItem) item;
+				value = nni.getValue();
+			}
+			int increment = 1;
+			if (value == null || value.length() < 1) {
+				increment = 0;
+			}
+			if (!this.neContexts.containsKey(item.getContextId())) {
+				this.neContexts.put(item.getContextId(), new Integer(increment));
+			} else {
+				int count = this.neContexts.get(item.getContextId()).intValue();
+				count = count + increment;
+				this.neContexts.put(item.getContextId(), new Integer(count));
 			}
 		}
 	}
@@ -395,68 +435,70 @@ public class InlineFormatter {
 		return indent;
 	}
 
+	/**
+	 * Responsible for populating the inline XBRL resource section of
+	 * the output XHTML document.
+	 * @param parent The parent element that will be populated.
+	 * @throws Exception
+	 */
 	private void parseResources(Element parent) throws Exception {
 		Element resources = XHTMLFormatter.createResource(this.doc, parent);
 
-		Logger.getRootLogger().info("Build Inline resource section ...");
-		for (Instance instance : instances) {
-			String url = instance.getURL();
-			if (this.url == null || !url.equals(this.url))
-				continue;
+		logger.info("Build Inline resource section ...");
 
-			Logger.getRootLogger().debug("Linkbase Refs in the instance");
-			for (SimpleLink slink : instance.getLinkbaseRefs()) {
-				String ref = slink.getHref();
-				Logger.getRootLogger().debug(ref);
-			}
-
-			Logger.getRootLogger().debug("Schema Refs in the instance");
-			Element reference = XHTMLFormatter
-					.createReference(this.doc, parent);
-			for (SimpleLink slink : instance.getSchemaRefs()) {
-				String ref = slink.getHref();
-				String[] parts = ref.trim().replace('\\', '/').split("/");
-
-				XHTMLFormatter.createSchemaRef(this.doc, reference, "simple",
-						parts[parts.length - 1]);
-				Logger.getRootLogger().debug(ref);
-			}
-
-			// List contexts
-			FragmentList<Context> contextList = instance.getContexts();
-			Logger.getRootLogger().debug("Contexts in the instance.");
-			for (Context context : contextList) {
-				Logger.getRootLogger().debug("Context ID: " + context.getId());
-				XHTMLFormatter.createContext(this.doc, resources, context);
-				this.contexts.put(context.getId(), context);
-			}
-
-			// List units
-			FragmentList<Unit> units = instance.getUnits();
-			Logger.getRootLogger().debug("Units in the instance.");
-			for (Unit unit : units) {
-				Logger.getRootLogger().info("Unit ID: " + unit.getId());
-				XHTMLFormatter.createUnit(this.doc, resources, unit);
-				this.units.put(unit.getId(), unit);
-			}
+		logger.debug("Linkbase Refs in the instance");
+		for (SimpleLink linkbaseReference : instanceRoot.getLinkbaseRefs()) {
+			String ref = linkbaseReference.getHref();
+			// TODO Create the necessary linkbase reference in the inline XBRL document.
+			logger.debug(ref);
 		}
+
+		Run.reportTime("Rendering linkbase references");
+
+		logger.debug("Schema Refs in the instance");
+		Element reference = XHTMLFormatter
+				.createReference(this.doc, parent);
+		for (SimpleLink schemaReference : instanceRoot.getSchemaRefs()) {
+			String ref = schemaReference.getHref();
+			String[] parts = ref.trim().replace('\\', '/').split("/");
+
+			XHTMLFormatter.createSchemaRef(this.doc, reference, "simple",
+					parts[parts.length - 1]);
+			logger.debug(ref);
+		}
+
+		Run.reportTime("Rendering schema references");
+
+		// List contexts
+		FragmentList<Context> contexts = instanceRoot.getContexts();
+		logger.debug("Contexts in the instance.");
+		for (Context context : contexts) {
+			logger.debug("Context ID: " + context.getId());
+			XHTMLFormatter.createContext(this.doc, resources, context);
+			this.contexts.put(context.getId(), context);
+		}
+        Run.reportTime("Rendering contexts");
+
+		// List units
+		FragmentList<Unit> units = instanceRoot.getUnits();
+		logger.debug("Units in the instance.");
+		for (Unit unit : units) {
+			logger.info("Unit ID: " + unit.getId());
+			XHTMLFormatter.createUnit(this.doc, resources, unit);
+			this.units.put(unit.getId(), unit);
+		}
+        Run.reportTime("Rendering units");
 
 	}
 
 	private void createFootnotes(Element parent) throws Exception {
-		for (Instance instance : instances) {
-			FragmentList<ExtendedLink> links = instance.getFootnoteLinks();
-			Logger.getRootLogger().debug("Footnote links in the instance.");
-			for (ExtendedLink link : links) {
-				FragmentList<Resource> resources = link.getResources();
-				for (Resource resource : resources) {
-					FootnoteResource fnr = (FootnoteResource) resource;
-					Logger.getRootLogger()
-							.debug(
-									"Footnote resource: "
-											+ fnr.getDataRootElement()
-													.getTextContent());
-				}
+		FragmentList<ExtendedLink> links = instanceRoot.getFootnoteLinks();
+		logger.debug("Footnote links in the instance.");
+		for (ExtendedLink link : links) {
+			FragmentList<Resource> resources = link.getResources();
+			for (Resource resource : resources) {
+				FootnoteResource fnr = (FootnoteResource) resource;
+				logger.debug("Footnote resource: " + fnr.getDataRootElement().getTextContent());
 			}
 		}
 	}
