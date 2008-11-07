@@ -165,7 +165,11 @@ public class LoaderImpl implements Loader {
         else logger.debug(Thread.currentThread().getName() + " stopping discovery.");
         discovering = value;
     }
-    private boolean isDiscovering() {
+    
+    /**
+     * @see Loader#isDiscovering()
+     */
+    public boolean isDiscovering() {
         return discovering;
     }
 

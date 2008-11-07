@@ -187,6 +187,12 @@ public interface Loader {
 	 * on the stack of fragments being built.
 	 */
 	public boolean isBuildingAFragment();
+	
+	/**
+	 * @return true if the loader is current engaged in 
+	 * document discovery and false otherwise.
+	 */
+    public boolean isDiscovering();
 
 	/**
 	 * Push a new fragment onto the stack of fragments that are being built
