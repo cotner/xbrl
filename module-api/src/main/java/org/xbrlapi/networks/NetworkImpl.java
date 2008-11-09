@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Arc;
@@ -262,7 +263,7 @@ public class NetworkImpl implements Network {
 
 	    logger.debug("Getting active relationships from " + index + " for " + this);
 	    
-		List<Relationship> activeRelationships = new LinkedList<Relationship>();
+		List<Relationship> activeRelationships = new Vector<Relationship>();
 
 		if (! sourceRelationships.containsKey(index)) return activeRelationships;
 		
@@ -292,6 +293,21 @@ public class NetworkImpl implements Network {
 		
 		return activeRelationships;
 	}
+	
+    /**
+     * @see org.xbrlapi.networks.Network#hasActiveRelationshipsFrom(String)
+     */
+    public boolean hasActiveRelationshipsFrom(String index) {
+        return sourceRelationships.containsKey(index);
+    }
+    
+    /**
+     * @see org.xbrlapi.networks.Network#hasActiveRelationshipsTo(String)
+     */
+    public boolean hasActiveRelationshipsTo(String index) {
+        return (targetRelationships.containsKey(index));
+    }
+    
 	
 	/**
 	 * @see org.xbrlapi.networks.Network#getActiveRelationshipsTo(String)

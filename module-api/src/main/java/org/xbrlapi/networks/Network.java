@@ -51,6 +51,21 @@ public interface Network {
 	 * in the network.
 	 */
 	public boolean hasFragment(String index) throws XBRLException;
+	
+    /** 
+     * @param index The index of the fragment to check.
+     * @return true if the network contains active relationships 
+     * from the specified fragment and false otherwise.
+     */
+    public boolean hasActiveRelationshipsFrom(String index);
+	
+    /** 
+     * @param index The index of the fragment to check.
+     * @return true if the network contains active relationships 
+     * to the specified fragment and false otherwise.
+     */
+    public boolean hasActiveRelationshipsTo(String index);
+        
 
 	/** 
 	 * @param index The index of the fragment to get from the set
@@ -58,7 +73,7 @@ public interface Network {
 	 * @return The requested fragment or null if the fragment is not
 	 * already included in the set of fragments stored by the network.
 	 */
-	public Fragment getFragment(String index)  throws XBRLException;
+	public Fragment getFragment(String index) throws XBRLException;
 	
 	/**
 	 * @param <F> The type of fragment to use for the fragments in the list.
