@@ -505,7 +505,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             xmlQueryContext.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
             for (String namespace: this.namespaceBindings.keySet()) 
                 xmlQueryContext.setNamespace(this.namespaceBindings.get(namespace),namespace);
-            xmlQueryContext.setEvaluationType(XmlQueryContext.Lazy); 
+            // xmlQueryContext.setEvaluationType(XmlQueryContext.Lazy); 
             return xmlQueryContext;
         } catch (XmlException e) {
             throw new XBRLException("Failed to create query context.",e);
