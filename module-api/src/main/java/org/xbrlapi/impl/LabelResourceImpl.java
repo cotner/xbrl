@@ -6,6 +6,9 @@ import java.util.regex.Pattern;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xbrlapi.Concept;
+import org.xbrlapi.Fragment;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -17,11 +20,6 @@ import org.xbrlapi.utilities.XBRLException;
 public class LabelResourceImpl extends MixedContentResourceImpl implements LabelResource {
 
 	/**
-	 * Get the value of the XHTML resource as a text string,
-	 * @return the value of the XHTML resource as a text string
-	 * with the XHTML markup replaced by spaces and with leading, trailing
-	 * and double spaces removed.
-	 * @throws XBRLException
 	 * @see org.xbrlapi.LabelResource#getStringValue()
 	 */
 	public String getStringValue() throws XBRLException {
@@ -54,5 +52,29 @@ public class LabelResourceImpl extends MixedContentResourceImpl implements Label
 		}
 		return " " + value.trim() + " ";
 	}	
+	
+    /**
+     * @return the list of Concepts in the data store that have this label.
+     * @throws XBRLException
+     */
+    public FragmentList<Concept> getConcepts() throws XBRLException	{
+        FragmentList<Concept> concepts = new FragmentListImpl<Concept>();
+        
+        FragmentList<Fragment> relatives = this.getRelatives(org.xbrlapi.utilities.Constants.LabelArcRole,null,null,null,false);
+        for (Fragment relative: relatives) {
+            if (relative.isa("org.xbrlapi.impl.ConceptImpl")) {
+                concepts.add((Concept) relative);
+            }
+        }
+
+        relatives = this.getRelatives(org.xbrlapi.utilities.Constants.GenericLabelArcRole,null,null,null,false);
+        for (Fragment relative: relatives) {
+            if (relative.isa("org.xbrlapi.impl.ConceptImpl")) {
+                concepts.add((Concept) relative);
+            }
+        }
+        
+        return concepts;
+    }
 	
 }

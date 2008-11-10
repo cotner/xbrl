@@ -18,5 +18,10 @@ public interface LabelResource extends MixedContentResource {
 	 */
 	public String getStringValue() throws XBRLException;
 	
+	/**
+	 * @return the list of Concepts in the data store that have this label.
+	 * @throws XBRLException
+	 */
+	public FragmentList<Concept> getConcepts() throws XBRLException;
 
 }
