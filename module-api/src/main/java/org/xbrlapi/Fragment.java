@@ -450,5 +450,19 @@ public interface Fragment extends Comparable<Fragment> {
 	 */
 	public boolean equals(Object o1) throws ClassCastException;
     
-    
+    /**
+     * @param arcrole The <code>xlink:arcrole</code> attribute on the arcs expressing the 
+     * relationships to the relative fragments.
+     * @param linkrole The <code>xlink:role</code> attribute on the extended links containing
+     * the relationships to the relative fragments.  This criteria is not used if the value is null.
+     * @param resourcerole The required <code>xlink:role</code> attribute value on the 
+     * related fragments. This criteria is not used if the value is null.
+     * @param language The required value of the <code>xml:language</code> language 
+     * encoding on the relative fragments.  This criteria is not used if the value is null.
+     * @param getTargets The boolean value that is set to true if the relatives are required
+     * to be targets of relationships from this fragment and that is set to false otherwise.
+     * @return a list of fragments that meet the specified selection criteria.
+     * @throws XBRLException
+     */
+    public <F extends Fragment> FragmentList<F> getRelatives(String arcrole, String linkrole, String resourcerole, String language, boolean getTargets) throws XBRLException;    
 }
