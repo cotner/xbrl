@@ -66,6 +66,21 @@ public class StoreImplTestCase extends BaseTestCase {
 		}
 	}
 	
+    public void testQueryForIndices() {
+        try {
+            String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
+            List<String> indices = store.queryForIndices(xpathQuery);
+            assertTrue(indices.size() > 1);
+            for (String index: indices) {
+                logger.info(index);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
+
+	
 	
 
 	public void testQueryLoadedFragments() {

@@ -2,6 +2,10 @@ package org.xbrlapi.data.bdbxml;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -455,6 +459,47 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             if (xmlResults != null) xmlResults.delete();
         }
 	}
+    
+    /**
+     * @see org.xbrlapi.data.Store#queryForIndices(String)
+     */
+    public List<String> queryForIndices(String query) throws XBRLException {
+
+        query = query + this.getURLFilteringQueryClause();
+        
+        this.incrementCallCount();
+        
+        XmlResults xmlResults = null;
+        XmlValue xmlValue = null;
+        try {
+    
+            try {
+                xmlResults = performQuery(query);
+                xmlValue = xmlResults.next();
+                List<String> indices = new Vector<String>();
+                String regex = "<xbrlapi:fragment.*? index=\"(\\w+)\".*?>";
+                Pattern pattern = Pattern.compile(regex,Pattern.DOTALL);
+                while (xmlValue != null) {
+                    Matcher matcher = pattern.matcher(xmlValue.asString());
+                    matcher.matches();
+                    String index = matcher.group(1);
+                    indices.add(index);
+                    xmlValue.delete();
+                    xmlValue = xmlResults.next();
+                }
+                
+                return indices;
+    
+            } catch (XmlException e) {
+                throw new XBRLException("Failed query: " + query,e);
+            }
+            
+        } finally {
+            if (xmlValue != null) xmlValue.delete();
+            if (xmlResults != null) xmlResults.delete();
+        }
+        
+    }    
     
     /**
      * Provides direct access to the query mechanism so that we can use

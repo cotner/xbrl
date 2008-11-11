@@ -1108,12 +1108,23 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getLanguage(String, String)
      */
     public Language getLanguage(String encoding, String code) throws XBRLException {
-        if (encoding == null) return null;
-        if (code == null) return null;
+        if (encoding == null) throw new XBRLException("The language code must not be null.");
+        if (code == null) throw new XBRLException("The language name encoding must not be null.");
         String query = "/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@type='org.xbrlapi.impl.LanguageImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/lang:language/lang:encoding='" + encoding.toUpperCase() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/lang:language/lang:code='" + code.toUpperCase() + "']";
         FragmentList<Language> languages = this.<Language>query(query);
         if (languages.getLength() == 0) return null;
         return languages.get(0);
+    }
+    
+    
+    
+    /**
+     * @see org.xbrlapi.data.Store#getLanguages(String)
+     */
+    public FragmentList<Language> getLanguages(String code) throws XBRLException {
+        if (code == null) throw new XBRLException("The language code must not be null.");
+        String query = "/*[@type='org.xbrlapi.impl.LanguageImpl' and */lang:language/lang:code='" + code.toUpperCase() + "']";
+        return this.<Language>query(query);
     }    
     
 

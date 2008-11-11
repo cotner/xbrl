@@ -114,6 +114,15 @@ public interface Store {
 	 * @throws XBRLException if the query cannot be executed.
 	 */
 	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException;
+
+    /**
+     * Run a query against the collection of all fragments in the store.
+     * @param query The XPath query to run against the set of fragments.
+     * @return a list of the indices of the fragments matching the query or
+     * the empty list if no fragments match the query.
+     * @throws XBRLException if the query cannot be executed.
+     */
+    public List<String> queryForIndices(String query) throws XBRLException;
 	
 	
 
@@ -416,13 +425,22 @@ public interface Store {
      * language is expressed in.
      * @param code The code that identifies the language being named.
      * @return the Language fragment that specifies the name of the language
-     * for the given code, expressed in the language identified by the encoding or
-     * null if either parameter is null or if there is no matching language name 
+     * for the given code, expressed in the language identified by the encoding or 
+     * null or if there is no matching language name 
      * in the data store.  The input parameters are converted to upper case before
      * processing.
-     * @throws XBRLException
+     * @throws XBRLException if either parameter equals null.
      */
     public Language getLanguage(String encoding, String code) throws XBRLException;
+    
+    /**
+     * @param code The language code to get the language fragments for.  The code
+     * is converted to upper case before processing.
+     * @return the list of language fragments giving names for the language
+     * associated with the specified language code.
+     * @throws XBRLException if the language code is null.
+     */
+    public FragmentList<Language> getLanguages(String code) throws XBRLException;    
     
     /**
      * Sets the matcher for the store to use.  Care should be taken to ensure

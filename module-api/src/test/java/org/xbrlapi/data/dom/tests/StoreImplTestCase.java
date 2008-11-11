@@ -1,5 +1,7 @@
 package org.xbrlapi.data.dom.tests;
 
+import java.util.List;
+
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.impl.MockFragmentImpl;
@@ -88,6 +90,21 @@ public class StoreImplTestCase extends BaseTestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+    public void testQueryForIndices() {
+        try {
+            String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
+            List<String> indices = store.queryForIndices(xpathQuery);
+            assertTrue(indices.size() > 1);
+            for (String index: indices) {
+                logger.info(index);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
+    
 	
 	
 

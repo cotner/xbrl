@@ -1,5 +1,10 @@
 package org.xbrlapi.data.xindice;
 
+import java.util.List;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.xindice.client.xmldb.services.CollectionManager;
 import org.apache.xindice.xml.dom.DocumentImpl;
 import org.w3c.dom.Document;
@@ -314,6 +319,42 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		return fragments;
     	
 	}
+    
+    /**
+     * @see org.xbrlapi.data.Store#queryForIndices(String)
+     */
+    public List<String> queryForIndices(String query) throws XBRLException {
+
+        
+        query = query + this.getURLFilteringQueryClause();
+        
+        ResourceSet resources = null;
+        try {
+            for (String namespace: this.namespaceBindings.keySet()) 
+                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
+            resources = xpathService.query(query);
+        } catch (XMLDBException e) {
+            throw new XBRLException("The XPath query service failed.", e);
+        }
+
+        List<String> indices = new Vector<String>();
+        try {
+            ResourceIterator iterator = resources.getIterator();
+            String regex = "<xbrlapi:fragment.*? index=\"(\\w+)\".*?>";
+            Pattern pattern = Pattern.compile(regex,Pattern.DOTALL);
+            while (iterator.hasMoreResources()) {
+                XMLResource resource = (XMLResource) iterator.nextResource();
+                String string = ((String) resource.getContent()).replaceAll("\n"," ");
+                Matcher matcher = pattern.matcher(string);
+                matcher.matches();
+                String index = matcher.group(1);
+                indices.add(index);
+            }
+        } catch (XMLDBException e) {
+            throw new XBRLException("The XPath query of the DTS failed.", e);
+        }
+        return indices;
+    }    
 	
 	/**
  	 * Adds an index to the specified collection (used my data and metadata).

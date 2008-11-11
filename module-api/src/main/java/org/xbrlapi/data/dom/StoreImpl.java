@@ -5,7 +5,9 @@ package org.xbrlapi.data.dom;
  */
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.apache.xpath.domapi.XPathEvaluatorImpl;
@@ -194,7 +196,34 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
 
 
-	/**
+    /**
+     * Contains the logic common to queries that return fragments and
+     * queries that return fragment indices.
+     * @param query The query to run.
+     * @return The XPath query result.
+     * @throws XBRLException
+     */
+    private XPathResult runQuery(String query) throws XBRLException {
+
+        query = query + this.getURLFilteringQueryClause();
+        
+        if (query.charAt(0) == '/')
+            query = "/store" + query;
+        else
+            query = "/store/" + query;
+        
+        // Create an XPath evaluator and pass in the document.
+        XPathEvaluator evaluator = new XPathEvaluatorImpl(dom);
+        XPathNSResolverImpl resolver = new XPathNSResolverImpl();
+        for (String namespace: this.namespaceBindings.keySet()) {
+            resolver.setNamespaceBinding(this.namespaceBindings.get(namespace),namespace);
+        }
+        return (XPathResult) evaluator.evaluate(query, dom, resolver, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+    }
+    
+
+    
+    /**
 	 * Run a query against the collection of all fragments in the store.
 	 * @param query The XPath query to run.
 	 * @return a resource set that contains data for each matching fragment.
@@ -202,21 +231,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 */
     @SuppressWarnings(value = "unchecked")
 	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
-
-        query = query + this.getURLFilteringQueryClause();
-        
-		if (query.charAt(0) == '/')
-			query = "/store" + query;
-		else
-			query = "/store/" + query;
-		
-		// Create an XPath evaluator and pass in the document.
-		XPathEvaluator evaluator = new XPathEvaluatorImpl(dom);
-		XPathNSResolverImpl resolver = new XPathNSResolverImpl();
-        for (String namespace: this.namespaceBindings.keySet()) {
-            resolver.setNamespaceBinding(this.namespaceBindings.get(namespace),namespace);
-        }
-		XPathResult result = (XPathResult) evaluator.evaluate(query, dom, resolver, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+        XPathResult result = runQuery(query);
 		FragmentList<F> fragments = new FragmentListImpl<F>();
 		Node n;
 	    while ((n = result.iterateNext()) != null) {
@@ -225,6 +240,20 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	    }
 	    return fragments;
 	}
+    
+    /**
+     * @see org.xbrlapi.data.Store#queryForIndices(String)
+     */
+    public List<String> queryForIndices(String query) throws XBRLException {
+        XPathResult result = runQuery(query);
+        Node n;
+        List<String> indices = new Vector<String>();
+        while ((n = result.iterateNext()) != null) {
+            String index = getIndex(n);
+            indices.add(index);
+        }
+        return indices;
+    }
 	
 	/**
 	 * Get the index of the fragment containing the node matched by the query.
