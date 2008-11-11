@@ -1,6 +1,7 @@
 package org.xbrlapi.data.exist.tests;
 
 import java.util.List;
+import java.util.Map;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
@@ -70,9 +71,9 @@ public class StoreImplTestCase extends BaseTestCase {
     public void testQueryForIndices() {
         try {
             String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
-            List<String> indices = store.queryForIndices(xpathQuery);
-            assertTrue(indices.size() > 1);
-            for (String index: indices) {
+            Map<String,String> indices = store.queryForIndices(xpathQuery);
+            assertTrue(! indices.isEmpty());
+            for (String index: indices.keySet()) {
                 logger.info(index);
             }
         } catch (Exception e) {

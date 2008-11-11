@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
-
-import org.xbrlapi.networks.Networks;
+import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -13,6 +12,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Language;
 import org.xbrlapi.data.resource.Matcher;
+import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -118,11 +118,11 @@ public interface Store {
     /**
      * Run a query against the collection of all fragments in the store.
      * @param query The XPath query to run against the set of fragments.
-     * @return a list of the indices of the fragments matching the query or
-     * the empty list if no fragments match the query.
+     * @return a map indexed by the indices of the fragments matching 
+     * the query.
      * @throws XBRLException if the query cannot be executed.
      */
-    public List<String> queryForIndices(String query) throws XBRLException;
+    public Map<String,String> queryForIndices(String query) throws XBRLException;
 	
 	
 

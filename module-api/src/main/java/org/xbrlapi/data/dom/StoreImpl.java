@@ -244,13 +244,13 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public List<String> queryForIndices(String query) throws XBRLException {
+    public Map<String,String> queryForIndices(String query) throws XBRLException {
         XPathResult result = runQuery(query);
         Node n;
-        List<String> indices = new Vector<String>();
+        HashMap<String,String> indices = new HashMap<String,String>();
         while ((n = result.iterateNext()) != null) {
             String index = getIndex(n);
-            indices.add(index);
+            indices.put(index,null);
         }
         return indices;
     }

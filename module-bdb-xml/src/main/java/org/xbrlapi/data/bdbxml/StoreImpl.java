@@ -2,8 +2,8 @@ package org.xbrlapi.data.bdbxml;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -463,7 +463,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public List<String> queryForIndices(String query) throws XBRLException {
+    public Map<String,String> queryForIndices(String query) throws XBRLException {
 
         query = query + this.getURLFilteringQueryClause();
         
@@ -476,14 +476,14 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             try {
                 xmlResults = performQuery(query);
                 xmlValue = xmlResults.next();
-                List<String> indices = new Vector<String>();
+                Map<String,String> indices = new HashMap<String,String>();
                 String regex = "<xbrlapi:fragment.*? index=\"(\\w+)\".*?>";
                 Pattern pattern = Pattern.compile(regex,Pattern.DOTALL);
                 while (xmlValue != null) {
                     Matcher matcher = pattern.matcher(xmlValue.asString());
                     matcher.matches();
                     String index = matcher.group(1);
-                    indices.add(index);
+                    indices.put(index,null);
                     xmlValue.delete();
                     xmlValue = xmlResults.next();
                 }

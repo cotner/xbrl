@@ -1,7 +1,7 @@
 package org.xbrlapi.data.exist;
 
-import java.util.List;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -340,7 +340,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public List<String> queryForIndices(String query) throws XBRLException {
+    public Map<String,String> queryForIndices(String query) throws XBRLException {
 
         query = query + this.getURLFilteringQueryClause();
         
@@ -353,7 +353,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             throw new XBRLException("The XPath query service failed.", e);
         }
 
-        List<String> indices = new Vector<String>();
+        Map<String,String> indices = new HashMap<String,String>();
         try {
             ResourceIterator iterator = resources.getIterator();
             String regex = "<xbrlapi:fragment.*? index=\"(\\w+)\".*?>";
@@ -364,7 +364,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
                 Matcher matcher = pattern.matcher(string);
                 matcher.matches();
                 String index = matcher.group(1);
-                indices.add(index);
+                indices.put(index,null);
             }
         } catch (XMLDBException e) {
             throw new XBRLException("The XPath query of the DTS failed.", e);
