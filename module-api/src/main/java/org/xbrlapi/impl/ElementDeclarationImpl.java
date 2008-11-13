@@ -3,6 +3,7 @@ package org.xbrlapi.impl;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.ElementDeclaration;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -23,6 +24,52 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     	}
     	return false;
     }
+    
+    /**
+     * @see org.xbrlapi.ElementDeclaration#isItem()
+     */
+     public boolean isItem() throws XBRLException {
+         String sgName = this.getSubstitutionGroupLocalname();
+         String sgNS = this.getSubstitutionGroupNamespace();
+         String query = "/*[*/xsd:element/@name='" + sgName + "']";
+         FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
+         for (ElementDeclaration declaration: declarations) {
+             if (declaration.getTargetNamespaceURI().equals(sgNS)) {
+                 if (declaration.getName().equals("tuple") && declaration.getTargetNamespaceURI().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+                     return true;
+                 }
+                 try {
+                     return declaration.isItem();
+                 } catch (XBRLException e) {
+                     return false;
+                 }
+             }
+         }
+         throw new XBRLException("The substitution group is invalid.");
+     }
+     
+     /**
+      * @see org.xbrlapi.ElementDeclaration#isTuple()
+      */
+      public boolean isTuple() throws XBRLException {
+          String sgName = this.getSubstitutionGroupLocalname();
+          String sgNS = this.getSubstitutionGroupNamespace();
+          String query = "/*[*/xsd:element/@name='" + sgName + "']";
+          FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
+          for (ElementDeclaration declaration: declarations) {
+              if (declaration.getTargetNamespaceURI().equals(sgNS)) {
+                  if (declaration.getName().equals("item") && declaration.getTargetNamespaceURI().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+                      return true;
+                  }
+                  try {
+                      return declaration.isItem();
+                  } catch (XBRLException e) {
+                      return false;
+                  }
+              }
+          }
+          throw new XBRLException("The substitution group is invalid.");
+      }     
     
 
 

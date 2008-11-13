@@ -42,8 +42,6 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     	return null;
     }
     
-
-
     /**
      * Retrieves the fragment that is the schema for this concept.
      * @return a Schema fragment for the parent schema of this concept.
@@ -60,6 +58,6 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     public FragmentList<Fact> getFacts() throws XBRLException {
         getStore().setNamespaceBinding(this.getTargetNamespaceURI(),"xbrlapi_concept");
     	return getStore().<Fact>query("/*[*/xbrlapi_concept:"+ this.getName() + "]");
-    }
-
+    }    
+    
 }

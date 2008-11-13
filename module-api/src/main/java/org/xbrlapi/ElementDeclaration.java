@@ -102,6 +102,20 @@ public interface ElementDeclaration extends SchemaDeclaration {
      */
     public String getFixed() throws XBRLException;
     
-
+    /**
+     * @return true if the element declaration is for an element 
+     * in the substitution group for the XBRL item element and
+     * false otherwise.
+     * @throws XBRLException
+     */
+     public boolean isItem() throws XBRLException;
+     
+     /**
+      * @return true if the element declaration is for an element 
+      * in the substitution group for the XBRL tuple element and
+      * false otherwise.
+      * @throws XBRLException
+      */
+     public boolean isTuple() throws XBRLException;
 
 }
