@@ -240,6 +240,21 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}
+	}
+		
+    public void testDerterminationOfBeingATuple() {     
+
+        try {
+            FragmentList<Concept> fragments = store.getFragments("Concept");
+            assertTrue(fragments.getLength() > 0);
+            for (Concept fragment: fragments) {
+                assertTrue(fragment.isTuple() || fragment.isItem());
+            }
+        } catch (XBRLException e) {
+            fail(e.getMessage());
+        }
+		
+		
 	}	
 	
 
