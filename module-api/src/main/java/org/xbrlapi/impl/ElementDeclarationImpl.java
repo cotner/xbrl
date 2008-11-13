@@ -30,12 +30,13 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
      */
      public boolean isItem() throws XBRLException {
          String sgName = this.getSubstitutionGroupLocalname();
+         if (sgName == null) return false;
          String sgNS = this.getSubstitutionGroupNamespace();
          String query = "/*[*/xsd:element/@name='" + sgName + "']";
          FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
          for (ElementDeclaration declaration: declarations) {
              if (declaration.getTargetNamespaceURI().equals(sgNS)) {
-                 if (declaration.getName().equals("tuple") && declaration.getTargetNamespaceURI().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+                 if (declaration.getName().equals("item") && declaration.getTargetNamespaceURI().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
                      return true;
                  }
                  try {
@@ -53,16 +54,17 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
       */
       public boolean isTuple() throws XBRLException {
           String sgName = this.getSubstitutionGroupLocalname();
+          if (sgName == null) return false;
           String sgNS = this.getSubstitutionGroupNamespace();
           String query = "/*[*/xsd:element/@name='" + sgName + "']";
           FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
           for (ElementDeclaration declaration: declarations) {
               if (declaration.getTargetNamespaceURI().equals(sgNS)) {
-                  if (declaration.getName().equals("item") && declaration.getTargetNamespaceURI().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+                  if (declaration.getName().equals("tuple") && declaration.getTargetNamespaceURI().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
                       return true;
                   }
                   try {
-                      return declaration.isItem();
+                      return declaration.isTuple();
                   } catch (XBRLException e) {
                       return false;
                   }
@@ -172,13 +174,14 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
 
     /**
      * Retrieve the substitution group local name.
-     * @return the local name for the substitution group.
-     * @throws XBRLException if the substitution group is not declared.
+     * @return the local name for the substitution group or null if none is declared.
+     * @throws XBRLException if the substitution group is an empty string rather than a QName.
      * @see org.xbrlapi.ElementDeclaration#getSubstitutionGroupLocalname()
      */  
     public String getSubstitutionGroupLocalname() throws XBRLException {
     	String sg = getSubstitutionGroupQName();
-    	if (sg.equals("") || (sg == null))
+    	if (sg == null) return null;
+    	if (sg.equals(""))
 			throw new XBRLException("The element declaration does not declare its substitution group via a substitutionGroup attribute.");    	
     	return getLocalnameFromQName(sg);
     }
