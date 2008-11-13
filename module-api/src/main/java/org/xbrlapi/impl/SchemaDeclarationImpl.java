@@ -42,9 +42,6 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	}
     	return false;
     }
-    
-
-
 
     /**
      * Get the block attribute value.
@@ -56,12 +53,6 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace,"block");
     }
     
-
-
-
-    
-
-
     /**
      * Get the final attribute value.
      * One of #all or list of extension and restriction.
@@ -71,8 +62,6 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     public String getFinal() throws XBRLException {
     	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace,"final");
     }
-    
-
 
     /**
      * Get the id attribute value.
@@ -82,8 +71,6 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     public String getSchemaDeclarationId() throws XBRLException {
     	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace,"id");
     }
-    
-
     
     /**
      * Get the collection of other non-schema non-xbrl attributes.
@@ -103,10 +90,6 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return otherAttributes;
     }
     
-
-
-    
-    
     /**
      * Determines if concept has a non-schema non-xbrl attribute value.
      * Mirrors the hasAttributeNS method of the org.w3c.dom.Element class.
@@ -124,10 +107,6 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	return false;
     }
 
-
-
-
-    
     /**
      * TODO Implement the getAnnotations Method for schema declarations.
      * Retrieves an array of annotation objects associated with the concept
@@ -155,7 +134,5 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     		throw new XBRLException("The complex content could not be retrieved for the specified concept.");
     	}
     }
-
-
 
 }
