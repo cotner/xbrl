@@ -1,6 +1,5 @@
 package org.xbrlapi.data.xindice.tests;
 
-import java.util.List;
 import java.util.Map;
 
 import org.xbrlapi.Fragment;
