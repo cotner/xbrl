@@ -86,4 +86,13 @@ public interface Aspect {
      */
     public void setTransformer(AspectValueTransformer transformer);
 
+    /**
+     * @param value The aspect value to add to the aspect.
+     * @throws XBRLException if the aspect value cannot be added
+     * because its unique identifier cannot be obtained from the
+     * aspect value transformer.
+     */
+    public void addValue(AspectValue value) throws XBRLException;
+    
+    
 }

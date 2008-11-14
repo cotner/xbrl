@@ -48,6 +48,13 @@ abstract public class BaseAspect implements Aspect {
         v.addAll(values.values());
         return v;
     }
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#addValue()
+     */
+    public void addValue(AspectValue value) throws XBRLException {
+        values.put(this.getTransformer().transform(value), value);
+    }    
 
     /**
      * @see org.xbrlapi.aspects.Aspect#isEmpty()
