@@ -19,7 +19,7 @@ public class LanguageImpl extends FragmentImpl implements Language {
     	Element root = getDataRootElement();
     	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace,"encoding");
     	Element encoding = (Element) nodes.item(0);
-    	return encoding.getTextContent();		
+    	return encoding.getTextContent().toLowerCase();		
 	}
 	
 	/**
@@ -29,7 +29,7 @@ public class LanguageImpl extends FragmentImpl implements Language {
     	Element root = getDataRootElement();
     	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace,"code");
     	Element code = (Element) nodes.item(0);
-    	return code.getTextContent();		
+    	return code.getTextContent().toLowerCase();		
 	}	
 	
 	/**
