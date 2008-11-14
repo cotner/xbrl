@@ -1,0 +1,8 @@
+Release details:
+
+The XBRL Dimensions (XDT) implementation.
+
+Release 4.0
+Basic new XDT fragment types created.
+XDT fragment detection implemented.
+Basic dimension value analysis features implemented.

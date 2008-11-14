@@ -1,0 +1,6 @@
+Release details:
+
+The XBRLAPI examples module.
+
+Release 4.0
+Provides basic examples of how to use the API.
