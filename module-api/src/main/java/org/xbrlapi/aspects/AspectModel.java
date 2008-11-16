@@ -3,6 +3,7 @@ package org.xbrlapi.aspects;
 import java.util.Collection;
 import java.util.List;
 
+import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -49,6 +50,12 @@ public interface AspectModel {
      * @param aspect The aspect to set in the aspect model, as an orphan.
      */
     public void setOrphanAspect(Aspect aspect);
+    
+    /**
+     * @param fact The fact to add to the aspect model
+     * @throws XBRLException if the fact cannot be added to the aspect model.
+     */
+    public void addFact(Fact fact) throws XBRLException;
     
     /**
      * @param aspect The aspect to add to the aspect model.

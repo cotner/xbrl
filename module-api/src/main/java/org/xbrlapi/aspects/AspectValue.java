@@ -25,6 +25,6 @@ public interface AspectValue {
      * form.
      * @throws XBRLException if the string value cannot be obtained.
      */
-    public String getValue() throws XBRLException;
+    public String getTransformedValue() throws XBRLException;
 
 }

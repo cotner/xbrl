@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import org.xbrlapi.Concept;
+import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -36,5 +37,10 @@ public class ConceptAspect extends BaseAspect implements Aspect {
             Concept f = ((Concept) value.getFragment());
             return f.getTargetNamespaceURI() + ": " + f.getName();
         }
-    }    
+    }
+
+    @SuppressWarnings("unchecked")
+    public ConceptAspectValue getValue(Fact fact) throws XBRLException {
+        return new ConceptAspectValue(this,fact.getConcept());
+    }
 }

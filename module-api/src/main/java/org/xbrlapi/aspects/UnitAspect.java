@@ -1,5 +1,7 @@
 package org.xbrlapi.aspects;
 
+import org.xbrlapi.Fact;
+import org.xbrlapi.Item;
 import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -41,5 +43,16 @@ public class UnitAspect extends BaseAspect implements Aspect {
             }
             return null;
         }
+    }    
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
+     */
+    @SuppressWarnings("unchecked")
+    public UnitAspectValue getValue(Fact fact) throws XBRLException {
+        if (fact.isTuple()) return null;
+        Item item = (Item) fact;
+        if (! item.isNumeric()) return null;
+        return new UnitAspectValue(this,item.getUnit());
     }    
 }

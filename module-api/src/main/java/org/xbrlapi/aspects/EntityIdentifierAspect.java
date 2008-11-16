@@ -1,6 +1,8 @@
 package org.xbrlapi.aspects;
 
 import org.xbrlapi.Entity;
+import org.xbrlapi.Fact;
+import org.xbrlapi.Item;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -36,5 +38,17 @@ public class EntityIdentifierAspect extends BaseAspect implements Aspect {
             Entity f = ((Entity) value.getFragment());
             return f.getIdentifierScheme() + ": " + f.getIdentifierValue();
         }
+    }
+    
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
+     */
+    @SuppressWarnings("unchecked")
+    public EntityIdentifierAspectValue getValue(Fact fact) throws XBRLException {
+        if (fact.isTuple()) {
+            return null;
+        }
+        return new EntityIdentifierAspectValue(this,((Item) fact).getContext().getEntity());
     }    
 }

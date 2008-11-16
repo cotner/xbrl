@@ -1,5 +1,7 @@
 package org.xbrlapi.aspects;
 
+import org.xbrlapi.Fact;
+import org.xbrlapi.Item;
 import org.xbrlapi.Period;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -57,6 +59,17 @@ public class PeriodAspect extends BaseAspect implements Aspect {
             return dateValue + ":" + timeValue;
             
         }
+    }    
+
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
+     */
+    @SuppressWarnings("unchecked")
+    public PeriodAspectValue getValue(Fact fact) throws XBRLException {
+        if (fact.isTuple()) {
+            return null;
+        }
+        return new PeriodAspectValue(this,((Item) fact).getContext().getPeriod());
     }    
     
 }

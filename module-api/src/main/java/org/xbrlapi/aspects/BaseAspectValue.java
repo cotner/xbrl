@@ -6,7 +6,7 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class BaseAspectValue implements AspectValue {
+public abstract class BaseAspectValue implements AspectValue {
 
     private Aspect aspect = null;
     
@@ -35,7 +35,7 @@ public class BaseAspectValue implements AspectValue {
      }
 
     /**
-     * @see AspectValue#getValue()
+     * @see AspectValue#getAspect()
      */
     public Aspect getAspect() {
         return aspect;
@@ -49,9 +49,9 @@ public class BaseAspectValue implements AspectValue {
     }
 
     /**
-     * @see AspectValue#getValue()
+     * @see AspectValue#getTransformedValue()
      */
-    public String getValue() throws XBRLException {
+    public String getTransformedValue() throws XBRLException {
         return getAspect().getTransformer().transform(this);
     }
     

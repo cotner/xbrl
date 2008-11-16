@@ -1,5 +1,7 @@
 package org.xbrlapi.aspects;
 
+import org.xbrlapi.Fact;
+import org.xbrlapi.Item;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -37,4 +39,20 @@ public class ScenarioAspect extends BaseAspect implements Aspect {
             return f.getStore().serializeToString(f.getDataRootElement());
         }
     }    
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
+     */
+    @SuppressWarnings("unchecked")
+    public ScenarioAspectValue getValue(Fact fact) throws XBRLException {
+        if (fact.isTuple()) {
+            return null;
+        }
+        Item item = (Item) fact;
+        Scenario scenario = item.getContext().getScenario();
+        if (scenario == null) {
+            return null;
+        }
+        return new ScenarioAspectValue(this,scenario);
+    }        
 }

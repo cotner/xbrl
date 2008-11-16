@@ -1,9 +1,13 @@
 package org.xbrlapi.aspects;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -101,5 +105,23 @@ abstract public class BaseAspect implements Aspect {
         this.transformer = transformer;
     }
     
+    private HashMap<String,Set<Fact>> facts = new HashMap<String,Set<Fact>>();
+
+    /**
+     * @see Aspect#addFact(Fact)
+     */
+    public void addFact(Fact fact) throws XBRLException {
+        AspectValue value = getValue(fact);
+        this.addValue(value);
+        AspectValueTransformer transformer = this.getTransformer();
+        String key = transformer.transform(value);
+        if (facts.containsKey(key)) {
+            facts.get(key).add(fact);
+        } else {
+            Set<Fact> set = new HashSet<Fact>();
+            set.add(fact);
+            facts.put(key,set);
+        }
+    }
     
 }

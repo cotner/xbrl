@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -130,4 +131,13 @@ abstract public class BaseAspectModel implements AspectModel {
         aspects.put(aspect.getType(),aspect);
     }
 
+    /**
+     * @see AspectModel#addFact(Fact)
+     */
+    public void addFact(Fact fact) throws XBRLException {
+        for (Aspect aspect: getAspects()) {
+            aspect.addFact(fact);
+        }
+    }
+    
 }

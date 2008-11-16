@@ -2,6 +2,7 @@ package org.xbrlapi.aspects;
 
 import java.util.List;
 
+import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -65,7 +66,7 @@ public interface Aspect {
      * of an aspect.
      * @return a sorted list of the values for the aspect.
      */
-    public List<AspectValue> getValues(); 
+    public <A extends AspectValue> List<A> getValues(); 
     
     /**
      * @return the number of values for this aspect.
@@ -92,7 +93,19 @@ public interface Aspect {
      * because its unique identifier cannot be obtained from the
      * aspect value transformer.
      */
-    public void addValue(AspectValue value) throws XBRLException;
+    public <A extends AspectValue> void addValue(A value) throws XBRLException;
+ 
+    /**
+     * @param fact The fact to add.
+     * @throws XBRLException if the fact cannot be added.
+     */
+    public void addFact(Fact fact) throws XBRLException;
     
+    /**
+     * @param fact The fact to get the aspect value for
+     * @return the aspect value for the fact
+     * @throws XBRLException
+     */
+    public <A extends AspectValue> A getValue(Fact fact) throws XBRLException;
     
 }
