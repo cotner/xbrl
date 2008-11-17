@@ -9,12 +9,12 @@ public class NonDimensionalAspectModel extends BaseAspectModel implements Aspect
 
     public NonDimensionalAspectModel() throws XBRLException {
         super();
-        this.setOrphanAspect(new ConceptAspect(this));
-        this.setOrphanAspect(new EntityIdentifierAspect(this));
-        this.setOrphanAspect(new SegmentAspect(this));
-        this.setOrphanAspect(new PeriodAspect(this));
-        this.setOrphanAspect(new ScenarioAspect(this));
-        this.setOrphanAspect(new UnitAspect(this));
+        this.setAspect(new ConceptAspect(this));
+        this.setAspect(new EntityIdentifierAspect(this));
+        this.setAspect(new SegmentAspect(this));
+        this.setAspect(new PeriodAspect(this));
+        this.setAspect(new ScenarioAspect(this));
+        this.setAspect(new UnitAspect(this));
     }
 
     public String getType() {

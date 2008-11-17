@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.XBRLException;
@@ -66,10 +67,11 @@ abstract public class BaseAspectModel implements AspectModel {
         return dimensions.get(dimension);
     }
 
+
     /**
-     * @see AspectModel#setOrphanAspect(Aspect)
+     * @see AspectModel#setAspect(Aspect)
      */
-    public void setOrphanAspect(Aspect aspect) {
+    public void setAspect(Aspect aspect) {
         try {
             aspect.setAspectModel(this);
         } catch (XBRLException e) {
@@ -92,61 +94,56 @@ abstract public class BaseAspectModel implements AspectModel {
     }
     
     /**
-     * @see AspectModel#setAspect(Aspect, String)
+     * @see AspectModel#arrangeAspect(Aspect, String)
      */
-    public void setAspect(Aspect aspect, String dimension) {
-        try {
-            aspect.setAspectModel(this);
-        } catch (XBRLException e) {
-            ;//Not possible
+    public void arrangeAspect(String aspectType, String dimension) throws XBRLException {
+
+        if (! aspects.containsKey(aspectType)) throw new XBRLException("The aspect is not part of the aspect model.");
+        Aspect aspect = aspects.get(aspectType);
+        
+        if (! aspect.isOrphan()) {
+            List<Aspect> dimensionAspects = dimensions.get(aspect.getDimension());
+            dimensionAspects.remove(aspect);
         }
-        if (aspects.containsKey(aspect.getType())) {
-            Aspect old = aspects.get(aspect.getType());
-            if (old.getDimension() != null) {
-                List<Aspect> dimensionAspects = dimensions.get(old.getDimension());
-                LOOP: for (Aspect dimensionAspect: dimensionAspects) {
-                    if (dimensionAspect.getType().equals(old.getType())) {
-                        dimensionAspects.remove(dimensionAspect);
-                        break LOOP;
-                    }
-                }
-            }
+       
+        List<Aspect> dimensionAspects;
+        if (dimensions.containsKey(dimension)) {
+            dimensionAspects = this.dimensions.get(dimension);
+            dimensionAspects.add(aspect);
+        } else {
+            dimensionAspects = new Vector<Aspect>();
+            dimensions.put(dimension,dimensionAspects);
         }
-        aspect.setDimension(dimension);    
-        dimensions.get(dimension).add(aspect);
-        aspects.put(aspect.getType(),aspect);
+        dimensionAspects.add(aspect);
+
+        aspect.setDimension(dimension);
     }
     
     /**
-     * @see AspectModel#setAspect(Aspect, String, String)
+     * @see AspectModel#arrangeAspect(Aspect, String, String)
      */
-    public void setAspect(Aspect aspect, String dimension, String parentType) {
-        try {
-            aspect.setAspectModel(this);
-        } catch (XBRLException e) {
-            ;//Not possible
+    public void arrangeAspect(String aspectType, String dimension, String parentType) throws XBRLException {
+        if (! aspects.containsKey(aspectType)) throw new XBRLException("The aspect is not part of the aspect model.");
+        if (! aspects.containsKey(parentType)) throw new XBRLException("The parent aspect is not part of the aspect model.");
+        if (! this.dimensions.containsKey(dimension)) throw new XBRLException("The dimension is not part of the aspect model.");
+        
+        Aspect aspect = aspects.get(aspectType);
+        if (aspect.getDimension() != null) {
+            List<Aspect> dimensionAspects = dimensions.get(aspect.getDimension());
+            dimensionAspects.remove(aspect);
         }
-        if (aspects.containsKey(aspect.getType())) {
-            Aspect old = aspects.get(aspect.getType());
-            if (old.getDimension() != null) {
-                List<Aspect> dimensionAspects = dimensions.get(old.getDimension());
-                LOOP: for (Aspect dimensionAspect: dimensionAspects) {
-                    if (dimensionAspect.getType().equals(old.getType())) {
-                        dimensionAspects.remove(dimensionAspect);
-                        break LOOP;
-                    }
-                }
-            }
-        }
-        aspect.setDimension(dimension);
-        List<Aspect> dimensionAspects = dimensions.get(dimension);
-        GETPARENT: for (Aspect dimensionAspect: dimensionAspects) {
+        
+        List<Aspect> dimensionAspects = this.dimensions.get(dimension);
+        FINDPARENT: for (Aspect dimensionAspect: dimensionAspects) {
             if (dimensionAspect.getType().equals(parentType)) {
-                dimensionAspects.add(dimensionAspects.indexOf(dimensionAspect)+1,aspect);
-                break GETPARENT;
+                int index = dimensionAspects.indexOf(dimensionAspect)+1;
+                dimensionAspects.add(index, aspect);
+                break FINDPARENT;
             }
         }
-        aspects.put(aspect.getType(),aspect);
+
+        aspect.setDimension(dimension);
+        
     }
 
     /**

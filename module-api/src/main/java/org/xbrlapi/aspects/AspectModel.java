@@ -65,7 +65,7 @@ public interface AspectModel {
     /**
      * @param aspect The aspect to set in the aspect model, as an orphan.
      */
-    public void setOrphanAspect(Aspect aspect);
+    public void setAspect(Aspect aspect);
     
     /**
      * @param fact The fact to add to the aspect model
@@ -75,18 +75,20 @@ public interface AspectModel {
 
     
     /**
-     * @param aspect The aspect to add to the aspect model.
+     * @param aspectType The type of aspect to arrange in the aspect model.
      * @param dimension the dimension to put the aspect in, in last 
      * place in the ordering.
+     * @throws XBRLException if the aspect is not in the aspect model.
      */
-    public void setAspect(Aspect aspect, String dimension);
+    public void arrangeAspect(String aspectType, String dimension) throws XBRLException;
     
     /**
-     * @param aspect The aspect to add to the aspect model.
+     * @param aspectType The type of aspect to arrange in the aspect model.
      * @param dimension the dimension to put the aspect in.
      * @param parentType The type of parent aspect for the aspect being set.
+     * @throws XBRLException if the aspect or parent are not in the aspect model.
      */
-    public void setAspect(Aspect aspect, String dimension, String parentType);
+    public void arrangeAspect(String aspectType, String dimension, String parentType) throws XBRLException;
  
     /**
      * @param values is a set of AspectValues to be matched.

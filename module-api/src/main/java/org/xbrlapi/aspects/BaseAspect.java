@@ -2,6 +2,7 @@ package org.xbrlapi.aspects;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,14 +38,55 @@ abstract public class BaseAspect implements Aspect {
     public String getDimension() {
         return dimension;
     }
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#isOrphan()
+     */
+    public boolean isOrphan() {
+        return (this.dimension == null);
+    }
 
     /**
      * @see org.xbrlapi.aspects.Aspect#getLength()
      */
     public int getLength() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.values.size();
     }
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getIterator()
+     */
+    public Iterator<AspectValue> getValueIterator() {
+        return values.values().iterator();
+    }
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getDescendantCount()
+     */
+    public int getDescendantCount() throws XBRLException {
+        if (this.isOrphan()) return 1;
+        List<Aspect> aspects = this.getAspectModel().getDimensionAspects(this.getDimension());
+        int count = 0;
+        for (Aspect aspect: aspects) {
+            if (aspect.getType().equals(this.getType())) count = 1;
+            else if (! aspect.isEmpty()) count = count * aspect.getLength();
+        }
+        return count;
+    }
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getAncestorCount()
+     */
+    public int getAncestorCount() throws XBRLException {
+        if (this.isOrphan()) return 1;
+        List<Aspect> aspects = this.getAspectModel().getDimensionAspects(this.getDimension());
+        int count = 1;
+        for (Aspect aspect: aspects) {
+            if (aspect.getType().equals(this.getType())) return count;
+            if (! aspect.isEmpty()) count = count * aspect.getLength();
+        }
+        return count;
+    }    
 
     /**
      * @see org.xbrlapi.aspects.Aspect#getValues()

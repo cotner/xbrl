@@ -1,5 +1,6 @@
 package org.xbrlapi.aspects;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -61,6 +62,12 @@ public interface Aspect {
     public void setDimension(String dimension);    
 
     /**
+     * @return true if the aspect is in a dimension of the 
+     * containing aspect model and false otherwise.
+     */
+    public boolean isOrphan();
+    
+    /**
      * @param aspectModel the aspect model to assign this aspect to.
      * @throws XBRLException if the aspect model is null.
      */
@@ -76,12 +83,33 @@ public interface Aspect {
      * of an aspect.
      * @return a sorted list of the values for the aspect.
      */
-    public <A extends AspectValue> List<A> getValues(); 
+    public <A extends AspectValue> List<A> getValues();
+   
     
     /**
      * @return the number of values for this aspect.
      */
     public int getLength();
+    
+    /**
+     * @return an iterator over the ordered values for this aspect.
+     */
+    public Iterator<AspectValue> getValueIterator();
+    
+    /**
+     * @return the number of combinations of descendant aspect
+     * values (for those descendant aspects in the same dimension
+     * of the aspect model).
+     */
+    public int getDescendantCount() throws XBRLException;
+    
+    /**
+     * @return the number of combinations of ancestor aspect
+     * values (for those ancestor aspects in the same dimension
+     * of the aspect model).
+     */
+    public int getAncestorCount() throws XBRLException;    
+    
     
     /**
      * @return the transformer responsible for converting
