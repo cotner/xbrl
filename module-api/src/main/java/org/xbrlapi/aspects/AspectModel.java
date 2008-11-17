@@ -2,6 +2,7 @@ package org.xbrlapi.aspects;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.XBRLException;
@@ -71,6 +72,7 @@ public interface AspectModel {
      * @throws XBRLException if the fact cannot be added to the aspect model.
      */
     public void addFact(Fact fact) throws XBRLException;
+
     
     /**
      * @param aspect The aspect to add to the aspect model.
@@ -85,5 +87,14 @@ public interface AspectModel {
      * @param parentType The type of parent aspect for the aspect being set.
      */
     public void setAspect(Aspect aspect, String dimension, String parentType);
+ 
+    /**
+     * @param values is a set of AspectValues to be matched.
+     * @return the set of all facts in the aspect model that 
+     * match all of the aspect values to be matched.
+     * @throws XBRLException
+     */
+    public Set<Fact> getFacts(Set<AspectValue> values) throws XBRLException;
+    
     
 }

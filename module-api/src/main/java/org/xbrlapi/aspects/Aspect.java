@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -32,6 +33,14 @@ public interface Aspect {
      * and false otherwise.
      */
     public boolean isEmpty();
+    
+    /**
+     * @param value The value to test for.
+     * @return true if the aspect has the given value
+     * @throws XBRLException
+     */
+    public boolean hasValue(AspectValue value) throws XBRLException;
+    
 
     /**
      * @return true if the aspect has just one aspect value
@@ -136,5 +145,12 @@ public interface Aspect {
      * @throws XBRLException
      */
     public String getFragmentKey(Fact fact) throws XBRLException;
+    
+    /**
+     * @param value The aspect value to match
+     * @return the set of facts with the specified aspect value for this aspect.
+     * @throws XBRLException if the aspect value is not a value for this aspect.
+     */
+    public Set<Fact> getFacts(AspectValue value) throws XBRLException;
     
 }

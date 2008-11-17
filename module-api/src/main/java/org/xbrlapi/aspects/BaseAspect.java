@@ -78,6 +78,13 @@ abstract public class BaseAspect implements Aspect {
     }
     
     /**
+     * @see Aspect#hasValue(AspectValue)
+     */
+    public boolean hasValue(AspectValue value) throws XBRLException {
+        return values.containsKey(getTransformer().transform(value));
+    }
+    
+    /**
      * @see org.xbrlapi.aspects.Aspect#setAspectModel(org.xbrlapi.aspects.AspectModel)
      */
     public void setAspectModel(AspectModel aspectModel) throws XBRLException {
@@ -109,6 +116,16 @@ abstract public class BaseAspect implements Aspect {
     }
     
     private HashMap<String,Set<Fact>> facts = new HashMap<String,Set<Fact>>();
+    
+    /**
+     * @see Aspect#getFacts(AspectValue)
+     */
+    public Set<Fact> getFacts(AspectValue value) throws XBRLException {
+        if (! this.hasValue(value)) throw new XBRLException("This aspect does not have the given aspect value.");
+        String key = getTransformer().transform(value);
+        if (! facts.containsKey(key)) return new HashSet<Fact>();
+        return facts.get(key);
+    }
 
     /**
      * @see Aspect#addFact(Fact)
