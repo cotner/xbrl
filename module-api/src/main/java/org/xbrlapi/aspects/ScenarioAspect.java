@@ -1,21 +1,21 @@
 package org.xbrlapi.aspects;
 
+import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Item;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ScenarioAspect extends BaseAspect implements Aspect {
+public class ScenarioAspect extends BaseContextAspect implements Aspect {
 
     /**
      * @param aspectModel The aspect model with this aspect.
      * @throws XBRLException.
      */
     public ScenarioAspect(AspectModel aspectModel) throws XBRLException {
-        super();
         setAspectModel(aspectModel);
         setTransformer(new Transformer());
     }
@@ -45,14 +45,19 @@ public class ScenarioAspect extends BaseAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public ScenarioAspectValue getValue(Fact fact) throws XBRLException {
-        if (fact.isTuple()) {
+        try {
+            return new ScenarioAspectValue(this,getFragment(fact));
+        } catch (XBRLException e) {
             return null;
         }
-        Item item = (Item) fact;
-        Scenario scenario = item.getContext().getScenario();
-        if (scenario == null) {
-            return null;
-        }
-        return new ScenarioAspectValue(this,scenario);
     }        
+    
+    /**
+     * @see Aspect#getFragmentFromStore(Fact)
+     */
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+        Scenario scenario = ((Context) super.getFragment(fact)).getScenario();
+        if (scenario == null) throw new XBRLException("The scenario fragment is not available.");
+        return scenario;
+    }    
 }

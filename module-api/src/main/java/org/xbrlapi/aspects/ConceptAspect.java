@@ -2,6 +2,7 @@ package org.xbrlapi.aspects;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -14,7 +15,6 @@ public class ConceptAspect extends BaseAspect implements Aspect {
      * @throws XBRLException.
      */
     public ConceptAspect(AspectModel aspectModel) throws XBRLException {
-        super();
         setAspectModel(aspectModel);
         setTransformer(new Transformer());
     }
@@ -39,8 +39,26 @@ public class ConceptAspect extends BaseAspect implements Aspect {
         }
     }
 
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
+     */
     @SuppressWarnings("unchecked")
     public ConceptAspectValue getValue(Fact fact) throws XBRLException {
-        return new ConceptAspectValue(this,fact.getConcept());
+        return new ConceptAspectValue(this,getFragment(fact));
     }
+    
+    /**
+     * @see Aspect#getFragmentFromStore(Fact)
+     */
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+        return fact.getConcept();
+    }
+    
+    /**
+     * @see Aspect#getFragmentKey(Fact)
+     */
+    public String getFragmentKey(Fact fact) throws XBRLException {
+        return fact.getNamespaceURI() + fact.getLocalname();
+    }
+
 }

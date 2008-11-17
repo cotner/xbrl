@@ -1,21 +1,21 @@
 package org.xbrlapi.aspects;
 
+import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Item;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class EntityIdentifierAspect extends BaseAspect implements Aspect {
+public class EntityIdentifierAspect extends BaseContextAspect implements Aspect {
 
     /**
      * @param aspectModel The aspect model with this aspect.
      * @throws XBRLException.
      */
     public EntityIdentifierAspect(AspectModel aspectModel) throws XBRLException {
-        super();
         setAspectModel(aspectModel);
         setTransformer(new Transformer());
     }
@@ -40,15 +40,23 @@ public class EntityIdentifierAspect extends BaseAspect implements Aspect {
         }
     }
     
-    
     /**
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
     public EntityIdentifierAspectValue getValue(Fact fact) throws XBRLException {
-        if (fact.isTuple()) {
+        try {
+            return new EntityIdentifierAspectValue(this,getFragment(fact));
+        } catch (XBRLException e) {
             return null;
         }
-        return new EntityIdentifierAspectValue(this,((Item) fact).getContext().getEntity());
-    }    
+    }
+    
+    /**
+     * @see Aspect#getFragmentFromStore(Fact)
+     */
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+        return ((Context) super.getFragment(fact)).getEntity();
+    }
+    
 }

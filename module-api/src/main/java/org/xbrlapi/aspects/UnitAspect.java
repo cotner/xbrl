@@ -1,7 +1,9 @@
 package org.xbrlapi.aspects;
 
 import org.xbrlapi.Fact;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
+import org.xbrlapi.NumericItem;
 import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -50,9 +52,34 @@ public class UnitAspect extends BaseAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public UnitAspectValue getValue(Fact fact) throws XBRLException {
-        if (fact.isTuple()) return null;
+        try {
+            return new UnitAspectValue(this,getFragment(fact));
+        } catch (XBRLException e) {
+            return null;
+        }
+    }
+    
+    /**
+     * @see Aspect#getFragmentFromStore(Fact)
+     */
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+        if (fact.isTuple()) {
+            throw new XBRLException("The fact must not be a tuple.");
+        }
         Item item = (Item) fact;
-        if (! item.isNumeric()) return null;
-        return new UnitAspectValue(this,item.getUnit());
+        if (! item.isNumeric()) throw new XBRLException("The fact must be numeric.");
+        return item.getUnit();
     }    
+    
+    /**
+     * @see Aspect#getFragmentKey(Fact)
+     */
+    public String getFragmentKey(Fact fact) throws XBRLException {
+        if (fact.isTuple()) {
+            throw new XBRLException("The fact must not be a tuple.");
+        }
+        Item item = (Item) fact;
+        if (! item.isNumeric()) throw new XBRLException("The fact must be numeric.");
+        return item.getURL() + ((NumericItem) item).getUnitId();
+    }
 }

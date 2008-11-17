@@ -3,11 +3,13 @@ package org.xbrlapi.aspects;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
 import org.xbrlapi.Fact;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -57,7 +59,8 @@ abstract public class BaseAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#addValue()
      */
     public void addValue(AspectValue value) throws XBRLException {
-        values.put(this.getTransformer().transform(value), value);
+        String key = this.getTransformer().transform(value);
+        if (! values.containsKey(key)) values.put(key, value);
     }    
 
     /**
@@ -116,12 +119,27 @@ abstract public class BaseAspect implements Aspect {
         AspectValueTransformer transformer = this.getTransformer();
         String key = transformer.transform(value);
         if (facts.containsKey(key)) {
-            facts.get(key).add(fact);
+            Set<Fact> set = facts.get(key);
+            if (! set.contains(fact)) set.add(fact);
         } else {
             Set<Fact> set = new HashSet<Fact>();
             set.add(fact);
             facts.put(key,set);
         }
     }
+    
+
+    private Map<String,Fragment> fragmentMap = new HashMap<String,Fragment>();
+    public Fragment getFragment(Fact fact) throws XBRLException {
+        String fragmentKey = getFragmentKey(fact);
+        if (fragmentMap.containsKey(fragmentKey)) {
+            return fragmentMap.get(fragmentKey);
+        }
+        Fragment fragment = getFragmentFromStore(fact);
+        fragmentMap.put(fragmentKey,fragment);
+        return fragment;
+    }
+    
+    
     
 }

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -28,6 +27,23 @@ abstract public class BaseAspectModel implements AspectModel {
      */
     public Collection<Aspect> getAspects() {
         return aspects.values();
+    }
+    
+    /**
+     * @see AspectModel#getAspect(String)
+     */
+    public Aspect getAspect(String type) throws XBRLException {
+        if (hasAspect(type)) {
+            return aspects.get(type);
+        }
+        throw new XBRLException("The aspect model does not include aspect " + type);
+    }
+    
+    /**
+     * @see AspectModel#hasAspect(String)
+     */
+    public boolean hasAspect(String type) {
+        return aspects.containsKey(type);
     }
 
     /**
@@ -131,13 +147,6 @@ abstract public class BaseAspectModel implements AspectModel {
         aspects.put(aspect.getType(),aspect);
     }
 
-    /**
-     * @see AspectModel#addFact(Fact)
-     */
-    public void addFact(Fact fact) throws XBRLException {
-        for (Aspect aspect: getAspects()) {
-            aspect.addFact(fact);
-        }
-    }
+
     
 }

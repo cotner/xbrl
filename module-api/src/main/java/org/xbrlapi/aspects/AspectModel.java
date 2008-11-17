@@ -26,6 +26,21 @@ public interface AspectModel {
      * @return a Collection of the aspects in the aspect model.
      */
     public Collection<Aspect> getAspects();
+
+    /**
+     * @param type the aspect type.
+     * @return the aspect with the specified aspect type.
+     * @throws XBRLException if the aspect model does not have the
+     * specified aspect.
+     */
+    public Aspect getAspect(String type) throws XBRLException;
+    
+    /**
+     * @param type the aspect type.
+     * @return true if the aspect model includes the aspect with 
+     * the specified aspect type and false otherwise.
+     */
+    public boolean hasAspect(String type);
     
     /**
      * @return a collection of aspects that are not associated with a dimension, either

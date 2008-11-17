@@ -1,21 +1,22 @@
 package org.xbrlapi.aspects;
 
+import org.xbrlapi.Context;
+import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Item;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.Segment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class SegmentAspect extends BaseAspect implements Aspect {
+public class SegmentAspect extends BaseContextAspect implements Aspect {
 
     /**
      * @param aspectModel The aspect model with this aspect.
      * @throws XBRLException.
      */
     public SegmentAspect(AspectModel aspectModel) throws XBRLException {
-        super();
         setAspectModel(aspectModel);
         setTransformer(new Transformer());
     }
@@ -44,15 +45,21 @@ public class SegmentAspect extends BaseAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public ScenarioAspectValue getValue(Fact fact) throws XBRLException {
-        if (fact.isTuple()) {
+    public SegmentAspectValue getValue(Fact fact) throws XBRLException {
+        try {
+            return new SegmentAspectValue(this,getFragment(fact));
+        } catch (XBRLException e) {
             return null;
         }
-        Item item = (Item) fact;
-        Segment segment = item.getContext().getEntity().getSegment();
-        if (segment == null) {
-            return null;
-        }
-        return new ScenarioAspectValue(this,segment);
-    }      
+    }
+
+    /**
+     * @see Aspect#getFragmentFromStore(Fact)
+     */
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+        Entity entity = ((Context) super.getFragment(fact)).getEntity();
+        Segment segment = entity.getSegment();
+        if (segment == null) throw new XBRLException("The segment fragment is not available.");
+        return segment;
+    }
 }

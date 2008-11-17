@@ -3,6 +3,7 @@ package org.xbrlapi.aspects;
 import java.util.List;
 
 import org.xbrlapi.Fact;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -96,6 +97,9 @@ public interface Aspect {
     public <A extends AspectValue> void addValue(A value) throws XBRLException;
  
     /**
+     * Adds the fact to the aspect, generating the aspect
+     * value, and storing the fact for later retrieval by that
+     * aspect value.
      * @param fact The fact to add.
      * @throws XBRLException if the fact cannot be added.
      */
@@ -107,5 +111,30 @@ public interface Aspect {
      * @throws XBRLException
      */
     public <A extends AspectValue> A getValue(Fact fact) throws XBRLException;
+
+
+    /**
+     * @param fact the fact to get the fragment for.
+     * @return the fragment required to generate an aspect value from the 
+     * fact.
+     * @throws XBRLException if the fragment cannot be obtained.
+     */
+    public Fragment getFragment(Fact fact) throws XBRLException;
+    
+    /**
+     * @param fact The fact to get the aspect value fragment from
+     * @return the fragment, retrieved from the data store, that is
+     * required to generate an aspect value from the fact.
+     * @throws XBRLException if the fragment cannot be obtained.
+     */
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException;
+    
+    /**
+     * @param fact The fact.
+     * @returnto the unique string identifying the fragment
+     * that is part of the aspect value for the given fact.
+     * @throws XBRLException
+     */
+    public String getFragmentKey(Fact fact) throws XBRLException;
     
 }
