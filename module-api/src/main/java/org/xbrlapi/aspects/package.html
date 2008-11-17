@@ -5,15 +5,42 @@
 </head>
 <body bgcolor="white">
 
-	The aspects package provides some basic classes supporting analysis 
-	of aspects as defined in the XBRL Variables specification.  It provides
-	a single aspect model implementation - for the non-dimensional aspect model. 
+	The aspects package provides some basic support of an OLAP view of XBRL data.
 	
 	<h2>Package Specification</h2>
 	
     <p>
     This package contains interfaces and implementations 
-    of AspectModels, Aspects and AspectValues.
+    of AspectModels, Aspects and AspectValues and 
+    AspectValueTransformers.
+    </p>
+
+    <p>
+      Aspect models are a collation of aspects, each one of which provides a piece of
+      information about an XBRL fact (eg the concept, the reporting entity, the reporting
+      period etc.).
+    </p>
+    
+    <p>
+      Aspects can be organised into heirarchies within groups 
+      (referred to as dimensions). This can be useful in working with aspects to populate 
+      rows and columns etc of tabular data arrangments.  Dimensions can have any name.
+      Dimensions are an ordered list of aspects.
+    </p>
+    
+    <p>
+      Aspects have a set of aspect values.  Each value can be transformed, according to the 
+      rules chosen by the aspect configuration, into a string representation.
+    </p>
+    
+    <p>
+      Aspect models provide a means of getting the set of facts in the aspect model that
+      are reported with specified values for a chosen set of aspects.
+    </p>
+    
+    <p>
+      Aspect models can be customised, by using custom transformers for aspects or by
+      designing a custom aspect model with custom aspects.
     </p>
     
 	<!-- Put @see and @since tags down here. -->
