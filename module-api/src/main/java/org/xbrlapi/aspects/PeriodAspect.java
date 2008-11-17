@@ -27,7 +27,7 @@ public class PeriodAspect extends BaseContextAspect implements Aspect {
         return Aspect.PERIOD;
     }
 
-    private class Transformer implements AspectValueTransformer {
+    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         public Transformer() {
             super();
         }
@@ -35,17 +35,21 @@ public class PeriodAspect extends BaseContextAspect implements Aspect {
             if (! value.getFragment().isa("org.xbrlapi.impl.PeriodImpl")) {
                 throw new XBRLException("The fragment is not the correct fragment type.");
             }
-            Period f = ((Period) value.getFragment());
-            String v = "";
-            if (f.isFiniteDurationPeriod()) {
-                v += dateTime(f.getStart()) + "-" + dateTime(f.getEnd());
-            } else if (f.isInstantPeriod()) {
-                v += dateTime(f.getInstant());
-            } else {
-                v += "forever";
+            if (hasTransform(value)) {
+                return getTransform(value);
             }
-            
-            return v;
+            Period f = ((Period) value.getFragment());
+            String result = "";
+            if (f.isFiniteDurationPeriod()) {
+                result += dateTime(f.getStart()) + "-" + dateTime(f.getEnd());
+            } else if (f.isInstantPeriod()) {
+                result += dateTime(f.getInstant());
+            } else {
+                result += "forever";
+            }
+            setTransform(value,result);
+            return result;
+
         }
 
         private String dateTime(String value) {

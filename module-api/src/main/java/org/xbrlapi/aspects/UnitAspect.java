@@ -29,7 +29,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
         return Aspect.CONCEPT;
     }
 
-    private class Transformer implements AspectValueTransformer {
+    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         public Transformer() {
             super();
         }
@@ -38,12 +38,13 @@ public class UnitAspect extends BaseAspect implements Aspect {
                 throw new XBRLException("The fragment is not the correct fragment type.");
             }
             Unit f = ((Unit) value.getFragment());
-            String v = "";
+            String result = "";
             for (String measure: f.getResolvedNumeratorMeasures()) {
                 String[] parts = measure.split("\\Q|:|:|\\E");
-                v += parts[0] + parts[1];
+                result += parts[0] + parts[1];
             }
-            return null;
+            setTransform(value,result);
+            return result;
         }
     }    
     

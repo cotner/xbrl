@@ -27,7 +27,7 @@ public class EntityIdentifierAspect extends BaseContextAspect implements Aspect 
         return Aspect.ENTITY_IDENTIFIER;
     }
 
-    private class Transformer implements AspectValueTransformer {
+    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         public Transformer() {
             super();
         }
@@ -35,8 +35,13 @@ public class EntityIdentifierAspect extends BaseContextAspect implements Aspect 
             if (! value.getFragment().isa("org.xbrlapi.impl.EntityImpl")) {
                 throw new XBRLException("The fragment is not the correct fragment type.");
             }
+            if (hasTransform(value)) {
+                return getTransform(value);
+            }
             Entity f = ((Entity) value.getFragment());
-            return f.getIdentifierScheme() + ": " + f.getIdentifierValue();
+            String result = f.getIdentifierScheme() + ": " + f.getIdentifierValue();
+            setTransform(value,result);
+            return result;
         }
     }
     

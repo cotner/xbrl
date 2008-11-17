@@ -1,5 +1,8 @@
 package org.xbrlapi.aspects;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -26,7 +29,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
         return Aspect.CONCEPT;
     }
 
-    private class Transformer implements AspectValueTransformer {
+    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         public Transformer() {
             super();
         }
@@ -34,9 +37,16 @@ public class ConceptAspect extends BaseAspect implements Aspect {
             if (! value.getFragment().isa("org.xbrlapi.impl.ConceptImpl")) {
                 throw new XBRLException("The fragment is not the correct fragment type.");
             }
+            if (hasTransform(value)) {
+                return getTransform(value);
+            }
             Concept f = ((Concept) value.getFragment());
-            return f.getTargetNamespaceURI() + ": " + f.getName();
+            String result = f.getTargetNamespaceURI() + ": " + f.getName();
+            setTransform(value,result);
+            return result;
         }
+        
+        private Map<AspectValue,String> map = new HashMap<AspectValue,String>();
     }
 
     /**

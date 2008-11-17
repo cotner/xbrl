@@ -27,7 +27,7 @@ public class ScenarioAspect extends BaseContextAspect implements Aspect {
         return Aspect.SCENARIO;
     }
 
-    private class Transformer implements AspectValueTransformer {
+    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         public Transformer() {
             super();
         }
@@ -36,7 +36,9 @@ public class ScenarioAspect extends BaseContextAspect implements Aspect {
                 throw new XBRLException("The fragment is not the correct fragment type.");
             }
             Scenario f = ((Scenario) value.getFragment());
-            return f.getStore().serializeToString(f.getDataRootElement());
+            String result = f.getStore().serializeToString(f.getDataRootElement());
+            setTransform(value,result);
+            return result;
         }
     }    
     
