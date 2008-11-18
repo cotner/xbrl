@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects.tests;
 
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fact;
@@ -43,8 +44,8 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             AspectModel model = new NonDimensionalAspectModel();
             model.arrangeAspect(Aspect.CONCEPT,"row");
             model.arrangeAspect(Aspect.ENTITY_IDENTIFIER,"row");
-            model.arrangeAspect(Aspect.PERIOD,"row");
-            model.arrangeAspect(Aspect.UNIT,"row");
+            model.arrangeAspect(Aspect.PERIOD,"col");
+            model.arrangeAspect(Aspect.UNIT,"col");
             for (Fact fact: facts) {
                 model.addFact(fact);
             }
@@ -60,16 +61,22 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             model.setCriterion(model.getAspect(Aspect.ENTITY_IDENTIFIER).getValues().get(0));
             model.setCriterion(model.getAspect(Aspect.PERIOD).getValues().get(0));
             model.setCriterion(model.getAspect(Aspect.UNIT).getValues().get(0));
-            assertEquals(2,model.getMatchingFacts().size());
-            
-            List<List<AspectValue>> matrix = model.getAspectValueCombinationsForDimension("row");
-            assertEquals(16,matrix.size());
-            assertEquals(4,matrix.get(0).size());
-            for (List<AspectValue> combination: matrix) {
-                for (AspectValue value: combination) {
-                    System.out.print(value.getTransformedValue());
+            List<List<AspectValue>> rowMatrix = model.getAspectValueCombinationsForDimension("row");
+            List<List<AspectValue>> colMatrix = model.getAspectValueCombinationsForDimension("col");
+            assertEquals(4,rowMatrix.size());
+            assertEquals(2,rowMatrix.get(0).size());
+            assertEquals(2,colMatrix.size());
+            assertEquals(2,colMatrix.get(0).size());
+            for (List<AspectValue> rowCombination: rowMatrix) {
+                for (List<AspectValue> colCombination: colMatrix) {
+                    model.clearAllCriteria();
+                    model.setCriteria(rowCombination);
+                    model.setCriteria(colCombination);
+                    Set<Fact> matchingFacts = model.getMatchingFacts();
+                    for (Fact matchingFact: matchingFacts) {
+                        logger.info(matchingFact.getFragmentIndex());
+                    }
                 }
-                System.out.println("");
             }
             
 		} catch (Exception e) {

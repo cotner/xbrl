@@ -222,7 +222,7 @@ abstract public class BaseAspect implements Aspect {
     /**
      * @see org.xbrlapi.aspects.Aspect#getFacts()
      */
-    public Set<Fact> getMatchingFacts() {
+    public Set<Fact> getMatchingFacts() throws XBRLException {
         if (getSelectionCriterion() == null) {
             Set<Fact> result = new HashSet<Fact>();
             for (AspectValue value: values.values()) {
@@ -230,7 +230,7 @@ abstract public class BaseAspect implements Aspect {
             }
             return result;
         }
-        return this.facts.get(criterion);
+        return this.facts.get(criterion.getTransformedValue());
     }
 
     /**
@@ -247,12 +247,11 @@ abstract public class BaseAspect implements Aspect {
         return criterion;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.xbrlapi.aspects.Aspect#setSelectionCriterion(org.xbrlapi.aspects.AspectValue)
      */
     public void setSelectionCriterion(AspectValue criterion) {
-        // TODO Auto-generated method stub
-        
+        this.criterion = criterion;
     }
     
     

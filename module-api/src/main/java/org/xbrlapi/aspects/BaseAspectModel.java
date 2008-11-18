@@ -2,6 +2,7 @@ package org.xbrlapi.aspects;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -17,6 +19,8 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 abstract public class BaseAspectModel implements AspectModel {
+
+    protected static Logger logger = Logger.getLogger(BaseAspectModel.class);  
 
     /**
      * From aspect type to aspect.
@@ -163,6 +167,8 @@ abstract public class BaseAspectModel implements AspectModel {
 
     public Set<Fact> getFacts(Collection<AspectValue> values) throws XBRLException {
 
+        System.out.println("# of criteria = " + values.size());
+        
         if (values == null) throw new XBRLException("The list of aspect values must not be null.");
         
         if (values.isEmpty()) return getAllFacts();
@@ -189,13 +195,13 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#getMatchingFacts()
      */
     public Set<Fact> getMatchingFacts() throws XBRLException {
-        Set<Fact> matches = null;
+        Set<Fact> matches = new HashSet<Fact>();
         for (Aspect aspect: getAspects()) {
-            if (matches == null) {
+            if (matches.isEmpty()) {
                 if(aspect.hasSelectionCriterion()) {
-                    matches = aspect.getMatchingFacts();
+                    matches.addAll(aspect.getMatchingFacts());
                 } else {
-                    matches = getAllFacts();
+                    matches.addAll(getAllFacts());
                 }
             } else {
                 if(aspect.hasSelectionCriterion()) {
@@ -214,6 +220,15 @@ abstract public class BaseAspectModel implements AspectModel {
         Aspect aspect = this.getAspect(criterion.getAspect().getType());
         aspect.setSelectionCriterion(criterion);
     }
+    
+    /**
+     * @see AspectModel#setCriteria(Collection)
+     */
+    public void setCriteria(Collection<AspectValue> criteria) throws XBRLException {
+        for (AspectValue criterion: criteria) {
+            setCriterion(criterion);
+        }
+    }    
 
     /**
      * @see AspectModel#clearAllCriteria()
@@ -232,7 +247,7 @@ abstract public class BaseAspectModel implements AspectModel {
         // Set up the result matrix
         List<Aspect> aspects = getDimensionAspects(dimension);
         List<List<AspectValue>> result = new Vector<List<AspectValue>>();
-        int combinations = aspects.get(0).getDescendantCount() * aspects.get(0).getDescendantCount();
+        int combinations = aspects.get(0).getValues().size() * aspects.get(0).getDescendantCount();
         for (int i=0; i<combinations; i++) {
             result.add(new Vector<AspectValue>());
         }
@@ -241,16 +256,16 @@ abstract public class BaseAspectModel implements AspectModel {
             int vCount = values.size();
             int dCount = aspect.getDescendantCount();
             int aCount = aspect.getAncestorCount();
-            System.out.println(aspect.getType());
-            System.out.println(aCount);
-            System.out.println(dCount);
-            System.out.println(vCount);
-            for (int i=0; i<aCount; i++) {
-                for (int j=0; j<dCount; j++) {
-                    for (int k=0; k<vCount; k++) {
-                        int index = i*dCount*vCount + j*vCount+k;
-                        System.out.println(index);
-                        result.get(index).add(values.get(k));
+            logger.debug(aspect.getType());
+            logger.debug("#ancestors   = " + aCount);
+            logger.debug("#descendants = " + dCount);
+            logger.debug("#values      = " + vCount);
+            for (int a_i=0; a_i<aCount; a_i++) {
+                for (int d_i=0; d_i<dCount; d_i++) {
+                    for (int v_i=0; v_i<vCount; v_i++) {
+                        int index = dCount*vCount*a_i + dCount*v_i + d_i;
+                        logger.debug("value " + v_i + " goes at index " + index);
+                        result.get(index).add(values.get(v_i));
                     }
                 }
             }

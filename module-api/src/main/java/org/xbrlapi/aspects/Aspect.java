@@ -187,8 +187,9 @@ public interface Aspect {
      * @return the set of facts matching the selection criterion
      * set for this aspect or all facts if the selection criterion
      * is cleared (null).
+     * @throws XBRLException
      */
-    public Set<Fact> getMatchingFacts();
+    public Set<Fact> getMatchingFacts() throws XBRLException;
     
     /**
      * @return true if the aspect has a selection criterion aspect 
