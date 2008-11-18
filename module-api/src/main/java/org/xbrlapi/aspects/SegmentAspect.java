@@ -10,7 +10,7 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class SegmentAspect extends BaseContextAspect implements Aspect {
+public class SegmentAspect extends ContextAspect implements Aspect {
 
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -59,7 +59,7 @@ public class SegmentAspect extends BaseContextAspect implements Aspect {
      * @see Aspect#getFragmentFromStore(Fact)
      */
     public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        Entity entity = ((Context) super.getFragment(fact)).getEntity();
+        Entity entity = ((Context) super.getFragmentFromStore(fact)).getEntity();
         Segment segment = entity.getSegment();
         if (segment == null) throw new XBRLException("The segment fragment is not available.");
         return segment;

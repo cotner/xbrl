@@ -26,7 +26,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
      * @see Aspect#getType()
      */
     public String getType() {
-        return Aspect.CONCEPT;
+        return Aspect.UNIT;
     }
 
     private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {

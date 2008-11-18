@@ -94,7 +94,7 @@ public interface Aspect {
     /**
      * @return an iterator over the ordered values for this aspect.
      */
-    public Iterator<AspectValue> getValueIterator();
+    public Iterator<AspectValue> getIterator();
     
     /**
      * @return the number of combinations of descendant aspect
@@ -136,15 +136,17 @@ public interface Aspect {
     /**
      * Adds the fact to the aspect, generating the aspect
      * value, and storing the fact for later retrieval by that
-     * aspect value.
+     * aspect value.  The fact is not stored for this aspect if
+     * it does not have a value for this aspect.
      * @param fact The fact to add.
-     * @throws XBRLException if the fact cannot be added.
+     * @throws XBRLException.
      */
     public void addFact(Fact fact) throws XBRLException;
     
     /**
      * @param fact The fact to get the aspect value for
-     * @return the aspect value for the fact
+     * @return the aspect value for the fact or null if the
+     * fact does not have a value for this aspect.
      * @throws XBRLException
      */
     public <A extends AspectValue> A getValue(Fact fact) throws XBRLException;
@@ -180,5 +182,35 @@ public interface Aspect {
      * @throws XBRLException if the aspect value is not a value for this aspect.
      */
     public Set<Fact> getFacts(AspectValue value) throws XBRLException;
+    
+    /**
+     * @return the set of facts matching the selection criterion
+     * set for this aspect or all facts if the selection criterion
+     * is cleared (null).
+     */
+    public Set<Fact> getMatchingFacts();
+    
+    /**
+     * @return true if the aspect has a selection criterion aspect 
+     * value and false if that criterion is null.
+     */
+    public boolean hasSelectionCriterion();
+    
+    /**
+     * @return the aspect value used by the aspect model for selecting facts
+     * based upon this aspect or null if no such criterion has been set.
+     */
+    public AspectValue getSelectionCriterion();
+
+    /**
+     * @param criterion The selection criterion for this aspect.
+     */
+    public void setSelectionCriterion(AspectValue criterion);
+    
+    /**
+     * Sets the selection criterion to null.
+     */
+    public void clearSelectionCriterion();
+    
     
 }

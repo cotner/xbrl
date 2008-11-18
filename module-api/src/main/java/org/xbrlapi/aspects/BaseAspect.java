@@ -56,7 +56,7 @@ abstract public class BaseAspect implements Aspect {
     /**
      * @see org.xbrlapi.aspects.Aspect#getIterator()
      */
-    public Iterator<AspectValue> getValueIterator() {
+    public Iterator<AspectValue> getIterator() {
         return values.values().iterator();
     }
     
@@ -174,6 +174,7 @@ abstract public class BaseAspect implements Aspect {
      */
     public void addFact(Fact fact) throws XBRLException {
         AspectValue value = getValue(fact);
+        if (value == null) return;
         this.addValue(value);
         AspectValueTransformer transformer = this.getTransformer();
         String key = transformer.transform(value);
@@ -198,6 +199,52 @@ abstract public class BaseAspect implements Aspect {
         fragmentMap.put(fragmentKey,fragment);
         return fragment;
     }
+
+    private AspectValue criterion = null;
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#clearSelectionCriterion()
+     */
+    public void clearSelectionCriterion() {
+        criterion = null;
+    }
+
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getFacts()
+     */
+    public Set<Fact> getMatchingFacts() {
+        if (getSelectionCriterion() == null) {
+            Set<Fact> result = new HashSet<Fact>();
+            for (AspectValue value: values.values()) {
+                result.addAll(facts.get(value));
+            }
+            return result;
+        }
+        return this.facts.get(criterion);
+    }
+
+    /**
+     * @see org.xbrlapi.aspects.Aspect#hasSelectionCriterion()
+     */
+    public boolean hasSelectionCriterion() {
+        return (getSelectionCriterion() != null);
+    }
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getSelectionCriterion()
+     */
+    public AspectValue getSelectionCriterion() {
+        return criterion;
+    }
+
+    /* (non-Javadoc)
+     * @see org.xbrlapi.aspects.Aspect#setSelectionCriterion(org.xbrlapi.aspects.AspectValue)
+     */
+    public void setSelectionCriterion(AspectValue criterion) {
+        // TODO Auto-generated method stub
+        
+    }
+    
     
     
     

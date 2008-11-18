@@ -9,7 +9,7 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class EntityIdentifierAspect extends BaseContextAspect implements Aspect {
+public class EntityIdentifierAspect extends ContextAspect implements Aspect {
 
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -61,7 +61,7 @@ public class EntityIdentifierAspect extends BaseContextAspect implements Aspect 
      * @see Aspect#getFragmentFromStore(Fact)
      */
     public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        return ((Context) super.getFragment(fact)).getEntity();
+        return ((Context) super.getFragmentFromStore(fact)).getEntity();
     }
     
 }

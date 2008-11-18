@@ -9,7 +9,7 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class PeriodAspect extends BaseContextAspect implements Aspect {
+public class PeriodAspect extends ContextAspect implements Aspect {
 
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -81,7 +81,7 @@ public class PeriodAspect extends BaseContextAspect implements Aspect {
      * @see Aspect#getFragmentFromStore(Fact)
      */
     public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        return ((Context) super.getFragment(fact)).getPeriod();
+        return ((Context) super.getFragmentFromStore(fact)).getPeriod();
     }    
     
 }

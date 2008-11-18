@@ -8,7 +8,7 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public abstract class BaseContextAspect extends BaseAspect implements Aspect {
+public abstract class ContextAspect extends BaseAspect implements Aspect {
 
     /**
      * @see Aspect#getFragmentFromStore(Fact)

@@ -98,5 +98,36 @@ public interface AspectModel {
      */
     public Set<Fact> getFacts(Set<AspectValue> values) throws XBRLException;
     
+    /**
+     * @return the set of all facts in the aspect model.
+     * @throws XBRLException
+     */
+    public Set<Fact> getAllFacts() throws XBRLException;
+    
+    /**
+     * @return The set of facts matching the selection 
+     * criteria that have been added to the aspect model.
+     * @throws XBRLException
+     */
+    public Set<Fact> getMatchingFacts() throws XBRLException;
+    
+    /**
+     * Adds a fact selection criterion used in selecting
+     * a set of the facts in the aspect model.
+     * @param criterion The aspect value that the selected
+     * facts must have.
+     * @see AspectModel#getFacts()
+     * @throws XBRLException
+     */
+    public void setCriterion(AspectValue criterion) throws XBRLException;
+
+    /**
+     * Clears all fact selection criteria in the aspect model.
+     * @see AspectModel#setCriterion(AspectValue)
+     * @see AspectModel#getMatchingFacts()
+     */
+    public void clearAllCriteria();
+
+    
     
 }

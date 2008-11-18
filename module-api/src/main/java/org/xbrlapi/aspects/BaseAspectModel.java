@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import org.xbrlapi.Fact;
@@ -24,6 +25,8 @@ abstract public class BaseAspectModel implements AspectModel {
      * From dimension name to list of aspects in dimension.
      */
     private Map<String,List<Aspect>> dimensions = new HashMap<String,List<Aspect>>();
+    
+    private Set<Fact> facts = new TreeSet<Fact>(); 
     
     /**
      * @see AspectModel#getAspects()
@@ -150,6 +153,7 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#addFact(Fact)
      */
     public void addFact(Fact fact) throws XBRLException {
+        facts.add(fact);
         Collection<Aspect> aspects = this.getAspects();
         for (Aspect aspect: aspects) {
             aspect.addFact(fact);
@@ -160,6 +164,11 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#getFacts(Set)
      */
     public Set<Fact> getFacts(Set<AspectValue> values) throws XBRLException {
+
+        if (values == null) throw new XBRLException("The set of aspect values must not be null.");
+        
+        if (values.isEmpty()) return getAllFacts();
+        
         Set<Fact> matches = null;
         for (AspectValue value: values) {
             if (matches == null) {
@@ -170,6 +179,53 @@ abstract public class BaseAspectModel implements AspectModel {
             }
         }
         return matches;
-    }    
+    }
+    
+    public Set<Fact> getAllFacts() throws XBRLException {
+        return facts;
+    }
+    
+
+    
+    /**
+     * @see AspectModel#getMatchingFacts()
+     */
+    public Set<Fact> getMatchingFacts() throws XBRLException {
+        Set<Fact> matches = null;
+        for (Aspect aspect: getAspects()) {
+            if (matches == null) {
+                if(aspect.hasSelectionCriterion()) {
+                    matches = aspect.getMatchingFacts();
+                } else {
+                    matches = getAllFacts();
+                }
+            } else {
+                if(aspect.hasSelectionCriterion()) {
+                    Set<Fact> candidates = aspect.getMatchingFacts();
+                    matches.retainAll(candidates);
+                }
+            }
+        }
+        return matches;
+    }
+    
+    /**
+     * @see AspectModel#setCriterion(AspectValue)
+     */
+    public void setCriterion(AspectValue criterion) throws XBRLException {
+        Aspect aspect = this.getAspect(criterion.getAspect().getType());
+        aspect.setSelectionCriterion(criterion);
+    }
+
+    /**
+     * @see AspectModel#clearAllCriteria()
+     */
+    public void clearAllCriteria() {
+        for (Aspect aspect: getAspects()) {
+            aspect.clearSelectionCriterion();
+        }
+    }
+    
+
     
 }

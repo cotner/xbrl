@@ -9,7 +9,7 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ScenarioAspect extends BaseContextAspect implements Aspect {
+public class ScenarioAspect extends ContextAspect implements Aspect {
 
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -58,7 +58,7 @@ public class ScenarioAspect extends BaseContextAspect implements Aspect {
      * @see Aspect#getFragmentFromStore(Fact)
      */
     public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        Scenario scenario = ((Context) super.getFragment(fact)).getScenario();
+        Scenario scenario = ((Context) super.getFragmentFromStore(fact)).getScenario();
         if (scenario == null) throw new XBRLException("The scenario fragment is not available.");
         return scenario;
     }    
