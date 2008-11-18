@@ -63,9 +63,14 @@ abstract public class BaseAspect implements Aspect {
     /**
      * @see org.xbrlapi.aspects.Aspect#getDescendantCount()
      */
-    public int getDescendantCount() throws XBRLException {
+    public int getDescendantCount() {
         if (this.isOrphan()) return 1;
-        List<Aspect> aspects = this.getAspectModel().getDimensionAspects(this.getDimension());
+        List<Aspect> aspects = null;
+        try {
+            aspects = this.getAspectModel().getDimensionAspects(this.getDimension());
+        } catch (XBRLException e) {
+            ;// Cannot be thrown
+        }
         int count = 0;
         for (Aspect aspect: aspects) {
             if (aspect.getType().equals(this.getType())) count = 1;
@@ -77,9 +82,14 @@ abstract public class BaseAspect implements Aspect {
     /**
      * @see org.xbrlapi.aspects.Aspect#getAncestorCount()
      */
-    public int getAncestorCount() throws XBRLException {
+    public int getAncestorCount() {
         if (this.isOrphan()) return 1;
-        List<Aspect> aspects = this.getAspectModel().getDimensionAspects(this.getDimension());
+        List<Aspect> aspects = null;
+        try {
+            aspects = this.getAspectModel().getDimensionAspects(this.getDimension());
+        } catch (XBRLException e) {
+            ;//Cannot be thrown
+        }
         int count = 1;
         for (Aspect aspect: aspects) {
             if (aspect.getType().equals(this.getType())) return count;

@@ -101,14 +101,14 @@ public interface Aspect {
      * values (for those descendant aspects in the same dimension
      * of the aspect model).
      */
-    public int getDescendantCount() throws XBRLException;
+    public int getDescendantCount();
     
     /**
      * @return the number of combinations of ancestor aspect
      * values (for those ancestor aspects in the same dimension
      * of the aspect model).
      */
-    public int getAncestorCount() throws XBRLException;    
+    public int getAncestorCount();    
     
     
     /**

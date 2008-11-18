@@ -2,6 +2,7 @@ package org.xbrlapi.aspects;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +25,7 @@ abstract public class BaseAspectModel implements AspectModel {
     /**
      * From dimension name to list of aspects in dimension.
      */
-    private Map<String,List<Aspect>> dimensions = new HashMap<String,List<Aspect>>();
+    private Map<String,LinkedList<Aspect>> dimensions = new HashMap<String,LinkedList<Aspect>>();
     
     private Set<Fact> facts = new TreeSet<Fact>(); 
     
@@ -66,7 +67,7 @@ abstract public class BaseAspectModel implements AspectModel {
     /**
      * @see AspectModel#getDimensionAspects(String)
      */
-    public List<Aspect> getDimensionAspects(String dimension) {
+    public LinkedList<Aspect> getDimensionAspects(String dimension) {
         return dimensions.get(dimension);
     }
 
@@ -105,16 +106,15 @@ abstract public class BaseAspectModel implements AspectModel {
         Aspect aspect = aspects.get(aspectType);
         
         if (! aspect.isOrphan()) {
-            List<Aspect> dimensionAspects = dimensions.get(aspect.getDimension());
-            dimensionAspects.remove(aspect);
+           LinkedList<Aspect> dimensionAspects = dimensions.get(aspect.getDimension());
+           dimensionAspects.remove(aspect);
         }
        
-        List<Aspect> dimensionAspects;
+        LinkedList<Aspect> dimensionAspects;
         if (dimensions.containsKey(dimension)) {
             dimensionAspects = this.dimensions.get(dimension);
-            dimensionAspects.add(aspect);
         } else {
-            dimensionAspects = new Vector<Aspect>();
+            dimensionAspects = new LinkedList<Aspect>();
             dimensions.put(dimension,dimensionAspects);
         }
         dimensionAspects.add(aspect);
@@ -160,12 +160,10 @@ abstract public class BaseAspectModel implements AspectModel {
         }
     }
  
-    /**
-     * @see AspectModel#getFacts(Set)
-     */
-    public Set<Fact> getFacts(Set<AspectValue> values) throws XBRLException {
 
-        if (values == null) throw new XBRLException("The set of aspect values must not be null.");
+    public Set<Fact> getFacts(Collection<AspectValue> values) throws XBRLException {
+
+        if (values == null) throw new XBRLException("The list of aspect values must not be null.");
         
         if (values.isEmpty()) return getAllFacts();
         
@@ -226,6 +224,38 @@ abstract public class BaseAspectModel implements AspectModel {
         }
     }
     
-
+    /**
+     * @see AspectModel#getAspectValueCombinationsForDimension(String)
+     */
+    public List<List<AspectValue>> getAspectValueCombinationsForDimension(String dimension) {
+        
+        // Set up the result matrix
+        List<Aspect> aspects = getDimensionAspects(dimension);
+        List<List<AspectValue>> result = new Vector<List<AspectValue>>();
+        int combinations = aspects.get(0).getDescendantCount() * aspects.get(0).getDescendantCount();
+        for (int i=0; i<combinations; i++) {
+            result.add(new Vector<AspectValue>());
+        }
+        for (Aspect aspect: aspects) {
+            List<AspectValue> values = aspect.getValues();
+            int vCount = values.size();
+            int dCount = aspect.getDescendantCount();
+            int aCount = aspect.getAncestorCount();
+            System.out.println(aspect.getType());
+            System.out.println(aCount);
+            System.out.println(dCount);
+            System.out.println(vCount);
+            for (int i=0; i<aCount; i++) {
+                for (int j=0; j<dCount; j++) {
+                    for (int k=0; k<vCount; k++) {
+                        int index = i*dCount*vCount + j*vCount+k;
+                        System.out.println(index);
+                        result.get(index).add(values.get(k));
+                    }
+                }
+            }
+        }
+        return result;
+    }
     
 }

@@ -1,5 +1,7 @@
 package org.xbrlapi.aspects.tests;
 
+import java.util.List;
+
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fact;
 import org.xbrlapi.FragmentList;
@@ -12,11 +14,13 @@ import org.xbrlapi.aspects.NonDimensionalAspectModel;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
-	private final String STARTING_POINT = "test.data.small.instance";
+	private final String STARTING_POINT1 = "test.data.small.instance";
+    private final String STARTING_POINT2 = "test.data.small.instance.2";	
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+        loader.discover(this.getURL(STARTING_POINT1));       
+		loader.discover(this.getURL(STARTING_POINT2));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -35,7 +39,12 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 	public void testCreatingNonDimensionalAspectModel() {
 		try {
 			FragmentList<Fact> facts = store.<Fact>getFragments("SimpleNumericItem");
+			assertEquals(2,facts.getLength());
             AspectModel model = new NonDimensionalAspectModel();
+            model.arrangeAspect(Aspect.CONCEPT,"row");
+            model.arrangeAspect(Aspect.ENTITY_IDENTIFIER,"row");
+            model.arrangeAspect(Aspect.PERIOD,"row");
+            model.arrangeAspect(Aspect.UNIT,"row");
             for (Fact fact: facts) {
                 model.addFact(fact);
             }
@@ -51,7 +60,17 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             model.setCriterion(model.getAspect(Aspect.ENTITY_IDENTIFIER).getValues().get(0));
             model.setCriterion(model.getAspect(Aspect.PERIOD).getValues().get(0));
             model.setCriterion(model.getAspect(Aspect.UNIT).getValues().get(0));
-            assertEquals(1,model.getMatchingFacts().size());
+            assertEquals(2,model.getMatchingFacts().size());
+            
+            List<List<AspectValue>> matrix = model.getAspectValueCombinationsForDimension("row");
+            assertEquals(16,matrix.size());
+            assertEquals(4,matrix.get(0).size());
+            for (List<AspectValue> combination: matrix) {
+                for (AspectValue value: combination) {
+                    System.out.print(value.getTransformedValue());
+                }
+                System.out.println("");
+            }
             
 		} catch (Exception e) {
 			e.printStackTrace();

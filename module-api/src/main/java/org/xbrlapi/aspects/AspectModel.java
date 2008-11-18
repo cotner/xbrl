@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -57,10 +58,10 @@ public interface AspectModel {
      * of child aspects, all of which are aspects associated with the same dimension
      * of the aspect model.  These dimensions are useful for relating aspects
      * to rows and columns of a table, for example.
-     * @return the list of aspects for the dimension.
+     * @return the linked list of aspects for the dimension.
      * @throws XBRLException if the dimension is not defined for the aspect model.
      */
-    public List<Aspect> getDimensionAspects(String dimension) throws XBRLException;
+    public LinkedList<Aspect> getDimensionAspects(String dimension) throws XBRLException;
 
     /**
      * @param aspect The aspect to set in the aspect model, as an orphan.
@@ -90,13 +91,15 @@ public interface AspectModel {
      */
     public void arrangeAspect(String aspectType, String dimension, String parentType) throws XBRLException;
  
+
+    
     /**
-     * @param values is a set of AspectValues to be matched.
+     * @param values is a collection of AspectValues to be matched.
      * @return the set of all facts in the aspect model that 
      * match all of the aspect values to be matched.
      * @throws XBRLException
      */
-    public Set<Fact> getFacts(Set<AspectValue> values) throws XBRLException;
+    public Set<Fact> getFacts(Collection<AspectValue> values) throws XBRLException;    
     
     /**
      * @return the set of all facts in the aspect model.
@@ -128,6 +131,16 @@ public interface AspectModel {
      */
     public void clearAllCriteria();
 
-    
+    /**
+     * @param dimension The name of the dimension
+     * @return a list of lists of aspect values where
+     * each list in the list is a combination of one 
+     * aspect value for each aspect in the dimension.
+     * The aspect values in each combination 
+     * are ordered in the same order as the aspects in the
+     * dimension.  The lists in the list are ordered 
+     * by the orderings of the values for each aspect.
+     */
+    public List<List<AspectValue>> getAspectValueCombinationsForDimension(String dimension);
     
 }
