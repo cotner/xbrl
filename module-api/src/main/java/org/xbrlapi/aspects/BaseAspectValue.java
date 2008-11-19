@@ -49,9 +49,9 @@ public abstract class BaseAspectValue implements AspectValue {
     }
 
     /**
-     * @see AspectValue#getTransformedValue()
+     * @see AspectValue#getId()
      */
-    public String getTransformedValue() throws XBRLException {
+    public String getId() throws XBRLException {
         return getAspect().getTransformer().getIdentifier(this);
     }
     

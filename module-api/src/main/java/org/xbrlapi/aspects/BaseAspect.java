@@ -230,7 +230,7 @@ abstract public class BaseAspect implements Aspect {
             }
             return result;
         }
-        return this.facts.get(criterion.getTransformedValue());
+        return this.facts.get(criterion.getId());
     }
 
     /**
