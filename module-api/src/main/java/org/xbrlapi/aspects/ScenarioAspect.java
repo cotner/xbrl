@@ -31,15 +31,38 @@ public class ScenarioAspect extends ContextAspect implements Aspect {
         public Transformer() {
             super();
         }
-        public String transform(AspectValue value) throws XBRLException {
+        
+        /**
+         * @see AspectValueTransformer#validate(AspectValue)
+         */
+        public void validate(AspectValue value) throws XBRLException {
+            super.validate(value);
             if (! value.getFragment().isa("org.xbrlapi.impl.ScenarioImpl")) {
-                throw new XBRLException("The fragment is not the correct fragment type.");
+                throw new XBRLException("The aspect value must have a scenario fragment.");
+            }
+        }
+
+        /**
+         * @see AspectValueTransformer#getIdentifier(AspectValue)
+         */
+        public String getIdentifier(AspectValue value) throws XBRLException {
+            validate(value);
+            if (hasMapId(value)) {
+                return getMapId(value);
             }
             Scenario f = ((Scenario) value.getFragment());
-            String result = f.getStore().serializeToString(f.getDataRootElement());
-            setTransform(value,result);
-            return result;
+            String id = f.getStore().serializeToString(f.getDataRootElement());
+            setMapId(value,id);
+            return id;
         }
+        
+        /**
+         * @see AspectValueTransformer#getLabel(AspectValue)
+         */
+        public String getLabel(AspectValue value) throws XBRLException {
+            return getIdentifier(value);
+        }        
+
     }    
     
     /**

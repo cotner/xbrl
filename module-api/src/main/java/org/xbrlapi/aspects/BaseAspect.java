@@ -111,7 +111,7 @@ abstract public class BaseAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#addValue()
      */
     public void addValue(AspectValue value) throws XBRLException {
-        String key = this.getTransformer().transform(value);
+        String key = this.getTransformer().getIdentifier(value);
         if (! values.containsKey(key)) values.put(key, value);
     }    
 
@@ -133,7 +133,7 @@ abstract public class BaseAspect implements Aspect {
      * @see Aspect#hasValue(AspectValue)
      */
     public boolean hasValue(AspectValue value) throws XBRLException {
-        return values.containsKey(getTransformer().transform(value));
+        return values.containsKey(getTransformer().getIdentifier(value));
     }
     
     /**
@@ -174,7 +174,7 @@ abstract public class BaseAspect implements Aspect {
      */
     public Set<Fact> getFacts(AspectValue value) throws XBRLException {
         if (! this.hasValue(value)) throw new XBRLException("This aspect does not have the given aspect value.");
-        String key = getTransformer().transform(value);
+        String key = getTransformer().getIdentifier(value);
         if (! facts.containsKey(key)) return new HashSet<Fact>();
         return facts.get(key);
     }
@@ -187,7 +187,7 @@ abstract public class BaseAspect implements Aspect {
         if (value == null) return;
         this.addValue(value);
         AspectValueTransformer transformer = this.getTransformer();
-        String key = transformer.transform(value);
+        String key = transformer.getIdentifier(value);
         if (facts.containsKey(key)) {
             Set<Fact> set = facts.get(key);
             if (! set.contains(fact)) set.add(fact);

@@ -3,23 +3,54 @@ package org.xbrlapi.aspects;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.xbrlapi.utilities.XBRLException;
+
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public abstract class BaseAspectValueTransformer implements AspectValueTransformer {
+public class BaseAspectValueTransformer implements AspectValueTransformer {
     
-    private Map<AspectValue,String> map = new HashMap<AspectValue,String>();
+    public BaseAspectValueTransformer() {
+        super();
+    }    
     
-    protected boolean hasTransform(AspectValue value) {
-        return map.containsKey(value);
+    private Map<AspectValue,String> idMap = new HashMap<AspectValue,String>();
+    private Map<String,String> labelMap = new HashMap<String,String>();
+    
+    protected boolean hasMapId(AspectValue value) {
+        return idMap.containsKey(value);
     }
 
-    protected String getTransform(AspectValue value) {
-        return map.get(value);
+    protected String getMapId(AspectValue value) {
+        return idMap.get(value);
     }
     
-    protected String setTransform(AspectValue value, String transform) {
-        return map.put(value,transform);
+    protected String setMapId(AspectValue value, String id) {
+        return idMap.put(value,id);
+    }
+
+    protected boolean hasMapLabel(String id) {
+        return labelMap.containsKey(id);
+    }
+
+    protected String getMapLabel(String id) {
+        return labelMap.get(id);
     }
     
+    protected String setMapLabel(String id, String label) {
+        return labelMap.put(id,label);
+    }
+
+    public void validate(AspectValue value) throws XBRLException {
+        ;
+    }    
+    
+    public String getIdentifier(AspectValue value) throws XBRLException {
+        return value.getFragment().getFragmentIndex();
+    }
+    
+    public String getLabel(AspectValue value) throws XBRLException {
+        return getIdentifier(value);
+    }
+        
 }

@@ -4,6 +4,9 @@ import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.FragmentList;
+import org.xbrlapi.LabelResource;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -28,21 +31,98 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
     }
 
     private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
+        
         public Transformer() {
             super();
         }
-        public String transform(AspectValue value) throws XBRLException {
+
+        /**
+         * @see AspectValueTransformer#validate(AspectValue)
+         */
+        public void validate(AspectValue value) throws XBRLException {
+            super.validate(value);
             if (! value.getFragment().isa("org.xbrlapi.impl.EntityImpl")) {
-                throw new XBRLException("The fragment is not the correct fragment type.");
+                throw new XBRLException("The aspect value must have an entity fragment.");
             }
-            if (hasTransform(value)) {
-                return getTransform(value);
+        }
+        
+        /**
+         * @see AspectValueTransformer#getIdentifier(AspectValue)
+         */
+        public String getIdentifier(AspectValue value) throws XBRLException {
+            validate(value);
+            if (hasMapId(value)) {
+                return getMapId(value);
             }
             Entity f = ((Entity) value.getFragment());
-            String result = f.getIdentifierScheme() + ": " + f.getIdentifierValue();
-            setTransform(value,result);
-            return result;
+            String id = f.getIdentifierScheme() + ": " + f.getIdentifierValue();
+            setMapId(value,id);
+            return id;
         }
+        
+        /**
+         * @see AspectValueTransformer#getLabel(AspectValue)
+         */
+        public String getLabel(AspectValue value) throws XBRLException {
+            String id = getIdentifier(value);
+            if (hasMapLabel(id)) {
+                return getMapLabel(id);
+            }
+            String label = id;
+            Entity f = ((Entity) value.getFragment());
+            FragmentList<LabelResource> labels = f.getEntityLabels();
+            FINDLABEL: for (LabelResource l: labels) {
+                if (
+                        l.getLanguage().equals(getLanguageCode()) &&
+                        l.getResourceRole().equals(getLabelRole())
+                   ) {
+                    label = l.getStringValue();
+                    break FINDLABEL;
+                }
+            }
+            setMapLabel(id,label);
+            return label;
+        }
+        
+        /**
+         * The label role is used in constructing the label for the
+         * concept aspect values.
+         */
+        private String role = Constants.StandardLabelRole;
+        /**
+         * @return the label resource role.
+         */
+        public String getLabelRole() {
+            return role;
+        }
+        /**
+         * @param role The label resource role to use in
+         * selecting labels for the concept.
+         */
+        public void setLabelRole(String role) {
+            this.role = role;
+        }
+
+        /**
+         * The language code is used in constructing the label for the
+         * concept aspect values.
+         */
+        private String language = "en";
+        /**
+         * @return the language code.
+         */
+        public String getLanguageCode() {
+            return language;
+        }
+        /**
+         * @param language The ISO language code
+         */
+        public void setLanguageCode(String language) throws XBRLException {
+            if (language == null) throw new XBRLException("The language must not be null.");
+            this.language = language;
+        }    
+    
+    
     }
     
     /**

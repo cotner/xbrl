@@ -52,7 +52,7 @@ public abstract class BaseAspectValue implements AspectValue {
      * @see AspectValue#getTransformedValue()
      */
     public String getTransformedValue() throws XBRLException {
-        return getAspect().getTransformer().transform(this);
+        return getAspect().getTransformer().getIdentifier(this);
     }
     
 }

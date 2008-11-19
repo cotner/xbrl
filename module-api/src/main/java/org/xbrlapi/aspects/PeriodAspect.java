@@ -31,27 +31,45 @@ public class PeriodAspect extends ContextAspect implements Aspect {
         public Transformer() {
             super();
         }
-        public String transform(AspectValue value) throws XBRLException {
+
+        /**
+         * @see AspectValueTransformer#validate(AspectValue)
+         */
+        public void validate(AspectValue value) throws XBRLException {
+            super.validate(value);
             if (! value.getFragment().isa("org.xbrlapi.impl.PeriodImpl")) {
-                throw new XBRLException("The fragment is not the correct fragment type.");
+                throw new XBRLException("The aspect value must have a period fragment.");
             }
-            if (hasTransform(value)) {
-                return getTransform(value);
+        }
+        
+        /**
+         * @see AspectValueTransformer#getIdentifier(AspectValue)
+         */
+        public String getIdentifier(AspectValue value) throws XBRLException {
+            validate(value);
+            if (hasMapId(value)) {
+                return getMapId(value);
             }
             Period f = ((Period) value.getFragment());
-            String result = "";
+            String id = "";
             if (f.isFiniteDurationPeriod()) {
-                result += dateTime(f.getStart()) + "-" + dateTime(f.getEnd());
+                id += dateTime(f.getStart()) + "-" + dateTime(f.getEnd());
             } else if (f.isInstantPeriod()) {
-                result += dateTime(f.getInstant());
+                id += dateTime(f.getInstant());
             } else {
-                result += "forever";
+                id += "forever";
             }
-            setTransform(value,result);
-            return result;
-
+            setMapId(value,id);
+            return id;
         }
-
+        
+        /**
+         * @see AspectValueTransformer#getLabel(AspectValue)
+         */
+        public String getLabel(AspectValue value) throws XBRLException {
+            return getIdentifier(value);
+        }        
+        
         private String dateTime(String value) {
             int tIndex = value.indexOf('T');
             if (tIndex == -1) {

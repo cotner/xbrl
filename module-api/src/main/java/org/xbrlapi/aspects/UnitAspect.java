@@ -30,12 +30,30 @@ public class UnitAspect extends BaseAspect implements Aspect {
     }
 
     private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
+        
         public Transformer() {
             super();
         }
-        public String transform(AspectValue value) throws XBRLException {
+        
+
+        /**
+         * @see AspectValueTransformer#validate(AspectValue)
+         */
+        public void validate(AspectValue value) throws XBRLException {
+            super.validate(value);
             if (! value.getFragment().isa("org.xbrlapi.impl.UnitImpl")) {
-                throw new XBRLException("The fragment is not the correct fragment type.");
+                throw new XBRLException("The aspect value must have a unit fragment.");
+            }
+        }
+
+        /**
+         * TODO Handle transformations and labelling of units with denominators.
+         * @see AspectValueTransformer#getIdentifier(AspectValue)
+         */
+        public String getIdentifier(AspectValue value) throws XBRLException {
+            validate(value);
+            if (hasMapId(value)) {
+                return getMapId(value);
             }
             Unit f = ((Unit) value.getFragment());
             String result = "";
@@ -43,9 +61,17 @@ public class UnitAspect extends BaseAspect implements Aspect {
                 String[] parts = measure.split("\\Q|:|:|\\E");
                 result += parts[0] + parts[1];
             }
-            setTransform(value,result);
+            setMapId(value,result);
             return result;
         }
+        
+        /**
+         * @see AspectValueTransformer#getLabel(AspectValue)
+         */
+        public String getLabel(AspectValue value) throws XBRLException {
+            return getIdentifier(value);
+        } 
+        
     }    
     
     /**

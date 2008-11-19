@@ -29,18 +29,36 @@ public class SegmentAspect extends ContextAspect implements Aspect {
     }
 
     private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
-        public Transformer() {
-            super();
-        }
-        public String transform(AspectValue value) throws XBRLException {
+        /**
+         * @see AspectValueTransformer#validate(AspectValue)
+         */
+        public void validate(AspectValue value) throws XBRLException {
+            super.validate(value);
             if (! value.getFragment().isa("org.xbrlapi.impl.SegmentImpl")) {
-                throw new XBRLException("The fragment is not the correct fragment type.");
+                throw new XBRLException("The aspect value must have a segment fragment.");
+            }
+        }
+
+        /**
+         * @see AspectValueTransformer#getIdentifier(AspectValue)
+         */
+        public String getIdentifier(AspectValue value) throws XBRLException {
+            validate(value);
+            if (hasMapId(value)) {
+                return getMapId(value);
             }
             Segment f = ((Segment) value.getFragment());
-            String result = f.getStore().serializeToString(f.getDataRootElement());
-            setTransform(value,result);
-            return result;
+            String id = f.getStore().serializeToString(f.getDataRootElement());
+            setMapId(value,id);
+            return id;
         }
+        
+        /**
+         * @see AspectValueTransformer#getLabel(AspectValue)
+         */
+        public String getLabel(AspectValue value) throws XBRLException {
+            return getIdentifier(value);
+        } 
     }    
     
     /**
