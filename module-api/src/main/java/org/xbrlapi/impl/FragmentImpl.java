@@ -1083,7 +1083,7 @@ public class FragmentImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getLocalnameFromQName(String)
      */
     public String getLocalnameFromQName(String qname) {
-    	String localname = "";
+    	String localname = qname;
 		int delimiterIndex = qname.indexOf(':');
     	if (delimiterIndex > 0) {
     		localname = qname.substring(delimiterIndex+1,qname.length());
