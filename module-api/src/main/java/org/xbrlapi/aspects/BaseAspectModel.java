@@ -196,12 +196,12 @@ abstract public class BaseAspectModel implements AspectModel {
      */
     public Set<Fact> getMatchingFacts() throws XBRLException {
         Set<Fact> matches = new HashSet<Fact>();
+        boolean gotSomeMatches = false;
         for (Aspect aspect: getAspects()) {
-            if (matches.isEmpty()) {
+            if (! gotSomeMatches) {
                 if(aspect.hasSelectionCriterion()) {
                     matches.addAll(aspect.getMatchingFacts());
-                } else {
-                    matches.addAll(getAllFacts());
+                    gotSomeMatches = true;
                 }
             } else {
                 if(aspect.hasSelectionCriterion()) {
@@ -271,6 +271,45 @@ abstract public class BaseAspectModel implements AspectModel {
             }
         }
         return result;
+    }
+    
+    /**
+     * @see AspectModel#getMinimalAspectValueCombinationsForDimension(String)
+     */
+    public List<List<AspectValue>> getMinimalAspectValueCombinationsForDimension(String dimension) {
+        
+        // Set up the result matrix
+        List<Aspect> aspects = getDimensionAspects(dimension);
+        List<List<AspectValue>> result = new Vector<List<AspectValue>>();
+        int combinations = aspects.get(0).getValues().size() * aspects.get(0).getDescendantCount();
+        for (int i=0; i<combinations; i++) {
+            result.add(new Vector<AspectValue>());
+        }
+        ASPECT: for (Aspect aspect: aspects) {
+            //if (aspect.isSingular() && aspect.getValues().get(0).getClass().equals("org.xbrlapi.aspects.MissingAspectValue")) {
+            if (aspect.isSingular() && (aspect.getValues().get(0).getFragment() == null)) {
+                logger.info("Aspect " + aspect.getType() + " has just a single missing value.");
+                continue ASPECT;
+            }
+            List<AspectValue> values = aspect.getValues();
+            int vCount = values.size();
+            int dCount = aspect.getDescendantCount();
+            int aCount = aspect.getAncestorCount();
+            logger.debug(aspect.getType());
+            logger.debug("#ancestors   = " + aCount);
+            logger.debug("#descendants = " + dCount);
+            logger.debug("#values      = " + vCount);
+            for (int a_i=0; a_i<aCount; a_i++) {
+                for (int d_i=0; d_i<dCount; d_i++) {
+                    for (int v_i=0; v_i<vCount; v_i++) {
+                        int index = dCount*vCount*a_i + dCount*v_i + d_i;
+                        logger.debug("value " + v_i + " goes at index " + index);
+                        result.get(index).add(values.get(v_i));
+                    }
+                }
+            }
+        }
+        return result;        
     }
     
 }

@@ -69,7 +69,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
             }
             Concept f = ((Concept) value.getFragment());
             FragmentList<LabelResource> labels = f.getLabelsWithLanguageAndRole(getLanguageCode(),getLabelRole());
-            if (labels.isEmpty()) return getIdentifier(value);
+            if (labels.isEmpty()) return id;
             String label = labels.get(0).getStringValue();
             setMapLabel(id,label);
             return label;
@@ -120,7 +120,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public ConceptAspectValue getValue(Fact fact) throws XBRLException {
+    public AspectValue getValue(Fact fact) throws XBRLException {
         return new ConceptAspectValue(this,getFragment(fact));
     }
     

@@ -21,7 +21,6 @@ public abstract class BaseAspectValue implements AspectValue {
         super();
         setAspect(aspect);
         setFragment(fragment);
-        
     }
 
     private void setAspect(Aspect aspect) throws XBRLException {
@@ -29,8 +28,7 @@ public abstract class BaseAspectValue implements AspectValue {
        this.aspect = aspect;
     }
 
-    private void setFragment(Fragment fragment) throws XBRLException {
-        if (fragment == null) throw new XBRLException("The fragment must not be null."); 
+    private void setFragment(Fragment fragment) {
         this.fragment = fragment;
      }
 
@@ -54,5 +52,12 @@ public abstract class BaseAspectValue implements AspectValue {
     public String getId() throws XBRLException {
         return getAspect().getTransformer().getIdentifier(this);
     }
+    
+    /**
+     * @see AspectValue#getLabel()
+     */
+    public String getLabel() throws XBRLException {
+        return getAspect().getTransformer().getLabel(this);
+    }    
     
 }

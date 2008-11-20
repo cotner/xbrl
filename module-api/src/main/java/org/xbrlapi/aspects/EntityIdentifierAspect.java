@@ -31,7 +31,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
     }
 
     private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
-        
+
         public Transformer() {
             super();
         }
@@ -55,7 +55,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
                 return getMapId(value);
             }
             Entity f = ((Entity) value.getFragment());
-            String id = f.getIdentifierScheme() + ": " + f.getIdentifierValue();
+            String id = f.getIdentifierScheme() + ": " + f.getIdentifierValue().replaceFirst("^0+","");
             setMapId(value,id);
             return id;
         }
@@ -129,7 +129,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public EntityIdentifierAspectValue getValue(Fact fact) throws XBRLException {
+    public AspectValue getValue(Fact fact) throws XBRLException {
         try {
             return new EntityIdentifierAspectValue(this,getFragment(fact));
         } catch (XBRLException e) {

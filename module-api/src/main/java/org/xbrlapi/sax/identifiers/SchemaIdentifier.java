@@ -141,8 +141,8 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                 
                 if ((fragment == null) && (elementName != null)) {
                     fragment = new ElementDeclarationImpl();
-                }                   
-                
+                }
+
             }
             
             if (fragment != null) {

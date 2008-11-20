@@ -1,5 +1,8 @@
 package org.xbrlapi.aspects;
 
+import java.util.Comparator;
+import java.util.TreeMap;
+
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -11,6 +14,31 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class PeriodAspect extends ContextAspect implements Aspect {
 
+    private class PeriodComparator implements Comparator<String> {
+        
+        public PeriodComparator() {
+            super();
+        }
+        
+        public int compare(String left, String right) {
+            
+            if (equals(left,right)) return 0;
+            
+            if (left.equals("forever")) return -1;
+            if (right.equals("forever")) return 1;
+            
+            if (left.length() > right.length()) return -1;
+            if (left.length() < right.length()) return 1;
+            
+            return left.compareTo(right);
+        }
+        
+        public boolean equals(String left, String right) {
+            return left.equals(right);
+        }
+        
+    }
+    
     /**
      * @param aspectModel The aspect model with this aspect.
      * @throws XBRLException.
@@ -18,6 +46,7 @@ public class PeriodAspect extends ContextAspect implements Aspect {
     public PeriodAspect(AspectModel aspectModel) throws XBRLException {
         setAspectModel(aspectModel);
         setTransformer(new Transformer());
+        values = new TreeMap<String,AspectValue>(new PeriodComparator());
     }
 
     /**
@@ -53,7 +82,7 @@ public class PeriodAspect extends ContextAspect implements Aspect {
             Period f = ((Period) value.getFragment());
             String id = "";
             if (f.isFiniteDurationPeriod()) {
-                id += dateTime(f.getStart()) + "-" + dateTime(f.getEnd());
+                id += dateTime(f.getStart()) + " to " + dateTime(f.getEnd());
             } else if (f.isInstantPeriod()) {
                 id += dateTime(f.getInstant());
             } else {
@@ -87,7 +116,7 @@ public class PeriodAspect extends ContextAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public PeriodAspectValue getValue(Fact fact) throws XBRLException {
+    public AspectValue getValue(Fact fact) throws XBRLException {
         try {
             return new PeriodAspectValue(this,getFragment(fact));
         } catch (XBRLException e) {

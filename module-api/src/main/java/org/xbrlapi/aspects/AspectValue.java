@@ -8,6 +8,8 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public interface AspectValue {
 
+
+    
     /**
      * @return the fragment expressing this aspect value.
      */
@@ -26,5 +28,11 @@ public interface AspectValue {
      * @throws XBRLException if the string value cannot be obtained.
      */
     public String getId() throws XBRLException;
+    
+    /**
+     * @return The label for this aspect value.
+     * @throws XBRLException
+     */
+    public String getLabel() throws XBRLException;
 
 }

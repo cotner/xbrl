@@ -19,7 +19,7 @@ public interface Aspect {
      */
     static public final String CONCEPT = "concept";
     static public final String PERIOD = "period";
-    static public final String ENTITY_IDENTIFIER = "entity_identifier";
+    static public final String ENTITY_IDENTIFIER = "entity";
     static public final String SEGMENT = "segment";
     static public final String SCENARIO = "scenario";
     static public final String UNIT = "unit";
@@ -48,6 +48,12 @@ public interface Aspect {
      * and false otherwise.
      */
     public boolean isSingular();
+    
+    /**
+     * @return true if the aspect has just one aspect value
+     * that is the missing aspect value and false otherwise.
+     */
+    public boolean isMissing();    
     
     /**
      * @return dimension name or null if the aspect is an orphan

@@ -153,4 +153,17 @@ public interface AspectModel {
      */
     public List<List<AspectValue>> getAspectValueCombinationsForDimension(String dimension);
     
+    /**
+     * @param dimension The name of the dimension
+     * @return a list of lists of aspect values where
+     * each list in the list is a combination of one 
+     * aspect value for each aspect in the dimension.
+     * The aspect values in each combination 
+     * are ordered in the same order as the aspects in the
+     * dimension.  The lists in the list are ordered 
+     * by the orderings of the values for each aspect.
+     * Any aspect that has just missing aspect values is omitted.
+     */
+    public List<List<AspectValue>> getMinimalAspectValueCombinationsForDimension(String dimension);    
+    
 }

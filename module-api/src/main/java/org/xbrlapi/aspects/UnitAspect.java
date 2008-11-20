@@ -41,6 +41,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
          */
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
+            if (value.getFragment() == null) return;
             if (! value.getFragment().isa("org.xbrlapi.impl.UnitImpl")) {
                 throw new XBRLException("The aspect value must have a unit fragment.");
             }
@@ -54,6 +55,10 @@ public class UnitAspect extends BaseAspect implements Aspect {
             validate(value);
             if (hasMapId(value)) {
                 return getMapId(value);
+            }
+            if (value.getFragment() == null) {
+                setMapId(value,"");
+                return "";
             }
             Unit f = ((Unit) value.getFragment());
             String result = "";
@@ -69,7 +74,22 @@ public class UnitAspect extends BaseAspect implements Aspect {
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
         public String getLabel(AspectValue value) throws XBRLException {
-            return getIdentifier(value);
+            String id = getIdentifier(value);
+            if (hasMapLabel(id)) {
+                return getMapLabel(id);
+            }
+            if (value.getFragment() == null) {
+                setMapLabel("","");
+                return "";
+            }
+            Unit f = ((Unit) value.getFragment());
+            String result = "";
+            for (String measure: f.getResolvedNumeratorMeasures()) {
+                String[] parts = measure.split("\\Q|:|:|\\E");
+                result += parts[1];
+            }
+            setMapLabel(id,result);
+            return result;
         } 
         
     }    
@@ -78,11 +98,11 @@ public class UnitAspect extends BaseAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public UnitAspectValue getValue(Fact fact) throws XBRLException {
+    public AspectValue getValue(Fact fact) throws XBRLException {
         try {
             return new UnitAspectValue(this,getFragment(fact));
         } catch (XBRLException e) {
-            return null;
+            return new MissingAspectValue(this);
         }
     }
     

@@ -130,6 +130,13 @@ abstract public class BaseAspect implements Aspect {
     }
     
     /**
+     * @see org.xbrlapi.aspects.Aspect#isMissing()
+     */
+    public boolean isMissing() {
+        return (isSingular() && (getValues().get(0).getFragment() == null));
+    }
+    
+    /**
      * @see Aspect#hasValue(AspectValue)
      */
     public boolean hasValue(AspectValue value) throws XBRLException {
