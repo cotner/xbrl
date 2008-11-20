@@ -6,7 +6,6 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Tuple;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -48,11 +47,12 @@ public class FactImpl extends FragmentImpl implements Fact {
 	 */
 	public Concept getConcept() throws XBRLException {
 		
-		FragmentList<Concept> candidates = getStore().<Concept>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ConceptImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@name='" + this.getLocalname() + "']");
+		FragmentList<Concept> candidates = getStore().<Concept>query("/*[@type='org.xbrlapi.impl.ConceptImpl' and */*/@name='" + this.getLocalname() + "']");
 		for (Concept concept: candidates) {
 			if (this.getNamespaceURI().equals(concept.getTargetNamespaceURI())) 
 				return concept;
 		}
+		getStore().serialize(this.getMetadataRootElement());
 		throw new XBRLException("No concept could be found for the fact.");
 	}
 	
