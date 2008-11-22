@@ -148,36 +148,40 @@
 
                 [#if conceptHasData && items?exists && items?size > 0]
                     [#assign item = items[0] /]
-                    <td class="value">
-                    [#if item.numeric]<!-- The item is numeric -->
-                      <div class="numeric">
-                          <!-- Sort out the inline XBRL stuff. -->
-                          <!-- Sort out the formatting to take unit information into account. -->
-                          <ix:nonFraction 
-                              ix:name="${concept.name}"
-                              ix:format="commadot" 
-                              ix:scale="0"
-                              contextRef="${item.contextId}" 
-                              unitRef="${item.unitId}"
-                              decimals="0" 
-                              id="${item.fragmentIndex}" >
-                            ${item.value?number?string.currency}
-                          </ix:nonFraction>
-                      </div>
-                    [#else]<!-- The item is non-numeric -->
-                      <div class="nonnumeric">
-	                      <!-- Sort out the inline XBRL stuff. -->
-	                      [#assign value = item.value /]
-	                      [#if value?length > 255]
-	                        ${value?substring(0,255)} ...
-	                      [#else]
-	                        ${value}
-	                      [/#if]
-                      </div>
+                    [#if ! item.nil]
+	                    <td class="value">
+		                    [#if item.numeric]<!-- The item is numeric -->
+		                      <div class="numeric">
+		                          <!-- Sort out the inline XBRL stuff. -->
+		                          <!-- Sort out the formatting to take unit information into account. -->
+		                          <ix:nonFraction 
+		                              ix:name="${concept.name}"
+		                              ix:format="commadot" 
+		                              ix:scale="0"
+		                              contextRef="${item.contextId}" 
+		                              unitRef="${item.unitId}"
+		                              decimals="0" 
+		                              id="${item.fragmentIndex}" >
+		                            ${item.value?number?string.currency}
+		                          </ix:nonFraction>
+		                      </div>
+		                    [#else]<!-- The item is non-numeric -->
+		                      <div class="nonnumeric">
+			                      <!-- Sort out the inline XBRL stuff. -->
+			                      [#assign value = item.value /]
+			                      [#if value?length > 255]
+			                        ${value?substring(0,255)} ...
+			                      [#else]
+			                        ${value}
+			                      [/#if]
+		                      </div>
+		                    [/#if]
+	                    </td>
+	                [#else]
+		                  <td class="value">nil</td>
                     [/#if]
-                    </td>
                 [#else]
-                  <td class="value">na</td>
+                  <td class="value">&nbsp;</td>
                 [/#if]
               [/#list]<!-- loop over periods -->
               </tr>
