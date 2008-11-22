@@ -1,0 +1,275 @@
+body {
+  margin-top: 10px;
+  padding: 5px;
+  background-color: white;
+}
+
+table.value {
+  padding: 5px;
+  margin: 5px;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  border: 0px none white;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  font-family: "Arial", "Verdana", "sans-serif";
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.footnote {
+  padding: 0px;
+  margin: 5px;
+  border: 0px none black;
+  font-family: "Arial", "Verdana", "sans-serif";
+}
+
+table.otherinfo {
+  padding: 0px;
+  margin: 5px;
+  border: 0px none black;
+  font-family: "Arial", "Verdana", "sans-serif";
+  border-spacing: 5px;
+}
+
+tr.row1 {
+  border: 0px none black;
+  padding: 0px;
+  margin: 0px;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+tr.row1total {
+  border: 0px none black;
+  padding: 0px;
+  margin: 0px;
+  background-color: white;
+  border-bottom: 1px solid black;
+}
+
+tr.row2 {
+  border: 0px none black;
+  padding: 0px;
+  margin: 0px;
+  background-color: #ccffff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+tr.row2total {
+  border: 0px none black;
+  padding: 0px;
+  margin: 0px;
+  background-color: #ccffff;
+  border-bottom: 1px solid black;
+}
+
+tr.lastrow {
+  border: 0px none black;
+  padding: 0px;
+  margin: 0px;
+  background-color: white;
+  height: 8px;
+}
+
+tr.totalrow {
+  border: 0px none black;
+  padding: 0px;
+  margin: 0px;
+  background-color: white;
+  height: 8px;
+  border-bottom: 0.5px solid black;
+}
+
+caption.value {
+  caption-side: top;
+  padding: 5px;
+  margin: 5px;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  border: 0px none white;
+  border-top: 2px solid black;
+  border-bottom: 0px;
+  font-family: "Arial", "Verdana", "sans-serif";
+  font-size: 16pt;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+th.indent {
+  padding: 0px 0px 0px 2px;
+  margin: 0px;
+  border-bottom: 1px solid black;
+  font-size: 13px;
+}
+
+th.label {
+  padding: 0px 0px 0px 0px;
+  margin: 0px;
+  border-bottom: 1px solid black;
+  font-size: 13px;
+}
+
+th.value {
+  padding: 5px 0px 5px 0px;
+  margin: 0px;
+  border-bottom: 1px solid black;
+  border-left: 5px solid #ffffff;
+  font-size: 13px;
+  text-align: center;
+}
+
+th.space {
+  
+}
+
+td.indent {
+  padding: 0px 0px 2px 0px;
+  margin: 0px;
+  font-size: 12px;
+}
+
+td.label {
+  padding: 3px 0px 1px 5px;
+  margin: 0px;
+  font-size: 12px;
+  text-align: left;
+}
+
+td.value {
+  text-align: center;
+  margin: 0px;
+  padding: 3px 0px 1px 2px;
+  font-size: 12px;
+}
+
+td.space {
+  
+}
+
+div.main {
+  text-align: center;
+}
+
+div.header {
+  text-align: center;
+}
+
+div.nil {
+  text-align: center;
+}
+
+div.numeric {
+  text-align: right;
+  padding-right: 3px;
+}
+
+div.nonnumeric {
+  text-align: left;
+  padding-left: 3px;
+}
+
+.calcerror {
+  color: red;
+  font-weight: bold;
+}
+
+pre-wrap.label {
+  padding: 3px 0px 1px 5px;
+  margin: 0px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.topborder {
+  border-top: 1px solid black;
+}
+
+.bottomborder {
+  border-bottom: 1px solid black;
+}
+
+span.footnote {
+  margin-right: 10px;
+}
+
+a.link_value_footnote {
+  
+}
+
+a.link_footnote_value {
+  
+}
+
+td.footnote_no {
+  vertical-align: top;
+  border: 0px none black;
+  padding: 3px;
+  margin: 0px;
+  font-size: 13px;
+  text-align: right;
+  width: 30px;
+}
+
+td.footnote_content {
+  vertical-align: top;
+  border: 0px none black;
+  padding: 3px;
+  margin: 0px;
+  font-size: 13px;
+  width: 700px;
+}
+
+td.footnote_link {
+  border: 0px none black;
+  padding: 3px;
+  margin: 0px;
+  font-size: 13px;
+  width: 700px;
+}
+
+td.otherinfo {
+  color: #000070;
+  border: 0px none black;
+  padding: 1px 5px 1px 5px;
+  margin: 1px 5px 1px 5px;
+  vertical-align: top;
+  font-size: 8pt;
+}
+
+div.pagetitle {
+  text-align: center;
+  font-family: "Arial", "Verdana", "sans-serif";
+  font-size: 16pt;
+  font-weight: bold;
+  margin: 25px 5px 25px 5px;
+}
+
+div.normal {
+  border: 0px none black;
+  padding: 0px;
+  margin: 0px;
+}
+
+div.caption {
+  border: 0px none black;
+  padding: 0px;
+  margin: 0px;
+  font-size: 10px;
+  text-align: % CaptionAlign %;
+}
+
+div.footnote_title {
+  text-align: left;
+  font-family: "Arial", "Verdana", "sans-serif";
+  font-size: 13pt;
+  font-weight: bold;
+  margin: 5px 5px 5px 5px;
+}
+
+div.footer {
+  font-family: "Arial", "Verdana", "sans-serif";
+  font-size: 10pt;
+  text-align: right;
+}

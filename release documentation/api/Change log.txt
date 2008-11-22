@@ -1,3 +1,17 @@
+21 Nov. 2008
+Made the getNetworkRoots method of the XBRLStore a generic method and 
+ensured that it does not return locators.
+
+20 Nov. 2008
+Fixed a bug in the Fragment implementation relating to getting the 
+local name from a QName.  QNames without a prefix were not handled correctly.
+Squeezed more performance out of the method to get the labels for a fragment.
+
+19 Nov. 2008
+Added a new org.xbrlapi.aspects package to handle Aspect model population
+with facts.  Aspect models can be loosely thought of as sparse hypercubes.
+They are very very useful!
+
 19 Aug. 2008
 Enabled the getFragments method to use a fragment class name rather than
 just part of the fragment interface name.  This makes the method more able
