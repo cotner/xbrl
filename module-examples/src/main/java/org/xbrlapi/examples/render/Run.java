@@ -416,22 +416,15 @@ public class Run {
             System.err.println(message);
         }
 
-        System.err
-                .println("Command line usage: java org.xbrlapi.examples.render.Run <OPTIONS> <ADDITIONAL URLS>");
+        System.err.println("Command line usage: java org.xbrlapi.examples.render.Run <OPTIONS> <ADDITIONAL URLS>");
         System.err.println("Mandatory arguments: ");
-        System.err
-                .println(" -database VALUE     directory containing the Oracle Berkeley XML database");
+        System.err.println(" -database VALUE     directory containing the Oracle Berkeley XML database");
         System.err.println(" -container VALUE    name of the data container");
-        System.err
-                .println(" -cache VALUE        directory that is the root of the document cache");
-        System.err
-                .println(" -output VALUE       the name (and path) of the output file");
-        System.err
-                .println(" -template VALUE     path to the Freemarker template for the rendering.");
-        System.err
-                .println(" -target VALUE       The URL of the target XBRL instance to render.");
-        System.err
-                .println(" The optional additional URLs allow control over the DTS supporting the rendering of the XBRL instance.");
+        System.err.println(" -cache VALUE        directory that is the root of the document cache");
+        System.err.println(" -output VALUE       the name (and path) of the output file");
+        System.err.println(" -template VALUE     path to the Freemarker template for the rendering.");
+        System.err.println(" -target VALUE       The URL of the target XBRL instance to render.");
+        System.err.println(" The optional additional URLs allow control over the DTS supporting the rendering of the XBRL instance.");
 
         if ("".equals(message)) {
             System.exit(0);

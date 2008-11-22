@@ -2,6 +2,7 @@
                   XBRLAPI  RENDERING SAMPLE APPLICATION
 
   Author: Steve Yang (steve2yang@yahoo.com)
+  Author: Geoff Shuetrim (geoff@galexy.net)
 
   What is it?
   -----------
@@ -11,12 +12,16 @@
   document using XBRLAPI and renders the document according to XBRL Inline 
   Specification 0.64. 
 
-  The the purpose of this project is to give developers step by step instructions
-  to discover a taxonomy set and use Berkeley DB XML API to store the instance 
-  documents and traverse through the various relationship networks to build rendering 
+  The purpose of this module is to give developers step by step instructions
+  to discover a taxonomy set and use the XBRLAPI to store the instance 
+  documents and traverse through the various presentation networks to build rendering 
   solutions. This sample application also demonstrates how to build XBRL Inline 
   documents using XBRL API.
-
+  
+  The example uses the open source Freemarker template system
+  (http://freemarker.sourceforge.net/) to simplify the documentation of
+  the desired rendering of the information in the XBRL instance
+  being processed.
 
   Where is it?
   ------------
@@ -31,6 +36,7 @@
   ------------
 
    o  A Java 1.5 or later compatible virtual machine for your operating system.
+   o  An installation of the Oracle Berkeley XML database.
    o  Xerces 2.6.2 or later version jar file.
    o  Xalan 2.7.0 or later version jar file.
    o  Log4j 1.2.15 or later version jar file.
@@ -49,15 +55,17 @@
   -Djava.library.path=<Berkeley DB XML 2.3.10/lib>
   -classpath=<java class paths>
   
-  Program Arguments: org.xbrlapi.render.Run -database <...> -container <...> -cache <...> -stylesheet <...> [XBRL instance file]
+  Program Arguments: org.xbrlapi.render.Run -database <...> -container <...> -cache <...> -template <...> -target <XBRL instance file> <URLS>
   -database <XML DB location>
   -container <default DB container name>
   -cache <XML DB cache location>
-  -stylesheet <stylesheet location>
+  -template <template location>
+  -target <target XBRL instance URL>
+  -output <file location of the output document>
+  -<URLS> A space delimited set of additional URLs that will be used as starting points for DTS discovery.
   
   Look for the most updated documentation on the XBRLAPI.ORG web site under
   the SourceForge Project (http://sourceforge.net/projects/xbrlapi/).
-
 
   Licensing and legal issues
   --------------------------
