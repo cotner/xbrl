@@ -294,8 +294,6 @@ public class Run {
                 table.put("maxLevel", maxLevel);
                 reportTime("Processing  " + roleTitle);
                 
-                break;
-
             }
 
             // TODO Extend the template to render the footnote information.
