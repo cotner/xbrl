@@ -1,3 +1,7 @@
+22. Nov. 2008
+Fixed up the usage of the isNil method to use nil rather 
+than nill and to be for facts rather than just items.
+
 21 Nov. 2008
 Made the getNetworkRoots method of the XBRLStore a generic method and 
 ensured that it does not return locators.
