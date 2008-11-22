@@ -6,6 +6,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Tuple;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -65,4 +66,11 @@ public class FactImpl extends FragmentImpl implements Fact {
 		return (unitRef != "");
 	}
 
+	/** 
+     * @see org.xbrlapi.Fact#isNil()
+     */
+    public boolean isNil() throws XBRLException {
+        if (this.getDataRootElement().getAttributeNS(Constants.XMLSchemaInstanceNamespace,"nil").equals("true")) return true;
+        return false;
+    }
 }

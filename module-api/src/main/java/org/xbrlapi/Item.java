@@ -36,10 +36,6 @@ public interface Item extends Fact {
 	
 
 	
-	/** 
-	 * Return true if the item has a nill value.
-	 * @throws XBRLException
-	 */
-	public boolean isNill() throws XBRLException;	
+	
 
 }

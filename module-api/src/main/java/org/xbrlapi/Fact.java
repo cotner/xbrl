@@ -45,4 +45,10 @@ public interface Fact extends Fragment {
 	 */
 	public boolean isNumeric() throws XBRLException;
 
+    /** 
+     * Return true if the fact has a nill value.
+     * @throws XBRLException
+     */
+    public boolean isNil() throws XBRLException;	
+	
 }

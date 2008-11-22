@@ -4,7 +4,6 @@ import org.w3c.dom.Element;
 import org.xbrlapi.Context;
 import org.xbrlapi.Item;
 import org.xbrlapi.Unit;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -51,14 +50,6 @@ public class ItemImpl extends FactImpl implements Item {
 	
 
 	
-	/** 
-	 * Return true if the item has a nill value.
-	 * @throws XBRLException
-	 * @see org.xbrlapi.Item#isNill()
-	 */
-	public boolean isNill() throws XBRLException {
-		if (this.getDataRootElement().getAttributeNS(Constants.XMLSchemaInstanceNamespace,"nill").equals("true")) return true;
-		return false;
-	}	
+	
 	
 }
