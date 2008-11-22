@@ -90,6 +90,20 @@ public interface Aspect {
      * @return a sorted list of the values for the aspect.
      */
     public <A extends AspectValue> List<A> getValues();
+    
+    /**
+     * @param id the identifier generated from the value being sought.
+     * @return the aspect value that has the given identifier.
+     * @see AspectValue#getId()
+     */
+    public AspectValue getValue(String id);
+    
+    /**
+     * @param id the identifier generated from the value being sought.
+     * @return true if the aspect model has a value with the given id.
+     * @see AspectValue#getId()
+     */
+    public boolean hasValue(String id);
    
     
     /**

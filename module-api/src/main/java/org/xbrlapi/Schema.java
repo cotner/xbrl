@@ -8,8 +8,6 @@ import org.xbrlapi.utilities.XBRLException;
 
 public interface Schema extends SchemaContent {
     
-
-
     /**
      * Checks if the element form is qualified.
      * @return true if the element form is qualified and false otherwise.
@@ -38,12 +36,21 @@ public interface Schema extends SchemaContent {
     public FragmentList<ExtendedLink> getExtendedLinks() throws XBRLException;    
     
     /**
+     * Get the fragment list of element declarations (that are not concepts) in the schema.
+     * @return the list of element declarations in the schema.
+     * @throws XBRLException.
+     */
+    public FragmentList<Concept> getOtherElementDeclarations() throws XBRLException;
+    
+    /**
      * Get the fragment list of concepts in the schema.
      * @return the list of concepts in the schema.
      * @throws XBRLException.
      */
     public FragmentList<Concept> getConcepts() throws XBRLException;
 
+    
+    
     /**
      * Get a specific concept by its name.
      * return the chosen concept or null if the concept does not exist.

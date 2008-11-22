@@ -50,6 +50,8 @@ public interface ArcEnd extends ExtendedLinkContent {
      * The list is empty if there are no matching arcs.
      */
     public FragmentList<Arc> getArcsFromWithArcrole(String arcrole) throws XBRLException;
+    
+
 
     /**
      * @param arcrole the required arcrole.

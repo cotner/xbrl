@@ -441,6 +441,32 @@ public interface Fragment extends Comparable<Fragment> {
      */
     public Networks getNetworksWithArcrole(String arcrole) throws XBRLException;
     
+    /**
+     * @param arcrole the required arcrole value.
+     * @return the collection of networks including
+     * relationships that involve this node as a source 
+     * (not a target) and that are expressed by arcs with the given
+     * arcrole value.  Note that the networks are not 
+     * completed in the sense that arcs are followed to
+     * nodes that are then used to gather further relationships. 
+     * @throws XBRLException
+     */
+    public Networks getNetworksFromWithArcrole(String arcrole) throws XBRLException;
+    
+    /**
+     * @param linkrole the required linkrole value.
+     * @param arcrole the required arcrole value.
+     * @return the collection of networks including
+     * relationships that involve this node as a source 
+     * (not a target) and that are expressed by arcs with the given
+     * arcrole value in extended links with the given linkrole value.  
+     * Note that the networks are not 
+     * completed in the sense that arcs are followed to
+     * nodes that are then used to gather further relationships. 
+     * @throws XBRLException
+     */
+    public Networks getNetworksFromWithRoleAndArcrole(String linkrole, String arcrole) throws XBRLException;    
+    
     
 	/**
 	 * Override the Object equals method to base equality on the

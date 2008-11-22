@@ -46,13 +46,14 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             model.arrangeAspect(Aspect.ENTITY_IDENTIFIER,"row");
             model.arrangeAspect(Aspect.PERIOD,"col");
             model.arrangeAspect(Aspect.UNIT,"col");
+            model.arrangeAspect(Aspect.SCENARIO,"col");
             for (Fact fact: facts) {
                 model.addFact(fact);
             }
             for (Aspect aspect: model.getAspects()) {
                 logger.info(aspect.getType());
                 for (AspectValue value: aspect.getValues()) {
-                    logger.info(value.getTransformedValue());
+                    logger.info(value.getId());
                 }
             }
             assertEquals(6,model.getAspects().size());
@@ -63,6 +64,11 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             model.setCriterion(model.getAspect(Aspect.UNIT).getValues().get(0));
             List<List<AspectValue>> rowMatrix = model.getAspectValueCombinationsForDimension("row");
             List<List<AspectValue>> colMatrix = model.getAspectValueCombinationsForDimension("col");
+            
+            for (AspectValue v: colMatrix.get(0)) {
+                if (v==null) logger.info("First combination: " + null + "=" + null);
+                else logger.info("First combination: " + v.getAspect().getType() + "=" + v.getId());
+            }
             assertEquals(4,rowMatrix.size());
             assertEquals(2,rowMatrix.get(0).size());
             assertEquals(2,colMatrix.size());

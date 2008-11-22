@@ -89,14 +89,19 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     }
     
     /**
-     * Get the fragment list of concepts in the schema.
-     * @return the list of concepts in the schema.
-     * @throws XBRLException.
      * @see org.xbrlapi.Schema#getConcepts()
      */
     public FragmentList<Concept> getConcepts() throws XBRLException {
     	return this.<Concept>getChildren("org.xbrlapi.impl.ConceptImpl");
     }
+    
+    /**
+     * @see org.xbrlapi.Schema#getOtherElementDeclarations()
+     */
+    public FragmentList<Concept> getOtherElementDeclarations() throws XBRLException {
+        return this.<Concept>getChildren("org.xbrlapi.impl.ElementDeclarationImpl");
+    }
+    
 
     /**
      * Get a specific concept by its name.

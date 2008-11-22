@@ -231,8 +231,7 @@ public class InlineFormatter {
 				NodeList nl = segment.getComplexContent();
 				for (int i = 0; i < nl.getLength(); i++) {
 					if (nl.item(i).getNamespaceURI() == XBRLFormatter.DimensionRole) {
-                        String dimension = nl.item(i).getAttributes()
-								.getNamedItem("dimension").getNodeValue();
+                        String dimension = nl.item(i).getAttributes().getNamedItem("dimension").getNodeValue();
                         String member = nl.item(i).getTextContent();
 					}
 				}

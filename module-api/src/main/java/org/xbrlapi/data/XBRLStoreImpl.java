@@ -17,6 +17,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
+import org.xbrlapi.Locator;
 import org.xbrlapi.Resource;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Tuple;
@@ -160,7 +161,8 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
      * of any relationships in the network).
      * @throws XBRLException
      */
-    public FragmentList<Fragment> getNetworkRoots(String linkNamespace, String linkName, String linkRole, String arcNamespace, String arcName, String arcRole) throws XBRLException {
+    @SuppressWarnings("unchecked")
+    public <F extends Fragment> FragmentList<F> getNetworkRoots(String linkNamespace, String linkName, String linkRole, String arcNamespace, String arcName, String arcRole) throws XBRLException {
     	
     	// Get the links that contain the network declaring arcs.
     	String linkQuery = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ExtendedLinkImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*[namespace-uri()='" + linkNamespace + "' and local-name()='" + linkName + "' and @xlink:role='" + linkRole + "']]";
@@ -190,12 +192,17 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	}
     	
     	// Get the root resources in the network
-    	FragmentList<Fragment> roots = new FragmentListImpl<Fragment>();
+    	FragmentList<F> roots = new FragmentListImpl<F>();
     	Iterator<String> iterator = sourceIds.keySet().iterator();
     	while (iterator.hasNext()) {
     		String id = iterator.next();
     		if (! targetIds.containsKey(id)) {
-    			roots.addFragment(this.getFragment(id));
+    		    Fragment target = this.getFragment(id);
+    		    if (! target.isa("org.xbrlapi.impl.LocatorImpl"))
+    		        roots.addFragment((F) target);
+    		    else {
+                    roots.addFragment((F) ((Locator) target).getTargetFragment());
+    		    }
     		}
     	}
     	return roots;

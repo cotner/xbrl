@@ -186,6 +186,6 @@ public interface XBRLStore extends Store {
      * of any relationships in the network).
      * @throws XBRLException
      */
-    public FragmentList<Fragment> getNetworkRoots(String linkNamespace, String linkName, String linkRole, String arcNamespace, String arcName, String arcRole) throws XBRLException;
+    public <F extends Fragment> FragmentList<F> getNetworkRoots(String linkNamespace, String linkName, String linkRole, String arcNamespace, String arcName, String arcRole) throws XBRLException;
     
 }

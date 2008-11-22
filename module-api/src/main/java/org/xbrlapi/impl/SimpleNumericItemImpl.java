@@ -19,6 +19,7 @@ public class SimpleNumericItemImpl extends NumericItemImpl implements SimpleNume
 	 * @see org.xbrlapi.SimpleNumericItem#getValue()
 	 */
 	public String getValue() throws XBRLException {
+	    if (this.isNill()) return null;
 		return getDataRootElement().getTextContent().trim();
 	}
 	

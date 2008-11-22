@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
@@ -19,6 +20,8 @@ import org.xbrlapi.utilities.XBRLException;
  */
 abstract public class BaseAspect implements Aspect {
 
+    protected static Logger logger = Logger.getLogger(BaseAspect.class);  
+    
     TreeMap<String,AspectValue> values = new TreeMap<String,AspectValue>();
     
     private AspectModel model = null;
@@ -106,6 +109,20 @@ abstract public class BaseAspect implements Aspect {
         v.addAll(values.values());
         return v;
     }
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getValue(String)
+     */
+    public AspectValue getValue(String id) {
+        return values.get(id);
+    }
+    
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getValue(String)
+     */
+    public boolean hasValue(String id) {
+        return values.containsKey(id);
+    }    
     
     /**
      * @see org.xbrlapi.aspects.Aspect#addValue()

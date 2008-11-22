@@ -127,7 +127,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getFacts()
      */
     public FragmentList<Fact> getFacts() throws XBRLException {
-    	return getStore().<Fact>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getFragmentIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
+    	return getStore().<Fact>query("/*[@parentIndex='" + this.getFragmentIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
     }
     
     /**
@@ -135,7 +135,9 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      */
     public FragmentList<Item> getItems() throws XBRLException {
         return getStore().<Item>query("/*[@parentIndex='" + this.getFragmentIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl')]");
-    }    
+    }
+    
+    
 
 
     

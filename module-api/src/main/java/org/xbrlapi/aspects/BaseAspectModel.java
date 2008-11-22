@@ -161,6 +161,7 @@ abstract public class BaseAspectModel implements AspectModel {
         Collection<Aspect> aspects = this.getAspects();
         for (Aspect aspect: aspects) {
             aspect.addFact(fact);
+            logger.debug(aspect.getValue(fact).getLabel());
         }
     }
  
