@@ -162,19 +162,7 @@ public interface Loader {
 	 */
 	public void stashURL(URL url) throws XBRLException;
 
-	/*
-	 * Stash a URL to await loading into data store.
-	 * @param url The absolute URL to be stashed (any relative
-	 * URL gets resolved against the Base URL before stashing.
-	 * @namespace The namespace of the schema if the document at the 
-	 * specified URL is a schema.  Use a null if no namespace is available.
-	 * Perhaps this should be implemented as two methods, one for use when
-	 * the namespace is available and one for use otherwise.
-	 * @throws XBRLException if the URL cannot be stored for
-	 * later exploration or if the URL is not absolute
-	 */
-	//public void stashURL(URL url, String namespace) throws XBRLException; //hju	
-	
+
 	/**
 	 * Get the fragment that is currently being built by the DTS loader
 	 * @return the fragment being built currently by the DTS loader.
