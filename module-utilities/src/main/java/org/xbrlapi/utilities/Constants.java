@@ -172,4 +172,6 @@ public class Constants {
      * Link roles
      */
     public final  static String StandardLinkRole = "http://www.xbrl.org/2003/role/link";
+    
+    public final static String ISO4217 = "http://www.xbrl.org/2003/iso4217";
 }
