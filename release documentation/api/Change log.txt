@@ -1,3 +1,7 @@
+24 Nov. 2008
+Fixed NPE in the method to get denominator measures for 
+an org.xbrlapi.Unit that does not have a denominator.
+
 22. Nov. 2008
 Fixed up the usage of the isNil method to use nil rather 
 than nill and to be for facts rather than just items.
