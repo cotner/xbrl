@@ -72,7 +72,7 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             assertEquals(4,rowMatrix.size());
             assertEquals(2,rowMatrix.get(0).size());
             assertEquals(2,colMatrix.size());
-            assertEquals(2,colMatrix.get(0).size());
+            assertEquals(3,colMatrix.get(0).size());
             for (List<AspectValue> rowCombination: rowMatrix) {
                 for (List<AspectValue> colCombination: colMatrix) {
                     model.clearAllCriteria();

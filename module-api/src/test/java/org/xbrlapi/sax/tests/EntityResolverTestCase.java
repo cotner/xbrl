@@ -84,25 +84,34 @@ public class EntityResolverTestCase extends BaseTestCase {
 		
 		String url = getURL("test.data.cacheableURL.A");
 
+        ContentHandler contentHandler = new EntityResolverTestCase.ContentHandler();
+        XMLReader reader = null;
 		try {
-			EntityResolverTestCase.ContentHandler contentHandler = new EntityResolverTestCase.ContentHandler();
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			factory.setValidating(false);
 			factory.setNamespaceAware(true);
 			SAXParser parser = factory.newSAXParser();
-			XMLReader reader = parser.getXMLReader();
+			reader = parser.getXMLReader();
 			reader.setContentHandler(contentHandler);
-			logger.info("Trying to create an entity resolver using cache " + cachePath);
-			EntityResolver entityResolver = new EntityResolverImpl(new File(cachePath));
-			reader.setEntityResolver(entityResolver);
-			reader.parse(url.toString());
-		
+        } catch (ParserConfigurationException e) {
+            fail(e.getMessage());
+        } catch (SAXException e) {
+            fail(e.getMessage());
+        }
+        
+        logger.info("Trying to create an entity resolver using cache " + cachePath);
+        EntityResolver entityResolver = null;
+        try {
+			entityResolver = new EntityResolverImpl(new File(cachePath));
 		} catch (XBRLException e) {
 			fail(e.getMessage());
-		} catch (ParserConfigurationException e) {
-			fail(e.getMessage());
-		} catch (SAXException e) {
-			fail(e.getMessage());
+		}
+        reader.setEntityResolver(entityResolver);
+		
+		try {
+            reader.parse(url.toString());
+        } catch (SAXException e) {
+            fail(e.getMessage());
 		} catch (IOException e) {
 		    e.printStackTrace();
 			fail(e.getMessage());
@@ -111,21 +120,22 @@ public class EntityResolverTestCase extends BaseTestCase {
 				CacheImpl cache = new CacheImpl(new File(cachePath));
 				cache.purge(new URL(url));
 			} catch (Exception e) {
+			    e.printStackTrace();
 				fail(e.getMessage());
 			}
 		}
 	}
 	
-	private static class ContentHandler extends DefaultHandler {
+	class ContentHandler extends DefaultHandler {
 		
 	    public void startDocument() throws SAXException 
 		{
-	    	System.out.println("Starting the document");
+	    	;
 	    }
 	    
 	    public void startElement( String namespaceURI, String lName, String qName, Attributes attrs) throws SAXException 
 		{
-	    	logger.info("Starting element " + lName);
+	        ;
 		}
 		
 	}

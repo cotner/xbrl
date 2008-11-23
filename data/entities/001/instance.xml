@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xbrl
+  xmlns="http://www.xbrl.org/2003/instance"
+  xmlns:eg="http://xbrlapi.org/test/"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+  xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://www.xbrl.org/2003/instance http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd
+    http://xbrlapi.org/test/ schema.xsd"
+  >
+
+  <link:schemaRef xlink:type="simple" xlink:href="schema.xsd" />
+
+  <context id="c1">
+    <entity>
+      <identifier scheme="http://xbrlapi.org/integer/entity/scheme/">1</identifier>
+    </entity>
+    <period>
+      <instant>2007-12-31</instant>
+    </period>
+  </context>
+
+  <context id="c2">
+    <entity>
+      <identifier scheme="http://xbrlapi.org/string/entity/scheme/">00001</identifier>
+    </entity>
+    <period>
+      <instant>2007-12-31</instant>
+    </period>
+  </context>
+
+  <eg:concept1 contextRef="c1">abc</eg:concept1>
+  <eg:concept1 contextRef="c2">mno</eg:concept1>
+</xbrl>

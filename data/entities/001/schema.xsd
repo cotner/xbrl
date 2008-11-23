@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema
+  elementFormDefault="qualified"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xbrldt="http://xbrl.org/2005/xbrldt"
+  xmlns:eg="http://xbrlapi.org/test/"
+  targetNamespace="http://xbrlapi.org/test/">
+
+  <annotation>
+    <appinfo>
+
+      <link:linkbase 
+      xmlns:entity="http://xbrlapi.org/entities" 
+      xmlns:label="http://xbrl.org/2008/label"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:edgar="http://www.sec.gov/Archives/edgar"
+      xmlns:generic="http://xbrl.org/2008/generic">
+         <link:arcroleRef xlink:type="simple" arcroleURI="http://xbrl.org/arcrole/2008/element-label"
+                          xlink:href="http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/generic-label.xsd#element-label"/>
+         <link:arcroleRef xlink:type="simple" arcroleURI="http://xbrlapi.org/arcrole/equivalent-entity"
+                          xlink:href="http://www.xbrlapi.org/xbrl/entities.xsd#equivalent-entity"/>
+         <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+
+            <entity:identifier xlink:type="resource" xlink:label="identifier" 
+            scheme="http://xbrlapi.org/string/entity/scheme/" value="00001"/>
+            <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                         xlink:role="http://www.xbrl.org/2003/role/label">String Entity Name</label:label>
+            <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                         xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+
+            <entity:identifier xlink:type="resource" xlink:label="int-identifier" 
+            scheme="http://xbrlapi.org/integer/entity/scheme/" value="1"/>
+            <label:label xlink:type="resource" xlink:label="int-label" xml:lang="en"
+                         xlink:role="http://www.xbrl.org/2003/role/label">Integer Entity Name</label:label>
+            <generic:arc xlink:type="arc" xlink:from="int-identifier" xlink:to="int-label"
+                         xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+            <generic:arc xlink:type="arc" xlink:from="int-identifier" xlink:to="identifier"
+                         xlink:arcrole="http://xbrlapi.org/arcrole/equivalent-entity"/>
+         </generic:link>
+       </link:linkbase>
+    </appinfo>
+  </annotation>
+
+  <import
+    namespace="http://www.xbrl.org/2003/instance"
+    schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd" />
+
+  <element id="concept1" name="concept1"
+    type="xbrli:stringItemType"
+    substitutionGroup="xbrli:item"
+    xbrli:periodType="instant"/>
+
+</schema>
