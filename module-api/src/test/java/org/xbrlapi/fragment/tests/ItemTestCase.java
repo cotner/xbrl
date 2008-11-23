@@ -44,12 +44,12 @@ public class ItemTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test is the item nill.
 	 */
-	public void testIsNill() {
+	public void testIsNil() {
         try {
             FragmentList<Item> fragments = store.<Item>getFragments("SimpleNumericItem");
             assertTrue(fragments.getLength() > 0);
             for (Item fragment: fragments) {
-                assertEquals(false, fragment.isNill());
+                assertEquals(false, fragment.isNil());
             }
         } catch (Exception e) {
             fail(e.getMessage());
