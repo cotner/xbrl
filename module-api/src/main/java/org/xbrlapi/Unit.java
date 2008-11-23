@@ -47,19 +47,17 @@ public interface Unit extends FactDimensionContainer {
     public boolean equals(Unit unit) throws XBRLException;
 
     /**
-     * @return a list of resolved numerator measure qname values each of which 
-     * is the namespace followed by the separator string |:|:| followed by the local name.
+     * @return a list of resolved numerator measures.
      * @throws XBRLException
      */
-    public List<String> getResolvedNumeratorMeasures() throws XBRLException;
+    public List<Measure> getResolvedNumeratorMeasures() throws XBRLException;
     
     /**
-     * @return a list of resolved denominator measure qname values each of which 
-     * is the namespace followed by the separator string |:|:| followed by the local name.
+     * @return a list of resolved denominator measures.
      * If there is no denominator then it returns an empty list.
      * @throws XBRLException
      */
-    public List<String> getResolvedDenominatorMeasures() throws XBRLException;
+    public List<Measure> getResolvedDenominatorMeasures() throws XBRLException;
     
     
 }

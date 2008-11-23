@@ -17,7 +17,7 @@ public class NonNumericItemImpl extends ItemImpl implements NonNumericItem {
 	 * @see org.xbrlapi.NonNumericItem#getValue()
 	 */
 	public String getValue() throws XBRLException {
-		if (this.isNill()) return null;
+		if (this.isNil()) return null;
 		return getDataRootElement().getTextContent().trim();
 	}
 	

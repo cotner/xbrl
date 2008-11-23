@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
+import org.xbrlapi.Measure;
 import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -37,11 +38,11 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
     /**
      * @see org.xbrlapi.Unit#getResolvedNumeratorMeasures()
      */
-    public List<String> getResolvedNumeratorMeasures() throws XBRLException {
+    public List<Measure> getResolvedNumeratorMeasures() throws XBRLException {
         NodeList measures = getNumeratorMeasures();
-        List<String> result = new Vector<String>();
+        List<Measure> result = new Vector<Measure>();
         for (int i=0; i<measures.getLength(); i++) {
-            result.add(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)) + "|:|:|" + this.getLocalnameFromQName(measures.item(i).getTextContent()));
+            result.add(new MeasureImpl(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)), this.getLocalnameFromQName(measures.item(i).getTextContent())));
         }
         return result;
     }
@@ -49,11 +50,11 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
     /**
      * @see org.xbrlapi.Unit#getResolvedDenominatorMeasures()
      */
-    public List<String> getResolvedDenominatorMeasures() throws XBRLException {
-        List<String> result = new Vector<String>();
+    public List<Measure> getResolvedDenominatorMeasures() throws XBRLException {
+        List<Measure> result = new Vector<Measure>();
         NodeList measures = getDenominatorMeasures();
         for (int i=0; i<measures.getLength(); i++) {
-            result.add(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)) + "|:|:|" + this.getLocalnameFromQName(measures.item(i).getTextContent()));
+            result.add(new MeasureImpl(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)),this.getLocalnameFromQName(measures.item(i).getTextContent())));
         }
         return result;
     }    
