@@ -263,7 +263,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         if (dataContainer == null) return;
 	    if (dataManager == null) initManager();
         try {
-            dataContainer.sync();
+            //dataContainer.sync();
             dataContainer.close();
             dataContainer.delete();
             dataContainer = null;
