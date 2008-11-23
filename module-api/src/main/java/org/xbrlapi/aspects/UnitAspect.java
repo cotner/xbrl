@@ -1,8 +1,11 @@
 package org.xbrlapi.aspects;
 
+import java.util.List;
+
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
+import org.xbrlapi.Measure;
 import org.xbrlapi.NumericItem;
 import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.XBRLException;
@@ -48,7 +51,6 @@ public class UnitAspect extends BaseAspect implements Aspect {
         }
 
         /**
-         * TODO Handle transformations and labelling of units with denominators.
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
@@ -62,9 +64,20 @@ public class UnitAspect extends BaseAspect implements Aspect {
             }
             Unit f = ((Unit) value.getFragment());
             String result = "";
-            for (String measure: f.getResolvedNumeratorMeasures()) {
-                String[] parts = measure.split("\\Q|:|:|\\E");
-                result += parts[0] + parts[1];
+            List<Measure> numerators = f.getResolvedNumeratorMeasures();
+            for (int i=0; i<numerators.size(); i++) {
+                Measure measure = numerators.get(i);
+                if (i == 0) result += measure.getNamespace() + ":" + measure.getLocalname();
+                else result += "*" + measure.getNamespace() + ":" + measure.getLocalname();
+            }
+            if (f.hasDenominator()) {
+                result += "/";
+                List<Measure> denominators = f.getResolvedDenominatorMeasures();
+                for (int i=0; i<denominators.size(); i++) {
+                    Measure measure = denominators.get(i);
+                    if (i == 0) result += measure.getNamespace() + ":" + measure.getLocalname();
+                    else result += "*" + measure.getNamespace() + ":" + measure.getLocalname();
+                }
             }
             setMapId(value,result);
             return result;
@@ -84,9 +97,20 @@ public class UnitAspect extends BaseAspect implements Aspect {
             }
             Unit f = ((Unit) value.getFragment());
             String result = "";
-            for (String measure: f.getResolvedNumeratorMeasures()) {
-                String[] parts = measure.split("\\Q|:|:|\\E");
-                result += parts[1];
+            List<Measure> numerators = f.getResolvedNumeratorMeasures();
+            for (int i=0; i<numerators.size(); i++) {
+                Measure measure = numerators.get(i);
+                if (i == 0) result += measure.getLocalname();
+                else result += "*" + measure.getLocalname();
+            }
+            if (f.hasDenominator()) {
+                result += "/";
+                List<Measure> denominators = f.getResolvedDenominatorMeasures();
+                for (int i=0; i<denominators.size(); i++) {
+                    Measure measure = denominators.get(i);
+                    if (i == 0) result += measure.getLocalname();
+                    else result += "*" + measure.getLocalname();
+                }
             }
             setMapLabel(id,result);
             return result;
