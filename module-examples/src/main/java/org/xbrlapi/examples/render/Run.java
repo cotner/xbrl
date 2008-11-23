@@ -221,6 +221,8 @@ public class Run {
 
             SimpleDateFormat fmt = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
             model.put("store", store);
+            model.put("iso4217",org.xbrlapi.utilities.Constants.ISO4217);
+            model.put("xbrli",org.xbrlapi.utilities.Constants.XBRL21Namespace);
             model.put("now", fmt.format(new Date()));
             model.put("linkbaseReferences", instance.getLinkbaseRefs());
             model.put("schemaReferences", instance.getSchemaRefs());
