@@ -57,7 +57,16 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
      * @see org.xbrlapi.Entity#getEntityResources()
      */
     public FragmentList<EntityResource> getEntityResources() throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.EntityResourceImpl' and */*/@scheme='"+ this.getIdentifierScheme() +"' and dbxml:contains(*/*/@value,'" + this.getIdentifierValue() + "')]";
+
+        String value = this.getIdentifierValue().trim();
+        try {
+            Integer iValue = new Integer(value);
+            value = iValue.toString();
+        } catch (Exception e) {
+            ; // The conversion failed so use the original value
+        }
+        
+        String query = "/*[@type='org.xbrlapi.impl.EntityResourceImpl' and */*/@scheme='"+ this.getIdentifierScheme() +"' and */*/@value='" + value + "']";
         return getStore().<EntityResource>query(query);
     }
     
