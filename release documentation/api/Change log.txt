@@ -1,6 +1,10 @@
 22. Nov. 2008
 Fixed up the usage of the isNil method to use nil rather 
 than nill and to be for facts rather than just items.
+Added a measure interface and implementation to handle measures
+in unit fragments.  This makes it easier to access resolved measure
+QNames in numerators and denominators.  This also causes backward 
+incompatibility issues for some methods of the org.xbrlapi.Unit interface.
 
 21 Nov. 2008
 Made the getNetworkRoots method of the XBRLStore a generic method and 
