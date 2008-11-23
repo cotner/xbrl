@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>XBRLAPI.ORG XBRL Report Rendering Example</title>
+<title>XBRLAPI.ORG XBRL Data Loading Example</title>
 <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
 </head>
 <body>
@@ -24,15 +24,11 @@
 <div class="content">
 
 <h1>
-XBRLAPI rendering sample application
+XBRLAPI data loading sample application
 </h1>
 
 <h2>
-Author: Steve Yang (steve2yang at yahoo.com)
-</h2>
-
-<h2>
-Contributor: Geoff Shuetrim (geoff at galexy.net)
+Author: Geoff Shuetrim (geoff at galexy.net)
 </h2>
 
 <h2>
@@ -40,34 +36,8 @@ What is it?
 </h2>
 
 <p>
-  This is a sample Java application demonstrating the usage of 
-  XBRLAPI and its various modules. The Rendering Sample Application loads instance 
-  document using XBRLAPI and renders the document according to XBRL Inline 
-  Specification 0.64.
-</p>
-<p>
-  The purpose of this module is to give developers step by step instructions
-  to discover a taxonomy set and use the XBRLAPI to store the instance 
-  documents and traverse through the various presentation networks to build rendering 
-  solutions. This sample application also demonstrates how to build XBRL Inline 
-  documents using XBRL API.
-</p>
-<p>
-  The example uses the open source Freemarker template system
-  (http://freemarker.sourceforge.net/) to simplify the documentation of
-  the desired rendering of the information in the XBRL instance
-  being processed.
-</p>
-
-<p>
-<a href="result.xhtml">The rendered output</a> that can be produced
-from this
-<a href="template.ftl">Freemarker template defining the report rendering</a> 
-and this
-<a href="http://xbrl.us/us-gaap/instance/1.0/mmm-20071231/mmm-20071231_XML.xml">target XBRL instance</a>
-with a
-<a href="http://xbrl.us/us-gaap/instance/1.0/mmm-20071231/mmm-20071231_pre.xml">presentation linkbase</a> 
-included as an additional URL starting point for DTS discovery.
+  This is a Java sample application to demonstrate loading data into the data store
+  to facilitate XBRL operations using the XBRLAPI.
 </p>
 
 <h2>
@@ -95,8 +65,6 @@ included as an additional URL starting point for DTS discovery.
    <li>  XBRLAPI module-xlink jar file.</li>
    <li>  XBRLAPI module-xpointer jar file.</li>
    <li>  XBRLAPI module-api jar file.</li>
-   <li>  XBRLAPI module-bdb-xml jar file.</li>  
-   <li>  A working installation of the <a href="/installationDocumentation/bdbxml.html">Oracle Berkeley XML Database</a>.</li>  
 </ul>
 
 <p>
@@ -116,7 +84,6 @@ included as an additional URL starting point for DTS discovery.
 
 <pre>  
   -Dlog4j.configuration=&lt;location of log4j.properties&gt;
-  -Djava.library.path=&lt;Berkeley DB XML 2.3.10/lib&gt;
   -classpath=&lt;java class paths&gt;
 </pre>
 
@@ -125,7 +92,7 @@ included as an additional URL starting point for DTS discovery.
 </h3>
 
 <pre>
-  java org.xbrlapi.examples.render.Run <OPTIONS> <URLS>
+  java org.xbrlapi.examples.load.Load <OPTIONS> <URLS>
 </pre>
 
 <p>
@@ -137,10 +104,6 @@ the mandatory options are:
 <li>-database [the directory containing the Oracle Berkeley XML database]</li>
 <li>-container [the name of the database container in the Oracle Berkeley XML database]</li>
 <li>-cache [the directory containing the document cache]</li>
-<li>-template [the file location of the Freemarker template]</li>
-<li>-target [the URL of the XBRL instance to be rendered]</li>
-<li>-output [the output file to produce]</li>
-<li></li>
 </ul>
 
 <h2>

@@ -43,7 +43,9 @@ of any kind caused by following these suggestions or using the XBRLAPI.
 </p>
 
 <p>For those looking for examples showing how to exercise the API provided by
-XBRLAPI, the best place to look is in the unit-testing code.  This is distributed
+XBRLAPI, the best place to look is in the examples module where a very simple
+data loading example is provided and where a more detailed and realistic
+XBRL instance rendering example is also provided.  You can also investigate the unit-testing code.  This is distributed
 in the source code archive available as a file release from 
 <a href="http://sourceforge.net/project/showfiles.php?group_id=135539">Sourceforge.</a>
 
@@ -85,6 +87,11 @@ The modules and their dependencies are as follows:
 	<td>all other XBRLAPI modules</td>
 </tr>
 <tr>
+  <td>module-api</td>
+  <td>Provides the XBRLAPI API and implementation.</td>
+  <td>all XBRLAPI data store modules</td>
+</tr>
+<tr>
 	<td>module-xmlbase</td>
 	<td>Provides an <a href="http://www.w3.org/TR/xmlbase/">XML Base</a> implementation</td>
 	<td>xbrlapi-api module</td>
@@ -98,11 +105,6 @@ The modules and their dependencies are as follows:
 	<td>module-xpointer</td>
 	<td>Provides an <a href="http://www.w3.org/TR/2003/REC-xptr-framework-20030325/">XML Pointer</a> implementation</td>
 	<td>xbrlapi-api module</td>
-</tr>
-<tr>
-	<td>module-api</td>
-	<td>Provides the XBRLAPI API and implementation.</td>
-	<td>all XBRLAPI data store modules</td>
 </tr>
 <tr>
 	<td>module-bdb-xml</td>
@@ -121,6 +123,17 @@ The modules and their dependencies are as follows:
 	<td>Provides the <a href="http://xml.apache.org/xindice/">
 	Xindice</a> persistent data store implementation.</td>
 	<td>no modules</td>
+</tr>
+<tr>
+  <td>module-examples</td>
+  <td>Provides examples of data loading and XBRL instance rendering.</td>
+  <td>no modules</td>
+</tr>
+<tr>
+  <td>module-xdt</td>
+  <td>Provides an extension to the XBRLAPI to deal with the XBRL Dimensions
+  specification.  This module remains experimental and unstable.</td>
+  <td>no modules</td>
 </tr>
 </table>
 
