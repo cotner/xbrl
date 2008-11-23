@@ -155,6 +155,7 @@
 		                          <!-- Sort out the inline XBRL stuff. -->
 		                          <!-- Sort out the formatting to take unit information into account. -->
 		                          <ix:nonFraction 
+		                              xmlns="${concept.targetNamespaceURI}"
 		                              ix:name="${concept.name}"
 		                              ix:format="commadot" 
 		                              ix:scale="0"
