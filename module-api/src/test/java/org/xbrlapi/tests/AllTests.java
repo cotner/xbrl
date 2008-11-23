@@ -15,6 +15,7 @@ public class AllTests {
 		suite.addTest(org.xbrlapi.data.dom.tests.AllTests.suite());
         suite.addTest(org.xbrlapi.data.resource.tests.AllTests.suite());
 		suite.addTest(org.xbrlapi.fragment.tests.AllTests.suite());
+        suite.addTest(org.xbrlapi.aspects.tests.AllTests.suite());
 		suite.addTest(org.xbrlapi.loader.tests.AllTests.suite());
 		suite.addTest(org.xbrlapi.relationships.tests.AllTests.suite());
 		suite.addTest(org.xbrlapi.sax.tests.AllTests.suite());
