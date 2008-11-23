@@ -162,7 +162,24 @@
 		                              unitRef="${item.unitId}"
 		                              decimals="0" 
 		                              id="${item.fragmentIndex}" >
-		                            ${item.value?number?string.currency}
+                                      [#assign nMeasures = item.unit.resolvedNumeratorMeasures /]
+                                      [#assign dMeasures = item.unit.resolvedDenominatorMeasures /]
+                                      [#if nMeasures?size > 1 || dMeasures?size > 0]
+                                        ${item.value}
+                                      [/#if]
+                                      [#assign measure = nMeasures[0] /]
+                                      [#if measure.namespace = iso4217]
+                                        ${item.value?number?string.currency} ${measure.localname}
+                                      [/#if]
+		                              [#if measure.namespace == xbrli && measure.localname == "shares"]
+                                        ${item.value?number} shares
+		                              [/#if]
+                                      [#if measure.namespace == xbrli && measure.localname == "pure" && (item.value?number >= 1)]
+                                        ${item.value?number}
+                                      [/#if]
+                                      [#if measure.namespace == xbrli && measure.localname == "pure" && (item.value?number < 1)]
+                                        ${item.value?number * 100} %
+                                      [/#if]
 		                          </ix:nonFraction>
 		                      </div>
 		                    [#else]<!-- The item is non-numeric -->
