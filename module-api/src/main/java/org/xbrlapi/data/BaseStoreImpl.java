@@ -347,7 +347,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.Store.getReferencingDocuments(String)
+     * @see org.xbrlapi.data.Store#getReferencingDocuments(String)
      */
     public List<String> getReferencingDocuments(String url) throws XBRLException {
         String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@targetDocumentURL='"+ url + "']";
@@ -368,7 +368,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.Store.getReferencedDocuments(String)
+     * @see org.xbrlapi.data.Store#getReferencedDocuments(String)
      */
     public List<String> getReferencedDocuments(String url) throws XBRLException {
         String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + url + "' and @targetDocumentURL]";

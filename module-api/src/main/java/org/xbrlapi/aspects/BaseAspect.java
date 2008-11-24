@@ -125,7 +125,7 @@ abstract public class BaseAspect implements Aspect {
     }    
     
     /**
-     * @see org.xbrlapi.aspects.Aspect#addValue()
+     * @see org.xbrlapi.aspects.Aspect#addValue(AspectValue)
      */
     public void addValue(AspectValue value) throws XBRLException {
         String key = this.getTransformer().getIdentifier(value);
@@ -244,7 +244,7 @@ abstract public class BaseAspect implements Aspect {
     }
 
     /**
-     * @see org.xbrlapi.aspects.Aspect#getFacts()
+     * @see org.xbrlapi.aspects.Aspect#getMatchingFacts()
      */
     public Set<Fact> getMatchingFacts() throws XBRLException {
         if (getSelectionCriterion() == null) {

@@ -778,7 +778,7 @@ public class FragmentImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getNetworksFromWithRoleAndArcrole(String)
+     * @see org.xbrlapi.Fragment#getNetworksFromWithRoleAndArcrole(String, String)
      */
     public Networks getNetworksFromWithRoleAndArcrole(String linkrole, String arcrole) throws XBRLException {
         Networks networks = new NetworksImpl();

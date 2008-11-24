@@ -39,7 +39,6 @@ public class TreeIterator implements Iterator<Fragment> {
     /**
      * Use this constructor when the network defines a single tree.
      * @param network The network to use.
-     * @param start The tree root fragment to use.
      * @throws XBRLException if the network does not define a single tree.
      */
     public TreeIterator(Network network) throws XBRLException {

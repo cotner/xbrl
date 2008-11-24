@@ -191,7 +191,6 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     }
     
     /**
-     * @returns null.
      * @see org.xbrlapi.SimpleLink#getArcrole()
      */
     public String getArcrole() throws XBRLException {

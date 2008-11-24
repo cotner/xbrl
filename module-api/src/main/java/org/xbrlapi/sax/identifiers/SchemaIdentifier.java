@@ -19,7 +19,6 @@ import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.impl.ElementDeclarationImpl;
 import org.xbrlapi.impl.ReferencePartDeclarationImpl;
 import org.xbrlapi.impl.SchemaImpl;
-import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.ContentHandler;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.GrammarCacheImpl;
@@ -35,7 +34,7 @@ import org.xml.sax.Attributes;
 public class SchemaIdentifier extends BaseIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(Loader)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
      */
     public SchemaIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);

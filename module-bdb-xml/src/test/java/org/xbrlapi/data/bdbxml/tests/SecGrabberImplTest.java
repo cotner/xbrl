@@ -33,7 +33,12 @@ public class SecGrabberImplTest extends BaseTestCase {
             int cnt = 3;
             List<URL> r1 = resources.subList(0,cnt);
             logger.info("About to discover SEC data.");
-            loader.discover(r1);
+            for (URL url: r1) {
+                loader.stashURL(url);
+            }
+            loader.discoverNext();
+            loader.discoverNext();
+            loader.discoverNext();
 
         } catch (Exception e) {
             e.printStackTrace();

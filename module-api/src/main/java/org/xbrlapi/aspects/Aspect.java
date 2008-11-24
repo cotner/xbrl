@@ -190,7 +190,7 @@ public interface Aspect {
     
     /**
      * @param fact The fact.
-     * @returnto the unique string identifying the fragment
+     * @return the unique string identifying the fragment
      * that is part of the aspect value for the given fact.
      * @throws XBRLException
      */

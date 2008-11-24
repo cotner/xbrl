@@ -12,7 +12,6 @@ public class AllTests {
         suite.addTestSuite(AddToExistingStoreTestCase.class);
 		suite.addTestSuite(DocumentRecoveryFromStoreTestCase.class);
         suite.addTestSuite(DTDDeclarationHandlerTestCase.class);
-        suite.addTestSuite(EntityResourceTestCase.class);
         suite.addTestSuite(LoaderDiscoverNextWithPersistentDataStoreTestCase.class);
         suite.addTestSuite(LoadLargeDTSTestCase.class);
         suite.addTestSuite(SecGrabberImplTest.class);

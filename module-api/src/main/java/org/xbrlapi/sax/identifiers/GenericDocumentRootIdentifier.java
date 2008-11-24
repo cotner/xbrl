@@ -2,7 +2,6 @@ package org.xbrlapi.sax.identifiers;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.impl.FragmentImpl;
-import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.ContentHandler;
 import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.Attributes;
@@ -16,7 +15,7 @@ import org.xml.sax.Attributes;
 public class GenericDocumentRootIdentifier extends BaseIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(Loader)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
      */
     public GenericDocumentRootIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);

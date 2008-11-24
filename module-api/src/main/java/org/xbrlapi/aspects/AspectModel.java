@@ -119,7 +119,7 @@ public interface AspectModel {
      * a set of the facts in the aspect model.
      * @param criterion The aspect value that the selected
      * facts must have.
-     * @see AspectModel#getFacts()
+     * @see AspectModel#getMatchingFacts()
      * @throws XBRLException
      */
     public void setCriterion(AspectValue criterion) throws XBRLException;
@@ -128,7 +128,7 @@ public interface AspectModel {
      * Adds a collection of fact selection criteria.
      * @param criteria The collection of aspect values 
      * that the selected facts must have.
-     * @see AspectModel#getFacts()
+     * @see AspectModel#getMatchingFacts()
      * @see AspectModel#setCriterion(AspectValue)
      * @throws XBRLException
      */

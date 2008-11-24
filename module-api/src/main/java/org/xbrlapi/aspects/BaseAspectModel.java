@@ -102,7 +102,7 @@ abstract public class BaseAspectModel implements AspectModel {
     }
     
     /**
-     * @see AspectModel#arrangeAspect(Aspect, String)
+     * @see AspectModel#arrangeAspect(String, String)
      */
     public void arrangeAspect(String aspectType, String dimension) throws XBRLException {
 
@@ -127,7 +127,7 @@ abstract public class BaseAspectModel implements AspectModel {
     }
     
     /**
-     * @see AspectModel#arrangeAspect(Aspect, String, String)
+     * @see AspectModel#arrangeAspect(String, String, String)
      */
     public void arrangeAspect(String aspectType, String dimension, String parentType) throws XBRLException {
         if (! aspects.containsKey(aspectType)) throw new XBRLException("The aspect is not part of the aspect model.");

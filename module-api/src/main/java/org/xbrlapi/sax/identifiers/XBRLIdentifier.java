@@ -16,7 +16,6 @@ import org.xbrlapi.impl.TupleImpl;
 import org.xbrlapi.impl.UnitImpl;
 import org.xbrlapi.impl.UsedOnImpl;
 import org.xbrlapi.impl.XlinkDocumentationImpl;
-import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.ContentHandler;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -31,7 +30,7 @@ import org.xml.sax.Attributes;
 public class XBRLIdentifier extends BaseIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(Loader)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
      */
     public XBRLIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);
