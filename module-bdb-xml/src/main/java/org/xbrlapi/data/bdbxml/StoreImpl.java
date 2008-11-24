@@ -24,6 +24,7 @@ import com.sleepycat.db.DatabaseException;
 import com.sleepycat.db.Environment;
 import com.sleepycat.db.EnvironmentConfig;
 import com.sleepycat.dbxml.XmlContainer;
+import com.sleepycat.dbxml.XmlContainerConfig;
 import com.sleepycat.dbxml.XmlDocument;
 import com.sleepycat.dbxml.XmlDocumentConfig;
 import com.sleepycat.dbxml.XmlException;
@@ -98,7 +99,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         try {
             CheckpointConfig checkpointConfig = new CheckpointConfig();
             checkpointConfig.setKBytes(CHECKPOINT_KILOBYTES);
-            environment.checkpoint(checkpointConfig);
+            if (environment.getConfig().getTransactional())
+                environment.checkpoint(checkpointConfig);
         } catch (DatabaseException e) {
             throw new XBRLException("The checkpoint operation failed.", e);
         }
@@ -115,13 +117,14 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	private void initEnvironment() throws XBRLException {
         try {
             EnvironmentConfig environmentConfiguration = new EnvironmentConfig();
+            environmentConfiguration.setThreaded(true);
             environmentConfiguration.setAllowCreate(true);         // If the environment does not exist, create it.
             environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
             environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
             environmentConfiguration.setInitializeCache(true);
             environmentConfiguration.setCacheSize(1024 * 1024 * 500);
             environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
-            environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
+            environmentConfiguration.setTransactional(false);       // Turn on the transactional subsystem.
             environment = new Environment(new File(locationName), environmentConfiguration);
             logger.info("Initialised the environment.");
         } catch (FileNotFoundException e) {
@@ -169,7 +172,12 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     private void createContainer() throws XBRLException {
         if (dataManager == null) initManager();
         try {
-            dataContainer = dataManager.createContainer(containerName);
+            XmlContainerConfig config = new XmlContainerConfig();
+            config.setStatisticsEnabled(true);
+            dataContainer = dataManager.createContainer(containerName,config);
+            
+            logger.info("Query optimisation statistics enabled? " + dataContainer.getContainerConfig().getStatisticsEnabled());
+            
         } catch (XmlException e) {
             throw new XBRLException("The data container could not be created.", e);
         } 
