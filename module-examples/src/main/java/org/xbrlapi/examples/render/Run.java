@@ -296,19 +296,21 @@ public class Run {
                 table.put("maxLevel", maxLevel);
                 reportTime("Processing  " + roleTitle);
                 
+                break;
+                
             }
 
             // TODO Extend the template to render the footnote information.
             FragmentList<ExtendedLink> footnoteLinks = instance
                     .getFootnoteLinks();
             model.put("footnotes", footnoteLinks);
+            reportTime("Processing footnotes");
 
-            // Process the template and data model to produce the rendered
-            // report.
-            Writer out = new OutputStreamWriter(new FileOutputStream(arguments
-                    .get("output")));
+            // Process the template and data model to produce the rendered report.
+            Writer out = new OutputStreamWriter(new FileOutputStream(arguments.get("output")));
             template.process(model, out);
             out.flush();
+            reportTime("Processing the template");
 
             // Clean up the data store and exit
             cleanup(store);
@@ -352,7 +354,7 @@ public class Run {
         maxLevel = Math.max(indent.length(), maxLevel);
 
         // Get the standard concept label
-        logger.info(conceptKey + " " + labelRole);
+        //logger.info(conceptKey + " " + labelRole);
         FragmentList<LabelResource> labelResources = concept.getLabelsWithLanguageAndRole("en-US",labelRole);
         String label;
         if (labelResources.getLength() > 0) {
