@@ -2,7 +2,8 @@ Release details:
 
 The XBRL Dimensions (XDT) implementation.
 
-Release 4.0
+Release 3.3
+November 24, 2008
 Basic new XDT fragment types created.
 XDT fragment detection implemented.
 Basic dimension value analysis features implemented.

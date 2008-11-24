@@ -1,6 +1,11 @@
 Release details:
 Utilities module for XBRLAPI.
 
+Release 3.3
+November 24, 2008
+Point release to align with other modules.  
+Some new constants have been defined.
+
 Release 3.2
 Jul 30, 2008
 Point release to increase the range of constants relating to roles

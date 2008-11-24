@@ -2,5 +2,7 @@ Release details:
 
 The XBRLAPI examples module.
 
-Release 4.0
-Provides basic examples of how to use the API.
+Release 3.3
+November 24, 2008
+First release of this module that provides 
+basic examples of how to use the API.

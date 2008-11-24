@@ -1,5 +1,10 @@
 Release details:
 
+Release 3.3
+November 24, 2008
+Point release to provide new aspects package and to provide
+a range of important bug fixes.
+
 Release 3.2
 Jul 30, 2008
 Point release to upgrade data store performance and
