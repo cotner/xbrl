@@ -155,6 +155,7 @@
 		                          <!-- Sort out the inline XBRL stuff. -->
 		                          <!-- Sort out the formatting to take unit information into account. -->
 		                          <ix:nonFraction 
+		                              xmlns="${concept.targetNamespaceURI}"
 		                              ix:name="${concept.name}"
 		                              ix:format="commadot" 
 		                              ix:scale="0"
@@ -174,10 +175,10 @@
 		                              [#if measure.namespace == xbrli && measure.localname == "shares"]
                                         ${item.value?number} shares
 		                              [/#if]
-                                      [#if measure.namespace == xbrli && measure.localname == "pure" and (item.value?number >= 1)]
+                                      [#if measure.namespace == xbrli && measure.localname == "pure" && (item.value?number >= 1)]
                                         ${item.value?number}
                                       [/#if]
-                                      [#if measure.namespace == xbrli && measure.localname == "pure" and (item.value?number < 1)]
+                                      [#if measure.namespace == xbrli && measure.localname == "pure" && (item.value?number < 1)]
                                         ${item.value?number * 100} %
                                       [/#if]
 		                          </ix:nonFraction>
