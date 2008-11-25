@@ -25,6 +25,9 @@
   <language><encoding>EN</encoding><code>DZ</code><name>Bhutani</name></language>
   <language><encoding>EN</encoding><code>EL</code><name>Greek</name></language>
   <language><encoding>EN</encoding><code>EN</code><name>English</name></language>
+  <language><encoding>EN</encoding><code>EN-US</code><name>US English</name></language>
+  <language><encoding>EN-US</encoding><code>EN</code><name>English</name></language>
+  <language><encoding>EN-US</encoding><code>EN-US</code><name>US English</name></language>
   <language><encoding>EN</encoding><code>EO</code><name>Esperanto</name></language>
   <language><encoding>EN</encoding><code>ES</code><name>Spanish</name></language>
   <language><encoding>EN</encoding><code>ET</code><name>Estonian</name></language>
