@@ -405,6 +405,7 @@ public class Run {
         String duration = (new Double(
                 (System.currentTimeMillis() - startTime) / 1000)).toString();
         logger.info(task + " took " + duration + " second(s).");
+        startTime = System.currentTimeMillis();
     }
 
     /**
