@@ -743,7 +743,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public Fragment getStub(String url) throws XBRLException {
         try {
             URL matchURL = getMatcher().getMatch(new URL(url));
-            FragmentList<Fragment> stubs = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@stub and @url='" + matchURL + "']");        
+            FragmentList<Fragment> stubs = this.<Fragment>query("/*[@stub and @url='" + matchURL + "']");
             if (stubs.getLength() == 0) return null;
             if (stubs.getLength() > 1) throw new XBRLException("There are " + stubs.getLength() + " stubs for " + url);
             return stubs.get(0);
