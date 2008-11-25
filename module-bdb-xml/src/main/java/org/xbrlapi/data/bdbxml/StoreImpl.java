@@ -93,7 +93,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	
 	private void incrementCallCount() throws XBRLException {
 
-	    //logger.info("Call count = " + callCount);
 	    callCount++;
         
         try {
@@ -105,7 +104,10 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             throw new XBRLException("The checkpoint operation failed.", e);
         }
 	    
-        // if (callCount > this.RESET_CALL_COUNT) resetConnection();
+        if (callCount > this.RESET_CALL_COUNT) {
+            //logger.info("OB XML database call count = " + callCount);
+            //resetConnection();
+        }
         
 	}
 
@@ -126,6 +128,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
             environmentConfiguration.setTransactional(false);       // Turn on the transactional subsystem.
             environment = new Environment(new File(locationName), environmentConfiguration);
+            environment.trickleCacheWrite(20);
             logger.info("Initialised the environment.");
         } catch (FileNotFoundException e) {
             throw new XBRLException("The physical location of the BDB XML database could not be found.", e);
