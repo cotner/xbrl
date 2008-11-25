@@ -527,14 +527,24 @@ public class LoaderImpl implements Loader {
      */
     public void discover() throws XBRLException {
 
-        if (isDiscovering()) return;
+        if (isDiscovering()) {
+            logger.debug("The loader is already doing discovery.");
+            return;
+        }
         setDiscovering(true);
 
         for (URL url: getStore().getDocumentsToDiscover()) {
             this.stashURL(url);
         }
-
+        
+        Object[] urls = this.documentQueue.keySet().toArray();
+        logger.debug(urls.length + " documents queued for discovery.");
+        for (int i=0; i<urls.length;i++){
+            logger.debug(urls[i]);
+        }
+        
         URL url = getNextDocumentToExplore();
+        logger.debug("Next is " + url);
         while (url != null) {
             if (!getStore().hasDocument(url.toString())) {
                 setDocumentURL(url.toString());
@@ -561,6 +571,8 @@ public class LoaderImpl implements Loader {
         }
 
         setDiscovering(false);
+        
+        this.documentQueue = new HashMap<String,Integer>();
 
     }
 

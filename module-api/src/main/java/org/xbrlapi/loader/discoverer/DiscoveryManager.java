@@ -59,7 +59,7 @@ public class DiscoveryManager implements Runnable {
                 
                 for (URL resource: resources) {
                     loader.stashURL(resource);
-                }                
+                }
 
                 //Store store = loader.getStore();
                 Discoverer discoverer = new Discoverer(loader);
