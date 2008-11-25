@@ -199,7 +199,7 @@
 		                  <td class="value">nil</td>
                     [/#if]
                 [#else]
-                  <td class="value">&nbsp;</td>
+                  <td class="value"/>
                 [/#if]
               [/#list]<!-- loop over periods -->
               </tr>
