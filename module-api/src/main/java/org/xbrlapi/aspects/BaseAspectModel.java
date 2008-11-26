@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -31,7 +30,7 @@ abstract public class BaseAspectModel implements AspectModel {
      */
     private Map<String,LinkedList<Aspect>> dimensions = new HashMap<String,LinkedList<Aspect>>();
     
-    private Set<Fact> facts = new TreeSet<Fact>(); 
+    private Set<Fact> facts = new HashSet<Fact>(); 
     
     /**
      * @see AspectModel#getAspects()
@@ -311,6 +310,29 @@ abstract public class BaseAspectModel implements AspectModel {
             }
         }
         return result;        
+    }
+ 
+    /**
+     * @see AspectModel#deleteAspect(String)
+     */
+    public void deleteAspect(String type) throws XBRLException {
+        if (! hasAspect(type)) return;
+        
+        Aspect aspect = this.getAspect(type);
+        List<Aspect> dimensionAspects = this.getDimensionAspects(aspect.getDimension());
+        dimensionAspects.remove(aspect);
+        aspects.remove(aspect.getType());
+
+    }
+ 
+    /**
+     * @see AspectModel#clearFacts()
+     */
+    public void clearFacts() throws XBRLException {
+        for (Aspect aspect: this.getAspects()) {
+            aspect.clearFacts();
+        }
+        this.facts.clear();
     }
     
 }

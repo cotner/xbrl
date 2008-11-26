@@ -52,5 +52,9 @@ public class BaseAspectValueTransformer implements AspectValueTransformer {
     public String getLabel(AspectValue value) throws XBRLException {
         return getIdentifier(value);
     }
+    
+    public void clearIdentifiers() {
+        this.idMap.clear();
+    }
         
 }

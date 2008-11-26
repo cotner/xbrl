@@ -278,7 +278,14 @@ abstract public class BaseAspect implements Aspect {
         this.criterion = criterion;
     }
     
-    
+    /**
+     * @see Aspect#clearFacts()
+     */
+    public void clearFacts() throws XBRLException {
+        this.facts.clear();
+        this.values.clear();
+        this.getTransformer().clearIdentifiers();
+    }    
     
     
 }

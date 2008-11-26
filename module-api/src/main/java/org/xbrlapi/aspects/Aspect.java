@@ -233,5 +233,11 @@ public interface Aspect {
      */
     public void clearSelectionCriterion();
     
-    
+    /**
+     * Removes all facts from the aspect and all aspect values
+     * from the aspect.  The aspect retains its
+     * map from aspect value IDs to aspect value labels, however.
+     * @throws XBRLException
+     */
+    public void clearFacts() throws XBRLException;    
 }

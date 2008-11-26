@@ -32,4 +32,11 @@ public interface AspectValueTransformer {
      */
     public String getLabel(AspectValue value) throws XBRLException;
 
+    /**
+     * Empties the map of entity identifiers so that there are no
+     * aspect values pointing to identifiers anymore.  This leaves the
+     * map from identifiers to labels intact though.
+     */
+    public void clearIdentifiers();
+    
 }

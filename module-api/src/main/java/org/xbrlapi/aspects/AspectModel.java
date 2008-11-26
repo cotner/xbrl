@@ -166,4 +166,18 @@ public interface AspectModel {
      */
     public List<List<AspectValue>> getMinimalAspectValueCombinationsForDimension(String dimension);    
     
+    /**
+     * @param type The type identifying the aspect to delete.
+     * @throws XBRLException
+     */
+    public void deleteAspect(String type) throws XBRLException;
+    
+    /**
+     * Removes all facts from the aspect model and all aspect values
+     * from the aspects in the aspect models.  The aspects retain their
+     * maps from aspect value IDs to aspect value labels, however.
+     * @throws XBRLException
+     */
+    public void clearFacts() throws XBRLException;
+    
 }
