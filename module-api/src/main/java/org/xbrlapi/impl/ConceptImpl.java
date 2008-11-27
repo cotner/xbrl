@@ -1,10 +1,15 @@
 package org.xbrlapi.impl;
 
+import java.util.List;
+import java.util.Vector;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Schema;
+import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -59,5 +64,24 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
         getStore().setNamespaceBinding(this.getTargetNamespaceURI(),"xbrlapi_concept");
     	return getStore().<Fact>query("/*[*/xbrlapi_concept:"+ this.getName() + "]");
     }    
+ 
+    /**
+     * @see org.xbrlapi.Concept#getPresentationNetworks()
+     */
+    public Networks getPresentationNetworks() throws XBRLException {
+        return this.getNetworksWithArcrole(Constants.PresentationArcRole);
+    }
+    
+    /**
+     * @see org.xbrlapi.Concept#getPresentationNetworkLinkroles()
+     */
+    public List<String> getPresentationNetworkLinkroles() throws XBRLException {
+        List<String> roles = new Vector<String>();
+        for (Network network: this.getPresentationNetworks()) {
+            roles.add(network.getLinkRole());
+        }
+        return roles;
+    }
+
     
 }
