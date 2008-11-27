@@ -114,5 +114,24 @@ public interface Network {
 	 * @throws XBRLException
 	 */
 	public List<Relationship> getActiveRelationshipsTo(String index) throws XBRLException;
+
+	/**
+	 * @param <F> The type of org.xbrlapi.Fragment
+	 * @param index The parent fragment index 
+	 * @return the list of children fragments for the specified
+	 * parent fragment, or an empty list if there are no children fragments.
+	 * @throws XBRLException
+	 */
+	public <F extends Fragment> FragmentList<F> getChildren(String index) throws XBRLException;
 	
+    /**
+     * Note that a fragment can have more than one parent fragment given
+     * that the networks are not just trees.
+     * @param <F> The type of org.xbrlapi.Fragment
+     * @param index The child fragment index 
+     * @return the list of parent fragments for the specified
+     * child fragment, or an empty list if there are no parent fragments.
+     * @throws XBRLException
+     */
+    public <F extends Fragment> FragmentList<F> getParents(String index) throws XBRLException;
 }

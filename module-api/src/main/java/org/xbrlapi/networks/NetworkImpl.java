@@ -328,6 +328,32 @@ public class NetworkImpl implements Network {
 		}
 
 		return activeRelationships;
-	}	
-	
+	}
+
+    /**
+     * @see Network#getChildren(String)
+     */
+    @SuppressWarnings("unchecked")
+    public <F extends Fragment> FragmentList<F> getChildren(String index)
+            throws XBRLException {
+        FragmentList<F> children = new FragmentListImpl<F>();
+        for (Relationship relationship: this.getActiveRelationshipsFrom(index)) {
+            children.add((F) relationship.getTarget());
+        }
+        return children;
+    }
+
+
+    /**
+     * @see Network#getParents(String)
+     */
+    @SuppressWarnings("unchecked")
+    public <F extends Fragment> FragmentList<F> getParents(String index) throws XBRLException {
+        FragmentList<F> parents = new FragmentListImpl<F>();
+        for (Relationship relationship: this.getActiveRelationshipsTo(index)) {
+            parents.add((F) relationship.getSource());
+        }
+        return parents;
+    }
+    
 }
