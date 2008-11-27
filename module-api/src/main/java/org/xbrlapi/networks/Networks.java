@@ -13,7 +13,7 @@ import org.xbrlapi.utilities.XBRLException;
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public interface Networks {
+public interface Networks extends Iterable<Network> {
 	
 	/**
 	 * @param network The network to add to the collection of networks.

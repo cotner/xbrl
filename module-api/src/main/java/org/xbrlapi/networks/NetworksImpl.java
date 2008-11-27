@@ -1,9 +1,11 @@
 package org.xbrlapi.networks;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
@@ -213,4 +215,15 @@ public class NetworksImpl implements Networks {
 		}
 		return roles;
 	}
+	
+    /**
+     * @see java.lang.Iterable#iterator()
+     */
+    public Iterator<Network> iterator() {
+        Set<Network> set = new HashSet<Network>();
+        for (HashMap<String,Network> map: networks.values()) {
+            set.addAll(map.values());
+        }
+        return set.iterator();
+    }
 }
