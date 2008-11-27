@@ -24,7 +24,7 @@ import org.xml.sax.Attributes;
 public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseIdentifier(ContentHandler)
      */
     public SchemaIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);
@@ -33,7 +33,7 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
     /**
      * Finds Sschema fragments including XDT-specific fragments
      * 
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#startElement(String,String,String,Attributes)
+     * @see org.xbrlapi.sax.identifiers.Identifier#startElement(String,String,String,Attributes)
      */
     public void startElement(
             String namespaceURI, 

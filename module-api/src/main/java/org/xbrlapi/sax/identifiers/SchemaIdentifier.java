@@ -34,7 +34,7 @@ import org.xml.sax.Attributes;
 public class SchemaIdentifier extends BaseIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseIdentifier(ContentHandler)
      */
     public SchemaIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);
@@ -178,7 +178,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
     private XSModel model = null;    
     
     /**
-     * @returns The XML Schema grammar model.
+     * @return the XML Schema grammar model.
      */
     protected XSModel getXSModel() {
         return this.model;

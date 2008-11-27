@@ -14,7 +14,7 @@ import org.xml.sax.Attributes;
 public class LanguageIdentifier extends BaseIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseIdentifier(ContentHandler)
      */
     public LanguageIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);

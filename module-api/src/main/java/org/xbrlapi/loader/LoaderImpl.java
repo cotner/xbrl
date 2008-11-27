@@ -384,7 +384,7 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * @see org.xbrlapi.loader.Loader#updateState(long)
+     * @see Loader#updateState(ElementState)
      */
     public void updateState(ElementState state) throws XBRLException {
 

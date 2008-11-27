@@ -15,7 +15,7 @@ import org.xml.sax.Attributes;
 public class GenericDocumentRootIdentifier extends BaseIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseIdentifier(ContentHandler)
      */
     public GenericDocumentRootIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);

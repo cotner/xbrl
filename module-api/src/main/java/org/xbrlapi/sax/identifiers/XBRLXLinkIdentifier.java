@@ -15,7 +15,7 @@ import org.xml.sax.Attributes;
 public class XBRLXLinkIdentifier extends BaseIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseIdentifier(ContentHandler)
      */
     public XBRLXLinkIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);

@@ -30,7 +30,7 @@ import org.xml.sax.Attributes;
 public class XBRLIdentifier extends BaseIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseIdentifier(ContentHandler)
      */
     public XBRLIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);

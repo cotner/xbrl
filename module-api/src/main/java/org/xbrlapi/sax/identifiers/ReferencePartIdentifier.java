@@ -15,7 +15,7 @@ import org.xml.sax.Attributes;
 public class ReferencePartIdentifier extends BaseIdentifier implements Identifier {
 
     /**
-     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseFragmentIdentifierImpl(ContentHandler)
+     * @see org.xbrlapi.sax.identifiers.BaseIdentifier#BaseIdentifier(ContentHandler)
      */
     public ReferencePartIdentifier(ContentHandler contentHandler) throws XBRLException {
         super(contentHandler);
