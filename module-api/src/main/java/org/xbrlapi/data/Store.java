@@ -498,6 +498,25 @@ public interface Store {
      * from a specific set of documents and false otherwise.
      */
     public boolean isFilteringByURLs();
+
+    /**
+     * @return the Networks object incorporated into the 
+     * data store, if there is one, and null otherwise
+     * This is used to centralise all networks creation into 
+     * the one networks object, should that be desired.
+     * Otherwise ensure that this is set to null.
+     */
+    public Networks getStoredNetworks();
     
+    /**
+     * @param networks The networks to incorporate into the data
+     * store object.
+     */
+    public void setStoredNetworks(Networks networks);
+
+    /**
+     * @return true iff the store incorporates a central networks object.
+     */
+    public boolean hasStoredNetworks();
     
 }

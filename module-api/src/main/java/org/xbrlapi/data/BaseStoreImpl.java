@@ -1125,8 +1125,28 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         if (code == null) throw new XBRLException("The language code must not be null.");
         String query = "/*[@type='org.xbrlapi.impl.LanguageImpl' and */lang:language/lang:code='" + code.toUpperCase() + "']";
         return this.<Language>query(query);
-    }    
-    
+    }
 
-    
+    private Networks networks = null;
+    /**
+     * @see Store#getStoredNetworks()
+     */
+    public Networks getStoredNetworks() {
+        return networks;
+    }
+
+    /**
+     * @see Store#hasStoredNetworks()
+     */
+    public boolean hasStoredNetworks() {
+        return networks != null;
+    }
+
+    /**
+     * @see Store#setStoredNetworks(org.xbrlapi.networks.Networks)
+     */
+    public void setStoredNetworks(Networks networks) {
+        this.networks = networks;
+    }
+
 }
