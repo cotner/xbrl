@@ -32,6 +32,7 @@ import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.NonDimensionalAspectModel;
+import org.xbrlapi.aspects.QuarterlyPeriodAspect;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.XBRLStore;
@@ -263,6 +264,7 @@ public class Run {
 
                 // Configure the aspect model (useful for sorting facts by their aspects)
                 aspectModel = new NonDimensionalAspectModel();
+                aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
 
                 FragmentList<Concept> roots = store.<Concept>getNetworkRoots(
