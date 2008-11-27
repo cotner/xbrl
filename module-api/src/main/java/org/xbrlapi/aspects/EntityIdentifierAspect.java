@@ -80,6 +80,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
                     break FINDLABEL;
                 }
             }
+            logger.info("Entity id aspect value label is " + label);
             setMapLabel(id,label);
             return label;
         }

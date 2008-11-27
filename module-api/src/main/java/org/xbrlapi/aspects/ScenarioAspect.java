@@ -96,6 +96,7 @@ public class ScenarioAspect extends ContextAspect implements Aspect {
                     label += "=" + text;
                 }
             }
+            logger.info("Scenario aspect value label is " + label);            
             setMapLabel(id,label);
             return label;        
         }        

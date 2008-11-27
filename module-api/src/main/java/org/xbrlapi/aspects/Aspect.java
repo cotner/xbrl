@@ -239,5 +239,17 @@ public interface Aspect {
      * map from aspect value IDs to aspect value labels, however.
      * @throws XBRLException
      */
-    public void clearFacts() throws XBRLException;    
+    public void clearFacts() throws XBRLException;
+    
+    /**
+     * This method supports aspects, such as the concept aspect and
+     * XDT dimension aspects where aspect values have a heirarchical 
+     * organisation, such that an aspect value can be associated with 
+     * an ordered set of children aspect values.
+     * @param parent The parent aspect value.
+     * @return the ordered list of child aspect values. 
+     * The list is empty if none exist.
+     * @throws XBRLException
+     */
+    public List<AspectValue> getChildren(AspectValue parent) throws XBRLException;
 }

@@ -58,6 +58,13 @@ public abstract class BaseAspectValue implements AspectValue {
      */
     public String getLabel() throws XBRLException {
         return getAspect().getTransformer().getLabel(this);
+    }
+
+    /**
+     * @see org.xbrlapi.aspects.AspectValue#getParent()
+     */
+    public AspectValue getParent() throws XBRLException {
+        return null;
     }    
     
 }

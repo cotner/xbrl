@@ -285,7 +285,14 @@ abstract public class BaseAspect implements Aspect {
         this.facts.clear();
         this.values.clear();
         this.getTransformer().clearIdentifiers();
+    }
+
+    /**
+     * @see org.xbrlapi.aspects.Aspect#getChildren(AspectValue)
+     */
+    public List<AspectValue> getChildren(AspectValue parent)
+            throws XBRLException {
+        return new Vector<AspectValue>();
     }    
-    
-    
+
 }

@@ -93,6 +93,7 @@ public class SegmentAspect extends ContextAspect implements Aspect {
                     label += "=" + text;
                 }
             }
+            logger.info("Segment aspect value label is " + label);            
             setMapLabel(id,label);
             return label;        
 

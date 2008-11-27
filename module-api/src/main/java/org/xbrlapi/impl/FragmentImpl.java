@@ -498,7 +498,9 @@ public class FragmentImpl implements Fragment {
     private Networks getLabelNetworks() throws XBRLException {
 
         Relationship relationship = null;
-        Networks networks = new NetworksImpl();
+        Networks networks;
+        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
+        else networks = new NetworksImpl();
 
         // If we have a resource, it could be related directly via arcs to relatives.
         if (this.isa("org.xbrlapi.impl.ResourceImpl")) {
@@ -572,7 +574,9 @@ public class FragmentImpl implements Fragment {
     public Networks getNetworks() throws XBRLException {
     	
     	logger.debug("Getting networks for fragment " + getFragmentIndex());
-    	Networks networks = new NetworksImpl();
+        Networks networks;
+        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
+        else networks = new NetworksImpl();
 		Relationship relationship = null;
     	
     	// If we have a resource, it could be related directly via arcs to relatives.
@@ -659,7 +663,9 @@ public class FragmentImpl implements Fragment {
      */
     public Networks getNetworksWithArcrole(String arcrole) throws XBRLException {
         logger.debug("Getting relationships to and from fragment " + getFragmentIndex() + " with arcrole " + arcrole);
-        Networks networks = new NetworksImpl();
+        Networks networks;
+        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
+        else networks = new NetworksImpl();
         Relationship relationship = null;
 
         // If we have a resource, it could be related directly via arcs to relatives.
@@ -734,7 +740,9 @@ public class FragmentImpl implements Fragment {
      */
     public Networks getNetworksFromWithArcrole(String arcrole) throws XBRLException {
         logger.debug("Getting relationships from fragment " + getFragmentIndex() + " with arcrole " + arcrole);
-        Networks networks = new NetworksImpl();
+        Networks networks;
+        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
+        else networks = new NetworksImpl();
         Relationship relationship = null;
 
         // If we have a resource, it could be related directly via arcs to relatives.
@@ -781,7 +789,9 @@ public class FragmentImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getNetworksFromWithRoleAndArcrole(String, String)
      */
     public Networks getNetworksFromWithRoleAndArcrole(String linkrole, String arcrole) throws XBRLException {
-        Networks networks = new NetworksImpl();
+        Networks networks;
+        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
+        else networks = new NetworksImpl();
         Relationship relationship = null;
 
         // If we have a resource, it could be related directly via arcs to relatives.
@@ -867,7 +877,9 @@ public class FragmentImpl implements Fragment {
      */
     public <F extends Fragment> FragmentList<F> getRelatives(String arcrole, String linkrole, String resourcerole, String language, boolean getTargets) throws XBRLException {
 
-        Networks networks = new NetworksImpl();
+        Networks networks;
+        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
+        else networks = new NetworksImpl();
         Relationship relationship = null;
         
         // First get any direct arcs if this fragment is an XLink resource.

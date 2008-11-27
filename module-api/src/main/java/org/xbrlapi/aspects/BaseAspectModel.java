@@ -288,7 +288,7 @@ abstract public class BaseAspectModel implements AspectModel {
         ASPECT: for (Aspect aspect: aspects) {
             //if (aspect.isSingular() && aspect.getValues().get(0).getClass().equals("org.xbrlapi.aspects.MissingAspectValue")) {
             if (aspect.isSingular() && (aspect.getValues().get(0).getFragment() == null)) {
-                logger.info("Aspect " + aspect.getType() + " has just a single missing value.");
+                logger.debug("Aspect " + aspect.getType() + " has just a single missing value.");
                 continue ASPECT;
             }
             List<AspectValue> values = aspect.getValues();

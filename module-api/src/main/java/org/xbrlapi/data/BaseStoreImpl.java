@@ -891,7 +891,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public Networks getNetworks(String arcRole) throws XBRLException {
 
-    	Networks networks = new NetworksImpl();
+        Networks networks;
+        if (hasStoredNetworks()) networks = getStoredNetworks();
+        else networks = new NetworksImpl();
     	
     	// First get the set of arcs using the arc role
 		FragmentList<Arc> arcs = getArcs(arcRole);
@@ -922,7 +924,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public Networks getNetworks(String linkrole, String arcrole) throws XBRLException {
 
-        Networks networks = new NetworksImpl();
+        Networks networks;
+        if (hasStoredNetworks()) networks = getStoredNetworks();
+        else networks = new NetworksImpl();
 
         Map<String,ExtendedLink> links = new HashMap<String,ExtendedLink>();
         

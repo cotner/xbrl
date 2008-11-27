@@ -112,6 +112,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
                     else result += "*" + measure.getLocalname();
                 }
             }
+            logger.info("Unit aspect value label is " + result);            
             setMapLabel(id,result);
             return result;
         } 
