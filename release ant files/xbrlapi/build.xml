@@ -32,9 +32,9 @@
 		<javadoc
              destdir="../../docs/xbrlapi"
 			 classpathRef="classpath"
-    		 doctitle="&lt;h1&gt;&lt;a href='http://www.xbrlapi.org/'&gt;XBRLAPI project&lt;/a&gt;&lt;/h1&gt;"
+    		     doctitle="&lt;h1&gt;&lt;a href='http://www.xbrlapi.org/'&gt;XBRLAPI project&lt;/a&gt;&lt;/h1&gt;"
   	         header="&lt;h3&gt; &lt;a href='http://www.xbrlapi.org/' target='_top' &gt; XBRLAPI &lt;/a&gt; &lt;/h3&gt; &lt;h3&gt;A Java API for &lt;a href='http://www.xbrl.org/' target='_top'&gt;XBRL&lt;/a&gt;&lt;/h3&gt;"
-    	     footer="&lt;p&gt;&lt;a target='_top' href='http://sourceforge.net'&gt;&lt;img src='http://sourceforge.net/sflogo.php?group_id=135539&amp;type=1' width='88' height='31' border='0' align='right' alt='SourceForge Logo' /&gt;&lt;/a&gt;&lt;/p&gt;"
+    	       footer="&lt;p&gt;&lt;a target='_top' href='http://sourceforge.net'&gt;&lt;img src='http://sourceforge.net/sflogo.php?group_id=135539&amp;type=1' width='88' height='31' border='0' align='right' alt='SourceForge Logo' /&gt;&lt;/a&gt;&lt;/p&gt;&lt;object&gt;&lt;noscript&gt;&lt;p&gt;&lt;img src='http://apps.sourceforge.net/piwik/xbrlapi/piwik.php?idsite=1' alt='piwik'/&gt;&lt;/p>&lt;/noscript&gt;&lt;/object&gt;"
              author="true"
              version="true"
              use="true"
