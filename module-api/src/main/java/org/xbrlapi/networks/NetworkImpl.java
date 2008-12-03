@@ -41,6 +41,8 @@ public class NetworkImpl implements Network {
 	 */
 	private Store store = null;
 		
+	private HashMap<String,Relationship> relationships = new HashMap<String,Relationship>();
+	
 	/**
 	 * The map of fragments involved in the relationships in the network.
 	 */
@@ -182,6 +184,17 @@ public class NetworkImpl implements Network {
 		if (! getLinkRole().equals(relationship.getLinkRole())) throw new XBRLException("The network link role does not match that of the relationship.");
 		
 		if (! getArcRole().equals(relationship.getArcRole())) throw new XBRLException("The network arc role does not match that of the relationship.");
+		
+		// Make sure the relationship is not already in the network.
+		String relationshipKey = (
+		        relationship.getArc().getFragmentIndex() + 
+		        relationship.getSource().getFragmentIndex() + 
+		        relationship.getTarget().getFragmentIndex()
+		        );
+		if (relationships.containsKey(relationshipKey)) {
+		    return;// The relationship is already recorded in the network
+		}
+	    relationships.put(relationshipKey,relationship);
 		
 		// Inform the relationship of the network it is in
 		relationship.setNetwork(this);

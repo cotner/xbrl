@@ -93,6 +93,9 @@ public interface Network {
 	/**
 	 * Adds the relationship to the network making it discoverable
 	 * given the index of the source fragment and the target fragment.
+	 * If the relationship has already been recorded in the network, then
+	 * it is not added again because that would be redundant and potentially
+	 * confusing.
 	 * @param relationship The relationship to add.
 	 * @throws XBRLException
 	 */
