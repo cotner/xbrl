@@ -10,6 +10,7 @@ import org.xbrlapi.FragmentList;
 import org.xbrlapi.Schema;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
+import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -69,7 +70,16 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
      * @see org.xbrlapi.Concept#getPresentationNetworks()
      */
     public Networks getPresentationNetworks() throws XBRLException {
-        return this.getNetworksWithArcrole(Constants.PresentationArcRole);
+        
+        Networks networks = this.getNetworksToWithArcrole(Constants.PresentationArcRole);
+        
+        for (Network network: networks.getNetworks(Constants.PresentationArcRole)) {
+            List<Relationship> relationships = network.getActiveRelationshipsTo(this.getFragmentIndex());
+            for (Relationship relationship: relationships) {
+                networks = ((Concept) relationship.getSource()).getPresentationNetworks();
+            }
+        }
+        return networks;
     }
     
     /**

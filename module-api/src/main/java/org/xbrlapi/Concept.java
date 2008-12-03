@@ -37,7 +37,9 @@ public interface Concept extends ElementDeclaration {
  
     /**
      * @return the networks of presentation relationships involving
-     * this concept as a source or a target.
+     * this concept as a source or a target. The networks are populated
+     * right back to the roots of the trees in the presentation networks
+     * that link to the concept.
      * @throws XBRLException
      */
     public Networks getPresentationNetworks() throws XBRLException;

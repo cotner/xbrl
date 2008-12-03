@@ -454,6 +454,18 @@ public interface Fragment extends Comparable<Fragment> {
     public Networks getNetworksFromWithArcrole(String arcrole) throws XBRLException;
     
     /**
+     * @param arcrole the required arcrole value.
+     * @return a collection of networks that definitely include
+     * relationships that involve this node as a target
+     * (not a source) and that are expressed by arcs with the given
+     * arcrole value.  Note that the networks are not necessarily
+     * completed in the sense that arcs are followed to
+     * nodes that are then used to gather further relationships. 
+     * @throws XBRLException
+     */
+    public Networks getNetworksToWithArcrole(String arcrole) throws XBRLException;    
+    
+    /**
      * @param linkrole the required linkrole value.
      * @param arcrole the required arcrole value.
      * @return the collection of networks including
