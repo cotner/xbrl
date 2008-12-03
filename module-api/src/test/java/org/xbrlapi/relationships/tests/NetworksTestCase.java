@@ -9,14 +9,13 @@ package org.xbrlapi.relationships.tests;
 import java.util.List;
 import java.util.Set;
 
-import org.xbrlapi.networks.Network;
-import org.xbrlapi.networks.Networks;
-import org.xbrlapi.networks.Relationship;
-
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.Networks;
+import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.Constants;
 
 public class NetworksTestCase extends DOMLoadingTestCase {
@@ -62,6 +61,36 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+    public void testMultipleAdditionsOfTheOneRelationship() {  
+
+        try {
+
+            List<String> arcroles = networks.getArcRoles();
+            assertEquals(1, arcroles.size());
+            assertEquals(Constants.LabelArcRole,arcroles.get(0));
+
+            List<String> linkroles = networks.getLinkRoles(arcroles.get(0));
+            assertEquals(1, linkroles.size());
+            assertEquals(Constants.StandardLinkRole,linkroles.get(0));
+            
+            Networks myNetworks = label.getNetworks();
+            store.setStoredNetworks(myNetworks);
+            myNetworks = label.getNetworks();
+            assertEquals(networks.getSize(),myNetworks.getSize());
+            
+            for (Network network: networks) {
+                Network myNetwork = myNetworks.getNetwork(network.getArcRole(),network.getLinkRole());
+                assertEquals(network.getNumberOfRelationships(),myNetwork.getNumberOfRelationships());
+                logger.info(myNetwork.getNumberOfRelationships());
+                logger.info(myNetwork.getNumberOfActiveRelationships());
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }	
 
 	/**
 	 * Test whether the networks loading process operates.
