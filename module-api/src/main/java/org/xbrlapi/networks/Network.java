@@ -137,4 +137,15 @@ public interface Network {
      * @throws XBRLException
      */
     public <F extends Fragment> FragmentList<F> getParents(String index) throws XBRLException;
+    
+    /**
+     * @return the number of relationships (active or otherwise) in the network.
+     */
+    public int getNumberOfRelationships();
+
+    /**
+     * @return the number of active relationships in the network.
+     */
+    public int getNumberOfActiveRelationships();
+    
 }

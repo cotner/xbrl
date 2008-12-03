@@ -182,22 +182,27 @@ public class NetworkImpl implements Network {
 		
 		// Ensure that the relationship belongs
 		if (! getLinkRole().equals(relationship.getLinkRole())) throw new XBRLException("The network link role does not match that of the relationship.");
-		
 		if (! getArcRole().equals(relationship.getArcRole())) throw new XBRLException("The network arc role does not match that of the relationship.");
+
+        String semanticKey = relationship.getSemanticKey();
+        Fragment source = relationship.getSource();
+        String sourceIndex = source.getFragmentIndex();
 		
 		// Make sure the relationship is not already in the network.
-		String relationshipKey = (
-		        relationship.getArc().getFragmentIndex() + 
-		        relationship.getSource().getFragmentIndex() + 
-		        relationship.getTarget().getFragmentIndex()
-		        );
-		if (relationships.containsKey(relationshipKey)) {
+		String targetsSemanticKey = semanticKey + sourceIndex;
+		if (this.targetRelationships.containsKey(targetsSemanticKey)) {
 		    return;// The relationship is already recorded in the network
 		}
-	    relationships.put(relationshipKey,relationship);
-		
-		// Inform the relationship of the network it is in
-		relationship.setNetwork(this);
+
+        Fragment target = relationship.getTarget();
+        String targetIndex = target.getFragmentIndex();
+        String sourcesSemanticKey = semanticKey + targetIndex;
+
+        // Inform the relationship of the network it is in
+        relationship.setNetwork(this);
+
+        if (! fragments.containsKey(targetIndex)) fragments.put(targetIndex,target);
+        if (! fragments.containsKey(sourceIndex)) fragments.put(sourceIndex,source);
 		
 		// Store the fragments in the relationship
 		Arc arc = relationship.getArc();
@@ -207,22 +212,6 @@ public class NetworkImpl implements Network {
 		ExtendedLink link = relationship.getLink();
 		String linkIndex = arc.getFragmentIndex();
 		if (! fragments.containsKey(linkIndex)) fragments.put(linkIndex,link);
-		
-		Fragment source = relationship.getSource();
-		String sourceIndex = source.getFragmentIndex();
-		if (! fragments.containsKey(sourceIndex)) fragments.put(sourceIndex,source);
-
-		Fragment target = relationship.getTarget();
-		String targetIndex = target.getFragmentIndex();
-		if (! fragments.containsKey(targetIndex)) fragments.put(targetIndex,target);
-
-		// Store the relationship itself
-		String semanticKey = relationship.getSemanticKey();
-
-		//Integer priority = relationship.getPriority();
-
-		String sourcesSemanticKey = semanticKey + targetIndex;
-		String targetsSemanticKey = semanticKey + sourceIndex;
 		
 		HashMap<String,EquivalentRelationships> fragmentRelationships = null;
 		EquivalentRelationships er = null;
@@ -369,7 +358,29 @@ public class NetworkImpl implements Network {
         return parents;
     }
 
+    /**
+     * @see Network#getNumberOfRelationships()
+     */
+    public int getNumberOfRelationships() {
+        int count = 0;
+        for (HashMap<String,EquivalentRelationships> map: this.sourceRelationships.values()) {
+            for (EquivalentRelationships relationships: map.values()) {
+                count += relationships.getLength();
+            }
+        }
+        return count;
+    }
 
+    /**
+     * @see Network#getNumberOfActiveRelationships()
+     */
+    public int getNumberOfActiveRelationships() {
+        int count = 0;
+        for (HashMap<String,EquivalentRelationships> map: this.sourceRelationships.values()) {
+            count += map.size();
+        }
+        return count;
+    }
     
     
     
