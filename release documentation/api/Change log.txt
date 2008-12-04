@@ -1,3 +1,9 @@
+4 Dec. 2008
+Added new methods to better handle analysis of presentation networks
+and to provide a more complete range of network construction methods.
+Added the new org.xbrlapi.networks.Network#complete method to allow
+for a network to be completely constructed in a single call.
+
 24 Nov. 2008
 Fixed NPE in the method to get denominator measures for 
 an org.xbrlapi.Unit that does not have a denominator.
