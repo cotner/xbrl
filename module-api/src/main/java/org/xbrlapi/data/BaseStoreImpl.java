@@ -893,7 +893,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
         Networks networks;
         if (hasStoredNetworks()) networks = getStoredNetworks();
-        else networks = new NetworksImpl();
+        else networks = new NetworksImpl(this);
     	
     	// First get the set of arcs using the arc role
 		FragmentList<Arc> arcs = getArcs(arcRole);
@@ -926,7 +926,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
         Networks networks;
         if (hasStoredNetworks()) networks = getStoredNetworks();
-        else networks = new NetworksImpl();
+        else networks = new NetworksImpl(this);
 
         Map<String,ExtendedLink> links = new HashMap<String,ExtendedLink>();
         

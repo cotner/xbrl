@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
@@ -21,11 +22,22 @@ public class NetworksImpl implements Networks {
 
 	protected static Logger logger = Logger.getLogger(Loader.class);	
 	
+	/**
+	 * The data store containing the information defining the networks.
+	 */
+	private Store store = null;
+	
 	// Map of networks: indexed by the arc role then the link role.
 	private HashMap<String,HashMap<String,Network>> networks = new HashMap<String,HashMap<String,Network>>();
 	
-	public NetworksImpl() {
+	/**
+	 * @param store The data store containing the information defining the networks.
+	 * @throws XBRLException if the data store is null.
+	 */
+	public NetworksImpl(Store store) throws XBRLException {
 		super();
+		if (store == null) throw new XBRLException("The data store must not be null.");
+		this.store = store;
 	}
 
 	/**
@@ -170,7 +182,7 @@ public class NetworksImpl implements Networks {
 			return;
 		}
 		logger.debug("A new network is required for relationship with linkrole " + linkRole + " and arcrole " + arcRole);
-		Network network = new NetworkImpl(linkRole,arcRole);
+		Network network = new NetworkImpl(getStore(),linkRole,arcRole);
 		network.addRelationship(relationship);
 		addNetwork(network);
 	}
@@ -225,5 +237,12 @@ public class NetworksImpl implements Networks {
             set.addAll(map.values());
         }
         return set.iterator();
+    }
+
+    /**
+     * @see Networks#getStore()
+     */
+    public Store getStore() {
+        return this.store;
     }
 }

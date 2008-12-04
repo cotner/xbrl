@@ -431,5 +431,15 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
         return allDocuments;
 
     }
-        
+ 
+    /**
+     * @see XBRLStore#getExtendedLinksWithRole(String)
+     */
+    public FragmentList<ExtendedLink> getExtendedLinksWithRole(String linkrole) throws XBRLException {
+        String query = "/*[*/*[@xlink:type='extended' and @xlink:role='" + linkrole + "']]";
+logger.info(query);
+        FragmentList<ExtendedLink> links = this.<ExtendedLink>query(query);
+        return links;
+    }
+    
 }

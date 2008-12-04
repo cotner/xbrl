@@ -72,8 +72,10 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     public Networks getPresentationNetworks() throws XBRLException {
         
         Networks networks = this.getNetworksToWithArcrole(Constants.PresentationArcRole);
+        logger.info(networks.getSize());
         
         for (Network network: networks.getNetworks(Constants.PresentationArcRole)) {
+            logger.info(network.getNumberOfActiveRelationships());
             List<Relationship> relationships = network.getActiveRelationshipsTo(this.getFragmentIndex());
             for (Relationship relationship: relationships) {
                 networks = ((Concept) relationship.getSource()).getPresentationNetworks();

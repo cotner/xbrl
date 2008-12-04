@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -127,6 +128,11 @@ public interface Networks extends Iterable<Network> {
 	 * @throws XBRLException
 	 */
 	public int getSize() throws XBRLException;
-	
+
+	/**
+	 * @return the data store containing the information defining this 
+	 * collection of networks.
+	 */
+	public Store getStore();
 	
 }

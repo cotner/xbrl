@@ -11,10 +11,13 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Arc;
+import org.xbrlapi.ArcEnd;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.Locator;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
@@ -63,12 +66,15 @@ public class NetworkImpl implements Network {
 	private HashMap<String,HashMap<String,EquivalentRelationships>> targetRelationships = new HashMap<String,HashMap<String,EquivalentRelationships>>();
 	
 	/**
+	 * @param store The data store.
 	 * @param linkRole The link role defining the network.
 	 * @param arcRole The arc role defining the network.
-	 * @throws XBRLException
+	 * @throws XBRLException if the data store is null.
 	 */
-	public NetworkImpl(String linkRole, String arcRole) throws XBRLException {
+	public NetworkImpl(Store store, String linkRole, String arcRole) throws XBRLException {
 		super();
+		if (store == null) throw new XBRLException("The store must not be null.");
+		setStore(store);
 		setLinkRole(linkRole);
 		setArcRole(arcRole);
 	}
@@ -382,6 +388,34 @@ public class NetworkImpl implements Network {
         return count;
     }
     
-    
+    /**
+     * @see Network#complete()
+     */
+    public void complete() throws XBRLException {
+        
+        logger.debug("Completing network with arcrole " + this.getArcRole() + " and link role " + getLinkRole());
+
+        // Get the arcs that define relationships in the network
+        logger.info(getStore());
+        FragmentList<ExtendedLink> links = ((XBRLStore) this.getStore()).getExtendedLinksWithRole(this.getLinkRole());
+        for (ExtendedLink link: links) {
+            FragmentList<Arc> arcs = link.getArcsByArcrole(this.getArcRole());
+            for (Arc arc: arcs) {
+                FragmentList<ArcEnd> sources = arc.getSourceFragments();
+                FragmentList<ArcEnd> targets = arc.getTargetFragments();
+                for (Fragment source: sources) {
+                    Fragment s = source;
+                    if (source.isa("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTargetFragment();
+                    for (Fragment target: targets) {
+                        Fragment t = target;
+                        if (target.isa("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTargetFragment();
+                        Relationship relationship = new RelationshipImpl(arc,s,t);
+                        this.addRelationship(relationship);
+                    }
+                }
+            }
+        }
+
+    }
     
 }

@@ -148,4 +148,11 @@ public interface Network {
      */
     public int getNumberOfActiveRelationships();
     
+    /**
+     * Complete the network, finding all relationships in the data store
+     * that participate in the network.
+     * @throws XBRLException
+     */
+    public void complete() throws XBRLException;
+
 }

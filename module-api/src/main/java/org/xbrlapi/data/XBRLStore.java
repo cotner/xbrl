@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.xbrlapi.ArcroleType;
 import org.xbrlapi.Concept;
+import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
@@ -187,5 +188,13 @@ public interface XBRLStore extends Store {
      * @throws XBRLException
      */
     public <F extends Fragment> FragmentList<F> getNetworkRoots(String linkNamespace, String linkName, String linkRole, String arcNamespace, String arcName, String arcRole) throws XBRLException;
+ 
+    /**
+     * @param linkrole The required linkrole value.
+     * @return the list of extended links with the specified linkrole.
+     * @throws XBRLException
+     */
+    public FragmentList<ExtendedLink> getExtendedLinksWithRole(String linkrole) throws XBRLException;
+    
     
 }

@@ -48,6 +48,16 @@ public interface ExtendedLink extends Link {
     public FragmentList<Arc> getArcs() throws XBRLException;
     
     /**
+     * @param arcrole The arcrole of the required arcs.
+     * Get the list of arcs with the given arcrole that are 
+     * contained by the extended link.
+     * @return the list of matching arc fragments or the empty list if none are found.
+     * @throws XBRLException
+     */
+    public FragmentList<Arc> getArcsByArcrole(String arcrole) throws XBRLException;
+    
+    
+    /**
      * @param from The required value of the xlink:from attribute of the arcs.
      * @return the list of arcs with a given xlink:from label in extended link.
      * or the empty list if none are found.
