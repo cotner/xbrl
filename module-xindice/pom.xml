@@ -5,7 +5,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.xbrlapi</groupId>
   <artifactId>xbrlapi-xindice</artifactId>
-  <version>3.3</version>
+  <version>3.4</version>
   <packaging>jar</packaging>
   <name>XBRLAPI Xindice data store</name>
   <url>http://www.xbrlapi.org</url>
@@ -30,7 +30,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     <dependency>
         <groupId>org.xbrlapi</groupId>
         <artifactId>xbrlapi-api</artifactId>
-        <version>3.3</version>
+        <version>3.4</version>
     </dependency>
 
     <!-- Provides the Xindice XML:DB implementation -->
