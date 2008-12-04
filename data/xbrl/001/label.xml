@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linkbase
+  xmlns="http://www.xbrl.org/2003/linkbase"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xsi:schemaLocation="
+    http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd">
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="concept" xlink:href="schema.xsd#root" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">Root</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="concept" xlink:to="label" />
+  </labelLink>
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="concept" xlink:href="schema.xsd#parent1" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">Parent 1</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="concept" xlink:to="label" />
+  </labelLink>
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="concept" xlink:href="schema.xsd#parent2" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">Parent 2</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="concept" xlink:to="label" />
+  </labelLink>
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="concept" xlink:href="schema.xsd#child1" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">Child 1</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="concept" xlink:to="label" />
+  </labelLink>
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="concept" xlink:href="schema.xsd#child2" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">Child 2</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="concept" xlink:to="label" />
+  </labelLink>
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="concept" xlink:href="schema.xsd#child3" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">Child 3</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="concept" xlink:to="label" />
+  </labelLink>
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="concept" xlink:href="schema.xsd#child4" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">Child 4</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xlink:from="concept" xlink:to="label" />
+  </labelLink>
+
+
+</linkbase>

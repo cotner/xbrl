@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linkbase
+  xmlns="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd">
+    
+  <presentationLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="root" xlink:href="schema.xsd#root" />
+    <loc xlink:type="locator" xlink:label="parent1" xlink:href="schema.xsd#parent1" />
+    <loc xlink:type="locator" xlink:label="parent2" xlink:href="schema.xsd#parent2" />
+    <presentationArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/parent-child"
+      xlink:from="root" xlink:to="parent1" order="1"/>
+    <presentationArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/parent-child"
+      xlink:from="root" xlink:to="parent2" order="2"/>
+  </presentationLink>
+
+  <presentationLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="parent1" xlink:href="schema.xsd#parent1" />
+    <loc xlink:type="locator" xlink:label="child1" xlink:href="schema.xsd#child1" />
+    <loc xlink:type="locator" xlink:label="child2" xlink:href="schema.xsd#child2" />
+    <presentationArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/parent-child"
+      xlink:from="parent1" xlink:to="child1" order="1"/>
+    <presentationArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/parent-child"
+      xlink:from="parent1" xlink:to="child2" order="2"/>
+  </presentationLink>
+
+  <presentationLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="parent2" xlink:href="schema.xsd#parent2" />
+    <loc xlink:type="locator" xlink:label="child3" xlink:href="schema.xsd#child3" />
+    <loc xlink:type="locator" xlink:label="child4" xlink:href="schema.xsd#child4" />
+    <presentationArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/parent-child"
+      xlink:from="parent2" xlink:to="child3" order="1"/>
+    <presentationArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/parent-child"
+      xlink:from="parent2" xlink:to="child4" order="2"/>
+  </presentationLink>
+
+
+</linkbase>
