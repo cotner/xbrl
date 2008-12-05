@@ -2,6 +2,7 @@ package org.xbrlapi.impl;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -1284,14 +1285,11 @@ public class FragmentImpl implements Fragment {
 	}
 
     /**
-     * @see org.xbrlapi.Fragment#getNetworksToWithArcrole(String)
+     * @see org.xbrlapi.Fragment#getRelationshipsToWithArcrole(String)
      */
-    public Networks getNetworksToWithArcrole(String arcrole) throws XBRLException {
+    public List<Relationship> getRelationshipsToWithArcrole(String arcrole) throws XBRLException {
         logger.debug("Getting relationships to fragment " + getFragmentIndex() + " with arcrole " + arcrole);
-        Networks networks;
-        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
-        else networks = new NetworksImpl(getStore());
-        Relationship relationship = null;
+        List<Relationship> relationships = new Vector<Relationship>();
     
         // If we have a resource, it could be related directly via arcs to relatives.
         if (this.isa("org.xbrlapi.impl.ResourceImpl")) {
@@ -1302,11 +1300,10 @@ public class FragmentImpl implements Fragment {
                 for (ArcEnd source: sources) {
                     if (source.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
                         Fragment s = ((Locator) source).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,s,this);
+                        relationships.add(new RelationshipImpl(arc,s,this));
                     } else {
-                        relationship = new RelationshipImpl(arc,source,this);
-                    }               
-                    networks.addRelationship(relationship);
+                        relationships.add(new RelationshipImpl(arc,source,this));
+                    }
                 }
             }
             
@@ -1321,16 +1318,15 @@ public class FragmentImpl implements Fragment {
                 for (ArcEnd source: sources) {
                     if (source.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
                         Fragment s = ((Locator) source).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,s,this);
+                        relationships.add(new RelationshipImpl(arc,s,this));
                     } else {
-                        relationship = new RelationshipImpl(arc,source,this);
+                        relationships.add(new RelationshipImpl(arc,source,this));
                     }
-                    networks.addRelationship(relationship);
                 }
             }
         }
     
-        return networks;
+        return relationships;
     }
 
 
