@@ -8,9 +8,9 @@ import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Schema;
+import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
-import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -66,32 +66,21 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     	return getStore().<Fact>query("/*[*/xbrlapi_concept:"+ this.getName() + "]");
     }    
  
-    /**
-     * @see org.xbrlapi.Concept#getPresentationNetworks()
-     */
-    public Networks getPresentationNetworks() throws XBRLException {
-        
-        Networks networks = this.getNetworksToWithArcrole(Constants.PresentationArcRole);
-        logger.info(networks.getSize());
-        
-        for (Network network: networks.getNetworks(Constants.PresentationArcRole)) {
-            logger.info(network.getNumberOfActiveRelationships());
-            List<Relationship> relationships = network.getActiveRelationshipsTo(this.getFragmentIndex());
-            for (Relationship relationship: relationships) {
-                networks = ((Concept) relationship.getSource()).getPresentationNetworks();
-            }
-        }
-        return networks;
-    }
+
     
     /**
      * @see org.xbrlapi.Concept#getPresentationNetworkLinkroles()
      */
     public List<String> getPresentationNetworkLinkroles() throws XBRLException {
         List<String> roles = new Vector<String>();
-        for (Network network: this.getPresentationNetworks()) {
+        
+        Networks temp = null;
+        if (getStore().hasStoredNetworks()) temp = getStore().getStoredNetworks();
+        getStore().setStoredNetworks(null);
+        for (Network network: ((XBRLStore) this.getStore()).getMinimalNetworksWithArcrole(this,Constants.PresentationArcRole)) {
             roles.add(network.getLinkRole());
         }
+        if (temp != null) getStore().setStoredNetworks(temp);
         return roles;
     }
 

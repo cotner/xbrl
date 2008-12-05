@@ -2,7 +2,6 @@ package org.xbrlapi;
 
 import java.util.List;
 
-import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -35,14 +34,7 @@ public interface Concept extends ElementDeclaration {
     public FragmentList<Fact> getFacts() throws XBRLException;
     
  
-    /**
-     * @return the networks of presentation relationships involving
-     * this concept as a source or a target. The networks are populated
-     * right back to the roots of the trees in the presentation networks
-     * that link to the concept.
-     * @throws XBRLException
-     */
-    public Networks getPresentationNetworks() throws XBRLException;
+
  
     /**
      * @return the list of extended link roles for the 
