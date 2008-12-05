@@ -379,7 +379,7 @@ public class Run {
                 
                 labelRole = Constants.StandardLabelRole;
                 if (relationship.getArc().hasAttribute("preferredLabel"))
-                    labelRole = relationship.getArc().getAttribute("preferredLabel");
+                    labelRole = relationship.getArcAttributeValue("preferredLabel");
                 
                 parsePresentation(
                         indent + " ", 
