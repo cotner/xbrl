@@ -302,6 +302,27 @@ public class NetworkImpl implements Network {
 		return activeRelationships;
 	}
 	
+	/**
+	 * @see Network#hasSingleParent(String)
+	 */
+    public boolean hasSingleParent(String index) throws XBRLException {
+        return (this.getActiveRelationshipsTo(index).size() == 1);
+    }
+    
+    /**
+     * @see Network#hasIsRoot(String)
+     */
+    public boolean isRoot(String index) throws XBRLException {
+        return (this.getActiveRelationshipsTo(index).size() == 0);
+    }
+    
+    /**
+     * @see Network#isLeaf(String)
+     */
+    public boolean isLeaf(String index) throws XBRLException {
+        return (this.getActiveRelationshipsFrom(index).size() == 0);
+    }	
+	
     /**
      * @see org.xbrlapi.networks.Network#hasActiveRelationshipsFrom(String)
      */
@@ -396,7 +417,6 @@ public class NetworkImpl implements Network {
         logger.debug("Completing network with arcrole " + this.getArcRole() + " and link role " + getLinkRole());
 
         // Get the arcs that define relationships in the network
-        logger.info(getStore());
         FragmentList<ExtendedLink> links = ((XBRLStore) this.getStore()).getExtendedLinksWithRole(this.getLinkRole());
         for (ExtendedLink link: links) {
             FragmentList<Arc> arcs = link.getArcsByArcrole(this.getArcRole());
@@ -416,6 +436,13 @@ public class NetworkImpl implements Network {
             }
         }
 
+    }
+
+    /**
+     * @see Network#contains(String)
+     */
+    public boolean contains(String index) {
+        return fragments.containsKey(index);
     }
     
 }
