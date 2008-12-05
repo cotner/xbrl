@@ -12,8 +12,9 @@ public interface Arc extends ExtendedLinkContent {
     /**
      * @param namespace The namespace of the attribute
      * @param name The local name of the attribute
-     * @return the value of the attribute
-     * @throws XBRLException if the arc does not have the attribute.
+     * @return the value of the attribute or null if the arc does not have
+     * the attribute.
+     * @throws XBRLException
      */
     public String getAttribute(String namespace, String name) throws XBRLException;
     
@@ -27,8 +28,9 @@ public interface Arc extends ExtendedLinkContent {
     
     /**
      * @param name The name of the attribute
-     * @return the value of the attribute
-     * @throws XBRLException if the arc does not have the attribute.
+     * @return the value of the attribute or null if the arc does not have the
+     * attribute.
+     * @throws XBRLException
      */
     public String getAttribute(String name) throws XBRLException;
     
