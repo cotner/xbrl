@@ -14,10 +14,7 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public interface AspectModel {
 
-    /**
-     * Non-dimensional aspect model identifier
-     */
-    static public final String NONDIMENSIONAL = "nondimensional";
+
 
     /**
      * @return The unique identifier of the aspect model.

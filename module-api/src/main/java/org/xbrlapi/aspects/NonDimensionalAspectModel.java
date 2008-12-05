@@ -18,7 +18,7 @@ public class NonDimensionalAspectModel extends BaseAspectModel implements Aspect
     }
 
     public String getType() {
-        return AspectModel.NONDIMENSIONAL;
+        return "nondimensional";        
     }
 
 }
