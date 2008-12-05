@@ -1,5 +1,8 @@
 package org.xbrlapi;
 
+import java.util.List;
+
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -18,6 +21,12 @@ public interface OpenContextComponent extends ContextComponent {
      * @throws XBRLException
      */
     public NodeList getComplexContent() throws XBRLException;
+    
+    /**
+     * @return the list of child elements.
+     * @throws XBRLException
+     */
+    public List<Element> getChildElements() throws XBRLException;    
 
 
     

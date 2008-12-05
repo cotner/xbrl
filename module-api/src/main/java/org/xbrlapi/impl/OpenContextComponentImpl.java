@@ -1,5 +1,9 @@
 package org.xbrlapi.impl;
 
+import java.util.List;
+import java.util.Vector;
+
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.OpenContextComponent;
 import org.xbrlapi.utilities.XBRLException;
@@ -11,17 +15,25 @@ import org.xbrlapi.utilities.XBRLException;
 class OpenContextComponentImpl extends ContextComponentImpl implements OpenContextComponent {
 	
     /**
-     * Gets the complex content
-     *
-     * @return the complex content contained by the open
-     * context component as a node list of complex content
-     * XML nodes
-     * @throws XBRLException
      * @see org.xbrlapi.OpenContextComponent#getComplexContent()
      */
     public NodeList getComplexContent() throws XBRLException {
     	return getDataRootElement().getChildNodes();
     }
+    
+    /**
+     * @see org.xbrlapi.OpenContextComponent#getChildElements()
+     */
+    public List<Element> getChildElements() throws XBRLException {
+        List<Element> result = new Vector<Element>();
+        NodeList nodes = this.getComplexContent();
+        for (int i=0; i<nodes.getLength(); i++) {
+            if (nodes.item(i).getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+                result.add((Element) nodes.item(i));
+            }
+        }
+        return result;
+    }    
 
 
     
