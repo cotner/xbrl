@@ -1,15 +1,16 @@
 package org.xbrlapi;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
-
-import org.xbrlapi.networks.Networks;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xbrlapi.builder.Builder;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.networks.Networks;
+import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -455,15 +456,13 @@ public interface Fragment extends Comparable<Fragment> {
     
     /**
      * @param arcrole the required arcrole value.
-     * @return a collection of networks that definitely include
-     * relationships that involve this node as a target
+     * @return a list of relationships (active and otherise) 
+     * that involve this fragment as a target node
      * (not a source) and that are expressed by arcs with the given
-     * arcrole value.  Note that the networks are not necessarily
-     * completed in the sense that arcs are followed to
-     * nodes that are then used to gather further relationships. 
+     * arcrole value. 
      * @throws XBRLException
      */
-    public Networks getNetworksToWithArcrole(String arcrole) throws XBRLException;    
+    public List<Relationship> getRelationshipsToWithArcrole(String arcrole) throws XBRLException;    
     
     /**
      * @param linkrole the required linkrole value.
