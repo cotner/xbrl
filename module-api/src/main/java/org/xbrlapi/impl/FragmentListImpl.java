@@ -18,6 +18,19 @@ implements FragmentList<F> {
 	
 	protected static Logger logger = Logger.getLogger(Loader.class);
 
+    public FragmentListImpl() {
+        super();
+    }
+	
+	
+	/**
+	 * @param fragment The fragment to include in the list of fragments.
+	 */
+	public FragmentListImpl(F fragment) {
+	    this();
+	    this.add(fragment);
+	}
+	
     /**
      * Get length of the list of fragments.
      * @return The length of the list of fragments.
