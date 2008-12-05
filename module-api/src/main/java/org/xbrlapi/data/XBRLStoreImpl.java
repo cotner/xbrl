@@ -22,6 +22,10 @@ import org.xbrlapi.Resource;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.impl.FragmentListImpl;
+import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.Networks;
+import org.xbrlapi.networks.NetworksImpl;
+import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -437,9 +441,67 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
      */
     public FragmentList<ExtendedLink> getExtendedLinksWithRole(String linkrole) throws XBRLException {
         String query = "/*[*/*[@xlink:type='extended' and @xlink:role='" + linkrole + "']]";
-logger.info(query);
         FragmentList<ExtendedLink> links = this.<ExtendedLink>query(query);
         return links;
     }
+
+    /**
+     * Tracks the fragments that have been processed to get minimal networks with a given arcrole
+     */
+    private HashMap<String,Fragment> processedFragments = new HashMap<String,Fragment>();
+
+
+    /**
+     * @see org.xbrlapi.XBRLStore#getMinimalNetworksWithArcrole(Fragment, String)
+     */
+    public Networks getMinimalNetworksWithArcrole(Fragment fragment, String arcrole) throws XBRLException {
+        return this.getMinimalNetworksWithArcrole(new FragmentListImpl<Fragment>(fragment),arcrole);
+    }    
+    
+    /**
+     * @see org.xbrlapi.XBRLStore#getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, String)
+     */
+    public Networks getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, String arcrole) throws XBRLException {
+        
+        Networks networks;
+        if (this.hasStoredNetworks()) networks = this.getStoredNetworks();
+        else networks = new NetworksImpl(this);
+
+        processedFragments = new HashMap<String,Fragment>();
+        
+        for (Fragment fragment: fragments) {
+            networks = augmentNetworksForFragment(fragment,arcrole,networks);
+        }
+        return networks;
+    }
+    
+    /**
+     * This method is recursive.
+     * @param fragment The fragment to use as the target for the relationships to be added to the networks
+     * @param arcrole The arcrole for the networks to augment.
+     * @param networks The networks system to augment.
+     * @return The networks after augmentation.
+     * @throws XBRLException
+     */
+    private Networks augmentNetworksForFragment(Fragment fragment, String arcrole, Networks networks) throws XBRLException {
+        if (processedFragments.containsKey(fragment.getFragmentIndex())) {
+            return networks;
+        }
+        for (Relationship relationship: fragment.getRelationshipsToWithArcrole(arcrole)) {
+            networks.addRelationship(relationship);
+        }
+        for (Network network: networks.getNetworks(arcrole)) {
+            List<Relationship> activeRelationships = network.getActiveRelationshipsTo(fragment.getFragmentIndex());
+            logger.debug(fragment.getFragmentIndex() + " has " + activeRelationships.size() + " parent fragments.");
+            for (Relationship activeRelationship: activeRelationships) {
+                Fragment source = activeRelationship.getSource();
+                networks = augmentNetworksForFragment(source,arcrole,networks);
+            }
+        }
+        return networks;
+    }
+    
+    
+    
     
 }

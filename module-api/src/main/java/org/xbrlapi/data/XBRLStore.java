@@ -13,6 +13,7 @@ import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Tuple;
+import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -195,6 +196,22 @@ public interface XBRLStore extends Store {
      * @throws XBRLException
      */
     public FragmentList<ExtendedLink> getExtendedLinksWithRole(String linkrole) throws XBRLException;
+
+    /**
+     * Get the networks that, at a minimum, contain the relationships
+     * from each of the given fragments working back through ancestor relationships
+     * as far as possible.
+     * @param fragments The fragments to analyse.
+     * @param arcrole The required arcrole.
+     * @return The networks containing the relationships.
+     * @throws XBRLException
+     */
+    public Networks getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, String arcrole) throws XBRLException;
     
+    /**
+     * Convenience method for a single fragment.
+     * @see XBRLStore#getMinimalNetworksWithArcrole(FragmentList,String)
+     */
+    public Networks getMinimalNetworksWithArcrole(Fragment fragment, String arcrole) throws XBRLException;    
     
 }
