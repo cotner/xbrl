@@ -209,6 +209,13 @@ public class RelationshipImpl implements Relationship {
 	public String getArcAttributeValue(String namespace, String name) throws XBRLException {
 		return getArc().getAttribute(namespace, name);
 	}
+	
+    /**
+     * @see org.xbrlapi.networks.Relationship#getArcAttributeValue(String)
+     */
+    public String getArcAttributeValue(String name) throws XBRLException {
+        return getArc().getAttribute(name);
+    }	
 
 	/**
 	 * @see org.xbrlapi.networks.Relationship#getArcRole()

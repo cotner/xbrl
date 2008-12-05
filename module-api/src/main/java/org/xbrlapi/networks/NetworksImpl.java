@@ -245,4 +245,5 @@ public class NetworksImpl implements Networks {
     public Store getStore() {
         return this.store;
     }
+    
 }

@@ -137,6 +137,16 @@ public interface Relationship {
 	 */
 	public String getArcAttributeValue(String namespace, String name) throws XBRLException;
 	
+    /**
+     * Use this method if the attribute on the arc does not have 
+     * its own namespace.
+     * @param name The name of the attribute.
+     * @return The value of the attribute on the arc 
+     * or null if no such attribute exists.
+     * @throws XBRLException
+     */
+    public String getArcAttributeValue(String name) throws XBRLException;	
+	
 	/**
 	 * 
 	 * @return the value of the order attribute on the arc defining
