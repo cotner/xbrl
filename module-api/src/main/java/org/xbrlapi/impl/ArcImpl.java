@@ -26,7 +26,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public String getAttribute(String namespace, String name) throws XBRLException {
         Element root = getDataRootElement();
-        if (! root.hasAttributeNS(namespace,name)) throw new XBRLException("The arc does not have the attribute: " + namespace + ":" + name);
+        if (! root.hasAttributeNS(namespace,name)) return null;
         return root.getAttributeNS(namespace,name);
     }
     
@@ -42,7 +42,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public String getAttribute(String name) throws XBRLException {
         Element root = getDataRootElement();
-        if (! root.hasAttribute(name)) throw new XBRLException("The arc does not have the attribute: " + name);
+        if (! root.hasAttribute(name)) return null;
         return root.getAttribute(name);
     }
     
