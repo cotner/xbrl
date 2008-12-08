@@ -1,6 +1,7 @@
 package org.xbrlapi.xdt.values;
 
 import org.xbrlapi.Item;
+import org.xbrlapi.OpenContextComponent;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 
@@ -34,6 +35,13 @@ public interface DimensionValue {
      */
     public Object getValue() throws XBRLException;
 
+    /**
+     * @return The OCC containing the dimension value or null if
+     * the dimension value is a default one.
+     * @throws XBRLException
+     */
+    public OpenContextComponent getOpenContextComponent() throws XBRLException;
+    
     /**
      * @return true if the dimension value is a typed dimension value and
      * false otherwise.

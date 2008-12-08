@@ -110,6 +110,13 @@ public class DimensionValueImpl implements DimensionValue {
     }
 
     /**
+     * @see DimensionValue#getOpenContextComponent()
+     */
+    public OpenContextComponent getOpenContextComponent() throws XBRLException {
+        return occ;
+    }
+    
+    /**
      * @see org.xbrlapi.xdt.values.DimensionValue#isExplicitDimensionValue()
      */
     public boolean isExplicitDimensionValue() throws XBRLException {

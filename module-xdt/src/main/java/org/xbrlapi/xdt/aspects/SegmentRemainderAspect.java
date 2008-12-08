@@ -122,8 +122,8 @@ public class SegmentRemainderAspect extends ContextAspect implements Aspect {
                     }
                 }
             }
-            
-            logger.info("Segment remainder aspect value label is " + label);            
+
+            logger.info("Typed dimension aspect value label is " + label);            
             setMapLabel(id,label);
             return label;   
         } 
