@@ -1,3 +1,11 @@
+9 Dec. 2008
+Added in XDT aspects and dimensional aspect model to the XDT module.
+
+5 Dec. 2008
+Changed the getAttribute methods of the Arc fragment interface to 
+return null if the arc does not have the specified attribute rather
+than throwing an exception.
+
 4 Dec. 2008
 Added new methods to better handle analysis of presentation networks
 and to provide a more complete range of network construction methods.
