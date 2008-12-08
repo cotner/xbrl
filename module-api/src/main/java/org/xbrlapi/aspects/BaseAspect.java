@@ -295,4 +295,14 @@ abstract public class BaseAspect implements Aspect {
         return new Vector<AspectValue>();
     }    
 
+    /**
+     * This basic implementation has a unique key for each fact
+     * which is not generally all that efficient from a 
+     * memory footprint perspective.
+     * @see Aspect#getFragmentKey(Fact)
+     */
+    public String getFragmentKey(Fact fact) throws XBRLException {
+        return fact.getFragmentIndex();
+    }
+    
 }
