@@ -3,6 +3,7 @@ package org.xbrlapi.xdt.values;
 import org.w3c.dom.Element;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Item;
+import org.xbrlapi.OpenContextComponent;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 
@@ -32,14 +33,17 @@ public class DimensionValueImpl implements DimensionValue {
      * Construct a dimension value.
      * @param item The item that has the dimension value.
      * @param dimension The dimension with the value.
+     * @param occ The open context component (segment or scenario) - null if the 
+     * value is a default dimension value.
      * @param value The dimension value object (that must be one of
      * an org.xbrlapi.Concept or a org.w3c.dom.Element) where the 
      * class of the object matches the type of dimension.
      * @throws XBRLException.
      */
-    public DimensionValueImpl(Item item, Dimension dimension, Object value) throws XBRLException {
+    public DimensionValueImpl(Item item, Dimension dimension, OpenContextComponent occ, Object value) throws XBRLException {
         setItem(item);
         setDimension(dimension);
+        setOCC(occ);
         setValue(value);
     }
     
@@ -67,6 +71,12 @@ public class DimensionValueImpl implements DimensionValue {
             }
         }
     }
+    
+    private OpenContextComponent occ = null;
+    private void setOCC(OpenContextComponent occ) {
+        this.occ = occ;
+    }
+    
 
     /**
      * @see org.xbrlapi.xdt.values.DimensionValue#getItem()
@@ -103,15 +113,14 @@ public class DimensionValueImpl implements DimensionValue {
      * @see org.xbrlapi.xdt.values.DimensionValue#isExplicitDimensionValue()
      */
     public boolean isExplicitDimensionValue() throws XBRLException {
-        return (!isTypedDimensionValue());
+        return getDimension().isExplicitDimension();
     }
 
     /**
      * @see org.xbrlapi.xdt.values.DimensionValue#isTypedDimensionValue()
      */
     public boolean isTypedDimensionValue() throws XBRLException {
-        if (getDimension().getType().equals("org.xbrlapi.xdt.TypedDimensionImpl")) return true;
-        return false;
+        return getDimension().isTypedDimension();
     }
     
 }

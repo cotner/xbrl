@@ -56,13 +56,13 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
         Scenario scenario = context.getScenario();
         Element typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(scenario, dimension);
         if (typedDimensionValue != null) {
-            return new DimensionValueImpl(item, dimension, typedDimensionValue);
+            return new DimensionValueImpl(item, dimension, scenario, typedDimensionValue);
         }
         
         Segment segment = context.getEntity().getSegment();
         typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(segment, dimension);
         if (typedDimensionValue != null) {
-            return new DimensionValueImpl(item, dimension, typedDimensionValue);
+            return new DimensionValueImpl(item, dimension, segment, typedDimensionValue);
         }
         
         return null;
@@ -78,20 +78,22 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
         
         Context context = item.getContext();
 
-        Concept dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getScenario(), dimension);
+        Scenario scenario = context.getScenario();
+        Concept dimensionValue = this.getDomainMemberFromOpenContextComponent(scenario, dimension);
         if (dimensionValue != null) {
-            return new DimensionValueImpl(item, dimension, dimensionValue);
+            return new DimensionValueImpl(item, dimension, scenario, dimensionValue);
         }
         
-        dimensionValue = this.getDomainMemberFromOpenContextComponent(context.getEntity().getSegment(), dimension);
+        Segment segment = context.getEntity().getSegment();
+        dimensionValue = this.getDomainMemberFromOpenContextComponent(segment, dimension);
         if (dimensionValue != null) {
-            return new DimensionValueImpl(item, dimension, dimensionValue);
+            return new DimensionValueImpl(item, dimension, segment, dimensionValue);
         }
         
         try {
             Concept def = ((ExplicitDimension) dimension).getDefaultDomainMember();
             if (def != null) {
-                return new DimensionValueImpl(item, dimension, def);
+                return new DimensionValueImpl(item, dimension, null, def);
             }
         } catch (XBRLException e) {
             return null;
