@@ -11,7 +11,7 @@ public abstract class BaseAspectValue implements AspectValue {
     private Aspect aspect = null;
     
     private Fragment fragment = null;
-    
+
     /**
      * @param aspect The aspect with this value
      * @param fragment The fragment expressing this value
@@ -61,7 +61,7 @@ public abstract class BaseAspectValue implements AspectValue {
     }
 
     /**
-     * @see org.xbrlapi.aspects.AspectValue#getParent()
+     * @see AspectValue#getParent()
      */
     public AspectValue getParent() throws XBRLException {
         return null;

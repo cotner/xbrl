@@ -37,7 +37,7 @@ public interface AspectValue {
     
     /**
      * This method supports aspects, such as the concept aspect and
-     * XDT dimension aspects where aspect values have a heirarchical 
+     * XDT dimension aspects where aspect values can have a heirarchical 
      * organisation, such that an aspect value can be associated with 
      * an ordered set of children aspect values.
      * @return the parent aspect value or null if none exists.
