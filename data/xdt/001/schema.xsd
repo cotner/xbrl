@@ -6,8 +6,8 @@
   xmlns:link="http://www.xbrl.org/2003/linkbase"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:xbrldt="http://xbrl.org/2005/xbrldt"
-  xmlns:eg="http://xbrlapi.org/test/"
-  targetNamespace="http://xbrlapi.org/test/">
+  xmlns:eg="http://xbrlapi.org/test/xdt/001"
+  targetNamespace="http://xbrlapi.org/test/xdt/001">
 
   <annotation>
     <appinfo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema
+  elementFormDefault="qualified"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xbrldt="http://xbrl.org/2005/xbrldt"
+  xmlns:eg="http://xbrlapi.org/test/xdt/002"
+  targetNamespace="http://xbrlapi.org/test/xdt/002">
+
+  <annotation>
+    <appinfo>
+      <link:linkbaseRef xlink:type="simple" xlink:href="definition.xml"
+        xlink:role="http://www.xbrl.org/2003/role/definitionLinkbaseRef"
+        xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"/>
+
+      <link:linkbaseRef xlink:type="simple" xlink:href="label.xml"
+        xlink:role="http://www.xbrl.org/2003/role/labelLinkbaseRef"
+        xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"/>
+
+    </appinfo>
+  </annotation>
+
+  <import
+    namespace="http://www.xbrl.org/2003/instance"
+    schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd" />
+  <import
+    namespace="http://xbrl.org/2005/xbrldt"
+    schemaLocation="http://www.xbrl.org/2005/xbrldt-2005.xsd" />
+
+  <element id="hypercube" name="hypercube"
+    type="xbrli:stringItemType"
+    substitutionGroup="xbrldt:hypercubeItem"
+    xbrli:periodType="instant"
+    abstract="true"/>
+
+  <element
+    id="dim1"
+    name="dim1"
+    type="xbrli:stringItemType"
+    substitutionGroup="xbrldt:dimensionItem"
+    xbrli:periodType="instant"
+    abstract="true"
+    xbrldt:typedDomainRef="typedDimContentValidity.xsd#dim1Domain" />
+
+  <element
+    id="dim1Domain"
+    name="customer">
+    <complexType>
+      <simpleContent>
+        <extension base="string">
+          <attribute name="type" type="string" use="required"/>
+        </extension>
+      </simpleContent>
+    </complexType>
+  </element>
+
+  <element id="concept1" name="concept1"
+    type="xbrli:stringItemType"
+    substitutionGroup="xbrli:item"
+    xbrli:periodType="instant"/>
+
+</schema>
