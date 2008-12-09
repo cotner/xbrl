@@ -10,6 +10,9 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
@@ -304,5 +307,48 @@ abstract public class BaseAspect implements Aspect {
     public String getFragmentKey(Fact fact) throws XBRLException {
         return fact.getFragmentIndex();
     }
+ 
+    /**
+     * Convenience method to enable a list of elements
+     * to be converted into something a bit more readable for
+     * display purposes.
+     * @param children The list of elements.
+     * @return the label.
+     */
+    protected String getLabelFromElements(List<Element> children) {
+        String label = "";
+        for (int i=0; i<children.size(); i++) {
+            if (i>0) {
+                label += " ";
+            }
+            label += getLabelFromElement(children.get(i));
+        }
+        return label;
+    }
+    
+    /**
+     * Convenience method to return a label generated
+     * from a single element.
+     * @param child The single element.
+     * @return the label.
+     */
+    protected String getLabelFromElement(Element child) {
+        String label = child.getLocalName();
+        String text = child.getTextContent();
+        NamedNodeMap attrs = child.getAttributes();
+        if (attrs.getLength() > 0) {
+            label += "(";
+            for (int i=0; i<attrs.getLength(); i++) {
+                Attr attr = (Attr) attrs.item(i);
+                if (i!=0) label += ","; 
+                label += attr.getName() + "=" + attr.getValue();
+            }
+            label += ")";
+        }
+        if (! text.trim().equals("")) {
+            label += "=" + text;
+        }
+        return label;
+    }    
     
 }
