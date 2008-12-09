@@ -1,8 +1,6 @@
 package org.xbrlapi.xdt.aspects;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Concept;
@@ -97,21 +95,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
                 }
             }
             
-            String id = child.getLocalName();
-            String text = child.getTextContent();
-            if (! text.trim().equals("")) {
-                id += "=" + text;
-            }
-            NamedNodeMap attrs = child.getAttributes();
-            if (attrs.getLength() > 0) {
-                id += "(";
-                for (int i=0; i<attrs.getLength(); i++) {
-                    Attr attr = (Attr) attrs.item(i);
-                    if (i!=0) id += ","; 
-                    id += attr.getName() + "=" + attr.getValue();
-                }
-                id += ")";
-            }
+            String id = getLabelFromElement(child);
             
             setMapId(value,id);
             return id;
