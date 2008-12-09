@@ -72,9 +72,10 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         XBRLStore store = (XBRLStore) occ.getStore();
         
         List<Element> children = occ.getChildElements();
+        
         for (Element child: children) {
             if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
-                if (! child.hasAttribute("dimension")) {
+                if (child.hasAttribute("dimension")) {
                     String qname = child.getAttribute("dimension");
                     String ns = occ.getNamespaceFromQName(qname,child);
                     String localname = occ.getLocalnameFromQName(qname);

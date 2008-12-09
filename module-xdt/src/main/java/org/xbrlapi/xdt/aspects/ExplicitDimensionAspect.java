@@ -12,6 +12,7 @@ import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspect;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
+import org.xbrlapi.aspects.MissingAspectValue;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.ExplicitDimension;
@@ -103,6 +104,10 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
                 return getMapLabel(id);
             }
             Concept f = ((Concept) value.getFragment());
+            if (f == null) {
+                setMapLabel(id,"");
+                return "";
+            }            
             FragmentList<LabelResource> labels = f.getLabelsWithLanguageAndRole(getLanguageCode(),getLabelRole());
             if (labels.isEmpty()) return id;
             String label = labels.get(0).getStringValue();
@@ -118,7 +123,11 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        return new ExplicitDimensionAspectValue(this,getFragment(fact));
+        Fragment fragment = getFragment(fact);
+        if (fragment == null) {
+            return new MissingAspectValue(this);
+        }
+        return new ExplicitDimensionAspectValue(this,fragment);
     }
 
     /**
@@ -126,6 +135,7 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
      */
     public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
         DimensionValue value = accessor.getValue((Item) fact, dimension);
+        if (value == null) return null; 
         return (Concept) value.getValue();
     }
     
@@ -134,6 +144,7 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
      */
     public String getFragmentKey(Fact fact) throws XBRLException {
         DimensionValue dimensionValue = accessor.getValue((Item) fact, this.dimension);
+        if (dimensionValue == null) return "";
         Concept concept = (Concept) dimensionValue.getValue();
         return concept.getNamespaceURI() + concept.getLocalname();
     }    
