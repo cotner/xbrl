@@ -1,8 +1,8 @@
 package org.xbrlapi.aspects;
 
+import java.util.List;
+
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
@@ -56,7 +56,8 @@ public class SegmentAspect extends ContextAspect implements Aspect {
                 return "";
             }
             Segment f = ((Segment) value.getFragment());
-            String id = f.getStore().serializeToString(f.getDataRootElement());
+            List<Element> children = f.getChildElements();
+            String id = getLabelFromElements(children);
             setMapId(value,id);
             return id;
         }
@@ -65,38 +66,7 @@ public class SegmentAspect extends ContextAspect implements Aspect {
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
         public String getLabel(AspectValue value) throws XBRLException {
-            validate(value);
-            String id = getIdentifier(value);
-            if (hasMapLabel(id)) {
-                return getMapLabel(id);
-            }
-            if (value.getFragment() == null) {
-                setMapLabel(id,"");
-                return "";
-            }
-            Segment f = ((Segment) value.getFragment());
-            NodeList children = f.getDataRootElement().getChildNodes();
-            Element child = null;
-            CHILDREN: for (int i=0; i<children.getLength(); i++) {
-                if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    child = (Element) children.item(i);
-                    break CHILDREN;
-                }
-            }
-            String label = "";
-            if (child == null) {
-                f.getStore().serialize(f.getDataRootElement());
-            } else {
-                label = child.getLocalName();
-                String text = child.getTextContent();
-                if (! text.trim().equals("")) {
-                    label += "=" + text;
-                }
-            }
-            logger.info("Segment aspect value label is " + label);            
-            setMapLabel(id,label);
-            return label;        
-
+            return getIdentifier(value);
         } 
     }    
     

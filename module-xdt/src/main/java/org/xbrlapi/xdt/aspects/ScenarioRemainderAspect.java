@@ -1,10 +1,9 @@
 package org.xbrlapi.xdt.aspects;
 
 import java.util.List;
+import java.util.Vector;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -67,16 +66,17 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
                 return "";
             }
             Scenario f = ((Scenario) value.getFragment());
-            String id = "";
             List<Element> children = f.getChildElements();
+            List<Element> remainder = new Vector<Element>();
             CHILDREN: for (Element child: children) {
                 if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
                     if (child.hasAttribute("dimension")) {
                         continue CHILDREN;
                     }
                 }
-                id += f.getStore().serializeToString(child);
+                remainder.add(child);
             }
+            String id = getLabelFromElements(remainder);
             setMapId(value,id);
             return id;
         }
@@ -85,49 +85,7 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
         public String getLabel(AspectValue value) throws XBRLException {
-            validate(value);
-            validate(value);
-            String id = getIdentifier(value);
-            if (hasMapLabel(id)) {
-                return getMapLabel(id);
-            }
-            if (value.getFragment() == null) {
-                setMapLabel(id,"");
-                return "";
-            }
-            Scenario f = ((Scenario) value.getFragment());
-            String label = "";
-            List<Element> children = f.getChildElements();
-            if (children.size() == 0) {
-                label ="";
-            } else {
-                CHILDREN: for (Element child: children) {
-                    if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
-                        if (child.hasAttribute("dimension")) {
-                            continue CHILDREN;
-                        }
-                    }
-                    label += child.getLocalName();
-                    String text = child.getTextContent();
-                    if (! text.trim().equals("")) {
-                        label += "=" + text;
-                    }
-                    NamedNodeMap attrs = child.getAttributes();
-                    if (attrs.getLength() > 0) {
-                        label += "(";
-                        for (int i=0; i<attrs.getLength(); i++) {
-                            Attr attr = (Attr) attrs.item(i);
-                            if (i!=0) label += ","; 
-                            label += attr.getName() + "=" + attr.getValue();
-                        }
-                        label += ")";
-                    }
-                }
-            }
-            
-            logger.info("Scenario remainder aspect value label is " + label);            
-            setMapLabel(id,label);
-            return label;        
+            return getIdentifier(value);
         }        
 
     }    
