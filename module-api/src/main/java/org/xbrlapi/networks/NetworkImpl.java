@@ -310,7 +310,7 @@ public class NetworkImpl implements Network {
     }
     
     /**
-     * @see Network#hasIsRoot(String)
+     * @see Network#isRoot(String)
      */
     public boolean isRoot(String index) throws XBRLException {
         return (this.getActiveRelationshipsTo(index).size() == 0);

@@ -60,7 +60,7 @@ public interface Network {
     public boolean hasActiveRelationshipsFrom(String index);
     
     /** 
-     * @index the index of the fragment.
+     * @param index the index of the fragment.
      * @return true if the fragment with the given index
      * has a single parent fragment in the network and 
      * false otherwise.
@@ -69,7 +69,7 @@ public interface Network {
     public boolean hasSingleParent(String index) throws XBRLException;
     
     /** 
-     * @index the index of the fragment.
+     * @param index the index of the fragment.
      * @return true if the fragment with the given index
      * has no parent fragments and false otherwise.
      * @throws XBRLException
@@ -77,7 +77,7 @@ public interface Network {
     public boolean isRoot(String index) throws XBRLException;
     
     /** 
-     * @index the index of the fragment.
+     * @param index the index of the fragment.
      * @return true if the fragment with the given index
      * has no child fragments in the network and false otherwise.
      * @throws XBRLException
