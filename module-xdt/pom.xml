@@ -5,7 +5,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.xbrlapi</groupId>
   <artifactId>xbrlapi-xdt</artifactId>
-  <version>3.4</version>
+  <version>3.5</version>
   <packaging>jar</packaging>
   <name>XBRLAPI XDT implementation</name>
   <url>http://www.xbrlapi.org</url>
@@ -30,7 +30,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     <dependency>
         <groupId>org.xbrlapi</groupId>
         <artifactId>xbrlapi-api</artifactId>
-        <version>3.4</version>
+        <version>3.5</version>
     </dependency>
 
   </dependencies>
