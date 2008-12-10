@@ -1,3 +1,7 @@
+10 Dec. 2008
+Fixed the NPE bug in the handling of processing instructions that
+come before any markup in an XML document.
+
 9 Dec. 2008
 Added in XDT aspects and dimensional aspect model to the XDT module.
 
