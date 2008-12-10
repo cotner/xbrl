@@ -15,6 +15,9 @@
     	manifest="${manifest}/MANIFEST.MF">
         <fileset dir="${build}">
         	<include name="**/*"/>
+          <exclude name="**/xdt/*"/>
+          <exclude name="**/examples/*"/>
+          <exclude name="**/utilities/*"/>
         	<exclude name="**/exist/*"/>
         	<exclude name="**/xindice/*"/>
         	<exclude name="**/xlink/*"/>

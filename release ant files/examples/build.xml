@@ -10,7 +10,7 @@
   <target name="dist" depends="src" description="generate the JAR" >
   	<tstamp/>
     <jar compress="yes" jarfile="${dist}/xbrlapi-${moduleName}-${DSTAMP}.jar">
-        <fileset dir="${build}" includes="**/${moduleName}/*"/>
+        <fileset dir="${build}" includes="**/${moduleName}/**/*.class"/>
         <fileset dir="${src}" includes="**/*"/>
         <fileset dir="${srctest}" includes="**/*"/>
     </jar>
