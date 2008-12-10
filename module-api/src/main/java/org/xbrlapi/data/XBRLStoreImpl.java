@@ -452,14 +452,14 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
 
 
     /**
-     * @see org.xbrlapi.XBRLStore#getMinimalNetworksWithArcrole(Fragment, String)
+     * @see XBRLStore#getMinimalNetworksWithArcrole(Fragment, String)
      */
     public Networks getMinimalNetworksWithArcrole(Fragment fragment, String arcrole) throws XBRLException {
         return this.getMinimalNetworksWithArcrole(new FragmentListImpl<Fragment>(fragment),arcrole);
     }    
     
     /**
-     * @see org.xbrlapi.XBRLStore#getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, String)
+     * @see XBRLStore#getMinimalNetworksWithArcrole(FragmentList, String)
      */
     public Networks getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, String arcrole) throws XBRLException {
         
