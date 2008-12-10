@@ -1,2 +1,6 @@
+9 Dec. 2008
+Added in new aspects to support the XDT specification and defined
+a new dimensional aspect model.
+
 24 Nov. 2008
 Created the first release.

@@ -1,2 +1,5 @@
+10 Dec. 2008
+Fixed missing class files in the JAR.
+
 14 Nov. 2008
 Created the first release.

@@ -1,5 +1,9 @@
 Release details:
 
+Release 3.4
+December 10, 2008
+Fixed problems in construction of JAR files with the 3.3 release.
+
 Release 3.3
 November 24, 2008
 Point release to provide new aspects package and to provide
