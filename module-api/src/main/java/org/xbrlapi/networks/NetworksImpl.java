@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Arc;
+import org.xbrlapi.ArcEnd;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.Locator;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.loader.Loader;
@@ -21,6 +24,18 @@ import org.xbrlapi.utilities.XBRLException;
 public class NetworksImpl implements Networks {
 
 	protected static Logger logger = Logger.getLogger(Loader.class);	
+	
+	private HashMap<String,Arc> arcs = new HashMap<String,Arc>();
+	
+	/**
+	 * @param arcIndex The index to check for in testing for whether
+	 * the relationships defined by the arc are already in the networks.
+	 * @return true if the relationships defined by the arc are already 
+	 * in the networks.
+	 */
+	private boolean hasArc(String arcIndex) {
+	    return arcs.containsKey(arcIndex);
+	}
 	
 	/**
 	 * The data store containing the information defining the networks.
@@ -52,7 +67,8 @@ public class NetworksImpl implements Networks {
 		if (networks.containsKey(arcRole)) {
 			map = networks.get(arcRole);
 			if (map.containsKey(linkRole)) {
-				throw new XBRLException("The collection of networks already contains a network with the given arc and link roles.");
+			    Network existingNetwork = this.getNetwork(arcRole,linkRole);
+			    existingNetwork.add(network);
 			}
 			map.put(linkRole,network);
 			return;
@@ -60,8 +76,8 @@ public class NetworksImpl implements Networks {
 		
 		map = new HashMap<String,Network>();
 		map.put(linkRole,network);
-		networks.put(arcRole,map);
-		this.getArcRoles();
+		networks.put(arcRole,map);		
+		
 	}
 
 	/**
@@ -170,7 +186,7 @@ public class NetworksImpl implements Networks {
 	
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#addRelationship(Relationship)
+	 * @see Networks#addRelationship(Relationship)
 	 */
 	public void addRelationship(Relationship relationship) throws XBRLException {
 		logger.debug("Networks being augmented with relationship: " + relationship.toString());
@@ -186,6 +202,31 @@ public class NetworksImpl implements Networks {
 		network.addRelationship(relationship);
 		addNetwork(network);
 	}
+	
+    /**
+     * @see Networks#addRelationships(String)
+     */
+    public void addRelationships(String arcrole) throws XBRLException {
+
+        String query = "/*[@type='org.xbrlapi.impl.ArcImpl' and */*[@xlink:type='arc' and @xlink:arcrole='"+ arcrole +"']]";
+        FragmentList<Arc> arcs = this.getStore().<Arc>query(query);
+        for (Arc arc: arcs) {
+            FragmentList<ArcEnd> sources = arc.getSourceFragments();
+            FragmentList<ArcEnd> targets = arc.getTargetFragments();
+            for (Fragment source: sources) {
+                Fragment s = source;
+                if (source.isa("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTargetFragment();
+                for (Fragment target: targets) {
+                    Fragment t = target;
+                    if (target.isa("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTargetFragment();
+                    Relationship relationship = new RelationshipImpl(arc,s,t);
+                    this.addRelationship(relationship);
+                }
+            }
+        }
+
+    }
+	
 	
 	/**
 	 * @see org.xbrlapi.networks.Networks#getSize()

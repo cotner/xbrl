@@ -17,9 +17,11 @@ import org.xbrlapi.utilities.XBRLException;
 public interface Networks extends Iterable<Network> {
 	
 	/**
+	 * If the collection of networks already has a network with the 
+	 * same role and arcrole, then the relationships from the added
+	 * network are added into the existing network.
 	 * @param network The network to add to the collection of networks.
-	 * @throws XBRLException if the collection already contains a 
-	 * network with the same arc and link role as the network being added.
+	 * @throws XBRLException
 	 */
 	public void addNetwork(Network network) throws XBRLException;
 	
@@ -104,7 +106,15 @@ public interface Networks extends Iterable<Network> {
 	 * @param relationship The relationship to add to the collection of networks.
 	 * @throws XBRLException
 	 */
-	public void addRelationship(Relationship relationship) throws XBRLException;	
+	public void addRelationship(Relationship relationship) throws XBRLException;
+	
+	/**
+	 * Adds all relationships with the given arcrole to the set of networks.
+	 * @param arcrole The required arcrole.
+	 * @throws XBRLException
+	 */
+	public void addRelationships(String arcrole) throws XBRLException;
+	
 
 	/**
 	 * @return a list of arc role values for which there are networks in 
