@@ -9,7 +9,7 @@ package org.xbrlapi.xmlbase;
  */
 
 
-public interface BaseURLResolver {
+public interface BaseURIResolver {
 
 	public static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
 

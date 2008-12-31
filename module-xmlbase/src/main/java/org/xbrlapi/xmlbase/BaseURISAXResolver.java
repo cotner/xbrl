@@ -1,5 +1,7 @@
 package org.xbrlapi.xmlbase;
 
+import java.net.URI;
+
 /**
  * This interface declares the functionality expected
  * of classes that provide the XML Base functionality 
@@ -8,28 +10,27 @@ package org.xbrlapi.xmlbase;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-import java.net.URL;
 
-public interface BaseURLSAXResolver {
+public interface BaseURISAXResolver {
 
     /**
-     * Returns the XML Base URL of the given element.
+     * Returns the XML Base URI of the given element.
      * Used with the SAX API
-     * @return the Base URL form.
+     * @return the Base URI form.
      */
-    public URL getBaseURL() throws XMLBaseException;
+    public URI getBaseURI() throws XMLBaseException;
     
     /**
      * Updates the XML Base given new base information
      * Used on the start of element XML base event.
      * @param value the value of the xmlBase attribute if supplied.
      */
-    public void addBaseURL(String value) throws XMLBaseException;
+    public void addBaseURI(String value) throws XMLBaseException;
     
     /**
-     * Reverts to the previous Base URL - used on the end of 
+     * Reverts to the previous Base URI - used on the end of 
      * element XML base event.
      */
-    public void removeBaseURL() throws XMLBaseException;
+    public void removeBaseURI() throws XMLBaseException;
 
 }

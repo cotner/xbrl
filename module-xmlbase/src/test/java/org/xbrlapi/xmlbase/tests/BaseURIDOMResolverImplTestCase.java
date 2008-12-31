@@ -1,23 +1,23 @@
 package org.xbrlapi.xmlbase.tests;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.utilities.XMLDOMBuilder;
-import org.xbrlapi.xmlbase.BaseURLDOMResolver;
-import org.xbrlapi.xmlbase.BaseURLDOMResolverImpl;
+import org.xbrlapi.xmlbase.BaseURIDOMResolver;
+import org.xbrlapi.xmlbase.BaseURIDOMResolverImpl;
 import org.xbrlapi.xmlbase.XMLBaseException;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class BaseURLDOMResolverImplTestCase extends BaseTestCase {
+public class BaseURIDOMResolverImplTestCase extends BaseTestCase {
 	
 	private String xmlS1, xmlS2, xmlS3;
 	private Document xmlD1, xmlD2, xmlD3;
-	private BaseURLDOMResolver baseURLResolver, nullBaseURLResolver;
+	private BaseURIDOMResolver baseURIResolver, nullBaseURIResolver;
 
 	/*
 	 * @see TestCase#setUp()
@@ -55,8 +55,8 @@ public class BaseURLDOMResolverImplTestCase extends BaseTestCase {
 			+ "</my:root>";
 		xmlD3 = XMLDOMBuilder.newDocument(xmlS3);
 
-		baseURLResolver = new BaseURLDOMResolverImpl(new URL("http://www.xbrlapi.org/document.xml"));
-		nullBaseURLResolver = new BaseURLDOMResolverImpl();
+		baseURIResolver = new BaseURIDOMResolverImpl(new URI("http://www.xbrlapi.org/document.xml"));
+		nullBaseURIResolver = new BaseURIDOMResolverImpl();
 	}
 
 	/*
@@ -67,49 +67,49 @@ public class BaseURLDOMResolverImplTestCase extends BaseTestCase {
 	}
 
 	/**
-	 * Constructor for BaseURLDOMResolverImplTests.
+	 * Constructor for BaseURIDOMResolverImplTests.
 	 * @param arg0
 	 */
-	public BaseURLDOMResolverImplTestCase(String arg0) {
+	public BaseURIDOMResolverImplTestCase(String arg0) {
 		super(arg0);
 	}
 
 	/**
-	 * Test the BaseURLSAXResolverImpl constructor.  
+	 * Test the BaseURISAXResolverImpl constructor.  
 	 * The constructor is too simple to break.
 	 */
-	public final void testBaseURLImpl() {
+	public final void testBaseURIImpl() {
 	}
 
 	/**
-	 * Test the Base URL construction for the root element
+	 * Test the Base URI construction for the root element
 	 * in an XML document without namespaces for elements and
 	 * where the root element has an explicit xml:base attribute
 	 */
-	public final void testGetExplicitBaseURLForRootElement() {
+	public final void testGetExplicitBaseURIForRootElement() {
 		NodeList elts = xmlD1.getElementsByTagName("root");
 		assertEquals("DOM operation failed",1,elts.getLength());
 		Element elt = (Element) elts.item(0);
 		try {
-			assertEquals("http://www.xbrlapi.org/root.xml",baseURLResolver.getBaseURL(elt).toString());
+			assertEquals("http://www.xbrlapi.org/root.xml",baseURIResolver.getBaseURI(elt).toString());
 		} catch (XMLBaseException e) {
-			fail("Unexpected XBRLException thrown when determining the base URL.");
+			fail("Unexpected XBRLException thrown when determining the base URI.");
 		}
 	}
 
 	/**
-	 * Test the Base URL construction for the root element
+	 * Test the Base URI construction for the root element
 	 * in an XML document without namespaces for elements and
 	 * where the root element has NO explicit xml:base attribute.
 	 */
-	public final void testGetImplicitBaseURLForRootElement() {
+	public final void testGetImplicitBaseURIForRootElement() {
 		NodeList elts = xmlD3.getElementsByTagNameNS("http://www.xbrlapi.org/ns/","root");
 		assertEquals("DOM operation failed",1,elts.getLength());
 		Element elt = (Element) elts.item(0);
 		try {
-			assertEquals("http://www.xbrlapi.org/document.xml",baseURLResolver.getBaseURL(elt).toString());
+			assertEquals("http://www.xbrlapi.org/document.xml",baseURIResolver.getBaseURI(elt).toString());
 		} catch (XMLBaseException e) {
-			fail("Unexpected XBRLException thrown when determining the base URL.");
+			fail("Unexpected XBRLException thrown when determining the base URI.");
 		}
 	}
 
@@ -117,44 +117,44 @@ public class BaseURLDOMResolverImplTestCase extends BaseTestCase {
 	 * Test the resolution of a relative child elements xml:base
 	 * against the absolute xml:base of the root element.
 	 */
-	public final void testGetResolvedBaseURL() {
+	public final void testGetResolvedBaseURI() {
 		NodeList elts = xmlD1.getElementsByTagName("child2");
 		assertEquals("DOM operation failed",1,elts.getLength());
 		Element elt = (Element) elts.item(0);
 		try {
-			assertEquals("http://www.xbrlapi.org/child2.xml",nullBaseURLResolver.getBaseURL(elt).toString());
+			assertEquals("http://www.xbrlapi.org/child2.xml",nullBaseURIResolver.getBaseURI(elt).toString());
 		} catch (XMLBaseException e) {
-			fail("Unexpected XBRLException thrown when determining the base URL. " + e.getMessage());
+			fail("Unexpected XBRLException thrown when determining the base URI. " + e.getMessage());
 		}
 	}	
 
 	/**
 	 * Test the resolution of a relative child against a relative root
-	 * against an absolute document URL.
+	 * against an absolute document URI.
 	 */
-	public final void testGetResolvedBaseURLCascadingToDocumentURL() {
+	public final void testGetResolvedBaseURICascadingToDocumentURI() {
 		NodeList elts = xmlD2.getElementsByTagNameNS("http://www.xbrlapi.org/ns/","child2");
 		assertEquals("DOM operation failed",1,elts.getLength());
 		Element elt = (Element) elts.item(0);
 		try {
-			assertEquals("http://www.xbrlapi.org/child2.xml",baseURLResolver.getBaseURL(elt).toString());
+			assertEquals("http://www.xbrlapi.org/child2.xml",baseURIResolver.getBaseURI(elt).toString());
 		} catch (XMLBaseException e) {
-			fail("Unexpected XBRLException thrown when determining the base URL. " + e.getMessage());
+			fail("Unexpected XBRLException thrown when determining the base URI. " + e.getMessage());
 		}
 	}
 	
 	/**
 	 * Test the throwing of an exception when the xml:base attribute
-	 * is a relative address and there is no absolute URL to resolve
+	 * is a relative address and there is no absolute URI to resolve
 	 * it against.
 	 */
-	public final void testFailureForMalformedXMLBaseURL() {
+	public final void testFailureForMalformedXMLBaseURI() {
 		NodeList elts = xmlD3.getElementsByTagNameNS("http://www.xbrlapi.org/ns/","child2");
-		assertEquals("DOM operation failed",1,elts.getLength());
+		assertEquals("Child element was not retrieved correctly.",1,elts.getLength());
 		Element elt = (Element) elts.item(0);
 		try {
-			assertEquals("http://www.xbrlapi.org/child2.xml",nullBaseURLResolver.getBaseURL(elt).toString());
-			fail("Relative URL with no absolute base URL to resolve against should have thrown an XBRLException.");
+			assertEquals("http://www.xbrlapi.org/child2.xml",nullBaseURIResolver.getBaseURI(elt).toString());
+			fail("Relative URI with no absolute base URI to resolve against should have thrown an XBRLException.");
 		} catch (XMLBaseException expected) {
 			;
 		}
@@ -162,7 +162,7 @@ public class BaseURLDOMResolverImplTestCase extends BaseTestCase {
 	
 	/**
 	 * Test XML DOM set up as part of the testing fixture.
-	 * This is not directly testing the BaseURLSAXResolver implementation.
+	 * This is not directly testing the BaseURISAXResolver implementation.
 	 */
 	public final void testFixtureXMLDOMCreation() throws Exception {
 		// TODO Replace the version of the XML Base testing class being used.

@@ -1,25 +1,26 @@
 package org.xbrlapi.xmlbase.tests;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.utilities.XMLDOMBuilder;
-import org.xbrlapi.xmlbase.BaseURLDOMResolver;
-import org.xbrlapi.xmlbase.BaseURLDOMResolverImpl;
+import org.xbrlapi.xmlbase.BaseURIDOMResolver;
+import org.xbrlapi.xmlbase.BaseURIDOMResolverImpl;
 import org.xbrlapi.xmlbase.XMLBaseException;
 
 /**
- * Tests of illegal URL characters using the DOM based XML Base resolver
+ * Tests of illegal URI characters using the DOM based XML Base resolver
  * TODO confirm that xml base is adequately testing illegal URI characters
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class BaseURLDOMResolverImplIllegalCharacterHandlingTestCase extends BaseTestCase {
+public class BaseURIDOMResolverImplIllegalCharacterHandlingTestCase extends BaseTestCase {
 	
 	private String xmlS1;
 	private Document xmlD1;
-	private BaseURLDOMResolver baseURLResolver;
+	
+	private BaseURIDOMResolver baseURIResolver;
 
 	/*
 	 * @see TestCase#setUp()
@@ -37,7 +38,7 @@ public class BaseURLDOMResolverImplIllegalCharacterHandlingTestCase extends Base
 			+ "</root>";
 		xmlD1 = XMLDOMBuilder.newDocument(xmlS1);
 
-		baseURLResolver = new BaseURLDOMResolverImpl(new URL("http://www.xbrlapi.org/document.xml"));
+		baseURIResolver = new BaseURIDOMResolverImpl(new URI("http://www.xbrlapi.org/document.xml"));
 		
 	}
 
@@ -49,24 +50,26 @@ public class BaseURLDOMResolverImplIllegalCharacterHandlingTestCase extends Base
 	}
 
 	/**
-	 * Constructor for BaseURLDOMResolverImplTests.
+	 * Constructor for BaseURIDOMResolverImplTests.
 	 * @param arg0
 	 */
-	public BaseURLDOMResolverImplIllegalCharacterHandlingTestCase(String arg0) {
+	public BaseURIDOMResolverImplIllegalCharacterHandlingTestCase(String arg0) {
 		super(arg0);
 	}
 
 	/**
 	 * Test the encoding of the space character in an xml:base attribute
 	 */
-	public final void testGetExplicitBaseURLForRootElement() {
+	public final void testGetExplicitBaseURIForRootElement() {
 		NodeList elts = xmlD1.getElementsByTagName("root");
 		assertEquals("DOM operation failed",1,elts.getLength());
 		Element elt = (Element) elts.item(0);
 		try {
-			assertEquals("http://www.xbrlapi.org/r[oo]t.xml",baseURLResolver.getBaseURL(elt).toString());
-		} catch (XMLBaseException e) {
-			fail("Unexpected XBRLException thrown when determining the base URL.");
+			URI baseURI = baseURIResolver.getBaseURI(elt);
+			logger.info(baseURI);
+            fail("Should have thrown an XML Base Exception when determining the base URI.");
+		} catch (XMLBaseException expected) {
+		    ;
 		}
 	}
 	

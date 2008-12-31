@@ -6,9 +6,11 @@ package org.xbrlapi.xmlbase.tests;
  */
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
+
 abstract public class BaseTestCase extends TestCase {
 
-
+    protected static Logger logger = Logger.getLogger(BaseTestCase.class);    
 	
 	protected void setUp() throws Exception {
 		super.setUp();

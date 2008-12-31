@@ -7,12 +7,12 @@ package org.xbrlapi.xmlbase;
  */
 
 
-public class BaseURLResolverImpl implements BaseURLResolver {
+public class BaseURIResolverImpl implements BaseURIResolver {
 	
     /**
      * Constructor does nothing
      */
-    public BaseURLResolverImpl() {
+    public BaseURIResolverImpl() {
     	;
     }
 

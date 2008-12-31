@@ -8,10 +8,9 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.xbrlapi.xmlbase.tests");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(BaseURLDOMResolverImplTestCase.class);
-		suite
-				.addTestSuite(BaseURLDOMResolverImplIllegalCharacterHandlingTestCase.class);
-		suite.addTestSuite(BaseURLSAXResolverImplTestCase.class);
+		suite.addTestSuite(BaseURIDOMResolverImplTestCase.class);
+		suite.addTestSuite(BaseURIDOMResolverImplIllegalCharacterHandlingTestCase.class);
+		suite.addTestSuite(BaseURISAXResolverImplTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}
