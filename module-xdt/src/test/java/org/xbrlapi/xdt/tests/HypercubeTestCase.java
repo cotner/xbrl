@@ -28,7 +28,7 @@ public class HypercubeTestCase extends BaseTestCase {
 	public void testHypercubeIdentification() {
 
 		try {
-	        loader.discover(this.getURL(STARTING_POINT));
+	        loader.discover(this.getURI(STARTING_POINT));
 			FragmentList<Hypercube> fragments = store.<Hypercube>getFragments("org.xbrlapi.xdt.HypercubeImpl");
 			assertTrue(fragments.getLength() > 0);
 			for (Hypercube fragment: fragments) {
@@ -43,7 +43,7 @@ public class HypercubeTestCase extends BaseTestCase {
     public void testGettingDimensionsForAnEmptyHypercube() {
 
         try {
-            loader.discover(this.getURL(STARTING_POINT));
+            loader.discover(this.getURI(STARTING_POINT));
             FragmentList<Hypercube> fragments = store.<Hypercube>getFragments("org.xbrlapi.xdt.HypercubeImpl");
             assertTrue(fragments.getLength() > 0);
             for (Hypercube fragment: fragments) {

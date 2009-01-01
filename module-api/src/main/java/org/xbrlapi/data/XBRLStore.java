@@ -1,6 +1,6 @@
 package org.xbrlapi.data;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,25 +47,25 @@ public interface XBRLStore extends Store {
     public FragmentList<Tuple> getTuples() throws XBRLException;
 
     /**
-     * @param url The URL of the document to get the facts from.
+     * @param uri The URI of the document to get the facts from.
      * @return a list of all of the root-level facts in the specified document.
      * @throws XBRLException
      */
-    public FragmentList<Fact> getFacts(URL url) throws XBRLException;
+    public FragmentList<Fact> getFacts(URI uri) throws XBRLException;
     
     /**
-     * @param url The URL of the document to get the items from.
+     * @param uri The URI of the document to get the items from.
      * @return a list of all of the root-level items in the data store.
      * @throws XBRLException
      */
-    public FragmentList<Item> getItems(URL url) throws XBRLException;
+    public FragmentList<Item> getItems(URI uri) throws XBRLException;
     
     /**
-     * @param url The URL of the document to get the facts from.
+     * @param uri The URI of the document to get the facts from.
      * @return a list of all of the root-level tuples in the specified document.
      * @throws XBRLException
      */
-    public FragmentList<Tuple> getTuples(URL url) throws XBRLException;
+    public FragmentList<Tuple> getTuples(URI uri) throws XBRLException;
     
     /**
      * This implementation is not as strict as the XBRL 2.1 specification
@@ -152,11 +152,11 @@ public interface XBRLStore extends Store {
     public HashMap<String,String> getResourceRoles() throws XBRLException;    
     
     /**
-     * @param starters The list of URLs of the documents to use as 
+     * @param starters The list of URIs of the documents to use as 
      * starting points for analysis.
-     * @return list of URLs for the documents in the data store
+     * @return list of URIs for the documents in the data store
      * that are referenced, directly or indirectly, by any of the documents
-     * identified by the supplied list of document URLs.  Each entry in the list is a String.
+     * identified by the supplied list of document URIs.  Each entry in the list is a String.
      * @throws XBRLException if some of the referenced documents are not in
      * the data store.
      */
@@ -165,17 +165,24 @@ public interface XBRLStore extends Store {
     
     /**
      * This is just a convenience method.
-     * @param url The single document URL to use as 
+     * @param uri The single document URI to use as 
      * starting points for analysis.
-     * @return list of URLs for the documents in the data store
+     * @return list of URIs for the documents in the data store
      * that are referenced, directly or indirectly, by the document
-     * identified by the supplied URL.  Each entry in the list is a String.
+     * identified by the supplied URI.  Each entry in the list is a String.
      * @throws XBRLException if some of the referenced documents are not in
      * the data store.
      */
-    public List<String> getMinimumDocumentSet(String url) throws XBRLException;
+    public List<String> getMinimumDocumentSet(String uri) throws XBRLException;
 
     /**
+     * Implementation strategy is:<br/>
+     * <ol>
+     * <li>Get all extended link elements matching network requirements.</li>
+     * <li>Get all arcs defining relationships in the network.</li>
+     * <li>Get all resources at the source of the arcs.</li>
+     * <li>Return only those source resources that that are not target resources also.</li>
+     * </ol>
      * @param linkNamespace The namespace of the link element.
      * @param linkName The name of the link element.
      * @param linkRole the role on the extended links that contain the network arcs.

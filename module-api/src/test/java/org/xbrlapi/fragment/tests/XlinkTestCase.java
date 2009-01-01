@@ -1,6 +1,6 @@
 package org.xbrlapi.fragment.tests;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.regex.Pattern;
 
 import org.xbrlapi.DOMLoadingTestCase;
@@ -32,13 +32,13 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		"</presentationLink>\n" +
 		"</linkbase>\n";	
 	
-	private URL url = null;
+	private URI uri = null;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
-        String myURL = Pattern.compile("397-ABC.xsd").matcher(getURL("test.data.multi.concept.schema")).replaceAll("xlink_test.xml");
-        url = new URL(myURL);
+		loader.discover(this.getURI(STARTING_POINT));		
+        String myURI = Pattern.compile("397-ABC.xsd").matcher(getURI("test.data.multi.concept.schema")).replaceAll("xlink_test.xml");
+        uri = new URI(myURI);
 	}
 
 	protected void tearDown() throws Exception {
@@ -79,7 +79,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		
 		// Case where one exists
 		try {
-			loader.discover(url, document);
+			loader.discover(uri, document);
 			FragmentList<Xlink> fragments = store.<Xlink>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:title");
 			Xlink fragment = fragments.getFragment(0);
 			assertEquals("stuff", fragment.getTitleAttribute());
@@ -106,7 +106,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		
 		// Case where one exists
 		try {
-			loader.discover(url, document);
+			loader.discover(uri, document);
 			FragmentList<Title> fragments = store.getFragments("Title");
 			Fragment title = fragments.getFragment(0);
 			Xlink fragment = (Xlink) title.getParent();

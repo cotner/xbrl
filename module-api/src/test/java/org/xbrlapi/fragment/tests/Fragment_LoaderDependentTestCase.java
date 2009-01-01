@@ -21,7 +21,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -72,13 +72,13 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	}	
 
 	/**
-	 * Test retrieval of the URL of a stored fragment.
+	 * Test retrieval of the URI of a stored fragment.
 	 * TODO Figure out how to test operations on an unstored fragment using the mockfragmentimpl.
 	 */
-	public void testGetURLOfAStoredFragment() {
+	public void testGetURIOfAStoredFragment() {
         try {
-            Fragment fragment = store.getRootFragmentForDocument(this.getURL(STARTING_POINT));
-            assertEquals(this.getURL(STARTING_POINT), fragment.getURL());
+            Fragment fragment = store.getRootFragmentForDocument(this.getURI(STARTING_POINT));
+            assertEquals(this.getURI(STARTING_POINT), fragment.getURI());
         } catch (Exception e) {
             fail(e.getMessage());
         }	    
@@ -152,7 +152,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 		try {
 			FragmentList<Schema> schemas = store.<Schema>getFragments("Schema");
 			for (Schema schema: schemas) {
-				if (schema.getURL().equals(this.getURL(STARTING_POINT))) {
+				if (schema.getURI().equals(this.getURI(STARTING_POINT))) {
 					FragmentList<SimpleLink> links = schema.getSimpleLinks();
 					assertEquals(2,links.getLength());		
 				}
@@ -191,7 +191,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetXPathToParentElement() {
 	    
         try {
-            FragmentList<Schema> fragments = store.<Schema>query("/*[@url='" + this.getURL(STARTING_POINT) + "' and @parentIndex='none']");
+            FragmentList<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='none']");
             assertTrue(fragments.getLength() > 0);
             for (Fragment fragment: fragments) {
                 FragmentList<Fragment> children = fragment.getAllChildren();
@@ -209,7 +209,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetParentElement() {
         try {
-            FragmentList<Schema> fragments = store.<Schema>query("/*[@url='" + this.getURL(STARTING_POINT) + "' and @parentIndex='none']");
+            FragmentList<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='none']");
             assertTrue(fragments.getLength() > 0);
             for (Fragment fragment: fragments) {
                 FragmentList<Fragment> children = fragment.getAllChildren();

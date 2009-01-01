@@ -93,10 +93,10 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                             // Get the URIs of the documents that were used to create elements in this namespace
                             StringList locations = nsItem.getDocumentLocations();
                             
-                            // Check to see if the current document URL is one of those documents and if so, the candidate could be good
+                            // Check to see if the current document URI is one of those documents and if so, the candidate could be good
                             for (int j=0; j<locations.getLength(); j++) {
                                 String location = locations.item(j);
-                                if (location.equals(getContentHandler().getURL().toString())) {
+                                if (location.equals(getContentHandler().getURI().toString())) {
                                     // Throw an exception if we find two feasible candidate element declarations in the Schema model
                                     if (declaration != null) throw new XBRLException("Potentially ambiguous anonymous Schema problem.");
                                     declaration = candidateDeclaration;
@@ -236,8 +236,8 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
             preparser.setEntityResolver(entityResolver);
 
             // TODO make sure that this XML Resource Identifier is being initialised correctly.
-            String url = this.getContentHandler().getURL().toString();
-            XMLResourceIdentifier xri = new XMLResourceIdentifierImpl("", url, url, url);
+            String uri = this.getContentHandler().getURI().toString();
+            XMLResourceIdentifier xri = new XMLResourceIdentifierImpl("", uri, uri, uri);
             
             XMLInputSource xmlInputSource = entityResolver.resolveEntity(xri);
             
@@ -246,7 +246,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
             return grammar.toXSModel();         
 
         } catch (IOException e) {
-            throw new XBRLException("Grammar model construction for schema at URL: " + getContentHandler().getURL() + " failed.",e);
+            throw new XBRLException("Grammar model construction for schema at URI: " + getContentHandler().getURI() + " failed.",e);
         }
     }    
     

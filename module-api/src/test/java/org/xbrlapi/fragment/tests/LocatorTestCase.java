@@ -16,7 +16,7 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -50,7 +50,7 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 		try {
 			FragmentList<Locator> fragments = store.<Locator>getFragments("Locator");
 			Locator fragment = fragments.getFragment(0);
-			assertEquals(configuration.getProperty("test.data.baseURL") + "Common/instance/397-ABC.xsd#A", fragment.getAbsoluteHref().toString());
+			assertEquals(configuration.getProperty("test.data.baseURI") + "Common/instance/397-ABC.xsd#A", fragment.getAbsoluteHref().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -66,7 +66,7 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 			FragmentList<Locator> fragments = store.<Locator>getFragments("Locator");
 			Locator fragment = fragments.getFragment(0);
 			Fragment target = fragment.getTargetFragment();
-			assertEquals(fragment.getTargetDocumentURL().toString(), target.getURL().toString());
+			assertEquals(fragment.getTargetDocumentURI().toString(), target.getURI().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

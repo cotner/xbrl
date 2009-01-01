@@ -5,7 +5,7 @@ package org.xbrlapi.cache.tests;
  */
 
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.utilities.BaseTestCase;
@@ -33,11 +33,11 @@ public class CacheImplTestCase extends BaseTestCase {
 	}
 
 	/**
-	 * Test operations on a simple URL
+	 * Test operations on a simple URI
 	 */
-	public final void testSimpleURL() {
+	public final void testSimpleURI() {
 		try {
-			this.examineURL(new URL("http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"));
+			this.examineURI(new URI("http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"));
 		} catch (Exception e) {
 			fail("Unexpected exception. " + e.getMessage());
 		}
@@ -45,17 +45,20 @@ public class CacheImplTestCase extends BaseTestCase {
 	
 	
 
-	public final void examineURL(URL originalURL) {
+	public final void examineURI(URI originalURI) {
 		try {
 
+            logger.info("Original URI: " + originalURI);
 			CacheImpl cache = new CacheImpl(new File(cacheRoot));
-			assertFalse(cache.isCacheURL(originalURL));
-			File cacheFile = cache.getCacheFile(originalURL);
+			assertFalse(cache.isCacheURI(originalURI));
+			File cacheFile = cache.getCacheFile(originalURI);
 			assertNotNull(cacheFile);
-			URL cacheURL = cache.getCacheURL(originalURL);
-			assertTrue(cache.isCacheURL(cacheURL));
-			URL newURL = cache.getOriginalURL(cacheURL);
-			assertEquals(originalURL, newURL);
+			URI cacheURI = cache.getCacheURI(originalURI);
+			logger.info("Cache URI: " + cacheURI);
+			assertTrue(cache.isCacheURI(cacheURI));
+			URI newURI = cache.getOriginalURI(cacheURI);
+            logger.info("New Original URI: " + newURI);
+			assertEquals(originalURI, newURI);
 			
 		} catch (Exception e) {
 		    e.printStackTrace();

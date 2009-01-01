@@ -1,6 +1,6 @@
 package org.xbrlapi.xdt;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.loader.Loader;
@@ -17,22 +17,22 @@ public class ContentHandlerImpl extends org.xbrlapi.sax.ContentHandlerImpl {
 	protected static Logger logger = Logger.getLogger(ContentHandlerImpl.class);		
     
     /**
-     * @see org.xbrlapi.sax.ContentHandlerImpl#ContentHandlerImpl(Loader, URL)
+     * @see org.xbrlapi.sax.ContentHandlerImpl#ContentHandlerImpl(Loader, URI)
      */
-    public ContentHandlerImpl(Loader loader, URL url) throws XBRLException {
-        super(loader,url);
+    public ContentHandlerImpl(Loader loader, URI uri) throws XBRLException {
+        super(loader,uri);
     }
     	
     /**
-     * @see org.xbrlapi.sax.ContentHandlerImpl#ContentHandlerImpl(Loader, URL, String)
+     * @see org.xbrlapi.sax.ContentHandlerImpl#ContentHandlerImpl(Loader, URI, String)
      */
-    public ContentHandlerImpl(Loader loader, URL url, String xml) throws XBRLException {
-        super(loader, url, xml);
+    public ContentHandlerImpl(Loader loader, URI uri, String xml) throws XBRLException {
+        super(loader, uri, xml);
     }
 
     /**
-     * On starting to parse a document the Base URL resolver is 
-     * set up with the documents absolute URL.  The fragment identifiers
+     * On starting to parse a document the Base URI resolver is 
+     * set up with the documents absolute URI.  The fragment identifiers
      * are also instantiated and initialised.
      *
      * @see org.xml.sax.ContentHandler#startDocument()

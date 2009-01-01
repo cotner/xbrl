@@ -14,7 +14,7 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -41,12 +41,12 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 			
 			Loader secondLoader = createLoader(secondStore);
 
-			int count = secondStore.getStoredURLs().size();
+			int count = secondStore.getStoredURIs().size();
 			assertTrue(count > 1);
 			
-			secondLoader.discover(this.getURL("test.data.small.instance"));
+			secondLoader.discover(this.getURI("test.data.small.instance"));
 
-			assertEquals(2,secondStore.getStoredURLs().size() - count);
+			assertEquals(2,secondStore.getStoredURIs().size() - count);
 			
 			secondStore.close();
 			secondStore = null;

@@ -1,6 +1,6 @@
 package org.xbrlapi.data.resource;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -20,17 +20,17 @@ public class DefaultMatcherImpl implements Matcher {
     }
     
     /**
-     * @see org.xbrlapi.data.resource.Matcher#getMatch(URL)
+     * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
-    public URL getMatch(URL url) throws XBRLException {
-        return url;
+    public URI getMatch(URI uri) throws XBRLException {
+        return uri;
     }
 
     /**
-     * @see org.xbrlapi.data.resource.Matcher#getSignature(URL)
+     * @see org.xbrlapi.data.resource.Matcher#getSignature(URI)
      */
-    public String getSignature(URL url) throws XBRLException {
-        return url.toString();
+    public String getSignature(URI uri) throws XBRLException {
+        return uri.toString();
     }
 
 }

@@ -1,6 +1,6 @@
 package org.xbrlapi.loader.tests;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,18 +18,18 @@ public class LoaderImplTestCase extends BaseTestCase {
 	
 	private final String STARTING_POINT = "test.data.small.schema";
 	private final String STARTING_POINT_2 = "test.data.small.instance";
-	private URL url1 = null;
-	private URL url2 = null;
-	private List<URL> urls = new LinkedList<URL>();
+	private URI uri1 = null;
+	private URI uri2 = null;
+	private List<URI> uris = new LinkedList<URI>();
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		url1 = new URL(getURL(this.STARTING_POINT));
-		url2 = new URL(getURL(this.STARTING_POINT_2));
-		urls.add(url1);
-		urls.add(url2);
-/*		loader.discover(this.getURL(STARTING_POINT));		
-		loader.discover(this.getURL(STARTING_POINT_2));		
+		uri1 = new URI(getURI(this.STARTING_POINT));
+		uri2 = new URI(getURI(this.STARTING_POINT_2));
+		uris.add(uri1);
+		uris.add(uri2);
+/*		loader.discover(this.getURI(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT_2));		
 */	}
 	
 	public LoaderImplTestCase(String arg0) {
@@ -70,16 +70,16 @@ public class LoaderImplTestCase extends BaseTestCase {
 	 */
 	public void testLoaderImplStoreXLinkProcessorList() {
 		try {
-			new LoaderImpl(store,loader.getXlinkProcessor(),urls);
-			new LoaderImpl(store,loader.getXlinkProcessor(),new LinkedList<URL>());
+			new LoaderImpl(store,loader.getXlinkProcessor(),uris);
+			new LoaderImpl(store,loader.getXlinkProcessor(),new LinkedList<URI>());
 		} catch (XBRLException e) {
-			fail("Unexpected exception creating a loader using a list of URLs.");
+			fail("Unexpected exception creating a loader using a list of URIs.");
 		}
 	}
 
 	public void testLoaderImplStoreXLinkProcessorList_FailOnNullList() {
 		try {
-			List<URL> list = null;//URL right?
+			List<URI> list = null;
 			new LoaderImpl(store,loader.getXlinkProcessor(),list);
 			fail("Null list is not allowed for loaders.");
 		} catch (XBRLException expected) {
@@ -114,11 +114,11 @@ public class LoaderImplTestCase extends BaseTestCase {
 	}
 	
 	/**
-	 * Test discovery given an array of URL starting points
+	 * Test discovery given an array of URI starting points
 	 */
 	public void testDiscover() {
 		try {
-			loader.stashURL(url1);
+			loader.stashURI(uri1);
 			loader.discover();
 		} catch (XBRLException e) {
 			fail("Unexpected " + e.getMessage());
@@ -130,21 +130,21 @@ public class LoaderImplTestCase extends BaseTestCase {
 	 */
 	public void testInstanceDiscover() {
 		try {
-			loader.stashURL(url1);
-			loader.stashURL(url2);
+			loader.stashURI(uri1);
+			loader.stashURI(uri2);
 			loader.discover();
 			
-            List<String> urls = store.getStoredURLs();
-            assertTrue(urls.size() > 0);
+            List<String> uris = store.getStoredURIs();
+            assertTrue(uris.size() > 0);
             
             boolean foundStartingPoint = false;
             boolean foundBothStartingPoints = false;
-            for (String url: urls) {
-                if (url.equals(url1.toString())) {
+            for (String uri: uris) {
+                if (uri.equals(uri1.toString())) {
                     foundStartingPoint = true;
                 }
                 if (foundStartingPoint)
-                    if (url.equals(url2.toString())) {
+                    if (uri.equals(uri2.toString())) {
                         foundBothStartingPoints = true;
                     }
                     
@@ -158,36 +158,36 @@ public class LoaderImplTestCase extends BaseTestCase {
 	}
 	
 	/**
-	 * Test discovery of a list of URLs passed in
+	 * Test discovery of a list of URIs passed in
 	 * as arguments to the discover method.
 	 */
-	public void testDiscoverURLList() {
+	public void testDiscoverURIList() {
 		try {
-			loader.discover(urls);
+			loader.discover(uris);
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}		
 	}
 
 	/**
-	 * Test discovery given an array of URL starting points
+	 * Test discovery given an array of URI starting points
 	 */
 	public void testProcessSchemaLocationAttributes() {
 		try {
 			loader.setSchemaLocationAttributeUsage(true);
-			loader.discover(urls);
+			loader.discover(uris);
 		} catch (XBRLException e) {
 			fail("Unexpected " + e.getMessage());
 		}
 	}
 
 	/**
-	 * Test discovery one URL at a time
+	 * Test discovery one URI at a time
 	 */
 	public void testDiscoverNext() {
 		try {
-			loader.stashURL(url1);
-			loader.stashURL(url2);
+			loader.stashURI(uri1);
+			loader.stashURI(uri2);
 			while (! loader.getDocumentsStillToAnalyse().isEmpty()) {
 				for (String document: loader.getDocumentsStillToAnalyse()) {
 					logger.debug("still to process " + document);

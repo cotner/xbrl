@@ -1,7 +1,7 @@
 package org.xbrlapi.sax;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,8 +20,8 @@ import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkException;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
-import org.xbrlapi.xmlbase.BaseURLSAXResolver;
-import org.xbrlapi.xmlbase.BaseURLSAXResolverImpl;
+import org.xbrlapi.xmlbase.BaseURISAXResolver;
+import org.xbrlapi.xmlbase.BaseURISAXResolverImpl;
 import org.xbrlapi.xmlbase.XMLBaseException;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
@@ -44,18 +44,18 @@ import org.xml.sax.SAXException;
 public class ContentHandlerImpl extends BaseContentHandlerImpl implements ContentHandler {
 
     /**
-     * On starting to parse a document the Base URL resolver is 
-     * set up with the documents absolute URL.  The fragment identifiers
+     * On starting to parse a document the Base URI resolver is 
+     * set up with the documents absolute URI.  The fragment identifiers
      * are also instantiated and initialised.  
      */
     public void startDocument() throws SAXException 
     {
-        // Set up the base URL resolver for the content handler and the XLink handler.
-        if (getURL() == null) {
-            throw new SAXException("The document URL must not be null when setting up the base URL resolver.");
+        // Set up the base URI resolver for the content handler and the XLink handler.
+        if (getURI() == null) {
+            throw new SAXException("The document URI must not be null when setting up the base URI resolver.");
         }
-        setBaseURLSAXResolver(new BaseURLSAXResolverImpl(this.getURL()));
-        getXLinkHandler().setBaseURLSAXResolver(this.getBaseURLSAXResolver());
+        setBaseURISAXResolver(new BaseURISAXResolverImpl(this.getURI()));
+        getXLinkHandler().setBaseURISAXResolver(this.getBaseURISAXResolver());
 
         // Instantiate the fragment identifiers
         try {
@@ -74,7 +74,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
     /**
      * Sets the element state.
      * Increment the fragment children via the loader ????
-     * Stash xsi:schemaLocation attribute URLs for discovery if required.
+     * Stash xsi:schemaLocation attribute URIs for discovery if required.
      * Identifies any new fragment.
      * Adds the fragment, if one is found, to the stack of fragments being built by the loader.
      * Update the map of defined namespaces.
@@ -97,7 +97,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         // Update the loader information about child elements.
         loader.incrementChildren();
         
-        // Stash new URLs in xsi:schemaLocation attributes if desired
+        // Stash new URIs in xsi:schemaLocation attributes if desired
         if (loader.useSchemaLocationAttributes()) {
             String schemaLocations = attrs.getValue(Constants.XMLSchemaInstanceNamespace,"schemaLocation");
             if (schemaLocations != null) {
@@ -105,15 +105,15 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
                 String[] fields = schemaLocations.trim().split("\\s+");
                 for (int i=1; i<fields.length; i=i+2) {
                     try {
-                        URL url = new URL(getBaseURLSAXResolver().getBaseURL(),fields[i]);
-                        logger.debug("Working on: " + url);
-                        loader.stashURL(url);
-                    } catch (MalformedURLException e) {
-                        logger.warn("Ignoring malformed XSI schemaLocation URL in: " + schemaLocations);
+                        URI uri = getBaseURISAXResolver().getBaseURI().resolve(new URI(fields[i]));
+                        logger.debug("Working on: " + uri);
+                        loader.stashURI(uri);
+                    } catch (URISyntaxException e) {
+                        logger.warn("Ignoring malformed XSI schemaLocation URI in: " + schemaLocations);
                     } catch (XBRLException e) {
-                        logger.warn("A problem occurred when stashing the schemaLocation URL: " + fields[i]);
+                        logger.warn("A problem occurred when stashing the schemaLocation URI: " + fields[i]);
                     } catch (XMLBaseException e) {
-                        logger.warn("A problem occurred when getting the base URL so schemaLocation URLs were not stashed from: " + schemaLocations);
+                        logger.warn("A problem occurred when getting the base URI so schemaLocation URIs were not stashed from: " + schemaLocations);
                     }
                 }
             }
@@ -258,11 +258,12 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
     throws SAXException
     {
         try {
-            if (getLoader().getFragment() != null)
-                getLoader().getFragment().getBuilder().appendProcessingInstruction(target,data);
-            // TODO Figure out how to capture processing instructions that occur before the document root element.
+            Fragment fragment = getLoader().getFragment();
+            if (fragment != null) {
+                fragment.getBuilder().appendProcessingInstruction(target,data);
+            }
         } catch (XBRLException e) {
-            e.printStackTrace();
+            // Need to store processing instructions for incorporation into the fragment being created.
         }
     }    
     
@@ -295,7 +296,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
     
     /**
      * The locator for a document is stored to facilitate resolution 
-     * of CacheURLImpl's relative to that location.
+     * of CacheURIImpl's relative to that location.
      */
     public void setDocumentLocator(Locator locator) {
         this.locator = locator;
@@ -337,7 +338,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         if (!(getSystemId() == null))
             s.append(getSystemId() + ".  ");
         else
-            s.append("a document without a URL.  All DTS documents must have a URL but one being parsed into the DTS does not.");
+            s.append("a document without a URI.  All DTS documents must have a URI but one being parsed into the DTS does not.");
         s.append("The problem seems to be on line" + getLineNumber() + " at column " + getColumnNumber() + ".");
         return s.toString();
     }    
@@ -347,12 +348,12 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
      * identifying the DTS structure that the content
      * handler is discovering.
      * @param loader The DTS loader that is using this content handler.
-     * @param url The URL of the document being parsed.
+     * @param uri The URI of the document being parsed.
      * @throws XBRLException if any of the parameters
      * are null.
      */
-	public ContentHandlerImpl(Loader loader, URL url) throws XBRLException {
-		super(loader, url);		
+	public ContentHandlerImpl(Loader loader, URI uri) throws XBRLException {
+		super(loader, uri);		
 	    getNamespaceMaps().push(new HashMap<String,String>());
 		
 	}
@@ -362,13 +363,13 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
      * identifying the data structure that the content
      * handler is discovering.
      * @param loader The data loader that is using this content handler.
-     * @param url The URL of the document being parsed.
+     * @param uri The URI of the document being parsed.
      * @param xml The string representation of the XML document being parsed.
      * @throws XBRLException if any of the parameters
      * are null.
      */
-	public ContentHandlerImpl(Loader loader, URL url, String xml) throws XBRLException {
-		this(loader, url);
+	public ContentHandlerImpl(Loader loader, URI uri, String xml) throws XBRLException {
+		this(loader, uri);
 		setXML(xml);
 	}	
     
@@ -381,25 +382,25 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
     }
     
     /**
-     * The  resolver that is used to resolve URLs against
-     * the appropriate base URL during SAX parsing.
+     * The  resolver that is used to resolve URIs against
+     * the appropriate base URI during SAX parsing.
      */
-    private BaseURLSAXResolver baseURLSAXResolver = null;
+    private BaseURISAXResolver baseURISAXResolver = null;
     
     /**
-     * @param resolver The base URL resolver to use in the SAX parsing.
+     * @param resolver The base URI resolver to use in the SAX parsing.
      * @throws SAXException if the resolver is null.
      */
-    private void setBaseURLSAXResolver(BaseURLSAXResolver resolver) throws SAXException {
-        if (resolver == null) throw new SAXException("The base URL SAX resolver must not be null.");
-        this.baseURLSAXResolver = resolver;
+    private void setBaseURISAXResolver(BaseURISAXResolver resolver) throws SAXException {
+        if (resolver == null) throw new SAXException("The base URI SAX resolver must not be null.");
+        this.baseURISAXResolver = resolver;
     }
     
     /**
-     * @return the base URL resolver for SAX parsing.
+     * @return the base URI resolver for SAX parsing.
      */
-    protected BaseURLSAXResolver getBaseURLSAXResolver() {
-        return baseURLSAXResolver;
+    protected BaseURISAXResolver getBaseURISAXResolver() {
+        return baseURISAXResolver;
     }
     
     /**

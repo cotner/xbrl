@@ -163,19 +163,19 @@ public interface Fragment extends Comparable<Fragment> {
     public void removeMetadataElement(String eName, HashMap<String,String> attributes) throws XBRLException;
     
     /**
-     * Get the URL of the document containing this fragment.
+     * Get the URI of the document containing this fragment.
      * @throws XBRLException
      */
-    public String getURL() throws XBRLException;
+    public String getURI() throws XBRLException;
     
 
 	
     /**
-     * Set the URL of the fragment's document.
-     * @param url The string value of the document's absolute URL
+     * Set the URI of the fragment's document.
+     * @param uri The string value of the document's absolute URI
      * @throws XBRLException.
      */
-    public void setURL(String url) throws XBRLException;
+    public void setURI(String uri) throws XBRLException;
     
     /**
      * Retrieves a list of all locators that target this fragment.
@@ -386,6 +386,13 @@ public interface Fragment extends Comparable<Fragment> {
     public FragmentList<LabelResource> getLabels() throws XBRLException;
     
     /**
+     * @param networks The networks to use to obtain the labels.
+     * @return a list of label resources for the fragment.
+     * @throws XBRLException
+     */
+    public FragmentList<LabelResource> getLabels(Networks networks) throws XBRLException;    
+    
+    /**
      * @param role The XLink role value
      * @return the list of labels for this fragment with the specified XLink role.
      * @throws XBRLException
@@ -393,12 +400,39 @@ public interface Fragment extends Comparable<Fragment> {
     public FragmentList<LabelResource> getLabelsWithRole(String role) throws XBRLException;
     
     /**
+     * @param networks The networks to get the labels from.
+     * @param role The XLink role value
+     * @return the list of labels for this fragment with the specified XLink role.
+     * @throws XBRLException
+     */
+    public FragmentList<LabelResource> getLabelsWithRole(Networks networks, String role) throws XBRLException;    
+    
+    /**
      * @param language The xml:lang language codevalue
      * @return the list of labels for this fragment with the specified language code.
      * @throws XBRLException
      */
     public FragmentList<LabelResource> getLabelsWithLanguage(String language) throws XBRLException;
+    
+    /**
+     * @param networks The networks to get the labels from.
+     * @param language The xml:lang language codevalue
+     * @return the list of labels for this fragment with the specified language code.
+     * @throws XBRLException
+     */
+    public FragmentList<LabelResource> getLabelsWithLanguage(Networks networks, String language) throws XBRLException;    
+    
+    
 
+    /**
+     * @param networks The networks to get the labels from.
+     * @param language The xml:lang language codevalue
+     * @param role The XLink role value
+     * @return the list of labels for this fragment with the specified language code and XLink role.
+     * @throws XBRLException
+     */
+    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(Networks networks, String language, String role) throws XBRLException;
+    
     /**
      * @param language The xml:lang language codevalue
      * @param role The XLink role value

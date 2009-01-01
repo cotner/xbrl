@@ -21,8 +21,8 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT_A));		
-		loader.discover(this.getURL(STARTING_POINT_B));		
+		loader.discover(this.getURI(STARTING_POINT_A));		
+		loader.discover(this.getURI(STARTING_POINT_B));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -95,7 +95,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 		try {
 			FragmentList<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.getFragment(0);
-			FragmentList<Locator> locators = link.getLocatorsByHref(configuration.getProperty("test.data.baseURL") + "Common/instance/397-ABC.xsd#B");
+			FragmentList<Locator> locators = link.getLocatorsByHref(configuration.getProperty("test.data.baseURI") + "Common/instance/397-ABC.xsd#B");
 			assertEquals(1, locators.getLength());
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,7 +1,7 @@
 package org.xbrlapi.impl;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
@@ -16,17 +16,17 @@ import org.xbrlapi.utilities.XBRLException;
 public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
 	
 	/**
-	 * @see org.xbrlapi.SimpleLink#setTarget(URL)
+	 * @see org.xbrlapi.SimpleLink#setTarget(URI)
 	 */
-	public void setTarget(URL url) throws XBRLException {
-		setMetaAttribute("absoluteHref",url.toString());
-		setMetaAttribute("targetDocumentURL",this.getTargetDocumentURL(url).toString());
-		setMetaAttribute("targetPointerValue",this.getTargetPointerValue(url.getRef()));
+	public void setTarget(URI uri) throws XBRLException {
+		setMetaAttribute("absoluteHref",uri.toString());
+		setMetaAttribute("targetDocumentURI",this.getTargetDocumentURI(uri).toString());
+		setMetaAttribute("targetPointerValue",this.getTargetPointerValue(uri.getFragment()));
 	}
 
     /**
      * Get the link HREF attribute value, before any resolution.
-     * @return the CacheURLImpl value of the XLink href attribute
+     * @return the CacheURIImpl value of the XLink href attribute
      * @throws XBRLException
      * @see org.xbrlapi.SimpleLink#getHref()
      */
@@ -38,27 +38,27 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
 
     /**
      * Get the absolute value of the HREF to the metadata.
-     * @return The absolute URL specified by the locator HREF attribute.
+     * @return The absolute URI specified by the locator HREF attribute.
      * @throws XBRLException.
      * @see org.xbrlapi.SimpleLink#getAbsoluteHref()
      */
-    public URL getAbsoluteHref() throws XBRLException {
+    public URI getAbsoluteHref() throws XBRLException {
     	try {
-    		return new URL(this.getMetadataRootElement().getAttribute("absoluteHref"));
-    	} catch (MalformedURLException e) {
-    		throw new XBRLException("Absolute URL in the HREF of the locator is malformed.",e);
+    		return new URI(this.getMetadataRootElement().getAttribute("absoluteHref"));
+    	} catch (URISyntaxException e) {
+    		throw new XBRLException("Absolute URI in the HREF of the locator is malformed.",e);
     	}
     }        
     
     /**
-     * @return the document URL for the target fragment.
+     * @return the document URI for the target fragment.
      * @throws XBRLException.
      */
-    private URL getTargetDocumentURL() throws XBRLException {
+    private URI getTargetDocumentURI() throws XBRLException {
     	try {
-    		return new URL(this.getMetadataRootElement().getAttribute("targetDocumentURL"));
-    	} catch (MalformedURLException e) {
-    		throw new XBRLException("Absolute URL in the HREF of the locator is malformed.",e);
+    		return new URI(this.getMetadataRootElement().getAttribute("targetDocumentURI"));
+    	} catch (URISyntaxException e) {
+    		throw new XBRLException("Absolute URI in the HREF of the locator is malformed.",e);
     	}
     }
     
@@ -93,7 +93,7 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
     		pointerCondition = " and "+ Constants.XBRLAPIPrefix+ ":" + "xptr/@value='" + pointerValue + "'";
     	}
     	
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + getTargetDocumentURL() + "'" + pointerCondition + "]";
+    	String query = "/*[@uri='" + getTargetDocumentURI() + "'" + pointerCondition + "]";
     	logger.debug(query);
     	FragmentList<Fragment> fragments = getStore().query(query);
     	if (fragments.getLength() == 0) return null;

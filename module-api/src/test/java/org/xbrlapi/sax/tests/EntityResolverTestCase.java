@@ -2,8 +2,7 @@ package org.xbrlapi.sax.tests;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -53,26 +52,21 @@ public class EntityResolverTestCase extends BaseTestCase {
 	}
 
 	public final void testInputSourceCreatedByResolveEntity() {
-		String originalURL = "http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd";
+		String originalURI = "http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd";
 		try {
 			logger.info("Trying to create an entity resolver using cache " + cachePath);
 			EntityResolverImpl resolver = new EntityResolverImpl(new File(cachePath));
-			InputSource is = resolver.resolveEntity("",originalURL);
+			InputSource is = resolver.resolveEntity("",originalURI);
 			assertNull("Public ID for the input source is not null.",is.getPublicId());
-			try {
-			    System.out.println(new File(cachePath + "/http/www.xbrl.org/80/2003/xbrl-instance-2003-12-31.xsd").toURI().toURL().toString());			    
-                System.out.println(new File(is.getSystemId().toString()));
-				assertEquals("System ID is wrong.",new File(cachePath + "/http/www.xbrl.org/80/2003/xbrl-instance-2003-12-31.xsd").toURI().toURL().toString(),is.getSystemId());
-				
-			} catch (MalformedURLException me) {
-				fail(me.getMessage());
-			}
+		    System.out.println(new File(cachePath + "/http/www.xbrl.org/80/2003/xbrl-instance-2003-12-31.xsd").toURI().toString());			    
+            System.out.println(new File(is.getSystemId().toString()));
+			assertEquals("System ID is wrong.",new File(cachePath + "/http/www.xbrl.org/-1/2003/xbrl-instance-2003-12-31.xsd").toURI().toString(),is.getSystemId());
 		} catch (XBRLException e) {
 			fail("The entity resolver constructor failed unexpectedly.");
 		} finally {
 			try {
 				CacheImpl cache = new CacheImpl(new File(cachePath));
-				cache.purge(new URL(originalURL));
+				cache.purge(new URI(originalURI));
 			} catch (Exception e) {
 				fail(e.getMessage());
 			}
@@ -82,7 +76,7 @@ public class EntityResolverTestCase extends BaseTestCase {
 	
 	public final void testSAXParserUsageOfCustomEntityResolver() {
 		
-		String url = getURL("test.data.cacheableURL.A");
+		String uri = getURI("test.data.cacheableURI.A");
 
         ContentHandler contentHandler = new EntityResolverTestCase.ContentHandler();
         XMLReader reader = null;
@@ -109,7 +103,7 @@ public class EntityResolverTestCase extends BaseTestCase {
         reader.setEntityResolver(entityResolver);
 		
 		try {
-            reader.parse(url.toString());
+            reader.parse(uri.toString());
         } catch (SAXException e) {
             fail(e.getMessage());
 		} catch (IOException e) {
@@ -118,7 +112,7 @@ public class EntityResolverTestCase extends BaseTestCase {
 		} finally {
 			try {
 				CacheImpl cache = new CacheImpl(new File(cachePath));
-				cache.purge(new URL(url));
+				cache.purge(new URI(uri));
 			} catch (Exception e) {
 			    e.printStackTrace();
 				fail(e.getMessage());

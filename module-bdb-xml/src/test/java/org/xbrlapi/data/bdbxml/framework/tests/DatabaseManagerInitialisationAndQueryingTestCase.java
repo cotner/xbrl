@@ -44,23 +44,21 @@ public class DatabaseManagerInitialisationAndQueryingTestCase extends BaseTestCa
 		
 		try {
 		    environmentConfiguration = new EnvironmentConfig();
-		    environmentConfiguration.setAllowCreate(true);         // If the environment does not exist, create it.
-		    environmentConfiguration.setInitializeCache(true);     // Turn on the shared memory region.
-		    environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
-		    environmentConfiguration.setInitializeLogging(true);   // Turn on the logging subsystem.
-		    environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
-		    environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
+            environmentConfiguration.setThreaded(true);
+            environmentConfiguration.setAllowCreate(true);         // If the environment does not exist, create it.
+            environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
+            environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
+            environmentConfiguration.setInitializeCache(true);
+            environmentConfiguration.setCacheSize(1024 * 1024 * 500);
+            environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
+            environmentConfiguration.setTransactional(false);       // Turn on the transactional subsystem.
 		    environment = new Environment(environmentHome, environmentConfiguration);
 
 		    managerConfiguration = new XmlManagerConfig();
-		    managerConfiguration.setAdoptEnvironment(true);
-		    managerConfiguration.setAllowExternalAccess(true);
+            managerConfiguration.setAdoptEnvironment(true);
+            managerConfiguration.setAllowExternalAccess(true);
 		    myManager = new XmlManager(environment, managerConfiguration);
 		    
-		    // Set the log message levels to get a lot of detail.
-/*		    XmlManager.setLogLevel(XmlManager.LEVEL_ALL, true);
-		    XmlManager.setLogCategory(XmlManager.CATEGORY_ALL, true);		    
-*/		    
 		    if (myManager.existsContainer(containerName) > 0) {
 			    myManager.removeContainer(containerName);
 		    }
@@ -140,7 +138,6 @@ public class DatabaseManagerInitialisationAndQueryingTestCase extends BaseTestCa
 		        message += theDoc.getName() + ":\n";
 		        message += value.asString();
 		        message += "\n===============================\n";
-		        System.out.println(message);
 		        value = xmlResults.next();
 		     }		    
 		    

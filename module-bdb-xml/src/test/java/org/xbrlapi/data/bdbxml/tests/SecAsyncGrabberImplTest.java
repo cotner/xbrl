@@ -1,9 +1,8 @@
 package org.xbrlapi.data.bdbxml.tests;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
-import org.xbrlapi.data.Store;
 import org.xbrlapi.grabber.Grabber;
 import org.xbrlapi.grabber.SecGrabberImpl;
 import org.xbrlapi.loader.discoverer.DiscoveryManager;
@@ -14,14 +13,14 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
         super(arg0);
     }
 
-    private List<URL> resources = null;
+    private List<URI> resources = null;
     protected void setUp() throws Exception {
         super.setUp();
         String secFeed = configuration.getProperty("real.data.sec");
-        URL feedUrl = new URL(secFeed);
-        Grabber grabber = new SecGrabberImpl(feedUrl);
+        URI feedURI = new URI(secFeed);
+        Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
-        assertTrue(resources.size() > 1900);
+        assertTrue(resources.size() > 100);
     }
 
     protected void tearDown() throws Exception {
@@ -32,26 +31,16 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
         try {
 
             int cnt = 2;
-            List<URL> r1 = resources.subList(0,cnt);
+            List<URI> r1 = resources.subList(0,cnt);
             DiscoveryManager d1 = new DiscoveryManager(loader, r1, 20000);
             Thread t1 = new Thread(d1);
             t1.start();
 
-            Store newStore = this.createStore();
-                        
             while (t1.isAlive()) {
                 Thread.sleep(2000);
-/*                String id = loader.getCurrentFragmentId();
-                Thread.sleep(30000);
-                try {
-                    Fragment fragment = newStore.getFragment(id);
-                    if (fragment != null) newStore.serialize(fragment);
-                } catch (Exception e) {
-                    logger.info("failed to serialise " + id);
-                }
-*/            }
-            
-            newStore.close();
+                if (store.getStoredURIs().size()>10)
+                    loader.requestInterrupt();
+            }
             
         } catch (Exception e) {
             e.printStackTrace();

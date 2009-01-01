@@ -1,6 +1,6 @@
 package org.xbrlapi.grabber.tests;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.data.dom.tests.BaseTestCase;
@@ -13,12 +13,11 @@ public class SecGrabberImplTest extends BaseTestCase {
         super(arg0);
     }
     
-    private List<URL> resources = null;
+    private List<URI> resources = null;
 	protected void setUp() throws Exception {
 		super.setUp();
-		String secFeed = configuration.getProperty("real.data.sec");
-        URL feedUrl = new URL(secFeed);             
-        Grabber grabber = new SecGrabberImpl(feedUrl);
+        URI feedURI = new URI(getURI("test.data.local.sec"));             
+        Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
         assertTrue(resources.size() > 1900);
 	}
@@ -31,11 +30,11 @@ public class SecGrabberImplTest extends BaseTestCase {
 		try {
 
 			long start = System.currentTimeMillis();
-			for (URL resource: resources) {
+			for (URI resource: resources) {
 				if (! loader.getStore().hasDocument(resource.toString()))
 				loader.discover(resource);
 				System.out.println("Time taken = " + ((System.currentTimeMillis() - start) / 1000));
-				if (loader.getStore().getStoredURLs().size() > 14) {
+				if (loader.getStore().getStoredURIs().size() > 14) {
 				    break;
 				}
 			}

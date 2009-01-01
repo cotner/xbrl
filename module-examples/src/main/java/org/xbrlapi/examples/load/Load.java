@@ -6,8 +6,8 @@
 package org.xbrlapi.examples.load;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class Load {
         try {
             
             // Process command line arguments
-            List<URL> inputs = new LinkedList<URL>();
+            List<URI> inputs = new LinkedList<URI>();
             HashMap<String,String> arguments = new HashMap<String,String>();
             int i = 0;
             if (i >= args.length)
@@ -76,9 +76,9 @@ public class Load {
                         badUsage("Unknown argument: " + args[i]);
                 } else {
                     try {
-                        inputs.add(new URL(args[i]));
-                    } catch (MalformedURLException e) {
-                        badUsage("Malformed discovery starting point URL: " + args[i]);
+                        inputs.add(new URI(args[i]));
+                    } catch (URISyntaxException e) {
+                        badUsage("Malformed discovery starting point URI: " + args[i]);
                     }
                 }
                 i++;
@@ -191,7 +191,7 @@ public class Load {
             System.err.println(message);
         }
         
-        System.err.println("Command line usage: java org.xbrlapi.ng.eg0001 -database VALUE -container VALUE -cache VALUE URL1 URL2 ...");
+        System.err.println("Command line usage: java org.xbrlapi.ng.eg0001 -database VALUE -container VALUE -cache VALUE URI1 URI2 ...");
         System.err.println("Mandatory arguments: ");
         System.err.println(" -database VALUE   directory containing the Oracle BDB XML database");
         System.err.println(" -container VALUE  name of the data container");
@@ -231,7 +231,7 @@ public class Load {
         
         File cacheFile = new File(cache);
         
-        // Rivet errors in the SEC XBRL data require these URL remappings to prevent discovery process from breaking.
+        // Rivet errors in the SEC XBRL data require these URI remappings to prevent discovery process from breaking.
         HashMap<String,String> map = new HashMap<String,String>();
         map.put("http://www.xbrl.org/2003/linkbase/xbrl-instance-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
         map.put("http://www.xbrl.org/2003/instance/xbrl-instance-2003-12-31.xsd","http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");

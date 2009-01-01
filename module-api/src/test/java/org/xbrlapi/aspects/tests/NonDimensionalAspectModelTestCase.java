@@ -20,8 +20,8 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-        loader.discover(this.getURL(STARTING_POINT1));       
-		loader.discover(this.getURL(STARTING_POINT2));		
+        loader.discover(this.getURI(STARTING_POINT1));       
+		loader.discover(this.getURI(STARTING_POINT2));		
 	}
 
 	protected void tearDown() throws Exception {

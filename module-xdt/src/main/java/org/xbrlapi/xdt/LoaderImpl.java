@@ -2,7 +2,7 @@ package org.xbrlapi.xdt;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.data.Store;
@@ -31,36 +31,36 @@ public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader 
     /**
      * @see org.xbrlapi.loader.LoaderImpl#LoaderImpl(Store, XLinkProcessor, List)
      */
-    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor, List<URL> urls)
+    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor, List<URI> uris)
             throws XBRLException {
-        super(store,xlinkProcessor,urls);
+        super(store,xlinkProcessor,uris);
     }
 
 
     
     /**
-     * @see org.xbrlapi.loader.LoaderImpl#parse(URL)
+     * @see org.xbrlapi.loader.LoaderImpl#parse(URI)
      */
-    protected void parse(URL url) throws XBRLException {
+    protected void parse(URI uri) throws XBRLException {
         
         try {
-            InputSource inputSource = this.getEntityResolver().resolveEntity("", url.toString());
-            ContentHandler contentHandler = new ContentHandlerImpl(this, url);
-            parse(url, inputSource, contentHandler);
+            InputSource inputSource = this.getEntityResolver().resolveEntity("", uri.toString());
+            ContentHandler contentHandler = new ContentHandlerImpl(this, uri);
+            parse(uri, inputSource, contentHandler);
         } catch (SAXException e) {
-            throw new XBRLException("SAX exception thrown when parsing " + url,e);
+            throw new XBRLException("SAX exception thrown when parsing " + uri,e);
         } catch (IOException e) {
-            throw new XBRLException("IO exception thrown when parsing " + url,e);
+            throw new XBRLException("IO exception thrown when parsing " + uri,e);
         }
     }
 
     /**
-     * @see org.xbrlapi.loader.LoaderImpl#parse(URL, String)
+     * @see org.xbrlapi.loader.LoaderImpl#parse(URI, String)
      */
-    protected void parse(URL url, String xml) throws XBRLException {
+    protected void parse(URI uri, String xml) throws XBRLException {
         InputSource inputSource = new InputSource(new StringReader(xml));
-        ContentHandler contentHandler = new ContentHandlerImpl(this, url, xml);
-        super.parse(url, inputSource, contentHandler);
+        ContentHandler contentHandler = new ContentHandlerImpl(this, uri, xml);
+        super.parse(uri, inputSource, contentHandler);
     }
     
 }

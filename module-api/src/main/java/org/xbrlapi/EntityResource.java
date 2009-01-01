@@ -39,12 +39,12 @@ public interface EntityResource extends MixedContentResource {
     public FragmentList<Entity> getEntities() throws XBRLException;
 
     /**
-     * @param url The URL of the document to get the entities from
+     * @param uri The URI of the document to get the entities from
      * @return a list of entity identifier fragments from the contexts in
      * the specified document (or an empty fragment list if there are none
      * matching this entity resource).
      * @throws XBRLException
      */
-    public FragmentList<Entity> getEntities(String url) throws XBRLException;
+    public FragmentList<Entity> getEntities(String uri) throws XBRLException;
     
 }

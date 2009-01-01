@@ -19,7 +19,7 @@ public class FragmentComparator implements Comparator<Fragment> {
 	 * are grouped separately and so that the fragments are ordered from the closest to the end
 	 * of the document in document order to the closest to the beginning in document order.
 	 * Fragments are sorted:
-	 * 1. in increasing alphanumeric ordering of the URL of the document that the fragment
+	 * 1. in increasing alphanumeric ordering of the URI of the document that the fragment
 	 * belongs to; then
 	 * 2. in increasing order of the index of their parent fragment with root fragments being ordered first of all; then
 	 * 3. in increasing order of the XPath to the containing element in the parent fragment; then
@@ -36,9 +36,9 @@ public class FragmentComparator implements Comparator<Fragment> {
 				return 0;
 			}
 			
-			int urlComparison = f1.getURL().compareTo(f2.getURL());
-			if (urlComparison != 0)
-				return urlComparison;
+			int uriComparison = f1.getURI().compareTo(f2.getURI());
+			if (uriComparison != 0)
+				return uriComparison;
 			
 			String f1p = f1.getParentIndex();
 			String f2p = f2.getParentIndex();

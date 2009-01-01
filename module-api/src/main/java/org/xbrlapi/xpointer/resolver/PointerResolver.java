@@ -1,6 +1,6 @@
 package org.xbrlapi.xpointer.resolver;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.data.Store;
@@ -16,16 +16,16 @@ public interface PointerResolver {
 	
 	
 	/** 
-	 * Set the URL of the document within which the XPointer is being resolved.
-	 * @param url The URL of the document.
+	 * Set the URI of the document within which the XPointer is being resolved.
+	 * @param uri The URI of the document.
 	 */
-	public void setDocumentURL(URL url);
+	public void setDocumentURI(URI uri);
 	
 	/**
-	 * Get the URL of the document within which the XPointer is being resolved.
-	 * @return the url of the document within which the XPointer is being resolved.
+	 * Get the URI of the document within which the XPointer is being resolved.
+	 * @return the URI of the document within which the XPointer is being resolved.
 	 */
-	public URL getDocumentURL();
+	public URI getDocumentURI();
 	
 	/**
 	 * Get the data store used by a loader

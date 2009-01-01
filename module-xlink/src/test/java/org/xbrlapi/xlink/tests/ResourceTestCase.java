@@ -80,7 +80,7 @@ public class ResourceTestCase extends TestCase {
 		try {
 			assertEquals(expected,actual);
 		} catch (Exception e) {
-			fail("Unexpected Exception when testing SAX Base URL handling. " + e.getMessage());
+			fail("Unexpected Exception when testing SAX Base URI handling. " + e.getMessage());
 		}
 	}
 	
@@ -88,7 +88,7 @@ public class ResourceTestCase extends TestCase {
 		try {
 			assertNull(actual);
 		} catch (Exception e) {
-			fail("Unexpected Exception when testing SAX Base URL handling. " + e.getMessage());
+			fail("Unexpected Exception when testing SAX Base URI handling. " + e.getMessage());
 		}
 	}
 	

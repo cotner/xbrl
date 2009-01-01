@@ -1,6 +1,6 @@
 package org.xbrlapi.data.resource;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -18,12 +18,12 @@ import org.xbrlapi.utilities.XBRLException;
 public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
 
     /**
-     * Map from signature strings to lists of URLs with the same signature.
-     * The first URL in the list is the URL of the resource in the data
+     * Map from signature strings to lists of URIs with the same signature.
+     * The first URI in the list is the URI of the resource in the data
      * store.
      */
-    private HashMap<String,List<URL>> map = new HashMap<String,List<URL>>();
-    private HashMap<String,List<URL>>getMap() {
+    private HashMap<String,List<URI>> map = new HashMap<String,List<URI>>();
+    private HashMap<String,List<URI>>getMap() {
         return map;
     }
 
@@ -37,18 +37,18 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
     }
 
     /**
-     * @see org.xbrlapi.data.resource.Matcher#getMatch(URL)
+     * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
-    public URL getMatch(URL url) throws XBRLException {
-        String signature = this.getSignature(url);
-        if (signature == null) return url;
+    public URI getMatch(URI uri) throws XBRLException {
+        String signature = this.getSignature(uri);
+        if (signature == null) return uri;
         if (getMap().containsKey(signature)) {
-            List<URL> matches = getMap().get(signature);
-            if (! matches.contains(url))
-                matches.add(url);
+            List<URI> matches = getMap().get(signature);
+            if (! matches.contains(uri))
+                matches.add(uri);
         } else {
-            List<URL> list = new Vector<URL>();
-            list.add(url);
+            List<URI> list = new Vector<URI>();
+            list.add(uri);
             getMap().put(signature,list);
         }
         return getMap().get(signature).get(0);

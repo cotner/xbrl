@@ -16,7 +16,7 @@ public class ArcroleTypeTestCase extends DOMLoadingTestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(getURL(STARTING_POINT));
+		loader.discover(getURI(STARTING_POINT));
 	}
 	
 	protected void tearDown() throws Exception {

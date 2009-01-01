@@ -1,6 +1,6 @@
 package org.xbrlapi.loader;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 import java.util.Vector;
 
@@ -49,9 +49,9 @@ public interface Loader {
 	 * data into the data store.  The cache is only useful (and
 	 * thus only needs to be specified) when discovering XML that
 	 * is provided as a string rather than a resource that actually
-	 * exists at a specified URL.  This is because generally the
+	 * exists at a specified URI.  This is because generally the
 	 * caching mechanism available via the entityResolver will handle
-	 * caching for documents that actually exist at the specified URL.
+	 * caching for documents that actually exist at the specified URI.
 	 * care must be taken to ensure that the cache used by the loader 
 	 * is using the same local root folder as the cache used by the 
 	 * entityResolver.  This is because the documents cached by the 
@@ -101,7 +101,7 @@ public interface Loader {
 	public List<String> getDocumentsStillToAnalyse();
 	
 	/**
-	 * Begin the XBRL DTS discovery process with the URLs that
+	 * Begin the XBRL DTS discovery process with the URIs that
 	 * are already in the loading/discovery queue.
 	 * @throws XBRLException if the discovery process fails.
 	 */
@@ -118,49 +118,49 @@ public interface Loader {
 	
 	/**
 	 * Perform a discovery starting with an XML document that is represented as a string.
-	 * @param url The URL to be used for the document that is supplied as a string.
+	 * @param uri The URI to be used for the document that is supplied as a string.
 	 * @param xml The string representation of the XML document to be parsed.
 	 * @throws XBRLException if the discovery process fails.
 	 */
-	public void discover(URL url, String xml) throws XBRLException;
+	public void discover(URI uri, String xml) throws XBRLException;
 	
 	/**
 	 * Begin the XBRL DTS discovery process with the specified
-	 * URLs given in the provided list.
-	 * @param startingURLs The starting point URLs for the DTS
+	 * URIs given in the provided list.
+	 * @param startingURIs The starting point URIs for the DTS
 	 * discovery process
-	 * Trigger the discovery process given the starting URLs.
+	 * Trigger the discovery process given the starting URIs.
 	 * @throws XBRLException if the input list contains objects 
-	 * other than java.net.URLs.
+	 * other than java.net.URIs.
 	 */
-	public void discover(List<URL> startingURLs) throws XBRLException;
+	public void discover(List<URI> startingURIs) throws XBRLException;
 	
 	/**
-	 * Trigger the discovery process given a single URL.
-	 * @param url The URL to discover.
+	 * Trigger the discovery process given a single URI.
+	 * @param uri The URI to discover.
 	 * @throws XBRLException
 	 */
-	public void discover(URL url) throws XBRLException;
+	public void discover(URI uri) throws XBRLException;
 
 	/**
-	 * Trigger the discovery process given a single URL.
-	 * @param url The URL to discover.
+	 * Trigger the discovery process given a single URI.
+	 * @param uri The URI to discover.
 	 * @throws XBRLException
 	 */
-	public void discover(String url) throws XBRLException;	
+	public void discover(String uri) throws XBRLException;	
 
 
 
 
 	
 	/**
-	 * Stash a URL to await loading into DTS.
-	 * @param url The absolute URL to be stashed (any relative
-	 * URL gets resolved against the Base URL before stashing.
-	 * @throws XBRLException if the URL cannot be stored for 
-	 * later exploration or if the URL is not absolute.
+	 * Stash a URI to await loading into DTS.
+	 * @param uri The absolute URI to be stashed (any relative
+	 * URI gets resolved against the Base URI before stashing.
+	 * @throws XBRLException if the URI cannot be stored for 
+	 * later exploration or if the URI is not absolute.
 	 */
-	public void stashURL(URL url) throws XBRLException;
+	public void stashURI(URI uri) throws XBRLException;
 
 
 	/**
@@ -227,10 +227,10 @@ public interface Loader {
     public String getCurrentFragmentId() throws XBRLException;	
 	
 	/**
-	 * Get the URL for the document being parsed. 
-	 * @return The original (non-cache) URL of the document being parsed.
+	 * Get the URI for the document being parsed. 
+	 * @return The original (non-cache) URI of the document being parsed.
 	 */
-	public String getDocumentURL();
+	public String getDocumentURI();
 	
 	/**
 	 * Return the entity resolver being used by the loader.

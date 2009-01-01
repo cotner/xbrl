@@ -1,8 +1,8 @@
 package org.xbrlapi.data.dom;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -27,7 +27,7 @@ public class Load implements EntryPoint {
 	protected static Logger logger = Logger.getLogger(Load.class);		
 	
 	/**
-	 * Load the documents discoverable from the specified URLs.
+	 * Load the documents discoverable from the specified URIs.
 	 * @param args The white-space delimited list of arguments.
 	 */
 	public void run(String[] args) {
@@ -36,13 +36,13 @@ public class Load implements EntryPoint {
 			// HashMap to store arguments
 			HashMap<String,String> arguments = new HashMap<String,String>();
 			
-			// List of URLs of documents to load
-			LinkedList<URL> startingURLs = new LinkedList<URL>();
+			// List of URIs of documents to load
+			LinkedList<URI> startingURIs = new LinkedList<URI>();
 			
 			// Process command line arguments
 			int i = 0;
 			if (i >= args.length)
-				badUsage("At least one URL must be specified to seed the data discovery process.");
+				badUsage("At least one URI must be specified to seed the data discovery process.");
 
 			while (true) {
 
@@ -66,16 +66,16 @@ public class Load implements EntryPoint {
 
 				} else {
 					try {
-						startingURLs.add(new URL(args[i]));
-					} catch (MalformedURLException e) {
-						badUsage(args[i] + " is a malformed URL.");
+						startingURIs.add(new URI(args[i]));
+					} catch (URISyntaxException e) {
+						badUsage(args[i] + " is a malformed URI.");
 					}
 				}
 				i++;
 			}
 
-			if (startingURLs.size() == 0)
-				badUsage("At least one URL must be specified to seed the data discovery process.");
+			if (startingURIs.size() == 0)
+				badUsage("At least one URI must be specified to seed the data discovery process.");
 			
 			// Create a new data store for the DTS
 			Store store = new StoreImpl();
@@ -84,7 +84,7 @@ public class Load implements EntryPoint {
 			// Create an XLink processor for XBRL DTS discovery
 			XBRLXLinkHandlerImpl xlinkHandler = new XBRLXLinkHandlerImpl(); 
 			XLinkProcessor xlinkProcessor = new XLinkProcessorImpl(xlinkHandler, new XBRLCustomLinkRecogniserImpl());
-			Loader loader = new LoaderImpl(store,xlinkProcessor,startingURLs);
+			Loader loader = new LoaderImpl(store,xlinkProcessor,startingURIs);
 			xlinkHandler.setLoader(loader);
 			
 			// Set the entity resolver for the loader to use the specified caching folder
@@ -112,7 +112,7 @@ public class Load implements EntryPoint {
 		if (!"".equals(message)) {
 			System.err.println(message);
 		}
-		System.err.println("Command line usage: java org.xbrlapi.Run -class org.xbrlapi.data.dom.Load [parameters] [URLs]");
+		System.err.println("Command line usage: java org.xbrlapi.Run -class org.xbrlapi.data.dom.Load [parameters] [URIs]");
 		System.err.println("Parameters: ");
 		System.err.println("  -cache		(optional) Absolute path of for document cache");
 		System.exit(1);

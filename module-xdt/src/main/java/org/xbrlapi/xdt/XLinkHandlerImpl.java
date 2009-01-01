@@ -1,7 +1,7 @@
 package org.xbrlapi.xdt;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
@@ -24,7 +24,7 @@ import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkException;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
-import org.xbrlapi.xmlbase.BaseURLSAXResolver;
+import org.xbrlapi.xmlbase.BaseURISAXResolver;
 import org.xbrlapi.xmlbase.XMLBaseException;
 import org.xbrlapi.xpointer.resolver.PointerResolver;
 import org.xml.sax.Attributes;
@@ -50,9 +50,9 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 	private PointerResolver xptrResolver;
 
 	/**
-	 * The base URL resolver used by the XLink handler
+	 * The base URI resolver used by the XLink handler
 	 */
-	private BaseURLSAXResolver baseURLResolver;
+	private BaseURISAXResolver baseURIResolver;
 	
     /**
      * Data required to track the element scheme XPointer 
@@ -65,7 +65,7 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 	 */
 	public XLinkHandlerImpl() {
 		super();
-		this.baseURLResolver = null;
+		this.baseURIResolver = null;
 		this.xptrResolver = null;
 		this.loader = null;
 	}
@@ -79,11 +79,11 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 	}
 	
 	/**
-	 * Set the base URL resolver for the XBRL XLink handler.
-	 * @param resolver the base URL resolver used by the XLink handler.
+	 * Set the base URI resolver for the XBRL XLink handler.
+	 * @param resolver the base URI resolver used by the XLink handler.
 	 */
-	public void setBaseURLSAXResolver(BaseURLSAXResolver resolver) {
-		baseURLResolver = resolver;
+	public void setBaseURISAXResolver(BaseURISAXResolver resolver) {
+		baseURIResolver = resolver;
 	}
 	
 	/**
@@ -100,9 +100,9 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 	 */
 	public void xmlBaseStart(String value) throws XLinkException {
 		try {
-			baseURLResolver.addBaseURL(value);
+			baseURIResolver.addBaseURI(value);
 		} catch (XMLBaseException e) {
-			throw new XLinkException("The Base URL Resolver could not update the base URL",e);
+			throw new XLinkException("The Base URI Resolver could not update the base URI",e);
 		}
 	}
 
@@ -123,9 +123,9 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 	 */
 	public void xmlBaseEnd() throws XLinkException {
 			try {
-				 baseURLResolver.removeBaseURL();
+				 baseURIResolver.removeBaseURI();
 			} catch (XMLBaseException e) {
-				throw new XLinkException("The Base URL Resolver could not revert to the previous base URL",e);
+				throw new XLinkException("The Base URI Resolver could not revert to the previous base URI",e);
 			}
 	}
 
@@ -261,11 +261,11 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
             processFragment(fragment,attrs);            
 
             Loader loader = getLoader();
-            URL url = new URL(baseURLResolver.getBaseURL(),href);
-            fragment.setTarget(url);
-            loader.stashURL(url);
+            URI uri = baseURIResolver.getBaseURI().resolve(new URI(href));
+            fragment.setTarget(uri);
+            loader.stashURI(uri);
 
-		} catch (MalformedURLException e) {
+		} catch (URISyntaxException e) {
 			throw new XLinkException("The locator href is malformed.",e);
 		} catch (XMLBaseException e) {
 			throw new XLinkException("The locator href could not be queued up for processing.",e);
@@ -337,17 +337,17 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 		    }
             processFragment(fragment,attrs);
 
-            URL url = new URL(baseURLResolver.getBaseURL(),href);
+            URI uri = baseURIResolver.getBaseURI().resolve(new URI(href));
 			Loader loader = getLoader();
-            fragment.setTarget(url);
-            loader.stashURL(url);
+            fragment.setTarget(uri);
+            loader.stashURI(uri);
 			
-		} catch (MalformedURLException e) {
-			throw new XLinkException("The URL on a simple link was malformed.",e);
+        } catch (URISyntaxException e) {
+            throw new XLinkException("The URI on a simple link was malformed.",e);
 		} catch (XBRLException e) {
-			throw new XLinkException("The URL on a simple link could not be queued up for exploration in DTS discovery.",e);
+			throw new XLinkException("The URI on a simple link could not be queued up for exploration in DTS discovery.",e);
 		} catch (XMLBaseException e) {
-			throw new XLinkException("The URL on a simple link could not be queued up for exploration in DTS discovery.",e);
+			throw new XLinkException("The URI on a simple link could not be queued up for exploration in DTS discovery.",e);
 		}
 		
 	}

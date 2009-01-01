@@ -27,10 +27,10 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 		
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINTA));
-		loader.discover(this.getURL(STARTING_POINTB));	
-		loader.discover(this.getURL(STARTING_POINTC));	
-        loader.discover(this.getURL(STARTING_POINTD));
+		loader.discover(this.getURI(STARTING_POINTA));
+		loader.discover(this.getURI(STARTING_POINTB));	
+		loader.discover(this.getURI(STARTING_POINTC));	
+        loader.discover(this.getURI(STARTING_POINTD));
 	}
 
 	protected void tearDown() throws Exception {
@@ -73,7 +73,8 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	public void testGetRoleTypes() throws Exception {
 		try {
 			FragmentList<RoleType> roleTypes = store.getRoleTypes();
-			assertEquals(35, roleTypes.getLength());
+            logger.info(roleTypes.getLength());
+			assertTrue(roleTypes.getLength() > 40);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -91,6 +92,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	public void testGetLinkrolesForAGivenArcrole() throws Exception {
 		try {
 			HashMap<String,String> arcroles = store.getArcRoles();
+			assertTrue(arcroles.size() > 0);
 			for (String arcrole: arcroles.keySet()) {
 				HashMap<String,String> linkroles = store.getLinkRoles(arcrole);
 				logger.info(arcrole + " " + linkroles.size());
@@ -126,6 +128,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 			assertTrue(type.isUsedOn(Constants.XBRL21LinkNamespace,"presentationArc"));
 			assertFalse(type.isUsedOn(Constants.XBRL21LinkNamespace,"calculationArc"));
 			FragmentList<Arc> arcs = store.getFragments("Arc");
+			assertTrue(arcs.getLength() > 0);
 			for (Arc arc: arcs) {
 			    if (arc.getLocalname().equals("presentationArc"))
 			        assertTrue(type.isUsedCorrectly(arc));
@@ -140,11 +143,11 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
     public void testFilteredQuerying() throws Exception {
 
-        String url1 = this.getURL(this.STARTING_POINT_INSTANCE_1);
-        loader.discover(url1);
+        String uri1 = this.getURI(this.STARTING_POINT_INSTANCE_1);
+        loader.discover(uri1);
 
-        String url2 = this.getURL(this.STARTING_POINT_INSTANCE_2);
-        loader.discover(url2);
+        String uri2 = this.getURI(this.STARTING_POINT_INSTANCE_2);
+        loader.discover(uri2);
 
         logger.info("Done with loading the data.");
         
@@ -152,11 +155,16 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
         logger.info("Total number of fragments: " + allFragments.getLength());
         
-        List<String> urls = store.getMinimumDocumentSet(url1);
+        List<String> allURIs = store.getStoredURIs();
+        logger.info("# URIs in store = " + allURIs.size());
+        List<String> uris = store.getMinimumDocumentSet(uri1);
+        assertTrue(uris.size() > 1);
 
-        logger.info("Number of URLs: " + urls.size());
+        assertTrue(allURIs.size() > uris.size());
         
-        store.setFilteringURLs(urls);
+        logger.info("Number of URIs in minimum set = " + uris.size());
+        
+        store.setFilteringURIs(uris);
         
         FragmentList<Fragment> filteredFragments = store.query("/*");
 

@@ -1,6 +1,6 @@
 package org.xbrlapi.data.resource;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -20,20 +20,20 @@ public interface Matcher {
     public void setSigner(Signer signer);
     
     /**
-     * @param url The URL of the resource to obtain the signature for.
-     * @return the signature for the resource specified by the URL or null
+     * @param uri The URI of the resource to obtain the signature for.
+     * @return the signature for the resource specified by the URI or null
      * if the resource could not be cached (generally because it does not exist).
      * @throws XBRLException if the signature cannot be constructed.
      */
-    public String getSignature(URL url) throws XBRLException;
+    public String getSignature(URI uri) throws XBRLException;
     
     /**
-     * @param url The URL of the resource to be tested for a match.
-     * @return the URL of the matching resource in the data store if one
-     * exists and the original URL otherwise (because it becomes the
-     * matching URL in the data store).
+     * @param uri The URI of the resource to be tested for a match.
+     * @return the URI of the matching resource in the data store if one
+     * exists and the original URI otherwise (because it becomes the
+     * matching URI in the data store).
      * @throws XBRLException
      */
-	public URL getMatch(URL url) throws XBRLException;
+	public URI getMatch(URI uri) throws XBRLException;
 	
 }

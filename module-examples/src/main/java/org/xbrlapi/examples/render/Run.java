@@ -10,8 +10,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,7 +41,9 @@ import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
 import org.xbrlapi.loader.discoverer.DiscoveryManager;
 import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.NetworkImpl;
 import org.xbrlapi.networks.Networks;
+import org.xbrlapi.networks.NetworksImpl;
 import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
@@ -72,6 +74,8 @@ public class Run {
     private static Map<String,List<Item>> itemMap = new HashMap<String,List<Item>>();
     
     private static AspectModel aspectModel;
+    
+    private static Network network;
     private static Instance instance;
     private static ArrayList<Concept> concepts = new ArrayList<Concept>();
     private static int maxLevel = 1;
@@ -156,28 +160,27 @@ public class Run {
             startTime = System.currentTimeMillis();
 
             // Set up the data store to load the data
-            store = createStore(arguments.get("database"), arguments
-                    .get("container"));
+            store = createStore(arguments.get("database"), arguments.get("container"));
 
             // Set up the data loader (does the parsing and data discovery)
             Loader loader = createLoader(store, arguments.get("cache"));
 
-            // Queue up document URLs for discovery.
-            URL targetURL = null;
-            for (String url : inputs) {
+            // Queue up document URIs for discovery.
+            URI targetURI = null;
+            for (String uri : inputs) {
                 try {
-                    loader.stashURL(new URL(url));
-                } catch (MalformedURLException e) {
-                    badUsage("Malformed URL for: " + url);
+                    loader.stashURI(new URI(uri));
+                } catch (URISyntaxException e) {
+                    badUsage("Malformed URI for: " + uri);
                 }
             }
             try {
-                targetURL = new URL(arguments.get("target"));
-                loader.stashURL(targetURL);
-            } catch (MalformedURLException e) {
-                badUsage("Malformed URL for target XBRL instance.");
+                targetURI = new URI(arguments.get("target"));
+                loader.stashURI(targetURI);
+            } catch (URISyntaxException e) {
+                badUsage("Malformed URI for target XBRL instance.");
             }
-            reportTime("Setting URLs");
+            reportTime("Setting URIs");
 
             // Load the data required to render the XBRL instance.
             DiscoveryManager discoverer = new DiscoveryManager(loader);
@@ -185,13 +188,19 @@ public class Run {
             discoveryThread.start();
             while (discoveryThread.isAlive()) {
                 Thread.sleep(2000);
-                logger.info("Currently loading " + loader.getDocumentURL()
+                logger.info("Currently loading " + loader.getDocumentURI()
                         + ".");
                 logger.info(loader.getDocumentsStillToAnalyse().size()
                         + " documents still to load.");
             }
             reportTime("Loading data");
 
+            logger.info("Documents in the data store include ...");
+            
+            for (String uri: store.getStoredURIs()) {
+                logger.info(uri);
+            }
+            
             // Get the Freemarker template ready to use.
             if (!arguments.containsKey("template"))
                 throw new XBRLException(
@@ -212,7 +221,7 @@ public class Run {
             Map<String, Object> model = new HashMap<String, Object>();
 
             // Get the root fragment of the target XBRL instance
-            FragmentList<Instance> instances = store.getFragmentsFromDocument(targetURL, "Instance");
+            FragmentList<Instance> instances = store.getFragmentsFromDocument(targetURI, "Instance");
             if (instances.getLength() > 1)
                 throw new XBRLException("The target instance is not a single XBRL instance.");
             if (instances.getLength() == 0)
@@ -243,34 +252,56 @@ public class Run {
                 }
             }
             reportTime("Mapping items by concept");
+
+            // Prepare to track networks
+            Networks networks = null;
+            if (store.hasStoredNetworks()) {
+                networks = store.getStoredNetworks();
+            } else {
+                networks = new NetworksImpl(store);
+                store.setStoredNetworks(networks);
+            }
+            reportTime("Initialising the networks");
+            
+            // Build the label networks.
+            networks.addRelationships(Constants.LabelArcRole);
+            reportTime("Getting standard labels");
+            networks.addRelationships(Constants.GenericLabelArcRole);
+            reportTime("Getting generic labels");
             
             // Iterate the presentation networks in the DTS
             List<Map<String, Object>> tables = new Vector<Map<String, Object>>();
             model.put("tables", tables);
+
+            logger.info("# linkroles = " + store.getLinkRoles(Constants.PresentationArcRole).size());
+            
             for (String linkrole : store.getLinkRoles(Constants.PresentationArcRole).keySet()) {
                 HashMap<String, Object> table = new HashMap<String, Object>();
                 tables.add(table);
-
-                labels = new ArrayList<String>();
-                concepts = new ArrayList<Concept>();
-                maxLevel = 1;
-                
                 String roleTitle = linkrole;
                 FragmentList<RoleType> roleDeclarations = store
                         .getRoleTypes(linkrole);
                 if (roleDeclarations.getLength() > 0)
                     roleTitle = roleDeclarations.get(0).getDefinition();
                 table.put("title", roleTitle);
+                logger.info("Setting up: " + roleTitle);
+
+                labels = new ArrayList<String>();
+                concepts = new ArrayList<Concept>();
+                maxLevel = 1;
 
                 // Configure the aspect model (useful for sorting facts by their aspects)
                 aspectModel = new NonDimensionalAspectModel();
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
 
-                FragmentList<Concept> roots = store.<Concept>getNetworkRoots(
-                        Constants.XBRL21LinkNamespace, "presentationLink",
-                        linkrole, Constants.XBRL21LinkNamespace,
-                        "presentationArc", Constants.PresentationArcRole);
+                network = new NetworkImpl(store,linkrole,Constants.PresentationArcRole);
+                networks.addNetwork(network);
+                network.complete();
+                reportTime("Completing the network");
+                logger.info("# relationships = " + network.getNumberOfActiveRelationships());
+                
+                FragmentList<Concept> roots = network.<Concept>getRootFragments();
 
                 maxLevel = 1;
                 for (Concept root : roots) {
@@ -297,14 +328,11 @@ public class Run {
                 table.put("periods",periods);
                 table.put("maxLevel", maxLevel);
                 reportTime("Processing  " + roleTitle);
-                
-                break;
-                
+                                
             }
 
             // TODO Extend the template to render the footnote information.
-            FragmentList<ExtendedLink> footnoteLinks = instance
-                    .getFootnoteLinks();
+            FragmentList<ExtendedLink> footnoteLinks = instance.getFootnoteLinks();
             model.put("footnotes", footnoteLinks);
             reportTime("Processing footnotes");
 
@@ -357,7 +385,7 @@ public class Run {
 
         // Get the standard concept label
         //logger.info(conceptKey + " " + labelRole);
-        FragmentList<LabelResource> labelResources = concept.getLabelsWithLanguageAndRole("en-US",labelRole);
+        FragmentList<LabelResource> labelResources = concept.getLabelsWithLanguageAndRole(store.getStoredNetworks(), "en-US",labelRole);
         String label;
         if (labelResources.getLength() > 0) {
             label = labelResources.get(0).getStringValue().trim();
@@ -366,29 +394,23 @@ public class Run {
         }
         label = indent + label;
         labels.add(label);
-        logger.info(label);
+        reportTime(label);
 
-        Networks networks = concept.getNetworksFromWithRoleAndArcrole(linkrole, Constants.PresentationArcRole);
+        List<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getFragmentIndex());
 
-        if (networks.getSize() > 0) {
-
-            Network network = networks.getNetwork(Constants.PresentationArcRole,linkrole);
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getFragmentIndex());
-
-            for (Relationship relationship: relationships) {
-                
-                labelRole = Constants.StandardLabelRole;
-                if (relationship.getArc().hasAttribute("preferredLabel"))
-                    labelRole = relationship.getArcAttributeValue("preferredLabel");
-                
-                parsePresentation(
-                        indent + " ", 
-                        concept, 
-                        (Concept) relationship.getTarget(), 
-                        new Float(relationship.getOrder()).floatValue(), 
-                        linkrole,
-                        labelRole);
-            }
+        for (Relationship relationship: relationships) {
+            
+            labelRole = Constants.StandardLabelRole;
+            if (relationship.getArc().hasAttribute("preferredLabel"))
+                labelRole = relationship.getArcAttributeValue("preferredLabel");
+            
+            parsePresentation(
+                    indent + " ", 
+                    concept, 
+                    (Concept) relationship.getTarget(), 
+                    new Float(relationship.getOrder()).floatValue(), 
+                    linkrole,
+                    labelRole);
         }
     }
 
@@ -423,15 +445,15 @@ public class Run {
             System.err.println(message);
         }
 
-        System.err.println("Command line usage: java org.xbrlapi.examples.render.Run <OPTIONS> <ADDITIONAL URLS>");
+        System.err.println("Command line usage: java org.xbrlapi.examples.render.Run <OPTIONS> <ADDITIONAL URIS>");
         System.err.println("Mandatory arguments: ");
         System.err.println(" -database VALUE     directory containing the Oracle Berkeley XML database");
         System.err.println(" -container VALUE    name of the data container");
         System.err.println(" -cache VALUE        directory that is the root of the document cache");
         System.err.println(" -output VALUE       the name (and path) of the output file");
         System.err.println(" -template VALUE     path to the Freemarker template for the rendering.");
-        System.err.println(" -target VALUE       The URL of the target XBRL instance to render.");
-        System.err.println(" The optional additional URLs allow control over the DTS supporting the rendering of the XBRL instance.");
+        System.err.println(" -target VALUE       The URI of the target XBRL instance to render.");
+        System.err.println(" The optional additional URIs allow control over the DTS supporting the rendering of the XBRL instance.");
 
         if ("".equals(message)) {
             System.exit(0);
@@ -476,7 +498,7 @@ public class Run {
 
         File cacheFile = new File(cache);
 
-        // Rivet errors in the SEC XBRL data require these URL remappings to
+        // Rivet errors in the SEC XBRL data require these URI remappings to
         // prevent discovery process from breaking.
         HashMap<String, String> map = new HashMap<String, String>();
         map

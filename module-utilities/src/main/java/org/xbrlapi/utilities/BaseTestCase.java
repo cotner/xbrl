@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -41,9 +40,9 @@ abstract public class BaseTestCase extends TestCase {
 	protected String cachePath;
 	
 	/**
-	 * Base URL for test data
+	 * Base URI for test data
 	 */
-	protected String baseURL;
+	protected String baseURI;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -80,8 +79,8 @@ abstract public class BaseTestCase extends TestCase {
 			// Local Cache location
 			cachePath = configuration.getProperty("local.cache");
 			
-			// Base URL for test data
-			baseURL = configuration.getProperty("test.data.baseURL");
+			// Base URI for test data
+			baseURI = configuration.getProperty("test.data.baseURI");
 
 		} catch (NullPointerException e) {
 		    // This additional error handling was contributed by Walter Hamscher (25 July 2008)
@@ -95,30 +94,31 @@ abstract public class BaseTestCase extends TestCase {
 	}
 	
 	/**
-	 * @param property
-	 *            giving the relative URL of the test data
-	 * @return the absolute URL of the test data
+	 * @param property giving the relative URI of the test data
+	 * @return the absolute URI of the test data
 	 */
-	public String getURL(String property) {
+	public String getURI(String property) {
 		String myProperty = configuration.getProperty(property);
 		
-		if (myProperty.startsWith("http://"))
+		if (myProperty.startsWith("http://")) {
+            logger.debug("URI is " + myProperty);
 			return myProperty;
-		
-		if (myProperty.startsWith("file://"))
-		    return myProperty;
-		
-		if (property.startsWith("test.data.local.")) {
-		    try {
-	            File file = new File(configuration.getProperty(property));
-	            URL url = file.toURL();
-		        return url.toString();
-		    } catch (MalformedURLException e){
-		        fail("Failed to get the URL from configuration property " + property);
-		    }
 		}
 		
-		return baseURL + configuration.getProperty(property);
+		if (myProperty.startsWith("file://")) {
+            logger.debug("URI is " + myProperty);
+		    return myProperty;
+		}
+		
+		if (property.startsWith("test.data.local.")) {
+            File file = new File(configuration.getProperty(property));
+            URI uri = file.toURI();
+            logger.debug("URI is " + uri);
+            return uri.toString();
+		}
+		
+        logger.debug("URI is " + baseURI + configuration.getProperty(property));
+		return baseURI + configuration.getProperty(property);
 	}	
 
 	/**

@@ -28,37 +28,37 @@ public class FragmentComparatorTestCase extends BaseTestCase {
 		comparator = new FragmentComparator();
 		
 		f1 = new MockFragmentImpl("10");
-		f1.setURL("http://urlA/");
+		f1.setURI("http://uriA/");
 		f1.setSequenceToParentElement("");
 		f1.setParentIndex("1");
 		f1.setPrecedingSiblings("0");
 		
 		f2 = new MockFragmentImpl("11");
-		f2.setURL("http://urlA/");
+		f2.setURI("http://uriA/");
 		f2.setSequenceToParentElement("");
 		f2.setParentIndex("1");
 		f2.setPrecedingSiblings("0");
 		
 		f3 = new MockFragmentImpl("12");
-		f3.setURL("http://urlA/");
+		f3.setURI("http://uriA/");
 		f3.setSequenceToParentElement("");
 		f3.setParentIndex("1");
 		f3.setPrecedingSiblings("1");
 
 		f4 = new MockFragmentImpl("13");
-		f4.setURL("http://urlA/");
+		f4.setURI("http://uriA/");
 		f4.setSequenceToParentElement("");
 		f4.setParentIndex("2");
 		f4.setPrecedingSiblings("0");
 		
 		f5 = new MockFragmentImpl("14");
-		f5.setURL("http://urlA/");
+		f5.setURI("http://uriA/");
 		f5.setSequenceToParentElement("68 2");
 		f5.setParentIndex("1");
 		f5.setPrecedingSiblings("0");		
 
 		f6 = new MockFragmentImpl("15");
-		f6.setURL("http://urlB/");
+		f6.setURI("http://uriB/");
 		f6.setSequenceToParentElement("");
 		f6.setParentIndex("1");
 		f6.setPrecedingSiblings("0");		
@@ -114,7 +114,7 @@ public class FragmentComparatorTestCase extends BaseTestCase {
 	/**
 	 * Test the comparison of two equivalent fragments
 	 */
-	public void testCompareFragmentsWithDifferentURLs() {
+	public void testCompareFragmentsWithDifferentURIs() {
 		assertTrue(this.comparator.compare(f1,f6) < 0);
 	}
 

@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 import java.util.Vector;
 
@@ -59,11 +59,11 @@ public abstract class BaseMatcherImpl implements Matcher {
     
     
     /**
-     * @see org.xbrlapi.data.resource.Matcher#getSignature(URL)
+     * @see org.xbrlapi.data.resource.Matcher#getSignature(URI)
      */
-    public String getSignature(URL url) throws XBRLException {
-        cache.getCacheURL(url); // Caches if not already cached.
-        File cacheFile = cache.getCacheFile(url);
+    public String getSignature(URI uri) throws XBRLException {
+        cache.getCacheURI(uri); // Caches if not already cached.
+        File cacheFile = cache.getCacheFile(uri);
         if (cacheFile.exists()) {
             List<String> lines = getResourceContent(cacheFile);
             return getSignature().getSignature(lines);

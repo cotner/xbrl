@@ -12,7 +12,7 @@ public class DTDDeclarationHandlerTestCase extends BaseTestCase {
 		try {
 			super.setUp();
 			loader.setSchemaLocationAttributeUsage(true);
-			loader.discover(getURL(STARTING_POINT));		
+			loader.discover(getURI(STARTING_POINT));		
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -30,8 +30,8 @@ public class DTDDeclarationHandlerTestCase extends BaseTestCase {
 
 	public void testStorageOfDocumentsWithDTDs() {
 		try {
-			List<String> urls = store.getStoredURLs();
-			assertTrue(urls.size() > 0);
+			List<String> uris = store.getStoredURIs();
+			assertTrue(uris.size() > 0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

@@ -1,8 +1,7 @@
 package org.xbrlapi.xlink;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -39,32 +38,27 @@ public class Validator extends XLinkHandlerDefaultImpl {
 	private Document document;
 	
 	/**
-	 * Constructor that is given the URL of the document to be validated
-	 * @param url The URL of the document to be validated
+	 * Constructor that is given the URI of the document to be validated
+	 * @param uri The URI of the document to be validated
 	 */
-	public Validator(URL url) {
+	public Validator(URI uri) {
 		super();
 		createDocument();
-		is = new InputSource(url.toString());
+		is = new InputSource(uri.toString());
 	}
 
 	/**
-	 * Constructor that is given the URL of the document to be validated
+	 * Constructor that is given the URI of the document to be validated
 	 * @param file The file to be validated
 	 */
 	public Validator(File file) {
 		super();
 		createDocument();
-		try {
-			is = new InputSource(file.toURI().toURL().toString());		
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+		is = new InputSource(file.toURI().toString());		
 	}
 
 	/**
-	 * Constructor that is given the URL of the 
+	 * Constructor that is given the URI of the 
 	 * document to be validated.
 	 * @param is The input source for the XML to be validated
 	 */
@@ -304,7 +298,7 @@ public class Validator extends XLinkHandlerDefaultImpl {
 	
 					} else if (args[i].equals("-u")) {
 						i++;
-						arguments.put("url", args[i]);
+						arguments.put("uri", args[i]);
 	
 					} else
 						badUsage("Unknown option " + args[i]);
@@ -321,9 +315,9 @@ public class Validator extends XLinkHandlerDefaultImpl {
 				} else {
 					validator = new Validator(file);
 				}
-			} else if (arguments.containsKey("url")) {
-				URL url = new URL(arguments.get("url"));
-				validator = new Validator(url);
+			} else if (arguments.containsKey("uri")) {
+				URI uri = new URI(arguments.get("uri"));
+				validator = new Validator(uri);
 			}
 	
 			// Create the XLinkProcessor that will find what to validate
@@ -379,7 +373,7 @@ public class Validator extends XLinkHandlerDefaultImpl {
 		System.err.println("Command line usage: java org.xbrlapi.impl.LoaderImpl [parameters]");
 		System.err.println("Parameters: ");
 		System.err.println("  -f    path and filename, in local filesystem, of file to be analysed");
-		System.err.println("  -u    url of file to be analysed");
+		System.err.println("  -u    URI of file to be analysed");
 		if ("".equals(message)) {
 			System.exit(0);
 		} else {

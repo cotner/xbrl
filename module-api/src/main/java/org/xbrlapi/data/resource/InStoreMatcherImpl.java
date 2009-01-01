@@ -1,7 +1,7 @@
 package org.xbrlapi.data.resource;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import org.w3c.dom.Element;
@@ -23,7 +23,7 @@ import org.xbrlapi.utilities.XBRLException;
 public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
 
     /**
-     * The store in which the information about matched URLs is
+     * The store in which the information about matched URIs is
      * to be retained.
      */
     private Store store = null;
@@ -49,30 +49,30 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
     }
 
     /**
-     * @see org.xbrlapi.data.resource.Matcher#getMatch(URL)
+     * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
-    public URL getMatch(URL url) throws XBRLException {
-        logger.info("Getting match for " + url);
-        String signature = this.getSignature(url);
-        if (signature == null) return url;
+    public URI getMatch(URI uri) throws XBRLException {
+        logger.info("Getting match for " + uri);
+        String signature = this.getSignature(uri);
+        if (signature == null) return uri;
         Fragment match = null;
         if (getStore().hasFragment(signature)) {
-            logger.info(url + " has a match already");
-            String query = "/*[*/@url='" + url + "']";
+            logger.info(uri + " has a match already");
+            String query = "/*[*/@uri='" + uri + "']";
             FragmentList<Fragment> matches = getStore().query(query);
             if (matches.getLength() == 0) {
                 HashMap<String,String> attr = new HashMap<String,String>();
-                attr.put("url",url.toString());
+                attr.put("uri",uri.toString());
                 match = getStore().getFragment(signature);
                 match.appendMetadataElement("resource",attr);
             } else {
                 match = matches.get(0);
             }
         } else {
-            logger.info(url + " has no existing matches");
+            logger.info(uri + " has no existing matches");
             match = new MockFragmentImpl(signature);
             HashMap<String,String> attr = new HashMap<String,String>();
-            attr.put("url",url.toString());
+            attr.put("uri",uri.toString());
             match.appendMetadataElement("match",attr);
             match.appendMetadataElement("resource",attr);
             store.storeFragment(match);
@@ -80,9 +80,9 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
         NodeList nodes = match.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match");
         Element element = (Element) nodes.item(0);
         try {
-            return new URL(element.getAttribute("url"));
-        } catch (MalformedURLException e) {
-            throw new XBRLException("Unexpected malformed URL.",e);
+            return new URI(element.getAttribute("uri"));
+        } catch (URISyntaxException e) {
+            throw new XBRLException("Unexpected malformed URI.",e);
         }
         
     }

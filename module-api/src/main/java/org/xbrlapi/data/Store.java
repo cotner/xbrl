@@ -2,7 +2,7 @@ package org.xbrlapi.data;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -86,19 +86,19 @@ public interface Store {
      * This deletion method does not ensure that all other documents that
      * link to the document being deleted are also deleted.  This can cause
 	 * relationships in the data store to be non-resolvable.
-     * @param url The URL of the document to delete from the data store.
+     * @param uri The URI of the document to delete from the data store.
      * @throws XBRLException
      */
-    public void deleteDocument(String url) throws XBRLException;
+    public void deleteDocument(String uri) throws XBRLException;
     
 
 	 /**
 	  * This deletion method ensures that all related documents
 	  * are also deleted from the data store. 
-	  * @param url The URL of the document to delete.
+	  * @param uri The URI of the document to delete.
 	  * @throws XBRLException
 	  */
-    public void deleteRelatedDocuments(String url) throws XBRLException;
+    public void deleteRelatedDocuments(String uri) throws XBRLException;
     
 
     
@@ -180,21 +180,21 @@ public interface Store {
 
     /**
      * Get a single document in the store as a DOM.
-     * @param url The string representation of the URL of the 
+     * @param uri The string representation of the URI of the 
      * document to be retrieved.
      * @return a DOM Document containing the XML representation of the
-     * file at the specified URL.  Returns null if the store does not
-     * contain a document with the given URL.
+     * file at the specified URI.  Returns null if the store does not
+     * contain a document with the given URI.
      * @throws XBRLException if the document cannot be constructed as a DOM.
      */
-    public Element getDocumentAsDOM(String url) throws XBRLException;
+    public Element getDocumentAsDOM(String uri) throws XBRLException;
     
 	/**
 	 * Serializes the individual documents in the data store, 
 	 * saving them into a directory structure that is placed into
 	 * the specified directory.  The directory structure that is 
-	 * created mirrors the structure of the URLs of the documents. 
-	 * Note that the URLs of the documents that are written out
+	 * created mirrors the structure of the URIs of the documents. 
+	 * Note that the URIs of the documents that are written out
 	 * will be reflected in the paths to those documents
 	 * using the same rules as those applied for document caching.
 	 * @param destination The folder in which the directory structure and
@@ -206,20 +206,20 @@ public interface Store {
 	public void saveDocuments(File destination) throws XBRLException;
 	
 	/**
-	 * Serializes those documents in the data store with a URL that
-	 * begins with the specified URL prefix. They are saved to the local
+	 * Serializes those documents in the data store with a URI that
+	 * begins with the specified URI prefix. They are saved to the local
 	 * file system in the same manner as is applied for the saveDocuments
 	 * method that operates on all documents in the data store.
 	 * @param destination The folder in which the directory structure and
 	 * the documents in the data store are to be saved.
-	 * @param urlPrefix All documents in the data store with a URL that begins 
-	 * with the string specified by urlPrefix will be saved to the local
+	 * @param uriPrefix All documents in the data store with a URI that begins 
+	 * with the string specified by uriPrefix will be saved to the local
 	 * file system.
 	 * @throws XBRLException If the root folder does not exist or 
 	 * is not a directory or if the documents in the store cannot 
 	 * be saved to the local file system.
 	 */
-	public void saveDocuments(File destination, String urlPrefix) throws XBRLException;
+	public void saveDocuments(File destination, String uriPrefix) throws XBRLException;
 	
 	/**
 	 * Creates a single DOM structure from all documents in the 
@@ -261,25 +261,25 @@ public interface Store {
     public Document formCompositeDocument() throws XBRLException;
     
     /**
-     * Get a list of the URLs that have been stored.
-     * @return a list of the URLs in the data store.
+     * Get a list of the URIs that have been stored.
+     * @return a list of the URIs in the data store.
      * @throws XBRLException if the list cannot be constructed.
      */
-    public List<String> getStoredURLs() throws XBRLException;
+    public List<String> getStoredURIs() throws XBRLException;
     
     /**
-     * Test if a particular URL is already in the data store.
-     * @param url the string representation of the URL to be tested for.
+     * Test if a particular URI is already in the data store.
+     * @param uri the string representation of the URI to be tested for.
      * @return true if the document is in the store and false otherwise.
      * @throws XBRLException if the document cannot be constructed as a DOM.
      */
-    public boolean hasDocument(String url) throws XBRLException;
+    public boolean hasDocument(String uri) throws XBRLException;
     
 
     
     /**
      * Stores the state of the document discovery process.
-     * @param documents The list of URLs of the documents remaining to be
+     * @param documents The list of URIs of the documents remaining to be
      * discovered.
      * @throws XBRLException
      */
@@ -294,10 +294,10 @@ public interface Store {
     public String getNextFragmentId() throws XBRLException;
     
     /**
-     * @return the list of URLs of the documents remaining to be analysed.
-     * @throws XBRLException if any of the document URLs are malformed.
+     * @return the list of URIs of the documents remaining to be analysed.
+     * @throws XBRLException if any of the document URIs are malformed.
      */
-    public List<URL> getDocumentsToDiscover() throws XBRLException;
+    public List<URI> getDocumentsToDiscover() throws XBRLException;
     
     /**
      * @return a list of stub fragments (Those fragments indicating a 
@@ -307,11 +307,11 @@ public interface Store {
     public FragmentList<Fragment> getStubs() throws XBRLException;
 
     /**
-     * @param url The string value of the URL of the document to get the stub for.
+     * @param uri The string value of the URI of the document to get the stub for.
      * @return the stub fragment or null if none exists.
      * @throws XBRLException if there is more than one stub.
      */
-    public Fragment getStub(String url) throws XBRLException;
+    public Fragment getStub(String uri) throws XBRLException;
     
     /**
      * @param document The document to store a stub for.
@@ -320,11 +320,11 @@ public interface Store {
     public void storeStub(String document) throws XBRLException;    
     
     /**
-     * @param url The URL of the document for which 
+     * @param uri The URI of the document for which 
      * the stub fragment is to be removed from the data store.
      * @throws XBRLException
      */
-    public void removeStub(String url) throws XBRLException;
+    public void removeStub(String uri) throws XBRLException;
 
     /**
      * Utility method to return a list of fragments in a data store
@@ -376,27 +376,28 @@ public interface Store {
     /**
      * Utility method to return a list of fragments in a data store
      * that have a type corresponding to the specified fragment interface name and
-     * that are in the document with the specified URL.
-     * @param url The URL of the document to get the fragments from.
+     * that are in the document with the specified URI.
+     * @param uri The URI of the document to get the fragments from.
      * @param interfaceName The name of the interface.  EG: If a list of
-     *  org.xbrlapi.impl.ReferenceArcImpl fragments is required then
+     *   fragments is required then
      *  this parameter would have a value of "ReferenceArc".
      *  Note that this method does not yet recognise fragment subtypes so 
      *  a request for an Arc would not return all ReferenceArcs as well as other
      *  types of arcs.
      * @return a list of fragments with the given fragment type and in the given document.
      * @throws XBRLException
+     * @see org.xbrlapi.impl.ReferenceArcImpl
      */
-    public <F extends Fragment> FragmentList<F> getFragmentsFromDocument(URL url, String interfaceName) throws XBRLException;
+    public <F extends Fragment> FragmentList<F> getFragmentsFromDocument(URI uri, String interfaceName) throws XBRLException;
     
     /**
      * @param <F> The fragment extension class
-     * @param url The URL of the document to get the root fragment for.
-     * @return the root fragment of the document with the given URL or null if no
-     * root fragment is available for the given URL.
+     * @param uri The URI of the document to get the root fragment for.
+     * @return the root fragment of the document with the given URI or null if no
+     * root fragment is available for the given URI.
      * @throws XBRLException if more than one root fragment is found in the data store.
      */
-    public <F extends Fragment> F getRootFragmentForDocument(String url) throws XBRLException;
+    public <F extends Fragment> F getRootFragmentForDocument(String uri) throws XBRLException;
 
     
     /**
@@ -459,45 +460,45 @@ public interface Store {
      * Override this method in a data store implementation if the data store 
      * implementation supports XQuery (rather than XPath).
      * 
-     * @param url The URL of the referenced document.
-     * @return a list of the URLs of the documents directly referencing
+     * @param uri The URI of the referenced document.
+     * @return a list of the URIs of the documents directly referencing
      * the specified document as targets of their XLinks (custom or otherwise).
      * @throws XBRLException if the list of referencing documents cannot be populated.
      */
-    public List<String> getReferencingDocuments(String url) throws XBRLException;
+    public List<String> getReferencingDocuments(String uri) throws XBRLException;
     
     /**
      * Override this method in a data store implementation if the data store 
      * implementation supports XQuery (rather than XPath).
      * 
-     * @param url The URL of the referencing document.
+     * @param uri The URI of the referencing document.
      * @return a list of the documents directly referenced by this document.
      * @throws XBRLException if the list of referenced documents cannot be populated.
      */
-    public List<String> getReferencedDocuments(String url) throws XBRLException;    
+    public List<String> getReferencedDocuments(String uri) throws XBRLException;    
     
     /**
-     * @param urls The list of URLs to restrict query results to coming from.
+     * @param uris The list of URIs to restrict query results to coming from.
      */
-    public void setFilteringURLs(List<String> urls);
+    public void setFilteringURIs(List<String> uris);
 
     /**
-     * @return the list of URLs to filter query results using or
-     * null if no such list of URLs is being used by the data store.
+     * @return the list of URIs to filter query results using or
+     * null if no such list of URIs is being used by the data store.
      */
-    public List<String> getFilteringURLs();
+    public List<String> getFilteringURIs();
     
     /**
      * Specify that the data store is not to filter query results to only come
-     * from a specified set of URLs.
+     * from a specified set of URIs.
      */
-    public void clearFilteringURLs();
+    public void clearFilteringURIs();
 
     /**
      * @return true if the data store is restricting query results to come 
      * from a specific set of documents and false otherwise.
      */
-    public boolean isFilteringByURLs();
+    public boolean isFilteringByURIs();
 
     /**
      * @return the Networks object incorporated into the 

@@ -1,7 +1,7 @@
 package org.xbrlapi.grabber;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * Implementation of an XBRL document URL grabber for the SEC
+ * Implementation of an XBRL document URI grabber for the SEC
  * RSS feed.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
@@ -19,36 +19,37 @@ public class SecGrabberImpl extends AbstractGrabberImpl implements Grabber {
 	
 	Logger logger = Logger.getLogger(this.getClass());
 	
-	public SecGrabberImpl(URL source) {
+	public SecGrabberImpl(URI source) {
 		setSource(source);
 	}
 
-	URL source;	
-	private void setSource(URL source) {this.source = source; }
-	private URL getSource() { return source; }
+	URI source;	
+	private void setSource(URI source) {this.source = source; }
+	private URI getSource() { return source; }
 	
 	private static final String NAMESPACE = "http://www.sec.gov/Archives/edgar";
 	private static final String NAME = "xbrlFile";
 	
-	public List<URL> getResources() {
-		List<URL> resources = new ArrayList<URL>();
+	public List<URI> getResources() {
+		List<URI> resources = new ArrayList<URI>();
 		Document feed = getDocument(getSource());
 		NodeList nodes = feed.getElementsByTagNameNS(NAMESPACE,NAME);
-		for (int i=0; i< nodes.getLength(); i++) {
+		logger.info(nodes.getLength());
+		for (int i=0; i<nodes.getLength(); i++) {
 			Element element = (Element) nodes.item(i);
-			String url = element.getAttribute("url");
+			String uri = element.getAttribute("url");
 			if (
-					(url != null) &&
+					(uri != null) &&
 					(
-						(url.endsWith(".xml")) 
-						|| (url.endsWith(".xbrl"))
-						|| (url.endsWith(".xsd"))
+						(uri.endsWith(".xml")) 
+						|| (uri.endsWith(".xbrl"))
+						|| (uri.endsWith(".xsd"))
 					)
 				) {
 				try {
-					resources.add(new URL(url));
-				} catch (MalformedURLException e) {
-					logger.info("The SEC source URL was malformed");
+					resources.add(new URI(uri));
+				} catch (URISyntaxException e) {
+					logger.info("The SEC source URI was malformed");
 				}
 			}
 		}

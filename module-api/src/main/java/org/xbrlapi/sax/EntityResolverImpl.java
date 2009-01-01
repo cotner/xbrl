@@ -2,8 +2,8 @@ package org.xbrlapi.sax;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -41,7 +41,6 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
         ;
     }
     
-    
     /**
      * Construct the entity resolver by storing the cache root.
      * @param cacheRoot The root directory of the local cache.
@@ -52,20 +51,20 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
     }
 
 	/**
-	 * Create the entity resolver with a set of local URLs 
-	 * to be used by the loader in place of actual URLs.  
-	 * These local URLs, pointing to resources on the local file system, are used
+	 * Create the entity resolver with a set of local URIs 
+	 * to be used by the loader in place of actual URIs.  
+	 * These local URIs, pointing to resources on the local file system, are used
 	 * by the loader's entity resolver to swap the local resource for the  
-	 * original resource at the original URL.  Such substitutions are used by the 
+	 * original resource at the original URI.  Such substitutions are used by the 
 	 * entity resolver when doing SAX parsing and when building XML Schema grammar
 	 * models.
 	 * @param cacheRoot The root directory of the local cache.
-	 * @param urlMap The map from original URLs to local URLs.
-	 * @throws XBRLException if any of the objects in the list of URLs is not a 
-	 * java.net.URL object.
+	 * @param uriMap The map from original URIs to local URIs.
+	 * @throws XBRLException if any of the objects in the list of URIs is not a 
+	 * java.net.URI object.
 	 */
-	public EntityResolverImpl(File cacheRoot, Map<String,String> urlMap) throws XBRLException {
-		this.cache = new CacheImpl(cacheRoot, urlMap);
+	public EntityResolverImpl(File cacheRoot, Map<String,String> uriMap) throws XBRLException {
+		this.cache = new CacheImpl(cacheRoot, uriMap);
 	}
     
     /**
@@ -75,20 +74,20 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
      */
     public InputSource resolveEntity(String publicId, String systemId) {
 
-		logger.debug(System.currentTimeMillis() + " SAX: Resolving the entity for " + systemId);
+		logger.debug("SAX: Resolving the entity for " + systemId);
     	
     	try {
-    		URL url = new URL(systemId);
+    		URI uri = new URI(systemId);
     		if (hasCache()) { 
-    		    url = cache.getCacheURL(url);
+    		    uri = cache.getCacheURI(uri);
     		}
-    		return new InputSource(url.toString());
+    		return new InputSource(uri.toString());
 
     	} catch (XBRLException e) {
     		logger.warn("Cache handling for " + systemId + "failed.");
     		return new InputSource(systemId);
-    	} catch (MalformedURLException e) {
-    		logger.warn(systemId + " is a malformed URL.");
+    	} catch (URISyntaxException e) {
+    		logger.warn(systemId + " is a malformed URI.");
     		return new InputSource(systemId);
     	}
 
@@ -113,20 +112,21 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
 	public XMLInputSource resolveEntity(XMLResourceIdentifier resource) throws XNIException, IOException {
 
 		try {
+            logger.debug("SCHEMA: Resolving the entity for " + resource.getExpandedSystemId());
 			
-			URL url = new URL(resource.getExpandedSystemId());
+			URI uri = new URI(resource.getExpandedSystemId());
 			if (hasCache()) {
-			    url = cache.getCacheURL(url);
+			    uri = cache.getCacheURI(uri);
 			}
-			logger.debug(System.currentTimeMillis() + " SCHEMA: Resolving the entity for " + url);
+			logger.debug("... so resolving the entity for URI " + uri);
 			
-			return new XMLInputSource(resource.getPublicId(),url.toString(), url.toString());
+			return new XMLInputSource(resource.getPublicId(),uri.toString(), uri.toString());
 			
     	} catch (XBRLException e) {
     		logger.warn("Cache handling for " + resource.getExpandedSystemId() + "failed.");
 			return new XMLInputSource(resource.getPublicId(),resource.getExpandedSystemId(), resource.getBaseSystemId());
-    	} catch (MalformedURLException e) {
-    		logger.warn(resource.getExpandedSystemId() + " is a malformed URL.");
+    	} catch (URISyntaxException e) {
+    		logger.warn(resource.getExpandedSystemId() + " is a malformed URI.");
 			return new XMLInputSource(resource.getPublicId(),resource.getExpandedSystemId(), resource.getBaseSystemId());
     	}
 

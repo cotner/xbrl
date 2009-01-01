@@ -1,6 +1,6 @@
 package org.xbrlapi.data.resource.tests;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.dom.StoreImpl;
@@ -30,9 +30,8 @@ public class InStoreMatcherTestCase extends BaseTestCase {
 	
     public void testGetSignatureFromSmallFile() {
         try {
-            String URL = "test.data.small.schema";
-            URL url = new URL(this.getURL(URL));
-            logger.info(matcher.getSignature(url));
+            URI uri = new URI(this.getURI("test.data.small.schema"));
+            logger.info(matcher.getSignature(uri));
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception thrown.");
@@ -41,9 +40,8 @@ public class InStoreMatcherTestCase extends BaseTestCase {
     
     public void testGetSignatureFromLargeFile() {
         try {
-            String URL = "real.data.sec";
-            URL url = new URL(this.getURL(URL));
-            logger.info(matcher.getSignature(url));
+            URI uri = new URI(this.getURI("real.data.sec"));
+            logger.info(matcher.getSignature(uri));
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception thrown.");
@@ -52,11 +50,11 @@ public class InStoreMatcherTestCase extends BaseTestCase {
 
     public void testRepeatedGetMatchFromLargeFile() {
         try {
-            URL url1 = new URL(this.getURL("real.data.sec.usgaap.1"));
-            assertEquals(url1,matcher.getMatch(url1));
+            URI uri1 = new URI(this.getURI("real.data.sec.usgaap.1"));
+            assertEquals(uri1,matcher.getMatch(uri1));
 
-            URL url2 = new URL(this.getURL("real.data.sec.usgaap.2"));
-            assertEquals(url1,matcher.getMatch(url2));
+            URI uri2 = new URI(this.getURI("real.data.sec.usgaap.2"));
+            assertEquals(uri1,matcher.getMatch(uri2));
 
             store.serialize(store.getStoreAsDOM().getDocumentElement());
         } catch (Exception e) {

@@ -1,6 +1,6 @@
 package org.xbrlapi.data;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -117,53 +117,37 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     }
 
     /**
-     * @param url The URL of the document to get the facts from.
+     * @param uri The URI of the document to get the facts from.
      * @return a list of all of the root-level facts in the specified document.
      * @throws XBRLException
      */
-    public FragmentList<Fact> getFacts(URL url) throws XBRLException {
-    	FragmentList<Instance> instances = this.<Instance>getFragmentsFromDocument(url,"Instance");
+    public FragmentList<Fact> getFacts(URI uri) throws XBRLException {
+    	FragmentList<Instance> instances = this.<Instance>getFragmentsFromDocument(uri,"Instance");
     	return this.getFactsFromInstances(instances);
     }
     
     /**
-     * @param url The URL of the document to get the items from.
+     * @param uri The URI of the document to get the items from.
      * @return a list of all of the root-level items in the data store.
      * @throws XBRLException
      */
-    public FragmentList<Item> getItems(URL url) throws XBRLException {
-    	FragmentList<Instance> instances = this.<Instance>getFragmentsFromDocument(url,"Instance");
+    public FragmentList<Item> getItems(URI uri) throws XBRLException {
+    	FragmentList<Instance> instances = this.<Instance>getFragmentsFromDocument(uri,"Instance");
     	return this.getItemsFromInstances(instances);
     }
     
     /**
-     * @param url The URL of the document to get the facts from.
+     * @param uri The URI of the document to get the facts from.
      * @return a list of all of the root-level tuples in the specified document.
      * @throws XBRLException
      */
-    public FragmentList<Tuple> getTuples(URL url) throws XBRLException {
-    	FragmentList<Instance> instances = this.<Instance>getFragmentsFromDocument(url,"Instance");
+    public FragmentList<Tuple> getTuples(URI uri) throws XBRLException {
+    	FragmentList<Instance> instances = this.<Instance>getFragmentsFromDocument(uri,"Instance");
     	return this.getTuplesFromInstances(instances);
     }
 
     /**
-     * Implementation strategy is:<br/>
-     * 1. Get all extended link elements matching network requirements.<br/>
-     * 2. Get all arcs defining relationships in the network.<br/>
-     * 3. Get all resources at the source of the arcs.<br/>
-     * 4. Return only those source resources that that are not target resources also.<br/>
-     * 
-     * @param linkNamespace The namespace of the link element.
-     * @param linkName The name of the link element.
-     * @param linkRole the role on the extended links that contain the network arcs.
-     * @param arcNamespace The namespace of the arc element.
-     * @param arcName The name of the arc element.
-     * @param arcRole the arcrole on the arcs describing the network.
-     * @return The list of fragments for each of the resources that is identified as a root
-     * of the specified network (noting that a root resource is defined as a resource that is
-     * at the source of one or more relationships in the network and that is not at the target 
-     * of any relationships in the network).
-     * @throws XBRLException
+     * @see XBRLStore#getNetworkRoots(String, String, String, String, String, String)
      */
     @SuppressWarnings("unchecked")
     public <F extends Fragment> FragmentList<F> getNetworkRoots(String linkNamespace, String linkName, String linkRole, String arcNamespace, String arcName, String arcRole) throws XBRLException {
@@ -291,8 +275,11 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	FragmentList<RoleType> types = this.getRoleTypes();
     	for (RoleType type: types) {
     		String role = type.getCustomURI();
-    		String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ExtendedLinkImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@xlink:role='" + role + "']";
+    		FragmentList<ExtendedLink> all = this.<ExtendedLink>getFragments("ExtendedLink");
+    		logger.debug("# links = " + all.getLength());
+    		String query = "/*[@type='org.xbrlapi.impl.ExtendedLinkImpl' and */*/@xlink:role='" + role + "']";
         	FragmentList<ExtendedLink> links = this.<ExtendedLink>query(query);
+        	logger.debug("# links with given role = " + links.getLength());
     		if (links.getLength() > 0) {
     			roles.put(role,"");
     		}
@@ -397,9 +384,9 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.XBRLStore#getMinimumDocumentSet(String)
      */
-    public List<String> getMinimumDocumentSet(String url) throws XBRLException {
+    public List<String> getMinimumDocumentSet(String uri) throws XBRLException {
         List<String> starters = new Vector<String>();
-        starters.add(url);
+        starters.add(uri);
         return this.getMinimumDocumentSet(starters);
     }
     

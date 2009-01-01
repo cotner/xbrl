@@ -18,7 +18,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -128,14 +128,14 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetExtendedLinks() {
 
 		try {
-			loader.discover(this.getURL(this.SCHEMA_WITH_EMBEDDED_LINKS));
+			loader.discover(this.getURI(this.SCHEMA_WITH_EMBEDDED_LINKS));
 			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
 			logger.debug("There are " + fragments.getLength() + " schemas.");
 			for (int i=0; i< fragments.getLength(); i++) {
 				Schema schema = fragments.getFragment(i);
 				FragmentList<ExtendedLink> links = schema.getExtendedLinks();
 				if (links.getLength() > 0) {
-					logger.debug("Schema " + schema.getURL() + " contains " + links.getLength() + " extended links.");
+					logger.debug("Schema " + schema.getURI() + " contains " + links.getLength() + " extended links.");
 					assertTrue(links.get(0).getType().equals("org.xbrlapi.impl.ExtendedLinkImpl"));
 				}
 			}

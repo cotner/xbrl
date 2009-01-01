@@ -14,7 +14,7 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -26,7 +26,7 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 	}
 
 	/**
-	 * Test the retrieval of a list of URLs from the data store.
+	 * Test the retrieval of a list of URIs from the data store.
 	 */
 	public void testReconnectionToAnExistingStore() {
 
@@ -40,12 +40,12 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 
 			Loader secondLoader = createLoader(secondStore);
 
-			int original = secondStore.getStoredURLs().size(); 
+			int original = secondStore.getStoredURIs().size(); 
 			assertTrue(original >= 1);
 
-			secondLoader.discover(this.getURL("test.data.small.instance"));
+			secondLoader.discover(this.getURI("test.data.small.instance"));
 
-			assertTrue(secondStore.getStoredURLs().size() > original);
+			assertTrue(secondStore.getStoredURIs().size() > original);
 
 		} catch (XBRLException e) {
 			e.printStackTrace();

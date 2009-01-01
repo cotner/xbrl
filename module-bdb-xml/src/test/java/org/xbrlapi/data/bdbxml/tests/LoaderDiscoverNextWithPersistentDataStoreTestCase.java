@@ -1,6 +1,6 @@
 package org.xbrlapi.data.bdbxml.tests;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -15,7 +15,7 @@ public class LoaderDiscoverNextWithPersistentDataStoreTestCase extends BaseTestC
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.stashURL(new URL(this.getURL(STARTING_POINT)));		
+		loader.stashURI(new URI(this.getURI(STARTING_POINT)));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -27,7 +27,7 @@ public class LoaderDiscoverNextWithPersistentDataStoreTestCase extends BaseTestC
 	}
 
 	/**
-	 * Test discovery one URL at a time
+	 * Test discovery one URI at a time
 	 */
 	public void testDiscoverNext() {
 		try {

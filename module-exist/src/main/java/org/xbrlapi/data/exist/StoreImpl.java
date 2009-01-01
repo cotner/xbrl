@@ -115,10 +115,10 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:type\" type=\"xs:string\"/>\n"				
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@type\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@id\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@targetDocumentURL\" type=\"xs:string\"/>\n"
+		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@targetDocumentURI\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@targetPointerValue\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@parentIndex\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@url\" type=\"xs:string\"/>\n"
+		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@uri\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@absoluteHref\" type=\"xs:string\"/>\n"
                 + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@stub\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "xptr/@value\" type=\"xs:string\"/>\n"
@@ -312,7 +312,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     @SuppressWarnings(value = "unchecked")
 	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
 		
-        query = query + this.getURLFilteringQueryClause();
+        query = query + this.getURIFilteringQueryClause();
         
 		ResourceSet resources = null;
 		try {
@@ -342,7 +342,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      */
     public Map<String,String> queryForIndices(String query) throws XBRLException {
 
-        query = query + this.getURLFilteringQueryClause();
+        query = query + this.getURIFilteringQueryClause();
         
         ResourceSet resources = null;
         try {

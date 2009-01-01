@@ -1,6 +1,6 @@
 package org.xbrlapi.xpointer.resolver;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -30,7 +30,7 @@ public class PointerResolverImpl implements PointerResolver {
 	
 	private Store store;
 	
-	private URL url;
+	private URI uri;
 	
 	/**
 	 * XPointer resolver constructor
@@ -41,19 +41,19 @@ public class PointerResolverImpl implements PointerResolver {
 	}
 	
 	/** 
-	 * Set the URL of the document within which the XPointer is being resolved.
-	 * @param url The URL of the document.
+	 * Set the URI of the document within which the XPointer is being resolved.
+	 * @param uri The URI of the document.
 	 */
-	public void setDocumentURL(URL url) {
-		this.url = url;
+	public void setDocumentURI(URI uri) {
+		this.uri = uri;
 	}
 	
 	/**
-	 * Get the URL of the document within which the XPointer is being resolved.
-	 * @return the url of the document within which the XPointer is being resolved.
+	 * Get the URI of the document within which the XPointer is being resolved.
+	 * @return the URI of the document within which the XPointer is being resolved.
 	 */
-	public URL getDocumentURL() {
-		return url;
+	public URI getDocumentURI() {
+		return uri;
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class PointerResolverImpl implements PointerResolver {
 					 
 				// Handle element scheme pointer parts
 				} else if (part.getSchemeNamespace().toString().equals(PointerPart.DefaultPointerNamespace) && part.getSchemeLocalName().equals("element")) {
-					String xpath = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[@url='" + getDocumentURL() + "' and " + Constants.XBRLAPIPrefix + ":" + "xptr/@value='" + data + "']";
+					String xpath = "/*[@uri='" + getDocumentURI() + "' and " + Constants.XBRLAPIPrefix + ":" + "xptr/@value='" + data + "']";
 					FragmentList<Fragment> fl = getStore().query(xpath);					
 					if (fl.getLength() != 0) {
 						if (fl.getLength() > 1) {

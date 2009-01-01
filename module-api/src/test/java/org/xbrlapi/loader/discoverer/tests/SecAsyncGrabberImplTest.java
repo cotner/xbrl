@@ -1,6 +1,6 @@
 package org.xbrlapi.loader.discoverer.tests;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.data.dom.tests.BaseTestCase;
@@ -14,12 +14,11 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
         super(arg0);
     }
 
-    private List<URL> resources = null;
+    private List<URI> resources = null;
     protected void setUp() throws Exception {
         super.setUp();
-        String secFeed = configuration.getProperty("real.data.sec");
-        URL feedUrl = new URL(secFeed);             
-        Grabber grabber = new SecGrabberImpl(feedUrl);
+        URI feedURI = new URI(getURI("test.data.local.sec"));             
+        Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
         assertTrue(resources.size() > 1900);
     }
@@ -32,12 +31,12 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
 		try {
 
 			int cnt = 2;
-            List<URL> r1 = resources.subList(0,cnt);
+            List<URI> r1 = resources.subList(0,cnt);
 			DiscoveryManager d1 = new DiscoveryManager(loader, r1);
 			Thread t1 = new Thread(d1);
             t1.start();
 
-            List<URL> r2 = resources.subList(cnt,2*cnt);
+            List<URI> r2 = resources.subList(cnt,2*cnt);
             DiscoveryManager d2 = new DiscoveryManager(loader, r2);
             Thread t2 = new Thread(d2);
             t2.start();

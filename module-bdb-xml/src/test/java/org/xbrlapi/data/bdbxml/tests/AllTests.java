@@ -13,7 +13,6 @@ public class AllTests {
 		suite.addTestSuite(DocumentRecoveryFromStoreTestCase.class);
         suite.addTestSuite(DTDDeclarationHandlerTestCase.class);
         suite.addTestSuite(LoaderDiscoverNextWithPersistentDataStoreTestCase.class);
-        suite.addTestSuite(LoadLargeDTSTestCase.class);
         suite.addTestSuite(SecGrabberImplTest.class);
         suite.addTestSuite(SecAsyncGrabberImplTest.class);
         suite.addTestSuite(StoreImplConstructorTestCase.class);

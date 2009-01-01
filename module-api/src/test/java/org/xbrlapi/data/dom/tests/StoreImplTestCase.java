@@ -18,7 +18,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -151,7 +151,7 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testHasDocument() {
 		try {
-			assertTrue(store.hasDocument(getURL(STARTING_POINT)));
+			assertTrue(store.hasDocument(getURI(STARTING_POINT)));
 			assertFalse(store.hasDocument("http://www.rubbish.gcs/crazy.xyz"));
 		} catch (XBRLException e) {
 			fail("Unexpected " + e.getMessage());

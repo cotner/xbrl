@@ -1,6 +1,6 @@
 package org.xbrlapi.sax;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,10 +55,10 @@ public class BaseContentHandlerImpl extends DefaultHandler implements ContentHan
     }
 
     /**
-     * The URL of the document being parsed.  This is used to
+     * The URI of the document being parsed.  This is used to
      * recover the XML Schema model for the document if required.
      */
-    private URL url = null;
+    private URI uri = null;
     
     /**
      * The namespace map stack for tracking namespaces.
@@ -78,20 +78,20 @@ public class BaseContentHandlerImpl extends DefaultHandler implements ContentHan
 
     
     /**
-     * @see org.xbrlapi.sax.ContentHandler#getURL()
+     * @see org.xbrlapi.sax.ContentHandler#getURI()
      */
-    public URL getURL() {
-        return url;
+    public URI getURI() {
+        return uri;
     }
 
     /**
-     * @see org.xbrlapi.sax.ContentHandler#setURL(URL)
+     * @see org.xbrlapi.sax.ContentHandler#setURI(URI)
      */
-    public void setURL(URL url) throws XBRLException {
-        if (url == null) {
-            throw new XBRLException("The url must not be null.");
+    public void setURI(URI uri) throws XBRLException {
+        if (uri == null) {
+            throw new XBRLException("The URI must not be null.");
         }
-        this.url = url;
+        this.uri = uri;
     }
     
     /**
@@ -129,12 +129,12 @@ public class BaseContentHandlerImpl extends DefaultHandler implements ContentHan
     
     /**
      * @param loader The DTS loader that is using this content handler.
-     * @param url The URL of the document being parsed.
+     * @param uri The URI of the document being parsed.
      * @throws XBRLException if any of the parameters are null.
      */
-	public BaseContentHandlerImpl(Loader loader, URL url) throws XBRLException {
+	public BaseContentHandlerImpl(Loader loader, URI uri) throws XBRLException {
 		super();
-		setURL(url);
+		setURI(uri);
 		setLoader(loader);		
 	}
     

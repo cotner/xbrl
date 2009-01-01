@@ -12,12 +12,15 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
 import org.apache.xerces.util.XML11Char;
 import org.xbrlapi.utilities.Constants;
 import org.xml.sax.Attributes;
 
 public class XLinkProcessorImpl implements XLinkProcessor {
 
+    protected static Logger logger = Logger.getLogger(XLinkProcessorImpl.class);
+    
 	/**
 	 * The XLink handler to use for responding to XLink events
 	 * in the SAX parsing process.
@@ -126,6 +129,8 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		if (! (customLinkRecogniser == null))
 			if (customLinkRecogniser.isLink(namespaceURI, lName, qName, attrs)) {
 				
+			    logger.debug("Found a custom link: " + lName);
+			    
 				String href = customLinkRecogniser.getHref(namespaceURI, lName, qName, attrs);
 				String role = customLinkRecogniser.getRole(namespaceURI, lName, qName, attrs);
 				String arcrole = customLinkRecogniser.getArcrole(namespaceURI, lName, qName, attrs);

@@ -90,13 +90,14 @@ public class LoadTestCase extends TestCase {
         public SimpleStore(String location, String container) 
         throws FileNotFoundException, DatabaseException, XmlException {
             EnvironmentConfig environmentConfiguration = new EnvironmentConfig();
+            environmentConfiguration.setThreaded(true);
             environmentConfiguration.setAllowCreate(true);         // If the environment does not exist, create it.
-            environmentConfiguration.setInitializeCache(true);     // Turn on the shared memory region.
             environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
-            environmentConfiguration.setInitializeLogging(true);   // Turn on the logging subsystem.
-            environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
             environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
-            
+            environmentConfiguration.setInitializeCache(true);
+            environmentConfiguration.setCacheSize(1024 * 1024 * 500);
+            environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
+            environmentConfiguration.setTransactional(false);       // Turn on the transactional subsystem.
             environment = new Environment(new File(location), environmentConfiguration);
             
             managerConfiguration = new XmlManagerConfig();

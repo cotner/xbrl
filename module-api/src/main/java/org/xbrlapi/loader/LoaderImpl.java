@@ -2,10 +2,8 @@ package org.xbrlapi.loader;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -85,7 +83,7 @@ public class LoaderImpl implements Loader {
     
     /**
      * The cache to use when discovering XML materials specified as a String
-     * rather than just via a URL that resolves to the required XML.
+     * rather than just via a URI that resolves to the required XML.
      */
     private CacheImpl cache = null;
 
@@ -107,10 +105,10 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * The absolute URL of the document currently being parsed. Used to record
+     * The absolute URI of the document currently being parsed. Used to record
      * this metadata in each fragment.
      */
-    private String documentURL = null;
+    private String documentURI = null;
 
     /**
      * The document Id (including the document hash and its counter)
@@ -128,7 +126,7 @@ public class LoaderImpl implements Loader {
     private XLinkProcessor xlinkProcessor;
 
     /**
-     * The entity resolver to use for resolution of entities (URLs etc) during
+     * The entity resolver to use for resolution of entities (URIs etc) during
      * the loading/discovery process.  Defaults to one without a caching system.
      */
     private EntityResolver entityResolver = new EntityResolverImpl();
@@ -140,9 +138,9 @@ public class LoaderImpl implements Loader {
 
     /**
      * The map of documents awaiting loading into the DTS. This queue is
-     * implemented as a hash map to ensure that the keys (URLS in string form)
+     * implemented as a hash map to ensure that the keys (URIS in string form)
      * eliminate multiple discoveries of the same document. The value for each
-     * URL is set to false initially and is changed to true when the document
+     * URI is set to false initially and is changed to true when the document
      * has been loaded.
      */
     private HashMap<String, Integer> documentQueue = new HashMap<String, Integer>();
@@ -218,13 +216,13 @@ public class LoaderImpl implements Loader {
     /**
      * @param store The data store to hold the DTS
      * @param xlinkProcessor The XLink processor to use for link resolution
-     * @param urls The array of URLs for loading.
+     * @param uris The array of URIs for loading.
      * @throws XBRLException if the loader cannot be instantiated.
      */
-    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor, List<URL> urls)
+    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor, List<URI> uris)
             throws XBRLException {
         this(store, xlinkProcessor);
-        setStartingURLs(urls);
+        setStartingURIs(uris);
     }
 
 
@@ -248,15 +246,13 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Set the URL of the document now being parsed.
-     * 
-     * @param url
-     *            The URL of the document now being parsed.
+     * Set the URI of the document now being parsed.
+     * @param uri The URI of the document now being parsed.
      * @throws XBRLException.
      */
-    private void setDocumentURL(String url) throws XBRLException {
-        this.documentURL = url;
-        this.documentId = getStore().getDocumentId(url.toString());
+    private void setDocumentURI(String uri) throws XBRLException {
+        this.documentURI = uri;
+        this.documentId = getStore().getDocumentId(uri.toString());
     }
     
     /**
@@ -268,12 +264,12 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Get the URL for the document being parsed.
+     * Get the URI for the document being parsed.
      * 
-     * @return The original (non-cache) URL of the document being parsed.
+     * @return The original (non-cache) URI of the document being parsed.
      */
-    public String getDocumentURL() {
-        return this.documentURL;
+    public String getDocumentURI() {
+        return this.documentURI;
     }
 
     /**
@@ -436,7 +432,7 @@ public class LoaderImpl implements Loader {
         } else { // We have a document root fragment.
             fragment.setParentIndex("none");
         }
-        fragment.setURL(getDocumentURL());
+        fragment.setURI(getDocumentURI());
 
         // Push the fragment onto the stack of fragments
         fragments.add(fragment);
@@ -470,40 +466,29 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * @see org.xbrlapi.loader.Loader#discover(List)
+     * @see org.xbrlapi.loader.Loader#discover(List<URI>)
      */
-    public void discover(List<URL> startingURLs) throws XBRLException {
-
-        for (int i = 0; i < startingURLs.size(); i++) {
-            Object object = startingURLs.get(i);
-            // TODO Eliminate this check of URL object type now that generics
-            // are being used.
-            if (object instanceof java.net.URL)
-                stashURL((URL) object);
-            else
-                throw new XBRLException(
-                        "Loader discovery must be passed a list of java.net.URL objects.");
-        }
-
+    public void discover(List<URI> startingURIs) throws XBRLException {
+        for (URI uri: startingURIs) stashURI(uri);
         discover();
     }
 
     /**
-     * @see org.xbrlapi.loader.Loader#discover(URL)
+     * @see org.xbrlapi.loader.Loader#discover(URI)
      */
-    public void discover(URL url) throws XBRLException {
-        stashURL(url);
+    public void discover(URI uri) throws XBRLException {
+        stashURI(uri);
         discover();
     }
 
     /**
      * @see org.xbrlapi.loader.Loader#discover(String)
      */
-    public void discover(String url) throws XBRLException {
+    public void discover(String uri) throws XBRLException {
         try {
-            discover(new URL(url));
-        } catch (MalformedURLException e) {
-            throw new XBRLException("The URL to discover, " + url + " is malformed.", e);
+            discover(new URI(uri));
+        } catch (URISyntaxException e) {
+            throw new XBRLException("The URI to discover, " + uri + " is malformed.", e);
         }
     }
 
@@ -533,41 +518,54 @@ public class LoaderImpl implements Loader {
         }
         setDiscovering(true);
 
-        for (URL url: getStore().getDocumentsToDiscover()) {
-            this.stashURL(url);
+        for (URI uri: getStore().getDocumentsToDiscover()) {
+            this.stashURI(uri);
         }
         
-        Object[] urls = this.documentQueue.keySet().toArray();
-        logger.debug(urls.length + " documents queued for discovery.");
-        for (int i=0; i<urls.length;i++){
-            logger.debug(urls[i]);
+        Object[] uris = this.documentQueue.keySet().toArray();
+        logger.debug(uris.length + " documents queued for discovery.");
+        for (int i=0; i<uris.length;i++){
+            logger.debug(uris[i]);
         }
         
-        URL url = getNextDocumentToExplore();
-        logger.debug("Next is " + url);
-        while (url != null) {
-            if (!getStore().hasDocument(url.toString())) {
-                setDocumentURL(url.toString());
+        URI uri = getNextDocumentToExplore();
+        logger.debug("Next is " + uri);
+        while (uri != null) {
+            if (!getStore().hasDocument(uri.toString())) {
+                setDocumentURI(uri.toString());
                 this.setNextFragmentId("1");
                 double startTime = System.currentTimeMillis();
                 int startIndex = this.fragmentId;
-                parse(url);
+                try {
+                    parse(uri);
+                } catch (Exception e) {
+                    // Clean up the database to ensure no document is lying around.
+                    getStore().deleteDocument(uri.toString());
+                    // Clean up the document cache
+                    this.getCache().purge(uri);
+                    // Store the list of documents in the queue to be loaded.
+                    storeDocumentsToAnalyse();
+                    throw new XBRLException("The parsing process failed but the database has been cleaned up.",e);
+                }
                 String time = (new Double(
                         (System.currentTimeMillis() - startTime)
                                 / (fragmentId - startIndex))).toString();
                 if (time.length() > 4) time = time.substring(0, 4);
                 logger.info("Average time taken per fragment = " + time + " milliseconds");
-                logger.info(this.fragmentId + " fragments in " + url);
+                logger.info(this.fragmentId + " fragments in " + uri);
             } else {
-                logger.info(url + " is already in the data store.");
+                logger.info(uri + " is already in the data store.");
             }
+
+            this.markDocumentAsExplored(uri);
 
             if (interruptRequested()) {
                 cancelInterrupt();
+                storeDocumentsToAnalyse();
                 break;
             }
 
-            url = getNextDocumentToExplore();
+            uri = getNextDocumentToExplore();
         }
 
         setDiscovering(false);
@@ -586,18 +584,33 @@ public class LoaderImpl implements Loader {
         if (isDiscovering()) return;
         setDiscovering(true);
 
-        URL url = getNextDocumentToExplore();
-        while (store.hasDocument(url.toString()) && (url != null)) {
-            url = getNextDocumentToExplore();
+        URI uri = getNextDocumentToExplore();
+        while (store.hasDocument(uri.toString()) && (uri != null)) {
+            this.markDocumentAsExplored(uri);
+            uri = getNextDocumentToExplore();
         }
 
-        if (url != null) {
-            logger.info("Up to fragment " + this.fragmentId + ". Now parsing " + url);
-            setDocumentURL(url.toString());
+        if (uri != null) {
+            logger.info("Up to fragment " + this.fragmentId + ". Now parsing " + uri);
+            setDocumentURI(uri.toString());
             this.setNextFragmentId("1");
-            parse(url);
+            try {
+                parse(uri);
+            } catch (Exception e) {
+                // Clean up the database to ensure no document is lying around.
+                getStore().deleteDocument(uri.toString());
+                // Clean up the document cache
+                this.getCache().purge(uri);
+                // Store the list of documents in the queue to be loaded.
+                storeDocumentsToAnalyse();
+                throw new XBRLException("The parsing process failed but the database has been cleaned up.",e);
+            }
+            
+            this.markDocumentAsExplored(uri);
         }
 
+        this.storeDocumentsToAnalyse();
+        
         setDiscovering(false);
 
     }
@@ -606,131 +619,102 @@ public class LoaderImpl implements Loader {
      * Perform a discovery starting with an XML document that is represented as
      * a string.
      * 
-     * @param url
-     *            The URL to be used for the document that is supplied as a
-     *            string. This URL MUST be an absolute URL.
+     * @param uri
+     *            The URI to be used for the document that is supplied as a
+     *            string. This URI MUST be an absolute URI.
      * @param xml
      *            The string representation of the XML document to be parsed.
      * @throws XBRLException
-     *             if the discovery process fails or if the supplied URL is not
+     *             if the discovery process fails or if the supplied URI is not
      *             absolute or is not a valid URI syntax or the loader does not
      *             have a cache.
      */
-    public void discover(URL url, String xml) throws XBRLException {
+    public void discover(URI uri, String xml) throws XBRLException {
 
-        logger.debug("Discovering a resource supplied as a string and with URL: " + url);
+        logger.debug("Discovering a resource supplied as a string and with URI: " + uri);
 
-        try {
-            if (!url.toURI().isAbsolute())
-                throw new XBRLException("The URL " + url + " must be absolute.");
-        } catch (URISyntaxException e) {
-            throw new XBRLException("The URL " + url
-                    + " must be a valid URI syntax.", e);
-        }
+            if (!uri.isAbsolute()) throw new XBRLException("The URI " + uri + " must be absolute.");
+
+            if (uri.isOpaque()) throw new XBRLException("The URI " + uri + " must NOT be opaque.");
 
         // Copy the XML to the local cache even if it is there already (possibly over-writing existing documents)
-        this.getCache().copyToCache(url, xml);
+        this.getCache().copyToCache(uri, xml);
 
         try {
-            this.stashURL(new URL(
+            this.stashURI(new URI(
                     "http://www.xbrlapi.org/xbrl/xbrl-2.1-roles.xsd"));
-        } catch (MalformedURLException e) {
-            throw new XBRLException(
-                    "The standard roles URL could not be formed for discovery.",
-                    e);
+        } catch (URISyntaxException e) {
+            throw new XBRLException("The standard roles URI could not be formed for discovery.",e);
         }
         
-        discover(url);
+        discover(uri);
     }
 
-    /**
-     * Perform a discovery starting with an XML document that is represented as
-     * an input source.
-     * 
-     * @param url
-     *            The URL to be used for the document that is supplied as a
-     *            string.
-     * @param inputSource
-     *            The InputSource representation of the XML document to be
-     *            parsed.
-     * @throws XBRLException
-     *             if the discovery process fails.
-     */
-    /*
-     * public void discover(URL url, InputSource inputSource) throws
-     * XBRLException {
-     * 
-     * this.setNextFragmentId(getStore().getNextFragmentId());
-     * 
-     * while (url != null) { if (! getStore().hasDocument(url.toString())) {
-     * setDocumentURL(url.toString()); parse(url, inputSource); } url =
-     * getNextDocumentToExplore(); }
-     * 
-     * getStore().storeLoaderState(this.getCurrentFragmentId(),this.getDocumentsStillToAnalyse());
-     *  }
-     */
 
     /**
      * Retrieve URI of the next document to parse from the list of starting
-     * point URLs provided or URLs found during the discovery process.
+     * point URIs provided or URIs found during the discovery process.
      * 
      * @throws XBRLException
      * @return the URI of the next document to explore or null if there are
      *         none.
      */
-    private URL getNextDocumentToExplore() throws XBRLException {
+    private URI getNextDocumentToExplore() throws XBRLException {
         try {
             for (String key : documentQueue.keySet()) {
                 if ((documentQueue.get(key)).equals(new Integer(0))) {
-                    documentQueue.put(key, new Integer(1));
-                    URL url = new URL(key);
-                    return url;
+                    URI uri = new URI(key);
+                    return uri;
                 }
             }
             return null;
-        } catch (MalformedURLException e) {
+        } catch (URISyntaxException e) {
             throw new XBRLException(
-                    "The URL syntax for the next DTS document is malformed.", e);
+                    "The URI syntax for the next DTS document is malformed.", e);
         }
+    }
+    
+    private void markDocumentAsExplored(URI uri) {
+        documentQueue.put(uri.toString(),new Integer(1));
     }
 
     /**
-     * Parse an XML Document supplied as a URL the next part of the DTS.
-     * @param url The URL of the document to parse.
+     * Parse an XML Document supplied as a URI the next part of the DTS.
+     * @param uri The URI of the document to parse.
      * @throws XBRLException
      */
-    protected void parse(URL url) throws XBRLException {
+    protected void parse(URI uri) throws XBRLException {
         try {
-            InputSource inputSource = this.getEntityResolver().resolveEntity("", url.toString());
-            ContentHandler contentHandler = new ContentHandlerImpl(this, url);
-            parse(url, inputSource, contentHandler);
+            InputSource inputSource = this.getEntityResolver().resolveEntity("", uri.toString());
+            ContentHandler contentHandler = new ContentHandlerImpl(this, uri);
+            parse(uri, inputSource, contentHandler);
         } catch (SAXException e) {
-            throw new XBRLException("SAX exception thrown when parsing " + url,e);
+            throw new XBRLException("SAX exception thrown when parsing " + uri,e);
         } catch (IOException e) {
-            throw new XBRLException("IO exception thrown when parsing " + url,e);
+            throw new XBRLException("IO exception thrown when parsing " + uri,e);
         }
     }
 
     /**
      * Parse an XML Document supplied as a string the next part of the DTS.
-     * @param url The URL to associate with the supplied XML.
+     * @param uri The URI to associate with the supplied XML.
      * @param xml The XML document as a string.
      * @throws XBRLException
      */
-    protected void parse(URL url, String xml) throws XBRLException {
+    protected void parse(URI uri, String xml) throws XBRLException {
         InputSource inputSource = new InputSource(new StringReader(xml));
-        ContentHandler contentHandler = new ContentHandlerImpl(this, url, xml);
-        parse(url, inputSource, contentHandler);
+        ContentHandler contentHandler = new ContentHandlerImpl(this, uri, xml);
+        parse(uri, inputSource, contentHandler);
     }
 
     /**
      * Parse the supplied input source.
-     * @param url The URL to be associated with the supplied input source.
+     * @param uri The URI to be associated with the supplied input source.
      * @param inputSource The input source to parse.
      * @param contentHandler The content handler to use for SAX parsing.
      * @throws XBRLException
      */
-    protected void parse(URL url, InputSource inputSource, ContentHandler contentHandler) throws XBRLException {
+    protected void parse(URI uri, InputSource inputSource, ContentHandler contentHandler) throws XBRLException {
 
         // Create and configure the SAX parser factory
         SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -794,13 +778,13 @@ public class LoaderImpl implements Loader {
         }
 
         try {
-            logger.debug("Parsing " + url);
+            logger.debug("Parsing " + uri);
             reader.parse(inputSource);
         } catch (SAXException e) {
             e.printStackTrace();
-            throw new XBRLException("SAX exception thrown when parsing " + url,e);
+            throw new XBRLException("SAX exception thrown when parsing " + uri,e);
         } catch (IOException e) {
-            throw new XBRLException("IO exception thrown when parsing " + url,e);
+            throw new XBRLException("IO exception thrown when parsing " + uri,e);
         }
 
         // Remove any document stub from the data store once parsing is complete.
@@ -811,63 +795,61 @@ public class LoaderImpl implements Loader {
     /**
      * Set the starting points for DTSImpl discovery using a linked list
      * 
-     * @param urls
-     *            A list of starting point document URLs for DTSImpl discovery
+     * @param uris
+     *            A list of starting point document URIs for DTSImpl discovery
      * @throws XBRLException
      */
-    protected void setStartingURLs(List<URL> urls) throws XBRLException {
-        if (urls == null)
-            throw new XBRLException("Null list of urls is not permitted.");
+    protected void setStartingURIs(List<URI> uris) throws XBRLException {
+        if (uris == null)
+            throw new XBRLException("Null list of URIs is not permitted.");
 
-        for (int i = 0; i < urls.size(); i++) {
-            stashURL(urls.get(i));
+        for (int i = 0; i < uris.size(); i++) {
+            stashURI(uris.get(i));
         }
     }
 
     /**
-     * Stash a URL to await loading into DTS.
+     * Stash a URI to await loading into DTS.
      * 
-     * @param url
-     *            The absolute URL to be stashed (any relative URL gets resolved
-     *            against the Base URL before stashing. TODO put this
+     * @param uri
+     *            The absolute URI to be stashed (any relative URI gets resolved
+     *            against the Base URI before stashing. TODO put this
      *            functionality at the SAX parse call for the document. TODO
      *            make sure that the fragment after the # is handled for stashed
-     *            URLs in the loader.
+     *            URIs in the loader.
      * @throws XBRLException
-     *             if the URL cannot be stored for later exploration or if the
-     *             URL is not absolute
+     *             if the URI cannot be stored for later exploration or if the
+     *             URI is not absolute
      */
-    public synchronized void stashURL(URL url) throws XBRLException {
+    public synchronized void stashURI(URI uri) throws XBRLException {
 
-        // Make sure that the URL is a valid URI and is absolute
-        try {
-            if (!new URI(url.toString()).isAbsolute()) {
-                logger.warn("Failed to stash " + url);
-                throw new XBRLException("The URL: " + url + " needs to be resolved against a base URL prior to stashing.");                
-            }
+        // Validate the URI
+        if (!uri.isAbsolute()) {
+            throw new XBRLException("The URI: " + uri + " must be absolute.");                
+        }
+        if (uri.isOpaque()) {
+            throw new XBRLException("The URI: " + uri + " must not be opaque.");                
+        }
                 
-        } catch (URISyntaxException e) {
-            throw new XBRLException("The URL: " + url + " is not a valid URI.",e);
-        }
+        logger.debug("Stashing " + uri);
 
-        URL dereferencedURL = null;
+        URI dereferencedURI = null;
         try {
-            dereferencedURL = new URL(url.getProtocol(), url.getHost(), url
-                    .getPort(), url.getPath());
-        } catch (MalformedURLException e) {
+            dereferencedURI = new URI(uri.getScheme(),null,uri.getHost(), uri.getPort(), uri.getPath(),null,null);
+        } catch (URISyntaxException e) {
             throw new XBRLException(
-                    "Malformed URL found in DTS discovery process: " + url, e);
+                    "Malformed URI found in DTS discovery process: " + uri, e);
         }
 
-        // Stash the URL if it has not already been stashed
-        if (!documentQueue.containsKey(dereferencedURL.toString())) {
+        // Stash the URI if it has not already been stashed
+        if (!documentQueue.containsKey(dereferencedURI.toString())) {
 
             // Only stash if the document does not already have a match.
-            URL matchURL = getStore().getMatcher().getMatch(dereferencedURL);
-            if (matchURL.equals(dereferencedURL)) {
-                documentQueue.put(dereferencedURL.toString(), new Integer(0));
+            URI matchURI = getStore().getMatcher().getMatch(dereferencedURI);
+            if (matchURI.equals(dereferencedURI)) {
+                documentQueue.put(dereferencedURI.toString(), new Integer(0));
             } else {
-                logger.debug("No need to stash " + dereferencedURL + " because it has match " + matchURL);
+                logger.debug("No need to stash " + dereferencedURI + " because it has match " + matchURI);
             }
             
         }

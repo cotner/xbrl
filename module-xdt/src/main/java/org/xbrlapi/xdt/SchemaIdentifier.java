@@ -84,10 +84,10 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
                             // Get the URIs of the documents that were used to create elements in this namespace
                             StringList locations = nsItem.getDocumentLocations();
                             
-                            // Check to see if the current document URL is one of those documents and if so, the candidate could be good
+                            // Check to see if the current document URI is one of those documents and if so, the candidate could be good
                             for (int j=0; j<locations.getLength(); j++) {
                                 String location = locations.item(j);
-                                if (location.equals(getContentHandler().getURL().toString())) {
+                                if (location.equals(getContentHandler().getURI().toString())) {
                                     // Throw an exception if we find two feasible candidate element declarations in the Schema model
                                     if (declaration != null) throw new XBRLException("Potentially ambiguous anonymous Schema problem.");
                                     declaration = candidateDeclaration;

@@ -1,6 +1,6 @@
 package org.xbrlapi.data.bdbxml.tests;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.grabber.Grabber;
@@ -12,15 +12,15 @@ public class SecGrabberImplTest extends BaseTestCase {
         super(arg0);
     }
 
-    private List<URL> resources = null;
+    private List<URI> resources = null;
     protected void setUp() throws Exception {
         super.setUp();
         logger.info("Getting the SEC feed.");
         String secFeed = configuration.getProperty("real.data.sec");
-        URL feedUrl = new URL(secFeed);
-        Grabber grabber = new SecGrabberImpl(feedUrl);
+        URI feedURI = new URI(secFeed);
+        Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
-        assertTrue(resources.size() > 1900);
+        assertTrue(resources.size() > 100);
     }
 
     protected void tearDown() throws Exception {
@@ -31,10 +31,10 @@ public class SecGrabberImplTest extends BaseTestCase {
         try {
 
             int cnt = 3;
-            List<URL> r1 = resources.subList(0,cnt);
+            List<URI> r1 = resources.subList(0,cnt);
             logger.info("About to discover SEC data.");
-            for (URL url: r1) {
-                loader.stashURL(url);
+            for (URI uri: r1) {
+                loader.stashURI(uri);
             }
             loader.discoverNext();
             loader.discoverNext();

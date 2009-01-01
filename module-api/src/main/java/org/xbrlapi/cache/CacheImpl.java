@@ -3,13 +3,14 @@ package org.xbrlapi.cache;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -17,13 +18,13 @@ import org.xbrlapi.utilities.XBRLException;
 
 /**
  * Translates 
- * 1. original URLs into cache File objects or cache URL objects
- * 2. cache URLs into original URL objects
- * The translation from cache URLs to original URLs is a hack that
- * enables relative URLs in cached files to be identified as such an
- * resolved to obtain the original URL of the resource identified
- * by the relative URL.
- * This class also provides a method for testing if a URL is a cache URL.
+ * 1. original URIs into cache File objects or cache URI objects
+ * 2. cache URIs into original URI objects
+ * The translation from cache URIs to original URIs is a hack that
+ * enables relative URIs in cached files to be identified as such an
+ * resolved to obtain the original URI of the resource identified
+ * by the relative URI.
+ * This class also provides a method for testing if a URI is a cache URI.
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
  */
 public class CacheImpl {
@@ -36,15 +37,15 @@ public class CacheImpl {
     private File cacheRoot;
     
     /**
-     * The map of local URLs to use in place of
-     * original URLs.  The original URL points to the 
-     * local URL in the map that is used.
+     * The map of local URIs to use in place of
+     * original URIs.  The original URI points to the 
+     * local URI in the map that is used.
      * TODO Implement the cache map as an object that can be chosen via dependency injection.
      */
-    private Map<String,String> urlMap = null;      
+    private Map<String,String> uriMap = null;      
 
     /**
-     * Constructs a URL translator for usage with a local cache location.
+     * Constructs a URI translator for usage with a local cache location.
      * @param cacheRoot
      * @throws XBRLException if the cacheRoot is null or does not exist.
      */
@@ -55,136 +56,133 @@ public class CacheImpl {
 	}
     
     /**
-     * Constructs a URL translator for usage with a local cache location.
+     * Constructs a URI translator for usage with a local cache location.
      * @param cacheRoot
-	 * @param urlMap The map from original URLs to local URLs.
+	 * @param uriMap The map from original URIs to local URIs.
      * @throws XBRLException if the cacheRoot is null or does not exist
-     * or if any of the objects in the list of URLs is not a java.net.URL object.
      */
-	public CacheImpl(File cacheRoot, Map<String,String> urlMap) throws XBRLException {
-		this(cacheRoot);		
-		this.urlMap = urlMap;
+	public CacheImpl(File cacheRoot, Map<String,String> uriMap) throws XBRLException {
+		this(cacheRoot);
+		this.uriMap = uriMap;
 	}	
 	
     /**
-     * Tests if a URL is a URL of a resource in the local cache.
-     * @param url The URL to be tested to see if it identifies a 
+     * Tests if a URI is a URI of a resource in the local cache.
+     * @param uri The URI to be tested to see if it identifies a 
      * resource in the local cache.
-     * @return true if and only if the URL is for a resource in the 
+     * @return true if and only if the URI is for a resource in the 
      * local cache.
-     * @throws XBRLException if the URL status as a cache URL cannot be determined.
+     * @throws XBRLException if the URI status as a cache URI cannot be determined.
      */
-    public boolean isCacheURL(URL url) throws XBRLException {
-    	logger.debug(System.currentTimeMillis() + " Checking if " + url + " is in the cache.");
+    public boolean isCacheURI(URI uri) throws XBRLException {
+    	logger.debug("Checking if " + uri + " is in the cache.");
     	
-    	if (! url.getProtocol().equals("file")) {
-        	logger.debug(System.currentTimeMillis() + " Protocol is wrong so not in cache.");
+    	if (! uri.getScheme().equals("file")) {
+        	logger.debug("Protocol is wrong so not in cache.");
     		return false;
     	}
 
     	try {
     	    // TODO Make this test work for windows paths.
     	    logger.debug("The canonical path to the cache root is: " + cacheRoot.getCanonicalPath());
-            logger.debug("The path for the URL being tested is: " + url.getPath());
+            logger.debug("The path component of the URI being tested is: " + uri.getPath());
 
-            String urlPath = "";
+            String uriPath = "";
             try {
-                urlPath = new File(url.getPath()).getCanonicalPath();
-                logger.debug("Canonicalised URL path is: " + urlPath);
-            } catch (Exception couldNotCanonicaliseURLPath) {
-                logger.debug(System.currentTimeMillis() + " Could not canonicalise URL Path " + url.getPath() + " so we do not have a cache URL.");
+                uriPath = new File(uri.getPath()).getCanonicalPath();
+                logger.debug("Canonicalised URI path is: " + uriPath);
+            } catch (Exception couldNotCanonicaliseURIPath) {
+                logger.debug("Could not canonicalise URI Path " + uri.getPath() + " so we do not have a cache URI.");
                 return false;
             }
 
-            if (urlPath.startsWith(cacheRoot.getCanonicalPath().toString())) {
-                logger.debug(System.currentTimeMillis() + " Path is right so is in cache.");
+            if (uriPath.startsWith(cacheRoot.getCanonicalPath().toString())) {
+                logger.debug("Path is right so is in cache.");
                 return true;
             }
 
     	} catch (Exception e) {
-    		throw new XBRLException("The cannonical cache root path cannot be determined.",e);
+    		throw new XBRLException("The canonical cache root path cannot be determined.",e);
     	}
-    	logger.debug(System.currentTimeMillis() + " Path is wrong so not in cache.");    	
+    	logger.debug("Path is wrong so not in cache.");    	
     	return false;
     }
     
     /**
-     * TODO Modify to use the java.net.URLEncoder and java.net.URLDecoder classes.
-     * Adds the resource at the original URL to the cache if it is not already cached.
-     * @param url The URL to be translated into a cache URL (if necessary).
-     * @return the cache URL corresponding to the provided URL.
-     * @throws MalformedURLException if the cache file does not map to a URL.
+     * TODO Modify to use the java.net.URIEncoder and java.net.URIDecoder classes.
+     * Adds the resource at the original URI to the cache if it is not already cached.
+     * @param uri The URI to be translated into a cache URI (if necessary).
+     * @return the cache URI corresponding to the provided URI.
      * @throws XBRLException if the resource cannot be cached.
      */
-    public URL getCacheURL(URL url) throws XBRLException {
+    public URI getCacheURI(URI uri) throws XBRLException {
 
-    	logger.debug(System.currentTimeMillis() + " About to get the cache URL for " + url);
+    	logger.debug("About to get the cache URI for " + uri);
     	
         try {
-        	// First determine the original URL
-        	URL originalURL = url;
-        	if (isCacheURL(url)) {
-        		originalURL = getOriginalURL(url);
+        	// First determine the original URI
+        	URI originalURI = uri;
+        	if (isCacheURI(uri)) {
+        		originalURI = getOriginalURI(uri);
     		} else {
-    			if (urlMap != null) {
-    	         	logger.debug(System.currentTimeMillis() + " About to check URL against URL map.");
-    	        	if (urlMap.containsKey(url.toString())) {
-	        	        originalURL = new URL(urlMap.get(url.toString()));
+    			if (uriMap != null) {
+    	        	if (uriMap.containsKey(uri.toString())) {
+	        	        originalURI = new URI(uriMap.get(uri.toString()));
     	        	}
-    	        	logger.debug(System.currentTimeMillis() + " Done checking URL against URL map.");
     			}
     		}
         	
-        	// Second determine the cache file from the original URL
+        	// Second determine the cache file from the original URI
         	// so that the caching status can be checked.
-        	File cacheFile = getCacheFile(originalURL);
+        	File cacheFile = getCacheFile(originalURI);
+        	logger.debug("The cache file is " + cacheFile);
     		if (! cacheFile.exists()) {
-    			copyToCache(originalURL,cacheFile);
+    			copyToCache(originalURI,cacheFile);
     		}
     
-    		logger.debug(System.currentTimeMillis() + " Got the cache URL " + cacheFile.toURI().toURL());
+    		logger.debug("Got the cache URI " + cacheFile.toURI());
     
     		if (! cacheFile.exists()) {
-    			logger.info(System.currentTimeMillis() + " " + originalURL + " could not be cached.");
-    			return originalURL;
+    			logger.info(originalURI + " could not be cached.");
+    			return originalURI;
     		}
-			return cacheFile.toURI().toURL();
-        } catch (MalformedURLException e) {
-            throw new XBRLException(url + " is a malformed URL.", e);
+			return cacheFile.toURI();
+        } catch (URISyntaxException e) {
+            throw new XBRLException(uri + " is a malformed URI.", e);
         }
     }
     
 
     
     /**
-     * @param url The URL to be translated into an original URL (if necessary).
-     * @return the original (non-cache) URL corresponding to the provided URL.
+     * @param uri The URI to be translated into an original URI (if necessary).
+     * @return the original (non-cache) URI corresponding to the provided URI.
      * @throws XBRLException if a caching operation fails 
-     * or if a cache file cannot be translated into a URL.
+     * or if a cache file cannot be translated into a URI.
      */
-    public URL getOriginalURL(URL url) throws XBRLException {
+    public URI getOriginalURI(URI uri) throws XBRLException {
     	
-    	logger.debug(System.currentTimeMillis() + " About to get the original URL for " + url);
+    	logger.debug("About to get the original URI for " + uri);
     	
-    	// Just return the url if it is not a cache URL
-    	if (! isCacheURL(url)) {
-    		logger.debug(System.currentTimeMillis() + " Returning the URL as it is already original.");
-    		return url;
+    	// Just return the URI if it is not a cache URI
+    	if (! isCacheURI(uri)) {
+    		logger.debug("Returning the URI as it is already original.");
+    		return uri;
     	}
 
-		String path = url.getPath();
+		String path = uri.getPath();
 		
 		try {
 		    path = (new File(path)).getCanonicalPath();
 		} catch (IOException e) {
-		    throw new XBRLException("Canonical path could not be obtained from the URL.",e);
+		    throw new XBRLException("Canonical path could not be obtained from the URI.",e);
 		}
 
 		// Eliminate the cacheRoot part of the path
 		try {
 			path = path.replace(cacheRoot.getCanonicalPath().toString().substring(1),"").substring(1);
 		} catch (IOException e) {
-			throw new XBRLException("The original URL could not be determined for " + url);
+			throw new XBRLException("The original URI could not be determined for " + uri);
 		}
 
         // Translate file separator into slashes 
@@ -204,46 +202,50 @@ public class CacheImpl {
 		}
 
 		try {
-			URL originalURL = new URL(protocol, authority, port, path);
-	    	logger.debug(System.currentTimeMillis() + " Got the original URL " + originalURL);
-			return originalURL;
-		} catch (MalformedURLException e) {
-			throw new XBRLException("Malformed original URL.",e);
+			URI originalURI = new URI(protocol, null,authority, port, path,null,null);
+	    	logger.debug("Got the original URI " + originalURI);
+			return originalURI;
+		} catch (URISyntaxException e) {
+			throw new XBRLException("Malformed original URI.",e);
 		}
 
     }
     
     /**
      * TODO Consider using StringTokeniser for this transform.
-     * Gets the cache file for an original URL.
-     * @param url The URL to obtain the cache file for,
-     * @return The File for the provided URL.
+     * Gets the cache file for an original URI.
+     * @param uri The URI to obtain the cache file for,
+     * @return The File for the provided URI.
      */
-    public File getCacheFile(URL url) {
-    	
-/*        
- * Usage of the StringTokeniser
- * String localFile=null;
- * StringTokenizer st=new StringTokenizer(url.getFile(), "/");
- * while (st.hasMoreTokens()) localFile=st.nextToken();
- * fos = new FileOutputStream(localFile);
-*/    	
-    	logger.debug(System.currentTimeMillis() + " Getting the cache file for " + url);
-    	String relativeLocation = getRelativeLocation(url);
-    	logger.debug(System.currentTimeMillis() + " Done getting the cache file " + (new File(cacheRoot,relativeLocation)));
-    	return new File(cacheRoot,relativeLocation);
+    public File getCacheFile(URI uri) {
+
+        
+        /*        
+         * Usage of the StringTokeniser
+         * String localFile=null;
+         * StringTokenizer st=new StringTokenizer(uri.getFile(), "/");
+         * while (st.hasMoreTokens()) localFile=st.nextToken();
+         * fos = new FileOutputStream(localFile);
+        */      
+        
+    	logger.debug("Getting the cache file for " + uri);
+    	String relativeLocation = getRelativeLocation(uri);
+    	File cacheFile = new File(cacheRoot,relativeLocation);
+    	logger.debug("Done getting the cache file " + cacheFile);
+    	return cacheFile;
     }
     
     /**
      * Copy the original resource into the local cache if the resource exists and is
      * able to be copied into the cache and does nothing otherwise.  Thus, caching fails
      * silently.
-     * @param originalURL the URL of the resource to be copied into the cache.
+     * @param originalURI the URI of the resource to be copied into the cache.
      * @param cacheFile The file to be used to store the cache version of the resource.
      */
-    public void copyToCache(URL originalURL, File cacheFile) {
+    public void copyToCache(URI originalURI, File cacheFile) {
     	
-    	logger.info("Attempting to cache: " + originalURL);
+    	logger.debug("Attempting to cache: " + originalURI);
+        logger.debug("Cache file is: " + cacheFile);
     	
     	// If necessary, create the directory to contain the cached resource
 		File parent = cacheFile.getParentFile();
@@ -251,10 +253,18 @@ public class CacheImpl {
 		
 		try {
 
-			// Establish the connection to the original CacheURLImpl data source
-		    URLConnection urlCon =  originalURL.openConnection();
-	        
-		    BufferedInputStream bis = new BufferedInputStream(urlCon.getInputStream());
+			// Establish the connection to the original CacheURIImpl data source
+		    InputStream inputStream = null;
+		    
+		    if (originalURI.getScheme().equals("file")) {
+	            String path = originalURI.getPath();
+                File f = new File(path);
+	            inputStream = new FileInputStream(f);
+		    } else {
+                inputStream =  originalURI.toURL().openConnection().getInputStream();
+		    }
+		    
+		    BufferedInputStream bis = new BufferedInputStream(inputStream);
 		    
 		    // Establish the connection to the destination file
 		    FileOutputStream fos = new FileOutputStream(cacheFile);
@@ -271,27 +281,31 @@ public class CacheImpl {
 		    bos.flush();
 		    bis.close();
 		    bos.close();
-    
+            logger.debug("Done with caching the file.");
+
 		} catch (java.net.NoRouteToHostException e) {
-		    ;
+		    e.printStackTrace();
+		    logger.debug(e.getMessage());
 		} catch (FileNotFoundException e) {
-			 ;
+            e.printStackTrace();
+            logger.debug(e.getMessage());
 		} catch (IOException e) {
-			 ;
+            e.printStackTrace();
+            logger.debug(e.getMessage());
 		}
     }
     
     /**
      * Copy the original resource into the local cache.
-     * @param originalURL the URL of the resource to be copied into the cache.
-     * @param xml The XML to store in the cache at the given URL.
+     * @param originalURI the URI of the resource to be copied into the cache.
+     * @param xml The XML to store in the cache at the given URI.
      * @throws XBRLException if the resource cannot be copied into the local cache.
      */
-    public void copyToCache(URL originalURL, String xml) throws XBRLException {
+    public void copyToCache(URI originalURI, String xml) throws XBRLException {
     	
-    	logger.debug("Attempting to cache a string XML document using : " + originalURL);
+    	logger.debug("Attempting to cache a string XML document using : " + originalURI);
 
-    	File cacheFile = this.getCacheFile(originalURL);
+    	File cacheFile = this.getCacheFile(originalURI);
     	
     	logger.debug("The cache file is : " + cacheFile.toString());
     	
@@ -310,38 +324,40 @@ public class CacheImpl {
     
     /**
      * Get the location of the resource relative to the cache root that
-     * is implied by the supplied URL.
-     * @param url The URL to analyse to determine the implied relative path
+     * is implied by the supplied URI.
+     * @param uri The URI to analyse to determine the implied relative path
      * to the resource in the local cache.
      * @return the path to the locally cached resource that is implied by the
-     * URL.
+     * URI.
      */
-    private String getRelativeLocation(URL url) {
+    private String getRelativeLocation(URI uri) {
     	
-    	logger.debug(System.currentTimeMillis() + " Getting the relative location for " + url);
+    	logger.debug("Getting the relative location for " + uri);
     	
-		String protocol = url.getProtocol();
-		String authority = url.getAuthority();
+		String scheme = uri.getScheme();
+		logger.debug("URI scheme is " + scheme);
+        int port = uri.getPort();
+        logger.debug("port is " + port);
+        String path = uri.getPath().substring(1);
+        logger.debug("Path is " + path);
+		String authority = uri.getAuthority();
 		if (authority != null) {
-	        if (authority.contains(":")) 
-	            authority = authority.substring(0,authority.indexOf(":"));
+	        if (authority.contains(":")) authority = authority.substring(0,authority.indexOf(":"));
 		}
-		int port = url.getPort();
-		String path = url.getPath().substring(1);
+		logger.debug("Authority is " + authority);
 		
 		// Make default ports explicit.
-		if (port == -1) port = url.getDefaultPort();
 		String portValue = (new Integer(port)).toString();
 
 		// Translate slashes into the local file separator 
 		path = path.replace('/',File.separatorChar);
 		
-		String relativeLocation = protocol;
+		String relativeLocation = scheme;
 		relativeLocation = relativeLocation.concat(File.separator+authority);
 		relativeLocation = relativeLocation.concat(File.separator+portValue);
 		relativeLocation = relativeLocation.concat(File.separator+path);
 
-    	logger.debug(System.currentTimeMillis() + " Got relative location " + relativeLocation);
+    	logger.debug("Got relative location " + relativeLocation);
 		
 		return relativeLocation;
     	
@@ -351,11 +367,11 @@ public class CacheImpl {
     
     /**
      * Delete a resource from the cache.
-     * @param url The original or the cache URL.
+     * @param uri The original or the cache URI.
      */
-    public void purge(URL url) {
-    	//URL originalURL = getOriginalURL(url);
-		File file = this.getCacheFile(url);
+    public void purge(URI uri) {
+    	//URI originalURI = getOriginalURI(uri);
+		File file = this.getCacheFile(uri);
 		file.delete();
         logger.info("Purged " + file);
     }

@@ -445,4 +445,26 @@ public class NetworkImpl implements Network {
         return fragments.containsKey(index);
     }
     
+    
+    /**
+     * @see Network#getAllRelationships()
+     */
+    public List<Relationship> getAllRelationships() throws XBRLException {
+        List<Relationship> relationships = new Vector<Relationship>();
+        relationships.addAll(this.relationships.values());
+        return relationships;
+    }
+    
+    /**
+     * @see Network#add(Network)
+     */
+    public void add(Network network) throws XBRLException {
+        if (this == network) return;
+        for (Relationship relationship: network.getAllRelationships()) {
+            if (! this.contains(relationship.getArcIndex())) {
+                this.addRelationship(relationship);
+            }
+        }
+    }
+    
 }

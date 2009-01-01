@@ -152,6 +152,6 @@ public class UnitAspect extends BaseAspect implements Aspect {
         }
         Item item = (Item) fact;
         if (! item.isNumeric()) throw new XBRLException("The fact must be numeric.");
-        return item.getURL() + ((NumericItem) item).getUnitId();
+        return item.getURI() + ((NumericItem) item).getUnitId();
     }
 }

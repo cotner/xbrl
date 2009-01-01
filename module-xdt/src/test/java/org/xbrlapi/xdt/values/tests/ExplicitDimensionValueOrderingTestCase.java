@@ -46,9 +46,9 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
     
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
     
-            String url = this.getURL(STARTING_POINT);
+            String uri = this.getURI(STARTING_POINT);
 
-            loader.discover(url);
+            loader.discover(uri);
             
             FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.getLength());
@@ -88,9 +88,9 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
     
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
     
-            String url = this.getURL(STARTING_POINT);
+            String uri = this.getURI(STARTING_POINT);
 
-            loader.discover(url);
+            loader.discover(uri);
             
             FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.getLength());
@@ -131,9 +131,9 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
     
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
 
-            String url = this.getURL(STARTING_POINT);
+            String uri = this.getURI(STARTING_POINT);
 
-            loader.discover(url);
+            loader.discover(uri);
             
             FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.getLength());

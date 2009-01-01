@@ -124,7 +124,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             this.addIndex("name","value","@name");
             this.addIndex("type","value","@type");
             this.addIndex("id","value","@id");
-            this.addIndex("url","value","@url");
+            this.addIndex("uri","value","@uri");
             this.addIndex("xpointerExpression","value","@expression");
             this.addIndex("parentIndex","value","@parentIndex");
         }   
@@ -294,7 +294,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     @SuppressWarnings(value = "unchecked")
 	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
         
-        query = query + this.getURLFilteringQueryClause();
+        query = query + this.getURIFilteringQueryClause();
         
 		ResourceSet resources = null;
 		try {
@@ -326,7 +326,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     public Map<String,String> queryForIndices(String query) throws XBRLException {
 
         
-        query = query + this.getURLFilteringQueryClause();
+        query = query + this.getURIFilteringQueryClause();
         
         ResourceSet resources = null;
         try {

@@ -1,7 +1,7 @@
 package org.xbrlapi.impl;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Vector;
 
 import org.w3c.dom.Element;
@@ -84,17 +84,20 @@ class XlinkImpl extends FragmentImpl implements Xlink {
 
     
 	/** 
-	 * Get the URL of the document containing the fragment targetted
-	 * by the supplied URL.
-	 * @param url The supplied URL for decomposition.
-	 * @return The URL of the the document containing the fragment targetted
-	 * by the supplied URL.
+	 * Get the URI of the document containing the fragment targetted
+	 * by the supplied URI.
+	 * @param uri The supplied URI for decomposition.
+	 * @return The URI of the the document containing the fragment targetted
+	 * by the supplied URI.
 	 * @throws XBRLException
 	 */
-	protected URL getTargetDocumentURL(URL url) throws XBRLException {
+	protected URI getTargetDocumentURI(URI uri) throws XBRLException {
 		try {
-			return new URL(url.getProtocol(),url.getHost(),url.getPort(),url.getFile());
-		} catch (MalformedURLException e) {
+		    
+		    // TODO !!! Why use this method ever?
+		    
+			return new URI(uri.getScheme(),null,uri.getHost(),uri.getPort(),uri.getPath(),null,null);
+		} catch (URISyntaxException e) {
 			throw new XBRLException("This exception can never be thrown.");
 		}
 	}    
@@ -102,7 +105,7 @@ class XlinkImpl extends FragmentImpl implements Xlink {
 	/**
 	 * Get the value of the XPointer that corresponds to the XPointer information
 	 * stored in the metadata of all fragments.
-	 * @param pointer The String value of the XPointer supplied in the URL.
+	 * @param pointer The String value of the XPointer supplied in the URI.
 	 * @return The value of the XPointer corresponding to the XPointer information
 	 * stored in the metadata of all fragments.  Returns the empty string if the XPointer does
 	 * not specify an element scheme or ID based shorthand pointer value.

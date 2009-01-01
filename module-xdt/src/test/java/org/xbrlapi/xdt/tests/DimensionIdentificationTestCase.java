@@ -29,7 +29,7 @@ public class DimensionIdentificationTestCase extends BaseTestCase {
 	public void testExplicitDimensionIdentification() {
 
 		try {
-	        loader.discover(this.getURL(EXPLICIT_DIMENSION_STARTING_POINT));
+	        loader.discover(this.getURI(EXPLICIT_DIMENSION_STARTING_POINT));
 			FragmentList<ExplicitDimension> fragments = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
 			assertTrue(fragments.getLength() > 0);
 			for (ExplicitDimension fragment: fragments) {
@@ -44,7 +44,7 @@ public class DimensionIdentificationTestCase extends BaseTestCase {
     public void testTypedDimensionIdentification() {
 
         try {
-            loader.discover(this.getURL(TYPED_DIMENSION_STARTING_POINT));
+            loader.discover(this.getURI(TYPED_DIMENSION_STARTING_POINT));
             FragmentList<TypedDimension> fragments = store.<TypedDimension>getFragments("org.xbrlapi.xdt.TypedDimensionImpl");
             assertTrue(fragments.getLength() > 0);
             for (TypedDimension fragment: fragments) {

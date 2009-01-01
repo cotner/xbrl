@@ -24,6 +24,7 @@ import org.xbrlapi.SimpleLink;
 import org.xbrlapi.builder.Builder;
 import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
 import org.xbrlapi.networks.Relationship;
@@ -362,19 +363,19 @@ public class FragmentImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getURL()
+     * @see org.xbrlapi.Fragment#getURI()
      */
-    public String getURL() throws XBRLException {
-        return this.getMetaAttribute("url");
+    public String getURI() throws XBRLException {
+        return this.getMetaAttribute("uri");
     }
     
 
     
     /**
-     * @see org.xbrlapi.Fragment#setURL(String)
+     * @see org.xbrlapi.Fragment#setURI(String)
      */
-    public void setURL(String url) throws XBRLException {
-        this.setMetaAttribute("url",url);
+    public void setURI(String uri) throws XBRLException {
+        this.setMetaAttribute("uri",uri);
     }
     
     
@@ -385,7 +386,7 @@ public class FragmentImpl implements Fragment {
     public FragmentList<Locator> getReferencingLocators() throws XBRLException {
     	
     	// Construct the Query
-    	String predicate = Constants.XBRLAPIPrefix + ":" + "data/link:loc and @targetDocumentURL='"+ getURL() +"' and (";
+    	String predicate = Constants.XBRLAPIPrefix + ":" + "data/link:loc and @targetDocumentURI='"+ getURI() +"' and (";
     	NodeList xptrs = this.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"xptr");
     	for (int i=0; i<xptrs.getLength(); i++) {
     		String value = ((Element) xptrs.item(i)).getAttribute("value").trim();
@@ -401,19 +402,69 @@ public class FragmentImpl implements Fragment {
     }
     
     /**
+     * @see org.xbrlapi.Fragment#getLabels(org.xbrlapi.networks.Networks)
+     */
+    public FragmentList<LabelResource> getLabels(Networks networks) throws XBRLException {
+
+        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
+        for (Network network: networks.getNetworks(Constants.LabelArcRole)) {
+            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+            for (Relationship relationship: relationships) {
+                labels.add((LabelResource) relationship.getTarget());
+            }
+        }
+        for (Network network: networks.getNetworks(Constants.GenericLabelArcRole)) {
+            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+            for (Relationship relationship: relationships) {
+                labels.add((LabelResource) relationship.getTarget());
+            }
+        }
+    	return labels;
+    }
+    
+    /**
      * TODO Add methods to get labels based on language and role.
      * @see org.xbrlapi.Fragment#getLabels()
      */
     public FragmentList<LabelResource> getLabels() throws XBRLException {
 
         Networks labelNetworks = this.getNetworksWithArcrole(Constants.LabelArcRole);
-    	FragmentList<LabelResource> labels = labelNetworks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.LabelArcRole);
+        FragmentList<LabelResource> labels = labelNetworks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.LabelArcRole);
 
-    	Networks genericLabelNetworks = this.getNetworksWithArcrole(Constants.GenericLabelArcRole);
+        Networks genericLabelNetworks = this.getNetworksWithArcrole(Constants.GenericLabelArcRole);
         FragmentList<LabelResource> genericLabels = genericLabelNetworks.<LabelResource>getTargetFragments(this.getFragmentIndex(),Constants.GenericLabelArcRole);
 
         labels.addAll(genericLabels);
-    	return labels;
+        return labels;
+    }    
+    
+    /**
+     * @see org.xbrlapi.Fragment#getLabelsWithRole(Networks, String)
+     */
+    public FragmentList<LabelResource> getLabelsWithRole(Networks networks, String role) throws XBRLException {
+        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
+        for (Network network: networks.getNetworks(Constants.LabelArcRole)) {
+            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+            for (Relationship relationship: relationships) {
+                LabelResource label = (LabelResource) relationship.getTarget();
+                String r = label.getResourceRole();
+                if (r != null) {
+                    if (r.equals(role)) labels.add(label);
+                }
+            }
+        }
+        for (Network network: networks.getNetworks(Constants.GenericLabelArcRole)) {
+            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+            for (Relationship relationship: relationships) {
+                LabelResource label = (LabelResource) relationship.getTarget();
+                String r = label.getResourceRole();
+                if (r != null) {
+                    if (r.equals(role)) labels.add(label);
+                }
+            }
+        }
+        return labels;
+
     }
     
     /**
@@ -443,6 +494,36 @@ public class FragmentImpl implements Fragment {
         }
         
         return result;
+    }    
+    
+    /**
+     * @see org.xbrlapi.Fragment#getLabelsWithLanguage(Networks, String)
+     */
+    public FragmentList<LabelResource> getLabelsWithLanguage(Networks networks, String language) throws XBRLException {
+
+        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
+        for (Network network: networks.getNetworks(Constants.LabelArcRole)) {
+            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+            for (Relationship relationship: relationships) {
+                LabelResource label = (LabelResource) relationship.getTarget();
+                String l = label.getLanguage();
+                if (l != null) {
+                    if (label.getLanguage().equals(language)) labels.add(label);
+                }
+            }
+        }
+        for (Network network: networks.getNetworks(Constants.GenericLabelArcRole)) {
+            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+            for (Relationship relationship: relationships) {
+                LabelResource label = (LabelResource) relationship.getTarget();
+                String l = label.getLanguage();
+                if (l != null) {
+                    if (label.getLanguage().equals(language)) labels.add(label);
+                }
+            }
+        }
+        return labels;
+
     }
     
     /**
@@ -474,6 +555,38 @@ public class FragmentImpl implements Fragment {
         return result;
     }
 
+    /**
+     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndRole(Networks, String, String)
+     */
+    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(Networks networks, String language, String role) throws XBRLException {
+        
+        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
+        for (Network network: networks.getNetworks(Constants.LabelArcRole)) {
+            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+            for (Relationship relationship: relationships) {
+                LabelResource label = (LabelResource) relationship.getTarget();
+                String l = label.getLanguage();
+                String r = label.getResourceRole();
+                if (l != null && r != null) {
+                    if (l.equals(language) && r.equals(role)) labels.add(label);
+                }
+            }
+        }
+        for (Network network: networks.getNetworks(Constants.GenericLabelArcRole)) {
+            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+            for (Relationship relationship: relationships) {
+                LabelResource label = (LabelResource) relationship.getTarget();
+                String l = label.getLanguage();
+                String r = label.getResourceRole();
+                if (l != null && r != null) {
+                    if (l.equals(language) && r.equals(role)) labels.add(label);
+                }
+            }
+        }
+        return labels;
+
+    }
+    
     /**
      * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndRole(String, String)
      */

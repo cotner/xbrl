@@ -18,9 +18,9 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));
-        loader.discover(this.getURL(STARTING_POINT_B));     
-		loader.discover(this.getURL(STARTING_POINT_C));		
+		loader.discover(this.getURI(STARTING_POINT));
+        loader.discover(this.getURI(STARTING_POINT_B));     
+		loader.discover(this.getURI(STARTING_POINT_C));		
 	}
 
 	protected void tearDown() throws Exception {

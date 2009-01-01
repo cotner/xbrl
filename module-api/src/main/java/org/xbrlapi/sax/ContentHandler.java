@@ -1,6 +1,6 @@
 package org.xbrlapi.sax;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
@@ -31,15 +31,15 @@ public interface ContentHandler extends org.xml.sax.ContentHandler {
     public void setLoader(Loader loader) throws XBRLException;
     
     /**
-     * @return the URL of the document being parsed.
+     * @return the URI of the document being parsed.
      */
-    public URL getURL();
+    public URI getURI();
 
     /**
-     * @param url The URL of the document being parsed.
-     * @throws XBRLException if the URL is null.
+     * @param uri The URI of the document being parsed.
+     * @throws XBRLException if the URI is null.
      */
-    public void setURL(URL url) throws XBRLException;
+    public void setURI(URI uri) throws XBRLException;
     
     /**
      * @param state The element state

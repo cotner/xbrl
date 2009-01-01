@@ -15,7 +15,7 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -52,7 +52,7 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
             assertTrue(links.getLength() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {
-                    assertEquals(configuration.getProperty("test.data.baseURL") + "Common/linkbase/RoleE.xsd#newExtendedRoleType",link.getAbsoluteHref().toString());
+                    assertEquals(configuration.getProperty("test.data.baseURI") + "Common/linkbase/RoleE.xsd#newExtendedRoleType",link.getAbsoluteHref().toString());
                 }
             }
         } catch (Exception e) {

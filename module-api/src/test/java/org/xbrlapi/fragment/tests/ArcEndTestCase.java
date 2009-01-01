@@ -6,7 +6,7 @@ package org.xbrlapi.fragment.tests;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-import java.net.URL;
+import java.net.URI;
 import java.util.regex.Pattern;
 
 import org.xbrlapi.DOMLoadingTestCase;
@@ -17,7 +17,7 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 
 	private final String STARTING_POINT = "test.data.multi.concept.schema";
 
-	String url = null;
+	String uri = null;
 	String document = 
 		"<linkbase xmlns=\"http://www.xbrl.org/2003/linkbase\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n" +
 	    "<presentationLink xlink:type=\"extended\" xlink:role=\"http://www.xbrl.org/2003/role/link\">\n" + 
@@ -30,9 +30,9 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		url = getURL(STARTING_POINT);
-		String myURL = Pattern.compile("397-ABC.xsd").matcher(url.toString()).replaceAll("string.xml");
-		loader.discover(new URL(myURL), document);
+		uri = getURI(STARTING_POINT);
+		String myURI = Pattern.compile("397-ABC.xsd").matcher(uri.toString()).replaceAll("string.xml");
+		loader.discover(new URI(myURI), document);
 	}
 
 	protected void tearDown() throws Exception {

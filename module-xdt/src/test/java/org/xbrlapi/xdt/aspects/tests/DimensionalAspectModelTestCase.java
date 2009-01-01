@@ -32,8 +32,8 @@ public class DimensionalAspectModelTestCase extends BaseTestCase {
 	public void testDimensionalAspectModelConstruction() {
 
 		try {
-	        loader.discover(this.getURL(this.EXPLICIT_DIMENSIONS));
-            loader.discover(this.getURL(this.TYPED_DIMENSIONS));
+	        loader.discover(this.getURI(this.EXPLICIT_DIMENSIONS));
+            loader.discover(this.getURI(this.TYPED_DIMENSIONS));
 	        
 	        AspectModel model = new DimensionalAspectModel();
 	        

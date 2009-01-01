@@ -13,7 +13,7 @@ import org.xml.sax.XMLReader;
 */
 public class DTDDeclarationTestCase extends BaseTestCase {
 	
-    private final String url = this.getURL("real.data.schema.with.dtd");
+    private final String uri = this.getURI("real.data.schema.with.dtd");
 
 	private SAXParser saxParser = null;
 	
@@ -54,7 +54,7 @@ public class DTDDeclarationTestCase extends BaseTestCase {
 	
 	public void testHandlingOfDTDEntities() {
 		try {
-			xmlReader.parse(url);
+			xmlReader.parse(uri);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -72,7 +72,7 @@ public class DTDDeclarationTestCase extends BaseTestCase {
 
 	public void testStorageOfDTDs() {
 		try {
-			//xmlReader.parse(url);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

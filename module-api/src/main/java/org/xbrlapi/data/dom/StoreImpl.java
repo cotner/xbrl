@@ -92,7 +92,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 */
 	public void storeFragment(Fragment fragment) throws XBRLException {
 		
-	    logger.debug("Storing " + fragment.getFragmentIndex());
+	    logger.debug("Storing " + fragment.getType() + " " + fragment.getFragmentIndex());
 	    
 		// If the fragment is already stored we are done.
 		if (fragment.getStore() != null) {			
@@ -203,7 +203,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      */
     private XPathResult runQuery(String query) throws XBRLException {
 
-        query = query + this.getURLFilteringQueryClause();
+        query = query + this.getURIFilteringQueryClause();
         
         if (query.charAt(0) == '/')
             query = "/store" + query;

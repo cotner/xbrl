@@ -26,7 +26,7 @@ import org.xml.sax.EntityResolver;
  * relies on the DOM data store implementation.
  * 
  * Specific implementations then just need to provide the 
- * loader with the URLs to discover and then trigger the 
+ * loader with the URIs to discover and then trigger the 
  * discovery process.
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)

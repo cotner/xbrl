@@ -11,7 +11,7 @@ public abstract class LoadPerformanceTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(getURL(STARTING_POINT));		
+		loader.discover(getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -28,8 +28,8 @@ public abstract class LoadPerformanceTestCase extends BaseTestCase {
 	public void testLargerStore() {
 		try {
 
-			List<String> urls = store.getStoredURLs();
-			assertTrue(urls.size() > 22);
+			List<String> uris = store.getStoredURIs();
+			assertTrue(uris.size() > 22);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

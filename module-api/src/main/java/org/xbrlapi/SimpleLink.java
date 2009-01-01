@@ -1,6 +1,6 @@
 package org.xbrlapi;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -12,11 +12,11 @@ public interface SimpleLink extends Link {
 
 	/**
 	 * Set metadata about the target of the simple link.
-	 * This includes, the absolute URL, the target document URL and the XPointer value
+	 * This includes, the absolute URI, the target document URI and the XPointer value
 	 * used to identify part of the target document.
 	 * @throws XBRLException
 	 */
-	public void setTarget(URL url) throws XBRLException;
+	public void setTarget(URI uri) throws XBRLException;
 	
     /**
      * Get the link HREF attribute value, before any resolution.
@@ -45,9 +45,9 @@ public interface SimpleLink extends Link {
 
     /**
      * Get the absolute value of the HREF to the metadata.
-     * @return The absolute URL specified by the locator HREF attribute.
+     * @return The absolute URI specified by the locator HREF attribute.
      * @throws XBRLException.
      */
-    public URL getAbsoluteHref() throws XBRLException;    
+    public URI getAbsoluteHref() throws XBRLException;    
 
 }

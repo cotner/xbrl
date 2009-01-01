@@ -12,7 +12,7 @@ public class DocumentDeletionTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -25,8 +25,8 @@ public class DocumentDeletionTestCase extends BaseTestCase {
 
 	public void testDeleteSingleDocument() {
 		try {
-			store.deleteDocument(this.getURL(STARTING_POINT));
-			assertFalse(store.getStoredURLs().contains(this.getURL(STARTING_POINT)));
+			store.deleteDocument(this.getURI(STARTING_POINT));
+			assertFalse(store.getStoredURIs().contains(this.getURI(STARTING_POINT)));
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -35,10 +35,10 @@ public class DocumentDeletionTestCase extends BaseTestCase {
 
 	public void testDeleteRelatedDocuments() {
 		try {
-			int initialSize = store.getStoredURLs().size();
-			store.deleteRelatedDocuments(this.getURL(STARTING_POINT));
-			assertFalse(store.getStoredURLs().contains(this.getURL(STARTING_POINT)));
-			assertEquals(initialSize-3,store.getStoredURLs().size());
+			int initialSize = store.getStoredURIs().size();
+			store.deleteRelatedDocuments(this.getURI(STARTING_POINT));
+			assertFalse(store.getStoredURIs().contains(this.getURI(STARTING_POINT)));
+			assertEquals(initialSize-3,store.getStoredURIs().size());
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail(e.getMessage());

@@ -1,7 +1,7 @@
 package org.xbrlapi.xdt;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Vector;
 
 import org.xbrlapi.Fragment;
@@ -84,17 +84,17 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     }
     
     /** 
-     * Get the URL of the document containing the fragment targetted
-     * by the supplied URL.
-     * @param url The supplied URL for decomposition.
-     * @return The URL of the the document containing the fragment targetted
-     * by the supplied URL.
+     * Get the URI of the document containing the fragment targetted
+     * by the supplied URI.
+     * @param uri The supplied URI for decomposition.
+     * @return The URI of the the document containing the fragment targetted
+     * by the supplied URI.
      * @throws XBRLException
      */
-    protected URL getTargetDocumentURL(URL url) throws XBRLException {
+    protected URI getTargetDocumentURI(URI uri) throws XBRLException {
         try {
-            return new URL(url.getProtocol(),url.getHost(),url.getPort(),url.getFile());
-        } catch (MalformedURLException e) {
+            return new URI(uri.getScheme(),null,uri.getHost(),uri.getPort(),uri.getPath(),null,null);
+        } catch (URISyntaxException e) {
             throw new XBRLException("This exception can never be thrown.");
         }
     }    
@@ -102,7 +102,7 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     /**
      * Get the value of the XPointer that corresponds to the XPointer information
      * stored in the metadata of all fragments.
-     * @param pointer The String value of the XPointer supplied in the URL.
+     * @param pointer The String value of the XPointer supplied in the URI.
      * @return The value of the XPointer corresponding to the XPointer information
      * stored in the metadata of all fragments.  Returns the empty string if the XPointer does
      * not specify an element scheme or ID based shorthand pointer value.
@@ -143,12 +143,12 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     // ********************************************************************************
     
     /**
-     * @see org.xbrlapi.SimpleLink#setTarget(URL)
+     * @see org.xbrlapi.SimpleLink#setTarget(URI)
      */
-    public void setTarget(URL url) throws XBRLException {
-        setMetaAttribute("absoluteHref",url.toString());
-        setMetaAttribute("targetDocumentURL",this.getTargetDocumentURL(url).toString());
-        setMetaAttribute("targetPointerValue",this.getTargetPointerValue(url.getRef()));
+    public void setTarget(URI uri) throws XBRLException {
+        setMetaAttribute("absoluteHref",uri.toString());
+        setMetaAttribute("targetDocumentURI",this.getTargetDocumentURI(uri).toString());
+        setMetaAttribute("targetPointerValue",this.getTargetPointerValue(uri.getFragment()));
     }
 
     /**
@@ -161,23 +161,23 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     /**
      * @see org.xbrlapi.SimpleLink#getAbsoluteHref()
      */
-    public URL getAbsoluteHref() throws XBRLException {
+    public URI getAbsoluteHref() throws XBRLException {
         try {
-            return new URL(this.getMetadataRootElement().getAttribute("absoluteHref"));
-        } catch (MalformedURLException e) {
-            throw new XBRLException("Absolute URL in the HREF of the locator is malformed.",e);
+            return new URI(this.getMetadataRootElement().getAttribute("absoluteHref"));
+        } catch (URISyntaxException e) {
+            throw new XBRLException("Absolute URI in the HREF of the locator is malformed.",e);
         }
     }        
     
     /**
-     * @return the document URL for the target fragment.
+     * @return the document URI for the target fragment.
      * @throws XBRLException.
      */
-    private URL getTargetDocumentURL() throws XBRLException {
+    private URI getTargetDocumentURI() throws XBRLException {
         try {
-            return new URL(this.getMetadataRootElement().getAttribute("targetDocumentURL"));
-        } catch (MalformedURLException e) {
-            throw new XBRLException("Absolute URL in the HREF of the locator is malformed.",e);
+            return new URI(this.getMetadataRootElement().getAttribute("targetDocumentURI"));
+        } catch (URISyntaxException e) {
+            throw new XBRLException("Absolute URI in the HREF of the locator is malformed.",e);
         }
     }
     
@@ -208,7 +208,7 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
             pointerCondition = " and "+ Constants.XBRLAPIPrefix+ ":" + "xptr/@value='" + pointerValue + "'";
         }
         
-        String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + getTargetDocumentURL() + "'" + pointerCondition + "]";
+        String query = "/*[@uri='" + getTargetDocumentURI() + "'" + pointerCondition + "]";
         FragmentList<Fragment> fragments = getStore().query(query);
         if (fragments.getLength() == 0) return null;
         if (fragments.getLength() > 1) throw new XBRLException("The simple link references more than one fragment.");

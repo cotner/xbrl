@@ -16,7 +16,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -28,22 +28,22 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	}
 	
 	/**
-	 * Test the retrieval of a list of URLs
+	 * Test the retrieval of a list of URIs
 	 */
-	public void testGettingURLList() {
+	public void testGettingURIList() {
 		try {
-			List<String> urls = store.getStoredURLs();
-			assertTrue(urls.size() > 0);
+			List<String> uris = store.getStoredURIs();
+			assertTrue(uris.size() > 0);
 			
 			boolean foundStartingPoint = false;
-			for (String url: urls) {
-			    if (url.equals(getURL(this.STARTING_POINT))) {
+			for (String uri: uris) {
+			    if (uri.equals(getURI(this.STARTING_POINT))) {
 			        foundStartingPoint = true;
 			    }
 			}
 			assertTrue(foundStartingPoint);
 			
-			Element e = store.getDocumentAsDOM(urls.get(0));
+			Element e = store.getDocumentAsDOM(uris.get(0));
 			assertNotNull(e);
 			
 		} catch (XBRLException e) {
@@ -68,7 +68,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	 */
 	public void testGetDocument() {
 		try {
-			Element root = store.getDocumentAsDOM(this.getURL(STARTING_POINT));
+			Element root = store.getDocumentAsDOM(this.getURI(STARTING_POINT));
 			assertNotNull(root);
 			assertEquals(root.getLocalName(),"schema");
 		} catch (XBRLException e) {

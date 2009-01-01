@@ -144,6 +144,13 @@ public interface Network {
 	 * @throws XBRLException
 	 */
 	public List<Relationship> getActiveRelationshipsTo(String index) throws XBRLException;
+	
+    /**
+     * @return the list of all relationships in the network.
+     * @throws XBRLException
+     */
+    public List<Relationship> getAllRelationships() throws XBRLException;
+	
 
 	/**
 	 * @param <F> The type of org.xbrlapi.Fragment
@@ -191,4 +198,13 @@ public interface Network {
      */
     public boolean contains(String index);
 
+    /**
+     * Adds relationships from the supplied network
+     * to this network where they are not already included.
+     * @param network The network to be merged into this
+     * network.
+     * @throws XBRLException
+     */
+    public void add(Network network) throws XBRLException;
+    
 }

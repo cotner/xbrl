@@ -32,14 +32,17 @@ public class DatabaseDeletionTestCase extends BaseTestCase {
 		super.setUp();
 		
 		try {
-		    environmentConfiguration = new EnvironmentConfig();
-		    environmentConfiguration.setAllowCreate(true);         // If the environment does not exist, create it.
-		    environmentConfiguration.setInitializeCache(true);     // Turn on the shared memory region.
-		    environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
-		    environmentConfiguration.setInitializeLogging(true);   // Turn on the logging subsystem.
-		    environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
-		    environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
-		    environment = new Environment(environmentHome, environmentConfiguration);
+            EnvironmentConfig environmentConfiguration = new EnvironmentConfig();
+            environmentConfiguration.setThreaded(true);
+            environmentConfiguration.setAllowCreate(true);         // If the environment does not exist, create it.
+            environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
+            environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
+            environmentConfiguration.setInitializeCache(true);
+            environmentConfiguration.setCacheSize(1024 * 1024 * 500);
+            environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
+            environmentConfiguration.setTransactional(false);       // Turn on the transactional subsystem.
+            environment = new Environment(environmentHome, environmentConfiguration);
+            environment.trickleCacheWrite(20);
 
 		    managerConfiguration = new XmlManagerConfig();
 		    managerConfiguration.setAdoptEnvironment(true);
@@ -50,7 +53,7 @@ public class DatabaseDeletionTestCase extends BaseTestCase {
 			    myManager.removeContainer(containerName);
 		    }
 			xmlContainer = myManager.createContainer(containerName);
-		    
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("The BDB XML manager setup failed.");
@@ -139,7 +142,6 @@ public class DatabaseDeletionTestCase extends BaseTestCase {
         try {
             
             for (int i=0; i<10; i++) {
-                logger.info(i);
                 this.closeUp();
                 this.setUp();
                 this.insertData((new Integer(i)).toString());

@@ -1,6 +1,6 @@
 package org.xbrlapi.data.resource.tests;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.data.resource.InMemoryMatcherImpl;
 
@@ -25,9 +25,8 @@ public class InMemoryMatcherTestCase extends BaseTestCase {
 
     public void testGetSignatureFromSmallFile() {
         try {
-            String URL = "test.data.small.schema";
-            URL url = new URL(this.getURL(URL));
-            logger.info(matcher.getSignature(url));
+            URI uri = new URI(this.getURI("test.data.small.schema"));
+            logger.info(matcher.getSignature(uri));
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception thrown.");
@@ -36,9 +35,8 @@ public class InMemoryMatcherTestCase extends BaseTestCase {
     
     public void testGetSignatureFromLargeFile() {
         try {
-            String URL = "real.data.sec";
-            URL url = new URL(this.getURL(URL));
-            logger.info(matcher.getSignature(url));
+            URI uri = new URI(this.getURI("real.data.sec"));
+            logger.info(matcher.getSignature(uri));
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception thrown.");
@@ -47,10 +45,10 @@ public class InMemoryMatcherTestCase extends BaseTestCase {
 
     public void testRepeatedGetMatchFromLargeFile() {
         try {
-            String URL = "real.data.sec";
-            URL url = new URL(this.getURL(URL));
-            assertEquals(url,matcher.getMatch(url));
-            assertEquals(url,matcher.getMatch(url));
+            String URI = "real.data.sec";
+            URI uri = new URI(this.getURI(URI));
+            assertEquals(uri,matcher.getMatch(uri));
+            assertEquals(uri,matcher.getMatch(uri));
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception thrown.");

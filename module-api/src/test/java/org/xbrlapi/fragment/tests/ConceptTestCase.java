@@ -41,7 +41,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 	public void testGetPeriodType() {	
 
         try {
-            loader.discover(this.getURL(FOOTNOTELINKS));        
+            loader.discover(this.getURI(FOOTNOTELINKS));        
             FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
             assertTrue(concepts.getLength() > 0);
             for (Concept concept: concepts) {
@@ -57,7 +57,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 
         boolean testDone = false;
         try {
-            loader.discover(this.getURL(FOOTNOTELINKS));        
+            loader.discover(this.getURI(FOOTNOTELINKS));        
             FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
             assertTrue(concepts.getLength() > 0);
             for (Concept concept: concepts) {
@@ -76,7 +76,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 	public void testGetBalance() {	
 
 		try {
-	        loader.discover(this.getURL(FOOTNOTELINKS));        
+	        loader.discover(this.getURI(FOOTNOTELINKS));        
             FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
             assertTrue(concepts.getLength() > 0);
             for (Concept concept: concepts) {
@@ -91,7 +91,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 	public void testGetLocators() {	
 
         try {
-            loader.discover(this.getURL(FOOTNOTELINKS));        
+            loader.discover(this.getURI(FOOTNOTELINKS));        
             FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
             assertTrue(concepts.getLength() > 0);
             for (Concept concept: concepts) {
@@ -105,7 +105,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 	
 	public void testGetLabels() {
 		try {
-	        loader.discover(this.getURL(LABELLINKS));       
+	        loader.discover(this.getURI(LABELLINKS));       
 
 			FragmentList<Concept> concepts = store.getFragments("Concept");
 			for (Concept concept: concepts) {
@@ -120,7 +120,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 	
     public void testGetPresentationNetworks() {
         try {
-            loader.discover(this.getURL(this.PRESENTATIONLINKS));       
+            loader.discover(this.getURI(this.PRESENTATIONLINKS));       
 
             Networks networks = new NetworksImpl(store);
             store.setStoredNetworks(networks);

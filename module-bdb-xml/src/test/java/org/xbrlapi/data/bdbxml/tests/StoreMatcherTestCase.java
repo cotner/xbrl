@@ -1,6 +1,6 @@
 package org.xbrlapi.data.bdbxml.tests;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.data.resource.InStoreMatcherImpl;
 import org.xbrlapi.data.resource.Matcher;
@@ -28,15 +28,15 @@ public class StoreMatcherTestCase extends BaseTestCase {
 		super(arg0);
 	}
 	
-	public void testURLStashingWithMatcher() {
+	public void testURIStashingWithMatcher() {
 		try {
-	        loader.discover(this.getURL(ORIGINAL));
-	        loader.discover(this.getURL(DUPLICATE));       
+	        loader.discover(this.getURI(ORIGINAL));
+	        loader.discover(this.getURI(DUPLICATE));       
 		    
-            URL url1 = new URL(this.getURL(ORIGINAL));
-	        URL url2 = new URL(this.getURL(DUPLICATE));
+            URI uri1 = new URI(this.getURI(ORIGINAL));
+	        URI uri2 = new URI(this.getURI(DUPLICATE));
 	        
-	        assertEquals(url1,store.getMatcher().getMatch(url2));
+	        assertEquals(uri1,store.getMatcher().getMatch(uri2));
 	        
 		} catch (Exception e) {
 			fail(e.getMessage());

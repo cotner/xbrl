@@ -29,6 +29,6 @@ public abstract class ContextAspect extends BaseAspect implements Aspect {
             throw new XBRLException("The fact must not be a tuple.");
         }
         Item item = (Item) fact;
-        return item.getURL() + item.getContextId();
+        return item.getURI() + item.getContextId();
     }    
 }

@@ -1,7 +1,8 @@
 package org.xbrlapi.grabber;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
+
 
 /**
  * Defines an XBRL grabber
@@ -10,8 +11,8 @@ import java.util.List;
 public interface Grabber {
 	
 	/**
-	 * @return a list of URLs of XBRL resources provided
+	 * @return a list of URIs of XBRL resources provided
 	 * by the source.
 	 */
-	public List<URL> getResources();
+	public List<URI> getResources();
 }

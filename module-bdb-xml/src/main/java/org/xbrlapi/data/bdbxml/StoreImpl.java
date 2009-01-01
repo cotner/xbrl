@@ -207,9 +207,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             xmlIndexSpecification.addIndex("","name","node-attribute-substring-string");
             
             xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
-            xmlIndexSpecification.addIndex("","url", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","uri", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","type", "node-attribute-equality-string");
-            xmlIndexSpecification.addIndex("","targetDocumentURL", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","targetDocumentURI", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","targetPointerValue", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","absoluteHref", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","id","node-attribute-equality-string");
@@ -368,10 +368,10 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * various fragment objects.
      * @see org.xbrlapi.data.Store#hasDocument(String)
      */
-	synchronized public boolean hasDocument(String url) throws XBRLException {
+	synchronized public boolean hasDocument(String uri) throws XBRLException {
         XmlResults results = null;
         try {
-            results = performQuery("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@url='" + url + "' and @parentIndex='none']");
+            results = performQuery("/*[@uri='" + uri + "' and @parentIndex='none']");
             return (results.size() == 1); 
         } catch (XmlException e) {
             throw new XBRLException("The size of the result set for the query could not be determined.", e);
@@ -439,7 +439,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     @SuppressWarnings(value = "unchecked")
 	synchronized public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
 
-        query = query + this.getURLFilteringQueryClause();
+        query = query + this.getURIFilteringQueryClause();
         
         this.incrementCallCount();
         
@@ -476,7 +476,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      */
     public Map<String,String> queryForIndices(String query) throws XBRLException {
 
-        query = query + this.getURLFilteringQueryClause();
+        query = query + this.getURIFilteringQueryClause();
         
         this.incrementCallCount();
         

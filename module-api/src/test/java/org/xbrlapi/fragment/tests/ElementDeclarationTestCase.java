@@ -6,7 +6,7 @@ package org.xbrlapi.fragment.tests;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-import java.net.URL;
+import java.net.URI;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
@@ -21,7 +21,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	private String documentStart = 
@@ -57,9 +57,9 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	public void testGetNillable() {		
 		try {
 			String xml = documentStart + documentEnd;
-			URL url = new URL("http://www.xbrlapi.org/default.xsd");
+			URI uri = new URI("http://www.xbrlapi.org/default.xsd");
 			
-			loader.discover(url,xml);
+			loader.discover(uri,xml);
 		
 			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element/@nillable='true']");
 			for (int i=0; i< fragments.getLength(); i++) {
@@ -111,8 +111,8 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 				documentStart +
 				" default=\"12.4\" " + 
 				documentEnd;
-			URL url = new URL("http://www.xbrlapi.org/default.xsd");
-			loader.discover(url,xml);
+			URI uri = new URI("http://www.xbrlapi.org/default.xsd");
+			loader.discover(uri,xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -164,10 +164,10 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 				documentStart +
 				" fixed=\"12.4\" " + 
 				documentEnd;
-			URL url = new URL("http://www.xbrlapi.org/default.xsd");
-			loader.discover(url,xml);
+			URI uri = new URI("http://www.xbrlapi.org/default.xsd");
+			loader.discover(uri,xml);
 
-			String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/*/@fixed='12.4']";
+			String query = "/*[" + Constants.XBRLAPIPrefix + ":" + "data/*/@fixed='12.4']";
 			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>query(query);
 			ElementDeclaration fragment = fragments.getFragment(0);
 			store.serialize(fragment.getMetadataRootElement());

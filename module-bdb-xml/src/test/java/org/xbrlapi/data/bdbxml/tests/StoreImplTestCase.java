@@ -18,7 +18,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -100,10 +100,10 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testHasDocument() {
 		try {
-		    List<String> urls = store.getStoredURLs();
-		    assertTrue(urls.size() > 0);
-		    for (String url: urls) {
-	            assertTrue(store.hasDocument(url));
+		    List<String> uris = store.getStoredURIs();
+		    assertTrue(uris.size() > 0);
+		    for (String uri: uris) {
+	            assertTrue(store.hasDocument(uri));
 		    }
 			assertFalse(store.hasDocument("http://www.rubbish.gcs/crazy.xyz"));
 		} catch (XBRLException e) {
