@@ -284,13 +284,10 @@ public class CacheImpl {
             logger.debug("Done with caching the file.");
 
 		} catch (java.net.NoRouteToHostException e) {
-		    e.printStackTrace();
 		    logger.debug(e.getMessage());
 		} catch (FileNotFoundException e) {
-            e.printStackTrace();
             logger.debug(e.getMessage());
 		} catch (IOException e) {
-            e.printStackTrace();
             logger.debug(e.getMessage());
 		}
     }

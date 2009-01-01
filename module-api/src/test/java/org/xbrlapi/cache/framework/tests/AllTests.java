@@ -8,7 +8,7 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.xbrlapi.cache.tests");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(FileSchemeURLTestCase.class);
+		suite.addTestSuite(FileSchemeURITestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

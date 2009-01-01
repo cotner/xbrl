@@ -35,7 +35,7 @@ public class CacheImplTestCase extends BaseTestCase {
 	/**
 	 * Test operations on a simple URI
 	 */
-	public final void testSimpleURI() {
+	public final void testHTTP_URI() {
 		try {
 			this.examineURI(new URI("http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"));
 		} catch (Exception e) {
@@ -64,6 +64,17 @@ public class CacheImplTestCase extends BaseTestCase {
 		    e.printStackTrace();
 			fail("Unexpected exception was thrown. " + e.getMessage());
 		}
-	}	
+	}
+
+    /**
+     * Test operations on a simple URI
+     */
+    public final void testFile_URI() {
+    	try {
+    		this.examineURI(new URI("file:///home/geoff/document.xml"));
+    	} catch (Exception e) {
+    		fail("Unexpected exception. " + e.getMessage());
+    	}
+    }	
 	
 }

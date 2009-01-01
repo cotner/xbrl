@@ -111,9 +111,10 @@ abstract public class BaseTestCase extends TestCase {
 		}
 		
 		if (property.startsWith("test.data.local.")) {
-            File file = new File(configuration.getProperty(property));
+            File root = new File(configuration.getProperty("local.test.data.root"));
+            File file = new File(root,configuration.getProperty(property));
             URI uri = file.toURI();
-            logger.debug("URI is " + uri);
+            logger.info("URI is " + uri);
             return uri.toString();
 		}
 		

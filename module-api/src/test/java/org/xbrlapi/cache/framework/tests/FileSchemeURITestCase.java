@@ -11,7 +11,7 @@ import java.net.URL;
 import org.xbrlapi.utilities.BaseTestCase;
 
 
-public class FileSchemeURLTestCase extends BaseTestCase {
+public class FileSchemeURITestCase extends BaseTestCase {
 
 	private String cacheRoot;
 	
@@ -24,7 +24,7 @@ public class FileSchemeURLTestCase extends BaseTestCase {
 		super.tearDown();
 	}
 
-	public FileSchemeURLTestCase(String arg0) {
+	public FileSchemeURITestCase(String arg0) {
 		super(arg0);
 	}
 
@@ -65,13 +65,6 @@ public class FileSchemeURLTestCase extends BaseTestCase {
             assertEquals("file",uri.getScheme());
             assertNull(uri.getAuthority());
             assertEquals("/home/geoff/rr-instance.xml",uri.getPath());
-            assertEquals(-1,uri.getPort());
-
-            URL url = new URL(urlString);
-            logger.info(url);
-            assertEquals("file",url.getProtocol());
-            assertEquals("",url.getAuthority());
-            assertEquals("/home/geoff/rr-instance.xml",url.getPath());
             assertEquals(-1,uri.getPort());
             
         } catch (Exception e) {
