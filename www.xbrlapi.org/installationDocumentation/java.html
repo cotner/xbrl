@@ -21,8 +21,10 @@ Configuring the Java environment.
 
 <h2>Obtain Java</h2>
 
-<p>XBRLAPI is implemented in Java and requires a Java 1.5 (or
-higher) runtime engine to execute. If you intend to use a data store
+<p>XBRLAPI is implemented in Java and requires a Java 1.6 (or
+higher) runtime engine to execute (the API actually probably runs OK with Java 1.5 but
+it is now tested with Java 1.6 following problems with the File class in Sun's
+implementation of Java 1.5). If you intend to use a data store
 that is run from within a Java servlet container such as Tomcat or
 Jetty, you must install a full Java SDK rather than just a Java runtime
 engine. XBRLAPI is being developed and tested using the Linux version of

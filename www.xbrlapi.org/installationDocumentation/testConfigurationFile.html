@@ -25,6 +25,19 @@
 <p>The test configuration file sets a large number of configuration
 properties. These are explained below.</p>
 
+<p>The most current version of the configuration file is available from
+<a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/trunk/test.configuration.properties">the SVN repository</a>.</p>
+
+<h2>Local test data configuration</h2>
+
+<h3>local.test.data.root</h3>
+<p><code>local.test.data.root = /local/test/data/path</code></p>
+<p>Specify the path to the root directory for the 
+local test data.  This is the test data that is maintained as
+part of the XBRLAPI project and that is released as a ZIP archive
+in its own package as one of the file releases maintained by the
+XBRLAPI project.</p>
+
 <h2>Caching configuration</h2>
 
 <h3>local.cache</h3>
@@ -39,8 +52,6 @@ local document cache.  This will be used when running all tests.</p>
 <h3>nonexistent.url</h3>
 <p><code>nonexistent.url = http://some.rubbish.org/nonexistent.xml</code></p>
 <p>Specify a valid URL but one that does not resolve.</p>
-
-
 
 <h2>Xindice data store configuration</h2>
 
@@ -83,8 +94,6 @@ collection that actually holds XBRLAPI data. A value of <code>/</code> specifies
 that the data store is in a collection that is a child of the database root.  If 
 some other value is used you will also need to ensure that the specified parent 
 collection actually exists.</p>
-
-
 
 <h2>Exist data store configuration</h2>
 
@@ -140,7 +149,6 @@ that actually holds XBRLAPI data. A value of <code>/</code> specifies that the d
 store is in a collection that is a child of the database root.  If some other value is used
 you will also need to ensure that the specified parent collection actually exists.</p>
 
-
 <h2>Oracle Berkeley Database XML data store configuration</h2>
 
 <p>These configuration properties are only required if you are unit testing 
@@ -154,8 +162,6 @@ the Oracle Berkeley Database XML data store implementation.</p>
 <p><code>bdbxml.container.name = xbrlapiContainer</code></p>
 <p>The container name needs to be a valid file name for the
 file system that you are using.</p>
-
-
 
 <h2>XBRL 2.1 conformance suite configuration</h2>
 
@@ -171,7 +177,6 @@ involves replacing the <code>://</code>,
 even if that is not explicit in the URL.  If you are using a <code>file</code> scheme URL then the port value is 
 <code>null</code>.</p>
 
-
 <h2>Conformance suite test data configuration</h2>
 
 <p>These properties all have names that are prefixed with <code>test.data</code>.</p>
@@ -180,6 +185,13 @@ even if that is not explicit in the URL.  If you are using a <code>file</code> s
 the conformance suite. These paths are resolved relative to the base URL
 of the conformance suite.  They should not be changed.</p>
 
+<h2>Local data set test configuration</h2>
+
+<p>These properties all have names that are prefixed with <code>test.data.local</code>.</p>
+
+<p>The values of these properties are all paths that are relative to the
+path specified by the <code>local.test.data.root</code> property. They should
+not need to be modified.</p>
 
 <h2>real data set test configuration</h2>
 

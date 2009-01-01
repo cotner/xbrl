@@ -13,7 +13,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURL(STARTING_POINT));		
+		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -25,12 +25,12 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	}
 	
 	/**
-	 * Test the retrieval of a list of URLs
+	 * Test the retrieval of a list of URIs
 	 * and test getting a document back as a DOM object.
 	 */
-	public void testGettingURLList() {
+	public void testGettingURIList() {
 		try {
-			List urls = store.getStoredURLs();
+			List urls = store.getStoredURIs();
 			assertEquals(6,urls.size());
 			
 			Element e = store.getDocumentAsDOM((String) urls.get(0));
@@ -58,7 +58,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	 */
 	public void testGetDocument() {
 		try {
-			Element root = store.getDocumentAsDOM(this.getURL(STARTING_POINT));
+			Element root = store.getDocumentAsDOM(this.getURI(STARTING_POINT));
 			assertNotNull(root);
 			assertEquals(root.getLocalName(),"schema");
 		} catch (XBRLException e) {
