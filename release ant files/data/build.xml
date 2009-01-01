@@ -1,0 +1,25 @@
+<project name="xlinkapi" default="data" basedir=".">
+	<description>
+  	Build the XBRLAPI local test data file release
+  </description>
+
+	<property name="root" location="../.."/>
+	<property name="data" location="${root}/data"/>
+  <property name="dist" location="${root}/dist"/>
+
+  <path id="classpath">
+    <fileset id="libFiles" dir="../../java/lib">
+      <include name="**/**/*.jar"/>
+     </fileset>
+  </path>	
+	
+	<target name="data" description="generate the data zip" >
+		<tstamp/>
+		<zip destfile="${dist}/xbrlapi-data-${DSTAMP}.zip">
+			<fileset dir="${data}" includes="**/*.*" />
+		</zip>
+	</target>
+
+</project>
+
+
