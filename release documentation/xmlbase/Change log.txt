@@ -1,3 +1,11 @@
+31. Dec. 2008
+Replaced usage of URLs with URIs throughout the API.  This was done
+to get better uniformity of handling of URLs and to take advantage of
+the better handling of different schemes in the java.net.URI interface compared to 
+the java.net.URL interface. This change does cause significant backward compatibility
+issues.  However, it is expected to resolve the ongoing problems that have
+been encountered when working with file-scheme URLs.
+
 September 14, 2006
 No changes required in the previous 12 months.
 Software promoted to 1.1 to reflect its production
