@@ -40,18 +40,20 @@ public class CacheImpl {
      * The map of local URIs to use in place of
      * original URIs.  The original URI points to the 
      * local URI in the map that is used.
-     * TODO Implement the cache map as an object that can be chosen via dependency injection.
      */
     private Map<String,String> uriMap = null;      
 
     /**
      * Constructs a URI translator for usage with a local cache location.
-     * @param cacheRoot
-     * @throws XBRLException if the cacheRoot is null or does not exist.
+     * @param cacheRoot The root directory for the cache.
+     * @throws XBRLException if the cacheRoot is null or does not exist or cannot be
+     * written to or read from.
      */
 	public CacheImpl(File cacheRoot) throws XBRLException {
 		if (cacheRoot == null) throw new XBRLException("The cache root is null.");
 		if (! cacheRoot.exists()) throw new XBRLException("The cache " + cacheRoot + " does not exist.");
+		if (! cacheRoot.canWrite()) throw new XBRLException("The cache " + cacheRoot + " cannot be written to.");
+        if (! cacheRoot.canRead()) throw new XBRLException("The cache " + cacheRoot + " cannot be read.");
 		this.cacheRoot = cacheRoot;
 	}
     
