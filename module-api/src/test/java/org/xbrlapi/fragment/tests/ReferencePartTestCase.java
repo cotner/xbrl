@@ -38,7 +38,7 @@ public class ReferencePartTestCase extends DOMLoadingTestCase {
 			assertTrue(parts.getLength() > 0);
 			
 			ReferencePart part = parts.getFragment(0);
-			assertEquals("New Fixed Assets", part.getValue());
+			assertEquals("Fixed Assets", part.getValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
