@@ -20,6 +20,7 @@ import org.xbrlapi.Item;
 import org.xbrlapi.Locator;
 import org.xbrlapi.Resource;
 import org.xbrlapi.RoleType;
+import org.xbrlapi.SchemaDeclaration;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.networks.Network;
@@ -248,13 +249,15 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
      */
     public Concept getConcept(String namespace, String name) throws XBRLException {
     	
-    	// TODO Make sure that non-concept element declarations are handled.
-    	
-    	FragmentList<Concept> concepts = this.<Concept>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment/"+ Constants.XBRLAPIPrefix+ ":" + "data/xsd:element[@name='" + name + "']");
+    	FragmentList<SchemaDeclaration> candidates = this.<SchemaDeclaration>query("/*[*/xsd:element[@name='" + name + "']]");
     	FragmentList<Concept> matches = new FragmentListImpl<Concept>();
-    	for (Concept concept: concepts) {
-    		if (concept.getTargetNamespaceURI().equals(namespace)) {
-    			matches.addFragment(concept);
+    	for (SchemaDeclaration candidate: candidates) {
+    		if (candidate.getTargetNamespaceURI().equals(namespace)) {
+    		    try {
+                    matches.addFragment((Concept) candidate);
+    		    } catch (Exception e) {
+    		        ;// Casting to a concept failed so it is not a concept.
+    		    }
     		}
     	}
     	
