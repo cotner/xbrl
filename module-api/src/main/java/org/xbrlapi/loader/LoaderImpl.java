@@ -551,7 +551,7 @@ public class LoaderImpl implements Loader {
                         (System.currentTimeMillis() - startTime)
                                 / (fragmentId - startIndex))).toString();
                 if (time.length() > 4) time = time.substring(0, 4);
-                logger.info("Average time taken per fragment = " + time + " milliseconds");
+                logger.debug("Average time taken per fragment = " + time + " milliseconds");
                 logger.info(this.fragmentId + " fragments in " + uri);
             } else {
                 logger.info(uri + " is already in the data store.");
