@@ -5,7 +5,7 @@ import java.util.List;
  * Tests of performance with larger data sets.
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
  */
-public class DTDDeclarationHandlerTestCase extends BaseTestCase {
+public abstract class DTDDeclarationHandlerTestCase extends BaseTestCase {
 	private final String STARTING_POINT = "real.data.schema.with.dtd";
 	
 	protected void setUp() throws Exception {
