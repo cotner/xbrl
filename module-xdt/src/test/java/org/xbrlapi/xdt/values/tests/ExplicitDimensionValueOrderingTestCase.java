@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt.values.tests;
 
+import java.util.List;
 import java.util.TreeSet;
 
 import org.xbrlapi.Concept;
@@ -134,6 +135,13 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             String uri = this.getURI(STARTING_POINT);
 
             loader.discover(uri);
+
+            List<String> uris = store.getStoredURIs();
+            for (String myURI: uris) logger.info(myURI);
+
+            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
+            for (Concept c: concepts) store.serialize(c.getDataRootElement());
+            
             
             FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.getLength());
@@ -144,7 +152,7 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             assertEquals(1,networks.getSize());
             Network network = networks.getNetwork(XDTConstants.domainMemberArcrole,Constants.StandardLinkRole);
             assertNotNull(network);
-            Concept root = ((XBRLStore) store).getConcept("http://xbrlapi.org/test/","dom1");
+            Concept root = ((XBRLStore) store).getConcept("http://xbrlapi.org/test/xdt/001","dom1");
 
             TreeSet <DimensionValue> values = new TreeSet<DimensionValue>(new ExplicitDimensionValueTreeComparator(network, root));
 
