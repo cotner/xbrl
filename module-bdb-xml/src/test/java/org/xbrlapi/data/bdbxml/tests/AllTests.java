@@ -6,8 +6,7 @@ import junit.framework.TestSuite;
 public class AllTests {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite(
-				"Test for org.xbrlapi.data.bdbxml.tests");
+		TestSuite suite = new TestSuite("Test for org.xbrlapi.data.bdbxml.tests");
 		//$JUnit-BEGIN$
         suite.addTestSuite(AddToExistingStoreTestCase.class);
 		suite.addTestSuite(DocumentRecoveryFromStoreTestCase.class);
