@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.utilities.XBRLException;
@@ -37,6 +38,7 @@ public class CacheImpl {
     private File cacheRoot;
     
     /**
+     * TODO !!! Make the caching uriMap a map from URI to URI rather than string to string.
      * The map of local URIs to use in place of
      * original URIs.  The original URI points to the 
      * local URI in the map that is used.
@@ -120,41 +122,37 @@ public class CacheImpl {
     public URI getCacheURI(URI uri) throws XBRLException {
 
     	logger.debug("About to get the cache URI for " + uri);
+	
+    	// First determine the original URI
+    	URI originalURI = uri;
+    	if (isCacheURI(uri)) {
+    		originalURI = getOriginalURI(uri);
+		} else {
+			if (uriMap != null) {
+	        	if (uriMap.containsKey(uri.toString())) {
+	                try {
+                        originalURI = new URI(uriMap.get(uri.toString()));
+	                } catch (URISyntaxException e) {
+	                    throw new XBRLException(uri + " is a malformed URI.", e);
+	                }
+	        	}
+			}
+		}
     	
-        try {
-        	// First determine the original URI
-        	URI originalURI = uri;
-        	if (isCacheURI(uri)) {
-        		originalURI = getOriginalURI(uri);
-    		} else {
-    			if (uriMap != null) {
-    	        	if (uriMap.containsKey(uri.toString())) {
-	        	        originalURI = new URI(uriMap.get(uri.toString()));
-    	        	}
-    			}
-    		}
-        	
-        	// Second determine the cache file from the original URI
-        	// so that the caching status can be checked.
+    	// Second determine the cache file from the original URI
+    	// so that we can try to cache it if that is necessary.
+    	try {
         	File cacheFile = getCacheFile(originalURI);
-        	logger.debug("The cache file is " + cacheFile);
     		if (! cacheFile.exists()) {
     			copyToCache(originalURI,cacheFile);
     		}
-    
-    		logger.debug("Got the cache URI " + cacheFile.toURI());
-    
-    		if (! cacheFile.exists()) {
-    			logger.info(originalURI + " could not be cached.");
-    			return originalURI;
-    		}
-			return cacheFile.toURI();
-        } catch (URISyntaxException e) {
-            throw new XBRLException(uri + " is a malformed URI.", e);
-        }
+            return cacheFile.toURI();
+    	} catch (XBRLException e) {
+            logger.debug(e.getMessage());
+            return originalURI;
+    	}
+        
     }
-    
-
     
     /**
      * @param uri The URI to be translated into an original URI (if necessary).
@@ -172,39 +170,42 @@ public class CacheImpl {
     		return uri;
     	}
 
-		String path = uri.getPath();
+		String data = uri.getPath();
 		
 		try {
-		    path = (new File(path)).getCanonicalPath();
+		    data = (new File(data)).getCanonicalPath();
 		} catch (IOException e) {
 		    throw new XBRLException("Canonical path could not be obtained from the URI.",e);
 		}
 
 		// Eliminate the cacheRoot part of the path
 		try {
-			path = path.replace(cacheRoot.getCanonicalPath().toString().substring(1),"").substring(1);
+			data = data.replace(cacheRoot.getCanonicalPath().toString().substring(1),"").substring(2);
 		} catch (IOException e) {
 			throw new XBRLException("The original URI could not be determined for " + uri);
 		}
-
-        // Translate file separator into slashes 
-        path = path.replace(File.separatorChar,'/');
 		
-        path = path.substring(1);
-        
-		// Retrieve the protocol
-		String[] components = path.split("/");
-		String protocol = components[0];
-		String authority = components[1];
-		if (authority.equals("null")) authority = null;
-		int port = new Integer(components[2]).intValue();
-		path = "";
-		for (int i=3; i<components.length; i++) {
-			path = path + "/" + components[i];
-		}
+		String[] parts = data.split(File.separator);
+		
+        String scheme = parts[0];
+        if (scheme.equals("null")) scheme = null;
+        String user = parts[1];
+        if (user.equals("null")) user = null;
+        String host = parts[2];
+        if (host.equals("null")) host = null;
+        int port = new Integer(parts[3]).intValue();
+        String query = parts[4];
+        if (query.equals("null")) query = null;
+        String fragment = parts[5];
+        if (fragment.equals("null")) fragment = null;
+
+        String path = "";
+        for (int i=6; i<parts.length; i++) {
+            path += "/" + parts[i];
+        }
 
 		try {
-			URI originalURI = new URI(protocol, null,authority, port, path,null,null);
+			URI originalURI = new URI(scheme, user,host, port, path,query,fragment);
 	    	logger.debug("Got the original URI " + originalURI);
 			return originalURI;
 		} catch (URISyntaxException e) {
@@ -214,27 +215,47 @@ public class CacheImpl {
     }
     
     /**
-     * TODO Consider using StringTokeniser for this transform.
      * Gets the cache file for an original URI.
      * @param uri The URI to obtain the cache file for,
      * @return The File for the provided URI.
+     * @throws XBRLException if the URI cannot be translated into
+     * a location in the local cache.
      */
-    public File getCacheFile(URI uri) {
-
-        
-        /*        
-         * Usage of the StringTokeniser
-         * String localFile=null;
-         * StringTokenizer st=new StringTokenizer(uri.getFile(), "/");
-         * while (st.hasMoreTokens()) localFile=st.nextToken();
-         * fos = new FileOutputStream(localFile);
-        */      
+    public File getCacheFile(URI uri) throws XBRLException {
         
     	logger.debug("Getting the cache file for " + uri);
-    	String relativeLocation = getRelativeLocation(uri);
-    	File cacheFile = new File(cacheRoot,relativeLocation);
-    	logger.debug("Done getting the cache file " + cacheFile);
-    	return cacheFile;
+
+        String scheme = uri.getScheme();
+        String user = uri.getUserInfo();
+        String host = uri.getHost();
+        String port = (new Integer(uri.getPort())).toString();
+        String path = uri.getPath();
+        String query = uri.getQuery();
+        String fragment = uri.getFragment();
+        
+        String s = File.separator;
+        String relativeLocation = scheme;
+        relativeLocation = relativeLocation.concat(s+user);
+        relativeLocation = relativeLocation.concat(s+host);
+        relativeLocation = relativeLocation.concat(s+port);
+        relativeLocation = relativeLocation.concat(s+query);
+        relativeLocation = relativeLocation.concat(s+fragment);
+        StringTokenizer tokenizer = new StringTokenizer(path, "/");
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if (token != null)
+                if (! token.equals(""))
+                    relativeLocation = relativeLocation.concat(s+token);
+        }
+
+        try {
+            File cacheFile = new File(this.cacheRoot,relativeLocation);
+            logger.debug("Got cacheFile" + cacheFile);
+            return cacheFile;
+        } catch (Exception e) {
+            throw new XBRLException(uri + " cannot be translated into a location in the cache");
+        }
+    	
     }
     
     /**
@@ -245,9 +266,6 @@ public class CacheImpl {
      * @param cacheFile The file to be used to store the cache version of the resource.
      */
     public void copyToCache(URI originalURI, File cacheFile) {
-    	
-    	logger.debug("Attempting to cache: " + originalURI);
-        logger.debug("Cache file is: " + cacheFile);
     	
     	// If necessary, create the directory to contain the cached resource
 		File parent = cacheFile.getParentFile();
@@ -283,7 +301,6 @@ public class CacheImpl {
 		    bos.flush();
 		    bis.close();
 		    bos.close();
-            logger.debug("Done with caching the file.");
 
 		} catch (java.net.NoRouteToHostException e) {
 		    logger.debug(e.getMessage());
@@ -321,58 +338,19 @@ public class CacheImpl {
 		}
     }    
     
-    /**
-     * Get the location of the resource relative to the cache root that
-     * is implied by the supplied URI.
-     * @param uri The URI to analyse to determine the implied relative path
-     * to the resource in the local cache.
-     * @return the path to the locally cached resource that is implied by the
-     * URI.
-     */
-    private String getRelativeLocation(URI uri) {
-    	
-    	logger.debug("Getting the relative location for " + uri);
-    	
-		String scheme = uri.getScheme();
-		logger.debug("URI scheme is " + scheme);
-        int port = uri.getPort();
-        logger.debug("port is " + port);
-        String path = uri.getPath().substring(1);
-        logger.debug("Path is " + path);
-		String authority = uri.getAuthority();
-		if (authority != null) {
-	        if (authority.contains(":")) authority = authority.substring(0,authority.indexOf(":"));
-		}
-		logger.debug("Authority is " + authority);
-		
-		// Make default ports explicit.
-		String portValue = (new Integer(port)).toString();
 
-		// Translate slashes into the local file separator 
-		path = path.replace('/',File.separatorChar);
-		
-		String relativeLocation = scheme;
-		relativeLocation = relativeLocation.concat(File.separator+authority);
-		relativeLocation = relativeLocation.concat(File.separator+portValue);
-		relativeLocation = relativeLocation.concat(File.separator+path);
-
-    	logger.debug("Got relative location " + relativeLocation);
-		
-		return relativeLocation;
-    	
-    }
     
 
     
     /**
      * Delete a resource from the cache.
      * @param uri The original or the cache URI.
+     * @throws XBRLException if the cache file cannot be determined.
      */
-    public void purge(URI uri) {
-    	//URI originalURI = getOriginalURI(uri);
+    public void purge(URI uri) throws XBRLException {
 		File file = this.getCacheFile(uri);
 		file.delete();
-        logger.info("Purged " + file);
+        logger.debug("Purged " + file);
     }
     
 }
