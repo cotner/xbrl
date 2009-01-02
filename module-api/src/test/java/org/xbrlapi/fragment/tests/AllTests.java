@@ -8,8 +8,12 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.xbrlapi.fragment.tests");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(LocatorTestCase.class);
+        suite.addTestSuite(ArcEndTestCase.class);
+        suite.addTestSuite(ArcroleTypeTestCase.class);
 		suite.addTestSuite(ArcTestCase.class);
+        suite.addTestSuite(ConceptTestCase.class);
+        suite.addTestSuite(ContextComponentTestCase.class);
+        suite.addTestSuite(ContextTestCase.class);
 		suite.addTestSuite(FactDimensionContainerTestCase.class);
 		suite.addTestSuite(ReferencePartTestCase.class);
 		suite.addTestSuite(ElementDeclarationTestCase.class);
@@ -19,10 +23,7 @@ public class AllTests {
 		suite.addTestSuite(SchemaContentTestCase.class);
 		suite.addTestSuite(LabelResourceTestCase.class);
 		suite.addTestSuite(ResourceTestCase.class);
-		suite.addTestSuite(ContextTestCase.class);
 		suite.addTestSuite(ExtendedLinkContentTestCase.class);
-		suite.addTestSuite(ConceptTestCase.class);
-		suite.addTestSuite(ArcEndTestCase.class);
 		suite.addTestSuite(PeriodTestCase.class);
 		suite.addTestSuite(NumericItemTestCase.class);
 		suite.addTestSuite(InstanceTestCase.class);
@@ -39,16 +40,16 @@ public class AllTests {
 		suite.addTestSuite(SegmentTestCase.class);
 		suite.addTestSuite(TitleTestCase.class);
 		suite.addTestSuite(ItemTestCase.class);
-		suite.addTestSuite(ArcroleTypeTestCase.class);
 		suite.addTestSuite(CustomTypeTestCase.class);
 		suite.addTestSuite(SimpleNumericItemTestCase.class);
 		suite.addTestSuite(ScenarioTestCase.class);
 		suite.addTestSuite(ExtendedLinkTestCase.class);
 		suite.addTestSuite(UnitTestCase.class);
 		suite.addTestSuite(OpenContextComponentTestCase.class);
-		suite.addTestSuite(ContextComponentTestCase.class);
+        suite.addTestSuite(LanguageTestCase.class);
 		suite.addTestSuite(LinkTestCase.class);
 		suite.addTestSuite(LinkbaseTestCase.class);
+        suite.addTestSuite(LocatorTestCase.class);
 		suite.addTestSuite(TupleTestCase.class);
 		suite.addTestSuite(NonNumericItemTestCase.class);
 		//$JUnit-END$
