@@ -137,19 +137,17 @@ public class LoaderImplTestCase extends BaseTestCase {
             List<String> uris = store.getStoredURIs();
             assertTrue(uris.size() > 0);
             
-            boolean foundStartingPoint = false;
-            boolean foundBothStartingPoints = false;
+            boolean found1 = false;
+            boolean found2 = false;
             for (String uri: uris) {
                 if (uri.equals(uri1.toString())) {
-                    foundStartingPoint = true;
+                    found1 = true;
                 }
-                if (foundStartingPoint)
-                    if (uri.equals(uri2.toString())) {
-                        foundBothStartingPoints = true;
-                    }
-                    
+                if (uri.equals(uri2.toString())) {
+                    found2 = true;
+                }
             }
-            assertTrue(foundBothStartingPoints);
+            assertTrue(found1 && found2);
 			
 		} catch (XBRLException e) {
 		    e.printStackTrace();
