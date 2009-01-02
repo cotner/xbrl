@@ -33,8 +33,8 @@ public class LanguageTestCase extends DOMLoadingTestCase {
 			FragmentList<Language> fragments = store.<Language>getFragments("Language");
 			Language fragment = fragments.getFragment(0);
 			assertEquals("Afar", fragment.getName());
-			assertEquals("AA", fragment.getCode());
-			assertEquals("EN", fragment.getLanguage());
+			assertEquals("aa", fragment.getCode());
+			assertEquals("en", fragment.getLanguage());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
