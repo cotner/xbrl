@@ -188,12 +188,15 @@ public class CacheImpl {
 		}
 		
 		List<String> parts = new Vector<String>();
+		logger.info(data);
         StringTokenizer tokenizer = new StringTokenizer(data, File.separator);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             if (token != null)
-                if (! token.equals(""))
-                    parts.add(tokenizer.nextToken());
+                if (! token.equals("")) {
+                    logger.info(token);
+                    parts.add(token);
+                }
         }
         
         String scheme = parts.get(0);
@@ -210,6 +213,10 @@ public class CacheImpl {
 
         String path = "";
         for (int i=6; i<parts.size(); i++) {
+            if (i == 6)
+                if (File.separator.matches("\\\\"))
+                    if (parts.get(i).matches("\\w_drive"))
+                        parts.set(i,parts.get(i).substring(0,0) + ":");          
             path += "/" + parts.get(i);
         }
 
@@ -252,6 +259,9 @@ public class CacheImpl {
         StringTokenizer tokenizer = new StringTokenizer(path, "/");
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
+            if (File.separator.equals("\\"))
+                if (token.matches("\\w\\Q:\\E"))
+                    token = token.substring(0,1) + "_drive";
             if (token != null)
                 if (! token.equals(""))
                     relativeLocation = relativeLocation.concat(s+token);
