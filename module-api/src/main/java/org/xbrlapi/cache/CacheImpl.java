@@ -11,8 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.utilities.XBRLException;
@@ -185,23 +187,30 @@ public class CacheImpl {
 			throw new XBRLException("The original URI could not be determined for " + uri);
 		}
 		
-		String[] parts = data.split(File.separator);
-		
-        String scheme = parts[0];
+		List<String> parts = new Vector<String>();
+        StringTokenizer tokenizer = new StringTokenizer(data, File.separator);
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if (token != null)
+                if (! token.equals(""))
+                    parts.add(tokenizer.nextToken());
+        }
+        
+        String scheme = parts.get(0);
         if (scheme.equals("null")) scheme = null;
-        String user = parts[1];
+        String user = parts.get(1);
         if (user.equals("null")) user = null;
-        String host = parts[2];
+        String host = parts.get(2);
         if (host.equals("null")) host = null;
-        int port = new Integer(parts[3]).intValue();
-        String query = parts[4];
+        int port = new Integer(parts.get(3)).intValue();
+        String query = parts.get(4);
         if (query.equals("null")) query = null;
-        String fragment = parts[5];
+        String fragment = parts.get(5);
         if (fragment.equals("null")) fragment = null;
 
         String path = "";
-        for (int i=6; i<parts.length; i++) {
-            path += "/" + parts[i];
+        for (int i=6; i<parts.size(); i++) {
+            path += "/" + parts.get(i);
         }
 
 		try {
