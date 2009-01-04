@@ -15,17 +15,18 @@
     	manifest="${manifest}/MANIFEST.MF">
         <fileset dir="${build}">
         	<include name="**/*"/>
-          <exclude name="**/xdt/*"/>
-          <exclude name="**/examples/*"/>
-          <exclude name="**/utilities/*"/>
-        	<exclude name="**/exist/*"/>
-        	<exclude name="**/xindice/*"/>
-        	<exclude name="**/xlink/*"/>
-        	<exclude name="**/xmlbase/*"/>
-            <exclude name="**/xpointer/*"/>
+          <exclude name="**/xdt/"/>
+          <exclude name="**/examples/"/>
+          <exclude name="**/utilities/"/>
+        	<exclude name="**/exist/"/>
+        	<exclude name="**/xindice/"/>
+          <exclude name="**/bdbxml/"/>
+        	<exclude name="**/xlink/"/>
+        	<exclude name="**/xmlbase/"/>
+          <exclude name="**/xpointer/"/>
         </fileset>
-        <fileset dir="${src}" includes="**/*"/>
-        <fileset dir="${srctest}" includes="**/*"/>
+        <!--fileset dir="${src}" includes="**/*"/>
+        <fileset dir="${srctest}" includes="**/*"/-->
     </jar>
   </target>
 
