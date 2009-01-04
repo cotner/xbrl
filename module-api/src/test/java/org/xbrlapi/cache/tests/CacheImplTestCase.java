@@ -75,6 +75,17 @@ public class CacheImplTestCase extends BaseTestCase {
     	} catch (Exception e) {
     		fail("Unexpected exception. " + e.getMessage());
     	}
+    }
+
+    /**
+     * Test operations on a simple URI
+     */
+    public final void testMSWindowsFile_URI() {
+    	try {
+    		this.examineURI(new URI("file:/C:/home/geoff/document.xml"));
+    	} catch (Exception e) {
+    		fail("Unexpected exception. " + e.getMessage());
+    	}
     }	
 	
 }
