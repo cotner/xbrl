@@ -149,11 +149,17 @@ the mandatory options are:
 <li>-database [the directory containing the Oracle Berkeley XML database]</li>
 <li>-container [the name of the database container in the Oracle Berkeley XML database]</li>
 <li>-cache [the directory containing the document cache]</li>
-<li>-template [the file location of the Freemarker template]</li>
+<li>-template [the file location of the Freemarker template]*</li>
 <li>-target [the URL of the XBRL instance to be rendered]</li>
 <li>-output [the output file to produce]</li>
 <li></li>
 </ul>
+
+<p>
+	* MS Windows issue: for reasons that remain unknown, the rendering example can have trouble loading Freemarker templates
+	if they are located in the root directory of a MS Windows drive.  Thus, a template location of <code>C:\template.ftl</code> 
+	will fail while a location <code>C:\templates.template.ftl</code> will work.
+</p>
 
 <h2>
   Licensing and legal issues
