@@ -188,13 +188,13 @@ public class CacheImpl {
 		}
 		
 		List<String> parts = new Vector<String>();
-		logger.info(data);
+		logger.debug(data);
         StringTokenizer tokenizer = new StringTokenizer(data, File.separator);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             if (token != null)
                 if (! token.equals("")) {
-                    logger.info(token);
+                    logger.debug(token);
                     parts.add(token);
                 }
         }
