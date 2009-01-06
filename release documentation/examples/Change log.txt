@@ -1,3 +1,8 @@
+31 Dec. 2008
+Improved the network processing efficiency of 
+the rendering example.  Incorporated improvements
+to the Freemarker template file from Walter Hamscher.
+
 10 Dec. 2008
 Fixed missing class files in the JAR.
 

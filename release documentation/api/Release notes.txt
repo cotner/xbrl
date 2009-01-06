@@ -8,7 +8,7 @@ then you need to download the JAR for the
 desired data store also.
 
 Release 4.0
-January 31, 2009
+January 7, 2009
 Backward incompatible release of the API involving changes
 to many method signatures - almost all of which are related
 to the decision to replace java.net.URL with java.net.URI where

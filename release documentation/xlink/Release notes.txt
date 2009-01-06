@@ -1,5 +1,12 @@
 Release details:
 
+Release 4.0
+January 7, 2009
+Backward incompatible release of the API involving changes
+to many method signatures - almost all of which are related
+to the decision to replace java.net.URL with java.net.URI where
+possible.
+
 Release 3.4
 December 10, 2008
 Fixed problems in construction of JAR files with the 3.3 release.
