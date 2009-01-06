@@ -58,7 +58,7 @@ public class EntityResolverTestCase extends BaseTestCase {
 			EntityResolverImpl resolver = new EntityResolverImpl(new File(cachePath));
 			InputSource is = resolver.resolveEntity("",originalURI);
 			assertNull("Public ID for the input source is not null.",is.getPublicId());
-			assertEquals("System ID is wrong.",new File(cachePath + "/http/null/www.xbrl.org/-1/2003/xbrl-instance-2003-12-31.xsd/null/null").toURI().toString(),is.getSystemId());
+			assertEquals("System ID is wrong.",new File(cachePath + "/http/null/www.xbrl.org/-1/null/null/2003/xbrl-instance-2003-12-31.xsd").toURI().toString(),is.getSystemId());
 		} catch (XBRLException e) {
 			fail("The entity resolver constructor failed unexpectedly.");
 		} finally {

@@ -195,23 +195,25 @@ public class Run {
             }
             reportTime("Loading data");
 
-            logger.info("Documents in the data store include ...");
-            
+/*            logger.info("Documents in the data store include ...");            
             for (String uri: store.getStoredURIs()) {
                 logger.info(uri);
             }
-            
+*/            
             // Get the Freemarker template ready to use.
             if (!arguments.containsKey("template"))
-                throw new XBRLException(
-                        "The Freemarker template must be specified.");
+                throw new XBRLException("The Freemarker template must be specified.");
+            logger.info("The specified template location is " + arguments.get("template"));
             File templateFile = new File(arguments.get("template"));
+            if (templateFile == null)
+                throw new XBRLException("The template file location is invalid and resulted in a null file.");
             if (!templateFile.exists())
-                throw new XBRLException(
-                        "The freemarker template does not exist.");
+                throw new XBRLException("The freemarker template does not exist.");
+            logger.info("The template file is " + templateFile);
+            logger.info("The template file name is " + templateFile.getName());
+            logger.info("The template file parent directory is " + templateFile.getParentFile());
             Configuration freemarker = new Configuration();
-            freemarker.setDirectoryForTemplateLoading(templateFile
-                    .getParentFile());
+            freemarker.setDirectoryForTemplateLoading(templateFile.getParentFile());
             freemarker.setObjectWrapper(new DefaultObjectWrapper());
             Template template = freemarker.getTemplate(templateFile.getName());
 

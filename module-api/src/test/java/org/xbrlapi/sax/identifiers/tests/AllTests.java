@@ -1,4 +1,4 @@
-package org.xbrlapi.grabber.tests;
+package org.xbrlapi.sax.identifiers.tests;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -6,9 +6,10 @@ import junit.framework.TestSuite;
 public class AllTests {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite("Test for org.xbrlapi.grabber.tests");
+		TestSuite suite = new TestSuite(
+				"Test for org.xbrlapi.relationships.tests");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(SecGrabberImplTest.class);
+		suite.addTestSuite(IdentifierTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}
