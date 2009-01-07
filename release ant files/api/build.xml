@@ -25,8 +25,8 @@
         	<exclude name="**/xmlbase/"/>
           <exclude name="**/xpointer/"/>
         </fileset>
-        <!--fileset dir="${src}" includes="**/*"/>
-        <fileset dir="${srctest}" includes="**/*"/-->
+        <fileset dir="${src}" includes="**/*"/>
+        <fileset dir="${srctest}" includes="**/*"/>
     </jar>
   </target>
 
