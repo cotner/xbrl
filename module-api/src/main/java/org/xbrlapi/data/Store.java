@@ -279,11 +279,12 @@ public interface Store {
     
     /**
      * Stores the state of the document discovery process.
-     * @param documents The list of URIs of the documents remaining to be
-     * discovered.
+     * @param documents The map from URIs of the documents 
+     * remaining to be discovered to the textual reason why 
+     * the document has not yet been discovered.
      * @throws XBRLException
      */
-    public void storeLoaderState(List<String> documents) throws XBRLException;    
+    public void storeLoaderState(Map<URI,String> documents) throws XBRLException;    
 
     /**
      * Get the next fragment ID to use when extending a DTS, instead of starting at 1 again
@@ -315,9 +316,10 @@ public interface Store {
     
     /**
      * @param document The document to store a stub for.
+     * @param reason The reason the document has not been stored.
      * @throws XBRLException
      */
-    public void storeStub(String document) throws XBRLException;    
+    public void storeStub(URI document, String reason) throws XBRLException;    
     
     /**
      * @param uri The URI of the document for which 
@@ -386,7 +388,7 @@ public interface Store {
      *  types of arcs.
      * @return a list of fragments with the given fragment type and in the given document.
      * @throws XBRLException
-     * @see org.xbrlapi.impl.ReferenceArcImpl
+     * @see org.xbrlapi.impl.ArcImpl
      */
     public <F extends Fragment> FragmentList<F> getFragmentsFromDocument(URI uri, String interfaceName) throws XBRLException;
     

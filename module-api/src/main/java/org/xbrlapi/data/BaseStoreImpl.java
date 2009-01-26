@@ -168,12 +168,12 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	}
 	
     /**
-     * @see org.xbrlapi.data.Store#storeLoaderState(List)
+     * @see org.xbrlapi.data.Store#storeLoaderState(Map)
      */
-    public void storeLoaderState(List<String> documents) throws XBRLException {
+    public void storeLoaderState(Map<URI,String> documents) throws XBRLException {
         try {
-            for (String document: documents) {
-                storeStub(document);
+            for (URI uri: documents.keySet()) {
+                storeStub(uri,documents.get(uri));
             }
         } catch (XBRLException e) {
             throw new XBRLException("The loader state could not be stored.",e);
@@ -181,18 +181,19 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
 
     /**
-     * @see org.xbrlapi.data.Store#storeStub(String)
+     * @see org.xbrlapi.data.Store#storeStub(URI,String)
      */
-    public void storeStub(String document) throws XBRLException {
+    public void storeStub(URI document, String reason) throws XBRLException {
 
-        if (this.hasDocument(document)) return;
-        if (this.getStub(document) != null) return;
+        if (this.hasDocument(document.toString())) return;
+        if (this.getStub(document.toString()) != null) return;
         
-        String documentId = getDocumentId(document);
+        String documentId = getDocumentId(document.toString());
         Fragment stub = new MockFragmentImpl(documentId);
         stub.setFragmentIndex(documentId);
-        stub.setURI(document);
+        stub.setURI(document.toString());
         stub.setMetaAttribute("stub","");
+        stub.setMetaAttribute("reason",reason);
         this.storeFragment(stub);
     }
 
@@ -733,7 +734,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getStubs()
      */
     public FragmentList<Fragment> getStubs() throws XBRLException {
-        return this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@stub]");
+        return this.<Fragment>query("/*[@stub]");
     }
     
     /**
