@@ -1,3 +1,12 @@
+26 Jan. 2009
+Changed the loader's document queue to be a map from URIs to load 
+status rather than from String representations of URIs to load 
+status to enable better analysis of URI equality.
+Modified the data store to keep track of reasons for documents not 
+being loaded when storing the loader state.  This enables robust
+handling of situations where documents that should be in the DTS are
+have IO problems or have SAX parsing problems.
+
 31. Dec. 2008
 Replaced usage of URLs with URIs throughout the API.  This was done
 to get better uniformity of handling of URLs and to take advantage of
