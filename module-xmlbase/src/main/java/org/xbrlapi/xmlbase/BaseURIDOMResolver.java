@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
 public interface BaseURIDOMResolver extends BaseURIResolver {
 
     /**
-     * @param elt The XML DOM element that the Base URI is being
+     * @param element The XML DOM element that the Base URI is being
      * obtained for.
      * @return the Base URI or null if none is defined.
      * The Base URI is determined with reference to xml:base
