@@ -33,7 +33,7 @@ public class LoaderDiscoverNextWithPersistentDataStoreTestCase extends BaseTestC
 		try {
 			loader.discoverNext();
 			while (! loader.getDocumentsStillToAnalyse().isEmpty()) {
-				for (String document: loader.getDocumentsStillToAnalyse()) {
+				for (URI document: loader.getDocumentsStillToAnalyse()) {
 					logger.info("still to process " + document);
 				}
 				loader.discoverNext();
