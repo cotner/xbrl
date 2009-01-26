@@ -187,7 +187,7 @@ public class LoaderImplTestCase extends BaseTestCase {
 			loader.stashURI(uri1);
 			loader.stashURI(uri2);
 			while (! loader.getDocumentsStillToAnalyse().isEmpty()) {
-				for (String document: loader.getDocumentsStillToAnalyse()) {
+				for (URI document: loader.getDocumentsStillToAnalyse()) {
 					logger.debug("still to process " + document);
 				}
 				loader.discoverNext();
