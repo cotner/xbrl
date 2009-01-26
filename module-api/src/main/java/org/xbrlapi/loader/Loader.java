@@ -98,7 +98,7 @@ public interface Loader {
 	 * @return the list of documents that are known to still need parsing
 	 * into the data store.
 	 */
-	public List<String> getDocumentsStillToAnalyse();
+	public List<URI> getDocumentsStillToAnalyse();
 	
 	/**
 	 * Begin the XBRL DTS discovery process with the URIs that

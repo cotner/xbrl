@@ -6,8 +6,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.EmptyStackException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -138,12 +138,13 @@ public class LoaderImpl implements Loader {
 
     /**
      * The map of documents awaiting loading into the DTS. This queue is
-     * implemented as a hash map to ensure that the keys (URIS in string form)
+     * implemented as a hash map to ensure that the keys 
      * eliminate multiple discoveries of the same document. The value for each
-     * URI is set to false initially and is changed to true when the document
-     * has been loaded.
+     * URI is set to 0 initially and is changed to 1 when the document
+     * has been loaded successfully and a negative number if document processing
+     * fails for some reason (SAX parsing error or an IO error generally).
      */
-    private HashMap<String, Integer> documentQueue = new HashMap<String, Integer>();
+    private HashMap<URI, Integer> documentQueue = new HashMap<URI, Integer>();
 
     /**
      * The unique fragment ID, that will be one for the first fragment. This is
@@ -175,7 +176,7 @@ public class LoaderImpl implements Loader {
 
     /**
      * Interrupts the loading process once the current 
-     * document discovery has been completed.
+     * document has been fully analysed.
      * This can be useful when the loader is shared among
      * several threads.
      */
@@ -466,7 +467,7 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * @see org.xbrlapi.loader.Loader#discover(List<URI>)
+     * @see Loader#discover(List)
      */
     public void discover(List<URI> startingURIs) throws XBRLException {
         for (URI uri: startingURIs) stashURI(uri);
@@ -495,10 +496,10 @@ public class LoaderImpl implements Loader {
     /**
      * @see org.xbrlapi.loader.Loader#getDocumentsStillToAnalyse()
      */
-    public List<String> getDocumentsStillToAnalyse() {
-        List<String> documents = new LinkedList<String>();
+    public List<URI> getDocumentsStillToAnalyse() {
+        List<URI> documents = new Vector<URI>();
 
-        for (String document : documentQueue.keySet()) {
+        for (URI document : documentQueue.keySet()) {
             if ((documentQueue.get(document)).equals(new Integer(0))) {
                 documents.add(document);
             }
@@ -536,17 +537,7 @@ public class LoaderImpl implements Loader {
                 this.setNextFragmentId("1");
                 double startTime = System.currentTimeMillis();
                 int startIndex = this.fragmentId;
-                try {
-                    parse(uri);
-                } catch (Exception e) {
-                    // Clean up the database to ensure no document is lying around.
-                    getStore().deleteDocument(uri.toString());
-                    // Clean up the document cache
-                    this.getCache().purge(uri);
-                    // Store the list of documents in the queue to be loaded.
-                    storeDocumentsToAnalyse();
-                    throw new XBRLException("The parsing process failed but the database has been cleaned up.",e);
-                }
+                parse(uri);
                 String time = (new Double(
                         (System.currentTimeMillis() - startTime)
                                 / (fragmentId - startIndex))).toString();
@@ -570,7 +561,7 @@ public class LoaderImpl implements Loader {
 
         setDiscovering(false);
         
-        this.documentQueue = new HashMap<String,Integer>();
+        this.documentQueue = new HashMap<URI,Integer>();
 
     }
 
@@ -660,23 +651,25 @@ public class LoaderImpl implements Loader {
      *         none.
      */
     private URI getNextDocumentToExplore() throws XBRLException {
-        try {
-            for (String key : documentQueue.keySet()) {
-                if ((documentQueue.get(key)).equals(new Integer(0))) {
-                    URI uri = new URI(key);
-                    return uri;
-                }
+        for (URI key : documentQueue.keySet()) {
+            if ((documentQueue.get(key)).equals(new Integer(0))) {
+                return key;
             }
-            return null;
-        } catch (URISyntaxException e) {
-            throw new XBRLException(
-                    "The URI syntax for the next DTS document is malformed.", e);
         }
+        return null;
     }
     
     private void markDocumentAsExplored(URI uri) {
-        documentQueue.put(uri.toString(),new Integer(1));
+        documentQueue.put(uri,new Integer(1));
     }
+    
+    private void markDocumentAsCausingIOExceptions(URI uri) {
+        documentQueue.put(uri,new Integer(-1));
+    }
+    
+    private void markDocumentAsCausingSAXExceptions(URI uri) {
+        documentQueue.put(uri,new Integer(-2));
+    }    
 
     /**
      * Parse an XML Document supplied as a URI the next part of the DTS.
@@ -688,10 +681,18 @@ public class LoaderImpl implements Loader {
             InputSource inputSource = this.getEntityResolver().resolveEntity("", uri.toString());
             ContentHandler contentHandler = new ContentHandlerImpl(this, uri);
             parse(uri, inputSource, contentHandler);
-        } catch (SAXException e) {
-            throw new XBRLException("SAX exception thrown when parsing " + uri,e);
+        } catch (SAXException saxException) {
+            logger.info("A SAX exception was thrown when parsing " + uri);
+            getStore().deleteDocument(uri.toString());
+            getCache().purge(uri);
+            logger.info("Purged " + uri + " from the data store and cache.");
+            this.markDocumentAsCausingSAXExceptions(uri);
         } catch (IOException e) {
-            throw new XBRLException("IO exception thrown when parsing " + uri,e);
+            logger.info("An IO exception was thrown when accessing" + uri);
+            getStore().deleteDocument(uri.toString());
+            getCache().purge(uri);
+            logger.info("Purged " + uri + " from the data store and cache.");
+            this.markDocumentAsCausingIOExceptions(uri);
         }
     }
 
@@ -847,7 +848,7 @@ public class LoaderImpl implements Loader {
             // Only stash if the document does not already have a match.
             URI matchURI = getStore().getMatcher().getMatch(dereferencedURI);
             if (matchURI.equals(dereferencedURI)) {
-                documentQueue.put(dereferencedURI.toString(), new Integer(0));
+                documentQueue.put(dereferencedURI, new Integer(0));
             } else {
                 logger.debug("No need to stash " + dereferencedURI + " because it has match " + matchURI);
             }
@@ -922,6 +923,19 @@ public class LoaderImpl implements Loader {
      * @see org.xbrlapi.loader.Loader#storeDocumentsToAnalyse()
      */
     public void storeDocumentsToAnalyse() throws XBRLException {
-        getStore().storeLoaderState(getDocumentsStillToAnalyse());
+        Map<URI,String> map = new HashMap<URI,String>();
+        for (URI document : documentQueue.keySet()) {
+            int value = documentQueue.get(document).intValue();
+            if (! (documentQueue.get(document)).equals(1)) {
+                String reason = "Document has not yet been analysed";
+                if (value == -1) {
+                    reason = "IO Exception prevented analysis.";
+                } else if (value == -2) {
+                    reason = "SAX Exception interrupted analysis.";
+                }
+                map.put(document,reason);
+            }
+        }        
+        getStore().storeLoaderState(map);
     }
 }
