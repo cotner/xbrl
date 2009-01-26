@@ -108,7 +108,7 @@ public class LoaderImpl implements Loader {
      * The absolute URI of the document currently being parsed. Used to record
      * this metadata in each fragment.
      */
-    private String documentURI = null;
+    private URI documentURI = null;
 
     /**
      * The document Id (including the document hash and its counter)
@@ -251,9 +251,9 @@ public class LoaderImpl implements Loader {
      * @param uri The URI of the document now being parsed.
      * @throws XBRLException.
      */
-    private void setDocumentURI(String uri) throws XBRLException {
+    private void setDocumentURI(URI uri) throws XBRLException {
         this.documentURI = uri;
-        this.documentId = getStore().getDocumentId(uri.toString());
+        this.documentId = getStore().getDocumentId(uri);
     }
     
     /**
@@ -266,10 +266,9 @@ public class LoaderImpl implements Loader {
 
     /**
      * Get the URI for the document being parsed.
-     * 
      * @return The original (non-cache) URI of the document being parsed.
      */
-    public String getDocumentURI() {
+    public URI getDocumentURI() {
         return this.documentURI;
     }
 
@@ -533,7 +532,7 @@ public class LoaderImpl implements Loader {
         logger.debug("Next is " + uri);
         while (uri != null) {
             if (!getStore().hasDocument(uri.toString())) {
-                setDocumentURI(uri.toString());
+                setDocumentURI(uri);
                 this.setNextFragmentId("1");
                 double startTime = System.currentTimeMillis();
                 int startIndex = this.fragmentId;
@@ -583,7 +582,7 @@ public class LoaderImpl implements Loader {
 
         if (uri != null) {
             logger.info("Up to fragment " + this.fragmentId + ". Now parsing " + uri);
-            setDocumentURI(uri.toString());
+            setDocumentURI(uri);
             this.setNextFragmentId("1");
             try {
                 parse(uri);

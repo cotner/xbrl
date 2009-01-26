@@ -312,7 +312,7 @@ public interface Store {
      * @return the stub fragment or null if none exists.
      * @throws XBRLException if there is more than one stub.
      */
-    public Fragment getStub(String uri) throws XBRLException;
+    public Fragment getStub(URI uri) throws XBRLException;
     
     /**
      * @param document The document to store a stub for.
@@ -421,7 +421,7 @@ public interface Store {
      * content of the document.
      * @throws XBRLException
      */
-    public String getDocumentId(String document) throws XBRLException;
+    public String getDocumentId(URI document) throws XBRLException;
     
     /**
      * @param encoding The code identifying the language that the name of the

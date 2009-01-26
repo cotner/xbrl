@@ -186,21 +186,21 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public void storeStub(URI document, String reason) throws XBRLException {
 
         if (this.hasDocument(document.toString())) return;
-        if (this.getStub(document.toString()) != null) return;
+        if (this.getStub(document) != null) return;
         
-        String documentId = getDocumentId(document.toString());
+        String documentId = getDocumentId(document);
         Fragment stub = new MockFragmentImpl(documentId);
         stub.setFragmentIndex(documentId);
-        stub.setURI(document.toString());
+        stub.setURI(document);
         stub.setMetaAttribute("stub","");
         stub.setMetaAttribute("reason",reason);
         this.storeFragment(stub);
     }
 
     /**
-     * @see org.xbrlapi.data.Store#getDocumentId(String)
+     * @see org.xbrlapi.data.Store#getDocumentId(URI)
      */    
-    public String getDocumentId(String document) throws XBRLException {
+    public String getDocumentId(URI document) throws XBRLException {
 
         Fragment stub = getStub(document);
         if (stub != null) {
@@ -738,22 +738,18 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.Store#getStub(String)
+     * @see org.xbrlapi.data.Store#getStub(URI)
      */
-    public Fragment getStub(String uri) throws XBRLException {
-        try {
-            URI matchURI = getMatcher().getMatch(new URI(uri));
-            FragmentList<Fragment> stubs = this.<Fragment>query("/*[@stub and @uri='" + matchURI + "']");
-            if (stubs.getLength() == 0) return null;
-            if (stubs.getLength() > 1) throw new XBRLException("There are " + stubs.getLength() + " stubs for " + uri);
-            return stubs.get(0);
-        } catch (URISyntaxException e) {
-            throw new XBRLException("Malformed URI.",e);
-        }
+    public Fragment getStub(URI uri) throws XBRLException {
+        URI matchURI = getMatcher().getMatch(uri);
+        FragmentList<Fragment> stubs = this.<Fragment>query("/*[@stub and @uri='" + matchURI + "']");
+        if (stubs.getLength() == 0) return null;
+        if (stubs.getLength() > 1) throw new XBRLException("There are " + stubs.getLength() + " stubs for " + uri);
+        return stubs.get(0);
     }
     
     /**
-     * @see org.xbrlapi.data.Store#getStub(String stubId)
+     * @see org.xbrlapi.data.Store#getStub(URI stubId)
      */
     public void removeStub(String stubId) throws XBRLException {
         if (hasFragment(stubId)) removeFragment(stubId);

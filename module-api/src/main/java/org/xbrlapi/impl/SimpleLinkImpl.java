@@ -65,9 +65,8 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
     /**
      * Get the string value of the XPointer element scheme expression from the xlink:href attribute.
      * @return the string value of the XPointer element scheme expression from the xlink:href attribute.
-     * @throws XBRLException.
      */
-    private String getTargetPointerValue() throws XBRLException {
+    private String getTargetPointerValue() {
     	return this.getMetadataRootElement().getAttribute("targetPointerValue");
     }
     

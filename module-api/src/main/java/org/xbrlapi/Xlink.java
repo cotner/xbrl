@@ -60,6 +60,4 @@ public interface Xlink extends Fragment {
      */
     public String getAttribute(String name) throws XBRLException;
     
-
-    
 }

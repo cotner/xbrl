@@ -230,7 +230,7 @@ public interface Loader {
 	 * Get the URI for the document being parsed. 
 	 * @return The original (non-cache) URI of the document being parsed.
 	 */
-	public String getDocumentURI();
+	public URI getDocumentURI();
 	
 	/**
 	 * Return the entity resolver being used by the loader.

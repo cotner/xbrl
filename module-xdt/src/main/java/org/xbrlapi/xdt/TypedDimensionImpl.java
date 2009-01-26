@@ -184,9 +184,8 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     /**
      * Get the string value of the XPointer element scheme expression from the xlink:href attribute.
      * @return the string value of the XPointer element scheme expression from the xlink:href attribute.
-     * @throws XBRLException.
      */
-    private String getTargetPointerValue() throws XBRLException {
+    private String getTargetPointerValue() {
         return this.getMetadataRootElement().getAttribute("targetPointerValue");
     }
     

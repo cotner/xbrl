@@ -25,16 +25,12 @@ public interface SimpleLink extends Link {
      */
     public String getHref() throws XBRLException;
     
-
-
     /**
      * Get the link arcrole attribute value, before any resolution.
      *
      * @throws XBRLException
      */
     public String getArcrole() throws XBRLException;
-    
-
     
     /**
      * @return the single fragment referenced by the simple link 
