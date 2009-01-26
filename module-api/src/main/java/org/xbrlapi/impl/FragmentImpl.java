@@ -1,5 +1,6 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -59,8 +60,8 @@ public class FragmentImpl implements Fragment {
 	private Store store = null;
 	
 	/**
-	 * The DOM instantiation of the 
-	 * fragment's root element.
+	 * The DOM instantiation of the fragment's root element or null
+	 * if the fragment has not been built.
 	 */
 	private Element rootElement = null;
 
@@ -167,7 +168,7 @@ public class FragmentImpl implements Fragment {
 	/**
      * @see org.xbrlapi.Fragment#getResource()
      */
-    public Element getResource() throws XBRLException {
+    public Element getResource() {
     	return rootElement;
     }
 	
@@ -200,7 +201,7 @@ public class FragmentImpl implements Fragment {
     /**
      * @see org.xbrlapi.Fragment#getMetadataRootElement()
      */
-    public Element getMetadataRootElement() throws XBRLException {
+    public Element getMetadataRootElement() {
     	if (builder != null) return builder.getMetadata();
     	return getResource();
     }
@@ -372,13 +373,11 @@ public class FragmentImpl implements Fragment {
 
     
     /**
-     * @see org.xbrlapi.Fragment#setURI(String)
+     * @see org.xbrlapi.Fragment#setURI(URI)
      */
-    public void setURI(String uri) throws XBRLException {
-        this.setMetaAttribute("uri",uri);
+    public void setURI(URI uri) throws XBRLException {
+        this.setMetaAttribute("uri",uri.toString());
     }
-    
-    
     
     /**
      * @see org.xbrlapi.Fragment#getReferencingLocators()

@@ -1,5 +1,6 @@
 package org.xbrlapi;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -53,7 +54,7 @@ public interface Fragment extends Comparable<Fragment> {
      * @return the DOM root element of the fragment or null if the resource
      * has not been initialised to a DOM root element.
      */
-    public Element getResource() throws XBRLException;    
+    public Element getResource();    
     
 	/**
 	 * Closes down the fragment builder and sets the data and metadata
@@ -84,9 +85,8 @@ public interface Fragment extends Comparable<Fragment> {
      * Get the root element of the fragment data.
      * @return an XML Element that is the root of the fragment data
      * or null if none exists.
-     * @throws XBRLException
      */
-    public Element getMetadataRootElement() throws XBRLException;
+    public Element getMetadataRootElement();
 
     /**
      * Tests if a fragment is new in the sense that it does not have a root data element.
@@ -175,7 +175,7 @@ public interface Fragment extends Comparable<Fragment> {
      * @param uri The string value of the document's absolute URI
      * @throws XBRLException.
      */
-    public void setURI(String uri) throws XBRLException;
+    public void setURI(URI uri) throws XBRLException;
     
     /**
      * Retrieves a list of all locators that target this fragment.
