@@ -1,3 +1,8 @@
+28 Jan. 2008
+Modified additional function signatures to work with 
+URI arguments rather than string representations of URI arguments.
+Added loader focussed unit testing for loading of duplicate resources.
+
 26 Jan. 2009
 Changed the loader's document queue to be a map from URIs to load 
 status rather than from String representations of URIs to load 
