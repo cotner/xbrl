@@ -13,6 +13,7 @@ import org.xbrlapi.utilities.XBRLException;
 public class DefaultMatcherImpl implements Matcher {
 
     public DefaultMatcherImpl() {
+        ;
     }
 
     public void setSigner(Signer signer) {

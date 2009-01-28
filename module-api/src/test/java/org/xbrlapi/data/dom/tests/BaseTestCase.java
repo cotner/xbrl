@@ -9,7 +9,7 @@ import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.dom.StoreImpl;
-import org.xbrlapi.data.resource.InMemoryMatcherImpl;
+import org.xbrlapi.data.resource.InStoreMatcherImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
@@ -59,7 +59,7 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 	 */
 	public StoreImpl createStore() throws XBRLException {
 	    StoreImpl store = new StoreImpl();
-	    store.setMatcher(new InMemoryMatcherImpl(cacheImpl));
+	    store.setMatcher(new InStoreMatcherImpl(store,cacheImpl));
 	    return store;
 	}
 

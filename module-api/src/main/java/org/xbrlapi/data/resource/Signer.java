@@ -11,7 +11,7 @@ import org.xbrlapi.utilities.XBRLException;
 public interface Signer {
 
     /**
-     * @param lines The list of lines in the resource.
+     * @param lines The list of all lines in the resource.
      * @return the signature given the resource content.
      * @throws XBRLException if the signature cannot be constructed.
      */
