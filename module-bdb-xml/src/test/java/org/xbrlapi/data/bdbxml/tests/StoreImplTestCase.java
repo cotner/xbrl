@@ -1,5 +1,6 @@
 package org.xbrlapi.data.bdbxml.tests;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -100,13 +101,13 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testHasDocument() {
 		try {
-		    List<String> uris = store.getStoredURIs();
+		    List<URI> uris = store.getStoredURIs();
 		    assertTrue(uris.size() > 0);
-		    for (String uri: uris) {
+		    for (URI uri: uris) {
 	            assertTrue(store.hasDocument(uri));
 		    }
-			assertFalse(store.hasDocument("http://www.rubbish.gcs/crazy.xyz"));
-		} catch (XBRLException e) {
+			assertFalse(store.hasDocument(new URI("http://www.rubbish.gcs/crazy.xyz")));
+		} catch (Exception e) {
 			fail("Unexpected " + e.getMessage());
 		}
 	}	

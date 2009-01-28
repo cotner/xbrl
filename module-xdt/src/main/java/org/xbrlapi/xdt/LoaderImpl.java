@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
@@ -38,29 +39,42 @@ public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader 
 
 
     
+
+    static Logger logger = Logger.getLogger(LoaderImpl.class);
+    
     /**
      * @see org.xbrlapi.loader.LoaderImpl#parse(URI)
      */
-    protected void parse(URI uri) throws XBRLException {
+    protected boolean parse(URI uri) throws XBRLException {
         
         try {
             InputSource inputSource = this.getEntityResolver().resolveEntity("", uri.toString());
             ContentHandler contentHandler = new ContentHandlerImpl(this, uri);
-            parse(uri, inputSource, contentHandler);
+            return parse(uri, inputSource, contentHandler);
         } catch (SAXException e) {
-            throw new XBRLException("SAX exception thrown when parsing " + uri,e);
+            logger.info("A SAX exception was thrown when resolving " + uri);
+            getStore().deleteDocument(uri);
+            getCache().purge(uri);
+            logger.info("Purged " + uri + " from the data store and cache.");
+            this.markDocumentAsCausingSAXExceptions(uri);
+            return false;
         } catch (IOException e) {
-            throw new XBRLException("IO exception thrown when parsing " + uri,e);
+            logger.info("An IO exception was thrown when resolving " + uri);
+            getStore().deleteDocument(uri);
+            getCache().purge(uri);
+            logger.info("Purged " + uri + " from the data store and cache.");
+            this.markDocumentAsCausingIOExceptions(uri);
+            return false;
         }
     }
 
     /**
      * @see org.xbrlapi.loader.LoaderImpl#parse(URI, String)
      */
-    protected void parse(URI uri, String xml) throws XBRLException {
+    protected boolean parse(URI uri, String xml) throws XBRLException {
         InputSource inputSource = new InputSource(new StringReader(xml));
         ContentHandler contentHandler = new ContentHandlerImpl(this, uri, xml);
-        super.parse(uri, inputSource, contentHandler);
+        return parse(uri, inputSource, contentHandler);
     }
     
 }

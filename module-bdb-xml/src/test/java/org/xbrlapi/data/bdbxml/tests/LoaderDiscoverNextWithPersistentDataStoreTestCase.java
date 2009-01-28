@@ -15,7 +15,7 @@ public class LoaderDiscoverNextWithPersistentDataStoreTestCase extends BaseTestC
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.stashURI(new URI(this.getURI(STARTING_POINT)));		
+		loader.stashURI(getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {

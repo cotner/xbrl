@@ -89,7 +89,7 @@ public interface Store {
      * @param uri The URI of the document to delete from the data store.
      * @throws XBRLException
      */
-    public void deleteDocument(String uri) throws XBRLException;
+    public void deleteDocument(URI uri) throws XBRLException;
     
 
 	 /**
@@ -98,7 +98,7 @@ public interface Store {
 	  * @param uri The URI of the document to delete.
 	  * @throws XBRLException
 	  */
-    public void deleteRelatedDocuments(String uri) throws XBRLException;
+    public void deleteRelatedDocuments(URI uri) throws XBRLException;
     
 
     
@@ -180,14 +180,13 @@ public interface Store {
 
     /**
      * Get a single document in the store as a DOM.
-     * @param uri The string representation of the URI of the 
-     * document to be retrieved.
+     * @param uri The URI of the document to be retrieved.
      * @return a DOM Document containing the XML representation of the
      * file at the specified URI.  Returns null if the store does not
      * contain a document with the given URI.
      * @throws XBRLException if the document cannot be constructed as a DOM.
      */
-    public Element getDocumentAsDOM(String uri) throws XBRLException;
+    public Element getDocumentAsDOM(URI uri) throws XBRLException;
     
 	/**
 	 * Serializes the individual documents in the data store, 
@@ -265,7 +264,7 @@ public interface Store {
      * @return a list of the URIs in the data store.
      * @throws XBRLException if the list cannot be constructed.
      */
-    public List<String> getStoredURIs() throws XBRLException;
+    public List<URI> getStoredURIs() throws XBRLException;
     
     /**
      * Test if a particular URI is already in the data store.
@@ -273,7 +272,7 @@ public interface Store {
      * @return true if the document is in the store and false otherwise.
      * @throws XBRLException if the document cannot be constructed as a DOM.
      */
-    public boolean hasDocument(String uri) throws XBRLException;
+    public boolean hasDocument(URI uri) throws XBRLException;
     
 
     
@@ -399,7 +398,7 @@ public interface Store {
      * root fragment is available for the given URI.
      * @throws XBRLException if more than one root fragment is found in the data store.
      */
-    public <F extends Fragment> F getRootFragmentForDocument(String uri) throws XBRLException;
+    public <F extends Fragment> F getRootFragmentForDocument(URI uri) throws XBRLException;
 
     
     /**
@@ -416,9 +415,11 @@ public interface Store {
     public void delete() throws XBRLException;    
 
     /**
-     * @param document The string representation of the document content.
-     * @return the hash value for the string representing the 
-     * content of the document.
+     * @param document The URI for the document.
+     * @return the ID to be used for the document when forming
+     * fragment IDs for all fragments in the data store.
+     * This ID needs to be unique for each document in the 
+     * data store or the data store will corrupt.
      * @throws XBRLException
      */
     public String getDocumentId(URI document) throws XBRLException;
@@ -467,7 +468,7 @@ public interface Store {
      * the specified document as targets of their XLinks (custom or otherwise).
      * @throws XBRLException if the list of referencing documents cannot be populated.
      */
-    public List<String> getReferencingDocuments(String uri) throws XBRLException;
+    public List<URI> getReferencingDocuments(URI uri) throws XBRLException;
     
     /**
      * Override this method in a data store implementation if the data store 
@@ -477,18 +478,18 @@ public interface Store {
      * @return a list of the documents directly referenced by this document.
      * @throws XBRLException if the list of referenced documents cannot be populated.
      */
-    public List<String> getReferencedDocuments(String uri) throws XBRLException;    
+    public List<URI> getReferencedDocuments(URI uri) throws XBRLException;    
     
     /**
      * @param uris The list of URIs to restrict query results to coming from.
      */
-    public void setFilteringURIs(List<String> uris);
+    public void setFilteringURIs(List<URI> uris);
 
     /**
      * @return the list of URIs to filter query results using or
      * null if no such list of URIs is being used by the data store.
      */
-    public List<String> getFilteringURIs();
+    public List<URI> getFilteringURIs();
     
     /**
      * Specify that the data store is not to filter query results to only come

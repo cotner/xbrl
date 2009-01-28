@@ -1,5 +1,8 @@
 package org.xbrlapi.fragment.tests;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.xbrlapi.impl.FragmentComparator;
 import org.xbrlapi.impl.MockFragmentImpl;
 import org.xbrlapi.utilities.BaseTestCase;
@@ -27,41 +30,45 @@ public class FragmentComparatorTestCase extends BaseTestCase {
 		
 		comparator = new FragmentComparator();
 		
-		f1 = new MockFragmentImpl("10");
-		f1.setURI("http://uriA/");
-		f1.setSequenceToParentElement("");
-		f1.setParentIndex("1");
-		f1.setPrecedingSiblings("0");
-		
-		f2 = new MockFragmentImpl("11");
-		f2.setURI("http://uriA/");
-		f2.setSequenceToParentElement("");
-		f2.setParentIndex("1");
-		f2.setPrecedingSiblings("0");
-		
-		f3 = new MockFragmentImpl("12");
-		f3.setURI("http://uriA/");
-		f3.setSequenceToParentElement("");
-		f3.setParentIndex("1");
-		f3.setPrecedingSiblings("1");
-
-		f4 = new MockFragmentImpl("13");
-		f4.setURI("http://uriA/");
-		f4.setSequenceToParentElement("");
-		f4.setParentIndex("2");
-		f4.setPrecedingSiblings("0");
-		
-		f5 = new MockFragmentImpl("14");
-		f5.setURI("http://uriA/");
-		f5.setSequenceToParentElement("68 2");
-		f5.setParentIndex("1");
-		f5.setPrecedingSiblings("0");		
-
-		f6 = new MockFragmentImpl("15");
-		f6.setURI("http://uriB/");
-		f6.setSequenceToParentElement("");
-		f6.setParentIndex("1");
-		f6.setPrecedingSiblings("0");		
+        try {
+    		f1 = new MockFragmentImpl("10");
+    	    f1.setURI(new URI("http://uriA/"));
+    	    f1.setSequenceToParentElement("");
+    		f1.setParentIndex("1");
+    		f1.setPrecedingSiblings("0");
+    		
+    		f2 = new MockFragmentImpl("11");
+    		f2.setURI(new URI("http://uriA/"));
+    		f2.setSequenceToParentElement("");
+    		f2.setParentIndex("1");
+    		f2.setPrecedingSiblings("0");
+    		
+    		f3 = new MockFragmentImpl("12");
+    		f3.setURI(new URI("http://uriA/"));
+    		f3.setSequenceToParentElement("");
+    		f3.setParentIndex("1");
+    		f3.setPrecedingSiblings("1");
+    
+    		f4 = new MockFragmentImpl("13");
+    		f4.setURI(new URI("http://uriA/"));
+    		f4.setSequenceToParentElement("");
+    		f4.setParentIndex("2");
+    		f4.setPrecedingSiblings("0");
+    		
+    		f5 = new MockFragmentImpl("14");
+    		f5.setURI(new URI("http://uriA/"));
+    		f5.setSequenceToParentElement("68 2");
+    		f5.setParentIndex("1");
+    		f5.setPrecedingSiblings("0");		
+    
+    		f6 = new MockFragmentImpl("15");
+    		f6.setURI(new URI("http://uriB/"));
+    		f6.setSequenceToParentElement("");
+    		f6.setParentIndex("1");
+    		f6.setPrecedingSiblings("0");		
+        } catch (URISyntaxException e) {
+            fail("URI syntax is invalid.");
+        }
 		
 	}
 

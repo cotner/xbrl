@@ -1,6 +1,7 @@
 package org.xbrlapi.impl;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -366,8 +367,12 @@ public class FragmentImpl implements Fragment {
     /**
      * @see org.xbrlapi.Fragment#getURI()
      */
-    public String getURI() throws XBRLException {
-        return this.getMetaAttribute("uri");
+    public URI getURI() throws XBRLException {
+        try {
+            return new URI(this.getMetaAttribute("uri"));
+        } catch (URISyntaxException e) {
+            throw new XBRLException(this.getMetaAttribute("uri") + " has an invalid URI syntax.");
+        }
     }
     
 

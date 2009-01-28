@@ -37,7 +37,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		loader.discover(this.getURI(STARTING_POINT));		
-        String myURI = Pattern.compile("397-ABC.xsd").matcher(getURI("test.data.multi.concept.schema")).replaceAll("xlink_test.xml");
+        String myURI = Pattern.compile("397-ABC.xsd").matcher(getURI("test.data.multi.concept.schema").toString()).replaceAll("xlink_test.xml");
         uri = new URI(myURI);
 	}
 

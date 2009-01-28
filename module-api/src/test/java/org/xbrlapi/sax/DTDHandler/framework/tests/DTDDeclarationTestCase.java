@@ -1,5 +1,7 @@
 package org.xbrlapi.sax.DTDHandler.framework.tests;
 
+import java.net.URI;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -13,7 +15,7 @@ import org.xml.sax.XMLReader;
 */
 public class DTDDeclarationTestCase extends BaseTestCase {
 	
-    private final String uri = this.getURI("real.data.schema.with.dtd");
+    private final URI uri = this.getURI("real.data.schema.with.dtd");
 
 	private SAXParser saxParser = null;
 	
@@ -54,7 +56,7 @@ public class DTDDeclarationTestCase extends BaseTestCase {
 	
 	public void testHandlingOfDTDEntities() {
 		try {
-			xmlReader.parse(uri);
+			xmlReader.parse(uri.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

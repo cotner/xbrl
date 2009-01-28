@@ -20,9 +20,9 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		uri1 = new URI(getURI(this.STARTING_POINT));
-		uri2 = new URI(getURI(this.STARTING_POINT_2));
-        uri3 = new URI(getURI(this.STARTING_POINT_3));
+		uri1 = getURI(this.STARTING_POINT);
+		uri2 = getURI(this.STARTING_POINT_2);
+        uri3 = getURI(this.STARTING_POINT_3);
 	}
 	
 	public AsyncLoaderImplTestCase(String arg0) {
@@ -54,7 +54,7 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
             assertTrue(store.getDocumentsToDiscover().size() > 0);
 			loader.discover();
             logger.info("# stored URIs = " + store.getStoredURIs().size());
-            for (String uri: store.getStoredURIs()) {
+            for (URI uri: store.getStoredURIs()) {
                 logger.info(uri);
             }
 			assertTrue(store.getStoredURIs().size() > 14);

@@ -1,5 +1,6 @@
 package org.xbrlapi.data.bdbxml.tests;
 
+import java.net.URI;
 import java.util.List;
 
 import org.w3c.dom.Element;
@@ -30,7 +31,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	 */
 	public void testGettingURIList() {
 		try {
-			List<String> uris = store.getStoredURIs();
+			List<URI> uris = store.getStoredURIs();
 			assertTrue(uris.size() > 1);
 			
 			Element e = store.getDocumentAsDOM(uris.get(0));

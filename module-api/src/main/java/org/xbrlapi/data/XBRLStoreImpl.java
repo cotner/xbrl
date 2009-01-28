@@ -385,10 +385,10 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
 
 
     /**
-     * @see org.xbrlapi.data.XBRLStore#getMinimumDocumentSet(String)
+     * @see org.xbrlapi.data.XBRLStore#getMinimumDocumentSet(URI)
      */
-    public List<String> getMinimumDocumentSet(String uri) throws XBRLException {
-        List<String> starters = new Vector<String>();
+    public List<URI> getMinimumDocumentSet(URI uri) throws XBRLException {
+        List<URI> starters = new Vector<URI>();
         starters.add(uri);
         return this.getMinimumDocumentSet(starters);
     }
@@ -396,13 +396,13 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.XBRLStore#getMinimumDocumentSet(List)
      */
-    public List<String> getMinimumDocumentSet(List<String> starters) throws XBRLException {
+    public List<URI> getMinimumDocumentSet(List<URI> starters) throws XBRLException {
         
-        List<String> allDocuments = new Vector<String>();        
-        List<String> documentsToCheck = new Vector<String>();        
-        Map<String,String> foundDocuments = new HashMap<String,String>();
+        List<URI> allDocuments = new Vector<URI>();        
+        List<URI> documentsToCheck = new Vector<URI>();        
+        Map<URI,String> foundDocuments = new HashMap<URI,String>();
 
-        for (String starter: starters) {
+        for (URI starter: starters) {
             if (! foundDocuments.containsKey(starter)) {
                 foundDocuments.put(starter,"");
                 documentsToCheck.add(starter);
@@ -410,10 +410,10 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
         }
         
         while (documentsToCheck.size() > 0) {
-            String doc = documentsToCheck.get(0);
+            URI doc = documentsToCheck.get(0);
             allDocuments.add(doc);
-            List<String> newDocuments = this.getReferencedDocuments(doc);
-            for (String newDocument: newDocuments) {
+            List<URI> newDocuments = this.getReferencedDocuments(doc);
+            for (URI newDocument: newDocuments) {
                 if (! foundDocuments.containsKey(newDocument)) {
                     foundDocuments.put(newDocument,"");
                     documentsToCheck.add(newDocument);

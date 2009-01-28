@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -14,7 +16,7 @@ public interface UsedOn extends Fragment {
      *
      * @throws XBRLException
      */
-    public String getURI() throws XBRLException;
+    public URI getURI() throws XBRLException;
     
 
 	

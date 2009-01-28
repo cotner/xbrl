@@ -166,7 +166,7 @@ public interface Fragment extends Comparable<Fragment> {
      * Get the URI of the document containing this fragment.
      * @throws XBRLException
      */
-    public String getURI() throws XBRLException;
+    public URI getURI() throws XBRLException;
     
 
 	

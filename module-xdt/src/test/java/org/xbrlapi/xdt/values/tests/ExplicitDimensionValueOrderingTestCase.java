@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt.values.tests;
 
+import java.net.URI;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -47,7 +48,7 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
     
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
     
-            String uri = this.getURI(STARTING_POINT);
+            URI uri = this.getURI(STARTING_POINT);
 
             loader.discover(uri);
             
@@ -89,7 +90,7 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
     
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
     
-            String uri = this.getURI(STARTING_POINT);
+            URI uri = this.getURI(STARTING_POINT);
 
             loader.discover(uri);
             
@@ -132,12 +133,12 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
     
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
 
-            String uri = this.getURI(STARTING_POINT);
+            URI uri = this.getURI(STARTING_POINT);
 
             loader.discover(uri);
 
-            List<String> uris = store.getStoredURIs();
-            for (String myURI: uris) logger.info(myURI);
+            List<URI> uris = store.getStoredURIs();
+            for (URI myURI: uris) logger.info(myURI);
 
             FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
             for (Concept c: concepts) store.serialize(c.getDataRootElement());

@@ -1,5 +1,6 @@
 package org.xbrlapi.data.bdbxml.tests;
 
+import java.net.URI;
 import java.util.List;
 /**
  * Tests of performance with larger data sets.
@@ -30,7 +31,7 @@ public abstract class DTDDeclarationHandlerTestCase extends BaseTestCase {
 
 	public void testStorageOfDocumentsWithDTDs() {
 		try {
-			List<String> uris = store.getStoredURIs();
+			List<URI> uris = store.getStoredURIs();
 			assertTrue(uris.size() > 0);
 		} catch (Exception e) {
 			e.printStackTrace();

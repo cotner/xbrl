@@ -88,7 +88,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             String lName, 
             String qName, 
             Attributes attrs) throws SAXException {
-        
+
         Loader loader = getLoader();
         
         // Update the information about the state of the current element
@@ -96,7 +96,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
 
         // Update the loader information about child elements.
         loader.incrementChildren();
-        
+
         // Stash new URIs in xsi:schemaLocation attributes if desired
         if (loader.useSchemaLocationAttributes()) {
             String schemaLocations = attrs.getValue(Constants.XMLSchemaInstanceNamespace,"schemaLocation");
@@ -118,7 +118,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
                 }
             }
         }
-        
+
         // Update the namespace data structure and insert namespace mappings into metadata.
         HashMap<String,String> inheritedMap = getNamespaceMaps().peek();
         HashMap<String,String> myMap = (HashMap<String,String>) inheritedMap.clone();
@@ -128,7 +128,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             }
         }
         getNamespaceMaps().push(myMap);
-        
+
         // Identify the fragments
         for (Identifier identifier: getIdentifiers()) {
             try {
@@ -147,7 +147,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         if (! loader.isBuildingAFragment()) {
             throw new SAXException("Some element has not been placed in a fragment.");
         }
-        
+
         // Extend the child count for a new element if 
         // we have not started a new fragment.
         try {
@@ -157,7 +157,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         } catch (XBRLException e) {
             throw new SAXException("Could not handle children tracking at the fragment level.",e);
         }
-        
+
         // Add the necessary xmlns namespace declarations to the fragment root.
         try {
             if (getLoader().getFragment().isNewFragment()) { // the element being started is the root of a new fragment.
@@ -169,7 +169,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         } catch (XBRLException e) {
            throw new SAXException("The loader is not building a fragment so something is badly amiss.",e);
         }
-        
+
         // Insert the current element into the fragment being built
         try {
             Fragment fragment = getLoader().getFragment();
@@ -177,7 +177,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             Builder builder = fragment.getBuilder();
             if (builder == null) throw new SAXException("A fragment being built needs a builder.");
             builder.appendElement(namespaceURI, lName, qName, attrs);
-            
+
         } catch (XBRLException e) {
             throw new SAXException("The element could not be appended to the fragment.",e);
         }
@@ -355,7 +355,6 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
 	public ContentHandlerImpl(Loader loader, URI uri) throws XBRLException {
 		super(loader, uri);		
 	    getNamespaceMaps().push(new HashMap<String,String>());
-		
 	}
 	
     /**

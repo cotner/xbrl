@@ -1,5 +1,6 @@
 package org.xbrlapi.data.dom.tests;
 
+import java.net.URI;
 import java.util.Map;
 
 import org.xbrlapi.Fragment;
@@ -152,8 +153,8 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testHasDocument() {
 		try {
 			assertTrue(store.hasDocument(getURI(STARTING_POINT)));
-			assertFalse(store.hasDocument("http://www.rubbish.gcs/crazy.xyz"));
-		} catch (XBRLException e) {
+			assertFalse(store.hasDocument(new URI("http://www.rubbish.gcs/crazy.xyz")));
+		} catch (Exception e) {
 			fail("Unexpected " + e.getMessage());
 		}
 	}

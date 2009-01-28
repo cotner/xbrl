@@ -11,7 +11,6 @@ import org.xbrlapi.loader.LoaderImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * Test the loader implementation.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 public class LoaderImplTestCase extends BaseTestCase {
@@ -24,8 +23,8 @@ public class LoaderImplTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		uri1 = new URI(getURI(this.STARTING_POINT));
-		uri2 = new URI(getURI(this.STARTING_POINT_2));
+		uri1 = getURI(this.STARTING_POINT);
+		uri2 = getURI(this.STARTING_POINT_2);
 		uris.add(uri1);
 		uris.add(uri2);
 /*		loader.discover(this.getURI(STARTING_POINT));		
@@ -134,12 +133,12 @@ public class LoaderImplTestCase extends BaseTestCase {
 			loader.stashURI(uri2);
 			loader.discover();
 			
-            List<String> uris = store.getStoredURIs();
+            List<URI> uris = store.getStoredURIs();
             assertTrue(uris.size() > 0);
             
             boolean found1 = false;
             boolean found2 = false;
-            for (String uri: uris) {
+            for (URI uri: uris) {
                 if (uri.equals(uri1.toString())) {
                     found1 = true;
                 }

@@ -25,7 +25,7 @@ public class InMemoryMatcherTestCase extends BaseTestCase {
 
     public void testGetSignatureFromSmallFile() {
         try {
-            URI uri = new URI(this.getURI("test.data.small.schema"));
+            URI uri = getURI("test.data.small.schema");
             logger.info(matcher.getSignature(uri));
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,7 +35,7 @@ public class InMemoryMatcherTestCase extends BaseTestCase {
     
     public void testGetSignatureFromLargeFile() {
         try {
-            URI uri = new URI(this.getURI("real.data.sec"));
+            URI uri = getURI("real.data.sec");
             logger.info(matcher.getSignature(uri));
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,7 +46,7 @@ public class InMemoryMatcherTestCase extends BaseTestCase {
     public void testRepeatedGetMatchFromLargeFile() {
         try {
             String URI = "real.data.sec";
-            URI uri = new URI(this.getURI(URI));
+            URI uri = getURI(URI);
             assertEquals(uri,matcher.getMatch(uri));
             assertEquals(uri,matcher.getMatch(uri));
         } catch (Exception e) {

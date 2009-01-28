@@ -17,7 +17,7 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 
 	private final String STARTING_POINT = "test.data.multi.concept.schema";
 
-	String uri = null;
+	URI uri = null;
 	String document = 
 		"<linkbase xmlns=\"http://www.xbrl.org/2003/linkbase\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n" +
 	    "<presentationLink xlink:type=\"extended\" xlink:role=\"http://www.xbrl.org/2003/role/link\">\n" + 

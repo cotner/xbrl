@@ -33,8 +33,8 @@ public class StoreMatcherTestCase extends BaseTestCase {
 	        loader.discover(this.getURI(ORIGINAL));
 	        loader.discover(this.getURI(DUPLICATE));       
 		    
-            URI uri1 = new URI(this.getURI(ORIGINAL));
-	        URI uri2 = new URI(this.getURI(DUPLICATE));
+            URI uri1 = getURI(ORIGINAL);
+	        URI uri2 = getURI(DUPLICATE);
 	        
 	        assertEquals(uri1,store.getMatcher().getMatch(uri2));
 	        

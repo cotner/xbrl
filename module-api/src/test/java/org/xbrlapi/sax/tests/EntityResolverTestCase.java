@@ -74,7 +74,7 @@ public class EntityResolverTestCase extends BaseTestCase {
 	
 	public final void testSAXParserUsageOfCustomEntityResolver() {
 		
-		String uri = getURI("test.data.cacheableURI.A");
+		URI uri = getURI("test.data.cacheableURI.A");
 
         ContentHandler contentHandler = new EntityResolverTestCase.ContentHandler();
         XMLReader reader = null;
@@ -110,7 +110,7 @@ public class EntityResolverTestCase extends BaseTestCase {
 		} finally {
 			try {
 				CacheImpl cache = new CacheImpl(new File(cachePath));
-				cache.purge(new URI(uri));
+				cache.purge(uri);
 			} catch (Exception e) {
 			    e.printStackTrace();
 				fail(e.getMessage());

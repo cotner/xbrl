@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -94,32 +95,31 @@ abstract public class BaseTestCase extends TestCase {
 	}
 	
 	/**
-	 * @param property giving the relative URI of the test data
+	 * @param property determining the URI of the test data
 	 * @return the absolute URI of the test data
 	 */
-	public String getURI(String property) {
+	public URI getURI(String property) {
 		String myProperty = configuration.getProperty(property);
-		
-		if (myProperty.startsWith("http://")) {
-            logger.debug("URI is " + myProperty);
-			return myProperty;
+		URI uri = null;
+		try {
+	        if (myProperty.startsWith("http:/")) {
+	            uri = new URI(myProperty);
+	        } else if (myProperty.startsWith("file:/")) {
+	            uri = new URI(myProperty);
+	        } else if (property.startsWith("test.data.local.")) {
+	            File root = new File(configuration.getProperty("local.test.data.root"));
+	            logger.info(root);
+	            File file = new File(root,configuration.getProperty(property));
+	            uri = file.toURI();
+	        } else {
+	            uri = new URI(baseURI + configuration.getProperty(property));		    
+	        }
+		} catch (URISyntaxException e) {
+		    fail("The URI syntax is invalid.");
 		}
-		
-		if (myProperty.startsWith("file://")) {
-            logger.debug("URI is " + myProperty);
-		    return myProperty;
-		}
-		
-		if (property.startsWith("test.data.local.")) {
-            File root = new File(configuration.getProperty("local.test.data.root"));
-            File file = new File(root,configuration.getProperty(property));
-            URI uri = file.toURI();
-            logger.info("URI is " + uri);
-            return uri.toString();
-		}
-		
-        logger.debug("URI is " + baseURI + configuration.getProperty(property));
-		return baseURI + configuration.getProperty(property);
+        logger.info("Test URI is " + uri);
+		return uri;
+
 	}	
 
 	/**

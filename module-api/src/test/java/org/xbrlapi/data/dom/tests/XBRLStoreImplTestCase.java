@@ -1,5 +1,6 @@
 package org.xbrlapi.data.dom.tests;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 
@@ -143,10 +144,10 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
     public void testFilteredQuerying() throws Exception {
 
-        String uri1 = this.getURI(this.STARTING_POINT_INSTANCE_1);
+        URI uri1 = this.getURI(this.STARTING_POINT_INSTANCE_1);
         loader.discover(uri1);
 
-        String uri2 = this.getURI(this.STARTING_POINT_INSTANCE_2);
+        URI uri2 = this.getURI(this.STARTING_POINT_INSTANCE_2);
         loader.discover(uri2);
 
         logger.info("Done with loading the data.");
@@ -155,9 +156,9 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
         logger.info("Total number of fragments: " + allFragments.getLength());
         
-        List<String> allURIs = store.getStoredURIs();
+        List<URI> allURIs = store.getStoredURIs();
         logger.info("# URIs in store = " + allURIs.size());
-        List<String> uris = store.getMinimumDocumentSet(uri1);
+        List<URI> uris = store.getMinimumDocumentSet(uri1);
         assertTrue(uris.size() > 1);
 
         assertTrue(allURIs.size() > uris.size());

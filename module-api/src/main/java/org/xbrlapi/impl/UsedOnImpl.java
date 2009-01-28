@@ -1,5 +1,8 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.w3c.dom.Node;
 import org.xbrlapi.UsedOn;
 import org.xbrlapi.utilities.XBRLException;
@@ -17,12 +20,16 @@ public class UsedOnImpl extends FragmentImpl implements UsedOn {
      * @throws XBRLException
      * @see org.xbrlapi.UsedOn#getURI()
      */
-    public String getURI() throws XBRLException {
+    public URI getURI() throws XBRLException {
     	Node rootNode = getDataRootElement();
     	String u = rootNode.getTextContent().trim();
     	if (u.equals(""))
 			throw new XBRLException("The used on declaration does not declare the element that usage is allowed on.");
-    	return this.getNamespaceFromQName(u, rootNode);
+    	try {
+    	    return new URI(this.getNamespaceFromQName(u, rootNode));
+    	} catch (URISyntaxException e) {
+    	    throw new XBRLException(getNamespaceFromQName(u, rootNode) + " has an invalid URI syntax.");
+    	}
     }
     
 

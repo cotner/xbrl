@@ -1,5 +1,6 @@
 package org.xbrlapi.data.dom.tests;
 
+import java.net.URI;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -32,11 +33,11 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	 */
 	public void testGettingURIList() {
 		try {
-			List<String> uris = store.getStoredURIs();
+			List<URI> uris = store.getStoredURIs();
 			assertTrue(uris.size() > 0);
 			
 			boolean foundStartingPoint = false;
-			for (String uri: uris) {
+			for (URI uri: uris) {
 			    if (uri.equals(getURI(this.STARTING_POINT))) {
 			        foundStartingPoint = true;
 			    }

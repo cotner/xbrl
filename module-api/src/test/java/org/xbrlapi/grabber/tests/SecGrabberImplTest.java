@@ -16,7 +16,7 @@ public class SecGrabberImplTest extends BaseTestCase {
     private List<URI> resources = null;
 	protected void setUp() throws Exception {
 		super.setUp();
-        URI feedURI = new URI(getURI("test.data.local.sec"));             
+        URI feedURI = getURI("test.data.local.sec");             
         Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
         assertTrue(resources.size() > 1900);
@@ -31,7 +31,7 @@ public class SecGrabberImplTest extends BaseTestCase {
 
 			long start = System.currentTimeMillis();
 			for (URI resource: resources) {
-				if (! loader.getStore().hasDocument(resource.toString()))
+				if (! loader.getStore().hasDocument(resource))
 				loader.discover(resource);
 				System.out.println("Time taken = " + ((System.currentTimeMillis() - start) / 1000));
 				if (loader.getStore().getStoredURIs().size() > 14) {

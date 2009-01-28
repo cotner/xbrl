@@ -88,9 +88,7 @@ public class BaseContentHandlerImpl extends DefaultHandler implements ContentHan
      * @see org.xbrlapi.sax.ContentHandler#setURI(URI)
      */
     public void setURI(URI uri) throws XBRLException {
-        if (uri == null) {
-            throw new XBRLException("The URI must not be null.");
-        }
+        if (uri == null) throw new XBRLException("The URI must not be null.");
         this.uri = uri;
     }
     

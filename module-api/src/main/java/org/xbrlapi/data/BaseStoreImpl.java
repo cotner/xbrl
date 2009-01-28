@@ -106,19 +106,19 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * List of URIs to use when filtering query results to only get matches
      * to a specific set of documents.
      */
-    private List<String> uris = null;
+    private List<URI> uris = null;
 
     /**
      * @see org.xbrlapi.data.Store#setFilteringURIs(List)
      */
-    public void setFilteringURIs(List<String> uris) {
+    public void setFilteringURIs(List<URI> uris) {
         this.uris = uris;
     }
     
     /**
      * @see org.xbrlapi.data.Store#getFilteringURIs()
      */
-    public List<String> getFilteringURIs() {
+    public List<URI> getFilteringURIs() {
         return this.uris;
     }    
     
@@ -145,7 +145,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
         if (isFilteringByURIs()) {
             String uriFilter = "0";
-            for (String uri: this.getFilteringURIs()) {
+            for (URI uri: this.getFilteringURIs()) {
                 uriFilter = uriFilter + " or @uri='" + uri + "'";
             }
             uriFilter = "[" + uriFilter + "]";
@@ -185,7 +185,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public void storeStub(URI document, String reason) throws XBRLException {
 
-        if (this.hasDocument(document.toString())) return;
+        if (this.hasDocument(document)) return;
         if (this.getStub(document) != null) return;
         
         String documentId = getDocumentId(document);
@@ -198,23 +198,31 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
 
     /**
+     * This implementation generates the document ID
+     * with a prefix that is a random string of characters 
+     * including a-z, A-Z and 0-9.
+     * If, by chance, the random string has already been 
+     * used for another document in the data store, then 
+     * another random string is generated and this repeats until
+     * the random string is unique in the data store.
      * @see org.xbrlapi.data.Store#getDocumentId(URI)
      */    
     public String getDocumentId(URI document) throws XBRLException {
 
+        // First see if the document already has a stub in the data store
+        // and if so, use the document ID that was used when the stub was
+        // stored.
         Fragment stub = getStub(document);
         if (stub != null) {
             return stub.getFragmentIndex();
         }
-        int i = 1;
-        String iString = (new Integer(i)).toString();
+        
+        // The document is not in the data store so generate a new document ID.
         String randomString = random();
-        while (this.hasFragment(randomString + "_" + iString + "_1")) {
-            i++;
-            iString = (new Integer(i)).toString();
+        while (this.hasFragment(randomString + "_1") || this.hasFragment(randomString)) {
+            randomString = random();
         }
-        return (randomString + "_" + iString);
-
+        return randomString;
     }
     
     /**
@@ -308,36 +316,32 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     
     
     /**
-	  * @see org.xbrlapi.data.Store#deleteDocument(String)
+	  * @see org.xbrlapi.data.Store#deleteDocument(URI)
      */
-    public void deleteDocument(String uri) throws XBRLException {
-    	try {
-    	    URI matchURI = this.getMatcher().getMatch(new URI(uri));
-    	    String query = "/*[@uri='"+ matchURI + "']";
-            FragmentList<Fragment> fragments = this.<Fragment>query(query);      
-            for (Fragment fragment: fragments) {
-                this.removeFragment(fragment.getFragmentIndex());
-            }
-    	} catch (URISyntaxException e) {
-    	    throw new XBRLException("Malformed URI.",e);
-    	}
+    public void deleteDocument(URI uri) throws XBRLException {
+        URI matchURI = this.getMatcher().getMatch(uri);
+        String query = "/*[@uri='"+ matchURI + "']";
+        FragmentList<Fragment> fragments = this.<Fragment>query(query);      
+        for (Fragment fragment: fragments) {
+            this.removeFragment(fragment.getFragmentIndex());
+        }
     }
     
 
     /**
-	  * @see org.xbrlapi.data.Store#deleteRelatedDocuments(String)
+	  * @see org.xbrlapi.data.Store#deleteRelatedDocuments(URI)
 	  */
-	private static HashMap<String,Boolean> documentsToDelete = new HashMap<String,Boolean>(); 
-    public void deleteRelatedDocuments(String uri) throws XBRLException {
+	private static HashMap<URI,Boolean> documentsToDelete = new HashMap<URI,Boolean>(); 
+    public void deleteRelatedDocuments(URI uri) throws XBRLException {
     	deleteDocument(uri);
     	FragmentList<Fragment> fragments = this.<Fragment>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@targetDocumentURI='"+ uri + "']");
     	for (Fragment fragment: fragments) {
             if (! documentsToDelete.containsKey(fragment.getURI())) {
                 documentsToDelete.put(fragment.getURI(),new Boolean(true));
             }
-    		Iterator<String> iterator = documentsToDelete.keySet().iterator();
+    		Iterator<URI> iterator = documentsToDelete.keySet().iterator();
     		while (iterator.hasNext()) {
-    			String myURI = iterator.next();
+    			URI myURI = iterator.next();
     			if (documentsToDelete.get(myURI)) {
         			deleteRelatedDocuments(myURI);
         			documentsToDelete.put(myURI,new Boolean(false));
@@ -347,17 +351,17 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.Store#getReferencingDocuments(String)
+     * @see org.xbrlapi.data.Store#getReferencingDocuments(URI)
      */
-    public List<String> getReferencingDocuments(String uri) throws XBRLException {
+    public List<URI> getReferencingDocuments(URI uri) throws XBRLException {
         String query = "/*[@targetDocumentURI='"+ uri + "']";
         FragmentList<Fragment> fragments = this.<Fragment>query(query);
 
-        List<String> uris = new Vector<String>();
-        HashMap<String,String> map = new HashMap<String,String>(); 
+        List<URI> uris = new Vector<URI>();
+        HashMap<URI,String> map = new HashMap<URI,String>(); 
 
         for (Fragment fragment: fragments) {
-            String doc = fragment.getURI();
+            URI doc = fragment.getURI();
             if (!map.containsKey(doc)) {
                 map.put(doc,"");
                 uris.add(doc);
@@ -368,20 +372,24 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.Store#getReferencedDocuments(String)
+     * @see org.xbrlapi.data.Store#getReferencedDocuments(URI)
      */
-    public List<String> getReferencedDocuments(String uri) throws XBRLException {
+    public List<URI> getReferencedDocuments(URI uri) throws XBRLException {
         String query = "/*[@uri='" + uri + "' and @targetDocumentURI]";
         FragmentList<Fragment> fragments = this.<Fragment>query(query);
 
-        List<String> uris = new Vector<String>();
-        HashMap<String,String> map = new HashMap<String,String>(); 
+        List<URI> uris = new Vector<URI>();
+        HashMap<URI,String> map = new HashMap<URI,String>(); 
 
         for (Fragment fragment: fragments) {
-            String target = fragment.getMetaAttribute("targetDocumentURI");
-            if (!map.containsKey(target)) {
-                map.put(target,"");
-                uris.add(target);
+            try {
+                URI target = new URI(fragment.getMetaAttribute("targetDocumentURI"));
+                if (!map.containsKey(target)) {
+                    map.put(target,"");
+                    uris.add(target);
+                }
+            } catch (URISyntaxException e) {
+                throw new XBRLException(fragment.getMetaAttribute("targetDocumentURI") + " has an invalid URI syntax.");
             }
         }
         
@@ -431,8 +439,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @return a list of the URIs in the data store.
      * @throws XBRLException if the list cannot be constructed.
      */
-    public List<String> getStoredURIs() throws XBRLException {
-    	LinkedList<String> uris = new LinkedList<String>();
+    public List<URI> getStoredURIs() throws XBRLException {
+    	LinkedList<URI> uris = new LinkedList<URI>();
     	FragmentList<Fragment> rootFragments = this.query("/*[@parentIndex='none']");
     	for (int i=0; i<rootFragments.getLength(); i++) {
     		uris.add(rootFragments.getFragment(i).getURI());
@@ -441,16 +449,12 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
 
     /**
-     * @see org.xbrlapi.data.Store#hasDocument(String)
+     * @see org.xbrlapi.data.Store#hasDocument(URI)
      */
-    public boolean hasDocument(String uri) throws XBRLException {
-        try {
-            URI matchURI = getMatcher().getMatch(new URI(uri));
-            FragmentList<Fragment> rootFragments = this.<Fragment>query("/*[@uri='" + matchURI + "' and @parentIndex='none']");
-            return (rootFragments.getLength() > 0) ? true : false;
-        } catch (URISyntaxException e) {
-            throw new XBRLException("Malformed URI.",e);
-        }
+    public boolean hasDocument(URI uri) throws XBRLException {
+        URI matchURI = getMatcher().getMatch(uri);
+        FragmentList<Fragment> rootFragments = this.<Fragment>query("/*[@uri='" + matchURI + "' and @parentIndex='none']");
+        return (rootFragments.getLength() > 0) ? true : false;
     }
 
     
@@ -467,7 +471,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * contain a document with the given URI.
      * @throws XBRLException if the document cannot be constructed as a DOM.
      */
-    public Element getDocumentAsDOM(String uri) throws XBRLException {
+    public Element getDocumentAsDOM(URI uri) throws XBRLException {
     	return getSubtree(this.getRootFragmentForDocument(uri));
     }
 	
@@ -481,19 +485,15 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException if more or less than one document is found in the store matching 
      * the supplied URI.
      */
-    private Element getAnnotatedDocumentAsDOM(String uri) throws XBRLException {
-        try {
-            URI matchURI = getMatcher().getMatch(new URI(uri));
-            FragmentList<Fragment> fragments = query("/*[@uri='" + matchURI + "' and @parentIndex='none']");
-            if (fragments.getLength() > 1) throw new XBRLException("More than one document was found in the data store.");
-            if (fragments.getLength() == 0) throw new XBRLException("No documents were found in the data store.");
-            Fragment fragment = fragments.getFragment(0);
-            Element document = this.getAnnotatedSubtree(fragment);
-            document.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",fragment.getFragmentIndex());
-            return document;
-        } catch (URISyntaxException e) {
-            throw new XBRLException("Malformed URI.",e);
-        }
+    private Element getAnnotatedDocumentAsDOM(URI uri) throws XBRLException {
+        URI matchURI = getMatcher().getMatch(uri);
+        FragmentList<Fragment> fragments = query("/*[@uri='" + matchURI + "' and @parentIndex='none']");
+        if (fragments.getLength() > 1) throw new XBRLException("More than one document was found in the data store.");
+        if (fragments.getLength() == 0) throw new XBRLException("No documents were found in the data store.");
+        Fragment fragment = fragments.getFragment(0);
+        Element document = this.getAnnotatedSubtree(fragment);
+        document.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",fragment.getFragmentIndex());
+        return document;
     }
     
 	/**
@@ -671,10 +671,10 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 		
     	Element root = storeDOM.createElementNS(Constants.XBRLAPINamespace,Constants.XBRLAPIPrefix + ":dts");
 		
-		List<String> uris = getStoredURIs();
-		Iterator<String> iterator = uris.iterator();
+		List<URI> uris = getStoredURIs();
+		Iterator<URI> iterator = uris.iterator();
 		while (iterator.hasNext()) {
-			String uri = iterator.next();
+			URI uri = iterator.next();
 			Element e = getDocumentAsDOM(uri);
 			root.appendChild(e);			
 		}
@@ -697,12 +697,10 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 		
     	Element root = storeDOM.createElementNS(Constants.CompNamespace,Constants.CompPrefix + ":dts");
 		
-		List<String> uris = getStoredURIs();
-		Iterator<String> iterator = uris.iterator();
-		while (iterator.hasNext()) {
-			String uri = iterator.next();
+		List<URI> uris = getStoredURIs();
+		for (URI uri: uris) {
 	    	Element file = storeDOM.createElementNS(Constants.CompNamespace,Constants.CompPrefix + ":file");
-	    	file.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":uri", uri);
+	    	file.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":uri", uri.toString());
 	    	file.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",this.getNextFragmentId());
 			root.appendChild(file);
 			file.appendChild(getAnnotatedDocumentAsDOM(uri));
@@ -807,24 +805,20 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	 */
 	public void saveDocuments(File destination, String uriPrefix) throws XBRLException {
 		
-		try {
-			if (! destination.exists()) throw new XBRLException("The specified directory does not exist.");
-			
-			if (! destination.isDirectory()) throw new XBRLException("A directory rather than a file must be specified.");
-			
-			List<String> uris = getStoredURIs();
-			Iterator<String> iterator = uris.iterator();
-			while (iterator.hasNext()) {			
-				String uri = iterator.next();
-				if (uri.startsWith(uriPrefix)) {
-					CacheImpl cache = new CacheImpl(destination);
-					File file = cache.getCacheFile(new URI(uri));
-					Element e = getDocumentAsDOM(uri);
-					serialize(e,file);
-				}
+		if (! destination.exists()) throw new XBRLException("The specified directory does not exist.");
+		
+		if (! destination.isDirectory()) throw new XBRLException("A directory rather than a file must be specified.");
+		
+		List<URI> uris = getStoredURIs();
+		Iterator<URI> iterator = uris.iterator();
+		while (iterator.hasNext()) {			
+			URI uri = iterator.next();
+			if (uri.toString().startsWith(uriPrefix)) {
+				CacheImpl cache = new CacheImpl(destination);
+				File file = cache.getCacheFile(uri);
+				Element e = getDocumentAsDOM(uri);
+				serialize(e,file);
 			}
-		} catch (URISyntaxException e) {
-			throw new XBRLException("Document could not be saved because the URI could not be formed.", e);
 		}
 		
 	}
@@ -1087,9 +1081,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
 
     /**
-     * @see org.xbrlapi.data.Store#getRootFragmentForDocument(String)
+     * @see org.xbrlapi.data.Store#getRootFragmentForDocument(URI)
      */
-    public <F extends Fragment> F getRootFragmentForDocument(String uri) throws XBRLException {
+    public <F extends Fragment> F getRootFragmentForDocument(URI uri) throws XBRLException {
     	FragmentList<F> fragments = this.<F>query("/*[@uri='" + uri + "' and @parentIndex='none']");
     	if (fragments.getLength() == 0) return null;
     	if (fragments.getLength() > 1) throw new XBRLException("Two fragments identify themselves as roots of the one document.");

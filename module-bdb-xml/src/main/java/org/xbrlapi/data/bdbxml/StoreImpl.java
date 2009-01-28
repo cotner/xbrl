@@ -2,6 +2,7 @@ package org.xbrlapi.data.bdbxml;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -366,9 +367,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * Overrides the base implementation to avoid the overhead of creating the
      * various fragment objects.
-     * @see org.xbrlapi.data.Store#hasDocument(String)
+     * @see org.xbrlapi.data.Store#hasDocument(URI)
      */
-	synchronized public boolean hasDocument(String uri) throws XBRLException {
+	synchronized public boolean hasDocument(URI uri) throws XBRLException {
         XmlResults results = null;
         try {
             results = performQuery("/*[@uri='" + uri + "' and @parentIndex='none']");

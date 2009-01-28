@@ -17,7 +17,7 @@ public class IdentifierTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		uri = new URI(getURI(this.STARTING_POINT));
+		uri = getURI(this.STARTING_POINT);
 	}
 	
 	public IdentifierTestCase(String arg0) {

@@ -17,7 +17,7 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
     private List<URI> resources = null;
     protected void setUp() throws Exception {
         super.setUp();
-        URI feedURI = new URI(getURI("test.data.local.sec"));             
+        URI feedURI = getURI("test.data.local.sec");             
         Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
         assertTrue(resources.size() > 1900);

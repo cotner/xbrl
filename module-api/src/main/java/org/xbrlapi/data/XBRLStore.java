@@ -160,7 +160,7 @@ public interface XBRLStore extends Store {
      * @throws XBRLException if some of the referenced documents are not in
      * the data store.
      */
-    public List<String> getMinimumDocumentSet(List<String> starters) throws XBRLException;
+    public List<URI> getMinimumDocumentSet(List<URI> starters) throws XBRLException;
     
     
     /**
@@ -173,7 +173,7 @@ public interface XBRLStore extends Store {
      * @throws XBRLException if some of the referenced documents are not in
      * the data store.
      */
-    public List<String> getMinimumDocumentSet(String uri) throws XBRLException;
+    public List<URI> getMinimumDocumentSet(URI uri) throws XBRLException;
 
     /**
      * Implementation strategy is:<br/>

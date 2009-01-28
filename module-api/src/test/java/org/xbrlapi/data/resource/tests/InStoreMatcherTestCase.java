@@ -30,7 +30,7 @@ public class InStoreMatcherTestCase extends BaseTestCase {
 	
     public void testGetSignatureFromSmallFile() {
         try {
-            URI uri = new URI(this.getURI("test.data.small.schema"));
+            URI uri = getURI("test.data.small.schema");
             logger.info(matcher.getSignature(uri));
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,7 +40,7 @@ public class InStoreMatcherTestCase extends BaseTestCase {
     
     public void testGetSignatureFromLargeFile() {
         try {
-            URI uri = new URI(this.getURI("real.data.sec"));
+            URI uri = getURI("real.data.sec");
             logger.info(matcher.getSignature(uri));
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,10 +50,10 @@ public class InStoreMatcherTestCase extends BaseTestCase {
 
     public void testRepeatedGetMatchFromLargeFile() {
         try {
-            URI uri1 = new URI(this.getURI("real.data.sec.usgaap.1"));
+            URI uri1 = getURI("real.data.sec.usgaap.1");
             assertEquals(uri1,matcher.getMatch(uri1));
 
-            URI uri2 = new URI(this.getURI("real.data.sec.usgaap.2"));
+            URI uri2 = getURI("real.data.sec.usgaap.2");
             assertEquals(uri1,matcher.getMatch(uri2));
 
             store.serialize(store.getStoreAsDOM().getDocumentElement());
