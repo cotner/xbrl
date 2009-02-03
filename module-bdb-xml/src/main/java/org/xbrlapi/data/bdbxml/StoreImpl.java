@@ -274,28 +274,13 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	private void closeContainer() throws XBRLException {
         if (dataContainer == null) return;
 	    if (dataManager == null) initManager();
-        try {
-            //dataContainer.sync();
-            dataContainer.close();
-            dataContainer.delete();
-            dataContainer = null;
-            logger.info("Closed the data container.");
-        } catch (XmlException e) {
-            throw new XBRLException("The BDB XML database container could not be closed cleanly");
-        }
+        dataContainer.delete();
+        dataContainer = null;
 	}
 	
-    private void closeManager() throws XBRLException {
+    private void closeManager() {
         if (dataManager == null) return;
-        try {
-            dataManager.close();
-            dataManager.delete();
-            dataManager = null;
-            environment = null;
-            logger.info("Closed the data manager.");
-        } catch (XmlException e) {
-            throw new XBRLException("The BDB XML database manager could not be be closed cleanly.");
-        }
+        dataManager.delete();
     }	
 	
     private void deleteContainer() throws XBRLException {
