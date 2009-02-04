@@ -23,19 +23,19 @@ public class XMLDOMBuilder {
 	
 	private static Logger logger = Logger.getLogger(XMLDOMBuilder.class);
 	
-	private static DocumentBuilderFactory factory = null;	
-	private static DocumentBuilder builder = null;
-	private static EntityResolver testEntityResolver = null;
+	private DocumentBuilderFactory factory = null;	
+	private DocumentBuilder builder = null;
+	private EntityResolver testEntityResolver = null;
 	
-	public XMLDOMBuilder() {
-		;
+	public XMLDOMBuilder() throws XBRLException {
+		initialise();
 	}
 	
 	/**
 	 * Initialise the document builder.
 	 * @throws XBRLException if the builder cannot be initialised.
 	 */
-	private static void initialise() {
+	private void initialise() throws XBRLException {
 		try {
 	        if (factory == null) {
 				factory = DocumentBuilderFactory.newInstance();
@@ -50,6 +50,7 @@ public class XMLDOMBuilder {
 	        }
 		} catch (Exception e) {
 			logger.error("The fragment builder could not be constructed.");
+			throw new XBRLException("The DOM builder could not be initialised.",e);
 		}
 	}
 	
@@ -57,8 +58,7 @@ public class XMLDOMBuilder {
 	 * Create an XML DOM document object that will contain the fragment content.
 	 * The DOM is always namespace aware and non-validating
 	 */
-	public static Document newDocument() {
-		initialise();
+	public Document newDocument() {
 		return builder.newDocument();
 	}
 	
@@ -67,9 +67,8 @@ public class XMLDOMBuilder {
 	 * @return An XML DOM object for the given input stream.
 	 * @throws XBRLException if an IO or SAX exception occurs.
 	 */
-	public static Document newDocument(InputStream inputStream) throws XBRLException {
+	public Document newDocument(InputStream inputStream) throws XBRLException {
 		try {
-			initialise();
 			return builder.parse(inputStream);
 		} catch (IOException e) {
 			throw new XBRLException("IO exception building an XML DOM.",e);
@@ -83,9 +82,8 @@ public class XMLDOMBuilder {
 	 * @return The DOM document corresponding to the supplied XML.
 	 * @throws XBRLException if problems occur constructing the DOM.
 	 */
-	public static Document newDocument(String xml) throws XBRLException {
+	public Document newDocument(String xml) throws XBRLException {
 		try {
-			initialise();
 			return builder.parse(new InputSource(new StringReader(xml)));			
 		} catch (IOException e) {
 			throw new XBRLException("An IO exception is causing problems.",e);
