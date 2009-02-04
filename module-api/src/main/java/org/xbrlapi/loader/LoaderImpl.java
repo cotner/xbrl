@@ -806,6 +806,8 @@ public class LoaderImpl implements Loader {
             logger.info("Purged " + uri + " from the data store and cache.");
             this.markDocumentAsCausingIOExceptions(uri);
             return false;
+        } finally {
+            getStore().sync();
         }
 
         // Remove any old document stub from the data store once parsing is successfully completed
