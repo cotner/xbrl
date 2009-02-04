@@ -12,6 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.XBRLStoreImpl;
 import org.xbrlapi.impl.FragmentFactory;
@@ -554,7 +555,18 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         }
 	}
 	
-	
+    /**
+     * Ensures that the database container is flushed to disk.
+     * @see Store#sync()
+     */
+    public void sync() throws XBRLException {
+        if (this.dataContainer == null) throw new XBRLException("The database container cannot be synced because it is null.");
+        try {
+            this.dataContainer.sync();
+        } catch (XmlException e) {
+            throw new XBRLException("The database updates could not be flushed to disk using the sync method.",e);
+        }
+    }	
 
 
 }

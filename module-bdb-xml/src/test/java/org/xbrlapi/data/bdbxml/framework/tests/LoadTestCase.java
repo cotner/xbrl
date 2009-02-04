@@ -9,6 +9,8 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
+
 import com.sleepycat.db.DatabaseException;
 import com.sleepycat.db.Environment;
 import com.sleepycat.db.EnvironmentConfig;
@@ -21,10 +23,11 @@ import com.sleepycat.dbxml.XmlManagerConfig;
 import com.sleepycat.dbxml.XmlUpdateContext;
 
 /**
- * Designed to simplify the analysis of the SIGSEGV crash
- * occurring on multiple processor computers.
+ * Designed to simplify the analysis of memory leaks leading 
+ * to SEG faults that bring down the java runtime environment.
  */
 public class LoadTestCase extends TestCase {
+    protected static Logger logger = Logger.getLogger(LoadTestCase.class);  
     
     private final int iterations = 10000;
     private String container = "container";
@@ -54,22 +57,21 @@ public class LoadTestCase extends TestCase {
 
     @Override
     protected void tearDown() throws Exception {
+        long start = System.currentTimeMillis();
+        logger.info("Starting store deletion at " + start);
         store.delete();
+        logger.info("Store deletion took " + ((System.currentTimeMillis() - start) / 1000) + " seconds.");
     }
 
     public LoadTestCase(String arg0) {
         super(arg0);
     }
 
-    /**
-     * Test the creation and registration of an XMLDB database object
-     */
     public final void testRepeatedDocumentAddition() {
         
         try {
             for (int i=1; i<=iterations; i++) {
                 store.putDocument(prefix + "Document: " + i + suffix);
-                //Thread.sleep(1);
             }
         
         } catch (Exception e) {

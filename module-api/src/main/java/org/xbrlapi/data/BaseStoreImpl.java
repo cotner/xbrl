@@ -196,6 +196,14 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         stub.setMetaAttribute("reason",reason);
         this.storeFragment(stub);
     }
+    
+    /**
+     * Default implementation does nothing.
+     * @see Store#sync()
+     */
+    public void sync() throws XBRLException {
+        ;
+    }
 
     /**
      * This implementation generates the document ID

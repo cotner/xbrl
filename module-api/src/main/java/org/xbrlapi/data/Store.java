@@ -522,5 +522,11 @@ public interface Store {
      * @return true iff the store incorporates a central networks object.
      */
     public boolean hasStoredNetworks();
+ 
+    /**
+     * Flush all database updates to the data store. 
+     * @throws XBRLException if the sync operation fails.
+     */
+    public void sync() throws XBRLException;
     
 }
