@@ -41,11 +41,6 @@
         <appender-ref ref="console"/>
     </category>
 
-    <category name="org.xbrlapi.loader" additivity="false">
-        <priority value="debug"/>
-        <appender-ref ref="console"/>
-    </category>
-
     <root>
 	   <priority value="info"/>
      <appender-ref ref="console"/>
