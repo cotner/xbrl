@@ -170,7 +170,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     /**
      * @see org.xbrlapi.data.Store#storeLoaderState(Map)
      */
-    public void storeLoaderState(Map<URI,String> documents) throws XBRLException {
+    public synchronized void storeLoaderState(Map<URI,String> documents) throws XBRLException {
         try {
             for (URI uri: documents.keySet()) {
                 storeStub(uri,documents.get(uri));
@@ -749,7 +749,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     /**
      * @see org.xbrlapi.data.Store#getDocumentsToDiscover()
      */
-    public List<URI> getDocumentsToDiscover() throws XBRLException {
+    public synchronized List<URI> getDocumentsToDiscover() throws XBRLException {
         FragmentList<Fragment> stubs = getStubs();
         LinkedList<URI> list = new LinkedList<URI>();
         for (Fragment stub: stubs) {
