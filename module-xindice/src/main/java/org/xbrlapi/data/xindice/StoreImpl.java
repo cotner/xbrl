@@ -136,7 +136,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * Close the data store by closing the data and metadata collections.
 	 * Throws XBRLException if the collections cannot be closed.
 	 */
-	public void close() throws XBRLException {
+	public synchronized void close() throws XBRLException {
 		try {
 			collection.close();
 		} catch (XMLDBException e) {
@@ -147,7 +147,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#delete()
 	 */
-	public void delete() throws XBRLException {
+	public synchronized void delete() throws XBRLException {
 		try {
 			Collection parent = collection.getParentCollection();
 			String collectionName = collection.getName();
@@ -158,6 +158,17 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			throw new XBRLException("The data collection could not be deleted.",e);
 		}
 	}
+	
+    /**
+     * @see org.xbrlapi.data.Store#storeFragment(Fragment)
+     */
+    public synchronized int getFragmentCount() throws XBRLException {
+        try {
+            return this.collection.getResourceCount();
+        } catch (XMLDBException e) {
+            throw new XBRLException("Failed to get the number of fragments in the data store.",e);
+        }
+    }   
 	
 	/**
 	 * Add a fragment to the data store.
@@ -179,7 +190,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * properties cannot be updated as required to reflect that its data has been
 	 * stored.
 	 */
-	public void storeFragment(Fragment fragment) throws XBRLException {
+    public synchronized void storeFragment(Fragment fragment) throws XBRLException {
 
 		if (fragment == null) throw new XBRLException("The fragment is null so it cannot be added.");
 		String index = fragment.getFragmentIndex();
@@ -214,14 +225,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 	
     /**
-     * Test if a store contains a specific fragment, as identified by
-     * its index.
-     * @param index The index of the fragment to test for.
-     * @return true iff the store contains a fragment with the specified 
-     * fragment index.
-     * @throws XBRLException If the test cannot be conducted.
+     * @see org.xbrlapi.data.Store#hasFragment(String)
      */
-    public boolean hasFragment(String index) throws XBRLException {
+	public synchronized boolean hasFragment(String index) throws XBRLException {
     	if (getFragment(index) == null) {
     		return false;
     	}
@@ -237,7 +243,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * the fragment is not in the store.
      * @throws XBRLException if the fragment cannot be retrieved.
      */
-    public Fragment getFragment(String index) throws XBRLException {
+    public synchronized Fragment getFragment(String index) throws XBRLException {
     	try {
     		XMLResource resource = (XMLResource) collection.getResource(index);
     		if (resource == null) return null;
@@ -271,7 +277,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @param index The index of the fragment to be removed from the DTS store.
 	 * @throws XBRLException if the fragment cannot be removed from the store.
 	 */
-	public void removeFragment(String index) throws XBRLException {
+    public synchronized void removeFragment(String index) throws XBRLException {
         try {
             if (! hasFragment(index)) {
             	return;
@@ -292,7 +298,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException if the query cannot be executed.
 	 */
     @SuppressWarnings(value = "unchecked")
-	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
         
         query = query + this.getURIFilteringQueryClause();
         
@@ -323,7 +329,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public Map<String,String> queryForIndices(String query) throws XBRLException {
+    public synchronized Map<String,String> queryForIndices(String query) throws XBRLException {
 
         
         query = query + this.getURIFilteringQueryClause();
@@ -418,7 +424,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @param pattern The pattern for the index (like the match attribute value in XSLT template elements.).
 	 * @throws XBRLException if the index cannot be added.
 	 */
-	public void addIndex(String name, String type, String pattern) throws XBRLException {
+	public synchronized void addIndex(String name, String type, String pattern) throws XBRLException {
 		addIndex(manager,name,type,pattern);	
 	}
 
@@ -450,7 +456,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @param name The name of the index to be deleted.
 	 * @throws XBRLException if the index cannot be added.
 	 */
-	public void deleteIndex(String name) throws XBRLException {
+	public synchronized void deleteIndex(String name) throws XBRLException {
 		deleteIndex(manager,name);
 	}
 

@@ -159,7 +159,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * Close the data store.
 	 * Throws XBRLException if the data store cannot be closed. 
 	 */
-	public void close() throws XBRLException {
+	public synchronized void close() throws XBRLException {
 		try {
 			collection.close();
 			connection = null;
@@ -171,7 +171,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#delete()
 	 */
-	public void delete() throws XBRLException {
+	public synchronized void delete() throws XBRLException {
 		try {
 			String collectionName = collection.getName();
 			collection.close();
@@ -186,7 +186,18 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		}
 	}	
 	
-	/**
+    /**
+     * @see org.xbrlapi.data.Store#storeFragment(Fragment)
+     */
+    public synchronized int getFragmentCount() throws XBRLException {
+        try {
+            return this.collection.getResourceCount();
+        } catch (XMLDBException e) {
+            throw new XBRLException("Failed to get the number of fragments in the data store.",e);
+        }
+    }	
+
+    /**
 	 * Add a fragment to the DTS.  Sets the fragment builder to null because it
 	 * is no longer required, stores the fragment data and metadata in the 
 	 * data store, sets the store property in the fragment.
@@ -194,7 +205,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException if the fragment cannot be added to the store 
 	 * (eg: because one with the same index is already in the store).
 	 */
-	public void storeFragment(Fragment fragment) throws XBRLException {
+    public synchronized void storeFragment(Fragment fragment) throws XBRLException {
 
 		if (fragment == null) throw new XBRLException("The fragment is null so it cannot be added.");
 		String index = fragment.getFragmentIndex();
@@ -236,7 +247,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * fragment index.
      * @throws XBRLException If the test cannot be conducted.
      */
-    public boolean hasFragment(String index) throws XBRLException {
+	public synchronized boolean hasFragment(String index) throws XBRLException {
     	if (getFragment(index) == null) {
     		return false;
     	}
@@ -252,7 +263,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * the fragment is not in the store.
      * @throws XBRLException if the fragment cannot be retrieved.
      */
-    public Fragment getFragment(String index) throws XBRLException {
+    public synchronized Fragment getFragment(String index) throws XBRLException {
     	try {
     		XMLResource resource = (XMLResource) collection.getResource(index);
     		if (resource == null) return null;
@@ -285,7 +296,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @param index The index of the fragment to be removed from the DTS store.
 	 * @throws XBRLException if the fragment cannot be removed from the store.
 	 */
-	public void removeFragment(String index) throws XBRLException {
+    public synchronized void removeFragment(String index) throws XBRLException {
         try {
             if (!hasFragment(index)) {
             	return;
@@ -310,7 +321,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @see org.xbrlapi.data.Store#query(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
 		
         query = query + this.getURIFilteringQueryClause();
         
@@ -340,7 +351,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public Map<String,String> queryForIndices(String query) throws XBRLException {
+    public synchronized Map<String,String> queryForIndices(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
         

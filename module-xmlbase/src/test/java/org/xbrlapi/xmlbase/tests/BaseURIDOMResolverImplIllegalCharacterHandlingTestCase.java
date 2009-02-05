@@ -36,7 +36,7 @@ public class BaseURIDOMResolverImplIllegalCharacterHandlingTestCase extends Base
 			+ "<child3 />"
 			+ "<child4 xml:base=\"\"/>"
 			+ "</root>";
-		xmlD1 = XMLDOMBuilder.newDocument(xmlS1);
+		xmlD1 = (new XMLDOMBuilder()).newDocument(xmlS1);
 
 		baseURIResolver = new BaseURIDOMResolverImpl(new URI("http://www.xbrlapi.org/document.xml"));
 		

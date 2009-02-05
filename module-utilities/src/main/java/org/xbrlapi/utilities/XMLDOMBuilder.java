@@ -86,8 +86,12 @@ public class XMLDOMBuilder {
 		try {
 			return builder.parse(new InputSource(new StringReader(xml)));			
 		} catch (IOException e) {
+            logger.error("The problematic XML is");
+            logger.error(xml);
 			throw new XBRLException("An IO exception is causing problems.",e);
 		} catch (SAXException e) {
+            logger.error("The problematic XML is");
+		    logger.error(xml);
 			throw new XBRLException("A SAX exception is causing problems.",e);
 		}
 	}	 

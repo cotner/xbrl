@@ -172,13 +172,9 @@ public class LoaderImpl implements Loader {
     private boolean interrupt = false;
 
     /**
-     * Interrupts the loading process once the current 
-     * document has been fully analysed.
-     * This can be useful when the loader is shared among
-     * several threads.
+     * @see Loader#requestInterrupt()
      */
     public void requestInterrupt() {
-        logger.info("An interrupt has been requested.");
         interrupt = true;
     }
     
@@ -195,7 +191,6 @@ public class LoaderImpl implements Loader {
      */
     public void cancelInterrupt() {
         interrupt = false;
-        logger.info("Cancelled the discovery interrupt.");
     }
     
     /**
@@ -513,7 +508,7 @@ public class LoaderImpl implements Loader {
     public void discover() throws XBRLException {
 
         if (isDiscovering()) {
-            logger.debug("The loader is already doing discovery.");
+            logger.warn("The loader is already doing discovery so starting discovery achieves nothing.");
             return;
         }
         setDiscovering(true);
@@ -524,13 +519,11 @@ public class LoaderImpl implements Loader {
         
         Object[] uris = this.documentQueue.keySet().toArray();
         logger.debug(uris.length + " documents queued for discovery.");
-        for (int i=0; i<uris.length;i++){
-            logger.debug(uris[i]);
-        }
         
         URI uri = getNextDocumentToExplore();
         logger.debug("Next is " + uri);
-        while (uri != null) {
+        DOCUMENTS: while (uri != null) {
+
             if (!getStore().hasDocument(uri)) {
                 setDocumentURI(uri);
                 this.setNextFragmentId("1");
@@ -551,7 +544,7 @@ public class LoaderImpl implements Loader {
 
             if (interruptRequested()) {
                 cancelInterrupt();
-                break;
+                break DOCUMENTS;
             }
 
             uri = getNextDocumentToExplore();
@@ -626,9 +619,9 @@ public class LoaderImpl implements Loader {
 
         logger.debug("Discovering a resource supplied as a string and with URI: " + uri);
 
-            if (!uri.isAbsolute()) throw new XBRLException("The URI " + uri + " must be absolute.");
+        if (!uri.isAbsolute()) throw new XBRLException("The URI " + uri + " must be absolute.");
 
-            if (uri.isOpaque()) throw new XBRLException("The URI " + uri + " must NOT be opaque.");
+        if (uri.isOpaque()) throw new XBRLException("The URI " + uri + " must NOT be opaque.");
 
         // Copy the XML to the local cache even if it is there already (possibly over-writing existing documents)
         this.getCache().copyToCache(uri, xml);
@@ -852,8 +845,6 @@ public class LoaderImpl implements Loader {
         if (uri.isOpaque()) {
             throw new XBRLException("The URI: " + uri + " must not be opaque.");                
         }
-                
-        logger.debug("Stashing " + uri);
 
         URI dereferencedURI = null;
         try {
@@ -957,6 +948,7 @@ public class LoaderImpl implements Loader {
                 map.put(document,reason);
             }
         }        
+        logger.info("Storing " + map.size() + " documents that are still to be analysed.");
         getStore().storeLoaderState(map);
     }
 }

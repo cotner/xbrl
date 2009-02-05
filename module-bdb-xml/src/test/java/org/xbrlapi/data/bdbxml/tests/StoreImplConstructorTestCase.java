@@ -46,7 +46,7 @@ public class StoreImplConstructorTestCase extends BaseTestCase {
 		
 		try {
 			Store newStore = this.createStore();
-			assertEquals(store.getNextFragmentId(),newStore.getNextFragmentId());
+			assertEquals(store.getFragmentCount(),newStore.getFragmentCount());
 			newStore.close();
 		} catch (XBRLException e) {
 			e.printStackTrace();

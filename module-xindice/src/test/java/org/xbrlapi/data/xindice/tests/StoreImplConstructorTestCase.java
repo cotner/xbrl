@@ -36,7 +36,7 @@ public class StoreImplConstructorTestCase extends BaseTestCase {
 			connections.add(newConnection);
 			Store newStore = createStore(connection);
 			stores.add(newStore);
-			assertEquals("Maximum fragment IDs do not match between stores.",store.getNextFragmentId(),newStore.getNextFragmentId());
+            assertEquals("Fragment counts do not match.",store.getFragmentCount(),newStore.getFragmentCount());
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail("The connection to an existing store failed to be created. " + e.getMessage());

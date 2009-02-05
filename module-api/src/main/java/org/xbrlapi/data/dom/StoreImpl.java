@@ -56,11 +56,12 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	
 	/**
 	 * Initialise the data store.
-	 * @throws XBRLException if the loader state cannot be initialised.
+	 * @throws XBRLException if the loader state cannot be initialised
+	 * or the XML DOM builder cannot be instantiated.
 	 */
-	public StoreImpl() {
+	public StoreImpl() throws XBRLException {
 	    super();
-		dom = XMLDOMBuilder.newDocument();
+		dom = (new XMLDOMBuilder()).newDocument();
 		store = dom.createElement(ROOT_NAME);
 		dom.appendChild(store);
 	}
@@ -68,7 +69,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#close()
 	 */
-	public void close() throws XBRLException {
+	public synchronized void close() throws XBRLException {
 		super.close();
 	}
 	
@@ -77,20 +78,21 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * the data store from persistent storage.
 	 * @see org.xbrlapi.data.Store#delete()
 	 */
-	public void delete() throws XBRLException {
+	public synchronized void delete() throws XBRLException {
 		; 
 	}	
 	
+    /**
+     * @see org.xbrlapi.data.Store#storeFragment(Fragment)
+     */
+    public synchronized int getFragmentCount() throws XBRLException {
+        return fragmentMap.size();
+    }
+	
 	/**
-	 * Add a fragment to the data store.
-	 * 
-	 * @param fragment
-	 *            The fragment to be added to the DTS store.
-	 * @throws XBRLException
-	 *             if the fragment cannot be added to the store (eg: because one
-	 *             with the same index is already in the store).
+	 * @see org.xbrlapi.data.Store#storeFragment(Fragment)
 	 */
-	public void storeFragment(Fragment fragment) throws XBRLException {
+	public synchronized void storeFragment(Fragment fragment) throws XBRLException {
 		
 	    logger.debug("Storing " + fragment.getType() + " " + fragment.getFragmentIndex());
 	    
@@ -118,31 +120,17 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 
 	/**
-	 * Test if a store contains a specific fragment, as identified by its index.
-	 * 
-	 * @param index
-	 *            The index of the fragment to test for.
-	 * @return true iff the store contains a fragment with the specified
-	 *         fragment index.
-	 * @throws XBRLException
-	 *             If the test cannot be conducted.
+	 * @see org.xbrlapi.data.Store#hasFragment(String)
 	 */
-	public boolean hasFragment(String index) throws XBRLException {
+	public synchronized boolean hasFragment(String index) throws XBRLException {
 		if (fragmentMap.containsKey(index)) return true;
 		return false;
 	}
 
 	/**
-	 * Retrieves a fragment from the store. The fragment will be created as a
-	 * fragment of the original fragment type but will be returned as a straight
-	 * fragment.
-	 * 
-	 * @param index The index of the fragment.
-	 * @return The fragment corresponding to the specified index or null
-	 * if the fragment is not in the store.
-	 * @throws XBRLException if the fragment cannot be retrieved.
+	 * @see org.xbrlapi.data.Store#getFragment(String)
 	 */
-	public Fragment getFragment(String index) throws XBRLException {
+	public synchronized Fragment getFragment(String index) throws XBRLException {
 
 		Element root = fragmentMap.get(index);
 		if (root == null) {
@@ -151,17 +139,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		return  FragmentFactory.newFragment(this, root);
 	}
 
-	/**
-	 * Remove a fragment from the store.
-	 * 
-	 * @param fragment
-	 *            The fragment to be removed from the store.
-	 * @throws XBRLException
-	 *             if the fragment exists but cannot be removed from the store.
-	 */
-	public void removeFragment(Fragment fragment) throws XBRLException {
-		removeFragment(fragment.getFragmentIndex());
-	}
+
 
 	/**
 	 * Remove a fragment from the store.
@@ -171,7 +149,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException
 	 *             if the fragment exists but cannot be removed from the store.
 	 */
-	public void removeFragment(String index) throws XBRLException {
+	public synchronized void removeFragment(String index) throws XBRLException {
     	
         if (! hasFragment(index)) return;
 
@@ -188,7 +166,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * getStoreAsDOM method.
      * Contributed by Howard Ungar 13 February, 2007.
      */
-    public Document getStoreAsDOM() {
+    public synchronized Document getStoreAsDOM() {
     	return this.dom;
     }
 
@@ -228,7 +206,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException if the query cannot be executed.
 	 */
     @SuppressWarnings(value = "unchecked")
-	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
         XPathResult result = runQuery(query);
 		FragmentList<F> fragments = new FragmentListImpl<F>();
 		Node n;
@@ -242,7 +220,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public Map<String,String> queryForIndices(String query) throws XBRLException {
+    public synchronized Map<String,String> queryForIndices(String query) throws XBRLException {
         XPathResult result = runQuery(query);
         Node n;
         HashMap<String,String> indices = new HashMap<String,String>();

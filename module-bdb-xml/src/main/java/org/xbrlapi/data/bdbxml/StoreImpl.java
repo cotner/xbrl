@@ -84,9 +84,18 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
     }
 
-
+    /**
+     * @see org.xbrlapi.data.Store#storeFragment(Fragment)
+     */
+    public synchronized int getFragmentCount() throws XBRLException {
+        try {
+            return this.dataContainer.getNumDocuments();
+        } catch (XmlException e) {
+            throw new XBRLException("Failed to get the number of fragments in the data store.",e);
+        }
+    }
     
-	private void resetConnection() throws XBRLException {
+	private synchronized void resetConnection() throws XBRLException {
         logger.info("Doing a connection reset.");
 		close();
 	    initContainer();
@@ -264,7 +273,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * that are used by the store.
 	 * @see org.xbrlapi.data.Store#close()
 	 */
-    synchronized public void close() throws XBRLException {
+    public synchronized void close() throws XBRLException {
 	    super.close();
 	    closeContainer();
 	    closeManager();
@@ -299,7 +308,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#delete()
 	 */
-    synchronized public void delete() throws XBRLException {
+    public synchronized void delete() throws XBRLException {
 	    deleteContainer();
 	    closeManager();
 	}
@@ -337,7 +346,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#hasFragment(String)
 	 */
-	synchronized public boolean hasFragment(String index) throws XBRLException {
+    public synchronized boolean hasFragment(String index) throws XBRLException {
 	    incrementCallCount();
         XmlDocument xmlDocument = null;
 	    try {
@@ -355,7 +364,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * various fragment objects.
      * @see org.xbrlapi.data.Store#hasDocument(URI)
      */
-	synchronized public boolean hasDocument(URI uri) throws XBRLException {
+	public synchronized boolean hasDocument(URI uri) throws XBRLException {
         XmlResults results = null;
         try {
             results = performQuery("/*[@uri='" + uri + "' and @parentIndex='none']");
@@ -368,10 +377,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     }    	
 
 	/**
-	 * TODO Make this a generic function
 	 * @see org.xbrlapi.data.Store#getFragment(String)
 	 */
-    synchronized public Fragment getFragment(String index) throws XBRLException {
+     public synchronized Fragment getFragment(String index) throws XBRLException {
 	    this.incrementCallCount();
         XmlDocument xmlDocument = null;
         Document document = null;
@@ -384,7 +392,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	        }
 
 	        try {
-	            document = XMLDOMBuilder.newDocument(xmlDocument.getContentAsInputStream());
+	            document = (new XMLDOMBuilder()).newDocument(xmlDocument.getContentAsInputStream());
 	        } catch (XmlException e) {
 	            throw new XBRLException("The fragment content is not available as an input stream.",e);
 	        }
@@ -399,14 +407,14 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#removeFragment(String)
 	 */
-    synchronized public void removeFragment(Fragment fragment) throws XBRLException {
+     public synchronized void removeFragment(Fragment fragment) throws XBRLException {
 		removeFragment(fragment.getFragmentIndex());
 	}
 
 	/**
 	 * @see org.xbrlapi.data.Store#removeFragment(String)
 	 */
-    synchronized public void removeFragment(String index) throws XBRLException {
+     public synchronized void removeFragment(String index) throws XBRLException {
 	    incrementCallCount();
         XmlUpdateContext xmlUpdateContext = null;
         try {
@@ -420,11 +428,11 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 
 	/**
-     * TODO Make sure that queries finding a node within a fragment return the fragment itself.         
+     * TODO Make sure that queries finding a node within a fragment return the fragment itself.
 	 * @see org.xbrlapi.data.Store#query(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	synchronized public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
         
@@ -439,7 +447,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
                 xmlValue = xmlResults.next();
     			FragmentList<F> fragments = new FragmentListImpl<F>();
     		    while (xmlValue != null) {
-    		        Document document = XMLDOMBuilder.newDocument(xmlValue.asString());
+    		        Document document = (new XMLDOMBuilder()).newDocument(xmlValue.asString());
     		        xmlValue.delete();
     		        Element root = document.getDocumentElement();
     				fragments.addFragment((F) FragmentFactory.newFragment(this, root));
@@ -461,7 +469,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public Map<String,String> queryForIndices(String query) throws XBRLException {
+    public synchronized Map<String,String> queryForIndices(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
         
@@ -559,7 +567,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * Ensures that the database container is flushed to disk.
      * @see Store#sync()
      */
-    public void sync() throws XBRLException {
+    public synchronized void sync() throws XBRLException {
         if (this.dataContainer == null) throw new XBRLException("The database container cannot be synced because it is null.");
         try {
             this.dataContainer.sync();

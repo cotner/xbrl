@@ -78,7 +78,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     /**
      * @see org.xbrlapi.data.Store#setMatcher(Matcher)
      */
-    public void setMatcher(Matcher matcher) throws XBRLException {
+    public synchronized void setMatcher(Matcher matcher) throws XBRLException {
         if (matcher == null) throw new XBRLException("The matcher cannot be null");
         this.matcher = matcher;
     }
@@ -98,7 +98,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     /**
      * @see org.xbrlapi.data.Store#setNamespaceBinding(String,String)
      */
-    public void setNamespaceBinding(String namespace, String prefix) throws XBRLException {
+    public synchronized void setNamespaceBinding(String namespace, String prefix) throws XBRLException {
         this.namespaceBindings.put(namespace,prefix);
     }
 
@@ -111,7 +111,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     /**
      * @see org.xbrlapi.data.Store#setFilteringURIs(List)
      */
-    public void setFilteringURIs(List<URI> uris) {
+    public synchronized void setFilteringURIs(List<URI> uris) {
         this.uris = uris;
     }
     
@@ -132,7 +132,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     /**
      * @see org.xbrlapi.data.Store#isFilteringByURIs()
      */
-    public boolean isFilteringByURIs() {
+    public synchronized boolean isFilteringByURIs() {
         if (this.uris == null) return false;
         return true;
     }
@@ -141,7 +141,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @return an X Query clause that restricts the set of fragments returned by 
      * a query to those from a specific set of URIs.
      */
-    protected String getURIFilteringQueryClause() {
+    protected synchronized String getURIFilteringQueryClause() {
 
         if (isFilteringByURIs()) {
             String uriFilter = "0";
@@ -185,9 +185,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public void storeStub(URI document, String reason) throws XBRLException {
 
-        if (this.hasDocument(document)) return;
-        if (this.getStub(document) != null) return;
-        
+        deleteDocument(document);
+
         String documentId = getDocumentId(document);
         Fragment stub = new MockFragmentImpl(documentId);
         stub.setFragmentIndex(documentId);
@@ -201,7 +200,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * Default implementation does nothing.
      * @see Store#sync()
      */
-    public void sync() throws XBRLException {
+    public synchronized void sync() throws XBRLException {
         ;
     }
 
@@ -216,14 +215,6 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getDocumentId(URI)
      */    
     public String getDocumentId(URI document) throws XBRLException {
-
-        // First see if the document already has a stub in the data store
-        // and if so, use the document ID that was used when the stub was
-        // stored.
-        Fragment stub = getStub(document);
-        if (stub != null) {
-            return stub.getFragmentIndex();
-        }
         
         // The document is not in the data store so generate a new document ID.
         String randomString = random();
@@ -329,7 +320,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public void deleteDocument(URI uri) throws XBRLException {
         URI matchURI = this.getMatcher().getMatch(uri);
         String query = "/*[@uri='"+ matchURI + "']";
-        FragmentList<Fragment> fragments = this.<Fragment>query(query);      
+        FragmentList<Fragment> fragments = this.<Fragment>query(query);
         for (Fragment fragment: fragments) {
             this.removeFragment(fragment.getFragmentIndex());
         }
@@ -443,13 +434,11 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	}
 	
     /**
-     * Get a list of the URIs that have been stored.
-     * @return a list of the URIs in the data store.
-     * @throws XBRLException if the list cannot be constructed.
+     * @see Store#getStoredURIs()
      */
     public List<URI> getStoredURIs() throws XBRLException {
     	LinkedList<URI> uris = new LinkedList<URI>();
-    	FragmentList<Fragment> rootFragments = this.query("/*[@parentIndex='none']");
+    	FragmentList<Fragment> rootFragments = this.getRootFragments();
     	for (int i=0; i<rootFragments.getLength(); i++) {
     		uris.add(rootFragments.getFragment(i).getURI());
     	}
@@ -518,7 +507,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
 		// Make sure that the DOM is initialised.
 		if (storeDOM == null) {
-			storeDOM = XMLDOMBuilder.newDocument();
+			storeDOM = (new XMLDOMBuilder()).newDocument();
 		}
 
 		// Get the DOM representation of the fragment
@@ -610,7 +599,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     	
 		// Make sure that the DOM is initialised.
 		if (storeDOM == null) {
-			storeDOM = XMLDOMBuilder.newDocument();
+			storeDOM = (new XMLDOMBuilder()).newDocument();
 		}
 
 		// Get the DOM representation of the fragment
@@ -674,7 +663,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public Document getStoreAsDOM() throws XBRLException {
 
 		if (storeDOM == null) {
-			storeDOM = XMLDOMBuilder.newDocument();
+			storeDOM = (new XMLDOMBuilder()).newDocument();
 		}
 		
     	Element root = storeDOM.createElementNS(Constants.XBRLAPINamespace,Constants.XBRLAPIPrefix + ":dts");
@@ -700,39 +689,27 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public Document formCompositeDocument() throws XBRLException {
     	
 		if (storeDOM == null) {
-			storeDOM = XMLDOMBuilder.newDocument();
+			storeDOM = (new XMLDOMBuilder()).newDocument();
 		}
 		
     	Element root = storeDOM.createElementNS(Constants.CompNamespace,Constants.CompPrefix + ":dts");
 		
 		List<URI> uris = getStoredURIs();
+		long counter = 1;
 		for (URI uri: uris) {
 	    	Element file = storeDOM.createElementNS(Constants.CompNamespace,Constants.CompPrefix + ":file");
 	    	file.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":uri", uri.toString());
-	    	file.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",this.getNextFragmentId());
+	    	file.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index","composite_" + new Long(counter++).toString());
 			root.appendChild(file);
 			file.appendChild(getAnnotatedDocumentAsDOM(uri));
 		}
-    	root.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",this.getNextFragmentId());
+    	root.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index","composite_" + new Long(counter++).toString());
     	storeDOM.appendChild(root);
     	return storeDOM;
     	
     }
     
-    /**
-     * @see org.xbrlapi.data.Store#getNextFragmentId()
-     */
-    public String getNextFragmentId() throws XBRLException {
-        return "1";
-/*        Fragment summary = this.getFragment("summary");
-        String maxId = summary.getMetaAttribute("maximumFragmentId");
-        if (maxId == null) {
-            return "1";
-        } else {
-            int value = (new Integer(maxId)).intValue();
-            return (new Integer(value+1)).toString();
-        }
-*/    }
+
     
 
     
@@ -759,7 +736,14 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public void removeStub(String stubId) throws XBRLException {
         if (hasFragment(stubId)) removeFragment(stubId);
-    }            
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#removeFragment(Fragment)
+     */
+    public void removeFragment(Fragment fragment) throws XBRLException {
+        removeFragment(fragment.getFragmentIndex());
+    }    
     
     
     /**
@@ -1103,7 +1087,11 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getRootFragments()
      */
     public <F extends Fragment> FragmentList<F> getRootFragments() throws XBRLException {
-    	return this.<F>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='none']");
+        long start = System.currentTimeMillis();
+        logger.debug("Getting all root fragments.");
+    	FragmentList<F> roots =  this.<F>query("/*[@parentIndex='none']");
+        logger.debug("Retrieval of root fragments took " + (System.currentTimeMillis() - start) + " milliseconds.");
+        return roots;
     }
 
     /**
@@ -1133,21 +1121,21 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     /**
      * @see Store#getStoredNetworks()
      */
-    public Networks getStoredNetworks() {
+    public synchronized Networks getStoredNetworks() {
         return networks;
     }
 
     /**
      * @see Store#hasStoredNetworks()
      */
-    public boolean hasStoredNetworks() {
+    public synchronized boolean hasStoredNetworks() {
         return networks != null;
     }
 
     /**
      * @see Store#setStoredNetworks(org.xbrlapi.networks.Networks)
      */
-    public void setStoredNetworks(Networks networks) {
+    public synchronized void setStoredNetworks(Networks networks) {
         this.networks = networks;
     }
 

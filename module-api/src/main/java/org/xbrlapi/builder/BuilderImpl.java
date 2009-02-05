@@ -90,10 +90,11 @@ public class BuilderImpl implements Builder {
 	/**
 	 * Create the builder making sure that the static DOM 
 	 * is instantiated and creating the metadata root element.
+	 * @throws XBRLException if the DOM Builder cannot be instantiated.
 	 */
-	public BuilderImpl() {
+	public BuilderImpl() throws XBRLException {
 		if (dom == null) {
-			dom = XMLDOMBuilder.newDocument();
+			dom = (new XMLDOMBuilder()).newDocument();
 		}		
 		setupBuilder();
 	}

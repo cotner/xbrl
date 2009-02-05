@@ -33,7 +33,7 @@ public class BaseURIDOMResolverImplTestCase extends BaseTestCase {
 			+ "<child3 />"
 			+ "<child4 xml:base=\"\"/>"
 			+ "</root>";
-		xmlD1 = XMLDOMBuilder.newDocument(xmlS1);
+		xmlD1 = (new XMLDOMBuilder()).newDocument(xmlS1);
 		
 		xmlS2 = 
 			"<?xml version=\"1.0\" ?>\n"
@@ -43,7 +43,7 @@ public class BaseURIDOMResolverImplTestCase extends BaseTestCase {
 			+ "<my:child3 />"
 			+ "<my:child4 xml:base=\"\"/>"
 			+ "</my:root>";
-		xmlD2 = XMLDOMBuilder.newDocument(xmlS2);
+		xmlD2 = (new XMLDOMBuilder()).newDocument(xmlS2);
 
 		xmlS3 = 
 			"<?xml version=\"1.0\" ?>\n"
@@ -53,7 +53,7 @@ public class BaseURIDOMResolverImplTestCase extends BaseTestCase {
 			+ "<my:child3 />"
 			+ "<my:child4 xml:base=\"\"/>"
 			+ "</my:root>";
-		xmlD3 = XMLDOMBuilder.newDocument(xmlS3);
+		xmlD3 = (new XMLDOMBuilder()).newDocument(xmlS3);
 
 		baseURIResolver = new BaseURIDOMResolverImpl(new URI("http://www.xbrlapi.org/document.xml"));
 		nullBaseURIResolver = new BaseURIDOMResolverImpl();

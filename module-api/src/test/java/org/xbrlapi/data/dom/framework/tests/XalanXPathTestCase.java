@@ -35,7 +35,7 @@ public class XalanXPathTestCase extends BaseTestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		d1 = XMLDOMBuilder.newDocument(c1);
+		d1 = (new XMLDOMBuilder()).newDocument(c1);
 		evaluator = new XPathEvaluatorImpl(d1);
 		resolver = new XPathNSResolverImpl();
 	}

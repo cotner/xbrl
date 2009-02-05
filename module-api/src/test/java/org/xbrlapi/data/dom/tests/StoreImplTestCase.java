@@ -47,7 +47,7 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testRemoveFragmentUsingIndex() {
 		try {
-			String index = store.getNextFragmentId();
+			String index = "1";
 			store.storeFragment(new MockFragmentImpl(index));
 			assertTrue(store.hasFragment(index));
 			store.removeFragment(index);
@@ -59,7 +59,7 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testRemoveFragmentUsingFragment() {
 		try {
-			String index = store.getNextFragmentId();
+			String index = "1";
 			store.storeFragment(new MockFragmentImpl(index));
 			assertTrue(store.hasFragment(index));
 			MockFragmentImpl document = (MockFragmentImpl) store.getFragment(index);
@@ -74,7 +74,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testQueryData() throws Exception {
 		
 	    store.storeFragment(new MockFragmentImpl("WooHoo"));
-		String index = store.getNextFragmentId();
+		String index = "1";
 		FragmentList<Fragment> fragments = null;
 		try {
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XBRLAPIPrefix + ":fragment";
@@ -128,15 +128,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		}
 	}	
 	
-	public void testGetNextFragmentId() {
-		try {
-		    String id = store.getNextFragmentId();
-		    store.storeFragment(new MockFragmentImpl(id));
-			assertEquals((new Integer(store.getNextFragmentId())).intValue(),(new Integer(store.getNextFragmentId())).intValue());
-		} catch (XBRLException e) {
-			fail("Unexpected " + e.getMessage());
-		}
-	}
+
 	
     public void testGetFragments() {
         try {

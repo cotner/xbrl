@@ -31,7 +31,6 @@ public class XBRLCustomLinkRecogniserImpl extends CustomLinkRecogniser {
 		if (namespaceURI.equals(Constants.XMLSchemaNamespace))
 			if (lName.equals("import") || lName.equals("include"))
 				result = true;
-        logger.debug("Testing " + lName + " for custom link status: " + result);
         return result;
 	}
 

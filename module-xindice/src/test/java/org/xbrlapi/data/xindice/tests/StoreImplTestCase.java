@@ -34,7 +34,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	 */
 	public void testAddFragment() {
 		try {
-			String index = store.getNextFragmentId();
+			String index = "1";
 			MockFragmentImpl d = new MockFragmentImpl(index);
 			store.storeFragment(d);
 			assertEquals(index,store.getFragment(index).getFragmentIndex());
@@ -48,7 +48,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	 */
 	public void testRemoveFragmentUsingIndex() {
 		try {
-			String index = store.getNextFragmentId();
+			String index = "1";
 			store.storeFragment(new MockFragmentImpl(index));
 			assertTrue(store.hasFragment(index));
 			store.removeFragment(index);

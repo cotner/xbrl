@@ -35,12 +35,14 @@ public interface Store {
 
 	/**
 	 * Close the data store.
+	 * This method must be synchronized.
 	 * Throws XBRLException if the data store cannot be closed. 
 	 */
 	public void close() throws XBRLException;
 
 	/**
-	 * Store a fragment.  
+	 * Store a fragment.
+	 * Implementations of this method must always be synchronized. 
 	 * @param fragment The fragment to be added to the store.
 	 * @throws XBRLException if the fragment cannot be added to the store.
 	 */
@@ -49,6 +51,7 @@ public interface Store {
     /**
      * Test if a store contains a specific fragment, as identified by
      * its index.
+     * Implementations of this method must be synchronized.
      * @param index The index of the fragment to test for.
      * @return true iff the store contains a fragment with the specified 
      * fragment index.
@@ -58,6 +61,7 @@ public interface Store {
     
     /**
      * Retrieves a fragment from a data store.
+     * Implementations of this method must be synchronized.
      * @param index The index of the fragment.
      * @return The fragment corresponding to the specified index.
      * @throws XBRLException if the fragment cannot be retrieved.
@@ -65,13 +69,23 @@ public interface Store {
     public Fragment getFragment(String index) throws XBRLException;
 
 	/**
-	 * Remove a fragment from the underlying data structure.  
+	 * Remove a fragment from the underlying data structure.
 	 * If a fragment with the same ID does not already exist in the 
-	 * DTs then no action is required.
+	 * data store then no action is required.
+     * Implementations of this method must be synchronized.
 	 * @param index The index of the fragment to be removed from the DTS store.
 	 * @throws XBRLException if the fragment cannot be removed from the store.
 	 */
 	public void removeFragment(String index) throws XBRLException;
+	
+    /**
+     * Remove a fragment from the underlying data structure.
+     * If a fragment with the same ID does not already exist in the 
+     * data store then no action is required.
+     * @param fragment The fragment to remove.
+     * @throws XBRLException if the fragment cannot be removed from the store.
+     */
+    public void removeFragment(Fragment fragment) throws XBRLException;	
 	
 	/**
 	 * @param namespace The namespace to bind a prefix to for querying
@@ -108,6 +122,7 @@ public interface Store {
 
 	/**
 	 * Run a query against the collection of all fragments in the store.
+     * Implementations of this method must be synchronized.
 	 * @param query The XPath query to run against the set of fragments.
 	 * @return a list of matching fragments or the empty list if no matching fragments
 	 * exist.
@@ -117,6 +132,7 @@ public interface Store {
 
     /**
      * Run a query against the collection of all fragments in the store.
+     * Implementations of this method must be synchronized.
      * @param query The XPath query to run against the set of fragments.
      * @return a map indexed by the indices of the fragments matching 
      * the query.
@@ -286,12 +302,10 @@ public interface Store {
     public void storeLoaderState(Map<URI,String> documents) throws XBRLException;    
 
     /**
-     * Get the next fragment ID to use when extending a DTS, instead of starting at 1 again
-     * and corrupting the DTS data store with duplicate fragment IDs.
-     * @return The next ID to use for the next fragment to be added to the DTS.
-     * @throws XBRLException
+     * @return the number of fragments in the data store.
+     * @throws XBRLException if the number of fragments cannot be determined.
      */
-    public String getNextFragmentId() throws XBRLException;
+    public int getFragmentCount() throws XBRLException;
     
     /**
      * @return the list of URIs of the documents remaining to be analysed.
@@ -409,7 +423,8 @@ public interface Store {
     public <F extends Fragment> FragmentList<F> getRootFragments() throws XBRLException;    
     
     /**
-     * Delete and close the data store.
+     * Close and then delete the data store.
+     * This method must be synchronized.
      * @throws XBRLException if the data store cannot be deleted.
      */
     public void delete() throws XBRLException;    
