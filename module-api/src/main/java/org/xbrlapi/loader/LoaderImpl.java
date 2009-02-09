@@ -538,7 +538,7 @@ public class LoaderImpl implements Loader {
                     markDocumentAsExplored(uri);
                 }
             } else {
-                logger.info(uri + " is already in the data store.");
+                logger.debug(uri + " is already in the data store.");
                 markDocumentAsExplored(uri);
             }
 
@@ -555,6 +555,8 @@ public class LoaderImpl implements Loader {
         
         this.documentQueue = new HashMap<URI,Integer>();
 
+        logger.info("Exiting discovery process though some documents may not yet be in the data store.");
+        
     }
 
     /**

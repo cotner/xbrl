@@ -84,7 +84,7 @@ public class DiscoveryManager implements Runnable {
                         if (! thread.isAlive()) {
                             break;
                         }
-                    }                        
+                    }
                     
                     if (thread.isAlive()) {
                         loader.requestInterrupt();

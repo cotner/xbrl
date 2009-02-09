@@ -36,6 +36,9 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
 	
+
+    
+    
 	public XBRLStoreImpl() {
 		super();
 	}
