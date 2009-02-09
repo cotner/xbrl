@@ -3,11 +3,15 @@ package org.xbrlapi.data.bdbxml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xbrlapi.Fragment;
@@ -49,6 +53,8 @@ import com.sleepycat.dbxml.XmlValue;
 
 public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 
+    protected static Logger logger = Logger.getLogger(StoreImpl.class);    
+    
     private int callCount = 0;
     private final int RESET_CALL_COUNT = 100000;
     private final int CHECKPOINT_KILOBYTES = 1000;
@@ -444,16 +450,24 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     
             try {
     			xmlResults = performQuery(query);
+
+    			double startTime = System.currentTimeMillis();
+
                 xmlValue = xmlResults.next();
     			FragmentList<F> fragments = new FragmentListImpl<F>();
+    			XMLDOMBuilder builder = new XMLDOMBuilder();
     		    while (xmlValue != null) {
-    		        Document document = (new XMLDOMBuilder()).newDocument(xmlValue.asString());
+                    XmlDocument doc = xmlValue.asDocument();
+    		        Document document = builder.newDocument(doc.getContentAsInputStream());
+    		        doc.delete();
     		        xmlValue.delete();
     		        Element root = document.getDocumentElement();
     				fragments.addFragment((F) FragmentFactory.newFragment(this, root));
     		        xmlValue = xmlResults.next();
     		    }
     	    	
+    	        Double time = new Double((System.currentTimeMillis()-startTime));
+    	        logger.debug(time + " milliseconds to create fragment list from" + query);
     			return fragments;
     
     		} catch (XmlException e) {
@@ -574,6 +588,51 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         } catch (XmlException e) {
             throw new XBRLException("The database updates could not be flushed to disk using the sync method.",e);
         }
+    }
+
+    /**
+     * @see org.xbrlapi.data.Store#getStoredURIs()
+     */
+    @Override
+    public List<URI> getStoredURIs() throws XBRLException {
+        
+        String query = "/*[@parentIndex='none']/@uri";
+        query = query + this.getURIFilteringQueryClause();
+        this.incrementCallCount();
+        
+        XmlResults xmlResults = null;
+        XmlValue xmlValue = null;
+        try {
+    
+            try {
+                xmlResults = performQuery(query);
+                double startTime = System.currentTimeMillis();
+
+                xmlValue = xmlResults.next();
+                List<URI> uris = new Vector<URI>();
+                while (xmlValue != null) {
+                    try {
+                        uris.add(new URI(xmlValue.getNodeValue()));
+                    } catch (URISyntaxException urie) {
+                        xmlValue.delete();
+                        throw new XBRLException("URI " + xmlValue.getNodeValue() + " does not have valid syntax.");
+                    }
+                    xmlValue.delete();
+                    xmlValue = xmlResults.next();
+                }
+                
+                Double time = new Double((System.currentTimeMillis()-startTime));
+                logger.debug(time + " milliseconds to create URI list from" + query);
+                return uris;
+    
+            } catch (XmlException e) {
+                throw new XBRLException("Failed query: " + query,e);
+            }
+            
+        } finally {
+            if (xmlValue != null) xmlValue.delete();
+            if (xmlResults != null) xmlResults.delete();
+        }        
     }	
 
 
