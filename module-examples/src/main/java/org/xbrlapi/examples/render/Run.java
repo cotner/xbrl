@@ -39,7 +39,7 @@ import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
-import org.xbrlapi.loader.discoverer.DiscoveryManager;
+import org.xbrlapi.loader.discoverer.Discoverer;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.NetworkImpl;
 import org.xbrlapi.networks.Networks;
@@ -183,7 +183,7 @@ public class Run {
             reportTime("Setting URIs");
 
             // Load the data required to render the XBRL instance.
-            DiscoveryManager discoverer = new DiscoveryManager(loader);
+            Discoverer discoverer = new Discoverer(loader);
             Thread discoveryThread = new Thread(discoverer);
             discoveryThread.start();
             while (discoveryThread.isAlive()) {
