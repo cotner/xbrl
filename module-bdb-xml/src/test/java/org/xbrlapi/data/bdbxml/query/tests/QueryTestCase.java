@@ -15,7 +15,7 @@ import org.xbrlapi.data.bdbxml.StoreImpl;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class QueryTestCase extends TestCase {
+public abstract class QueryTestCase extends TestCase {
     
     protected static Logger logger = Logger.getLogger(QueryTestCase.class);  
     

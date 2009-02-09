@@ -10,7 +10,7 @@ import junit.framework.TestCase;
  * of the database container to ensure that there is not
  * too much work when it comes time to finish up.
  */
-public class VolumeTestCase extends TestCase {
+public abstract class VolumeTestCase extends TestCase {
     
     private final String CONTAINER = "container";
     private final String LOCATION = "/home/geoff/experiment";
