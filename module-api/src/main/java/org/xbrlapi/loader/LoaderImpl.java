@@ -719,7 +719,7 @@ public class LoaderImpl implements Loader {
      */
     protected boolean parse(URI uri, InputSource inputSource, ContentHandler contentHandler) throws XBRLException {
 
-        logger.info("about to parse " + uri);        
+        logger.debug("about to parse " + uri);        
         // Create and configure the SAX parser factory
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setValidating(false); // Turn off standard XML validation
