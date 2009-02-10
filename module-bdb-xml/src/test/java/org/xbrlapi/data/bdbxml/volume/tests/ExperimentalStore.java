@@ -21,7 +21,6 @@ public class ExperimentalStore {
     private String prefix = "<root xmlns='http://test.namespace/' attribute='";
     private String suffix = "'>Value<hello/><something else='nothing much'>dfasd;fjasdfas;ldkj asdfl;hjasdfjksjdf;lasfl;adfhdsfahasdfh;alsdfhakslfjhalskjdljflkdalkhksd;lahdf;lsdflsn;kjkjniasvnoawe;oasinv;asno;an;osnvd;odf;sv;aivnaoas;ova;sovasodn</something></root>";
     
-
     XmlIndexSpecification xmlIndexSpecification = null;
     
     private String container = null;
