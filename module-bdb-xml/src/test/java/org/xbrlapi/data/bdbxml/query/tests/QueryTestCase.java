@@ -3,6 +3,7 @@ package org.xbrlapi.data.bdbxml.query.tests;
 
 import java.net.URI;
 import java.util.List;
+import java.util.TreeMap;
 
 import junit.framework.TestCase;
 
@@ -15,12 +16,12 @@ import org.xbrlapi.data.bdbxml.StoreImpl;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public abstract class QueryTestCase extends TestCase {
+public class QueryTestCase extends TestCase {
     
     protected static Logger logger = Logger.getLogger(QueryTestCase.class);  
     
     private final String CONTAINER = "browser";
-    private final String LOCATION = "/home/geoff/Data/bdbxml";
+    private final String LOCATION = "/home/geoff/Data/bdbxml/backup";
 
     private Store store = null;
     
@@ -40,6 +41,29 @@ public abstract class QueryTestCase extends TestCase {
         store.close();
     }
 
+    public final void testStubsRetrieval() throws Exception {
+
+        String query = "/*[@stub]";
+        FragmentList<Fragment> fragments = store.<Fragment>query(query);
+        for (Fragment stub: fragments) {
+            FragmentList<Fragment> referrers = store.<Fragment>query("/*[@targetDocumentURI='"+stub.getURI()+"']");
+            TreeMap<URI,String> map = new TreeMap<URI,String>();
+            for (Fragment referrer: referrers) {
+                if (! map.containsKey(referrer.getURI())) {
+                    map.put(referrer.getURI(),"");
+                }
+            }
+            logger.info("---------------------------------------------");
+            logger.info(stub.getMetadataRootElement().getAttribute("reason") + ": " + stub.getURI());
+            logger.info("This document is referred to by:");
+            for (URI uri: map.keySet()) {
+                FragmentList<Fragment> sources = store.<Fragment>query("/*[@uri='"+ uri +"' and @targetDocumentURI='"+stub.getURI()+"']");
+                logger.info(uri + " contains " + sources.getLength() + " references.");
+                //if (sources.getLength() > 0) store.serialize(sources.get(0));
+            }
+        }
+    }    
+    
     public final void testWildcardQueryWithSingleResult() {
         try {
             iterateURIs("/*[@uri='","' and @parentIndex='none']");
