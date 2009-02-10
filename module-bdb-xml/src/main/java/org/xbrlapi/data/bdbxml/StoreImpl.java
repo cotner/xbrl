@@ -141,9 +141,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
             environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
             environmentConfiguration.setInitializeCache(true);
-            environmentConfiguration.setCacheSize(1024 * 1024 * 500);
+            environmentConfiguration.setCacheSize(1024 * 1024 * 50);
             environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
-            environmentConfiguration.setTransactional(false);       // Turn on the transactional subsystem.
+            environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
             environment = new Environment(new File(locationName), environmentConfiguration);
             environment.trickleCacheWrite(20);
             logger.info("Initialised the environment.");
