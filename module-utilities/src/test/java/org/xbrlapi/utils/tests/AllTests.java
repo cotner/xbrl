@@ -1,7 +1,5 @@
 package org.xbrlapi.utils.tests;
 
-import org.xbrlapi.data.bdbxml.framework.tests.DatabaseManagerInitialisationAndQueryingTestCase;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
