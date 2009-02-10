@@ -8,6 +8,7 @@ import java.util.List;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
+import org.xbrlapi.data.resource.InStoreMatcherImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
@@ -58,7 +59,9 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 	 * @throws XBRLException
 	 */
 	public  StoreImpl createStore(String myLocation, String myContainerName) throws XBRLException {
-		return new StoreImpl(myLocation,myContainerName);
+		StoreImpl store = new StoreImpl(myLocation,myContainerName);
+		store.setMatcher(new InStoreMatcherImpl(store,new CacheImpl(new File(cache))));
+		return store;
 	}
 	
 	/**
