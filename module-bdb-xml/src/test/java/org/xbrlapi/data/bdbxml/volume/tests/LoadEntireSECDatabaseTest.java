@@ -12,7 +12,7 @@ import org.xbrlapi.grabber.SecGrabberImpl;
  * @author Geoff Shuetrim (geoff@galexy.net)
  *
  */
-public abstract class LoadEntireSECDatabaseTest extends BaseTestCase {
+public class LoadEntireSECDatabaseTest extends BaseTestCase {
     
     public LoadEntireSECDatabaseTest(String arg0) {
         super(arg0);
@@ -22,13 +22,11 @@ public abstract class LoadEntireSECDatabaseTest extends BaseTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         logger.info("Getting the SEC feed.");
-        String secFeed = configuration.getProperty("real.data.sec");
-        URI feedURI = new URI(secFeed);
+        URI feedURI = this.getURI("real.data.sec");
         Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
         assertTrue(resources.size() > 100);
-        secFeed = configuration.getProperty("test.data.local.sec");
-        feedURI = new URI(secFeed);
+        feedURI = this.getURI("test.data.local.sec");
         grabber = new SecGrabberImpl(feedURI);
         resources.addAll(grabber.getResources());
     }
