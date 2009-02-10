@@ -52,12 +52,12 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
     public URI getMatch(URI uri) throws XBRLException {
-        logger.info("Getting match for " + uri);
+        logger.debug("Getting match for " + uri);
         String signature = this.getSignature(uri);
         if (signature == null) return uri;
         Fragment match = null;
         if (getStore().hasFragment(signature)) {
-            logger.info(uri + " has a match already");
+            logger.debug(uri + " has a match already");
             String query = "/*[*/@uri='" + uri + "']";
             FragmentList<Fragment> matches = getStore().query(query);
             if (matches.getLength() == 0) {
@@ -69,7 +69,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
                 match = matches.get(0);
             }
         } else {
-            logger.info(uri + " has no existing matches");
+            logger.debug(uri + " has no existing matches");
             match = new MockFragmentImpl(signature);
             HashMap<String,String> attr = new HashMap<String,String>();
             attr.put("uri",uri.toString());
