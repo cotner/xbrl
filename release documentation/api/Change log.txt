@@ -1,4 +1,9 @@
-28 Jan. 2008
+11 Feb. 2009
+Added new queryForString and queryForStrings methods to 
+the org.xbrlapi.data.Store interface and all implementations 
+thereof.
+
+28 Jan. 2009
 Modified additional function signatures to work with 
 URI arguments rather than string representations of URI arguments.
 Added loader focussed unit testing for loading of duplicate resources.
