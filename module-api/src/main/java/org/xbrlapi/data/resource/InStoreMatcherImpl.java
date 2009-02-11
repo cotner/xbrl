@@ -49,19 +49,15 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
     public URI getMatch(URI uri) throws XBRLException {
-        logger.debug("Getting match for " + uri);
         
         String query = "/*[" + Constants.XBRLAPIPrefix + ":resource/@uri='" + uri +"']";
         FragmentList<Fragment> matches = getStore().query(query);
         if (matches.getLength() > 1) throw new XBRLException("The wrong number of match fragments was retrieved.  There must be just one.");
         
         if (matches.getLength() == 0) {
-            logger.debug(uri + " has not been checked for a match before.");
             String signature = this.getSignature(uri);
-            logger.info(uri + " : " + signature);
 
             if (getStore().hasFragment(signature)) {
-                logger.info("Signature is already stored.");
                 Fragment match = getStore().getFragment(signature);
                 HashMap<String,String> attr = new HashMap<String,String>();
                 attr.put("uri",uri.toString());
@@ -70,14 +66,12 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
                 return match.getURI();
             } 
 
-            logger.info("Signature needs to be stored.");
             Fragment match = new MockFragmentImpl(signature);
             HashMap<String,String> attr = new HashMap<String,String>();
             attr.put("uri",uri.toString());
             match.setMetaAttribute("uri",uri.toString());
             match.appendMetadataElement("resource",attr);
             getStore().storeFragment(match);
-            getStore().serialize(match);
             return uri;
             
         } 
