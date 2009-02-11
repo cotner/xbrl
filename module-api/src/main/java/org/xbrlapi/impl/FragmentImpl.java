@@ -320,7 +320,6 @@ public class FragmentImpl implements Fragment {
 			} else throw new XBRLException("A metadata element is being added with an attribute with a null name.");
     	}
     	root.appendChild(child);
-    	getStore().serialize(root);
 		updateStore();
     }
     
