@@ -15,7 +15,6 @@ public class PartialLoadingTestCase extends BaseTestCase {
 
 	private final String VALID_URI = "test.data.small.schema";
     private final String NONEXISTENT_URI = "nonexistent.uri";
-    private final String INVALIDXML_URI = "test.data.local.invalid.xml";
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -45,7 +44,7 @@ public class PartialLoadingTestCase extends BaseTestCase {
 
     public void testLoaderHandlingOfASAXException() throws Exception {
         try {
-            loader.stashURI(getURI(this.INVALIDXML_URI));
+            loader.discover(new URI("http://www.xbrlapi.org/invalid.xml"),"<xbrl>");
             loader.stashURI(getURI(this.VALID_URI));
             loader.discover();
         } catch (Exception e) {
