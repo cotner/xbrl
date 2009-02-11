@@ -301,7 +301,6 @@ public class FragmentImpl implements Fragment {
      * @see org.xbrlapi.Fragment#appendMetadataElement(String, HashMap)
      */
     public void appendMetadataElement(String eName, HashMap<String,String> attributes) throws XBRLException {
-    	
     	if (eName == null) throw new XBRLException("An element name must be specified.");
     	
     	if (getBuilder() != null) {
@@ -321,6 +320,7 @@ public class FragmentImpl implements Fragment {
 			} else throw new XBRLException("A metadata element is being added with an attribute with a null name.");
     	}
     	root.appendChild(child);
+    	getStore().serialize(root);
 		updateStore();
     }
     

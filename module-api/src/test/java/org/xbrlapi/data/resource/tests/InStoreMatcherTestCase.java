@@ -56,7 +56,6 @@ public class InStoreMatcherTestCase extends BaseTestCase {
             URI uri2 = getURI("real.data.sec.usgaap.2");
             assertEquals(uri1,matcher.getMatch(uri2));
 
-            store.serialize(store.getStoreAsDOM().getDocumentElement());
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception thrown.");

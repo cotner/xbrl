@@ -1,11 +1,8 @@
 package org.xbrlapi.data.resource;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.cache.CacheImpl;
@@ -52,39 +49,44 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
     public URI getMatch(URI uri) throws XBRLException {
-        logger.info("Getting match for " + uri);
-        String signature = this.getSignature(uri);
-        if (signature == null) return uri;
-        Fragment match = null;
-        if (getStore().hasFragment(signature)) {
-            logger.debug(uri + " has a match already");
-            String query = "/*[*/@uri='" + uri + "']";
-            FragmentList<Fragment> matches = getStore().query(query);
-            if (matches.getLength() == 0) {
+        logger.debug("Getting match for " + uri);
+        
+        String query = "/*[" + Constants.XBRLAPIPrefix + ":resource/@uri='" + uri +"']";
+        FragmentList<Fragment> matches = getStore().query(query);
+        if (matches.getLength() > 1) throw new XBRLException("The wrong number of match fragments was retrieved.  There must be just one.");
+        
+        if (matches.getLength() == 0) {
+            logger.debug(uri + " has not been checked for a match before.");
+            String signature = this.getSignature(uri);
+            logger.info(uri + " : " + signature);
+
+            if (getStore().hasFragment(signature)) {
+                logger.info("Signature is already stored.");
+                Fragment match = getStore().getFragment(signature);
                 HashMap<String,String> attr = new HashMap<String,String>();
                 attr.put("uri",uri.toString());
                 match = getStore().getFragment(signature);
                 match.appendMetadataElement("resource",attr);
-            } else {
-                match = matches.get(0);
-            }
-        } else {
-            logger.debug(uri + " has no existing matches");
-            match = new MockFragmentImpl(signature);
+                return match.getURI();
+            } 
+
+            logger.info("Signature needs to be stored.");
+            Fragment match = new MockFragmentImpl(signature);
             HashMap<String,String> attr = new HashMap<String,String>();
             attr.put("uri",uri.toString());
-            match.appendMetadataElement("match",attr);
+            match.setMetaAttribute("uri",uri.toString());
             match.appendMetadataElement("resource",attr);
-            store.storeFragment(match);
-        }
-        NodeList nodes = match.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match");
-        Element element = (Element) nodes.item(0);
-        try {
-            return new URI(element.getAttribute("uri"));
-        } catch (URISyntaxException e) {
-            throw new XBRLException("Unexpected malformed URI.",e);
-        }
+            getStore().storeFragment(match);
+            getStore().serialize(match);
+            return uri;
+            
+        } 
+
+        Fragment match = matches.get(0);
+        return match.getURI();
         
     }
+    
+
 
 }
