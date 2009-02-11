@@ -1,7 +1,9 @@
 package org.xbrlapi.data.exist;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -144,7 +146,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			xpathService.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace);
 			xpathService.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace);
 			xpathService.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace);
-			// TODO delete the composite prefix namespace declaration from the store and remove document fragment from tests.
 			xpathService.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace);
 			xpathService.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
 			// TODO add means for users to add their own namespace declarations to the data store xpath services
@@ -331,7 +332,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	            xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
 			resources = xpathService.query(query);
 		} catch (XMLDBException e) {
-			throw new XBRLException("The XPath query service failed.", e);
+			throw new XBRLException("The query service failed.", e);
 		}
 
 		FragmentList<F> fragments = new FragmentListImpl<F>();
@@ -339,11 +340,10 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			ResourceIterator iterator = resources.getIterator();
 			while (iterator.hasMoreResources()) {
 				Element root = getResourceRootElement((XMLResource) iterator.nextResource());
-
 				fragments.addFragment((F) FragmentFactory.newFragment(this, root));
 			}
 		} catch (XMLDBException e) {
-			throw new XBRLException("The XPath query of the DTS failed.", e);
+			throw new XBRLException("The query failed.", e);
 		}
 		return fragments;
 	}
@@ -378,9 +378,46 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
                 indices.put(index,null);
             }
         } catch (XMLDBException e) {
-            throw new XBRLException("The XPath query of the DTS failed.", e);
+            throw new XBRLException("The query failed.", e);
         }
         return indices;
+
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#queryForStrings(String)
+     */
+    public synchronized List<String> queryForStrings(String query) throws XBRLException {
+        if (query.startsWith("/*")) {
+            query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
+        } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
+            query = "/*" + this.getURIFilteringQueryClause() + query.substring(Constants.XBRLAPIPrefix.length() + 9); 
+        } else {
+            throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
+        }
+                
+        logger.info("RUNNING: " + query);
+        
+        ResourceSet resources = null;
+        try {
+            for (String namespace: this.namespaceBindings.keySet()) 
+                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
+            resources = xpathService.query(query + "/string()");
+        } catch (XMLDBException e) {
+            throw new XBRLException("The XPath query service failed.", e);
+        }
+
+        List<String> strings = new Vector<String>();
+        try {
+            ResourceIterator iterator = resources.getIterator();
+            while (iterator.hasMoreResources()) {
+                XMLResource resource = (XMLResource) iterator.nextResource();
+                strings.add((String) resource.getContent());
+            }
+        } catch (XMLDBException e) {
+            throw new XBRLException("The query failed.", e);
+        }
+        return strings;
 
     }    
 	

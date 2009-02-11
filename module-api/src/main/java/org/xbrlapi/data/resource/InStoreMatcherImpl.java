@@ -52,7 +52,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
     public URI getMatch(URI uri) throws XBRLException {
-        logger.debug("Getting match for " + uri);
+        logger.info("Getting match for " + uri);
         String signature = this.getSignature(uri);
         if (signature == null) return uri;
         Fragment match = null;

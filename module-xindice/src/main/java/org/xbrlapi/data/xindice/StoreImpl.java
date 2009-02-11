@@ -1,7 +1,9 @@
 package org.xbrlapi.data.xindice;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -316,7 +318,6 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			ResourceIterator iterator = resources.getIterator();
 			while (iterator.hasMoreResources()) {
 				Element root = getResourceRootElement((XMLResource) iterator.nextResource());
-				// TODO Figure out how to eliminate this warning.
 				fragments.addFragment((F) FragmentFactory.newFragment(this, root));
 			}
 		} catch (XMLDBException e) {
@@ -360,6 +361,45 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             throw new XBRLException("The XPath query of the DTS failed.", e);
         }
         return indices;
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#queryForStrings(String)
+     */
+    public synchronized List<String> queryForStrings(String query) throws XBRLException {
+        if (query.startsWith("/*")) {
+            query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
+        } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
+            query = "/*" + this.getURIFilteringQueryClause() + query.substring(Constants.XBRLAPIPrefix.length() + 9); 
+        } else {
+            throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
+        }
+                
+        logger.info("RUNNING: " + query);
+        
+        ResourceSet resources = null;
+        try {
+            for (String namespace: this.namespaceBindings.keySet()) 
+                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
+            resources = xpathService.query("string("+query+")");
+        } catch (XMLDBException e) {
+            throw new XBRLException("The XPath query service failed.", e);
+        }
+
+        List<String> strings = new Vector<String>();
+        try {
+            ResourceIterator iterator = resources.getIterator();
+            while (iterator.hasMoreResources()) {
+                XMLResource resource = (XMLResource) iterator.nextResource();
+                String content = (String) resource.getContent();
+                content = content.substring(content.indexOf(">")+1,content.indexOf("</"));
+                strings.add(content);
+            }
+        } catch (XMLDBException e) {
+            throw new XBRLException("The query failed.", e);
+        }
+        return strings;
+
     }    
 	
 	/**

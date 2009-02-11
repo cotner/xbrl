@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -45,6 +47,6 @@ public interface EntityResource extends MixedContentResource {
      * matching this entity resource).
      * @throws XBRLException
      */
-    public FragmentList<Entity> getEntities(String uri) throws XBRLException;
+    public FragmentList<Entity> getEntities(URI uri) throws XBRLException;
     
 }

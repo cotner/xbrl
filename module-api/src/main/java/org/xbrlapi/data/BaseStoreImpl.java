@@ -1139,4 +1139,13 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         this.networks = networks;
     }
 
+    /**
+     * @see Store#queryForString(String)
+     */
+    public String queryForString(String query) throws XBRLException {
+        List<String> strings = queryForStrings(query);
+        if (strings.size() == 0) return null;
+        if (strings.size() > 1) throw new XBRLException(query + " returned more than one string.");
+        return strings.get(0);
+    }
 }

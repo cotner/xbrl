@@ -13,6 +13,7 @@ public class AllTests {
         suite.addTestSuite(DocumentRecoveryFromStoreTestCase.class);
 		suite.addTestSuite(StoreImplConstructorTestCase.class);
 		suite.addTestSuite(StoreImplTestCase.class);
+        suite.addTestSuite(QueryForStringsTestCase.class);
 		
 		suite.addTest(org.xbrlapi.data.exist.framework.tests.AllTests.suite());		
 		//$JUnit-END$

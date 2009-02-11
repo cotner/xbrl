@@ -519,7 +519,51 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             if (xmlResults != null) xmlResults.delete();
         }
         
-    }    
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#queryForStrings(String)
+     */
+    public synchronized List<String> queryForStrings(String query) throws XBRLException {
+        if (query.startsWith("/*")) {
+            query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
+        } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
+            query = "/*" + this.getURIFilteringQueryClause() + query.substring(Constants.XBRLAPIPrefix.length() + 9); 
+        } else {
+            throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
+        }
+        logger.info("Adapted query is " + query);
+        this.incrementCallCount();
+        
+        XmlResults xmlResults = null;
+        XmlValue xmlValue = null;
+        try {
+    
+            try {
+                xmlResults = performQuery(query);
+                double startTime = System.currentTimeMillis();
+                xmlValue = xmlResults.next();
+                List<String> strings = new Vector<String>();
+                while (xmlValue != null) {
+                    strings.add(xmlValue.getNodeValue());
+                    xmlValue.delete();
+                    xmlValue = xmlResults.next();
+                }
+                
+                Double time = new Double((System.currentTimeMillis()-startTime));
+                logger.debug(time + " milliseconds to create String list from" + query);
+                return strings;
+    
+            } catch (XmlException e) {
+                throw new XBRLException("Failed query: " + query,e);
+            }
+            
+        } finally {
+            if (xmlValue != null) xmlValue.delete();
+            if (xmlResults != null) xmlResults.delete();
+        }        
+    }
+    
     
     /**
      * Provides direct access to the query mechanism so that we can use

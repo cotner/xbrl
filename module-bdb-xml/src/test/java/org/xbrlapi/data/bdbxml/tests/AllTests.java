@@ -1,5 +1,7 @@
 package org.xbrlapi.data.bdbxml.tests;
 
+import org.xbrlapi.data.exist.tests.QueryForStringsTestCase;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -17,6 +19,7 @@ public class AllTests {
         suite.addTestSuite(StoreImplConstructorTestCase.class);
 		suite.addTestSuite(StoreImplTestCase.class);
 		suite.addTestSuite(StoreImplConstructorTestCase.class);
+        suite.addTestSuite(QueryForStringsTestCase.class);
 		
 		suite.addTest(org.xbrlapi.data.bdbxml.framework.tests.AllTests.suite());
 		//$JUnit-END$

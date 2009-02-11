@@ -139,6 +139,28 @@ public interface Store {
      * @throws XBRLException if the query cannot be executed.
      */
     public Map<String,String> queryForIndices(String query) throws XBRLException;
+    
+    /**
+     * Run a query that is required to return a list of strings.
+     * Implementations of this method must be synchronized.
+     * @param query The XPath query to run against the set of fragments.
+     * @return a list of strings, each of which is a query result.
+     * @throws XBRLException if the query cannot be executed or if the
+     * query results are not strings.
+     */
+    public List<String> queryForStrings(String query) throws XBRLException;
+    
+    /**
+     * Run a query that is required to return a single string.
+     * Implementations of this method must be synchronized.
+     * @param query The XPath query to run against the set of fragments.
+     * @return a single string that is the query result or null if the query
+     * does not return any strings.
+     * @throws XBRLException if the query cannot be executed or if the
+     * query result is not a single string.
+     */
+    public String queryForString(String query) throws XBRLException;
+    
 	
 	
 

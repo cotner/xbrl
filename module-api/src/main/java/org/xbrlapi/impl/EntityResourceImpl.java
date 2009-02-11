@@ -1,7 +1,6 @@
 package org.xbrlapi.impl;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import org.xbrlapi.Entity;
@@ -104,17 +103,13 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
     }
 
     /**
-     * @see org.xbrlapi.EntityResource#getEntities(String)
+     * @see org.xbrlapi.EntityResource#getEntities(URI)
      */
-    public FragmentList<Entity> getEntities(String uri) throws XBRLException {
-        try {
-            URI matchURI = getStore().getMatcher().getMatch(new URI(uri));
-            String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and @uri='" + matchURI + "' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
-            FragmentList<Entity> entities = getStore().<Entity>query(query);
-            return entities;
-        } catch (URISyntaxException e) {
-            throw new XBRLException("Malformed URI.",e);
-        }
+    public FragmentList<Entity> getEntities(URI uri) throws XBRLException {
+        URI matchURI = getStore().getMatcher().getMatch(uri);
+        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and @uri='" + matchURI + "' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
+        FragmentList<Entity> entities = getStore().<Entity>query(query);
+        return entities;
     }
     
 }

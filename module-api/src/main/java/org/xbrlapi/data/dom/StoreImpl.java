@@ -5,7 +5,9 @@ package org.xbrlapi.data.dom;
  */
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.apache.xpath.domapi.XPathEvaluatorImpl;
@@ -21,6 +23,7 @@ import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.XBRLStoreImpl;
 import org.xbrlapi.impl.FragmentFactory;
 import org.xbrlapi.impl.FragmentListImpl;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 
@@ -207,6 +210,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 */
     @SuppressWarnings(value = "unchecked")
 	public synchronized <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
+        query = query + this.getURIFilteringQueryClause();
         XPathResult result = runQuery(query);
 		FragmentList<F> fragments = new FragmentListImpl<F>();
 		Node n;
@@ -221,6 +225,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
     public synchronized Map<String,String> queryForIndices(String query) throws XBRLException {
+        query = query + this.getURIFilteringQueryClause();
+        
         XPathResult result = runQuery(query);
         Node n;
         HashMap<String,String> indices = new HashMap<String,String>();
@@ -230,6 +236,28 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         }
         return indices;
     }
+    
+    /**
+     * @see org.xbrlapi.data.Store#queryForStrings(String)
+     */
+    public synchronized List<String> queryForStrings(String query) throws XBRLException {
+        if (query.startsWith("/*")) {
+            query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
+        } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
+            query = "/*" + this.getURIFilteringQueryClause() + query.substring(Constants.XBRLAPIPrefix.length() + 9); 
+        } else {
+            throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
+        }
+                
+        XPathResult result = runQuery(query);
+        List<String> strings = new Vector<String>();
+        Node n = null;
+        while ((n = result.iterateNext()) != null) {
+            strings.add(n.getNodeValue());
+        }
+        return strings;
+
+    }    
 	
 	/**
 	 * Get the index of the fragment containing the node matched by the query.

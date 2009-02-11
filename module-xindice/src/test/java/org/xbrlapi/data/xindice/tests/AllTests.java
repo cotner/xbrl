@@ -1,5 +1,7 @@
 package org.xbrlapi.data.xindice.tests;
 
+import org.xbrlapi.data.exist.tests.QueryForStringsTestCase;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -13,6 +15,7 @@ public class AllTests {
         suite.addTestSuite(DocumentRecoveryFromStoreTestCase.class);
 		suite.addTestSuite(StoreImplConstructorTestCase.class);
 		suite.addTestSuite(StoreImplTestCase.class);
+        suite.addTestSuite(QueryForStringsTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}
