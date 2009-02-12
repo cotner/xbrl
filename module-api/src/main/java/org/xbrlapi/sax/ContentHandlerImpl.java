@@ -140,6 +140,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
                 }
             } catch (XBRLException e) {
                 e.printStackTrace();
+                logger.error(this.getURI() + " : " + e.getMessage());
                 throw new SAXException("Fragment identification failed.",e);
             }
         }
@@ -155,6 +156,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
                 getLoader().extendChildren();   
             }
         } catch (XBRLException e) {
+            logger.error(this.getURI() + " : " + e.getMessage());
             throw new SAXException("Could not handle children tracking at the fragment level.",e);
         }
 
@@ -167,7 +169,8 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
                 }
             }
         } catch (XBRLException e) {
-           throw new SAXException("The loader is not building a fragment so something is badly amiss.",e);
+            logger.error(this.getURI() + " : " + e.getMessage());
+            throw new SAXException("The loader is not building a fragment so something is badly amiss.",e);
         }
 
         // Insert the current element into the fragment being built
@@ -179,6 +182,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             builder.appendElement(namespaceURI, lName, qName, attrs);
 
         } catch (XBRLException e) {
+            logger.error(this.getURI() + " : " + e.getMessage());
             throw new SAXException("The element could not be appended to the fragment.",e);
         }
 

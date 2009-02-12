@@ -253,23 +253,28 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			String title,
 			String label) 
 	throws XLinkException {
-		try {
-            Locator fragment = new LocatorImpl();
-            processFragment(fragment,attrs);            
+	    try {
+	        try {
+	            Locator fragment = new LocatorImpl();
+	            processFragment(fragment,attrs);            
 
-            Loader loader = getLoader();
-            URI uri = baseURIResolver.getBaseURI().resolve(new URI(href));
-            fragment.setTarget(uri);
-            loader.stashURI(uri);
+	            Loader loader = getLoader();
+	            URI uri = baseURIResolver.getBaseURI().resolve(new URI(href));
+	            fragment.setTarget(uri);
+	            loader.stashURI(uri);
 
-		} catch (URISyntaxException e) {
-			throw new XLinkException("The locator href is malformed.",e);
-		} catch (XMLBaseException e) {
-			throw new XLinkException("The locator href could not be queued up for processing.",e);
-		} catch (XBRLException e) {
-			throw new XLinkException("The locator href could not be queued up for processing.",e);
-		}
+	        } catch (URISyntaxException e) {
+                logger.error("Problem encountered starting a locator for " + this.getLoader().getDocumentURI());
+                throw new XLinkException("The locator href value," + href + ", is a malformed URI.",e);
+	        } catch (XMLBaseException e) {
+                logger.error("Problem encountered starting a locator for " + this.getLoader().getDocumentURI());
+	            throw new XLinkException("Base URI problems prevented the locator href from being queued up for processing.",e);
+	        }
+	    } catch (XBRLException xbrlException) {
+            throw new XLinkException("An XBRL Exception prevented the locator href from being queued up for processing.",xbrlException);
+        }           
 	}
+
 
 	/**
 	 * Handle the end of the locator.
@@ -407,7 +412,10 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
      */
     private void processFragment(Fragment fragment,Attributes attrs) throws XBRLException {
         Loader loader = this.getLoader();
-        fragment.setFragmentIndex(getLoader().getNextFragmentId());
+        String index = getLoader().getNextFragmentId();
+        if (index == null) throw new XBRLException(getLoader().getDocumentURI() + ": The fragment index MUST not be null.");
+        if (index.equals("")) throw new XBRLException(getLoader().getDocumentURI() + ": The fragment index MUST not be the empty string.");
+        fragment.setFragmentIndex(index);
         if (attrs.getValue("id") != null) {
             fragment.appendID(attrs.getValue("id"));
             this.getElementState().setId(attrs.getValue("id"));

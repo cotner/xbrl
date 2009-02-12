@@ -45,14 +45,14 @@ public class XBRLXLinkIdentifier extends BaseIdentifier implements Identifier {
             XBRLXLinkHandlerImpl xlinkHandler = (XBRLXLinkHandlerImpl) this.getXLinkHandler();
             xlinkHandler.setElementState(this.getElementState());
         } catch (ClassCastException e) {
-            throw new XBRLException("The XBRLXLinkIdentifier must be used with an XBRLXLinkHandler.",e);
+            throw new XBRLException("The XBRLXLinkIdentifier MUST use an XBRLXLinkHandler when parsing " + getContentHandler().getURI(),e);
         }
             
         // Pass control through to the XLink processor to detect XLink structures
         try {
             getXLinkProcessor().startElement(namespaceURI,lName,qName,attrs);
         } catch (XLinkException e) {
-            throw new XBRLException("XLink processing of the start of an element failed.",e);
+            throw new XBRLException("XLink processing of the start of an element failed when parsing " + getContentHandler().getURI(),e);
         }
         
     }
