@@ -5,9 +5,12 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.log4j.Logger;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.loader.Loader;
+import org.xbrlapi.sax.ContentHandlerImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xml.sax.ContentHandler;
@@ -43,38 +46,28 @@ public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader 
     static Logger logger = Logger.getLogger(LoaderImpl.class);
     
     /**
-     * @see org.xbrlapi.loader.LoaderImpl#parse(URI)
+     * Parse an XML Document supplied as a URI the next part of the DTS.
+     * @param uri The URI of the document to parse.
+     * @throws XBRLException IOException ParserConfigurationException SAXException
      */
-    protected boolean parse(URI uri) throws XBRLException {
-        
-        try {
-            InputSource inputSource = this.getEntityResolver().resolveEntity("", uri.toString());
-            ContentHandler contentHandler = new ContentHandlerImpl(this, uri);
-            return parse(uri, inputSource, contentHandler);
-        } catch (SAXException e) {
-            logger.info("A SAX exception was thrown when resolving " + uri);
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingSAXExceptions(uri);
-            return false;
-        } catch (IOException e) {
-            logger.info("An IO exception was thrown when resolving " + uri);
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingIOExceptions(uri);
-            return false;
-        }
+    protected void parse(URI uri) throws XBRLException, ParserConfigurationException, SAXException, IOException {
+        InputSource inputSource = null;
+        inputSource = this.getEntityResolver().resolveEntity("", uri.toString());
+        ContentHandler contentHandler = new ContentHandlerImpl(this, uri);
+        parse(uri, inputSource, contentHandler);
     }
 
+
     /**
-     * @see org.xbrlapi.loader.LoaderImpl#parse(URI, String)
+     * Parse an XML Document supplied as a string the next part of the DTS.
+     * @param uri The URI to associate with the supplied XML.
+     * @param xml The XML document as a string.
+     * @throws XBRLException IOException SAXException ParserConfigurationException
      */
-    protected boolean parse(URI uri, String xml) throws XBRLException {
+    protected void parse(URI uri, String xml) throws XBRLException, ParserConfigurationException, SAXException, IOException {
         InputSource inputSource = new InputSource(new StringReader(xml));
         ContentHandler contentHandler = new ContentHandlerImpl(this, uri, xml);
-        return parse(uri, inputSource, contentHandler);
+        parse(uri, inputSource, contentHandler);
     }
     
 }

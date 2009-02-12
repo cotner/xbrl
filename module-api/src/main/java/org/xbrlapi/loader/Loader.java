@@ -271,5 +271,19 @@ public interface Loader {
      * @throws XBRLException
      */
     public void storeDocumentsToAnalyse() throws XBRLException;
-	
+
+    /**
+     * Constant used to flag documents causing an XBRLException.
+     */
+    public final Integer XBRL_PROBLEM = new Integer(-3);
+
+    /**
+     * Constant used to flag documents causing a SAXException.
+     */
+    public final Integer SAX_PROBLEM = new Integer(-2);
+    /**
+     * Constant used to flag documents causing an IOException.
+     */
+    public final Integer IO_PROBLEM = new Integer(-1);
+    
 }

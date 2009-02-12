@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -321,7 +322,7 @@ public class LoaderImpl implements Loader {
 
     /**
      * The children vector contains an item for each element that has been started
-     * and that has not yet been ended by the SAX content handler.
+     * by the SAX parser and that has not yet been ended by it.
      * 
      * @return The vector of children or null if none exist (implying no parent fragments).
      */
@@ -344,7 +345,12 @@ public class LoaderImpl implements Loader {
         }
 
         // record a new child for the parent element
-        long c = (getChildrenVector().lastElement()).longValue() + 1;
+        Vector<Long> childrenVector = getChildrenVector();
+        if (childrenVector.isEmpty()) {
+            logger.error("Parsing " + getDocumentURI()+ ". The children vector is empty:");
+            logger.error("Problem occurred for fragment " + this.getCurrentFragmentId());
+        }
+        long c = (childrenVector.lastElement()).longValue() + 1;
         getChildrenVector().setElementAt(new Long(c),
                 getChildrenVector().size() - 1);
     }
@@ -454,9 +460,7 @@ public class LoaderImpl implements Loader {
             getStore().storeFragment(f);
             return f;
         } catch (EmptyStackException e) {
-            throw new XBRLException(
-                    "There are no fragments being built.  The stack of fragments is empty.",
-                    e);
+            throw new XBRLException(this.getDocumentURI() + " There are no fragments being built.  The stack of fragments is empty.",e);
         }
     }
 
@@ -502,10 +506,13 @@ public class LoaderImpl implements Loader {
         return documents;
     }
 
+
     /**
      * @see org.xbrlapi.loader.Loader#discover()
      */
     public void discover() throws XBRLException {
+        
+        int discoveryCount = 1;
 
         if (isDiscovering()) {
             logger.warn("The loader is already doing discovery so starting discovery achieves nothing.");
@@ -527,15 +534,18 @@ public class LoaderImpl implements Loader {
             if (!getStore().hasDocument(uri)) {
                 setDocumentURI(uri);
                 this.setNextFragmentId("1");
-                double startTime = System.currentTimeMillis();
-                int startIndex = this.fragmentId;
-                boolean successful = parse(uri);
-                if (successful) {
-                    String time = (new Double((System.currentTimeMillis() - startTime)/ (fragmentId - startIndex))).toString();
-                    if (time.length() > 4) time = time.substring(0, 4);
-                    logger.debug("Average time taken per fragment = " + time + " milliseconds");
-                    logger.info(this.fragmentId + " fragments in " + uri);
+                try {
+                    parse(uri);
+                    logger.info("#" + discoveryCount + ". " + this.fragmentId + " fragments in " + uri);
                     markDocumentAsExplored(uri);
+                } catch (XBRLException e) {
+                    this.cleanupFailedLoad(uri,Loader.XBRL_PROBLEM,e);
+                } catch (SAXException e) {
+                    this.cleanupFailedLoad(uri,Loader.SAX_PROBLEM,e);
+                } catch (IOException e) {
+                    this.cleanupFailedLoad(uri,Loader.IO_PROBLEM,e);
+                } catch (ParserConfigurationException e) {
+                    throw new XBRLException("The parser could not be correctly configured.",e);
                 }
             } else {
                 logger.debug(uri + " is already in the data store.");
@@ -548,14 +558,18 @@ public class LoaderImpl implements Loader {
             }
 
             uri = getNextDocumentToExplore();
+            discoveryCount++;
         }
 
         storeDocumentsToAnalyse();
         setDiscovering(false);
-        
-        this.documentQueue = new HashMap<URI,Integer>();
 
-        logger.info("Exiting discovery process though some documents may not yet be in the data store.");
+        if (this.documentQueue.size() == 0) {
+            logger.info("Document discovery completed successfully.");
+        } else {
+            logger.info("Document discovery exited without completing.");
+        }
+        this.documentQueue = new HashMap<URI,Integer>();
         
     }
 
@@ -566,7 +580,10 @@ public class LoaderImpl implements Loader {
 
         Store store = this.getStore();
         
-        if (isDiscovering()) return;
+        if (isDiscovering()) {
+            logger.warn("Already discovering data with this loader so loader will not discover next document as requested.");
+            return;
+        }
         setDiscovering(true);
 
         URI uri = getNextDocumentToExplore();
@@ -576,25 +593,22 @@ public class LoaderImpl implements Loader {
         }
 
         if (uri != null) {
-            logger.info("Up to fragment " + this.fragmentId + ". Now parsing " + uri);
+            logger.debug("Now parsing " + uri);
             setDocumentURI(uri);
             this.setNextFragmentId("1");
             try {
-                boolean successful = parse(uri);
-                if (! successful) {
-                    logger.info("Parsing problems prevented analysis of " + uri);
-                }
-            } catch (Exception e) {
-                // Clean up the database to ensure no document is lying around.
-                getStore().deleteDocument(uri);
-                // Clean up the document cache
-                this.getCache().purge(uri);
-                // Store the list of documents in the queue to be loaded.
-                storeDocumentsToAnalyse();
-                throw new XBRLException("The parsing process failed but the database has been cleaned up.",e);
+                parse(uri);
+                logger.info(this.fragmentId + " fragments in " + uri);
+                markDocumentAsExplored(uri);
+            } catch (XBRLException e) {
+                this.cleanupFailedLoad(uri,Loader.XBRL_PROBLEM,e);
+            } catch (SAXException e) {
+                this.cleanupFailedLoad(uri,Loader.SAX_PROBLEM,e);
+            } catch (IOException e) {
+                this.cleanupFailedLoad(uri,Loader.IO_PROBLEM,e);
+            } catch (ParserConfigurationException e) {
+                throw new XBRLException("The parser could not be correctly configured.",e);
             }
-            
-            this.markDocumentAsExplored(uri);
         }
 
         this.storeDocumentsToAnalyse();
@@ -659,54 +673,34 @@ public class LoaderImpl implements Loader {
         documentQueue.put(uri,new Integer(1));
     }
     
-    protected void markDocumentAsCausingIOExceptions(URI uri) {
-        documentQueue.put(uri,new Integer(-1));
-    }
+
     
-    protected void markDocumentAsCausingSAXExceptions(URI uri) {
-        documentQueue.put(uri,new Integer(-2));
-    }    
+
+    
+
 
     /**
      * Parse an XML Document supplied as a URI the next part of the DTS.
      * @param uri The URI of the document to parse.
-     * @return true if and only if the parsing was successfully completed.
-     * @throws XBRLException
+     * @throws XBRLException IOException ParserConfigurationException SAXException
      */
-    protected boolean parse(URI uri) throws XBRLException {
+    protected void parse(URI uri) throws XBRLException, ParserConfigurationException, SAXException, IOException {
         InputSource inputSource = null;
-        try {
-            inputSource = this.getEntityResolver().resolveEntity("", uri.toString());
-        } catch (SAXException saxException) {
-            logger.info("A SAX exception was thrown when resolving " + uri);
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingSAXExceptions(uri);
-            return false;
-        } catch (IOException e) {
-            logger.info("An IO exception was thrown when resolving " + uri);
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingIOExceptions(uri);
-            return false;
-        }
+        inputSource = this.getEntityResolver().resolveEntity("", uri.toString());
         ContentHandler contentHandler = new ContentHandlerImpl(this, uri);
-        return parse(uri, inputSource, contentHandler);
+        parse(uri, inputSource, contentHandler);
     }
 
     /**
      * Parse an XML Document supplied as a string the next part of the DTS.
      * @param uri The URI to associate with the supplied XML.
      * @param xml The XML document as a string.
-     * @return true if and only if the parsing completes successfully.
-     * @throws XBRLException
+     * @throws XBRLException IOException SAXException ParserConfigurationException
      */
-    protected boolean parse(URI uri, String xml) throws XBRLException {
+    protected void parse(URI uri, String xml) throws XBRLException, ParserConfigurationException, SAXException, IOException {
         InputSource inputSource = new InputSource(new StringReader(xml));
         ContentHandler contentHandler = new ContentHandlerImpl(this, uri, xml);
-        return parse(uri, inputSource, contentHandler);
+        parse(uri, inputSource, contentHandler);
     }
 
     /**
@@ -714,10 +708,9 @@ public class LoaderImpl implements Loader {
      * @param uri The URI to be associated with the supplied input source.
      * @param inputSource The input source to parse.
      * @param contentHandler The content handler to use for SAX parsing.
-     * @return true if and only if the parsing completed successfully.
-     * @throws XBRLException
+     * @throws XBRLException ParserConfigurationException SAXException IOException
      */
-    protected boolean parse(URI uri, InputSource inputSource, ContentHandler contentHandler) throws XBRLException {
+    protected void parse(URI uri, InputSource inputSource, ContentHandler contentHandler) throws XBRLException, ParserConfigurationException, SAXException, IOException {
 
         logger.debug("about to parse " + uri);        
         // Create and configure the SAX parser factory
@@ -734,80 +727,19 @@ public class LoaderImpl implements Loader {
 
         // Create the SAX parser to use
         SAXParser parser = null;
-        try {
-            parser = factory.newSAXParser();
-        } catch (Exception e) {
-            logger.info("A SAX parser configuration exception was preparing to parse " + uri);
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingSAXExceptions(uri);
-            return false;
-        }
+        parser = factory.newSAXParser();
 
         XMLReader reader = null;
-        try {
-            reader = parser.getXMLReader();
-        } catch (SAXException e) {
-            logger.info("A SAX exception was thrown when getting SAX XML reader for " + uri);
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingSAXExceptions(uri);
-            return false;
-        }
-
+        reader = parser.getXMLReader();
         reader.setEntityResolver(this.entityResolver);
         reader.setContentHandler(contentHandler);
         reader.setErrorHandler((ErrorHandler) contentHandler);
+        reader.setFeature("http://xml.org/sax/features/namespace-prefixes",true);
 
-        try {
-            reader.setFeature("http://xml.org/sax/features/namespace-prefixes",true);
-        } catch (Exception e) {
-            logger.info("The SAX parser does not support namespaces so we could not parse " + uri);
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingSAXExceptions(uri);
-            return false;
-        }
+        reader.setProperty(Constants.JAXP_SCHEMA_LANGUAGE,Constants.W3C_XML_SCHEMA);
 
-        try {
-            reader.setProperty(Constants.JAXP_SCHEMA_LANGUAGE,Constants.W3C_XML_SCHEMA);
-        } catch (Exception e) {
-            logger.info("The SAX parser does not support XML Schema validation so we could not parse " + uri);
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingSAXExceptions(uri);
-            return false;
-        }
-
-        try {
-            logger.debug("Parsing " + uri);
-            reader.parse(inputSource);
-        } catch (SAXException e) {
-            logger.info("The SAX parser could not parse " + uri);
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingSAXExceptions(uri);
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.info("An IO exception was thrown when parsing " + uri + " or one of its external resources.");
-            getStore().deleteDocument(uri);
-            getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
-            this.markDocumentAsCausingIOExceptions(uri);
-            return false;
-        } finally {
-            getStore().sync();
-        }
-
-        // Remove any old document stub from the data store once parsing is successfully completed
-        getStore().removeStub(documentId);
-        return true;
+        logger.debug("Parsing " + uri);
+        reader.parse(inputSource);
         
     }
 
@@ -893,7 +825,7 @@ public class LoaderImpl implements Loader {
     }
 
     public void incrementFragmentId() {
-        fragmentId = fragmentId + 1;
+        fragmentId++;
     }
 
     /**
@@ -946,11 +878,28 @@ public class LoaderImpl implements Loader {
                     reason = "IO exception";
                 } else if (value == -2) {
                     reason = "SAX exception";
+                } else if (value == -3) {
+                    reason = "XBRL exception";
                 }
                 map.put(document,reason);
             }
-        }        
+        }
         logger.info("Storing " + map.size() + " documents that are still to be analysed.");
         getStore().storeLoaderState(map);
+    }
+    
+    private void cleanupFailedLoad(URI uri, Integer type, Exception e) {
+        logger.error(getDocumentURI() + "encountered loading problem: " + e.getMessage());
+        documentQueue.put(uri,type);
+        try {
+            getStore().deleteDocument(uri);
+            getCache().purge(uri);
+            logger.info("Purged " + uri + " from the data store and cache.");
+        } catch (Exception exception) {
+            logger.error("Failed to clean up the document from the data store or cache. " + exception.getMessage());
+        }
+        childrenStack = new Stack<Vector<Long>>();
+        fragments = new Stack<Fragment>();
+        states = new Stack<ElementState>();        
     }
 }
