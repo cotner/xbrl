@@ -1,7 +1,16 @@
+12 Feb 2009
+Made the loader process able to handle all kinds of exceptions during the
+parsing process without causing the document discovery process to be derailed
+or the document cache or data store to be corrupted.
+Improved the efficiency of the document queue for data loading to improve
+the performance when loading very large numbers of documents.
+
 11 Feb. 2009
 Added new queryForString and queryForStrings methods to 
 the org.xbrlapi.data.Store interface and all implementations 
 thereof.
+Modified the in-store URI matching to ensure that a signature 
+only needs to be computed once for each document in the data store.
 
 28 Jan. 2009
 Modified additional function signatures to work with 
