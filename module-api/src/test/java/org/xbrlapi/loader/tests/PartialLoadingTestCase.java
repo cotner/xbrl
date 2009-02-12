@@ -31,11 +31,9 @@ public class PartialLoadingTestCase extends BaseTestCase {
             loader.discover();
             FragmentList<Fragment> stubs = store.getStubs();
             assertEquals(1,stubs.getLength());
-            Fragment stub = stubs.get(0);
-            store.serialize(stub);
             List<URI> uris = store.getDocumentsToDiscover();
             assertEquals(1,uris.size());
-            assertEquals(uris.get(0).toString(),getURI(this.NONEXISTENT_URI));
+            assertEquals(uris.get(0),getURI(this.NONEXISTENT_URI));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

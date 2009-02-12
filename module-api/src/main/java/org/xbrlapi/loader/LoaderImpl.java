@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -135,14 +137,17 @@ public class LoaderImpl implements Loader {
     private PointerResolver pointerResolver;
 
     /**
-     * The map of documents awaiting loading into the DTS. This queue is
-     * implemented as a hash map to ensure that the keys 
-     * eliminate multiple discoveries of the same document. The value for each
-     * URI is set to 0 initially and is changed to 1 when the document
-     * has been loaded successfully and a negative number if document processing
-     * fails for some reason (SAX parsing error or an IO error generally).
+     * The sorted map of documents that have failed to load.
+     * Each URI points to value that is the reason for the failure.
      */
-    private HashMap<URI, Integer> documentQueue = new HashMap<URI, Integer>();
+    private TreeMap<URI, String> failures = new TreeMap<URI, String>();
+    
+    /**
+     * The sorted set of documents that have successfully been loaded.
+     */
+    private TreeSet<URI> successes = new TreeSet<URI>();    
+    
+    private TreeSet<URI> documentQueue = new TreeSet<URI>();
 
     /**
      * The unique fragment ID, that will be one for the first fragment. This is
@@ -496,13 +501,7 @@ public class LoaderImpl implements Loader {
      */
     public List<URI> getDocumentsStillToAnalyse() {
         List<URI> documents = new Vector<URI>();
-
-        for (URI document : documentQueue.keySet()) {
-            if ((documentQueue.get(document)).equals(new Integer(0))) {
-                documents.add(document);
-            }
-        }
-
+        documents.addAll(documentQueue);
         return documents;
     }
 
@@ -524,8 +523,7 @@ public class LoaderImpl implements Loader {
             this.stashURI(uri);
         }
         
-        Object[] uris = this.documentQueue.keySet().toArray();
-        logger.debug(uris.length + " documents queued for discovery.");
+        logger.debug(documentQueue.size() + " documents queued for discovery.");
         
         URI uri = getNextDocumentToExplore();
         logger.debug("Next is " + uri);
@@ -538,12 +536,13 @@ public class LoaderImpl implements Loader {
                     parse(uri);
                     logger.info("#" + discoveryCount + ". " + this.fragmentId + " fragments in " + uri);
                     markDocumentAsExplored(uri);
+                    getStore().sync();
                 } catch (XBRLException e) {
-                    this.cleanupFailedLoad(uri,Loader.XBRL_PROBLEM,e);
+                    this.cleanupFailedLoad(uri,"XBRL Problem: " + e.getMessage(),e);
                 } catch (SAXException e) {
-                    this.cleanupFailedLoad(uri,Loader.SAX_PROBLEM,e);
+                    this.cleanupFailedLoad(uri,"SAX Problem: " + e.getMessage(),e);
                 } catch (IOException e) {
-                    this.cleanupFailedLoad(uri,Loader.IO_PROBLEM,e);
+                    this.cleanupFailedLoad(uri,"IO Problem: " + e.getMessage(),e);
                 } catch (ParserConfigurationException e) {
                     throw new XBRLException("The parser could not be correctly configured.",e);
                 }
@@ -564,12 +563,18 @@ public class LoaderImpl implements Loader {
         storeDocumentsToAnalyse();
         setDiscovering(false);
 
-        if (this.documentQueue.size() == 0) {
+        if (documentQueue.size() == 0 && failures.size() == 0) {
             logger.info("Document discovery completed successfully.");
         } else {
-            logger.info("Document discovery exited without completing.");
+            if (failures.size() > 0) {
+                logger.warn("Some documents failed to load.");
+            }
+            if (documentQueue.size() > 0) {
+                logger.info("Document discovery exited without completing.");
+            }
         }
-        this.documentQueue = new HashMap<URI,Integer>();
+        failures = new TreeMap<URI,String>();
+        documentQueue = new TreeSet<URI>();
         
     }
 
@@ -598,19 +603,21 @@ public class LoaderImpl implements Loader {
             this.setNextFragmentId("1");
             try {
                 parse(uri);
-                logger.info(this.fragmentId + " fragments in " + uri);
                 markDocumentAsExplored(uri);
+                getStore().sync();
+                logger.info(this.fragmentId + " fragments in " + uri);
             } catch (XBRLException e) {
-                this.cleanupFailedLoad(uri,Loader.XBRL_PROBLEM,e);
+                this.cleanupFailedLoad(uri,"XBRL Problem: " + e.getMessage(),e);
             } catch (SAXException e) {
-                this.cleanupFailedLoad(uri,Loader.SAX_PROBLEM,e);
+                this.cleanupFailedLoad(uri,"SAX Problem: " + e.getMessage(),e);
             } catch (IOException e) {
-                this.cleanupFailedLoad(uri,Loader.IO_PROBLEM,e);
+                this.cleanupFailedLoad(uri,"IO Problem: " + e.getMessage(),e);
             } catch (ParserConfigurationException e) {
                 throw new XBRLException("The parser could not be correctly configured.",e);
             }
         }
 
+        logger.info("Finished the discoverNext call for " + uri);
         this.storeDocumentsToAnalyse();
         
         setDiscovering(false);
@@ -655,22 +662,17 @@ public class LoaderImpl implements Loader {
     /**
      * Retrieve URI of the next document to parse from the list of starting
      * point URIs provided or URIs found during the discovery process.
-     * 
+     * @return the URI of the next document to explore or null if there are none.
      * @throws XBRLException
-     * @return the URI of the next document to explore or null if there are
-     *         none.
      */
     private URI getNextDocumentToExplore() throws XBRLException {
-        for (URI key : documentQueue.keySet()) {
-            if ((documentQueue.get(key)).equals(new Integer(0))) {
-                return key;
-            }
-        }
-        return null;
+        if (documentQueue.isEmpty()) return null;
+        return documentQueue.first();
     }
     
     protected void markDocumentAsExplored(URI uri) {
-        documentQueue.put(uri,new Integer(1));
+        documentQueue.remove(uri);
+        successes.add(uri);
     }
     
 
@@ -784,17 +786,16 @@ public class LoaderImpl implements Loader {
         try {
             dereferencedURI = new URI(uri.getScheme(),null,uri.getHost(), uri.getPort(), uri.getPath(),null,null);
         } catch (URISyntaxException e) {
-            throw new XBRLException(
-                    "Malformed URI found in DTS discovery process: " + uri, e);
+            throw new XBRLException("Malformed URI found in DTS discovery process: " + uri, e);
         }
 
         // Stash the URI if it has not already been stashed
-        if (!documentQueue.containsKey(dereferencedURI.toString())) {
+        if (!successes.contains(dereferencedURI)) {
 
             // Only stash if the document does not already have a match.
             URI matchURI = getStore().getMatcher().getMatch(dereferencedURI);
             if (matchURI.equals(dereferencedURI)) {
-                documentQueue.put(dereferencedURI, new Integer(0));
+                documentQueue.add(dereferencedURI);
             } else {
                 logger.debug("No need to stash " + dereferencedURI + " because it has match " + matchURI);
             }
@@ -870,27 +871,20 @@ public class LoaderImpl implements Loader {
      */
     public void storeDocumentsToAnalyse() throws XBRLException {
         Map<URI,String> map = new HashMap<URI,String>();
-        for (URI document : documentQueue.keySet()) {
-            int value = documentQueue.get(document).intValue();
-            if (! (documentQueue.get(document)).equals(1)) {
-                String reason = "Document has not yet been analysed";
-                if (value == -1) {
-                    reason = "IO exception";
-                } else if (value == -2) {
-                    reason = "SAX exception";
-                } else if (value == -3) {
-                    reason = "XBRL exception";
-                }
-                map.put(document,reason);
-            }
+        for (URI document : documentQueue) {
+            map.put(document,"Document has not yet been analysed");
+        }
+        for (URI document : failures.keySet()) {
+            map.put(document,failures.get(document));
         }
         logger.info("Storing " + map.size() + " documents that are still to be analysed.");
         getStore().storeLoaderState(map);
     }
     
-    private void cleanupFailedLoad(URI uri, Integer type, Exception e) {
+    private void cleanupFailedLoad(URI uri, String reason, Exception e) {
         logger.error(getDocumentURI() + "encountered loading problem: " + e.getMessage());
-        documentQueue.put(uri,type);
+        failures.put(uri,reason);
+        documentQueue.remove(uri);
         try {
             getStore().deleteDocument(uri);
             getCache().purge(uri);

@@ -139,10 +139,10 @@ public class LoaderImplTestCase extends BaseTestCase {
             boolean found1 = false;
             boolean found2 = false;
             for (URI uri: uris) {
-                if (uri.equals(uri1.toString())) {
+                if (uri.equals(uri1)) {
                     found1 = true;
                 }
-                if (uri.equals(uri2.toString())) {
+                if (uri.equals(uri2)) {
                     found2 = true;
                 }
             }
@@ -186,9 +186,6 @@ public class LoaderImplTestCase extends BaseTestCase {
 			loader.stashURI(uri1);
 			loader.stashURI(uri2);
 			while (! loader.getDocumentsStillToAnalyse().isEmpty()) {
-				for (URI document: loader.getDocumentsStillToAnalyse()) {
-					logger.debug("still to process " + document);
-				}
 				loader.discoverNext();
 			}
 		} catch (XBRLException e) {

@@ -62,13 +62,13 @@ public abstract class BaseMatcherImpl implements Matcher {
      * @see org.xbrlapi.data.resource.Matcher#getSignature(URI)
      */
     public String getSignature(URI uri) throws XBRLException {
-        cache.getCacheURI(uri); // Caches if not already cached.
+        cache.getCacheURI(uri); // Caches the URI if it is not already cached.
         File cacheFile = cache.getCacheFile(uri);
         if (cacheFile.exists()) {
             List<String> lines = getResourceContent(cacheFile);
             return getSignature().getSignature(lines);
         }
-        return null;
+        throw new XBRLException(uri + " could not be cached so a signature could not be obtained.");
     }
 
     protected List<String> getResourceContent(File file) throws XBRLException {

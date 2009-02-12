@@ -55,8 +55,15 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
         if (matches.getLength() > 1) throw new XBRLException("The wrong number of match fragments was retrieved.  There must be just one.");
         
         if (matches.getLength() == 0) {
-            String signature = this.getSignature(uri);
 
+            String signature = null;
+            try {
+                signature = this.getSignature(uri);
+            } catch (XBRLException e) {
+                logger.warn("The URI matching process failed. " + e.getMessage());
+                return uri;
+            }
+            
             if (getStore().hasFragment(signature)) {
                 Fragment match = getStore().getFragment(signature);
                 HashMap<String,String> attr = new HashMap<String,String>();
