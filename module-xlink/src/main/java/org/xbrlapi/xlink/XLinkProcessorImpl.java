@@ -382,12 +382,12 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		try {
 			URI uri = new URI(value);
 			if (! uri.isAbsolute()) {
-				xlinkHandler.error(namespaceURI,lName,qName,attrs,"The xlink role must be an absolute URI");
+				xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink role must be an absolute URI");
 				return false;
 			}
 			return true;
 		} catch (URISyntaxException e) {
-			xlinkHandler.error(namespaceURI,lName,qName,attrs,"The xlink role must have valid URI syntax");
+			xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink role must have valid URI syntax");
 			return false;
 		}
 	}
