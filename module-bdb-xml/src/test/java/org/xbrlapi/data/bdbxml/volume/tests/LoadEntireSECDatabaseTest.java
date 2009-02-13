@@ -20,6 +20,7 @@ public class LoadEntireSECDatabaseTest extends BaseTestCase {
     }
 
     private List<URI> resources = new Vector<URI>();
+
     protected void setUp() throws Exception {
         super.setUp();
         logger.info("Getting the SEC feed.");
