@@ -2,6 +2,7 @@ package org.xbrlapi.data.bdbxml.volume.tests;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Vector;
 
 import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
 import org.xbrlapi.grabber.Grabber;
@@ -18,7 +19,7 @@ public class LoadEntireSECDatabaseTest extends BaseTestCase {
         super(arg0);
     }
 
-    private List<URI> resources = null;
+    private List<URI> resources = new Vector<URI>();
     protected void setUp() throws Exception {
         super.setUp();
         logger.info("Getting the SEC feed.");
@@ -27,8 +28,8 @@ public class LoadEntireSECDatabaseTest extends BaseTestCase {
         resources = grabber.getResources();
         assertTrue(resources.size() > 100);
         feedURI = this.getURI("test.data.local.sec");
-        grabber = new SecGrabberImpl(feedURI);
-        resources.addAll(grabber.getResources());
+        Grabber oldGrabber = new SecGrabberImpl(feedURI);
+        resources.addAll(oldGrabber.getResources());
     }
 
     protected void tearDown() throws Exception {

@@ -540,12 +540,13 @@ public class LoaderImpl implements Loader {
         logger.debug("Next is " + uri);
         DOCUMENTS: while (uri != null) {
 
+            long start = System.currentTimeMillis();
+            
             if (!getStore().hasDocument(uri)) {
                 setDocumentURI(uri);
                 this.setNextFragmentId("1");
                 try {
                     parse(uri);
-                    logger.info("#" + discoveryCount + ". " + this.fragmentId + " fragments in " + uri);
                     markDocumentAsExplored(uri);
                     getStore().sync();
                 } catch (XBRLException e) {
@@ -566,6 +567,8 @@ public class LoaderImpl implements Loader {
                 cancelInterrupt();
                 break DOCUMENTS;
             }
+            long duration = (System.currentTimeMillis() - start) / 1000;
+            logger.info("#" + discoveryCount + " took " + duration + " seconds. " + this.fragmentId + " fragments in " + uri);
 
             uri = getNextDocumentToExplore();
             discoveryCount++;

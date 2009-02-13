@@ -45,10 +45,22 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
         setStore(store);
     }
 
+
+    /**
+     * The matches hashmap gets populated over time to 
+     * ensure that a match only has to be sought in the database
+     * once for each URI that is looked up.  This in-memory
+     * duplication should significantly improve search performance 
+     * over time as the matcher operates.
+     */
+    private HashMap<URI,URI> matchMap = new HashMap<URI,URI>();
+    
     /**
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
     public URI getMatch(URI uri) throws XBRLException {
+        
+        if (matchMap.containsKey(uri)) return matchMap.get(uri);
         
         String query = "/*[" + Constants.XBRLAPIPrefix + ":resource/@uri='" + uri +"']";
         FragmentList<Fragment> matches = getStore().query(query);
@@ -61,6 +73,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
                 signature = this.getSignature(uri);
             } catch (XBRLException e) {
                 logger.warn("The URI matching process failed. " + e.getMessage());
+                this.matchMap.put(uri,uri);
                 return uri;
             }
             
@@ -70,7 +83,9 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
                 attr.put("uri",uri.toString());
                 match = getStore().getFragment(signature);
                 match.appendMetadataElement("resource",attr);
-                return match.getURI();
+                URI matchURI = match.getURI();
+                this.matchMap.put(uri,matchURI);
+                return matchURI;
             } 
 
             Fragment match = new MockFragmentImpl(signature);
@@ -79,12 +94,15 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
             match.setMetaAttribute("uri",uri.toString());
             match.appendMetadataElement("resource",attr);
             getStore().storeFragment(match);
+            this.matchMap.put(uri,uri);
             return uri;
             
         } 
 
         Fragment match = matches.get(0);
-        return match.getURI();
+        URI matchURI = match.getURI();
+        this.matchMap.put(uri,matchURI);
+        return matchURI;
         
     }
     
