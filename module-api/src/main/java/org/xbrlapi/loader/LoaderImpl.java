@@ -39,16 +39,27 @@ import org.xml.sax.XMLReader;
 /**
  * Implementation of the XBRL API Loader interface. The loader is responsible
  * for managing the DTS discovery process. It manages:
- * 1. the queue of documents to be explored
- * 2. the document discovery process
- * 3. the stack of fragments being built and stored
- * 4. The fragment naming scheme
+ * <ul>
+ * <li>the queue of documents to be explored</li>
+ * <li>the document discovery process</li>
+ * <li>the stack of fragments being built and stored</li>
+ * <li>the fragment naming scheme</li>
+ * </ul>
  * 
  * Features of the loader include:
- * 1. The ability to interupt the document discovery process
+ * <ul>
+ * <li>The ability to interupt the document discovery process
  * between documents without losing track of the documents
  * remaining to be discovered.  Interrupts can be requested and 
- * cancelled.
+ * cancelled.</li>
+ * <li>The ability to continue discovery even when some documents
+ * screw up and need to be eliminated from the data store. In such
+ * cases, a stub fragment will be stored in the data store for 
+ * each problematic document, containing the document URI and a 
+ * brief explanation of the nature of the problem.  This 
+ * simplifies data store cleansing and it helps with making repairs to 
+ * the source data.</li>
+ * </ul>
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
