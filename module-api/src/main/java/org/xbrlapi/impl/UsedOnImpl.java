@@ -15,16 +15,13 @@ import org.xbrlapi.utilities.XBRLException;
 public class UsedOnImpl extends FragmentImpl implements UsedOn {
 
     /**
-     * Get the namespace URI of the element that can
-     * be used on.
-     * @throws XBRLException
-     * @see org.xbrlapi.UsedOn#getURI()
+     * @see org.xbrlapi.UsedOn#getUsedOnNamespace()
      */
-    public URI getURI() throws XBRLException {
+    public URI getUsedOnNamespace() throws XBRLException {
     	Node rootNode = getDataRootElement();
     	String u = rootNode.getTextContent().trim();
-    	if (u.equals(""))
-			throw new XBRLException("The used on declaration does not declare the element that usage is allowed on.");
+    	if (u.equals("")) throw new XBRLException("The used on declaration does not declare the element that usage is allowed on.");
+
     	try {
     	    return new URI(this.getNamespaceFromQName(u, rootNode));
     	} catch (URISyntaxException e) {
@@ -32,34 +29,23 @@ public class UsedOnImpl extends FragmentImpl implements UsedOn {
     	}
     }
     
-
-
     /**
-     * Get the localname for the element that can be used on.
-     * @return the local name of the element that the custom role or arcrole URI can be used on.
-     * @throws XBRLException
-     * @see org.xbrlapi.UsedOn#getLocalname()
+     * @see org.xbrlapi.UsedOn#getUsedOnLocalname()
      */
-    public String getLocalname() throws XBRLException {
-    	Node rootNode = getDataRootElement();
-    	String u = rootNode.getTextContent().trim();
-    	if (u.equals(""))
-			throw new XBRLException("The used on declaration does not declare the element that usage is allowed on.");
-    	return this.getLocalnameFromQName(u);
-    }
+    public String getUsedOnLocalname() throws XBRLException {
+        Node rootNode = getDataRootElement();
+        String u = rootNode.getTextContent().trim();
+        if (u.equals("")) throw new XBRLException("The used on declaration does not declare the element that usage is allowed on.");
+        return this.getLocalnameFromQName(u);
+    }    
     
     /**
-     * Returns true only if the custom role type can be used on the specified element
-     * based on this usedOn fragment.
-     * @param namespaceURI The namespace of the element being tested for
-     * @param localname The local name of the element being tested for
-     * @throws XBRLException
-     * @see org.xbrlapi.UsedOn#isUsedOn(String, String)
+     * @see org.xbrlapi.UsedOn#isUsedOn(URI, String)
      */
-    public boolean isUsedOn(String namespaceURI, String localname) throws XBRLException {
-    	if (! getURI().equals(namespaceURI))
+    public boolean isUsedOn(URI namespaceURI, String localname) throws XBRLException {
+    	if (! getUsedOnNamespace().equals(namespaceURI))
     		return false;
-    	if (! getLocalname().equals(localname))
+    	if (! getUsedOnLocalname().equals(localname))
     		return false;
     	return true;
     }

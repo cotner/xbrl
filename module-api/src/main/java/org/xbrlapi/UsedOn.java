@@ -11,21 +11,21 @@ import org.xbrlapi.utilities.XBRLException;
 public interface UsedOn extends Fragment {
 
     /**
-     * Get the namespace URI of the element that can
+     * @return the namespace URI of the element that can
      * be used on.
-     *
      * @throws XBRLException
      */
-    public URI getURI() throws XBRLException;
+    public URI getUsedOnNamespace() throws XBRLException;
     
 
 	
     /**
-     * Get the localname for the element that can be used on.
-     * @return the local name of the element that the custom role or arcrole URI can be used on.
+     * @return the local name of the element that the 
+     * custom XLINK link role, resource role, or arc role 
+     * can be used on.
      * @throws XBRLException
      */
-    public String getLocalname() throws XBRLException;
+    public String getUsedOnLocalname() throws XBRLException;
     
     /**
      * Returns true only if the custom role type can be used on the specified element
@@ -35,6 +35,6 @@ public interface UsedOn extends Fragment {
      * @param localname The local name of the element being tested for
      * @throws XBRLException
      */
-    public boolean isUsedOn(String namespaceURI, String localname) throws XBRLException;
+    public boolean isUsedOn(URI namespaceURI, String localname) throws XBRLException;
     
 }
