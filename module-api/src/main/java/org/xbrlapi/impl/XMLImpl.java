@@ -325,5 +325,14 @@ public class XMLImpl implements XML {
     public void serialize(String string) throws XBRLException {
         getStore().serialize(this.getMetadataRootElement(), string);
     }
-        
+
+    /**
+     * @see org.xbrlapi.XML#updateInStore()
+     */
+    public void updateInStore() throws XBRLException {
+        Store store = this.getStore();
+        if (store == null) return;
+        store.storeFragment(this);
+    }
+    
 }

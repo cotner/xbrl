@@ -22,7 +22,7 @@ public interface Relationship extends XML {
     /**
      * @param index The source fragment index.
      */
-    public void setSourceIndex(String index);
+    public void setSourceIndex(String index) throws XBRLException;
     
     /**
      * @return the fragment index for the target of the relationship.
@@ -32,7 +32,7 @@ public interface Relationship extends XML {
     /**
      * @param index The target fragment index.
      */
-    public void setTargetIndex(String index);
+    public void setTargetIndex(String index) throws XBRLException;
 
     /**
      * @return the source fragment of the relationship.
@@ -53,7 +53,7 @@ public interface Relationship extends XML {
     /**
      * @param role The containing extended link XLink role value
      */
-    public void setLinkRole(URI role);
+    public void setLinkRole(URI role) throws XBRLException;
     
     
     /**
@@ -64,7 +64,7 @@ public interface Relationship extends XML {
     /**
      * @param role The arc XLink role value
      */
-    public void setArcRole(URI role);
+    public void setArcRole(URI role) throws XBRLException;
     
     /**
      * @return the arc element namespace.
@@ -74,7 +74,7 @@ public interface Relationship extends XML {
     /**
      * @param namespace The namespace of the arc element.
      */
-    public void setArcNamespace(URI namespace);
+    public void setArcNamespace(URI namespace) throws XBRLException;
     
     /**
      * @return the link element namespace.
@@ -84,7 +84,17 @@ public interface Relationship extends XML {
     /**
      * @param namespace The namespace of the containing extended link element.
      */
-    public void setLinkNamespace(URI namespace);
+    public void setLinkNamespace(URI namespace) throws XBRLException;
+    
+    /**
+     * @return the arc fragment index.
+     */
+    public String getArcIndex();
+
+    /**
+     * @param index the index of the arc defining this relationship.
+     */
+    public void setArcIndex(String index) throws XBRLException;
     
     /**
      * @return the arc element name.
@@ -94,7 +104,7 @@ public interface Relationship extends XML {
     /**
      * @param name The local name of the arc element.
      */
-    public void setArcName(String name);
+    public void setArcName(String name) throws XBRLException;
 
     /**
      * @return the link element name.
@@ -104,7 +114,7 @@ public interface Relationship extends XML {
     /**
      * @param name The local name of the containing extended link element.
      */
-    public void setLinkName(String name);
+    public void setLinkName(String name) throws XBRLException;
     
     /**
      * @return the source XLink role or null if none exists.
@@ -114,7 +124,7 @@ public interface Relationship extends XML {
     /**
      * @param role the source XLink role.
      */
-    public void setSourceRole(URI role);
+    public void setSourceRole(URI role) throws XBRLException;
 
     /**
      * @return the target XLink role or null if none exists.
@@ -124,7 +134,7 @@ public interface Relationship extends XML {
     /**
      * @param role the target XLink role.
      */
-    public void setTargetRole(URI role);
+    public void setTargetRole(URI role) throws XBRLException;
 
     /**
      * @return the source XML language code or null if none exists.
@@ -134,7 +144,7 @@ public interface Relationship extends XML {
     /**
      * @param code the source XML language code.
      */
-    public void setSourceLanguageCode(String code);
+    public void setSourceLanguageCode(String code) throws XBRLException;
 
     /**
      * @return the target XML language code or null if none exists.
@@ -144,7 +154,7 @@ public interface Relationship extends XML {
     /**
      * @param code the target XML language code.
      */
-    public void setTargetLanguageCode(String code);
+    public void setTargetLanguageCode(String code) throws XBRLException;
 
     /**
      * @return the type of the source fragment.
@@ -154,7 +164,7 @@ public interface Relationship extends XML {
     /**
      * @param code the source fragment type.
      */
-    public void setSourceFragmentType(String type);
+    public void setSourceFragmentType(String type) throws XBRLException;
 
     
     /**
@@ -165,5 +175,5 @@ public interface Relationship extends XML {
     /**
      * @param code the target fragment type.
      */
-    public void setTargetFragmentType(String type);
+    public void setTargetFragmentType(String type) throws XBRLException;
 }

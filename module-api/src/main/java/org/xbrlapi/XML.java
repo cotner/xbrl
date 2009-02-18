@@ -171,5 +171,14 @@ public abstract interface XML extends Comparable<XML> {
      * @param string The specified output string.
      */
     public void serialize(String string) throws XBRLException;
+
+    /**
+     * Updates the data store to reflect the current state of
+     * this XML object.  If the XML object has not yet been
+     * stored then no action is taken.
+     * @throws XBRLException
+     */
+    public void updateInStore() throws XBRLException;
+    
     
 }

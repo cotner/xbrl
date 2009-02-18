@@ -36,6 +36,21 @@ public class RelationshipImpl extends XMLImpl implements Relationship {
     }
 
     /**
+     * @see org.xbrlapi.Relationship#getArcIndex()
+     */
+    public String getArcIndex() {
+        return getMetadataRootElement().getAttribute("arcIndex");
+    }
+
+    /**
+     * @see org.xbrlapi.Relationship#getArcIndex()
+     */
+    public void setArcIndex(String index) throws XBRLException {
+        getMetadataRootElement().setAttribute("arcIndex",index);
+        this.updateInStore();
+    }
+    
+    /**
      * @see org.xbrlapi.Relationship#getArcName()
      */
     public String getArcName() {
@@ -188,99 +203,114 @@ public class RelationshipImpl extends XMLImpl implements Relationship {
     /**
      * @see org.xbrlapi.Relationship#setArcName(java.lang.String)
      */
-    public void setArcName(String name) {
+    public void setArcName(String name) throws XBRLException {
         getMetadataRootElement().setAttribute("arcName",name);
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setArcNamespace(java.net.URI)
      */
-    public void setArcNamespace(URI namespace) {
+    public void setArcNamespace(URI namespace) throws XBRLException {
         getMetadataRootElement().setAttribute("arcNamespace",namespace.toString());
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setArcRole(java.net.URI)
      */
-    public void setArcRole(URI role) {
+    public void setArcRole(URI role) throws XBRLException {
         getMetadataRootElement().setAttribute("arcRole",role.toString());
+        this.updateInStore();
     }
+
 
     /**
      * @see org.xbrlapi.Relationship#setLinkName(java.lang.String)
      */
-    public void setLinkName(String name) {
+    public void setLinkName(String name) throws XBRLException {
         getMetadataRootElement().setAttribute("linkName",name);
     }
 
     /**
      * @see org.xbrlapi.Relationship#setLinkNamespace(java.net.URI)
      */
-    public void setLinkNamespace(URI namespace) {
+    public void setLinkNamespace(URI namespace) throws XBRLException {
         getMetadataRootElement().setAttribute("linkNamespace",namespace.toString());
+        this.updateInStore();
     }
+
 
     /**
      * @see org.xbrlapi.Relationship#setLinkRole(java.net.URI)
      */
-    public void setLinkRole(URI role) {
+    public void setLinkRole(URI role) throws XBRLException {
         getMetadataRootElement().setAttribute("linkRole",role.toString());
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setSourceFragmentType(java.lang.String)
      */
-    public void setSourceFragmentType(String type) {
+    public void setSourceFragmentType(String type) throws XBRLException {
         getMetadataRootElement().setAttribute("sourceType",type);
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setSourceIndex(java.lang.String)
      */
-    public void setSourceIndex(String index) {
+    public void setSourceIndex(String index) throws XBRLException {
         getMetadataRootElement().setAttribute("sourceIndex",index);
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setSourceLanguageCode(java.lang.String)
      */
-    public void setSourceLanguageCode(String code) {
+    public void setSourceLanguageCode(String code) throws XBRLException {
         getMetadataRootElement().setAttribute("sourceLanguage",code);
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setSourceRole(java.net.URI)
      */
-    public void setSourceRole(URI role) {
+    public void setSourceRole(URI role) throws XBRLException {
         getMetadataRootElement().setAttribute("sourceRole",role.toString());
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setTargetFragmentType(java.lang.String)
      */
-    public void setTargetFragmentType(String type) {
+    public void setTargetFragmentType(String type) throws XBRLException {
         getMetadataRootElement().setAttribute("targetRole",type);
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setTargetIndex(java.lang.String)
      */
-    public void setTargetIndex(String index) {
+    public void setTargetIndex(String index) throws XBRLException {
         getMetadataRootElement().setAttribute("targetIndex",index);
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setTargetLanguageCode(java.lang.String)
      */
-    public void setTargetLanguageCode(String code) {
+    public void setTargetLanguageCode(String code) throws XBRLException {
         getMetadataRootElement().setAttribute("targetLanguage",code);
+        this.updateInStore();
     }
 
     /**
      * @see org.xbrlapi.Relationship#setTargetRole(java.net.URI)
      */
-    public void setTargetRole(URI role) {
+    public void setTargetRole(URI role) throws XBRLException {
         getMetadataRootElement().setAttribute("targetRole",role.toString());
+        this.updateInStore();
     }
-    
+
 }
