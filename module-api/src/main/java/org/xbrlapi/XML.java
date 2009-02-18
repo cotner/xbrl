@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.io.File;
+import java.io.OutputStream;
 import java.util.HashMap;
 
 import org.w3c.dom.Document;
@@ -147,5 +149,27 @@ public abstract interface XML extends Comparable<XML> {
      */
     public void removeMetadataElement(String eName, HashMap<String,String> attributes) throws XBRLException;
         
+    /**
+     * serializes the XML to standard output.
+     */
+    public void serialize() throws XBRLException;
+    
+    /**
+     * Serializes the XML to the specified file.
+     * @param file The specified output file.
+     */
+    public void serialize(File file) throws XBRLException;
+   
+    /**
+     * Serializes the XML to the specified output stream.
+     * @param outputStream The specified output stream.
+     */
+    public void serialize(OutputStream outputStream) throws XBRLException;
+    
+    /**
+     * Serializes the XML to the specified output string.
+     * @param string The specified output string.
+     */
+    public void serialize(String string) throws XBRLException;
     
 }

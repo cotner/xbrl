@@ -375,4 +375,6 @@ public interface Fragment extends XML {
      * @throws XBRLException
      */
     public <F extends Fragment> FragmentList<F> getRelatives(String arcrole, String linkrole, String resourcerole, String language, boolean getTargets) throws XBRLException;    
+    
+
 }

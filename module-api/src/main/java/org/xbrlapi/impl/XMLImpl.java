@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.io.File;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -296,5 +298,32 @@ public class XMLImpl implements XML {
         
     }
     
+    /**
+     * @see org.xbrlapi.XML#serialize()
+     */
+    public void serialize() throws XBRLException {
+        getStore().serialize(this);
+    }
     
+    /**
+     * @see org.xbrlapi.XML#serialize(File)
+     */
+    public void serialize(File file) throws XBRLException {
+        getStore().serialize(this.getMetadataRootElement(), file);
+    }
+    
+    /**
+     * @see org.xbrlapi.XML#serialize(OutputStream)
+     */
+    public void serialize(OutputStream outputStream) throws XBRLException {
+        getStore().serialize(this.getMetadataRootElement(), outputStream);
+    }
+    
+    /**
+     * @see org.xbrlapi.XML#serialize(String)
+     */
+    public void serialize(String string) throws XBRLException {
+        getStore().serialize(this.getMetadataRootElement(), string);
+    }
+        
 }
