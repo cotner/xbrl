@@ -5,7 +5,8 @@ import java.util.Map;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
-import org.xbrlapi.impl.MockFragmentImpl;
+import org.xbrlapi.Mock;
+import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -33,13 +34,13 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testAddFragment() {
 		try {
 			String index = loader.getNextFragmentId();
-			MockFragmentImpl d = null;
-			d = new MockFragmentImpl(index);
+			MockImpl d = null;
+			d = new MockImpl(index);
 			store.storeFragment(d);
 			Fragment f = null;
 			f = store.getFragment(index);
 			assertNotNull(f);
-			assertEquals(index,f.getFragmentIndex());
+			assertEquals(index,f.getIndex());
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}
@@ -48,9 +49,9 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testRemoveFragmentUsingIndex() {
 		try {
 			String index = "1";
-			store.storeFragment(new MockFragmentImpl(index));
+			store.storeFragment(new MockImpl(index));
 			assertTrue(store.hasFragment(index));
-			store.removeFragment(index);
+			store.remove(index);
 			assertFalse(store.hasFragment(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());
@@ -60,11 +61,11 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testRemoveFragmentUsingFragment() {
 		try {
 			String index = "1";
-			store.storeFragment(new MockFragmentImpl(index));
+			store.storeFragment(new MockImpl(index));
 			assertTrue(store.hasFragment(index));
-			MockFragmentImpl document = (MockFragmentImpl) store.getFragment(index);
+			MockImpl document = (MockImpl) store.getFragment(index);
 			assertNotNull(document);
-			store.removeFragment(index);
+			store.remove(index);
 			assertFalse(store.hasFragment(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());
@@ -72,21 +73,24 @@ public class StoreImplTestCase extends BaseTestCase {
 	}
 	
 	public void testQueryData() throws Exception {
-		
-	    store.storeFragment(new MockFragmentImpl("WooHoo"));
+	    Mock fragment = new MockImpl("WooHoo");
+	    fragment.appendDataElement(Constants.XBRLAPINamespace,"info",Constants.XBRLAPIPrefix + ":info");
+	    store.storeFragment(fragment);
 		String index = "1";
+		store.serialize(fragment);
 		FragmentList<Fragment> fragments = null;
 		try {
-	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XBRLAPIPrefix + ":fragment";
-	        fragments = store.<Fragment>query(xpathQuery);
+	        String query = "/*[@type='org.xbrlapi.impl.MockImpl' and */xbrlapi:info]";
+	        logger.info(query);
+	        fragments = store.<Fragment>query(query);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
 		
 		try {
-			assertEquals("1",(new Long(fragments.getLength())).toString());
-	        assertEquals("fragment",fragments.getFragment(0).getDataRootElement().getLocalName());
-			store.removeFragment(index);
+			assertEquals("1",(new Integer(fragments.getLength())).toString());
+	        assertEquals("info",fragments.getFragment(0).getDataRootElement().getLocalName());
+			store.remove(index);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

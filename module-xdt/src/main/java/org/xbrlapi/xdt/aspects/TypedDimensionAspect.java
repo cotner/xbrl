@@ -41,7 +41,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
     private void setDimension(TypedDimension dimension) throws XBRLException {
         if (dimension == null) throw new XBRLException("The dimension must not be null.");
         this.dimension = dimension;
-        type = dimension.getTargetNamespaceURI() + dimension.getName();
+        type = dimension.getTargetNamespace() + dimension.getName();
     }
     
     /**
@@ -162,7 +162,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
      * @see Aspect#getFragmentKey(Fact)
      */
     public String getFragmentKey(Fact fact) throws XBRLException {
-        return fact.getFragmentIndex();
+        return fact.getIndex();
     }    
     
     

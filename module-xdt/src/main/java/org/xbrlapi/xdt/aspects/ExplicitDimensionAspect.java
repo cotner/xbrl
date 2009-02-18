@@ -36,7 +36,7 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
     private void setDimension(ExplicitDimension dimension) throws XBRLException {
         if (dimension == null) throw new XBRLException("The dimension must not be null.");
         this.dimension = dimension;
-        type = dimension.getTargetNamespaceURI() + dimension.getName();
+        type = dimension.getTargetNamespace() + dimension.getName();
     }
     
     /**
@@ -90,7 +90,7 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
             }
             
             Concept concept = (Concept) value.getFragment();
-            String id = concept.getTargetNamespaceURI() + concept.getName();
+            String id = concept.getTargetNamespace() + concept.getName();
             setMapId(value,id);
             return id;
         }
@@ -146,7 +146,7 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
         DimensionValue dimensionValue = accessor.getValue((Item) fact, this.dimension);
         if (dimensionValue == null) return "";
         Concept concept = (Concept) dimensionValue.getValue();
-        return concept.getNamespaceURI() + concept.getLocalname();
+        return concept.getNamespace() + concept.getLocalname();
     }    
     
     

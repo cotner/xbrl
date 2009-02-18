@@ -33,7 +33,7 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetTo() {	
 
 		try {
-			FragmentList<Arc> fragments = store.query("" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			FragmentList<Arc> fragments = store.<Arc>query("*/*/*[@xlink:type='arc']");
 			Arc fragment = fragments.getFragment(0);
 			assertEquals("contributingItem", fragment.getTo());
 		} catch (Exception e) {

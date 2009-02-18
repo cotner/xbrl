@@ -38,7 +38,6 @@ public class SecGrabberImplTest extends BaseTestCase {
 				    break;
 				}
 			}
-			System.out.println("All done and dusted!");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

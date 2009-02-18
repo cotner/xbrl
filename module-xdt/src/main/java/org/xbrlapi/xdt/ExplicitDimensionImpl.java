@@ -2,13 +2,12 @@ package org.xbrlapi.xdt;
 
 import java.util.List;
 
-import org.xbrlapi.networks.Network;
-import org.xbrlapi.networks.Networks;
-import org.xbrlapi.networks.Relationship;
-
 import org.xbrlapi.Concept;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.impl.FragmentListImpl;
+import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.Networks;
+import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -26,7 +25,7 @@ public class ExplicitDimensionImpl extends DimensionImpl implements ExplicitDime
         List<String> linkroles = networks.getLinkRoles(XDTConstants.defaultDimensionArcrole);
         for (String linkrole: linkroles) {
             Network network = networks.getNetwork(XDTConstants.defaultDimensionArcrole,linkrole);
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
             for (Relationship relationship: relationships) {
                 try {
                     defaults.add((Concept) relationship.getTarget());
@@ -36,9 +35,9 @@ public class ExplicitDimensionImpl extends DimensionImpl implements ExplicitDime
             }
         }
         
-        if (defaults.getLength() == 0) throw new XBRLException("There are no defaults for explicit dimension " + this.getTargetNamespaceURI() + ":" + this.getName());
+        if (defaults.getLength() == 0) throw new XBRLException("There are no defaults for explicit dimension " + this.getTargetNamespace() + ":" + this.getName());
         
-        if (defaults.getLength() > 1) throw new XBRLException("There are multiple defaults for explicit dimension " + this.getTargetNamespaceURI() + ":" + this.getName());
+        if (defaults.getLength() > 1) throw new XBRLException("There are multiple defaults for explicit dimension " + this.getTargetNamespace() + ":" + this.getName());
         
         return defaults.get(0);
         
@@ -54,7 +53,7 @@ public class ExplicitDimensionImpl extends DimensionImpl implements ExplicitDime
             List<String> linkroles = networks.getLinkRoles(XDTConstants.defaultDimensionArcrole);
             for (String linkrole: linkroles) {
                 Network network = networks.getNetwork(XDTConstants.defaultDimensionArcrole,linkrole);
-                List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getFragmentIndex());
+                List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
                 for (Relationship relationship: relationships) {
                     try {
                         defaults.add((Concept) relationship.getTarget());

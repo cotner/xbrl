@@ -12,7 +12,7 @@ import org.apache.xindice.xml.dom.DocumentImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xbrlapi.Fragment;
+import org.xbrlapi.XML;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.XBRLStoreImpl;
@@ -162,9 +162,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 	
     /**
-     * @see org.xbrlapi.data.Store#storeFragment(Fragment)
+     * @see org.xbrlapi.data.Store#storeFragment(XML)
      */
-    public synchronized int getFragmentCount() throws XBRLException {
+    public synchronized int getSize() throws XBRLException {
         try {
             return this.collection.getResourceCount();
         } catch (XMLDBException e) {
@@ -192,13 +192,13 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * properties cannot be updated as required to reflect that its data has been
 	 * stored.
 	 */
-    public synchronized void storeFragment(Fragment fragment) throws XBRLException {
+    public synchronized void storeFragment(XML fragment) throws XBRLException {
 
 		if (fragment == null) throw new XBRLException("The fragment is null so it cannot be added.");
-		String index = fragment.getFragmentIndex();
+		String index = fragment.getIndex();
 
 		if (hasFragment(index)) {
-            this.removeFragment(index);
+            this.remove(index);
         }
 
         if (fragment.getStore() != null) {
@@ -245,13 +245,13 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
      * the fragment is not in the store.
      * @throws XBRLException if the fragment cannot be retrieved.
      */
-    public synchronized Fragment getFragment(String index) throws XBRLException {
+    public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
     	try {
     		XMLResource resource = (XMLResource) collection.getResource(index);
     		if (resource == null) return null;
     		Element root = getResourceRootElement(resource);
     		
-    		return FragmentFactory.newFragment(this, root);
+    		return FragmentFactory.<F>newFragment(this, root);
     	} catch (XMLDBException e) {
     		throw new XBRLException("The fragment with index " + index + " could not be retrieved.",e);
     	}
@@ -279,7 +279,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @param index The index of the fragment to be removed from the DTS store.
 	 * @throws XBRLException if the fragment cannot be removed from the store.
 	 */
-    public synchronized void removeFragment(String index) throws XBRLException {
+    public synchronized void remove(String index) throws XBRLException {
         try {
             if (! hasFragment(index)) {
             	return;
@@ -300,7 +300,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException if the query cannot be executed.
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends XML> FragmentList<F> query(String query) throws XBRLException {
         
         query = query + this.getURIFilteringQueryClause();
         

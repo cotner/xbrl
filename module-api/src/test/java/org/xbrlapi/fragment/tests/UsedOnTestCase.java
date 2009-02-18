@@ -1,8 +1,11 @@
 package org.xbrlapi.fragment.tests;
 
+import java.net.URI;
+
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.UsedOn;
+import org.xbrlapi.utilities.Constants;
 
 /**
  * Tests the implementation of the org.xbrlapi.UsedOn interface.
@@ -35,9 +38,10 @@ public class UsedOnTestCase extends DOMLoadingTestCase {
 	        assertTrue(fragments.getLength() > 0);
 	        for (UsedOn fragment: fragments) {
 	            if (fragment.getParent().getDataRootElement().getAttribute("id").equals("newExtendedRoleType")) {
-                    assertEquals("http://www.xbrl.org/2003/linkbase",fragment.getURI());
-                    assertEquals("presentationLink", fragment.getLocalname());
-                    assertTrue(fragment.isUsedOn("http://www.xbrl.org/2003/linkbase", "presentationLink"));
+                    assertEquals(Constants.XBRL21LinkNamespace,fragment.getUsedOnNamespace().toString());
+                    assertEquals("presentationLink", fragment.getUsedOnLocalname());
+                    store.serialize(fragment);
+                    assertTrue(fragment.isUsedOn(new URI(Constants.XBRL21LinkNamespace), "presentationLink"));
 	            }
 	        }
 	    } catch (Exception e) {

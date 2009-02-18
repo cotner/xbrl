@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt.values;
 
+import java.net.URI;
 import java.util.Comparator;
 
 import org.w3c.dom.Element;
@@ -67,8 +68,8 @@ public class DimensionValueComparator implements Comparator<DimensionValue> {
         Concept v1m = (Concept) v1.getValue();
         Concept v2m = (Concept) v2.getValue();
         
-        String v1ns = v1m.getTargetNamespaceURI();
-        String v2ns = v2m.getTargetNamespaceURI();
+        URI v1ns = v1m.getTargetNamespace();
+        URI v2ns = v2m.getTargetNamespace();
         int result = v1ns.compareTo(v2ns);
         if (result != 0) return result;
         
@@ -110,8 +111,8 @@ public class DimensionValueComparator implements Comparator<DimensionValue> {
         Dimension v1d = v1.getDimension();
         Dimension v2d = v2.getDimension();
 
-        String d1ns = v1d.getTargetNamespaceURI();
-        String d2ns = v2d.getTargetNamespaceURI();
+        URI d1ns = v1d.getTargetNamespace();
+        URI d2ns = v2d.getTargetNamespace();
         int result = d1ns.compareTo(d2ns);
         if (result != 0) return result;
 

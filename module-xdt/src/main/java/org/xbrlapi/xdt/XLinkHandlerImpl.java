@@ -415,7 +415,7 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
      */
     private void processFragment(Fragment fragment,Attributes attrs) throws XBRLException {
         Loader loader = this.getLoader();
-        fragment.setFragmentIndex(getLoader().getNextFragmentId());
+        fragment.setIndex(getLoader().getNextFragmentId());
         if (attrs.getValue("id") != null) {
             fragment.appendID(attrs.getValue("id"));
             this.getElementState().setId(attrs.getValue("id"));

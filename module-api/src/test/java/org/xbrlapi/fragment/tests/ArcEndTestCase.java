@@ -51,8 +51,17 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			FragmentList<Locator> locators = store.<Locator>getFragments("Locator");
-			assertEquals("parent", locators.get(0).getLabel());
-			assertEquals("child", locators.get(1).getLabel());
+			boolean gotParent = false;
+            boolean gotChild = false;
+			for (Locator locator: locators) {
+			    if (locator.getLabel().equals("parent")) {
+			        gotParent = true;
+			    }
+                if (locator.getLabel().equals("child")) {
+                    gotChild = true;
+                }
+			}
+			assertTrue(gotParent && gotChild);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -66,8 +75,15 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			FragmentList<Locator> locators = store.<Locator>getFragments("Locator");
-			assertNull(locators.get(0).getRole());
-			assertEquals("http://www.xbrlapi.org/xlink/role", locators.get(2).getRole());
+            boolean gotRole = false;
+            for (Locator locator: locators) {
+                if (locator.getRole() != null) {
+                    if (locator.getRole().toString().equals("http://www.xbrlapi.org/xlink/role")) {
+                        gotRole = true;
+                    }
+                }
+            }
+            assertTrue(gotRole);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -81,8 +97,15 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			FragmentList<Locator> locators = store.<Locator>getFragments("Locator");
-			assertNull(locators.get(0).getArcEndId());
-			assertEquals("unique", locators.get(2).getArcEndId());
+            boolean gotArcEndId = false;
+            for (Locator locator: locators) {
+                if (locator.getArcEndId() != null) {
+                    if (locator.getArcEndId().equals("unique")) {
+                        gotArcEndId = true;
+                    }
+                }
+            }
+            assertTrue(gotArcEndId);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

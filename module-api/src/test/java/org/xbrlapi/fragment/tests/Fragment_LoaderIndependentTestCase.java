@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.impl.MockFragmentImpl;
+import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.BaseTestCase;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -34,9 +34,10 @@ public class Fragment_LoaderIndependentTestCase extends BaseTestCase {
 	 * Test retrieval of the type of fragment from an unstored fragment.
 	 */
 	public void testGetFragmentTypeForAnUnstoredFragment() {
-		try {
-			Fragment f = new MockFragmentImpl("1");
-			assertEquals("org.xbrlapi.impl.MockFragmentImpl",f.getType());
+
+    try {
+			Fragment f = new MockImpl("1");
+			assertEquals("org.xbrlapi.impl.MockImpl",f.getType());
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}
@@ -48,7 +49,7 @@ public class Fragment_LoaderIndependentTestCase extends BaseTestCase {
 	public void testExpectedExceptionCreatingFragmentWithNullIndex() {
 
 		try {
-			new MockFragmentImpl(null);
+			new MockImpl(null);
 			fail("An exception should be thrown if you create a fragment with a null index.");
 		} catch (XBRLException expected) {
 		}
@@ -59,11 +60,12 @@ public class Fragment_LoaderIndependentTestCase extends BaseTestCase {
 	 * Test retrieval of the namespace URI of root node in the fragment
 	 * when the fragment has a namespace for the root element.
 	 */
-	public void testGetNamespaceURIOfAnInConstructionFragmentWithANamespace() {
-		try {
+	public void testGetNamespaceOfAnInConstructionFragmentWithANamespace() {
+	    try {
 			String ns = "http://xbrlapi.org/";
-			MockFragmentImpl f = new MockFragmentImpl("1", ns, "root", "my:root");
-			assertEquals(ns, f.getNamespaceURI());
+			MockImpl f = new MockImpl("Mockery");
+			f.appendDataElement(ns, "root", "my:root");
+			assertEquals(ns, f.getNamespace().toString());
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}

@@ -37,7 +37,7 @@ public class SchemaContentTestCase extends DOMLoadingTestCase {
 		    FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
 		    assertTrue(concepts.getLength() > 0);
 		    for (Concept concept: concepts) {
-	            assertEquals(concept.getParent().getFragmentIndex(), concept.getSchema().getFragmentIndex());
+	            assertEquals(concept.getParent().getIndex(), concept.getSchema().getIndex());
 		    }
 		} catch (XBRLException e) {
 			fail(e.getMessage());
@@ -47,13 +47,14 @@ public class SchemaContentTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test getting the schema target namespace URI.
 	 */
-	public void testGetSchemaTargetNamespaceURI() {		
-        try {
+	public void testGetSchemaTargetNamespace() {		
+
+	    try {
             FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
             assertTrue(concepts.getLength() > 0);
             for (Concept concept: concepts) {
                 Schema schema = concept.getSchema();
-                assertEquals(concept.getTargetNamespaceURI(), schema.getDataRootElement().getAttribute("targetNamespace"));
+                assertEquals(concept.getTargetNamespace().toString(), schema.getDataRootElement().getAttribute("targetNamespace"));
             }
         } catch (XBRLException e) {
             fail(e.getMessage());

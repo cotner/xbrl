@@ -3,8 +3,8 @@ package org.xbrlapi.sax.identifiers.tests;
 import java.net.URI;
 
 import org.xbrlapi.Concept;
+import org.xbrlapi.FragmentList;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
-import org.xbrlapi.utilities.XBRLException;
 
 /**
  * Test the loader implementation.
@@ -31,9 +31,14 @@ public class IdentifierTestCase extends BaseTestCase {
 		try {
 			loader.stashURI(uri);
 			loader.discoverNext();
-			Concept concept = store.getConcept("http://www.microsoft.com/msft/xbrl/taxonomy/2005-02-28","CoverInformation");
+			FragmentList<Concept> concepts = store.getFragments("Concept");;
+			for (Concept concept: concepts) {
+			    logger.info(concept.getName() + " " + concept.getTargetNamespace());
+			}
+			Concept concept = store.getConcept(new URI("http://www.microsoft.com/msft/xbrl/taxonomy/2005-02-28"),"CoverInformation");
 			assertEquals("CoverInformation",concept.getName());
-		} catch (XBRLException e) {
+		} catch (Exception e) {
+		    e.printStackTrace();
 			fail("Unexpected " + e.getMessage());
 		}
 	}

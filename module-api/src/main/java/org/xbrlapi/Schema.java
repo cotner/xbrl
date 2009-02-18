@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -63,28 +65,28 @@ public interface Schema extends SchemaContent {
      * Get a list of concepts based on their type.
      * Returns null if no concepts match the selection criteria.
      *
-     * @param namespaceURI The namespaceURI of the concept type
+     * @param namespace The namespaceURI of the concept type
      * @param localName The local name of the concept type
      * @return A list of concept fragments in the containing schema that
      * match the specified element type.
      * 
      * @throws XBRLException
      */
-    public FragmentList<Concept> getConceptsByType(String namespaceURI, String localName) throws XBRLException;
+    public FragmentList<Concept> getConceptsByType(URI namespace, String localName) throws XBRLException;
     
     /**
      * Get a list concepts based on their substitution group.
      * Returns null if no concepts match the selection criteria.
      *
-     * @param namespaceURI The namespaceURI of the concept type
-     * @param localName The local name of the concept type
+     * @param namespace The namespaceURI of the concept type
+     * @param localname The local name of the concept type
      * 
      * @return a list of concepts in the schema that match the specified
      * substitution group
      * 
      * @throws XBRLException
      */
-    public FragmentList<Concept> getConceptsBySubstitutionGroup(String namespaceURI, String localName) throws XBRLException;
+    public FragmentList<Concept> getConceptsBySubstitutionGroup(URI namespace, String localname) throws XBRLException;
 
  		
 

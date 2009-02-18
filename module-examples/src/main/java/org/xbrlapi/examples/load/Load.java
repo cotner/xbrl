@@ -141,10 +141,10 @@ public class Load {
      */
     private static void reportNode(String indent, Fragment fragment, String linkrole) throws XBRLException {
         Concept concept = (Concept) fragment;
-        System.out.println(indent + concept.getTargetNamespaceURI() + ":" + concept.getName());
+        System.out.println(indent + concept.getTargetNamespace() + ":" + concept.getName());
         Networks networks = concept.getNetworksWithArcrole(Constants.PresentationArcRole); // Some fat can be trimmed here by only getting those networks with the required linkrole.
         if (networks.getSize() > 0) {
-            FragmentList<Fragment> children = networks.getTargetFragments(concept.getFragmentIndex(),Constants.PresentationArcRole,linkrole);
+            FragmentList<Fragment> children = networks.getTargetFragments(concept.getIndex(),Constants.PresentationArcRole,linkrole);
             for (Fragment child: children) {
                 reportNode(indent + " ", child,linkrole);
             }  

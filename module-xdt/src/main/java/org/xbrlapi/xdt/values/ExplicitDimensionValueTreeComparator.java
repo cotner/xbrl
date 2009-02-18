@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt.values;
 
+import java.net.URI;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,7 +47,7 @@ public class ExplicitDimensionValueTreeComparator extends DimensionValueComparat
         int order = 1;
         while (iterator.hasNext()) {
             Fragment node = iterator.next();
-            map.put(node.getFragmentIndex(),new Integer(order));
+            map.put(node.getIndex(),new Integer(order));
             order++;
         }
         
@@ -90,8 +91,8 @@ public class ExplicitDimensionValueTreeComparator extends DimensionValueComparat
         Concept m1 = (Concept) v1.getValue();
         Concept m2 = (Concept) v2.getValue();
 
-        String i1 = m1.getFragmentIndex();
-        String i2 = m2.getFragmentIndex();
+        String i1 = m1.getIndex();
+        String i2 = m2.getIndex();
         if (map.containsKey(i1) && map.containsKey(i2)) {
             Integer o1 = map.get(i1);
             Integer o2 = map.get(i2);
@@ -101,8 +102,8 @@ public class ExplicitDimensionValueTreeComparator extends DimensionValueComparat
         if (map.containsKey(i1)) return -1;
         if (map.containsKey(i2)) return 1;
         
-        String v1ns = m1.getTargetNamespaceURI();
-        String v2ns = m2.getTargetNamespaceURI();
+        URI v1ns = m1.getTargetNamespace();
+        URI v2ns = m2.getTargetNamespace();
         int result = v1ns.compareTo(v2ns);
         if (result != 0) return result;
         

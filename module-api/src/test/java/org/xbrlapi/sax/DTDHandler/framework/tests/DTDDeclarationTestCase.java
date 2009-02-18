@@ -13,7 +13,7 @@ import org.xml.sax.XMLReader;
  * Test the DTD declaration handling system.
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
 */
-public class DTDDeclarationTestCase extends BaseTestCase {
+public abstract class DTDDeclarationTestCase extends BaseTestCase {
 	
     private final URI uri = this.getURI("real.data.schema.with.dtd");
 

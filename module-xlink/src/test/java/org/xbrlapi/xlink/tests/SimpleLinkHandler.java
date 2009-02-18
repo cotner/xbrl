@@ -106,7 +106,7 @@ public class SimpleLinkHandler extends XLinkHandlerDefaultImpl {
 		
 		if ( lName.equals("child8") ) {
 			// Make sure malformed role attributes are detected
-			test.checkEqual("The xlink role must have valid URI syntax",message);
+			test.checkEqual("The XLink role must have valid URI syntax",message);
 			test.noteE8();
 		} else {
 			test.confirmFail("Unexpected error: "+message);	

@@ -1,5 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
+import java.net.URI;
+
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fact;
 import org.xbrlapi.FragmentList;
@@ -59,12 +61,12 @@ public class TupleTestCase extends DOMLoadingTestCase {
                 FragmentList<Fact> children = tuple.getChildFacts();
                 assertTrue(children.getLength() > 0);
                 for (Fact child: children) {
-                    String ns = child.getNamespaceURI();
-                    String ln = child.getLocalname();
-                    assertTrue(tuple.getChildFacts(ns,ln).getLength() > 0);
+                    URI namespace = child.getNamespace();
+                    String localname = child.getLocalname();
+                    assertTrue(tuple.getChildFacts(namespace,localname).getLength() > 0);
                     if (! child.isTuple()) {
                         String cr = ((Item) child).getContext().getId();
-                        assertTrue(tuple.getChildFacts(ns,ln,cr).getLength() > 0);
+                        assertTrue(tuple.getChildFacts(namespace,localname,cr).getLength() > 0);
                     }
                 }
             }

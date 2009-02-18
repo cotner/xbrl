@@ -104,9 +104,9 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 			Network network = networks.getNetwork(arcroles.get(0),linkroles.get(0));
 			assertEquals(Constants.LabelArcRole,network.getArcRole());
 			assertEquals(Constants.StandardLinkRole,network.getLinkRole());
-			List<Relationship> relationships = network.getActiveRelationshipsFrom(label.getFragmentIndex());
+			List<Relationship> relationships = network.getActiveRelationshipsFrom(label.getIndex());
 			assertEquals(0,relationships.size());
-			relationships = network.getActiveRelationshipsTo(label.getFragmentIndex());
+			relationships = network.getActiveRelationshipsTo(label.getIndex());
 			assertEquals(1,relationships.size());
 
 		} catch (Exception e) {
@@ -125,7 +125,7 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 			List<String> arcroles = networks.getArcRoles();
 			List<String> linkroles = networks.getLinkRoles(arcroles.get(0));
 			Network network = networks.getNetwork(arcroles.get(0),linkroles.get(0));
-			List<Relationship> relationships = network.getActiveRelationshipsTo(label.getFragmentIndex());
+			List<Relationship> relationships = network.getActiveRelationshipsTo(label.getIndex());
 			Relationship relationship = relationships.get(0);
 			assertEquals(Constants.LabelArcRole,relationship.getArc().getArcrole());
 			
@@ -144,7 +144,7 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 		try {
 
 			//Network network = networks.getNetwork(Constants.LabelArcRole,Constants.StandardLinkRole);
-			FragmentList<LabelResource> labels = networks.getTargetFragments(concept.getFragmentIndex(),Constants.LabelArcRole);
+			FragmentList<LabelResource> labels = networks.getTargetFragments(concept.getIndex(),Constants.LabelArcRole);
 			assertEquals(1,labels.getLength());
 			assertEquals(label.getStringValue(),labels.getFragment(0).getStringValue());
 			

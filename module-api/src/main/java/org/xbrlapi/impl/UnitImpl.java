@@ -1,5 +1,6 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -176,7 +177,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
     	return true;
     }
     
-    private String getMeasureNamespace(Element measure) throws XBRLException {
+    private URI getMeasureNamespace(Element measure) throws XBRLException {
     	return this.getNamespaceFromQName(measure.getTextContent(),measure);
     }
     

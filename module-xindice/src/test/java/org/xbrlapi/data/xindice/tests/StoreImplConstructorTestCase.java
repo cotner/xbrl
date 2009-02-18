@@ -36,7 +36,7 @@ public class StoreImplConstructorTestCase extends BaseTestCase {
 			connections.add(newConnection);
 			Store newStore = createStore(connection);
 			stores.add(newStore);
-            assertEquals("Fragment counts do not match.",store.getFragmentCount(),newStore.getFragmentCount());
+            assertEquals("Fragment counts do not match.",store.getSize(),newStore.getSize());
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail("The connection to an existing store failed to be created. " + e.getMessage());

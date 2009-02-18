@@ -1,5 +1,7 @@
 package org.xbrlapi.xdt.values;
 
+import java.net.URI;
+
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -102,7 +104,7 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
      */
     public Concept getDomainMemberFromOpenContextComponent(OpenContextComponent occ, Dimension dimension) throws XBRLException {
         if (occ != null) {
-            String namespace = dimension.getTargetNamespaceURI();
+            URI namespace = dimension.getTargetNamespace();
             String localname = dimension.getName();
             NodeList children = occ.getDataRootElement().getChildNodes();
             for (int i=0; i< children.getLength(); i++) {
@@ -112,11 +114,11 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
                     if (childElement.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
                         String dimensionName = childElement.getAttribute("dimension");
                         if (! dimensionName.equals("")) {
-                            String dimensionNamespace = occ.getNamespaceFromQName(dimensionName,child);
+                            URI dimensionNamespace = occ.getNamespaceFromQName(dimensionName,child);
                             String dimensionLocalname = occ.getLocalnameFromQName(dimensionName);
                             if (dimensionNamespace.equals(namespace) && dimensionLocalname.equals(localname)) {                                
                                 String memberName = childElement.getTextContent().trim();
-                                String memberNamespace = occ.getNamespaceFromQName(memberName,child);
+                                URI memberNamespace = occ.getNamespaceFromQName(memberName,child);
                                 String memberLocalname = occ.getLocalnameFromQName(memberName);
                                 return ((XBRLStore) occ.getStore()).getConcept(memberNamespace,memberLocalname);
                             }
@@ -133,7 +135,7 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
      */
     public Element getTypedDimensionContentFromOpenContextComponent(OpenContextComponent occ,Dimension dimension) throws XBRLException {
         if (occ != null) {
-            String namespace = dimension.getTargetNamespaceURI();
+            URI namespace = dimension.getTargetNamespace();
             String localname = dimension.getName();
             NodeList children = occ.getDataRootElement().getChildNodes();
             for (int i=0; i< children.getLength(); i++) {
@@ -143,7 +145,7 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
                     if (childElement.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
                         String dimensionName = childElement.getAttribute("dimension");
                         if (! dimensionName.equals("")) {
-                            String dimensionNamespace = occ.getNamespaceFromQName(dimensionName,child);
+                            URI dimensionNamespace = occ.getNamespaceFromQName(dimensionName,child);
                             String dimensionLocalname = occ.getLocalnameFromQName(dimensionName);
                             if (dimensionNamespace.equals(namespace) && dimensionLocalname.equals(localname)) {
                                 return childElement;

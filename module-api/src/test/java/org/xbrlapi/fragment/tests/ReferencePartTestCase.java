@@ -53,7 +53,7 @@ public class ReferencePartTestCase extends DOMLoadingTestCase {
 			store.serialize(part.getDataRootElement());
 			ReferencePartDeclaration declaration = part.getDeclaration();
 			assertEquals(part.getLocalname(),declaration.getName());
-			assertEquals(part.getNamespaceURI(),declaration.getTargetNamespaceURI());
+			assertEquals(part.getNamespace(),declaration.getTargetNamespace());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

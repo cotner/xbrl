@@ -37,7 +37,7 @@
     </category>
 
     <category name="org.xbrlapi.data.bdbxml.StoreImpl" additivity="false">
-        <priority value="info"/>
+        <priority value="debug"/>
         <appender-ref ref="console"/>
     </category>
 

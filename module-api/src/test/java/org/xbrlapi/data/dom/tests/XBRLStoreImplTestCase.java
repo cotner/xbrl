@@ -126,8 +126,8 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 		try {
 			FragmentList<ArcroleType> roleTypes = store.getArcroleTypes(Constants.PresentationArcRole);
 			ArcroleType type = roleTypes.get(0);
-			assertTrue(type.isUsedOn(Constants.XBRL21LinkNamespace,"presentationArc"));
-			assertFalse(type.isUsedOn(Constants.XBRL21LinkNamespace,"calculationArc"));
+			assertTrue(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"presentationArc"));
+			assertFalse(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"calculationArc"));
 			FragmentList<Arc> arcs = store.getFragments("Arc");
 			assertTrue(arcs.getLength() > 0);
 			for (Arc arc: arcs) {

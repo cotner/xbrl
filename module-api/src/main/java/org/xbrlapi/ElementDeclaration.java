@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -26,7 +28,7 @@ public interface ElementDeclaration extends SchemaDeclaration {
      * @return the namespace for the data type.
      * @throws XBRLException if the datatype is not declared by a type attribute.
      */
-    public String getTypeNamespace() throws XBRLException;
+    public URI getTypeNamespace() throws XBRLException;
     
     /**
      * Retrieve the type namespace alias.
@@ -59,7 +61,7 @@ public interface ElementDeclaration extends SchemaDeclaration {
      * @return the namespace for the element substitution group.
      * @throws XBRLException if the substitution group is not declared by a substitution group attribute.
      */
-    public String getSubstitutionGroupNamespace() throws XBRLException;
+    public URI getSubstitutionGroupNamespace() throws XBRLException;
     
     /**
      * Retrieve the substitution group namespace alias (also known as a namespace prefix).

@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xbrlapi.Fragment;
+import org.xbrlapi.XML;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.XBRLStore;
@@ -91,9 +91,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     }
 
     /**
-     * @see org.xbrlapi.data.Store#storeFragment(Fragment)
+     * @see org.xbrlapi.data.Store#storeFragment(XML)
      */
-    public synchronized int getFragmentCount() throws XBRLException {
+    public synchronized int getSize() throws XBRLException {
         try {
             return this.dataContainer.getNumDocuments();
         } catch (XmlException e) {
@@ -320,9 +320,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 	
 	/**
-	 * @see org.xbrlapi.data.Store#storeFragment(Fragment)
+	 * @see org.xbrlapi.data.Store#storeFragment(XML)
 	 */
-    synchronized public void storeFragment(Fragment fragment) throws XBRLException {
+    synchronized public void storeFragment(XML fragment) throws XBRLException {
 
 	    incrementCallCount();
         XmlUpdateContext xmlUpdateContext = null;
@@ -330,8 +330,8 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	        
 	        if (fragment.getStore() != null) return;
 
-	        String index = fragment.getFragmentIndex();
-	        if (hasFragment(index)) removeFragment(index);
+	        String index = fragment.getIndex();
+	        if (hasFragment(index)) remove(index);
 
             String xml = serializeToString(fragment.getMetadataRootElement());
             xmlUpdateContext = dataManager.createUpdateContext();
@@ -385,7 +385,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#getFragment(String)
 	 */
-     public synchronized Fragment getFragment(String index) throws XBRLException {
+     public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
 	    this.incrementCallCount();
         XmlDocument xmlDocument = null;
         Document document = null;
@@ -403,7 +403,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	            throw new XBRLException("The fragment content is not available as an input stream.",e);
 	        }
 
-    		return FragmentFactory.newFragment(this, document.getDocumentElement());
+    		return FragmentFactory.<F>newFragment(this, document.getDocumentElement());
 
 	    } finally {
             if (xmlDocument != null) xmlDocument.delete();
@@ -411,16 +411,16 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#removeFragment(String)
+	 * @see org.xbrlapi.data.Store#remove(String)
 	 */
-     public synchronized void removeFragment(Fragment fragment) throws XBRLException {
-		removeFragment(fragment.getFragmentIndex());
+     public synchronized void remove(XML fragment) throws XBRLException {
+		remove(fragment.getIndex());
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#removeFragment(String)
+	 * @see org.xbrlapi.data.Store#remove(String)
 	 */
-     public synchronized void removeFragment(String index) throws XBRLException {
+     public synchronized void remove(String index) throws XBRLException {
 	    incrementCallCount();
         XmlUpdateContext xmlUpdateContext = null;
         try {
@@ -438,7 +438,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @see org.xbrlapi.data.Store#query(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends XML> FragmentList<F> query(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
         

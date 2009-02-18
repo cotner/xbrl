@@ -153,7 +153,7 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             assertEquals(1,networks.getSize());
             Network network = networks.getNetwork(XDTConstants.domainMemberArcrole,Constants.StandardLinkRole);
             assertNotNull(network);
-            Concept root = ((XBRLStore) store).getConcept("http://xbrlapi.org/test/xdt/001","dom1");
+            Concept root = ((XBRLStore) store).getConcept(new URI("http://xbrlapi.org/test/xdt/001"),"dom1");
 
             TreeSet <DimensionValue> values = new TreeSet<DimensionValue>(new ExplicitDimensionValueTreeComparator(network, root));
 
@@ -171,8 +171,6 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             assertEquals(6, values.size());
             
             for (DimensionValue value: values) {
-//                store.serialize(value.getItem().getDataRootElement());
-//                store.serialize(value.getDimension().getDataRootElement());
                 store.serialize(((Concept) value.getValue()).getDataRootElement());
             }
             

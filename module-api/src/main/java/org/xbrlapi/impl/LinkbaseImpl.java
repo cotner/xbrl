@@ -61,7 +61,7 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     public FragmentList<SimpleLink> getArcroleRefs() throws XBRLException {
     	FragmentList<SimpleLink> links = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
     	for (SimpleLink link: links) {
-            if (! (link.getNamespace().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("arcroleRef")))
+            if (! (link.getNamespace().toString().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("arcroleRef")))
                 links.removeFragment(link);
     	}
     	return links;
@@ -113,7 +113,7 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     public FragmentList<SimpleLink> getRoleRefs() throws XBRLException {
     	FragmentList<SimpleLink> links = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
     	for (SimpleLink link: links) {
-    		if (! (link.getNamespace().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("roleRef")))
+    		if (! (link.getNamespace().toString().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("roleRef")))
     			links.removeFragment(link);
     	}
     	return links;

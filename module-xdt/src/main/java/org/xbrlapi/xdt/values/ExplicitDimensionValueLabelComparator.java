@@ -101,8 +101,8 @@ public class ExplicitDimensionValueLabelComparator extends DimensionValueCompara
             return 1;
         }        
 
-        String v1ns = m1.getTargetNamespaceURI();
-        String v2ns = m2.getTargetNamespaceURI();
+        URI v1ns = m1.getTargetNamespace();
+        URI v2ns = m2.getTargetNamespace();
         int result = v1ns.compareTo(v2ns);
         if (result != 0) return result;
         

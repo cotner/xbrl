@@ -33,7 +33,7 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
 	 * Test discovery given an XBRL instance as a starting point.
 	 */
 	public void testInterruption() {
-		try {
+	    try {
 	        loader.stashURI(this.uri3);
             loader.stashURI(this.uri1);
             loader.stashURI(this.uri2);

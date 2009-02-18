@@ -16,12 +16,12 @@ import org.xbrlapi.data.bdbxml.StoreImpl;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class QueryTestCase extends TestCase {
+public abstract class QueryTestCase extends TestCase {
     
     protected static Logger logger = Logger.getLogger(QueryTestCase.class);  
     
-    private final String CONTAINER = "browser";
-    private final String LOCATION = "/home/geoff/Data/bdbxml/backup";
+    private final String CONTAINER = "xbrlapiContainer";
+    private final String LOCATION = "/home/geoff/Data/bdbxml";
 
     private Store store = null;
     

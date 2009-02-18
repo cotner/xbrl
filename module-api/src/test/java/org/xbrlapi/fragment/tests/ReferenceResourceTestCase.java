@@ -51,7 +51,7 @@ public class ReferenceResourceTestCase extends DOMLoadingTestCase {
 			FragmentList<ReferenceResource> fragments = store.<ReferenceResource>getFragments("ReferenceResource");
 			ReferenceResource fragment = fragments.getFragment(0);
 			ReferencePart part = fragment.getReferenceParts().getFragment(0);
-			assertEquals("org.xbrlapi.impl.ReferencePartImpl", fragment.getReferencePart(part.getNamespaceURI(),part.getLocalname()).getType());
+			assertEquals("org.xbrlapi.impl.ReferencePartImpl", fragment.getReferencePart(part.getNamespace(),part.getLocalname()).getType());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

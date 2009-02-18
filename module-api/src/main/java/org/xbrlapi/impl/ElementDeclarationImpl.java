@@ -1,6 +1,8 @@
 package org.xbrlapi.impl;
 
 
+import java.net.URI;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.ElementDeclaration;
 import org.xbrlapi.FragmentList;
@@ -13,9 +15,6 @@ import org.xbrlapi.utilities.XBRLException;
 public class ElementDeclarationImpl extends SchemaDeclarationImpl implements ElementDeclaration {
 
     /**
-     * Determine if a concept is nillable
-     * @return true if the concept is nillable and false otherwise.
-     * @throws XBRLException
      * @see org.xbrlapi.ElementDeclaration#isNillable()
      */
     public boolean isNillable() throws XBRLException {
@@ -30,13 +29,16 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
      */
      public boolean isItem() throws XBRLException {
          String sgName = this.getSubstitutionGroupLocalname();
+         logger.debug(sgName);
          if (sgName == null) return false;
-         String sgNS = this.getSubstitutionGroupNamespace();
+         URI sgNamespace = this.getSubstitutionGroupNamespace();
+         logger.debug(sgNamespace);
          String query = "/*[*/xsd:element/@name='" + sgName + "']";
+         logger.debug(query);
          FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
          for (ElementDeclaration declaration: declarations) {
-             if (declaration.getTargetNamespace().equals(sgNS)) {
-                 if (declaration.getName().equals("item") && declaration.getTargetNamespace().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+             if (declaration.getTargetNamespace().equals(sgNamespace)) {
+                 if (declaration.getName().equals("item") && declaration.getTargetNamespace().toString().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
                      return true;
                  }
                  try {
@@ -55,12 +57,12 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
       public boolean isTuple() throws XBRLException {
           String sgName = this.getSubstitutionGroupLocalname();
           if (sgName == null) return false;
-          String sgNS = this.getSubstitutionGroupNamespace();
+          URI sgNS = this.getSubstitutionGroupNamespace();
           String query = "/*[*/xsd:element/@name='" + sgName + "']";
           FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
           for (ElementDeclaration declaration: declarations) {
               if (declaration.getTargetNamespace().equals(sgNS)) {
-                  if (declaration.getName().equals("tuple") && declaration.getTargetNamespace().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+                  if (declaration.getName().equals("tuple") && declaration.getTargetNamespace().toString().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
                       return true;
                   }
                   try {
@@ -77,23 +79,15 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
 
 
     /**
-     * Retrieve the type namespace.
-     * @return the namespace for the data type.
-     * @throws XBRLException if the datatype is not declared by a type attribute.
      * @see org.xbrlapi.ElementDeclaration#getTypeNamespace()
      */
-    public String getTypeNamespace() throws XBRLException {
+    public URI getTypeNamespace() throws XBRLException {
     	String type = getTypeQName();
-    	if (type.equals("") || (type == null))
-			throw new XBRLException("The element declaration does not declare its XML Schema data type via a type attribute.");
-    	return this.getNamespaceFromQName(type, getDataRootElement());
+    	if (type.equals("") || (type == null)) throw new XBRLException("The element declaration does not declare its XML Schema data type via a type attribute.");
+        return getNamespaceFromQName(type, getDataRootElement());
     }
     
     /**
-     * Retrieve the type namespace alias.
-     * @return the namespace alias (prefix) or the empty string if there 
-     * is no namespace prefix used in the QName.
-     * @throws XBRLException if the datatype is not declared.
      * @see org.xbrlapi.ElementDeclaration#getTypeNamespaceAlias()
      */
     public String getTypeNamespaceAlias() throws XBRLException {
@@ -104,10 +98,6 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     }
 
     /**
-     * Retrieve the type QName.
-     * @return the QName used to specify the data type or null
-     * if the element has no type attribute.
-     * @throws XBRLException if the data root element is not available.
      * @see org.xbrlapi.ElementDeclaration#getTypeQName()
      */
     public String getTypeQName() throws XBRLException {
@@ -118,9 +108,6 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     }
 
     /**
-     * Retrieve the type local name.
-     * @return the local name for the datatype.
-     * @throws XBRLException if the datatype is not declared.
      * @see org.xbrlapi.ElementDeclaration#getTypeLocalname()
      */  
     public String getTypeLocalname() throws XBRLException {
@@ -133,23 +120,15 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
 
 
     /**
-     * Retrieve the substitution group namespace.
-     * @return the namespace for the element substitution group.
-     * @throws XBRLException if the substitution group is not declared by a substitution group attribute.
      * @see org.xbrlapi.ElementDeclaration#getSubstitutionGroupNamespace()
      */
-    public String getSubstitutionGroupNamespace() throws XBRLException {
-    	String sg = getSubstitutionGroupQName();
-    	if (sg.equals("") || (sg == null))
-			throw new XBRLException("The element declaration does not declare its XML Schema substitution group via a substitutionGroup attribute.");   	
-    	return this.getNamespaceFromQName(sg, getDataRootElement());
+    public URI getSubstitutionGroupNamespace() throws XBRLException {
+    	String qname = getSubstitutionGroupQName();
+    	if (qname.equals("") || (qname == null)) throw new XBRLException("The element declaration does not declare its XML Schema substitution group via a substitutionGroup attribute.");   	
+	    return getNamespaceFromQName(qname, getDataRootElement());
     }
     
     /**
-     * Retrieve the substitution group namespace alias (also known as a namespace prefix).
-     * @return the namespace alias for the element substitution group or the empty string if the default namespace prefix
-     * is used.
-     * @throws XBRLException if the substitution group is not declared by a substitution group attribute.
      * @see org.xbrlapi.ElementDeclaration#getSubstitutionGroupNamespaceAlias()
      */    
     public String getSubstitutionGroupNamespaceAlias() throws XBRLException {
@@ -160,10 +139,6 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     }
 
     /**
-     * Retrieve the substitution group QName.
-     * @return the QName used to specify the substitution group or null
-     * if the element has no substitutionGroup attribute.
-     * @throws XBRLException if the data root element is not available.
      * @see org.xbrlapi.ElementDeclaration#getSubstitutionGroupQName()
      */  
     public String getSubstitutionGroupQName() throws XBRLException {
@@ -173,16 +148,13 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     }
 
     /**
-     * Retrieve the substitution group local name.
-     * @return the local name for the substitution group or null if none is declared.
-     * @throws XBRLException if the substitution group is an empty string rather than a QName.
      * @see org.xbrlapi.ElementDeclaration#getSubstitutionGroupLocalname()
      */  
     public String getSubstitutionGroupLocalname() throws XBRLException {
     	String sg = getSubstitutionGroupQName();
     	if (sg == null) return null;
     	if (sg.equals(""))
-			throw new XBRLException("The element declaration does not declare its substitution group via a substitutionGroup attribute.");    	
+			throw new XBRLException("The element declaration must not have an empty substitution group attribute.");    	
     	return getLocalnameFromQName(sg);
     }
 

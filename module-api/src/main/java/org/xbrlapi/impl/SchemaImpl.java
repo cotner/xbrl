@@ -20,10 +20,6 @@ import org.xbrlapi.utilities.XBRLException;
 public class SchemaImpl extends SchemaContentImpl implements Schema {
 		
     /**
-     * Get the schema target namespace URI.  
-     * @return the target namespace of the schema or null if the schema
-     * is anonymous.
-     * @throws XBRLException
      * @see org.xbrlapi.Schema#getTargetNamespace()
      */
     public URI getTargetNamespace() throws XBRLException {
@@ -38,9 +34,6 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     }
     
     /**
-     * Checks if the element form is qualified.
-     * @return true if the element form is qualified and false otherwise.
-     * @throws XBRLException
      * @see org.xbrlapi.Schema#isElementFormQualified()
      */
     public boolean isElementFormQualified() throws XBRLException {
@@ -109,10 +102,6 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     
 
     /**
-     * Get a specific concept by its name.
-     * return the chosen concept or null if the concept does not exist.
-     * @param name The name of the concept
-     * @throws XBRLException
      * @see org.xbrlapi.Schema#getConceptByName(String)
      */
     public Concept getConceptByName(String name) throws XBRLException {
@@ -124,20 +113,13 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     }
 
     /**
-     * Get a list of concepts based on their type.
-     * Returns null if no concepts match the selection criteria.
-     * @param namespaceURI The namespaceURI of the concept type
-     * @param localName The local name of the concept type
-     * @return A list of concept fragments in the containing schema that
-     * match the specified element type.
-     * @throws XBRLException
-     * @see org.xbrlapi.Schema#getConceptsByType(String, String)
+     * @see org.xbrlapi.Schema#getConceptsByType(URI, String)
      */
-    public FragmentList<Concept> getConceptsByType(String namespaceURI, String localName) throws XBRLException {
+    public FragmentList<Concept> getConceptsByType(URI namespace, String localName) throws XBRLException {
     	FragmentList<Concept> matches = new FragmentListImpl<Concept>();
     	FragmentList<Concept> concepts = getConcepts();
     	for (Concept concept: concepts) {
-			if (concept.getTypeNamespace().equals(namespaceURI) && 
+			if (concept.getTypeNamespace().equals(namespace) && 
 				concept.getTypeLocalname().equals(localName)) {
 				matches.add(concept);
 			}
@@ -146,21 +128,14 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
 	}
     
     /**
-     * Get a list concepts based on their substitution group.
-     * Returns null if no concepts match the selection criteria.
-     * @param namespaceURI The namespaceURI of the concept type
-     * @param localName The local name of the concept type
-     * @return a list of concepts in the schema that match the specified
-     * substitution group
-     * @throws XBRLException
-     * @see org.xbrlapi.Schema#getConceptsBySubstitutionGroup(String, String)
+     * @see org.xbrlapi.Schema#getConceptsBySubstitutionGroup(URI, String)
      */
-    public FragmentList<Concept> getConceptsBySubstitutionGroup(String namespaceURI, String localName) throws XBRLException {
+    public FragmentList<Concept> getConceptsBySubstitutionGroup(URI namespace, String localname) throws XBRLException {
     	FragmentListImpl<Concept> matches = new FragmentListImpl<Concept>();
     	FragmentList<Concept> concepts = getConcepts();
     	for (Concept concept: concepts) {
-			if (concept.getSubstitutionGroupNamespace().equals(namespaceURI) && 
-					concept.getSubstitutionGroupLocalname().equals(localName)) {
+			if (concept.getSubstitutionGroupNamespace().equals(namespace) && 
+					concept.getSubstitutionGroupLocalname().equals(localname)) {
 					matches.add(concept);
 			}
     	}
@@ -172,10 +147,6 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
 	
 
     /**
-     * Get a reference part declaration in a schema.
-     * Returns null if the reference part does not exist in the schema.
-     * @param name The name attribute value of the reference part to be retrieved.
-     * @throws XBRLException
      * @see org.xbrlapi.Schema#getReferencePartDeclaration(String)
      */
     public ReferencePartDeclaration getReferencePartDeclaration(String name) throws XBRLException {
@@ -187,9 +158,6 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     }
     
     /**
-     * Get a list of the reference part declarations in a schema.
-     * @return a list of reference part declarations in the schema.
-     * @throws XBRLException
      * @see org.xbrlapi.Schema#getReferencePartDeclarations()
      */
     public FragmentList<ReferencePartDeclaration> getReferencePartDeclarations() throws XBRLException {

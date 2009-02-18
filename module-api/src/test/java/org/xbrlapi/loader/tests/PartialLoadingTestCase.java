@@ -3,8 +3,8 @@ package org.xbrlapi.loader.tests;
 import java.net.URI;
 import java.util.List;
 
-import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.Stub;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 
 /**
@@ -25,11 +25,11 @@ public class PartialLoadingTestCase extends BaseTestCase {
 	}
 
 	public void testLoaderHandlingOfAnIOException() throws Exception {
-		try {
+	    try {
 	        loader.stashURI(getURI(this.NONEXISTENT_URI));
 	        loader.stashURI(getURI(this.VALID_URI));
             loader.discover();
-            FragmentList<Fragment> stubs = store.getStubs();
+            FragmentList<Stub> stubs = store.getStubs();
             assertEquals(1,stubs.getLength());
             List<URI> uris = store.getDocumentsToDiscover();
             assertEquals(1,uris.size());

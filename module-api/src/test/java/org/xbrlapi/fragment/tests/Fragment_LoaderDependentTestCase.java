@@ -41,7 +41,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 		try {
 		    FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
 		    for (Fragment fragment: fragments) {
-		        Fragment f = store.getFragment(fragment.getFragmentIndex());
+		        Fragment f = store.getFragment(fragment.getIndex());
 		        try {
 		            f.setStore(store);
 	                fail("The store for a fragment cannot be changed once it is set.");
@@ -88,13 +88,12 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 * Test retrieval of the namespace URI of root node in the fragment
 	 * when the fragment has a namespace for the root element.
 	 */
-	public void testGetNamespaceURIOfAStoredFragmentWithANamespace() {
-
+	public void testGetNamespaceOfAStoredFragmentWithANamespace() {
         try {
-            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
-            assertTrue(fragments.getLength() > 0);
-            for (Fragment fragment: fragments) {
-                assertEquals(Constants.XMLSchemaNamespace,fragment.getNamespaceURI());
+            FragmentList<Schema> schemas = store.<Schema>getFragments("Schema");
+            assertTrue(schemas.getLength() > 0);
+            for (Fragment fragment: schemas) {
+                assertEquals(Constants.XMLSchemaNamespace,fragment.getNamespace().toString());
             }
         } catch (Exception e) {
             fail(e.getMessage());
@@ -176,7 +175,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
             for (Fragment fragment: fragments) {
                 FragmentList<Fragment> children = fragment.getAllChildren();
                 for (Fragment child: children) {
-                    assertEquals(fragment.getFragmentIndex(),child.getParent().getFragmentIndex());
+                    assertEquals(fragment.getIndex(),child.getParent().getIndex());
                 }
             }    
 		} catch (Exception e) {

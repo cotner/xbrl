@@ -122,7 +122,7 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
         try {
             pointerParts = parser.Pointer();
         } catch (ParseException e) {
-            throw new XBRLException(pointer + " failed to parse as an XPointer for locator " + this.getFragmentIndex(), e);
+            throw new XBRLException(pointer + " failed to parse as an XPointer for locator " + this.getIndex(), e);
         }
             
         for (int i=0; i<pointerParts.size(); i++) {

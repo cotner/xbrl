@@ -1022,7 +1022,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     /**
      * @see org.xbrlapi.Fragment#getNamespaceFromQName(String, Node)
      */
-    public String getNamespaceFromQName(String qname, Node node) throws XBRLException {
+    public URI getNamespaceFromQName(String qname, Node node) throws XBRLException {
     	
         // Create NS prefix declaration for the QName being sought.
         String prefix = getPrefixFromQName(qname);
@@ -1037,7 +1037,11 @@ public class FragmentImpl extends XMLImpl implements Fragment {
             // Check for a namespace declaration on the current node
             String ns = element.getAttribute(declaration);
             if (! ns.equals("")) {
-                return ns;
+                try {
+                    return new URI(ns);
+                } catch (URISyntaxException e) {
+                    throw new XBRLException("The namespace is not a valid URI.",e);
+                }
             }            
             
             if (element.isSameNode(this.getMetadataRootElement())) {

@@ -58,7 +58,7 @@ public class ExtendedLinkHandler extends XLinkHandlerDefaultImpl {
 	public void error(String namespaceURI, String lName, String qName,
 			Attributes attrs,String message) throws XLinkException {	
 		if ( lName.equals("child3") ) {
-			test.checkEqual("The xlink role must be an absolute URI",message);
+			test.checkEqual("The XLink role must be an absolute URI",message);
 		} else {
 			test.confirmFail("Unexpected error: " + message);
 		}

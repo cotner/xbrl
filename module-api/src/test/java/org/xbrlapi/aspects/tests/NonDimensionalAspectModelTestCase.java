@@ -80,7 +80,7 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
                     model.setCriteria(colCombination);
                     Set<Fact> matchingFacts = model.getMatchingFacts();
                     for (Fact matchingFact: matchingFacts) {
-                        logger.info(matchingFact.getFragmentIndex());
+                        logger.info(matchingFact.getIndex());
                     }
                 }
             }

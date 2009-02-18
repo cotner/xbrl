@@ -51,7 +51,7 @@ public class DatabaseManagerInitialisationAndQueryingTestCase extends BaseTestCa
             environmentConfiguration.setInitializeCache(true);
             environmentConfiguration.setCacheSize(1024 * 1024 * 500);
             environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
-            environmentConfiguration.setTransactional(false);       // Turn on the transactional subsystem.
+            environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
 		    environment = new Environment(environmentHome, environmentConfiguration);
 
 		    managerConfiguration = new XmlManagerConfig();

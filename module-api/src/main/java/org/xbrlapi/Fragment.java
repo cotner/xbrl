@@ -217,7 +217,7 @@ public interface Fragment extends XML {
      * @return the namespace declared on the fragment for the QName
      * @throws XBRLException if the namespace is not declared
      */
-    public String getNamespaceFromQName(String qname, Node node) throws XBRLException;
+    public URI getNamespaceFromQName(String qname, Node node) throws XBRLException;
     
     /**
      * Returns the local name for a QName

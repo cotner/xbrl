@@ -96,7 +96,7 @@ public interface XBRLStore extends Store {
      * @throws XBRLException if more than one matching concept is found in the data store
      * or if no matching concepts are found in the data store.
      */
-    public Concept getConcept(String namespace, String name) throws XBRLException;
+    public Concept getConcept(URI namespace, String name) throws XBRLException;
 
     /**
      * @return a hash map indexed by link roles that are used in extended links in the data store.

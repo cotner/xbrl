@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
-import org.xbrlapi.impl.MockFragmentImpl;
+import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -33,9 +33,9 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testAddFragment() {
 		try {
 			String index = "1";
-			MockFragmentImpl d = new MockFragmentImpl(index);
+			MockImpl d = new MockImpl(index);
 			store.storeFragment(d);
-			assertEquals(index,store.getFragment(index).getFragmentIndex());	
+			assertEquals(index,store.getFragment(index).getIndex());	
 			
 		} catch (XBRLException e) {
 			e.printStackTrace();
@@ -46,9 +46,9 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testRemoveFragmentUsingIndex() {
 		try {
 			String index = "1";
-			store.storeFragment(new MockFragmentImpl(index));
+			store.storeFragment(new MockImpl(index));
 			assertTrue(store.hasFragment(index));
-			store.removeFragment(index);
+			store.remove(index);
 			assertFalse(store.hasFragment(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());

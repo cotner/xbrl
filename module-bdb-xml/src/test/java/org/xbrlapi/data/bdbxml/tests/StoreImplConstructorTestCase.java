@@ -2,7 +2,7 @@ package org.xbrlapi.data.bdbxml.tests;
 
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
-import org.xbrlapi.impl.MockFragmentImpl;
+import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -38,15 +38,15 @@ public class StoreImplConstructorTestCase extends BaseTestCase {
 	public void testStoreImplConnectsToAnExistingStore() {
 
 		try {
-			store.storeFragment(new MockFragmentImpl("1"));
-			store.storeFragment(new MockFragmentImpl("2"));
+			store.storeFragment(new MockImpl("1"));
+			store.storeFragment(new MockImpl("2"));
 		} catch (XBRLException e) {
 			fail("The addition of fragments to the original store failed.");
 		}
 		
 		try {
 			Store newStore = this.createStore();
-			assertEquals(store.getFragmentCount(),newStore.getFragmentCount());
+			assertEquals(store.getSize(),newStore.getSize());
 			newStore.close();
 		} catch (XBRLException e) {
 			e.printStackTrace();

@@ -64,18 +64,18 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element/@nillable='true']");
 			for (int i=0; i< fragments.getLength(); i++) {
 				ElementDeclaration fragment = fragments.getFragment(i);
-				assertTrue(fragment.getFragmentIndex() + " is nillable", fragment.isNillable());				
+				assertTrue(fragment.getIndex() + " is nillable", fragment.isNillable());				
 			}
 			fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element/@nillable='false']");
 			for (int i=0; i< fragments.getLength(); i++) {
 				ElementDeclaration fragment = fragments.getFragment(i);
-				assertFalse(fragment.getFragmentIndex() + " is not nillable", fragment.isNillable());				
+				assertFalse(fragment.getIndex() + " is not nillable", fragment.isNillable());				
 			}
 
 			fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@nillable)=0]");
 			for (int i=0; i< fragments.getLength(); i++) {
 				ElementDeclaration fragment = fragments.getFragment(i);
-				assertFalse(fragment.getFragmentIndex() + " is not nillable", fragment.isNillable());		
+				assertFalse(fragment.getIndex() + " is not nillable", fragment.isNillable());		
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,7 +92,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>getFragments("ElementDeclaration");
 			for (int i=0; i< fragments.getLength(); i++) {
 				ElementDeclaration fragment = fragments.getFragment(i);
-				assertTrue(fragment.getFragmentIndex() + " is element form qualified", fragment.getSchema().isElementFormQualified());				
+				assertTrue(fragment.getIndex() + " is element form qualified", fragment.getSchema().isElementFormQualified());				
 			}
 		} catch (XBRLException e) {
 			fail(e.getMessage());
@@ -124,7 +124,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=0]");
 			for (int i=0; i< fragments.getLength(); i++) {
 				ElementDeclaration fragment = fragments.getFragment(i);
-				assertNull(fragment.getFragmentIndex() + " has not default", fragment.getDefault());				
+				assertNull(fragment.getIndex() + " has not default", fragment.getDefault());				
 			}
 		} catch (XBRLException e) {
 			fail(e.getMessage());
@@ -135,7 +135,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=1]");
 			for (int i=0; i< fragments.getLength(); i++) {
 				ElementDeclaration fragment = fragments.getFragment(i);
-				assertNotNull(fragment.getFragmentIndex() + " has not default", fragment.getDefault());				
+				assertNotNull(fragment.getIndex() + " has not default", fragment.getDefault());				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -182,7 +182,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test getting the information about the data type.
 	 */
-	public void testGetTypeInformation() {		
+	public void testGetTypeInformation() {	
 		try {
 		    
             FragmentList<Concept> fragments = store.getFragments("Concept");
@@ -196,7 +196,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
                 assertNotNull(prefix);
                 assertEquals(Constants.XBRL21Prefix , fragment.getTypeNamespaceAlias());
 
-                String namespace = fragment.getNamespaceFromQName(type,fragment.getDataRootElement());
+                URI namespace = fragment.getNamespaceFromQName(type,fragment.getDataRootElement());
                 assertEquals(namespace, fragment.getTypeNamespace());
                 
                 String localname = fragment.getLocalnameFromQName(type);
@@ -214,8 +214,6 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	 * Test getting the information about the substitution group.
 	 */
 	public void testGetSubstitutionGroupInformation() {		
-
-	    
 	    try {
 	        
             FragmentList<Concept> fragments = store.getFragments("Concept");
@@ -229,7 +227,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
                 assertNotNull(prefix);
                 assertEquals(Constants.XBRL21Prefix , fragment.getSubstitutionGroupNamespaceAlias());
 
-                String namespace = fragment.getNamespaceFromQName(sg,fragment.getDataRootElement());
+                URI namespace = fragment.getNamespaceFromQName(sg,fragment.getDataRootElement());
                 assertEquals(namespace, fragment.getSubstitutionGroupNamespace());
                 
                 String localname = fragment.getLocalnameFromQName(sg);
@@ -243,14 +241,16 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	}
 		
     public void testDerterminationOfBeingATuple() {     
-
         try {
             FragmentList<Concept> fragments = store.getFragments("Concept");
             assertTrue(fragments.getLength() > 0);
             for (Concept fragment: fragments) {
+                logger.info("Tuple" + fragment.isTuple());
+                logger.info("Item" + fragment.isItem());
                 assertTrue(fragment.isTuple() || fragment.isItem());
             }
         } catch (XBRLException e) {
+            e.printStackTrace();
             fail(e.getMessage());
         }
 		

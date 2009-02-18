@@ -1,4 +1,16 @@
-12 Feb 2009
+18 Feb. 2009
+Additional changes to method signatures to pass URIs where possible
+instead of strings.  Corrected bugs in the UsedOn fragment subclass
+to ensure that inherited methods are not overridden in manners that
+contradict their intent.
+
+17 Feb. 2009
+Refactored fragment interfaces to distinguish document fragments from 
+other kinds of XML resources in the data store. This is needed to 
+retain clarity now that a broader range of information about relationships
+is stored directly in the data store.
+
+12 Feb. 2009
 Made the loader process able to handle all kinds of exceptions during the
 parsing process without causing the document discovery process to be derailed
 or the document cache or data store to be corrupted.

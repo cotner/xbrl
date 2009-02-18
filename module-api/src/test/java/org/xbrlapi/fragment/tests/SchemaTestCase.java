@@ -35,7 +35,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
 			for (int i=0; i< fragments.getLength(); i++) {
 				Schema schema = fragments.getFragment(i);
-				if (schema.getTargetNamespaceURI().equals("schema.getTargetNamespaceURI")) {
+				if (schema.getTargetNamespace().equals("schema.getTargetNamespaceURI")) {
 					FragmentList<Concept> concepts = schema.getConcepts();
 					assertTrue(concepts.getLength() > 0);
 					Concept concept = (Concept) fragments.getFragment(0);
@@ -55,7 +55,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
 			for (int i=0; i< fragments.getLength(); i++) {
 				Schema schema = fragments.getFragment(i);
-				if (schema.getTargetNamespaceURI().equals("schema.getTargetNamespaceURI")) {
+				if (schema.getTargetNamespace().equals("schema.getTargetNamespaceURI")) {
 					FragmentList<Concept> concepts = schema.getConcepts();
 					Concept concept = concepts.getFragment(0);
 					assertEquals(3, schema.getConceptsByType(concept.getTypeNamespace(),concept.getTypeLocalname()).getLength());
@@ -73,7 +73,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
 			for (int i=0; i< fragments.getLength(); i++) {
 				Schema schema = fragments.getFragment(i);
-				if (schema.getTargetNamespaceURI().equals("schema.getTargetNamespaceURI")) {
+				if (schema.getTargetNamespace().equals("schema.getTargetNamespaceURI")) {
 					String name = "managementName";
 					assertEquals(name, schema.getConceptByName(name).getName());
 				}
@@ -158,11 +158,10 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	}
 	
 	public void testGetTargetNamespace() {
-
 		try {
-			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
-			Schema schema = fragments.getFragment(0);
-			assertEquals("http://mycompany.com/xbrl/taxonomy", schema.getTargetNamespaceURI());
+			FragmentList<Schema> schemas = store.<Schema>getFragments("Schema");
+			Schema schema = schemas.getFragment(0);
+			assertEquals("http://mycompany.com/xbrl/taxonomy", schema.getTargetNamespace().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

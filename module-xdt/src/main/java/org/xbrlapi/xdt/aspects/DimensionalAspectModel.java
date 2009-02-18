@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt.aspects;
 
+import java.net.URI;
 import java.util.List;
 
 import org.w3c.dom.Element;
@@ -77,7 +78,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
             if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
                 if (child.hasAttribute("dimension")) {
                     String qname = child.getAttribute("dimension");
-                    String ns = occ.getNamespaceFromQName(qname,child);
+                    URI ns = occ.getNamespaceFromQName(qname,child);
                     String localname = occ.getLocalnameFromQName(qname);
                     if (! this.hasAspect(ns + localname)) {
                         Dimension dimension = (Dimension) store.getConcept(ns,localname);

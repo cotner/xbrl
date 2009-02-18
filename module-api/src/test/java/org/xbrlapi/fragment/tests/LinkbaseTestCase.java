@@ -35,7 +35,6 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	 * Test getting arcrole references from the linkbase.
 	 */
 	public void testGetArcroleRef() {	
-
 		try {
             FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
             for (SimpleLink link: links) {

@@ -248,7 +248,7 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
      * @throws XBRLException if more than one matching concept is found in the data store
      * or if no matching concepts are found in the data store.
      */
-    public Concept getConcept(String namespace, String name) throws XBRLException {
+    public Concept getConcept(URI namespace, String name) throws XBRLException {
     	
     	FragmentList<SchemaDeclaration> candidates = this.<SchemaDeclaration>query("/*[*/xsd:element[@name='" + name + "']]");
     	FragmentList<Concept> matches = new FragmentListImpl<Concept>();

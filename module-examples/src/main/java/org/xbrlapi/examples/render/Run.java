@@ -244,7 +244,7 @@ public class Run {
             
             FragmentList<Item> items = instance.getItems();
             for (Item item: items) {
-                String key= item.getNamespaceURI() + item.getLocalname();
+                String key= item.getNamespace() + item.getLocalname();
                 if (itemMap.containsKey(key)) {
                     itemMap.get(key).add(item);
                 } else {
@@ -373,7 +373,7 @@ public class Run {
 
         concepts.add(concept);
 
-        String conceptKey = concept.getTargetNamespaceURI() + concept.getName();
+        String conceptKey = concept.getTargetNamespace() + concept.getName();
         if (itemMap.containsKey(conceptKey)) {
             List<Item> items = itemMap.get(conceptKey);
             if (! items.isEmpty()) {
@@ -398,7 +398,7 @@ public class Run {
         labels.add(label);
         reportTime(label);
 
-        List<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getFragmentIndex());
+        List<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getIndex());
 
         for (Relationship relationship: relationships) {
             
