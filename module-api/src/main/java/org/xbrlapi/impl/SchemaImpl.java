@@ -1,5 +1,8 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.xbrlapi.Concept;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.FragmentList;
@@ -21,17 +24,19 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @return the target namespace of the schema or null if the schema
      * is anonymous.
      * @throws XBRLException
-     * @see org.xbrlapi.Schema#getTargetNamespaceURI()
+     * @see org.xbrlapi.Schema#getTargetNamespace()
      */
-    public String getTargetNamespaceURI() throws XBRLException {
+    public URI getTargetNamespace() throws XBRLException {
     	if (getDataRootElement().hasAttribute("targetNamespace")) {
-    		return getDataRootElement().getAttribute("targetNamespace");
+    		try {
+    		    return new URI(getDataRootElement().getAttribute("targetNamespace"));
+    		} catch (URISyntaxException e) {
+    		    throw new XBRLException("The target namespace is not a valid URI.",e);
+    		}
     	}
     	return null;
     }
     
-
-
     /**
      * Checks if the element form is qualified.
      * @return true if the element form is qualified and false otherwise.
@@ -49,11 +54,11 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getImports()
      */
     public FragmentList<SimpleLink> getImports() throws XBRLException {
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getFragmentIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
+    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
     	FragmentList<SimpleLink> links = getStore().<SimpleLink>query(query);
     	FragmentList<SimpleLink> imports = new FragmentListImpl<SimpleLink>();
     	for (SimpleLink link: links) {
-        	if (link.getLocalname().equals("import") && link.getNamespaceURI().equals(Constants.XMLSchemaNamespace)) {
+        	if (link.getLocalname().equals("import") && link.getNamespace().equals(Constants.XMLSchemaNamespace)) {
         		imports.add(link);
         	}
     	}
@@ -64,11 +69,11 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getIncludes()
      */
     public FragmentList<SimpleLink> getIncludes() throws XBRLException {
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getFragmentIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
+    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
     	FragmentList<SimpleLink> links = getStore().<SimpleLink>query(query);
     	FragmentList<SimpleLink> includes = new FragmentListImpl<SimpleLink>();
     	for (SimpleLink link: links) {
-        	if (link.getLocalname().equals("include") && link.getNamespaceURI().equals(Constants.XMLSchemaNamespace)) {
+        	if (link.getLocalname().equals("include") && link.getNamespace().equals(Constants.XMLSchemaNamespace)) {
         		includes.add(link);
         	}
     	}
@@ -79,11 +84,11 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getExtendedLinks()
      */
     public FragmentList<ExtendedLink> getExtendedLinks() throws XBRLException {
-    	FragmentList<Linkbase> linkbases = getStore().<Linkbase>getChildFragments("Linkbase",getFragmentIndex());
+    	FragmentList<Linkbase> linkbases = getStore().<Linkbase>getChildFragments("Linkbase",getIndex());
     	logger.debug("The schema contains " + linkbases.getLength() + " linkbases.");
     	FragmentList<ExtendedLink> links = new FragmentListImpl<ExtendedLink>();
     	for (Linkbase linkbase: linkbases) {
-        	links.addAll(getStore().<ExtendedLink>getChildFragments("ExtendedLink",linkbase.getFragmentIndex()));
+        	links.addAll(getStore().<ExtendedLink>getChildFragments("ExtendedLink",linkbase.getIndex()));
     	}
     	return links;
     }
@@ -111,7 +116,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getConceptByName(String)
      */
     public Concept getConceptByName(String name) throws XBRLException {
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ConceptImpl' and @parentIndex='" + getFragmentIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@name='" + name + "']";
+    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ConceptImpl' and @parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@name='" + name + "']";
     	FragmentList<Concept> concepts = getStore().<Concept>query(query);
     	if (concepts.getLength() == 0) return null;
     	if (concepts.getLength() > 1) throw new XBRLException("The concept name is not unique to the schema.");

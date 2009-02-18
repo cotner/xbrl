@@ -84,13 +84,21 @@ public class BaseIdentifier implements Identifier {
     }
     
     /**
+     * Performs the following operations on the fragment:
+     * <ul>
+     * <li>Sets its fragment index</li>
+     * <li>Determines if the fragment as an ID attribute and if so, appends
+     * an ID ( @see org.xbrlapi.Fragment#appendID(String) ) and 
+     * sets the ID in the element state.</li>
+     * <li>Adds the fragment ( @see org.xbrlapi.loader.Loader#addFragment(org.xbrlapi.Fragment,org.xbrlapi.xlink.ElementState) )</li>
+     * </ul>
      * Override this base implementation if an ID of the fragment root element can be
      * expressed by an attribute other than "id".
      * @see Identifier#processFragment(Fragment, Attributes)
      */
     public void processFragment(Fragment fragment,Attributes attrs) throws XBRLException {
         Loader loader = this.getLoader();
-        fragment.setFragmentIndex(getLoader().getNextFragmentId());
+        fragment.setIndex(getLoader().getNextFragmentId());
         if (attrs.getValue("id") != null) {
             fragment.appendID(attrs.getValue("id"));
             this.getElementState().setId(attrs.getValue("id"));

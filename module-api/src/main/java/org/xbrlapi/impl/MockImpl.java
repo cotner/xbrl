@@ -5,20 +5,23 @@ package org.xbrlapi.impl;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
+import org.xbrlapi.Mock;
 import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
-public class MockFragmentImpl extends FragmentImpl {
+public class MockImpl extends FragmentImpl implements Mock {
 	
 	/**
 	 * No argument constructor.
 	 * @throws XBRLException
 	 */
-	public MockFragmentImpl() throws XBRLException {
+	public MockImpl() throws XBRLException {
 		super();
 		this.setBuilder(new BuilderImpl());
-		getBuilder().appendElement(Constants.XBRLAPINamespace,"fragment",Constants.XBRLAPIPrefix + ":fragment");	
+		getBuilder().appendElement(
+		        Constants.XBRLAPINamespace,"fragment",
+		        Constants.XBRLAPIPrefix + ":fragment");	
 	}
 	
 	/**
@@ -26,13 +29,9 @@ public class MockFragmentImpl extends FragmentImpl {
 	 * within the scope of the containing data store.
 	 * @throws XBRLException
 	 */
-	public MockFragmentImpl(String id) throws XBRLException {
+	public MockImpl(String id) throws XBRLException {
 		this();
-		this.setFragmentIndex(id);
-		getBuilder().appendElement(
-				Constants.XBRLAPINamespace,
-				"fragment",
-				Constants.XBRLAPIPrefix + ":fragment");
+		this.setIndex(id);
 	}
 
 	/**
@@ -43,10 +42,18 @@ public class MockFragmentImpl extends FragmentImpl {
 	 * @param qName The QName for the root element of the data in the fragment.
 	 * @throws XBRLException
 	 */
-	public MockFragmentImpl(String id, String namespace, String name, String qName) throws XBRLException {
+	public MockImpl(String id, String namespace, String name, String qName) throws XBRLException {
 		this(id);
 		getBuilder().appendElement(namespace, name, qName);
 	}
+	
+    /**
+     * @see org.xbrlapi.Mock#appendDataElement(String, String, String)
+     */
+    public void appendDataElement(String namespace, String name, String qName) throws XBRLException {
+        if (this.getBuilder() == null) throw new XBRLException("The fragment is not still being built.");
+        getBuilder().appendElement(namespace, name, qName);
+    }
 
 	/**
 	 * Set the information about the sequence to be followed to reach the parent element 

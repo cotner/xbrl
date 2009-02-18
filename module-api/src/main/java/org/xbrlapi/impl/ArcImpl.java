@@ -139,7 +139,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     public <E extends ArcEnd> FragmentList<E> getSourceFragments() throws XBRLException {
     	ExtendedLink link = getExtendedLink();
     	FragmentList<E> ends = link.<E>getArcEndsByLabel(this.getFrom()); 
-    	logger.debug("Link "+ link.getFragmentIndex() + " has " + ends.getLength() + " ends with label " + this.getFrom());
+    	logger.debug("Link "+ link.getIndex() + " has " + ends.getLength() + " ends with label " + this.getFrom());
     	return ends;
     }
     
@@ -149,7 +149,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     public <E extends ArcEnd> FragmentList<E> getTargetFragments() throws XBRLException {
     	ExtendedLink link = getExtendedLink();
     	FragmentList<E> ends = link.<E>getArcEndsByLabel(this.getTo());
-    	logger.debug("Link "+ link.getFragmentIndex() + " has " + ends.getLength() + " ends with label " + this.getTo());
+    	logger.debug("Link "+ link.getIndex() + " has " + ends.getLength() + " ends with label " + this.getTo());
     	return ends;
     }
     
@@ -295,13 +295,13 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public boolean semanticEquals(Arc other) throws XBRLException {
     	
-    	if (! this.getNamespaceURI().equals(other.getNamespaceURI())) return false;
+    	if (! this.getNamespace().equals(other.getNamespace())) return false;
     	if (! this.getLocalname().equals(other.getLocalname())) return false;
 
     	ExtendedLink aLink = this.getExtendedLink();
     	ExtendedLink bLink = other.getExtendedLink();
     	
-    	if (! aLink.getNamespaceURI().equals(bLink.getNamespaceURI())) return false;
+    	if (! aLink.getNamespace().equals(bLink.getNamespace())) return false;
     	if (! aLink.getLocalname().equals(bLink.getLocalname())) return false;
     	if (! aLink.getLinkRole().equals(bLink.getLinkRole())) return false;
     	

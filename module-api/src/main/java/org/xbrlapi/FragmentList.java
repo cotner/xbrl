@@ -6,10 +6,9 @@ package org.xbrlapi;
 
 import java.util.List;
 
-import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
-public interface FragmentList<F extends Fragment> extends List<F> {
+public interface FragmentList<F extends XML> extends List<F> {
 
     /**
      * The number of fragments in the list. The range of 

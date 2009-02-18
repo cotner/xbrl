@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.CustomType;
@@ -70,7 +72,7 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
     public boolean isUsedCorrectly(Fragment fragment) throws XBRLException {
     	FragmentList<UsedOn> usedOns = getUsedOns();
     	for (UsedOn usedOn: usedOns) {
-    		if (usedOn.isUsedOn(fragment.getNamespaceURI(),fragment.getLocalname())) {
+    		if (usedOn.isUsedOn(fragment.getNamespace(),fragment.getLocalname())) {
     			return true;
     		}
     	}
@@ -80,17 +82,13 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
     
 
     /**
-     * Returns true only if the arcrole can be used on the specified element
-     * @param namespaceURI The namespace of the element being tested for
-     * @param localname The local name of the element being tested for
-     * @throws XBRLException
-     * @see org.xbrlapi.CustomType#isUsedOn(String,String)
+     * @see org.xbrlapi.CustomType#isUsedOn(URI,String)
      */
-    public boolean isUsedOn(String namespaceURI, String localname) throws XBRLException {
+    public boolean isUsedOn(URI namespace, String localname) throws XBRLException {
     	FragmentList<UsedOn> fragments = this.getUsedOns();
     	for(int i=0; i<fragments.getLength(); i++) {
         	UsedOn usedOn = fragments.getFragment(i);
-        	if (usedOn.isUsedOn(namespaceURI,localname)) return true;
+        	if (usedOn.isUsedOn(namespace,localname)) return true;
     	}
     	return false;
     }

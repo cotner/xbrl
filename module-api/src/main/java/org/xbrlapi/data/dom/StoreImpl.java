@@ -17,8 +17,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.xpath.XPathEvaluator;
 import org.w3c.dom.xpath.XPathResult;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.XML;
 import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.XBRLStoreImpl;
 import org.xbrlapi.impl.FragmentFactory;
@@ -86,18 +86,18 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}	
 	
     /**
-     * @see org.xbrlapi.data.Store#storeFragment(Fragment)
+     * @see org.xbrlapi.data.Store#storeFragment(XML)
      */
-    public synchronized int getFragmentCount() throws XBRLException {
+    public synchronized int getSize() throws XBRLException {
         return fragmentMap.size();
     }
 	
 	/**
-	 * @see org.xbrlapi.data.Store#storeFragment(Fragment)
+	 * @see org.xbrlapi.data.Store#storeFragment(XML)
 	 */
-	public synchronized void storeFragment(Fragment fragment) throws XBRLException {
+	public synchronized void storeFragment(XML fragment) throws XBRLException {
 		
-	    logger.debug("Storing " + fragment.getType() + " " + fragment.getFragmentIndex());
+	    logger.debug("Storing " + fragment.getType() + " " + fragment.getIndex());
 	    
 		// If the fragment is already stored we are done.
 		if (fragment.getStore() != null) {			
@@ -105,9 +105,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		}
 		
 		// Get the fragment index to delete existing fragments with the same index.
-		String index = fragment.getFragmentIndex();
+		String index = fragment.getIndex();
 		if (hasFragment(index)) {
-		    this.removeFragment(index);
+		    this.remove(index);
         }
 
 		// TODO Eliminate this importNode call.
@@ -133,7 +133,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#getFragment(String)
 	 */
-	public synchronized Fragment getFragment(String index) throws XBRLException {
+	public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
 
 		Element root = fragmentMap.get(index);
 		if (root == null) {
@@ -152,7 +152,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException
 	 *             if the fragment exists but cannot be removed from the store.
 	 */
-	public synchronized void removeFragment(String index) throws XBRLException {
+	public synchronized void remove(String index) throws XBRLException {
     	
         if (! hasFragment(index)) return;
 
@@ -209,7 +209,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException if the query cannot be executed.
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends Fragment> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends XML> FragmentList<F> query(String query) throws XBRLException {
         query = query + this.getURIFilteringQueryClause();
         XPathResult result = runQuery(query);
 		FragmentList<F> fragments = new FragmentListImpl<F>();

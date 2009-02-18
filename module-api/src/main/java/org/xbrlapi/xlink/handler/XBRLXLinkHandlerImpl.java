@@ -415,7 +415,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
         String index = getLoader().getNextFragmentId();
         if (index == null) throw new XBRLException(getLoader().getDocumentURI() + ": The fragment index MUST not be null.");
         if (index.equals("")) throw new XBRLException(getLoader().getDocumentURI() + ": The fragment index MUST not be the empty string.");
-        fragment.setFragmentIndex(index);
+        fragment.setIndex(index);
         if (attrs.getValue("id") != null) {
             fragment.appendID(attrs.getValue("id"));
             this.getElementState().setId(attrs.getValue("id"));

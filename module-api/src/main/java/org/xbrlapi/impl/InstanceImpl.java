@@ -71,7 +71,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getContext(String)
      */
     public Context getContext(String id) throws XBRLException {
-    	String xpath = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ContextImpl' and @parentIndex='" + getFragmentIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@id='" + id + "']";
+    	String xpath = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ContextImpl' and @parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@id='" + id + "']";
     	FragmentList<Context> list = getStore().<Context>query(xpath);
     	if (list.getLength() == 0) throw new XBRLException("The instance does not contain a context with id: " + id);
     	if (list.getLength() > 1) throw new XBRLException("The instance contains more than one context with id: " + id);
@@ -100,7 +100,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getUnit(String)
      */
     public Unit getUnit(String id) throws XBRLException {
-    	FragmentList<Unit> list = getStore().query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.UnitImpl' and @parentIndex='" + this.getFragmentIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@id='" + id + "']");
+    	FragmentList<Unit> list = getStore().query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.UnitImpl' and @parentIndex='" + this.getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@id='" + id + "']");
     	if (list.getLength() == 0) throw new XBRLException("The instance does not contain a unit with id: " + id);
     	if (list.getLength() > 1) throw new XBRLException("The instance contains more than one unit with id: " + id);
     	return list.getFragment(0);
@@ -127,14 +127,14 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getFacts()
      */
     public FragmentList<Fact> getFacts() throws XBRLException {
-    	return getStore().<Fact>query("/*[@parentIndex='" + this.getFragmentIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
+    	return getStore().<Fact>query("/*[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
     }
     
     /**
      * @see org.xbrlapi.Instance#getItems()
      */
     public FragmentList<Item> getItems() throws XBRLException {
-        return getStore().<Item>query("/*[@parentIndex='" + this.getFragmentIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl')]");
+        return getStore().<Item>query("/*[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl')]");
     }
     
     

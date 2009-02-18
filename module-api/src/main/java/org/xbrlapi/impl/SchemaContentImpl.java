@@ -1,5 +1,8 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.Schema;
 import org.xbrlapi.SchemaContent;
@@ -27,13 +30,17 @@ public class SchemaContentImpl extends FragmentImpl implements SchemaContent {
      * or null if no targetNamespace attribute is defined for the containing
      * schema fragment.
      * @throws XBRLException
-     * @see org.xbrlapi.SchemaContent#getTargetNamespaceURI()
+     * @see org.xbrlapi.SchemaContent#getTargetNamespace()
      */
-    public String getTargetNamespaceURI() throws XBRLException {
+    public URI getTargetNamespace() throws XBRLException {
     	Schema s = getSchema();
     	Element e = s.getDataRootElement();
     	if (e.hasAttribute("targetNamespace")) {
-    		return e.getAttribute("targetNamespace");
+    		try {
+    		    return new URI(e.getAttribute("targetNamespace"));
+    		} catch (URISyntaxException exception) {
+    		    throw new XBRLException("The target namespace is not a valid URI.",exception);
+    		}
     	}
     	return null;
     }

@@ -98,8 +98,8 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
         // Find unique labels
         HashMap<String,LabelResource> map = new HashMap<String,LabelResource>();
         for (LabelResource label: labels) {
-            if (!map.containsKey(label.getFragmentIndex())) {
-                map.put(label.getFragmentIndex(), label);
+            if (!map.containsKey(label.getIndex())) {
+                map.put(label.getIndex(), label);
             }
         }
         

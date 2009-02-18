@@ -35,8 +35,8 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
          String query = "/*[*/xsd:element/@name='" + sgName + "']";
          FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
          for (ElementDeclaration declaration: declarations) {
-             if (declaration.getTargetNamespaceURI().equals(sgNS)) {
-                 if (declaration.getName().equals("item") && declaration.getTargetNamespaceURI().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+             if (declaration.getTargetNamespace().equals(sgNS)) {
+                 if (declaration.getName().equals("item") && declaration.getTargetNamespace().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
                      return true;
                  }
                  try {
@@ -59,8 +59,8 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
           String query = "/*[*/xsd:element/@name='" + sgName + "']";
           FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
           for (ElementDeclaration declaration: declarations) {
-              if (declaration.getTargetNamespaceURI().equals(sgNS)) {
-                  if (declaration.getName().equals("tuple") && declaration.getTargetNamespaceURI().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+              if (declaration.getTargetNamespace().equals(sgNS)) {
+                  if (declaration.getName().equals("tuple") && declaration.getTargetNamespace().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
                       return true;
                   }
                   try {

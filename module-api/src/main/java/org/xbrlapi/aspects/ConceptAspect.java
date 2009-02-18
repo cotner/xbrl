@@ -54,7 +54,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
                 return getMapId(value);
             }
             Concept f = ((Concept) value.getFragment());
-            String id = f.getTargetNamespaceURI() + ": " + f.getName();
+            String id = f.getTargetNamespace() + ": " + f.getName();
             setMapId(value,id);
             return id;
         }
@@ -136,7 +136,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
      * @see Aspect#getFragmentKey(Fact)
      */
     public String getFragmentKey(Fact fact) throws XBRLException {
-        return fact.getNamespaceURI() + fact.getLocalname();
+        return fact.getNamespace() + fact.getLocalname();
     }
 
 }

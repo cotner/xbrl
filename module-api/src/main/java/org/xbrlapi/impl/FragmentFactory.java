@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import org.w3c.dom.Element;
-import org.xbrlapi.Fragment;
+import org.xbrlapi.XML;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -50,7 +50,7 @@ public class FragmentFactory<F> {
 	    * @throws XBRLException if the class cannot be loaded.
 	    */
 		@SuppressWarnings("unchecked")
-	    public static Fragment newFragment(Store store, Element root) throws XBRLException {
+	    public static <F extends XML> F newFragment(Store store, Element root) throws XBRLException {
 			try {
 				
 				if (root == null) throw new XBRLException("The data XML is null.");
@@ -62,11 +62,11 @@ public class FragmentFactory<F> {
 		    	Class fragmentClass = getClass(className);
 
 	        	Constructor constructor = fragmentClass.getConstructor();
-		    	Fragment fragment = (Fragment) constructor.newInstance();
+		    	XML fragment = (XML) constructor.newInstance();
 	            fragment.setStore(store);
 	            fragment.setResource(root);
-	            fragment.setFragmentIndex(root.getAttribute("index"));
-	            return fragment;
+	            fragment.setIndex(root.getAttribute("index"));
+	            return (F) fragment;
 	            
 	        } catch (InvocationTargetException e) {
 	            throw new XBRLException("Failed to instantiate the correct type of fragment because the constructor could not be invoked.",e);

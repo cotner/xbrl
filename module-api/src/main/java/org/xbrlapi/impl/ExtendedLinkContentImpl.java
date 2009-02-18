@@ -18,7 +18,7 @@ public class ExtendedLinkContentImpl extends XlinkImpl implements ExtendedLinkCo
      */
     public ExtendedLink getExtendedLink() throws XBRLException {
     	ExtendedLink link = (ExtendedLink) this.getAncestorOrSelf("org.xbrlapi.impl.ExtendedLinkImpl");
-    	logger.debug("The element is in extended link " + link.getFragmentIndex());
+    	logger.debug("The element is in extended link " + link.getIndex());
     	return link;
     }
 

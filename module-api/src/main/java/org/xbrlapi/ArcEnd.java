@@ -17,8 +17,8 @@ public interface ArcEnd extends ExtendedLinkContent {
     
     /**
      * Get the xlink:role attribute value.
-     * @return the value of the id attribute or null if no
-     * such attribute exists.
+     * @return the value of the XLink role attribute
+     * on the ArcEnd fragment or null if no such attribute exists.
      * @throws XBRLException
      */
     public String getRole() throws XBRLException;

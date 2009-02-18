@@ -7,7 +7,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.impl.MockFragmentImpl;
+import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -88,7 +88,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
                 return matchURI;
             } 
 
-            Fragment match = new MockFragmentImpl(signature);
+            Fragment match = new MockImpl(signature);
             HashMap<String,String> attr = new HashMap<String,String>();
             attr.put("uri",uri.toString());
             match.setMetaAttribute("uri",uri.toString());

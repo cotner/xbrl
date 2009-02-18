@@ -46,7 +46,7 @@ public class BaseAspectValueTransformer implements AspectValueTransformer {
     }    
     
     public String getIdentifier(AspectValue value) throws XBRLException {
-        return value.getFragment().getFragmentIndex();
+        return value.getFragment().getIndex();
     }
     
     public String getLabel(AspectValue value) throws XBRLException {

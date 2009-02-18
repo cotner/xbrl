@@ -440,7 +440,7 @@ public class LoaderImpl implements Loader {
         if (children != null) { 
             Fragment parent = getFragment();
             if (parent == null) throw new XBRLException("The parent fragment is missing.");
-            String parentIndex = parent.getFragmentIndex();
+            String parentIndex = parent.getIndex();
             if (parentIndex == null) throw new XBRLException("The parent index is null.");
             fragment.setParentIndex(parentIndex);
             fragment.setSequenceToParentElement(children);

@@ -305,7 +305,7 @@ abstract public class BaseAspect implements Aspect {
      * @see Aspect#getFragmentKey(Fact)
      */
     public String getFragmentKey(Fact fact) throws XBRLException {
-        return fact.getFragmentIndex();
+        return fact.getIndex();
     }
  
     /**

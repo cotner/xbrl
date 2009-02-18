@@ -168,16 +168,16 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     		ExtendedLink link = links.getFragment(i);
     		FragmentList<Arc> arcs = link.getArcs();
     		for (Arc arc: arcs) {
-    			if (arc.getNamespaceURI().equals(arcNamespace))
+    			if (arc.getNamespace().equals(arcNamespace))
     				if (arc.getLocalname().equals(arcName))
     					if (arc.getArcrole().equals(arcRole)) {
     			    		FragmentList<ArcEnd> sources = arc.getSourceFragments();
     						FragmentList<ArcEnd> targets = arc.getTargetFragments();
     						for (int k=0; k<sources.getLength(); k++) {
-    							sourceIds.put(sources.getFragment(k).getFragmentIndex(),"");
+    							sourceIds.put(sources.getFragment(k).getIndex(),"");
     						}
     						for (int k=0; k<sources.getLength(); k++) {
-    							targetIds.put(targets.getFragment(k).getFragmentIndex(),"");
+    							targetIds.put(targets.getFragment(k).getIndex(),"");
     						}
     					}
     		}
@@ -221,10 +221,10 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
 		    		FragmentList<ArcEnd> sources = arc.getSourceFragments();
 					FragmentList<ArcEnd> targets = arc.getTargetFragments();
 					for (int k=0; k<sources.getLength(); k++) {
-						sourceIds.put(sources.getFragment(k).getFragmentIndex(),"");
+						sourceIds.put(sources.getFragment(k).getIndex(),"");
 					}
 					for (int k=0; k<sources.getLength(); k++) {
-						targetIds.put(targets.getFragment(k).getFragmentIndex(),"");
+						targetIds.put(targets.getFragment(k).getIndex(),"");
 					}
 				}
     		}
@@ -232,11 +232,9 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	
     	// Get the root resources in the network
     	FragmentList<Fragment> roots = new FragmentListImpl<Fragment>();
-    	Iterator<String> iterator = sourceIds.keySet().iterator();
-    	while (iterator.hasNext()) {
-    		String id = iterator.next();
+    	for (String id: sourceIds.keySet()) {
     		if (! targetIds.containsKey(id)) {
-    			roots.addFragment(this.getFragment(id));
+    			roots.addFragment(this.<Fragment>getFragment(id));
     		}
     	}
     	return roots;
@@ -255,7 +253,7 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	FragmentList<SchemaDeclaration> candidates = this.<SchemaDeclaration>query("/*[*/xsd:element[@name='" + name + "']]");
     	FragmentList<Concept> matches = new FragmentListImpl<Concept>();
     	for (SchemaDeclaration candidate: candidates) {
-    		if (candidate.getTargetNamespaceURI().equals(namespace)) {
+    		if (candidate.getTargetNamespace().equals(namespace)) {
     		    try {
                     matches.addFragment((Concept) candidate);
     		    } catch (Exception e) {
@@ -325,7 +323,7 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     	for (Arc arc: arcs) {
     		if (! links.containsKey(arc.getParentIndex())) {
     			ExtendedLink link = arc.getExtendedLink();
-    			links.put(link.getFragmentIndex(),link);
+    			links.put(link.getIndex(),link);
     		}
     	}
     	
@@ -477,15 +475,15 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
      * @throws XBRLException
      */
     private Networks augmentNetworksForFragment(Fragment fragment, String arcrole, Networks networks) throws XBRLException {
-        if (processedFragments.containsKey(fragment.getFragmentIndex())) {
+        if (processedFragments.containsKey(fragment.getIndex())) {
             return networks;
         }
         for (Relationship relationship: fragment.getRelationshipsToWithArcrole(arcrole)) {
             networks.addRelationship(relationship);
         }
         for (Network network: networks.getNetworks(arcrole)) {
-            List<Relationship> activeRelationships = network.getActiveRelationshipsTo(fragment.getFragmentIndex());
-            logger.debug(fragment.getFragmentIndex() + " has " + activeRelationships.size() + " parent fragments.");
+            List<Relationship> activeRelationships = network.getActiveRelationshipsTo(fragment.getIndex());
+            logger.debug(fragment.getIndex() + " has " + activeRelationships.size() + " parent fragments.");
             for (Relationship activeRelationship: activeRelationships) {
                 Fragment source = activeRelationship.getSource();
                 networks = augmentNetworksForFragment(source,arcrole,networks);

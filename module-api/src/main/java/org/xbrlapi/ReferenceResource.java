@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -19,11 +21,11 @@ public interface ReferenceResource extends MixedContentResource {
      * Get a specific reference part from a reference.
      * Returns null if no such reference part exists.
      * 
-     * @param namespaceURI The namespace in which the reference part has been defined
-     * @param localName The local name of the reference part
+     * @param namespace The namespace in which the reference part has been defined
+     * @param localname The local name of the reference part
      * @throws XBRLException
      */
-    public ReferencePart getReferencePart(String namespaceURI, String localName) throws XBRLException;
+    public ReferencePart getReferencePart(URI namespace, String localname) throws XBRLException;
     
 
     

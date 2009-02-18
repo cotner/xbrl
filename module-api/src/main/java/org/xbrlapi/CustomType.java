@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -48,15 +50,11 @@ public interface CustomType extends Fragment {
     /**
      * Returns true only if the arcrole can be used on the specified element
      *
-     * @param namespaceURI The namespace of the element being tested for
+     * @param namespace The namespace of the element being tested for
      * @param localname The local name of the element being tested for
      * @throws XBRLException
      */
-    public boolean isUsedOn(String namespaceURI, String localname) throws XBRLException;
-    
-
-
-
+    public boolean isUsedOn(URI namespace, String localname) throws XBRLException;
     
 	/**
 	 * @return the list of usedOn child fragments.

@@ -79,7 +79,7 @@ public class TreeIterator implements Iterator<Fragment> {
         try {
 
             if (root != null) {
-                List<Relationship> relationships = network.getActiveRelationshipsFrom(root.getFragmentIndex());
+                List<Relationship> relationships = network.getActiveRelationshipsFrom(root.getIndex());
                 if (! relationships.isEmpty()) state.add(relationships);
                 Fragment next = root;
                 root = null;

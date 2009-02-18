@@ -162,7 +162,8 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
 
         // Add the necessary xmlns namespace declarations to the fragment root.
         try {
-            if (getLoader().getFragment().isNewFragment()) { // the element being started is the root of a new fragment.
+            // if the element being started is the root of a new fragment.
+            if (getLoader().getFragment().isNewFragment()) { 
                 Fragment f = getLoader().getFragment();
                 for (String key: inheritedMap.keySet()) {
                     f.setMetaAttribute(inheritedMap.get(key),key);

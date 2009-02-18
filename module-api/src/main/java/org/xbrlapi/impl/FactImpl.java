@@ -50,7 +50,7 @@ public class FactImpl extends FragmentImpl implements Fact {
 		
 		FragmentList<Concept> candidates = getStore().<Concept>query("/*[@type='org.xbrlapi.impl.ConceptImpl' and */*/@name='" + this.getLocalname() + "']");
 		for (Concept concept: candidates) {
-			if (this.getNamespaceURI().equals(concept.getTargetNamespaceURI())) 
+			if (this.getNamespace().equals(concept.getTargetNamespace())) 
 				return concept;
 		}
 		getStore().serialize(this.getMetadataRootElement());

@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -22,7 +24,7 @@ public interface SchemaContent extends Fragment {
      * schema fragment.
      * @throws XBRLException
      */
-    public String getTargetNamespaceURI() throws XBRLException;
+    public URI getTargetNamespace() throws XBRLException;
     
     
 

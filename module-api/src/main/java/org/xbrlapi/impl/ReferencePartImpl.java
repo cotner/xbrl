@@ -1,9 +1,10 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.ReferencePart;
 import org.xbrlapi.ReferencePartDeclaration;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -30,11 +31,11 @@ public class ReferencePartImpl extends FragmentImpl implements ReferencePart {
      */
     public ReferencePartDeclaration getDeclaration() throws XBRLException {
     	String name = this.getLocalname();
-    	String namespace = this.getNamespaceURI();
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ReferencePartDeclarationImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/xsd:element/@name='" + name + "']";
+    	URI namespace = this.getNamespace();
+    	String query = "/*[@type='org.xbrlapi.impl.ReferencePartDeclarationImpl' and */xsd:element/@name='" + name + "']";
     	FragmentList<ReferencePartDeclaration> declarations = getStore().<ReferencePartDeclaration>query(query);
     	for (ReferencePartDeclaration declaration: declarations) {
-    		if (declaration.getTargetNamespaceURI().equals(namespace)) {
+    		if (declaration.getTargetNamespace().equals(namespace)) {
     			return declaration;
     		}
     	}

@@ -118,7 +118,7 @@ public class RelationshipImpl implements Relationship {
 	public String toString() {
 		return 
 			"The relationship runs from fragment " + 
-			source.getFragmentIndex() + " to fragment " + target.getFragmentIndex() + " using arc " + arc.getFragmentIndex();
+			source.getIndex() + " to fragment " + target.getIndex() + " using arc " + arc.getIndex();
 	}
 	
 	/**
@@ -171,7 +171,7 @@ public class RelationshipImpl implements Relationship {
 	 */
 	public String getSourceIndex() throws XBRLException {
 		Fragment s = getSource();
-		return s.getFragmentIndex();
+		return s.getIndex();
 	}
 	
 	/**
@@ -179,21 +179,21 @@ public class RelationshipImpl implements Relationship {
 	 */
 	public String getTargetIndex() throws XBRLException {
 		Fragment t = getTarget();
-		return t.getFragmentIndex();
+		return t.getIndex();
 	}
 
 	/**
 	 * @see org.xbrlapi.networks.Relationship#getLinkIndex()
 	 */
 	public String getLinkIndex() throws XBRLException {
-		return getLink().getFragmentIndex();
+		return getLink().getIndex();
 	}
 
 	/**
 	 * @see org.xbrlapi.networks.Relationship#getArcIndex()
 	 */
 	public String getArcIndex() throws XBRLException {
-		return getArc().getFragmentIndex();
+		return getArc().getIndex();
 	}
 	
 	/**
@@ -268,14 +268,14 @@ public class RelationshipImpl implements Relationship {
 
 		Fragment os = other.getSource();
 		Fragment ts = this.getSource();
-		if (! ts.getFragmentIndex().equals(
-				os.getFragmentIndex())
+		if (! ts.getIndex().equals(
+				os.getIndex())
 				) return false;
 
 		Fragment tt = this.getTarget();
 		Fragment ot = other.getTarget();
-		if (! tt.getFragmentIndex().equals(
-				ot.getFragmentIndex())
+		if (! tt.getIndex().equals(
+				ot.getIndex())
 				) return false;
 
 		if (! this.getArc().semanticEquals(other.getArc())) return false;

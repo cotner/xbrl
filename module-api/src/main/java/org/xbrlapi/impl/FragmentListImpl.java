@@ -3,26 +3,22 @@ package org.xbrlapi.impl;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.Fragment;
+import org.xbrlapi.XML;
 import org.xbrlapi.FragmentList;
-import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class FragmentListImpl<F extends Fragment> 
-extends ArrayList<F> 
-implements FragmentList<F> {
+public class FragmentListImpl<F extends XML> extends ArrayList<F> implements FragmentList<F> {
 	
-	protected static Logger logger = Logger.getLogger(Loader.class);
+	protected static Logger logger = Logger.getLogger(FragmentListImpl.class);
 
     public FragmentListImpl() {
         super();
     }
-	
-	
+
 	/**
 	 * @param fragment The fragment to include in the list of fragments.
 	 */

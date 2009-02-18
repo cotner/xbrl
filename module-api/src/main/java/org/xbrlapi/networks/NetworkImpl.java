@@ -162,7 +162,7 @@ public class NetworkImpl implements Network {
 	 */
 	private void addFragment(Fragment fragment) {
 		if (store == null) store = fragment.getStore();
-		fragments.put(fragment.getFragmentIndex(),fragment);
+		fragments.put(fragment.getIndex(),fragment);
 	}
 	
 	/**
@@ -192,7 +192,7 @@ public class NetworkImpl implements Network {
 
         String semanticKey = relationship.getSemanticKey();
         Fragment source = relationship.getSource();
-        String sourceIndex = source.getFragmentIndex();
+        String sourceIndex = source.getIndex();
 		
 		// Make sure the relationship is not already in the network.
 		String targetsSemanticKey = semanticKey + sourceIndex;
@@ -201,7 +201,7 @@ public class NetworkImpl implements Network {
 		}
 
         Fragment target = relationship.getTarget();
-        String targetIndex = target.getFragmentIndex();
+        String targetIndex = target.getIndex();
         String sourcesSemanticKey = semanticKey + targetIndex;
 
         // Inform the relationship of the network it is in
@@ -212,11 +212,11 @@ public class NetworkImpl implements Network {
 		
 		// Store the fragments in the relationship
 		Arc arc = relationship.getArc();
-		String arcIndex = arc.getFragmentIndex();
+		String arcIndex = arc.getIndex();
 		if (! fragments.containsKey(arcIndex)) fragments.put(arcIndex,arc);
 		
 		ExtendedLink link = relationship.getLink();
-		String linkIndex = arc.getFragmentIndex();
+		String linkIndex = arc.getIndex();
 		if (! fragments.containsKey(linkIndex)) fragments.put(linkIndex,link);
 		
 		HashMap<String,EquivalentRelationships> fragmentRelationships = null;

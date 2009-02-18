@@ -11,6 +11,8 @@ import org.w3c.dom.Element;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Language;
+import org.xbrlapi.Stub;
+import org.xbrlapi.XML;
 import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.XBRLException;
@@ -46,7 +48,7 @@ public interface Store {
 	 * @param fragment The fragment to be added to the store.
 	 * @throws XBRLException if the fragment cannot be added to the store.
 	 */
-    public void storeFragment(Fragment fragment) throws XBRLException;    
+    public void storeFragment(XML fragment) throws XBRLException;    
 
     /**
      * Test if a store contains a specific fragment, as identified by
@@ -66,7 +68,7 @@ public interface Store {
      * @return The fragment corresponding to the specified index.
      * @throws XBRLException if the fragment cannot be retrieved.
      */
-    public Fragment getFragment(String index) throws XBRLException;
+    public <F extends XML> F getFragment(String index) throws XBRLException;
 
 	/**
 	 * Remove a fragment from the underlying data structure.
@@ -76,7 +78,7 @@ public interface Store {
 	 * @param index The index of the fragment to be removed from the DTS store.
 	 * @throws XBRLException if the fragment cannot be removed from the store.
 	 */
-	public void removeFragment(String index) throws XBRLException;
+	public void remove(String index) throws XBRLException;
 	
     /**
      * Remove a fragment from the underlying data structure.
@@ -85,7 +87,7 @@ public interface Store {
      * @param fragment The fragment to remove.
      * @throws XBRLException if the fragment cannot be removed from the store.
      */
-    public void removeFragment(Fragment fragment) throws XBRLException;	
+    public void remove(XML fragment) throws XBRLException;	
 	
 	/**
 	 * @param namespace The namespace to bind a prefix to for querying
@@ -93,9 +95,7 @@ public interface Store {
 	 * @throws XBRLException if either argument is null.
 	 */
     public void setNamespaceBinding(String namespace, String prefix) throws XBRLException;
-	
 
-    
     /**
      * This deletion method does not ensure that all other documents that
      * link to the document being deleted are also deleted.  This can cause
@@ -104,7 +104,6 @@ public interface Store {
      * @throws XBRLException
      */
     public void deleteDocument(URI uri) throws XBRLException;
-    
 
 	 /**
 	  * This deletion method ensures that all related documents
@@ -113,12 +112,6 @@ public interface Store {
 	  * @throws XBRLException
 	  */
     public void deleteRelatedDocuments(URI uri) throws XBRLException;
-    
-
-    
-
-
-
 
 	/**
 	 * Run a query against the collection of all fragments in the store.
@@ -128,7 +121,7 @@ public interface Store {
 	 * exist.
 	 * @throws XBRLException if the query cannot be executed.
 	 */
-	public <F extends Fragment> FragmentList<F> query(String query) throws XBRLException;
+	public <F extends XML> FragmentList<F> query(String query) throws XBRLException;
 
     /**
      * Run a query against the collection of all fragments in the store.
@@ -160,9 +153,6 @@ public interface Store {
      * query result is not a single string.
      */
     public String queryForString(String query) throws XBRLException;
-    
-	
-	
 
     /**
      * Serialize the specified XML DOM to the specified destination.
@@ -206,7 +196,7 @@ public interface Store {
      * @param fragment The fragment to be serialised.
      * @throws XBRLException
      */
-    public void serialize(Fragment fragment) throws XBRLException;
+    public void serialize(XML fragment) throws XBRLException;
     
     /**
      * Serialize the specified XML DOM node.
@@ -311,9 +301,7 @@ public interface Store {
      * @throws XBRLException if the document cannot be constructed as a DOM.
      */
     public boolean hasDocument(URI uri) throws XBRLException;
-    
 
-    
     /**
      * Stores the state of the document discovery process.
      * @param documents The map from URIs of the documents 
@@ -327,7 +315,7 @@ public interface Store {
      * @return the number of fragments in the data store.
      * @throws XBRLException if the number of fragments cannot be determined.
      */
-    public int getFragmentCount() throws XBRLException;
+    public int getSize() throws XBRLException;
     
     /**
      * @return the list of URIs of the documents remaining to be analysed.
@@ -340,14 +328,14 @@ public interface Store {
      * document that needs to be added to the data store).
      * @throws XBRLException
      */
-    public FragmentList<Fragment> getStubs() throws XBRLException;
+    public FragmentList<Stub> getStubs() throws XBRLException;
 
     /**
      * @param uri The string value of the URI of the document to get the stub for.
      * @return the stub fragment or null if none exists.
      * @throws XBRLException if there is more than one stub.
      */
-    public Fragment getStub(URI uri) throws XBRLException;
+    public Stub getStub(URI uri) throws XBRLException;
     
     /**
      * @param document The document to store a stub for.
@@ -376,7 +364,7 @@ public interface Store {
      * @return a list of fragments with the given fragment type.
      * @throws XBRLException
      */
-    public <F extends Fragment> FragmentList<F> getFragments(String interfaceName) throws XBRLException;
+    public <F extends XML> FragmentList<F> getFragments(String interfaceName) throws XBRLException;
     
     /**
      * @param interfaceName The name of the interface.  EG: If a list of
@@ -386,12 +374,13 @@ public interface Store {
      *  a request for an Arc would not return all ReferenceArcs as well as other
      *  types of arcs.
      *  @param parentIndex The index of the parent fragment.
-     * @return a list of fragments with the given fragment type and with the given parent fragment.
+     * @return a list of fragments with the given fragment type 
+     * and with the given parent fragment.  The list is empty if there
+     * are not child fragments.
      * @throws XBRLException
      */
     public <F extends Fragment> FragmentList<F> getChildFragments(String interfaceName, String parentIndex) throws XBRLException;
-    
-    
+
     /**
      * @param linkrole The linkrole of the networks.
      * @param arcrole The arcrole of the networks.
@@ -408,8 +397,7 @@ public interface Store {
      * @throws XBRLException
      */
     public Networks getNetworks(String arcRole) throws XBRLException;  
-    
-    
+
     /**
      * Utility method to return a list of fragments in a data store
      * that have a type corresponding to the specified fragment interface name and
@@ -426,7 +414,7 @@ public interface Store {
      * @see org.xbrlapi.impl.ArcImpl
      */
     public <F extends Fragment> FragmentList<F> getFragmentsFromDocument(URI uri, String interfaceName) throws XBRLException;
-    
+
     /**
      * @param <F> The fragment extension class
      * @param uri The URI of the document to get the root fragment for.
@@ -436,7 +424,6 @@ public interface Store {
      */
     public <F extends Fragment> F getRootFragmentForDocument(URI uri) throws XBRLException;
 
-    
     /**
      * @param <F> The fragment extension class
      * @return the list of root fragments of the documents in the store.

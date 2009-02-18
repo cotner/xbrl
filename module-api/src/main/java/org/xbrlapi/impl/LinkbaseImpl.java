@@ -61,7 +61,7 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     public FragmentList<SimpleLink> getArcroleRefs() throws XBRLException {
     	FragmentList<SimpleLink> links = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
     	for (SimpleLink link: links) {
-            if (! (link.getNamespaceURI().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("arcroleRef")))
+            if (! (link.getNamespace().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("arcroleRef")))
                 links.removeFragment(link);
     	}
     	return links;
@@ -113,7 +113,7 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     public FragmentList<SimpleLink> getRoleRefs() throws XBRLException {
     	FragmentList<SimpleLink> links = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
     	for (SimpleLink link: links) {
-    		if (! (link.getNamespaceURI().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("roleRef")))
+    		if (! (link.getNamespace().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("roleRef")))
     			links.removeFragment(link);
     	}
     	return links;
@@ -147,7 +147,7 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
      * @see org.xbrlapi.Linkbase#getExtendedLinks()
      */
     public FragmentList<ExtendedLink> getExtendedLinks() throws XBRLException {
-    	String xpath = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[@parentIndex='" + getFragmentIndex() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:type='extended']";
+    	String xpath = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[@parentIndex='" + getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:type='extended']";
     	FragmentList<ExtendedLink> fragments = getStore().<ExtendedLink>query(xpath);
     	if (fragments.getLength() == 0) return null;
     	return fragments;

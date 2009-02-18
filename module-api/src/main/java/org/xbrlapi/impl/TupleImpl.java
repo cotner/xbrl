@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+
 import org.xbrlapi.Fact;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Tuple;
@@ -19,7 +21,7 @@ public class TupleImpl extends FactImpl implements Tuple {
 	 * @see org.xbrlapi.Tuple#getChildFacts()
 	 */
 	public FragmentList<Fact> getChildFacts() throws XBRLException {
-    	return getStore().query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getFragmentIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
+    	return getStore().query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
 	}
 
 	/**
@@ -28,11 +30,11 @@ public class TupleImpl extends FactImpl implements Tuple {
 	 * @param name The local name of the desired facts
 	 * @return the specified facts.
 	 * @throws XBRLException
-	 * @see org.xbrlapi.Tuple#getChildFacts(String, String)
+	 * @see org.xbrlapi.Tuple#getChildFacts(URI, String)
 	 */
-	public FragmentList<Fact> getChildFacts(String namespace, String name) throws XBRLException {
+	public FragmentList<Fact> getChildFacts(URI namespace, String name) throws XBRLException {
 	    // TODO Improve query efficiency.
-		String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getFragmentIndex() + "' and namespace-uri("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+namespace+"' and local-name("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+name+"']";
+		String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and namespace-uri("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+namespace+"' and local-name("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+name+"']";
 		return getStore().query(query);
 	}
 	
@@ -43,10 +45,10 @@ public class TupleImpl extends FactImpl implements Tuple {
 	 * @param contextRef The value of the context reference for the required facts.
 	 * @return the specified facts.
 	 * @throws XBRLException
-	 * @see org.xbrlapi.Tuple#getChildFacts(String, String, String)
+	 * @see org.xbrlapi.Tuple#getChildFacts(URI, String, String)
 	 */
-	public FragmentList<Fact> getChildFacts(String namespace, String name, String contextRef) throws XBRLException {
-		String query = "/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@parentIndex='" + this.getFragmentIndex() + "' and " + Constants.XBRLAPIPrefix + ":" +  "data/*[namespace-uri()='" + namespace + "' and local-name()='" + name + "'  and @contextRef='" + contextRef + "']]";
+	public FragmentList<Fact> getChildFacts(URI namespace, String name, String contextRef) throws XBRLException {
+		String query = "/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@parentIndex='" + this.getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" +  "data/*[namespace-uri()='" + namespace + "' and local-name()='" + name + "'  and @contextRef='" + contextRef + "']]";
 		return getStore().query(query);
 	}
 	
