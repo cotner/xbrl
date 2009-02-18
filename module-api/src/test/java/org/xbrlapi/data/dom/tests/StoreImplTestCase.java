@@ -36,7 +36,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = loader.getNextFragmentId();
 			MockImpl d = null;
 			d = new MockImpl(index);
-			store.storeFragment(d);
+			store.persist(d);
 			Fragment f = null;
 			f = store.getFragment(index);
 			assertNotNull(f);
@@ -49,7 +49,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testRemoveFragmentUsingIndex() {
 		try {
 			String index = "1";
-			store.storeFragment(new MockImpl(index));
+			store.persist(new MockImpl(index));
 			assertTrue(store.hasFragment(index));
 			store.remove(index);
 			assertFalse(store.hasFragment(index));
@@ -61,7 +61,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testRemoveFragmentUsingFragment() {
 		try {
 			String index = "1";
-			store.storeFragment(new MockImpl(index));
+			store.persist(new MockImpl(index));
 			assertTrue(store.hasFragment(index));
 			MockImpl document = (MockImpl) store.getFragment(index);
 			assertNotNull(document);
@@ -75,7 +75,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testQueryData() throws Exception {
 	    Mock fragment = new MockImpl("WooHoo");
 	    fragment.appendDataElement(Constants.XBRLAPINamespace,"info",Constants.XBRLAPIPrefix + ":info");
-	    store.storeFragment(fragment);
+	    store.persist(fragment);
 		String index = "1";
 		store.serialize(fragment);
 		FragmentList<Fragment> fragments = null;

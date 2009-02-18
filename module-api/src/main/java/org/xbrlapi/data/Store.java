@@ -48,7 +48,7 @@ public interface Store {
 	 * @param fragment The fragment to be added to the store.
 	 * @throws XBRLException if the fragment cannot be added to the store.
 	 */
-    public void storeFragment(XML fragment) throws XBRLException;    
+    public void persist(XML fragment) throws XBRLException;    
 
     /**
      * Test if a store contains a specific fragment, as identified by
@@ -309,7 +309,7 @@ public interface Store {
      * the document has not yet been discovered.
      * @throws XBRLException
      */
-    public void storeLoaderState(Map<URI,String> documents) throws XBRLException;    
+    public void persistLoaderState(Map<URI,String> documents) throws XBRLException;    
 
     /**
      * @return the number of fragments in the data store.
@@ -342,7 +342,7 @@ public interface Store {
      * @param reason The reason the document has not been stored.
      * @throws XBRLException
      */
-    public void storeStub(URI document, String reason) throws XBRLException;    
+    public void persistStub(URI document, String reason) throws XBRLException;    
     
     /**
      * @param uri The URI of the document for which 

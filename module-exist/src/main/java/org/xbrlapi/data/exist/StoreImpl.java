@@ -188,7 +188,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}	
 	
     /**
-     * @see org.xbrlapi.data.Store#storeFragment(XML)
+     * @see org.xbrlapi.data.Store#persist(XML)
      */
     public synchronized int getSize() throws XBRLException {
         try {
@@ -206,7 +206,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @throws XBRLException if the fragment cannot be added to the store 
 	 * (eg: because one with the same index is already in the store).
 	 */
-    public synchronized void storeFragment(XML fragment) throws XBRLException {
+    public synchronized void persist(XML fragment) throws XBRLException {
 
 		if (fragment == null) throw new XBRLException("The fragment is null so it cannot be added.");
 		String index = fragment.getIndex();

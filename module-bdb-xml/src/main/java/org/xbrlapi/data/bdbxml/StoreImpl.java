@@ -91,7 +91,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     }
 
     /**
-     * @see org.xbrlapi.data.Store#storeFragment(XML)
+     * @see org.xbrlapi.data.Store#persist(XML)
      */
     public synchronized int getSize() throws XBRLException {
         try {
@@ -320,9 +320,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 	
 	/**
-	 * @see org.xbrlapi.data.Store#storeFragment(XML)
+	 * @see org.xbrlapi.data.Store#persist(XML)
 	 */
-    synchronized public void storeFragment(XML fragment) throws XBRLException {
+    synchronized public void persist(XML fragment) throws XBRLException {
 
 	    incrementCallCount();
         XmlUpdateContext xmlUpdateContext = null;

@@ -19,7 +19,6 @@ import org.xbrlapi.Locator;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.impl.FragmentListImpl;
-import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -27,7 +26,7 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class NetworkImpl implements Network {
 
-	protected static Logger logger = Logger.getLogger(Loader.class);	
+	protected static Logger logger = Logger.getLogger(NetworkImpl.class);	
 	
 	/**
 	 * The link role for the network.
@@ -454,6 +453,17 @@ public class NetworkImpl implements Network {
         relationships.addAll(this.relationships.values());
         return relationships;
     }
+    
+    /**
+     * @see Network#getAllActiveRelationships()
+     */
+    public List<Relationship> getAllActiveRelationships() throws XBRLException {
+        List<Relationship> relationships = new Vector<Relationship>();
+        for (String sourceIndex: this.sourceRelationships.keySet()) {
+            relationships.addAll(this.getActiveRelationshipsFrom(sourceIndex));
+        }
+        return relationships;
+    }    
     
     /**
      * @see Network#add(Network)

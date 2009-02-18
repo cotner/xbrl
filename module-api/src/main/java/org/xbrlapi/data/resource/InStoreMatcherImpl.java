@@ -93,7 +93,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
             attr.put("uri",uri.toString());
             match.setMetaAttribute("uri",uri.toString());
             match.appendMetadataElement("resource",attr);
-            getStore().storeFragment(match);
+            getStore().persist(match);
             this.matchMap.put(uri,uri);
             return uri;
             

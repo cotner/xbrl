@@ -141,7 +141,7 @@ public class XMLImpl implements XML {
      * @throws XBRLException if this fragment cannot be updated in the data store.
      */
     private void updateStore() throws XBRLException {
-        store.storeFragment(this);
+        store.persist(this);
     }
 
     /**
@@ -332,7 +332,7 @@ public class XMLImpl implements XML {
     public void updateInStore() throws XBRLException {
         Store store = this.getStore();
         if (store == null) return;
-        store.storeFragment(this);
+        store.persist(this);
     }
     
 }

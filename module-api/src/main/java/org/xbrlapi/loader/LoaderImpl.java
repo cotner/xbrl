@@ -473,7 +473,7 @@ public class LoaderImpl implements Loader {
             getStates().pop();
             childrenStack.pop();
             Fragment f = fragments.pop();
-            getStore().storeFragment(f);
+            getStore().persist(f);
             return f;
         } catch (EmptyStackException e) {
             throw new XBRLException(this.getDocumentURI() + " There are no fragments being built.  The stack of fragments is empty.",e);
@@ -892,7 +892,7 @@ public class LoaderImpl implements Loader {
             map.put(document,failures.get(document));
         }
         logger.info("Storing " + map.size() + " documents that are still to be analysed.");
-        getStore().storeLoaderState(map);
+        getStore().persistLoaderState(map);
     }
     
     private void cleanupFailedLoad(URI uri, String reason, Exception e) {

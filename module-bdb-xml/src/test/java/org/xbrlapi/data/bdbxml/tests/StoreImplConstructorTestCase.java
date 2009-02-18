@@ -38,8 +38,8 @@ public class StoreImplConstructorTestCase extends BaseTestCase {
 	public void testStoreImplConnectsToAnExistingStore() {
 
 		try {
-			store.storeFragment(new MockImpl("1"));
-			store.storeFragment(new MockImpl("2"));
+			store.persist(new MockImpl("1"));
+			store.persist(new MockImpl("2"));
 		} catch (XBRLException e) {
 			fail("The addition of fragments to the original store failed.");
 		}

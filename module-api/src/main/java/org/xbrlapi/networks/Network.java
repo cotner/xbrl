@@ -146,10 +146,17 @@ public interface Network {
 	public List<Relationship> getActiveRelationshipsTo(String index) throws XBRLException;
 	
     /**
-     * @return the list of all relationships in the network.
+     * @return the list of all relationships (active and inactive)
+     * in the network.
      * @throws XBRLException
      */
     public List<Relationship> getAllRelationships() throws XBRLException;
+    
+    /**
+     * @return the list of all active relationships in the network.
+     * @throws XBRLException
+     */
+    public List<Relationship> getAllActiveRelationships() throws XBRLException;    
 	
 
 	/**

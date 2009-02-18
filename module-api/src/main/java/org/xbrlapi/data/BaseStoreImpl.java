@@ -170,12 +170,12 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	}
 	
     /**
-     * @see org.xbrlapi.data.Store#storeLoaderState(Map)
+     * @see org.xbrlapi.data.Store#persistLoaderState(Map)
      */
-    public synchronized void storeLoaderState(Map<URI,String> documents) throws XBRLException {
+    public synchronized void persistLoaderState(Map<URI,String> documents) throws XBRLException {
         try {
             for (URI uri: documents.keySet()) {
-                storeStub(uri,documents.get(uri));
+                persistStub(uri,documents.get(uri));
             }
         } catch (XBRLException e) {
             throw new XBRLException("The loader state could not be stored.",e);
@@ -183,9 +183,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
 
     /**
-     * @see org.xbrlapi.data.Store#storeStub(URI,String)
+     * @see org.xbrlapi.data.Store#persistStub(URI,String)
      */
-    public void storeStub(URI uri, String reason) throws XBRLException {
+    public void persistStub(URI uri, String reason) throws XBRLException {
 
         deleteDocument(uri);
 
@@ -195,7 +195,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         stub.setMetaAttribute("uri",uri.toString());
         stub.setMetaAttribute("stub","");
         stub.setMetaAttribute("reason",reason);
-        storeFragment(stub);
+        persist(stub);
     }
     
     /**
