@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
 import org.xbrlapi.ExtendedLink;
@@ -104,27 +106,27 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     }
     
     /**
-     * @see org.xbrlapi.ExtendedLink#getArcsByFromLabelAndArcrole(String,String)
+     * @see org.xbrlapi.ExtendedLink#getArcsByFromLabelAndArcrole(String,URI)
      */
-    public FragmentList<Arc> getArcsByFromLabelAndArcrole(String from, String arcrole) throws XBRLException {
+    public FragmentList<Arc> getArcsByFromLabelAndArcrole(String from, URI arcrole) throws XBRLException {
         String xpath = "/*[@parentIndex='" + getIndex() + "' and */*[@xlink:from='" + from + "' and @xlink:arcrole='" + arcrole + "']]";
         FragmentList<Arc> arcs = getStore().<Arc>query(xpath);
         return arcs;
     }
     
     /**
-     * @see org.xbrlapi.ExtendedLink#getArcsByArcrole(String)
+     * @see org.xbrlapi.ExtendedLink#getArcsByArcrole(URI)
      */
-    public FragmentList<Arc> getArcsByArcrole(String arcrole) throws XBRLException {
+    public FragmentList<Arc> getArcsByArcrole(URI arcrole) throws XBRLException {
         String xpath = "/*[@parentIndex='" + getIndex() + "' and */*/@xlink:arcrole='" + arcrole + "']";
         FragmentList<Arc> arcs = getStore().<Arc>query(xpath);
         return arcs;
     }    
     
     /**
-     * @see org.xbrlapi.ExtendedLink#getArcsByToLabelAndArcrole(String,String)
+     * @see org.xbrlapi.ExtendedLink#getArcsByToLabelAndArcrole(String,URI)
      */
-    public FragmentList<Arc> getArcsByToLabelAndArcrole(String to, String arcrole) throws XBRLException {
+    public FragmentList<Arc> getArcsByToLabelAndArcrole(String to, URI arcrole) throws XBRLException {
         String xpath = "/*[@parentIndex='" + getIndex() + "' and */*[@xlink:to='" + to + "' and @xlink:arcrole='" + arcrole + "']]";
         FragmentList<Arc> arcs = getStore().<Arc>query(xpath);
         return arcs;

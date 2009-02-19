@@ -22,10 +22,9 @@ public interface CustomType extends Fragment {
 
     /**
      * Get the custom URI being defined.
-     *
      * @throws XBRLException
      */
-    public String getCustomURI() throws XBRLException;
+    public URI getCustomURI() throws XBRLException;
     
 
 

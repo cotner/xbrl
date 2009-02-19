@@ -107,7 +107,7 @@ public class Load {
             loader.discover(inputs);
             
             // Analyse the presentation networks in the supporting DTS
-            for (String linkrole: store.getLinkRoles(Constants.PresentationArcRole).keySet()) {
+            for (URI linkrole: store.getLinkRoles(Constants.PresentationArcRole())) {
                 FragmentList<Fragment> rootLocators = store.getNetworkRoots(Constants.XBRL21LinkNamespace,"presentationLink",arguments.get("linkrole"),Constants.XBRL21LinkNamespace,"presentationArc",Constants.PresentationArcRole);                            
                 for (Fragment rootLocator: rootLocators) {
                     Concept rootConcept = (Concept) ((Locator) rootLocator).getTargetFragment();
@@ -136,17 +136,17 @@ public class Load {
      * Report the information about a concept in the presentation heirarchy
      * @param indent The indent to use for reporting the fragment
      * @param fragment The fragment to report
-     * @param linkrole The linkrole of the network to use
+     * @param linkRole The linkrole of the network to use
      * @throws XBRLExceptions
      */
-    private static void reportNode(String indent, Fragment fragment, String linkrole) throws XBRLException {
+    private static void reportNode(String indent, Fragment fragment, URI linkRole) throws XBRLException {
         Concept concept = (Concept) fragment;
         System.out.println(indent + concept.getTargetNamespace() + ":" + concept.getName());
-        Networks networks = concept.getNetworksWithArcrole(Constants.PresentationArcRole); // Some fat can be trimmed here by only getting those networks with the required linkrole.
+        Networks networks = concept.getNetworksWithArcrole(Constants.PresentationArcRole()); // Some fat can be trimmed here by only getting those networks with the required linkrole.
         if (networks.getSize() > 0) {
-            FragmentList<Fragment> children = networks.getTargetFragments(concept.getIndex(),Constants.PresentationArcRole,linkrole);
+            FragmentList<Fragment> children = networks.getTargetFragments(concept.getIndex(),linkRole,Constants.PresentationArcRole());
             for (Fragment child: children) {
-                reportNode(indent + " ", child,linkrole);
+                reportNode(indent + " ", child,linkRole);
             }  
         }
     }

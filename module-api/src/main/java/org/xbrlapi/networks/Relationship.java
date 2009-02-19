@@ -1,5 +1,7 @@
 package org.xbrlapi.networks;
 
+import java.net.URI;
+
 import org.xbrlapi.Arc;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
@@ -117,14 +119,14 @@ public interface Relationship {
 	 * on the containing extended link.
 	 * @throws XBRLException
 	 */
-	public String getLinkRole() throws XBRLException;
+	public URI getLinkRole() throws XBRLException;
 	
 	/**
 	 * @return the XLink arc role value on the arc
 	 * defining the relationship.
 	 * @throws XBRLException
 	 */
-	public String getArcRole() throws XBRLException;
+	public URI getArcrole() throws XBRLException;
 	
 	/**
 	 * Use this method if the attribute on the arc has its

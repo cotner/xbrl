@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
@@ -51,16 +53,16 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
     }
 
     /**
-     * @see org.xbrlapi.ArcEnd#getArcsFromWithArcrole(String)
+     * @see org.xbrlapi.ArcEnd#getArcsFromWithArcrole(URI)
      */
-    public FragmentList<Arc> getArcsFromWithArcrole(String arcrole) throws XBRLException {
+    public FragmentList<Arc> getArcsFromWithArcrole(URI arcrole) throws XBRLException {
         return getExtendedLink().getArcsByFromLabelAndArcrole(this.getLabel(),arcrole);
     }
 
     /**
-     * @see org.xbrlapi.ArcEnd#getArcsToWithArcrole(String)
+     * @see org.xbrlapi.ArcEnd#getArcsToWithArcrole(URI)
      */
-    public FragmentList<Arc> getArcsToWithArcrole(String arcrole) throws XBRLException {
+    public FragmentList<Arc> getArcsToWithArcrole(URI arcrole) throws XBRLException {
         return getExtendedLink().getArcsByToLabelAndArcrole(this.getLabel(),arcrole);
     }
     

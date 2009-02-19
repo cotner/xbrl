@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
@@ -42,6 +44,6 @@ public interface Concept extends ElementDeclaration {
      * source or a target.
      * @throws XBRLException
      */
-    public List<String> getPresentationNetworkLinkroles() throws XBRLException;
+    public List<URI> getPresentationNetworkLinkroles() throws XBRLException;
     
  }

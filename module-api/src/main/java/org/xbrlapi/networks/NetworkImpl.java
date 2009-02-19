@@ -1,5 +1,6 @@
 package org.xbrlapi.networks;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,12 +32,12 @@ public class NetworkImpl implements Network {
 	/**
 	 * The link role for the network.
 	 */
-	private String linkRole = null;
+	private URI linkRole = null;
 	
 	/**
-	 * The arc role for the network.
+	 * The arcrole for the network.
 	 */
-	private String arcRole = null;
+	private URI arcRole = null;
 
 	/**
 	 * The data store to retrieve fragments if they are not already retrieved.
@@ -67,43 +68,43 @@ public class NetworkImpl implements Network {
 	/**
 	 * @param store The data store.
 	 * @param linkRole The link role defining the network.
-	 * @param arcRole The arc role defining the network.
+	 * @param arcrole The arc role defining the network.
 	 * @throws XBRLException if the data store is null.
 	 */
-	public NetworkImpl(Store store, String linkRole, String arcRole) throws XBRLException {
+	public NetworkImpl(Store store, URI linkRole, URI arcrole) throws XBRLException {
 		super();
 		if (store == null) throw new XBRLException("The store must not be null.");
 		setStore(store);
 		setLinkRole(linkRole);
-		setArcRole(arcRole);
+		setArcrole(arcrole);
 	}
 
 	/**
-	 * @see org.xbrlapi.networks.Network#getArcRole()
+	 * @see org.xbrlapi.networks.Network#getArcrole()
 	 */
-	public String getArcRole() {
+	public URI getArcrole() {
 		return arcRole;
 	}
 
 	/**
-	 * @see org.xbrlapi.networks.Network#setArcRole(String)
+	 * @see org.xbrlapi.networks.Network#setArcrole(URI)
 	 */
-	public void setArcRole(String arcRole) throws XBRLException {
-		 if (arcRole == null) throw new XBRLException("The network arcrole must not be set to null");
-		this.arcRole = arcRole;
+	public void setArcrole(URI arcrole) throws XBRLException {
+		 if (arcrole == null) throw new XBRLException("The network arcrole must not be set to null");
+		this.arcRole = arcrole;
 	}
 
 	/**
 	 * @see org.xbrlapi.networks.Network#getLinkRole()
 	 */
-	public String getLinkRole() {
+	public URI getLinkRole() {
 		return linkRole;
 	}
 
 	/**
-	 * @see org.xbrlapi.networks.Network#setLinkRole(String)
+	 * @see org.xbrlapi.networks.Network#setLinkRole(URI)
 	 */
-	public void setLinkRole(String linkRole) throws XBRLException {
+	public void setLinkRole(URI linkRole) throws XBRLException {
 		 if (linkRole == null) throw new XBRLException("The network link role must not be set to null");
 		this.linkRole = linkRole;
 	}
@@ -187,7 +188,7 @@ public class NetworkImpl implements Network {
 		
 		// Ensure that the relationship belongs
 		if (! getLinkRole().equals(relationship.getLinkRole())) throw new XBRLException("The network link role does not match that of the relationship.");
-		if (! getArcRole().equals(relationship.getArcRole())) throw new XBRLException("The network arc role does not match that of the relationship.");
+		if (! getArcrole().equals(relationship.getArcrole())) throw new XBRLException("The network arc role does not match that of the relationship.");
 
         String semanticKey = relationship.getSemanticKey();
         Fragment source = relationship.getSource();
@@ -362,8 +363,7 @@ public class NetworkImpl implements Network {
      * @see Network#getChildren(String)
      */
     @SuppressWarnings("unchecked")
-    public <F extends Fragment> FragmentList<F> getChildren(String index)
-            throws XBRLException {
+    public <F extends Fragment> FragmentList<F> getChildren(String index) throws XBRLException {
         FragmentList<F> children = new FragmentListImpl<F>();
         for (Relationship relationship: this.getActiveRelationshipsFrom(index)) {
             children.add((F) relationship.getTarget());
@@ -413,12 +413,12 @@ public class NetworkImpl implements Network {
      */
     public void complete() throws XBRLException {
         
-        logger.debug("Completing network with arcrole " + this.getArcRole() + " and link role " + getLinkRole());
+        logger.debug("Completing network with arcrole " + this.getArcrole() + " and link role " + getLinkRole());
 
         // Get the arcs that define relationships in the network
         FragmentList<ExtendedLink> links = ((XBRLStore) this.getStore()).getExtendedLinksWithRole(this.getLinkRole());
         for (ExtendedLink link: links) {
-            FragmentList<Arc> arcs = link.getArcsByArcrole(this.getArcRole());
+            FragmentList<Arc> arcs = link.getArcsByArcrole(this.getArcrole());
             for (Arc arc: arcs) {
                 FragmentList<ArcEnd> sources = arc.getSourceFragments();
                 FragmentList<ArcEnd> targets = arc.getTargetFragments();

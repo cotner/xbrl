@@ -286,7 +286,7 @@ public interface Fragment extends XML {
      * @return the list of labels for this fragment with the specified language code and XLink role.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(Networks networks, String language, String role) throws XBRLException;
+    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(Networks networks, String language, URI role) throws XBRLException;
     
     /**
      * @param language The xml:lang language codevalue
@@ -322,7 +322,7 @@ public interface Fragment extends XML {
      * nodes that are then used to gather further relationships. 
      * @throws XBRLException
      */
-    public Networks getNetworksWithArcrole(String arcrole) throws XBRLException;
+    public Networks getNetworksWithArcrole(URI arcrole) throws XBRLException;
     
     /**
      * @param arcrole the required arcrole value.
@@ -334,7 +334,7 @@ public interface Fragment extends XML {
      * nodes that are then used to gather further relationships. 
      * @throws XBRLException
      */
-    public Networks getNetworksFromWithArcrole(String arcrole) throws XBRLException;
+    public Networks getNetworksFromWithArcrole(URI arcrole) throws XBRLException;
     
     /**
      * @param arcrole the required arcrole value.
@@ -344,10 +344,10 @@ public interface Fragment extends XML {
      * arcrole value. 
      * @throws XBRLException
      */
-    public List<Relationship> getRelationshipsToWithArcrole(String arcrole) throws XBRLException;    
+    public List<Relationship> getRelationshipsToWithArcrole(URI arcrole) throws XBRLException;    
     
     /**
-     * @param linkrole the required linkrole value.
+     * @param linkRole the required linkrole value.
      * @param arcrole the required arcrole value.
      * @return the collection of networks including
      * relationships that involve this node as a source 
@@ -358,14 +358,14 @@ public interface Fragment extends XML {
      * nodes that are then used to gather further relationships. 
      * @throws XBRLException
      */
-    public Networks getNetworksFromWithRoleAndArcrole(String linkrole, String arcrole) throws XBRLException;    
+    public Networks getNetworksFromWithRoleAndArcrole(URI linkRole, URI arcrole) throws XBRLException;    
     
     /**
      * @param arcrole The <code>xlink:arcrole</code> attribute on the arcs expressing the 
      * relationships to the relative fragments.
-     * @param linkrole The <code>xlink:role</code> attribute on the extended links containing
+     * @param linkRole The <code>xlink:role</code> attribute on the extended links containing
      * the relationships to the relative fragments.  This criteria is not used if the value is null.
-     * @param resourcerole The required <code>xlink:role</code> attribute value on the 
+     * @param resourceRole The required <code>xlink:role</code> attribute value on the 
      * related fragments. This criteria is not used if the value is null.
      * @param language The required value of the <code>xml:language</code> language 
      * encoding on the relative fragments.  This criteria is not used if the value is null.
@@ -374,7 +374,7 @@ public interface Fragment extends XML {
      * @return a list of fragments that meet the specified selection criteria.
      * @throws XBRLException
      */
-    public <F extends Fragment> FragmentList<F> getRelatives(String arcrole, String linkrole, String resourcerole, String language, boolean getTargets) throws XBRLException;    
+    public <F extends Fragment> FragmentList<F> getRelatives(URI arcrole, URI linkRole, URI resourceRole, String language, boolean getTargets) throws XBRLException;    
     
 
 }

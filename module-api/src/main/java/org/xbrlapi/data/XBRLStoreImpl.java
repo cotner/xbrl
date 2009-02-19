@@ -272,73 +272,6 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     }
 
     /**
-     * @see org.xbrlapi.data.XBRLStore#getLinkRoles()
-     */
-    public HashMap<String,String> getLinkRoles() throws XBRLException {
-    	HashMap<String,String> roles = new HashMap<String,String>();
-    	FragmentList<RoleType> types = this.getRoleTypes();
-    	for (RoleType type: types) {
-    		String role = type.getCustomURI();
-    		FragmentList<ExtendedLink> all = this.<ExtendedLink>getFragments("ExtendedLink");
-    		logger.debug("# links = " + all.getLength());
-    		String query = "/*[@type='org.xbrlapi.impl.ExtendedLinkImpl' and */*/@xlink:role='" + role + "']";
-        	FragmentList<ExtendedLink> links = this.<ExtendedLink>query(query);
-        	logger.debug("# links with given role = " + links.getLength());
-    		if (links.getLength() > 0) {
-    			roles.put(role,"");
-    		}
-    	}
-    	return roles;
-    }
-    
-
-    
-    /**
-     * @see org.xbrlapi.data.XBRLStore#getArcRoles()
-     */
-    public HashMap<String,String> getArcRoles() throws XBRLException {
-    	// TODO Simplify getArcRoles method of the XBRLStore to eliminate need to get all arcs in the data store.
-    	HashMap<String,String> roles = new HashMap<String,String>();
-    	FragmentList<ArcroleType> types = this.getArcroleTypes();
-    	for (ArcroleType type: types) {
-    		String role = type.getCustomURI();
-    		String query = "/"+ Constants.XBRLAPIPrefix + ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:type='arc' and @xlink:arcrole='" + role + "']]";
-        	FragmentList<Arc> arcs = this.<Arc>query(query);
-    		if (arcs.getLength() > 0) {
-    			roles.put(role,"");
-    		}
-    	}
-
-    	return roles;
-    }
-    
-    /**
-     * @see org.xbrlapi.data.XBRLStore#getLinkRoles(String)
-     */
-    public HashMap<String,String> getLinkRoles(String arcrole) throws XBRLException {
-    	HashMap<String,String> roles = new HashMap<String,String>();
-    	HashMap<String,Fragment> links = new HashMap<String,Fragment>();
-		String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:type='arc' and @xlink:arcrole='" + arcrole + "']]";
-    	FragmentList<Arc> arcs = this.<Arc>query(query);
-    	for (Arc arc: arcs) {
-    		if (! links.containsKey(arc.getParentIndex())) {
-    			ExtendedLink link = arc.getExtendedLink();
-    			links.put(link.getIndex(),link);
-    		}
-    	}
-    	
-    	for (Fragment l: links.values()) {
-    		ExtendedLink link = (ExtendedLink) l;
-    		if (! roles.containsKey(link.getLinkRole())) {
-    			roles.put(link.getLinkRole(),"");
-    		}
-    	}
-    	
-    	return roles;
-    	
-    }
-    
-    /**
      * @return a list of roleType fragments
      * @throws XBRLException
      */
@@ -347,9 +280,9 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     }
     
     /**
-     * @see org.xbrlapi.data.XBRLStore#getRoleTypes(String)
+     * @see org.xbrlapi.data.XBRLStore#getRoleTypes(URI)
      */
-    public FragmentList<RoleType> getRoleTypes(String uri) throws XBRLException {
+    public FragmentList<RoleType> getRoleTypes(URI uri) throws XBRLException {
     	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/link:roleType/@roleURI='" + uri + "']";
     	return this.<RoleType>query(query);
     }    
@@ -374,14 +307,16 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.XBRLStore#getResourceRoles()
      */
-    public HashMap<String,String> getResourceRoles() throws XBRLException {
-    	HashMap<String,String> roles = new HashMap<String,String>();
+    public List<URI> getResourceRoles() throws XBRLException {
+    	HashMap<URI,String> roles = new HashMap<URI,String>();
     	FragmentList<Resource> resources = this.<Resource>query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/*/@xlink:type='resource']");
     	for (Resource resource: resources) {
-    		String role = resource.getResourceRole();
+    	    URI role = resource.getResourceRole();
     		if (! roles.containsKey(role)) roles.put(role,"");
     	}
-    	return roles;
+    	List<URI> result = new Vector<URI>();
+    	result.addAll(roles.keySet());
+    	return result;
     }    
 
 
@@ -428,9 +363,9 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
     }
  
     /**
-     * @see XBRLStore#getExtendedLinksWithRole(String)
+     * @see XBRLStore#getExtendedLinksWithRole(URI)
      */
-    public FragmentList<ExtendedLink> getExtendedLinksWithRole(String linkrole) throws XBRLException {
+    public FragmentList<ExtendedLink> getExtendedLinksWithRole(URI linkrole) throws XBRLException {
         String query = "/*[*/*[@xlink:type='extended' and @xlink:role='" + linkrole + "']]";
         FragmentList<ExtendedLink> links = this.<ExtendedLink>query(query);
         return links;
@@ -443,16 +378,16 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
 
 
     /**
-     * @see XBRLStore#getMinimalNetworksWithArcrole(Fragment, String)
+     * @see XBRLStore#getMinimalNetworksWithArcrole(Fragment, URI)
      */
-    public Networks getMinimalNetworksWithArcrole(Fragment fragment, String arcrole) throws XBRLException {
+    public Networks getMinimalNetworksWithArcrole(Fragment fragment, URI arcrole) throws XBRLException {
         return this.getMinimalNetworksWithArcrole(new FragmentListImpl<Fragment>(fragment),arcrole);
     }    
     
     /**
-     * @see XBRLStore#getMinimalNetworksWithArcrole(FragmentList, String)
+     * @see XBRLStore#getMinimalNetworksWithArcrole(FragmentList, URI)
      */
-    public Networks getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, String arcrole) throws XBRLException {
+    public Networks getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, URI arcrole) throws XBRLException {
         
         Networks networks;
         if (this.hasStoredNetworks()) networks = this.getStoredNetworks();
@@ -474,7 +409,7 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
      * @return The networks after augmentation.
      * @throws XBRLException
      */
-    private Networks augmentNetworksForFragment(Fragment fragment, String arcrole, Networks networks) throws XBRLException {
+    private Networks augmentNetworksForFragment(Fragment fragment, URI arcrole, Networks networks) throws XBRLException {
         if (processedFragments.containsKey(fragment.getIndex())) {
             return networks;
         }
@@ -490,6 +425,78 @@ public abstract class XBRLStoreImpl extends BaseStoreImpl implements XBRLStore {
             }
         }
         return networks;
+    }
+
+    /**
+     * @see org.xbrlapi.data.XBRLStore#getArcroles()
+     */
+    public List<URI> getArcroles() throws XBRLException {
+    	// TODO Simplify getArcRoles method of the XBRLStore to eliminate need to get all arcs in the data store.
+    	HashMap<URI,String> roles = new HashMap<URI,String>();
+    	FragmentList<ArcroleType> types = this.getArcroleTypes();
+    	for (ArcroleType type: types) {
+    		URI role = type.getCustomURI();
+    		String query = "/"+ Constants.XBRLAPIPrefix + ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:type='arc' and @xlink:arcrole='" + role + "']]";
+        	FragmentList<Arc> arcs = this.<Arc>query(query);
+    		if (arcs.getLength() > 0) {
+    			roles.put(role,"");
+    		}
+    	}
+    
+    	List<URI> result = new Vector<URI>();
+    	result.addAll(roles.keySet());
+    	return result;
+    }
+
+    /**
+     * @see org.xbrlapi.data.XBRLStore#getLinkRoles()
+     */
+    public List<URI> getLinkRoles() throws XBRLException {
+    	HashMap<URI,String> roles = new HashMap<URI,String>();
+    	FragmentList<RoleType> types = this.getRoleTypes();
+    	for (RoleType type: types) {
+    		URI role = type.getCustomURI();
+    		FragmentList<ExtendedLink> all = this.<ExtendedLink>getFragments("ExtendedLink");
+    		logger.debug("# links = " + all.getLength());
+    		String query = "/*[@type='org.xbrlapi.impl.ExtendedLinkImpl' and */*/@xlink:role='" + role + "']";
+        	FragmentList<ExtendedLink> links = this.<ExtendedLink>query(query);
+        	logger.debug("# links with given role = " + links.getLength());
+    		if (links.getLength() > 0) {
+    			roles.put(role,"");
+    		}
+    	}
+    	List<URI> result = new Vector<URI>();
+    	result.addAll(roles.keySet());
+    	return result;
+    }
+
+    /**
+     * @see org.xbrlapi.data.XBRLStore#getLinkRoles(URI)
+     */
+    public List<URI> getLinkRoles(URI arcrole) throws XBRLException {
+    	HashMap<URI,String> roles = new HashMap<URI,String>();
+    	HashMap<String,Fragment> links = new HashMap<String,Fragment>();
+    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:type='arc' and @xlink:arcrole='" + arcrole + "']]";
+    	FragmentList<Arc> arcs = this.<Arc>query(query);
+    	for (Arc arc: arcs) {
+    		if (! links.containsKey(arc.getParentIndex())) {
+    			ExtendedLink link = arc.getExtendedLink();
+    			links.put(link.getIndex(),link);
+    		}
+    	}
+    	
+    	for (Fragment l: links.values()) {
+    		ExtendedLink link = (ExtendedLink) l;
+    		if (! roles.containsKey(link.getLinkRole())) {
+    			roles.put(link.getLinkRole(),"");
+    		}
+    	}
+    	
+    	List<URI> linkroles = new Vector<URI>();
+    	linkroles.addAll(roles.keySet());
+    	
+    	return linkroles;
+    	
     }
     
     

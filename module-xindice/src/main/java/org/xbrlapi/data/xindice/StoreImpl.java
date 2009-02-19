@@ -330,7 +330,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public synchronized Map<String,String> queryForIndices(String query) throws XBRLException {
+    public synchronized List<String> queryForIndices(String query) throws XBRLException {
 
         
         query = query + this.getURIFilteringQueryClause();
@@ -360,7 +360,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         } catch (XMLDBException e) {
             throw new XBRLException("The XPath query of the DTS failed.", e);
         }
-        return indices;
+        List<String> result = new Vector<String>();
+        result.addAll(indices.keySet());
+        return result;
     }
     
     /**

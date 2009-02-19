@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -92,10 +94,16 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     /**
      * @see org.xbrlapi.Arc#getArcrole() 
      */
-    public String getArcrole() throws XBRLException {
+    public URI getArcrole() throws XBRLException {
     	Element root = getDataRootElement();
     	if (! root.hasAttributeNS(Constants.XLinkNamespace,"arcrole")) return null;
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"arcrole");
+    	String arcrole = getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"arcrole");
+    	try {
+    	    return new URI(arcrole);
+    	} catch (URISyntaxException e) {
+    	    throw new XBRLException("arcrole " + arcrole + "is not a valid URI.",e);
+    	}
+    	
     }
     
     /**

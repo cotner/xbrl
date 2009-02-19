@@ -1,7 +1,6 @@
 package org.xbrlapi.data;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 
 import org.xbrlapi.ArcroleType;
@@ -99,27 +98,6 @@ public interface XBRLStore extends Store {
     public Concept getConcept(URI namespace, String name) throws XBRLException;
 
     /**
-     * @return a hash map indexed by link roles that are used in extended links in the data store.
-     * @throws XBRLException
-     */
-    public HashMap<String,String> getLinkRoles() throws XBRLException;
-    
-    /**
-     * @param arcrole The arcrole determining the extended links that are to be examined for
-     * linkroles that are used on links containing arcs with the required arcrole.
-     * @return a hashmap of link roles, with one entry for each link role that is used on an
-     * extended link that contains an arc with the required arcrole.
-     * @throws XBRLException
-     */
-    public HashMap<String,String> getLinkRoles(String arcrole) throws XBRLException;
-    
-    /**
-     * @return a hash map indexed by arc roles that are used in extended links in the data store.
-     * @throws XBRLException
-     */
-    public HashMap<String,String> getArcRoles() throws XBRLException;
-    
-    /**
      * @return a list of arcroleType fragments
      * @throws XBRLException
      */
@@ -143,13 +121,13 @@ public interface XBRLStore extends Store {
      * @return a list of RoleType fragments with a given role
      * @throws XBRLException
      */
-    public FragmentList<RoleType> getRoleTypes(String uri) throws XBRLException;    
+    public FragmentList<RoleType> getRoleTypes(URI uri) throws XBRLException;    
     
     /**
      * @return a hash map indexed by resource roles that are used in extended links in the data store.
      * @throws XBRLException
      */
-    public HashMap<String,String> getResourceRoles() throws XBRLException;    
+    public List<URI> getResourceRoles() throws XBRLException;    
     
     /**
      * @param starters The list of URIs of the documents to use as 
@@ -202,7 +180,7 @@ public interface XBRLStore extends Store {
      * @return the list of extended links with the specified linkrole.
      * @throws XBRLException
      */
-    public FragmentList<ExtendedLink> getExtendedLinksWithRole(String linkrole) throws XBRLException;
+    public FragmentList<ExtendedLink> getExtendedLinksWithRole(URI linkrole) throws XBRLException;
 
     /**
      * Get the networks that, at a minimum, contain the relationships
@@ -213,12 +191,33 @@ public interface XBRLStore extends Store {
      * @return The networks containing the relationships.
      * @throws XBRLException
      */
-    public Networks getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, String arcrole) throws XBRLException;
+    public Networks getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, URI arcrole) throws XBRLException;
     
     /**
      * Convenience method for a single fragment.
-     * @see XBRLStore#getMinimalNetworksWithArcrole(FragmentList,String)
+     * @see XBRLStore#getMinimalNetworksWithArcrole(FragmentList,URI)
      */
-    public Networks getMinimalNetworksWithArcrole(Fragment fragment, String arcrole) throws XBRLException;    
+    public Networks getMinimalNetworksWithArcrole(Fragment fragment, URI arcrole) throws XBRLException;
+
+    /**
+     * @return a hash map indexed by arc roles that are used in extended links in the data store.
+     * @throws XBRLException
+     */
+    public List<URI> getArcroles() throws XBRLException;
+
+    /**
+     * @return a hash map indexed by link roles that are used in extended links in the data store.
+     * @throws XBRLException
+     */
+    public List<URI> getLinkRoles() throws XBRLException;
+
+    /**
+     * @param arcrole The arcrole determining the extended links that are to be examined for
+     * linkroles that are used on links containing arcs with the required arcrole.
+     * @return a hashmap of link roles, with one entry for each link role that is used on an
+     * extended link that contains an arc with the required arcrole.
+     * @throws XBRLException
+     */
+    public List<URI> getLinkRoles(URI arcrole) throws XBRLException;    
     
 }

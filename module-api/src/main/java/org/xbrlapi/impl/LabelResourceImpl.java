@@ -60,14 +60,14 @@ public class LabelResourceImpl extends MixedContentResourceImpl implements Label
     public FragmentList<Concept> getConcepts() throws XBRLException	{
         FragmentList<Concept> concepts = new FragmentListImpl<Concept>();
         
-        FragmentList<Fragment> relatives = this.getRelatives(org.xbrlapi.utilities.Constants.LabelArcRole,null,null,null,false);
+        FragmentList<Fragment> relatives = this.getRelatives(org.xbrlapi.utilities.Constants.LabelArcRole(),null,null,null,false);
         for (Fragment relative: relatives) {
             if (relative.isa("org.xbrlapi.impl.ConceptImpl")) {
                 concepts.add((Concept) relative);
             }
         }
 
-        relatives = this.getRelatives(org.xbrlapi.utilities.Constants.GenericLabelArcRole,null,null,null,false);
+        relatives = this.getRelatives(org.xbrlapi.utilities.Constants.GenericLabelArcRole(),null,null,null,false);
         for (Fragment relative: relatives) {
             if (relative.isa("org.xbrlapi.impl.ConceptImpl")) {
                 concepts.add((Concept) relative);

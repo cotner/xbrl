@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt;
 
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.Concept;
@@ -20,11 +21,11 @@ public class ExplicitDimensionImpl extends DimensionImpl implements ExplicitDime
      * @see org.xbrlapi.xdt.ExplicitDimension#getDefaultDomainMember()
      */
     public Concept getDefaultDomainMember() throws XBRLException {
-        Networks networks = this.getNetworksWithArcrole(XDTConstants.defaultDimensionArcrole);
+        Networks networks = this.getNetworksWithArcrole(XDTConstants.defaultDimensionArcrole());
         FragmentList<Concept> defaults = new FragmentListImpl<Concept>();
-        List<String> linkroles = networks.getLinkRoles(XDTConstants.defaultDimensionArcrole);
-        for (String linkrole: linkroles) {
-            Network network = networks.getNetwork(XDTConstants.defaultDimensionArcrole,linkrole);
+        List<URI> linkroles = networks.getLinkRoles(XDTConstants.defaultDimensionArcrole());
+        for (URI linkrole: linkroles) {
+            Network network = networks.getNetwork(linkrole,XDTConstants.defaultDimensionArcrole());
             List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
             for (Relationship relationship: relationships) {
                 try {
@@ -48,11 +49,11 @@ public class ExplicitDimensionImpl extends DimensionImpl implements ExplicitDime
      */
     public boolean hasDefaultDomainMember() throws XBRLException {
 
-            Networks networks = this.getNetworksWithArcrole(XDTConstants.defaultDimensionArcrole);
+            Networks networks = this.getNetworksWithArcrole(XDTConstants.defaultDimensionArcrole());
             FragmentList<Concept> defaults = new FragmentListImpl<Concept>();
-            List<String> linkroles = networks.getLinkRoles(XDTConstants.defaultDimensionArcrole);
-            for (String linkrole: linkroles) {
-                Network network = networks.getNetwork(XDTConstants.defaultDimensionArcrole,linkrole);
+            List<URI> linkroles = networks.getLinkRoles(XDTConstants.defaultDimensionArcrole());
+            for (URI linkrole: linkroles) {
+                Network network = networks.getNetwork(linkrole,XDTConstants.defaultDimensionArcrole());
                 List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
                 for (Relationship relationship: relationships) {
                     try {

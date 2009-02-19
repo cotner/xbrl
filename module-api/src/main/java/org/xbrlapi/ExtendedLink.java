@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -54,7 +56,7 @@ public interface ExtendedLink extends Link {
      * @return the list of matching arc fragments or the empty list if none are found.
      * @throws XBRLException
      */
-    public FragmentList<Arc> getArcsByArcrole(String arcrole) throws XBRLException;
+    public FragmentList<Arc> getArcsByArcrole(URI arcrole) throws XBRLException;
     
     
     /**
@@ -72,7 +74,7 @@ public interface ExtendedLink extends Link {
      * and arcrole value or the empty list if none are found.
      * @throws XBRLException
      */
-    public FragmentList<Arc> getArcsByFromLabelAndArcrole(String from, String arcrole) throws XBRLException;
+    public FragmentList<Arc> getArcsByFromLabelAndArcrole(String from, URI arcrole) throws XBRLException;
     
     /**
      * @param to The required value of the xlink:to attribute of the arcs.
@@ -89,7 +91,7 @@ public interface ExtendedLink extends Link {
      * and arcrole value or the empty list if none are found.
      * @throws XBRLException
      */
-    public FragmentList<Arc> getArcsByToLabelAndArcrole(String to, String arcrole) throws XBRLException;
+    public FragmentList<Arc> getArcsByToLabelAndArcrole(String to, URI arcrole) throws XBRLException;
 
     /**
      * Get the list of resources contained by the extended link.

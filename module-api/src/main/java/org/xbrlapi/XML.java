@@ -175,7 +175,9 @@ public abstract interface XML extends Comparable<XML> {
     /**
      * Updates the data store to reflect the current state of
      * this XML object.  If the XML object has not yet been
-     * stored then no action is taken.
+     * stored then no action is taken.  If there is a XML resource
+     * in the store with the same index, then that earlier version
+     * is first deleted from the data store.
      * @throws XBRLException
      */
     public void updateInStore() throws XBRLException;

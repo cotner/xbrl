@@ -1,6 +1,8 @@
 package org.xbrlapi.networks;
 
 
+import java.net.URI;
+
 import org.apache.log4j.Logger;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ExtendedLink;
@@ -218,9 +220,9 @@ public class RelationshipImpl implements Relationship {
     }	
 
 	/**
-	 * @see org.xbrlapi.networks.Relationship#getArcRole()
+	 * @see org.xbrlapi.networks.Relationship#getArcrole()
 	 */
-	public String getArcRole() throws XBRLException {
+	public URI getArcrole() throws XBRLException {
 		return getArc().getArcrole();
 	}
 
@@ -234,7 +236,7 @@ public class RelationshipImpl implements Relationship {
 	/**
 	 * @see org.xbrlapi.networks.Relationship#getLinkRole()
 	 */
-	public String getLinkRole() throws XBRLException {
+	public URI getLinkRole() throws XBRLException {
 		return getLink().getLinkRole();
 	}
 

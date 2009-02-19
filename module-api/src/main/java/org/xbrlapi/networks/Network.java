@@ -1,5 +1,6 @@
 package org.xbrlapi.networks;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
@@ -25,24 +26,24 @@ public interface Network {
 	/**
 	 * @return the arc role.
 	 */
-	public String getArcRole();
+	public URI getArcrole();
 
 	/**
-	 * @param arcRole the arc role to set.
+	 * @param arcrole the arc role to set.
 	 * @throws XBRLException if the arc role is null.
 	 */
-	public void setArcRole(String arcRole) throws XBRLException;
+	public void setArcrole(URI arcrole) throws XBRLException;
 
 	/**
 	 * @return the link role.
 	 */
-	public String getLinkRole();
+	public URI getLinkRole();
 
 	/**
 	 * @param linkRole the linkRole to set.
 	 * @throws XBRLException if the link role is null.
 	 */
-	public void setLinkRole(String linkRole) throws XBRLException;
+	public void setLinkRole(URI linkRole) throws XBRLException;
 
 	/** 
 	 * @param index The index of the fragment to check.

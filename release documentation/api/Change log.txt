@@ -1,3 +1,14 @@
+19 Feb. 2009
+Changed the store* method names in the org.xbrlapi.data.Store
+interface.
+Continued modifying method signatures to use URI instead of String
+whereever possible.
+Completed a first cut of the Storer interface and implementation
+for persisting active network relationships in the data store.  This
+should facilitate more efficient network analysis in some circumstances
+by enabling the cost of network analysis to be handled in a once off
+operation prior to the interactive analysis of the data.
+
 18 Feb. 2009
 Additional changes to method signatures to pass URIs where possible
 instead of strings.  Corrected bugs in the UsedOn fragment subclass

@@ -871,16 +871,16 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }    
     
     /**
-     * @see org.xbrlapi.data.Store#getNetworks(String)
+     * @see org.xbrlapi.data.Store#getNetworks(URI)
      */
-    public Networks getNetworks(String arcRole) throws XBRLException {
+    public Networks getNetworks(URI arcrole) throws XBRLException {
 
         Networks networks;
         if (hasStoredNetworks()) networks = getStoredNetworks();
         else networks = new NetworksImpl(this);
     	
     	// First get the set of arcs using the arc role
-		FragmentList<Arc> arcs = getArcs(arcRole);
+		FragmentList<Arc> arcs = getArcs(arcrole);
 		logger.info(arcs.getLength());
     	for (Arc arc: arcs) {
     		FragmentList<ArcEnd> sources = arc.getSourceFragments();
@@ -904,9 +904,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.Store#getNetworks(String,String)
+     * @see org.xbrlapi.data.Store#getNetworks(URI,URI)
      */
-    public Networks getNetworks(String linkrole, String arcrole) throws XBRLException {
+    public Networks getNetworks(URI linkRole, URI arcrole) throws XBRLException {
 
         Networks networks;
         if (hasStoredNetworks()) networks = getStoredNetworks();
@@ -925,8 +925,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
                 link = (ExtendedLink) arc.getParent();
                 links.put(link.getIndex(),link);
             }
-            String myLinkrole = link.getLinkRole();
-            if (myLinkrole.equals(linkrole)) {
+            URI myLinkrole = link.getLinkRole();
+            if (myLinkrole.equals(linkRole)) {
                 FragmentList<ArcEnd> sources = arc.getSourceFragments();
                 FragmentList<ArcEnd> targets = arc.getTargetFragments();
                 for (ArcEnd source: sources) {
@@ -955,7 +955,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @return the list of arc fragments with a given arc role value.
      * @throws XBRLException
      */
-    private FragmentList<Arc> getArcs(String arcrole) throws XBRLException {
+    private FragmentList<Arc> getArcs(URI arcrole) throws XBRLException {
     	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]";
     	return this.<Arc>query(query);
     }

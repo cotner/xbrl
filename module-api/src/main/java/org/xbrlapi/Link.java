@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -12,6 +14,6 @@ public interface Link extends Xlink {
      * @return the link role (The xlink:role attribute value).
      * @throws XBRLException
      */
-    public String getLinkRole() throws XBRLException;
+    public URI getLinkRole() throws XBRLException;
     
 }

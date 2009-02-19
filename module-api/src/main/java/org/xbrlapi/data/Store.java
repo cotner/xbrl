@@ -131,7 +131,7 @@ public interface Store {
      * the query.
      * @throws XBRLException if the query cannot be executed.
      */
-    public Map<String,String> queryForIndices(String query) throws XBRLException;
+    public List<String> queryForIndices(String query) throws XBRLException;
     
     /**
      * Run a query that is required to return a list of strings.
@@ -382,21 +382,21 @@ public interface Store {
     public <F extends Fragment> FragmentList<F> getChildFragments(String interfaceName, String parentIndex) throws XBRLException;
 
     /**
-     * @param linkrole The linkrole of the networks.
+     * @param linkRole The linkrole of the networks.
      * @param arcrole The arcrole of the networks.
      * @return the collection of networks expressed using arcs that involve this 
      * linkrole and arcrole.
      * @throws XBRLException
      */
-    public Networks getNetworks(String linkrole, String arcrole) throws XBRLException;
+    public Networks getNetworks(URI linkRole, URI arcrole) throws XBRLException;
 
     /**
-     * @param arcRole The XLink arcrole value.
+     * @param arcrole The XLink arcrole value.
      * @return the collection of networks expressed using arcs 
      * that involve this arc role.
      * @throws XBRLException
      */
-    public Networks getNetworks(String arcRole) throws XBRLException;  
+    public Networks getNetworks(URI arcrole) throws XBRLException;  
 
     /**
      * Utility method to return a list of fragments in a data store

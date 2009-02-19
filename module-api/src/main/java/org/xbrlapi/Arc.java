@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.w3c.dom.NamedNodeMap;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -79,7 +81,7 @@ public interface Arc extends ExtendedLinkContent {
      * @return the arc role of the arc.
      * @throws XBRLException
      */
-    public String getArcrole() throws XBRLException;
+    public URI getArcrole() throws XBRLException;
     
 
 	

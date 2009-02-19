@@ -1,7 +1,6 @@
 package org.xbrlapi.data.dom.tests;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 
 import org.xbrlapi.Arc;
@@ -44,7 +43,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
 	public void testGetLinkRoles() throws Exception {
 		try {
-			HashMap<String,String> roles = store.getLinkRoles();
+			List<URI> roles = store.getLinkRoles();
 			assertEquals(2, roles.size());
 		} catch (Exception e) {
 		    e.printStackTrace();
@@ -54,7 +53,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
 	public void testGetArcRoles() throws Exception {
 		try {
-			HashMap<String,String> roles = store.getArcRoles();
+			List<URI> roles = store.getArcroles();
 			assertTrue(roles.size() > 7);
 		} catch (Exception e) {
 		    e.printStackTrace();
@@ -64,7 +63,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testGetResourceRoles() throws Exception {
 		try {
-			HashMap<String,String> roles = store.getResourceRoles();
+			List<URI> roles = store.getResourceRoles();
 			assertEquals(3, roles.size());
 		} catch (Exception e) {
 			fail(e.getMessage());
@@ -92,10 +91,10 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testGetLinkrolesForAGivenArcrole() throws Exception {
 		try {
-			HashMap<String,String> arcroles = store.getArcRoles();
+			List<URI> arcroles = store.getArcroles();
 			assertTrue(arcroles.size() > 0);
-			for (String arcrole: arcroles.keySet()) {
-				HashMap<String,String> linkroles = store.getLinkRoles(arcrole);
+			for (URI arcrole: arcroles) {
+				List<URI> linkroles = store.getLinkRoles(arcrole);
 				logger.info(arcrole + " " + linkroles.size());
 			}
 		} catch (Exception e) {
@@ -115,7 +114,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testGetSpecificRoleTypes() throws Exception {
 		try {
-			FragmentList<RoleType> roleTypes = store.getRoleTypes(Constants.VerboseLabelRole);
+			FragmentList<RoleType> roleTypes = store.getRoleTypes(Constants.VerboseLabelRole());
 			assertEquals(1, roleTypes.getLength());
 		} catch (Exception e) {
 			fail(e.getMessage());

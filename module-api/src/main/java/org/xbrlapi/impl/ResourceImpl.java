@@ -1,5 +1,8 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.Language;
 import org.xbrlapi.Resource;
@@ -15,10 +18,15 @@ public class ResourceImpl extends ArcEndImpl implements Resource {
 	/**
 	 * @see org.xbrlapi.Resource#getResourceRole()
 	 */
-	public String getResourceRole() throws XBRLException {
+	public URI getResourceRole() throws XBRLException {
     	Element root = getDataRootElement();
     	if (! root.hasAttributeNS(Constants.XLinkNamespace,"role")) return null;
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"role");		
+        String value = getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"role");
+        try {
+            return new URI(value);
+        } catch (URISyntaxException e) {
+            throw new XBRLException(value + " has an invalid URI syntax for the resource XLink role",e);
+        }
 	}
 
     /**

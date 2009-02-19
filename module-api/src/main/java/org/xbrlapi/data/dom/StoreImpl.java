@@ -224,17 +224,19 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public synchronized Map<String,String> queryForIndices(String query) throws XBRLException {
+    public synchronized List<String> queryForIndices(String query) throws XBRLException {
         query = query + this.getURIFilteringQueryClause();
         
-        XPathResult result = runQuery(query);
+        XPathResult xpr = runQuery(query);
         Node n;
         HashMap<String,String> indices = new HashMap<String,String>();
-        while ((n = result.iterateNext()) != null) {
+        while ((n = xpr.iterateNext()) != null) {
             String index = getIndex(n);
             indices.put(index,null);
         }
-        return indices;
+        List<String> result = new Vector<String>();
+        result.addAll(indices.keySet());
+        return result;
     }
     
     /**

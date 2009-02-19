@@ -14,8 +14,8 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xbrlapi.XML;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.XML;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.XBRLStoreImpl;
@@ -483,7 +483,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public synchronized Map<String,String> queryForIndices(String query) throws XBRLException {
+    public synchronized List<String> queryForIndices(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
         
@@ -507,8 +507,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
                     xmlValue.delete();
                     xmlValue = xmlResults.next();
                 }
-                
-                return indices;
+                List<String> result = new Vector<String>();
+                result.addAll(indices.keySet());
+                return result;
     
             } catch (XmlException e) {
                 throw new XBRLException("Failed query: " + query,e);

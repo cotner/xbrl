@@ -1,5 +1,6 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Vector;
 
@@ -71,13 +72,13 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     /**
      * @see org.xbrlapi.Concept#getPresentationNetworkLinkroles()
      */
-    public List<String> getPresentationNetworkLinkroles() throws XBRLException {
-        List<String> roles = new Vector<String>();
+    public List<URI> getPresentationNetworkLinkroles() throws XBRLException {
+        List<URI> roles = new Vector<URI>();
         
         Networks temp = null;
         if (getStore().hasStoredNetworks()) temp = getStore().getStoredNetworks();
         getStore().setStoredNetworks(null);
-        for (Network network: ((XBRLStore) this.getStore()).getMinimalNetworksWithArcrole(this,Constants.PresentationArcRole)) {
+        for (Network network: ((XBRLStore) this.getStore()).getMinimalNetworksWithArcrole(this,Constants.PresentationArcRole())) {
             roles.add(network.getLinkRole());
         }
         if (temp != null) getStore().setStoredNetworks(temp);

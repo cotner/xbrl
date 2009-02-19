@@ -28,7 +28,7 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     /**
      * @see org.xbrlapi.Link#getLinkRole()
      */
-    public String getLinkRole() throws XBRLException {
+    public URI getLinkRole() throws XBRLException {
         return null;
     }
     

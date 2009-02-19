@@ -1,11 +1,13 @@
 package org.xbrlapi.networks;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Arc;
@@ -43,7 +45,7 @@ public class NetworksImpl implements Networks {
 	private Store store = null;
 	
 	// Map of networks: indexed by the arc role then the link role.
-	private HashMap<String,HashMap<String,Network>> networks = new HashMap<String,HashMap<String,Network>>();
+	private HashMap<URI,HashMap<URI,Network>> networks = new HashMap<URI,HashMap<URI,Network>>();
 	
 	/**
 	 * @param store The data store containing the information defining the networks.
@@ -59,34 +61,34 @@ public class NetworksImpl implements Networks {
 	 * @see org.xbrlapi.networks.Networks#addNetwork(Network)
 	 */
 	public void addNetwork(Network network) throws XBRLException {
-		String arcRole = network.getArcRole();
-		String linkRole = network.getLinkRole();
+		URI arcrole = network.getArcrole();
+		URI linkRole = network.getLinkRole();
 		
-		HashMap<String,Network> map = null;
+		HashMap<URI,Network> map = null;
 		
-		if (networks.containsKey(arcRole)) {
-			map = networks.get(arcRole);
+		if (networks.containsKey(arcrole)) {
+			map = networks.get(arcrole);
 			if (map.containsKey(linkRole)) {
-			    Network existingNetwork = this.getNetwork(arcRole,linkRole);
+			    Network existingNetwork = this.getNetwork(linkRole,arcrole);
 			    existingNetwork.add(network);
 			}
 			map.put(linkRole,network);
 			return;
 		}
 		
-		map = new HashMap<String,Network>();
+		map = new HashMap<URI,Network>();
 		map.put(linkRole,network);
-		networks.put(arcRole,map);		
+		networks.put(arcrole,map);		
 		
 	}
 
 	/**
-	 * @see org.xbrlapi.networks.Networks#getNetwork(String, String)
+	 * @see org.xbrlapi.networks.Networks#getNetwork(URI, URI)
 	 */
-	public Network getNetwork(String arcRole, String linkRole)
+	public Network getNetwork(URI linkRole, URI arcrole)
 			throws XBRLException {
-		if (networks.containsKey(arcRole)) {
-			HashMap<String,Network> map = networks.get(arcRole);
+		if (networks.containsKey(arcrole)) {
+			HashMap<URI,Network> map = networks.get(arcrole);
 			if (map.containsKey(linkRole))
 				return map.get(linkRole);
 		}
@@ -94,27 +96,27 @@ public class NetworksImpl implements Networks {
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getNetworks(String)
+	 * @see org.xbrlapi.networks.Networks#getNetworks(URI)
 	 */
-	public List<Network> getNetworks(String arcRole) throws XBRLException {
+	public List<Network> getNetworks(URI arcrole) throws XBRLException {
 		
 		List<Network> selectedNetworks = new LinkedList<Network>();
-		List<String> linkRoles = getLinkRoles(arcRole);
+		List<URI> linkRoles = getLinkRoles(arcrole);
 		if (linkRoles.isEmpty()) return selectedNetworks;
-		for (String linkRole: linkRoles) {
-			selectedNetworks.add(this.getNetwork(arcRole,linkRole));
+		for (URI linkRole: linkRoles) {
+			selectedNetworks.add(this.getNetwork(linkRole,arcrole));
 		}
 		return selectedNetworks;
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getSourceFragments(String, String)
+	 * @see org.xbrlapi.networks.Networks#getSourceFragments(String, URI)
 	 */
-	public <F extends Fragment> FragmentList<F>  getSourceFragments(String targetIndex, String arcRole) throws XBRLException {
+	public <F extends Fragment> FragmentList<F>  getSourceFragments(String targetIndex, URI arcrole) throws XBRLException {
 		
 		FragmentList<F> fragments = new FragmentListImpl<F>();
 		
-    	List<Network> selectedNetworks = this.getNetworks(arcRole);
+    	List<Network> selectedNetworks = this.getNetworks(arcrole);
     	for (Network network: selectedNetworks) {
     		List<Relationship> relationships = network.getActiveRelationshipsTo(targetIndex);
         	for (Relationship relationship: relationships) {
@@ -125,12 +127,12 @@ public class NetworksImpl implements Networks {
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getSourceFragments(String, String, String)
+	 * @see org.xbrlapi.networks.Networks#getSourceFragments(String, URI, URI)
 	 */
-	public <F extends Fragment> FragmentList<F>  getSourceFragments(String targetIndex, String arcRole, String linkRole) throws XBRLException {
+	public <F extends Fragment> FragmentList<F>  getSourceFragments(String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
 		FragmentList<F> fragments = new FragmentListImpl<F>();
-		if (! hasNetwork(arcRole, linkRole)) return fragments;
-    	Network network = this.getNetwork(arcRole, linkRole);
+		if (! hasNetwork(linkRole,arcrole)) return fragments;
+    	Network network = this.getNetwork(linkRole,arcrole);
 		List<Relationship> relationships = network.getActiveRelationshipsTo(targetIndex);
     	for (Relationship relationship: relationships) {
     		fragments.addFragment(relationship.<F>getSource());
@@ -139,14 +141,14 @@ public class NetworksImpl implements Networks {
 	}	
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getTargetFragments(String, String)
+	 * @see org.xbrlapi.networks.Networks#getTargetFragments(String, URI)
 	 */
-	public <F extends Fragment> FragmentList<F>  getTargetFragments(String sourceIndex, String arcRole) throws XBRLException {
+	public <F extends Fragment> FragmentList<F>  getTargetFragments(String sourceIndex, URI arcrole) throws XBRLException {
 		
 		FragmentList<F> fragments = new FragmentListImpl<F>();
 		
-    	List<Network> selectedNetworks = this.getNetworks(arcRole);
-    	logger.debug("There are " + selectedNetworks.size() + " networks with arcrole " + arcRole);
+    	List<Network> selectedNetworks = this.getNetworks(arcrole);
+    	logger.debug("There are " + selectedNetworks.size() + " networks with arcrole " + arcrole);
     	for (Network network: selectedNetworks) {
             logger.debug("A network has linkrole " + network.getLinkRole());
     		List<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
@@ -159,13 +161,13 @@ public class NetworksImpl implements Networks {
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getTargetFragments(String, String, String)
+	 * @see org.xbrlapi.networks.Networks#getTargetFragments(String, URI, URI)
 	 */
-	public <F extends Fragment> FragmentList<F>  getTargetFragments(String sourceIndex, String arcRole, String linkRole) throws XBRLException {
+	public <F extends Fragment> FragmentList<F>  getTargetFragments(String sourceIndex, URI arcRole, URI linkRole) throws XBRLException {
 		
 		FragmentList<F> fragments = new FragmentListImpl<F>();
-		if (! hasNetwork(arcRole, linkRole)) return fragments;
-    	Network network = this.getNetwork(arcRole, linkRole);
+		if (! hasNetwork(linkRole, arcRole)) return fragments;
+    	Network network = this.getNetwork(linkRole, arcRole);
 		List<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
     	for (Relationship relationship: relationships) {
     		fragments.addFragment(relationship.<F>getTarget());
@@ -174,11 +176,11 @@ public class NetworksImpl implements Networks {
 	}	
 
 	/**
-	 * @see org.xbrlapi.networks.Networks#hasNetwork(String, String)
+	 * @see org.xbrlapi.networks.Networks#hasNetwork(URI, URI)
 	 */
-	public boolean hasNetwork(String arcRole, String linkRole) {
-		if (networks.containsKey(arcRole)) {
-			HashMap<String,Network> map = networks.get(arcRole);
+	public boolean hasNetwork(URI linkRole, URI arcrole) {
+		if (networks.containsKey(arcrole)) {
+			HashMap<URI,Network> map = networks.get(arcrole);
 			if (map.containsKey(linkRole)) return true;
 		}
 		return false;
@@ -190,15 +192,15 @@ public class NetworksImpl implements Networks {
 	 */
 	public void addRelationship(Relationship relationship) throws XBRLException {
 		logger.debug("Networks being augmented with relationship: " + relationship.toString());
-		String arcRole = relationship.getArcRole();
-		String linkRole = relationship.getLinkRole();
+		URI arcrole = relationship.getArcrole();
+		URI linkRole = relationship.getLinkRole();
 		
-		if (hasNetwork(arcRole,linkRole)) {
-			getNetwork(arcRole,linkRole).addRelationship(relationship);
+		if (hasNetwork(linkRole,arcrole)) {
+			getNetwork(linkRole,arcrole).addRelationship(relationship);
 			return;
 		}
-		logger.debug("A new network is required for relationship with linkrole " + linkRole + " and arcrole " + arcRole);
-		Network network = new NetworkImpl(getStore(),linkRole,arcRole);
+		logger.debug("A new network is required for relationship with linkrole " + linkRole + " and arcrole " + arcrole);
+		Network network = new NetworkImpl(getStore(),linkRole,arcrole);
 		network.addRelationship(relationship);
 		addNetwork(network);
 	}
@@ -233,9 +235,9 @@ public class NetworksImpl implements Networks {
 	 */
 	public int getSize() throws XBRLException {
 		int size = 0;
-		List<String> arcroles = this.getArcRoles();
-		for (String arcrole: arcroles) {
-			List<String> linkroles = getLinkRoles(arcrole);
+		List<URI> arcroles = this.getArcroles();
+		for (URI arcrole: arcroles) {
+			List<URI> linkroles = getLinkRoles(arcrole);
 			size += linkroles.size();
 		}
 		return size;
@@ -243,26 +245,26 @@ public class NetworksImpl implements Networks {
 	
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getArcRoles()
+	 * @see org.xbrlapi.networks.Networks#getArcroles()
 	 */
-	public List<String> getArcRoles() throws XBRLException {
-		List<String> roles = new LinkedList<String>();
-		for (String value: networks.keySet()) {
+	public List<URI> getArcroles() throws XBRLException {
+		List<URI> roles = new Vector<URI>();
+		for (URI value: networks.keySet()) {
 			roles.add(value);
 		}
 		return roles;
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getLinkRoles(String)
+	 * @see org.xbrlapi.networks.Networks#getLinkRoles(URI)
 	 */
-	public List<String> getLinkRoles(String arcRole) throws XBRLException {
-		List<String> roles = new LinkedList<String>();
+	public List<URI> getLinkRoles(URI arcrole) throws XBRLException {
+		List<URI> roles = new Vector<URI>();
 
-		if (networks.containsKey(arcRole)) {
-			HashMap<String,Network> map = networks.get(arcRole);
+		if (networks.containsKey(arcrole)) {
+			HashMap<URI,Network> map = networks.get(arcrole);
 			if (map == null) return roles;
-			for (String value: map.keySet()) {
+			for (URI value: map.keySet()) {
 				roles.add(value);
 			}
 		}
@@ -274,7 +276,7 @@ public class NetworksImpl implements Networks {
      */
     public Iterator<Network> iterator() {
         Set<Network> set = new HashSet<Network>();
-        for (HashMap<String,Network> map: networks.values()) {
+        for (HashMap<URI,Network> map: networks.values()) {
             set.addAll(map.values());
         }
         return set.iterator();

@@ -1,6 +1,7 @@
 package org.xbrlapi.impl;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -35,16 +36,21 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
     /**
      * Get the custom URI being defined.
      * @return the custom URI being defined.
-     * @throws XBRLExceptio if the custom URI is not specified.
+     * @throws XBRLExceptio if the custom URI is not specified
+     * or is not a valid URI.
      * @see org.xbrlapi.CustomType#getCustomURI()
      */
-    public String getCustomURI() throws XBRLException {
-    	if (getDataRootElement().hasAttribute("roleURI")) {
-    		return getDataRootElement().getAttribute("roleURI");
-    	}
-    	if (getDataRootElement().hasAttribute("arcroleURI")) {
-    		return getDataRootElement().getAttribute("arcroleURI");
-    	}
+    public URI getCustomURI() throws XBRLException {
+        try {
+            if (getDataRootElement().hasAttribute("roleURI")) {
+                return new URI(getDataRootElement().getAttribute("roleURI"));
+            }
+            if (getDataRootElement().hasAttribute("arcroleURI")) {
+                return new URI(getDataRootElement().getAttribute("arcroleURI"));
+            }
+        } catch (URISyntaxException e) {
+            throw new XBRLException("The custom URI is not a valid URI.",e);
+        }
     	throw new XBRLException("The value of the custom URI is not provided.");
     }
     

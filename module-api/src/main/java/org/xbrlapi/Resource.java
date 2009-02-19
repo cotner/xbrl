@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -14,7 +16,7 @@ public interface Resource extends ArcEnd {
 	 * null if none is specified.
 	 * @throws XBRLException.
 	 */
-	public String getResourceRole() throws XBRLException;
+	public URI getResourceRole() throws XBRLException;
 	
 	/**
 	 * @return the XML language code for the resource or null

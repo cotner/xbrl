@@ -5,14 +5,14 @@ import java.net.URI;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * This XML resource supports capture of relationship
- * information directly in the data store.  This 
- * can facilitate faster relationship analysis. 
+ * This XML resource supports capture of active 
+ * relationship information directly in the data store.  
+ * This can facilitate faster relationship analysis. 
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public interface Relationship extends XML {
+public interface ActiveRelationship extends XML {
 
     /**
      * @return the fragment index for the source of the relationship.
@@ -57,15 +57,35 @@ public interface Relationship extends XML {
     
     
     /**
-     * @return the XLink arc role of the relationship.
+     * @return the XLink arcrole of the relationship.
      */
-    public URI getArcRole();
+    public URI getArcrole();
     
     /**
-     * @param role The arc XLink role value
+     * @param role The XLink arcrole value
      */
-    public void setArcRole(URI role) throws XBRLException;
+    public void setArcrole(URI role) throws XBRLException;
+
+    /**
+     * @return the source element namespace.
+     */
+    public URI getSourceNamespace();        
     
+    /**
+     * @param namespace The namespace of the source element.
+     */
+    public void setSourceNamespace(URI namespace) throws XBRLException;
+    
+    /**
+     * @return the target element namespace.
+     */
+    public URI getTargetNamespace();        
+    
+    /**
+     * @param namespace The namespace of the target element.
+     */
+    public void setTargetNamespace(URI namespace) throws XBRLException;
+
     /**
      * @return the arc element namespace.
      */
@@ -96,6 +116,26 @@ public interface Relationship extends XML {
      */
     public void setArcIndex(String index) throws XBRLException;
     
+    /**
+     * @return the source element name.
+     */
+    public String getSourceName();
+
+    /**
+     * @param name The local name of the source element.
+     */
+    public void setSourceName(String name) throws XBRLException;
+
+    /**
+     * @return the target element name.
+     */
+    public String getTargetName();
+
+    /**
+     * @param name The local name of the target element.
+     */
+    public void setTargetName(String name) throws XBRLException;
+
     /**
      * @return the arc element name.
      */
@@ -135,6 +175,7 @@ public interface Relationship extends XML {
      * @param role the target XLink role.
      */
     public void setTargetRole(URI role) throws XBRLException;
+
 
     /**
      * @return the source XML language code or null if none exists.
@@ -176,4 +217,10 @@ public interface Relationship extends XML {
      * @param code the target fragment type.
      */
     public void setTargetFragmentType(String type) throws XBRLException;
+    
+    /**
+     * @return true if the relationship is to an XBRL 2.1 or generic label
+     */
+    public boolean isToLabel();
+    
 }

@@ -275,18 +275,18 @@ public class Run {
             List<Map<String, Object>> tables = new Vector<Map<String, Object>>();
             model.put("tables", tables);
 
-            logger.info("# linkroles = " + store.getLinkRoles(Constants.PresentationArcRole).size());
+            logger.info("# linkroles = " + store.getLinkRoles(new URI(Constants.PresentationArcRole)).size());
             
-            for (String linkrole : store.getLinkRoles(Constants.PresentationArcRole).keySet()) {
+            for (URI linkrole : store.getLinkRoles(new URI(Constants.PresentationArcRole))) {
                 HashMap<String, Object> table = new HashMap<String, Object>();
                 tables.add(table);
-                String roleTitle = linkrole;
-                FragmentList<RoleType> roleDeclarations = store
-                        .getRoleTypes(linkrole);
-                if (roleDeclarations.getLength() > 0)
-                    roleTitle = roleDeclarations.get(0).getDefinition();
-                table.put("title", roleTitle);
-                logger.info("Setting up: " + roleTitle);
+                String title = linkrole.toString();
+                FragmentList<RoleType> roleDeclarations = store.getRoleTypes(linkrole);
+                if (roleDeclarations.getLength() > 0) {
+                    title = roleDeclarations.get(0).getDefinition();
+                }
+                table.put("title", title);
+                logger.info("Setting up: " + title);
 
                 labels = new ArrayList<String>();
                 concepts = new ArrayList<Concept>();
@@ -297,7 +297,11 @@ public class Run {
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
 
-                network = new NetworkImpl(store,linkrole,Constants.PresentationArcRole);
+                try {
+                    network = new NetworkImpl(store,linkrole,new URI(Constants.PresentationArcRole));
+                } catch (URISyntaxException e) {
+                    ;// Cannot actually be thrown
+                }
                 networks.addNetwork(network);
                 network.complete();
                 reportTime("Completing the network");
@@ -313,7 +317,7 @@ public class Run {
                             root, 
                             new Float(0.0).floatValue(), 
                             linkrole,
-                            Constants.StandardLabelRole);
+                            Constants.StandardLabelRole());
                 }
                 
                 // Get the sorted list of period aspect values
@@ -329,7 +333,7 @@ public class Run {
                 table.put("labels", labels);
                 table.put("periods",periods);
                 table.put("maxLevel", maxLevel);
-                reportTime("Processing  " + roleTitle);
+                reportTime("Processing  " + title);
                                 
             }
 
@@ -367,8 +371,8 @@ public class Run {
             Concept parent, 
             Concept concept, 
             float order,
-            String linkrole,
-            String labelRole
+            URI linkRole,
+            URI labelRole
             ) throws Exception {
 
         concepts.add(concept);
@@ -402,16 +406,21 @@ public class Run {
 
         for (Relationship relationship: relationships) {
             
-            labelRole = Constants.StandardLabelRole;
-            if (relationship.getArc().hasAttribute("preferredLabel"))
-                labelRole = relationship.getArcAttributeValue("preferredLabel");
-            
+            labelRole = Constants.StandardLabelRole();
+            if (relationship.getArc().hasAttribute("preferredLabel")) {
+                String preferredLabelRole = relationship.getArcAttributeValue("preferredLabel");
+                try {
+                    labelRole = new URI(preferredLabelRole);
+                } catch (URISyntaxException e) {
+                    throw new XBRLException("The preferred label URI "+preferredLabelRole+" is invalid.",e);
+                }
+            }
             parsePresentation(
                     indent + " ", 
                     concept, 
                     (Concept) relationship.getTarget(), 
                     new Float(relationship.getOrder()).floatValue(), 
-                    linkrole,
+                    linkRole,
                     labelRole);
         }
     }
