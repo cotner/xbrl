@@ -52,11 +52,11 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 
 			List<URI> arcroles = networks.getArcroles();
 			assertEquals(1, arcroles.size());
-			assertEquals(Constants.LabelArcRole,arcroles.get(0));
+			assertEquals(Constants.LabelArcRole(),arcroles.get(0));
 
 			List<URI> linkroles = networks.getLinkRoles(arcroles.get(0));
 			assertEquals(1, linkroles.size());
-			assertEquals(Constants.StandardLinkRole,linkroles.get(0));
+			assertEquals(Constants.StandardLinkRole(),linkroles.get(0));
 			
 		} catch (Exception e) {
 			fail(e.getMessage());
@@ -69,11 +69,11 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 
             List<URI> arcroles = networks.getArcroles();
             assertEquals(1, arcroles.size());
-            assertEquals(Constants.LabelArcRole,arcroles.get(0));
+            assertEquals(Constants.LabelArcRole(),arcroles.get(0));
 
             List<URI> linkRoles = networks.getLinkRoles(arcroles.get(0));
             assertEquals(1, linkRoles.size());
-            assertEquals(Constants.StandardLinkRole,linkRoles.get(0));
+            assertEquals(Constants.StandardLinkRole(),linkRoles.get(0));
             
             Networks myNetworks = label.getNetworks();
             store.setStoredNetworks(myNetworks);
@@ -102,9 +102,9 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 
 			List<URI> arcroles = networks.getArcroles();
 			List<URI> linkroles = networks.getLinkRoles(arcroles.get(0));
-			Network network = networks.getNetwork(arcroles.get(0),linkroles.get(0));
-			assertEquals(Constants.LabelArcRole,network.getArcrole());
-			assertEquals(Constants.StandardLinkRole,network.getLinkRole());
+			Network network = networks.getNetwork(linkroles.get(0),arcroles.get(0));
+			assertEquals(Constants.LabelArcRole(),network.getArcrole());
+			assertEquals(Constants.StandardLinkRole(),network.getLinkRole());
 			List<Relationship> relationships = network.getActiveRelationshipsFrom(label.getIndex());
 			assertEquals(0,relationships.size());
 			relationships = network.getActiveRelationshipsTo(label.getIndex());
@@ -128,7 +128,7 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 			Network network = networks.getNetwork(linkroles.get(0),arcroles.get(0));
 			List<Relationship> relationships = network.getActiveRelationshipsTo(label.getIndex());
 			Relationship relationship = relationships.get(0);
-			assertEquals(Constants.LabelArcRole,relationship.getArc().getArcrole());
+			assertEquals(Constants.LabelArcRole(),relationship.getArc().getArcrole());
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -155,7 +155,5 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
         }
             
     }
-    
-    
-    
+
 }

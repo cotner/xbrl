@@ -37,7 +37,7 @@ public class LinkTestCase extends DOMLoadingTestCase {
 		    for (Link link: links) {
     		    String role = link.getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"role");
     		    if (! role.equals(""))
-    		        assertEquals(role,link.getLinkRole());
+    		        assertEquals(role,link.getLinkRole().toString());
     		    else
                     assertNull(link.getLinkRole());
 		    }
@@ -57,7 +57,7 @@ public class LinkTestCase extends DOMLoadingTestCase {
             for (Link fragment: fragments) {
                 store.serialize(fragment);
                 if (fragment.getLocalname().equals("presentationLink")) {
-                    assertEquals("http://mycompany.com/xbrl/roleE/newExtendedRoleType",fragment.getLinkRole());
+                    assertEquals("http://mycompany.com/xbrl/roleE/newExtendedRoleType",fragment.getLinkRole().toString());
                 }
             }
         } catch (Exception e) {

@@ -34,7 +34,7 @@ public class ResourceTestCase extends DOMLoadingTestCase {
 		try {
 			FragmentList<Resource> fragments = store.<Resource>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
 			Resource fragment = fragments.getFragment(0);
-			assertEquals("http://www.xbrl.org/2003/role/label", fragment.getResourceRole());
+			assertEquals("http://www.xbrl.org/2003/role/label", fragment.getResourceRole().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

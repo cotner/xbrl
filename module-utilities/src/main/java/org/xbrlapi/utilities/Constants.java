@@ -213,6 +213,7 @@ public class Constants {
         try {
             return new URI(LabelArcRole);
         } catch (URISyntaxException e) { // Cannot be thrown.
+            System.err.println(LabelArcRole);
             return null;
         }
     }    
