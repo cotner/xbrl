@@ -10,7 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.loader.Loader;
-import org.xbrlapi.sax.ContentHandlerImpl;
+import org.xbrlapi.xdt.ContentHandlerImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xml.sax.ContentHandler;
