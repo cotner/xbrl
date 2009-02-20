@@ -19,8 +19,6 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationship {
 
-
-    
     /**
      * @param id The unique id of the fragment being created,
      * within the scope of the containing data store.
@@ -33,7 +31,7 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
         Fragment source = relationship.getSource();
 
         setSourceIndex(relationship.getSourceIndex());
-        setSourceFragmentType(source.getType());
+        setSourceType(source.getType());
         setSourceName(source.getLocalname());
         setSourceNamespace(source.getNamespace());
         if (source.isa("org.xbrlapi.impl.ResourceImpl")) {
@@ -76,9 +74,9 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getArcIndex()
+     * @param index the index of the arc defining this relationship.
      */
-    public void setArcIndex(String index) throws XBRLException {
+    private void setArcIndex(String index) {
         getMetadataRootElement().setAttribute("arcIndex",index);
     }
     
@@ -269,128 +267,126 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
     
     /**
-     * @see org.xbrlapi.ActiveRelationship#setArcName(java.lang.String)
+     * @param name The local name of the arc element.
      */
-    public void setArcName(String name) throws XBRLException {
+    private void setArcName(String name) {
         getMetadataRootElement().setAttribute("arcName",name);
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setArcNamespace(java.net.URI)
+     * @param namespace The namespace of the arc element.
      */
-    public void setArcNamespace(URI namespace) throws XBRLException {
+    private void setArcNamespace(URI namespace) {
         getMetadataRootElement().setAttribute("arcNamespace",namespace.toString());
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setArcrole(java.net.URI)
+     * @param role The XLink arcrole value
      */
-    public void setArcrole(URI role) throws XBRLException {
+    private void setArcrole(URI role) {
         getMetadataRootElement().setAttribute("arcRole",role.toString());
     }
 
-
     /**
-     * @see org.xbrlapi.ActiveRelationship#setLinkName(java.lang.String)
+     * @param name The local name of the containing extended link element.
      */
-    public void setLinkName(String name) throws XBRLException {
+    private void setLinkName(String name) {
         getMetadataRootElement().setAttribute("linkName",name);
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setLinkNamespace(java.net.URI)
+     * @param namespace The namespace of the containing extended link element.
      */
-    public void setLinkNamespace(URI namespace) throws XBRLException {
+    private void setLinkNamespace(URI namespace) {
         getMetadataRootElement().setAttribute("linkNamespace",namespace.toString());
     }
 
-
     /**
-     * @see org.xbrlapi.ActiveRelationship#setLinkRole(java.net.URI)
+     * @param role The containing extended link XLink role value
      */
-    public void setLinkRole(URI role) throws XBRLException {
+    private void setLinkRole(URI role) {
         getMetadataRootElement().setAttribute("linkRole",role.toString());
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setSourceFragmentType(java.lang.String)
+     * @param code the source fragment type.
      */
-    public void setSourceFragmentType(String type) throws XBRLException {
+    private void setSourceType(String type) {
         getMetadataRootElement().setAttribute("sourceType",type);
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setSourceIndex(java.lang.String)
+     * @param index The source fragment index.
      */
-    public void setSourceIndex(String index) throws XBRLException {
+    private void setSourceIndex(String index) {
         getMetadataRootElement().setAttribute("sourceIndex",index);
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setSourceLanguageCode(java.lang.String)
+     * @param code the source XML language code.
      */
-    public void setSourceLanguageCode(String code) throws XBRLException {
+    private void setSourceLanguageCode(String code) {
         getMetadataRootElement().setAttribute("sourceLanguage",code);
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setSourceRole(java.net.URI)
+     * @param role the source XLink role.
      */
-    public void setSourceRole(URI role) throws XBRLException {
+    private void setSourceRole(URI role) {
         getMetadataRootElement().setAttribute("sourceRole",role.toString());
     }
     
     /**
-     * @see org.xbrlapi.ActiveRelationship#setSourceName(String)
+     * @param name The local name of the source element.
      */
-    public void setSourceName(String name) {
+    private void setSourceName(String name) {
         getMetadataRootElement().setAttribute("sourceName",name);
     }    
     
     /**
-     * @see org.xbrlapi.ActiveRelationship#setSourceNamespace(URI)
+     * @param namespace The namespace of the source element.
      */
-    public void setSourceNamespace(URI namespace) {
+    private void setSourceNamespace(URI namespace) {
         getMetadataRootElement().setAttribute("sourceNamespace",namespace.toString());
     }    
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setTargetFragmentType(java.lang.String)
+     * @param code the target fragment type.
      */
-    public void setTargetFragmentType(String type) throws XBRLException {
+    private void setTargetFragmentType(String type) {
         getMetadataRootElement().setAttribute("targetRole",type);
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setTargetIndex(java.lang.String)
+     * @param index The target fragment index.
      */
-    public void setTargetIndex(String index) throws XBRLException {
+    private void setTargetIndex(String index) {
         getMetadataRootElement().setAttribute("targetIndex",index);
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setTargetLanguageCode(java.lang.String)
+     * @param code the target XML language code.
      */
-    public void setTargetLanguageCode(String code) throws XBRLException {
+    private void setTargetLanguageCode(String code) {
         getMetadataRootElement().setAttribute("targetLanguage",code);
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setTargetRole(java.net.URI)
+     * @param role the target XLink role.
      */
-    public void setTargetRole(URI role) throws XBRLException {
+    private void setTargetRole(URI role) {
         getMetadataRootElement().setAttribute("targetRole",role.toString());
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#setTargetName(String)
+     * @param name The local name of the target element.
      */
-    public void setTargetName(String name) {
+    private void setTargetName(String name) {
         getMetadataRootElement().setAttribute("targetName",name);
     }    
     
     /**
-     * @see org.xbrlapi.ActiveRelationship#setTargetNamespace(URI)
+     * @param namespace The namespace of the target element.
      */
     public void setTargetNamespace(URI namespace) {
         getMetadataRootElement().setAttribute("targetNamespace",namespace.toString());
