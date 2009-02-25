@@ -17,10 +17,19 @@ public class BaseAspectValueTransformer implements AspectValueTransformer {
     private Map<AspectValue,String> idMap = new HashMap<AspectValue,String>();
     private Map<String,String> labelMap = new HashMap<String,String>();
     
+    /**
+     * @param value The aspect value
+     * @return true if the transformer has an ID for the
+     * aspect value and false otherwise.
+     */
     protected boolean hasMapId(AspectValue value) {
         return idMap.containsKey(value);
     }
 
+    /**
+     * @param value The aspect value to get the aspect ID from.
+     * @return
+     */
     protected String getMapId(AspectValue value) {
         return idMap.get(value);
     }
@@ -33,6 +42,10 @@ public class BaseAspectValueTransformer implements AspectValueTransformer {
         return labelMap.containsKey(id);
     }
 
+    /**
+     * @param id The aspect ID
+     * @return the aspect value label.
+     */
     protected String getMapLabel(String id) {
         return labelMap.get(id);
     }
