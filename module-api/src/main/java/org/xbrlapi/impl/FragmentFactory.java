@@ -52,7 +52,7 @@ public class FragmentFactory<F> {
 		@SuppressWarnings("unchecked")
 	    public static <F extends XML> F newFragment(Store store, Element root) throws XBRLException {
 			try {
-				
+			    
 				if (root == null) throw new XBRLException("The data XML is null.");
 				if (! root.hasAttribute("type")) {
 					throw new XBRLException("The data does not identify the fragment type.");

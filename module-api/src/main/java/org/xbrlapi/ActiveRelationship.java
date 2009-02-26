@@ -125,4 +125,16 @@ public interface ActiveRelationship extends XML {
      */
     public boolean isToLabel();
     
+    /**
+     * @return true if the relationship is to an XBRL 2.1 or generic reference
+     */
+    public boolean isToReference();    
+    
+    /**
+     * @return true if the relationship is from a source fragment that is
+     * not also a target fragment in the same network of relationships that
+     * this relationship participates in.  Returns false otherwise.
+     */
+    public boolean isFromRoot();
+    
 }

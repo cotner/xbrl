@@ -12,7 +12,6 @@ import org.xbrlapi.Item;
 import org.xbrlapi.OpenContextComponent;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.Segment;
-import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.ExplicitDimension;
@@ -120,7 +119,7 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
                                 String memberName = childElement.getTextContent().trim();
                                 URI memberNamespace = occ.getNamespaceFromQName(memberName,child);
                                 String memberLocalname = occ.getLocalnameFromQName(memberName);
-                                return ((XBRLStore) occ.getStore()).getConcept(memberNamespace,memberLocalname);
+                                return occ.getStore().getConcept(memberNamespace,memberLocalname);
                             }
                         }
                     }

@@ -1,5 +1,7 @@
 package org.xbrlapi.xdt.aspects;
 
+import java.net.URI;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -170,12 +172,12 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
      * The label role is used in constructing the label for the
      * concept aspect values.
      */
-    private String role = Constants.StandardLabelRole;
+    private URI role = Constants.StandardLabelRole();
     
     /**
      * @return the label resource role.
      */
-    public String getLabelRole() {
+    public URI getLabelRole() {
         return role;
     }
     
@@ -183,7 +185,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
      * @param role The label resource role to use in
      * selecting labels for the concept.
      */
-    public void setLabelRole(String role) {
+    public void setLabelRole(URI role) {
         this.role = role;
     }    
 

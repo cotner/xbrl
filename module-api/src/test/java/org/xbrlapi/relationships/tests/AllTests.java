@@ -10,6 +10,7 @@ public class AllTests {
 				"Test for org.xbrlapi.relationships.tests");
 		//$JUnit-BEGIN$
 		suite.addTestSuite(NetworksTestCase.class);
+        suite.addTestSuite(PersistedNetworksTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

@@ -18,7 +18,6 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Locator;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -416,7 +415,7 @@ public class NetworkImpl implements Network {
         logger.debug("Completing network with arcrole " + this.getArcrole() + " and link role " + getLinkRole());
 
         // Get the arcs that define relationships in the network
-        FragmentList<ExtendedLink> links = ((XBRLStore) this.getStore()).getExtendedLinksWithRole(this.getLinkRole());
+        FragmentList<ExtendedLink> links = getStore().getExtendedLinksWithRole(this.getLinkRole());
         for (ExtendedLink link: links) {
             FragmentList<Arc> arcs = link.getArcsByArcrole(this.getArcrole());
             for (Arc arc: arcs) {

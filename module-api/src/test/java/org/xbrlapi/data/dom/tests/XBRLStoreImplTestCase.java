@@ -2,6 +2,7 @@ package org.xbrlapi.data.dom.tests;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcroleType;
@@ -43,7 +44,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
 	public void testGetLinkRoles() throws Exception {
 		try {
-			List<URI> roles = store.getLinkRoles();
+			Set<URI> roles = store.getLinkRoles();
 			assertEquals(2, roles.size());
 		} catch (Exception e) {
 		    e.printStackTrace();
@@ -53,7 +54,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
 	public void testGetArcRoles() throws Exception {
 		try {
-			List<URI> roles = store.getArcroles();
+			Set<URI> roles = store.getArcroles();
 			assertTrue(roles.size() > 7);
 		} catch (Exception e) {
 		    e.printStackTrace();
@@ -91,10 +92,10 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testGetLinkrolesForAGivenArcrole() throws Exception {
 		try {
-			List<URI> arcroles = store.getArcroles();
+			Set<URI> arcroles = store.getArcroles();
 			assertTrue(arcroles.size() > 0);
 			for (URI arcrole: arcroles) {
-				List<URI> linkroles = store.getLinkRoles(arcrole);
+				Set<URI> linkroles = store.getLinkRoles(arcrole);
 				logger.info(arcrole + " " + linkroles.size());
 			}
 		} catch (Exception e) {

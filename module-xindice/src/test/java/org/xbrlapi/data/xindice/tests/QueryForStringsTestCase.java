@@ -1,6 +1,6 @@
 package org.xbrlapi.data.xindice.tests;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Tests the query for strings method.
@@ -27,7 +27,7 @@ public class QueryForStringsTestCase extends BaseTestCase {
 	        loader.discover(this.getURI(START));
 		    
 	        String query = "/*/@index";
-	        List<String> results = store.queryForStrings(query);
+	        Set<String> results = store.queryForStrings(query);
 	        assertTrue(results.size() > 1);
 	        for (String result: results) {
 	            logger.info(result);

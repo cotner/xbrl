@@ -3,7 +3,6 @@ package org.xbrlapi.fragment.tests;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Language;
-import org.xbrlapi.data.XBRLStore;
 
 /**
  * Tests the implementation of the org.xbrlapi.Language interface.
@@ -44,7 +43,7 @@ public class LanguageTestCase extends DOMLoadingTestCase {
 	public void testGetLanguageName() {
 
 		try {
-			Language language = ((XBRLStore) store).getLanguage("EN","EN");
+			Language language = store.getLanguage("EN","EN");
 			assertEquals("English", language.getName());
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -9,7 +9,6 @@ import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Schema;
-import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.Constants;
@@ -78,7 +77,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
         Networks temp = null;
         if (getStore().hasStoredNetworks()) temp = getStore().getStoredNetworks();
         getStore().setStoredNetworks(null);
-        for (Network network: ((XBRLStore) this.getStore()).getMinimalNetworksWithArcrole(this,Constants.PresentationArcRole())) {
+        for (Network network: getStore().getMinimalNetworksWithArcrole(this,Constants.PresentationArcRole())) {
             roles.add(network.getLinkRole());
         }
         if (temp != null) getStore().setStoredNetworks(temp);

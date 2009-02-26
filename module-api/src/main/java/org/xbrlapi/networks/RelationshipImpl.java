@@ -305,6 +305,14 @@ public class RelationshipImpl implements Relationship {
 	public String getSemanticKey() throws XBRLException {
 		return this.getArc().getSemanticKey();
 	}
+
+    /**
+     * @see org.xbrlapi.networks.Relationship#isFromRoot()
+     */
+    public boolean isFromRoot() throws XBRLException {
+        return getNetwork().isRoot(this.getSourceIndex());
+    }
 	
 
+	
 }

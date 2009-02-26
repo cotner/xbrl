@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -300,7 +301,7 @@ abstract public class BaseAspect implements Aspect {
 
     /**
      * This basic implementation has a unique key for each fact
-     * which is not generally all that efficient from a 
+     * which is not efficient from a 
      * memory footprint perspective.
      * @see Aspect#getFragmentKey(Fact)
      */
@@ -349,6 +350,20 @@ abstract public class BaseAspect implements Aspect {
             label += "=" + text;
         }
         return label;
+    }    
+
+    /**
+     * @see Aspect#getAnalyser()
+     */
+    public Analyser getAnalyser() {
+        return getAspectModel().getAnalyser();
+    }    
+ 
+    /**
+     * @see Aspect#isUsingPersistedNetworks()
+     */
+    public boolean isUsingPersistedNetworks() {
+        return getAspectModel().isUsingPersistedNetworks();
     }    
     
 }

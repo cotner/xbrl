@@ -1,11 +1,11 @@
 package org.xbrlapi.networks;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.ActiveRelationship;
-import org.xbrlapi.data.XBRLStore;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.ActiveRelationshipImpl;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -16,9 +16,9 @@ public class StorerImpl implements Storer {
 
     protected static Logger logger = Logger.getLogger(StorerImpl.class);   
     
-    private XBRLStore store;
+    private Store store;
     
-    public StorerImpl(XBRLStore store) throws XBRLException {
+    public StorerImpl(Store store) throws XBRLException {
         super();
         setStore(store);
     }
@@ -28,7 +28,7 @@ public class StorerImpl implements Storer {
      * to be persisted.
      * @throws XBRLException if the data store is null.
      */
-    private XBRLStore getStore() {
+    private Store getStore() {
         return store;
     }
     
@@ -37,7 +37,7 @@ public class StorerImpl implements Storer {
      * to be persisted.
      * @throws XBRLException if the data store is null.
      */
-    private void setStore(XBRLStore store) throws XBRLException {
+    private void setStore(Store store) throws XBRLException {
         if (store == null) throw new XBRLException("The store must not be null.");
         this.store = store;
     }
@@ -74,9 +74,9 @@ public class StorerImpl implements Storer {
      */
     public void StoreAllNetworks() throws XBRLException {
         
-        List<URI> arcroles = getStore().getArcroles();
+        Set<URI> arcroles = getStore().getArcroles();
         for (URI arcrole: arcroles) {
-            List<URI> linkRoles = getStore().getLinkRoles(arcrole);
+            Set<URI> linkRoles = getStore().getLinkRoles(arcrole);
             for (URI linkRole: linkRoles) {
                 this.deleteRelationships(linkRole,arcrole);
                 this.storeRelationships(getStore().getNetworks(linkRole,arcrole));
@@ -88,8 +88,8 @@ public class StorerImpl implements Storer {
      * @see org.xbrlapi.networks.Storer#deleteRelationships(java.net.URI, java.net.URI)
      */
     public void deleteRelationships(URI linkRole, URI arcrole) throws XBRLException {
-        XBRLStore store = getStore();
-        List<String> indices = store.queryForIndices("/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+arcrole+"' and @linkRole='"+linkRole+"']");
+        Store store = getStore();
+        Set<String> indices = store.queryForIndices("/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+arcrole+"' and @linkRole='"+linkRole+"']");
         for (String index: indices) {
             store.remove(index);
         }
@@ -99,8 +99,8 @@ public class StorerImpl implements Storer {
      * @see org.xbrlapi.networks.Storer#deleteRelationships()
      */
     public void deleteRelationships() throws XBRLException {
-        XBRLStore store = getStore();
-        List<String> indices = store.queryForIndices("/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl']");
+        Store store = getStore();
+        Set<String> indices = store.queryForIndices("/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl']");
         for (String index: indices) {
             store.remove(index);
         }

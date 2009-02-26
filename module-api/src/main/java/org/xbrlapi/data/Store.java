@@ -5,13 +5,21 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xbrlapi.ArcroleType;
+import org.xbrlapi.Concept;
+import org.xbrlapi.ExtendedLink;
+import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
+import org.xbrlapi.Item;
 import org.xbrlapi.Language;
+import org.xbrlapi.RoleType;
 import org.xbrlapi.Stub;
+import org.xbrlapi.Tuple;
 import org.xbrlapi.XML;
 import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.networks.Networks;
@@ -45,10 +53,10 @@ public interface Store {
 	/**
 	 * Store a fragment.
 	 * Implementations of this method must always be synchronized. 
-	 * @param fragment The fragment to be added to the store.
+	 * @param xml The fragment to be added to the store.
 	 * @throws XBRLException if the fragment cannot be added to the store.
 	 */
-    public void persist(XML fragment) throws XBRLException;    
+    public void persist(XML xml) throws XBRLException;    
 
     /**
      * Test if a store contains a specific fragment, as identified by
@@ -127,11 +135,19 @@ public interface Store {
      * Run a query against the collection of all fragments in the store.
      * Implementations of this method must be synchronized.
      * @param query The XPath query to run against the set of fragments.
-     * @return a map indexed by the indices of the fragments matching 
+     * @return a set of the indices of fragments matching 
      * the query.
      * @throws XBRLException if the query cannot be executed.
      */
-    public List<String> queryForIndices(String query) throws XBRLException;
+    public Set<String> queryForIndices(String query) throws XBRLException;
+    
+    /**
+     * This method must be synchronised
+     * @param query The XPath query to run.
+     * @return a count of the number of results returned by the query.
+     * @throws XBRLException if the query cannot be executed.
+     */
+    public long queryCount(String query) throws XBRLException;    
     
     /**
      * Run a query that is required to return a list of strings.
@@ -141,7 +157,7 @@ public interface Store {
      * @throws XBRLException if the query cannot be executed or if the
      * query results are not strings.
      */
-    public List<String> queryForStrings(String query) throws XBRLException;
+    public Set<String> queryForStrings(String query) throws XBRLException;
     
     /**
      * Run a query that is required to return a single string.
@@ -396,7 +412,13 @@ public interface Store {
      * that involve this arc role.
      * @throws XBRLException
      */
-    public Networks getNetworks(URI arcrole) throws XBRLException;  
+    public Networks getNetworks(URI arcrole) throws XBRLException;
+
+    /**
+     * @return the collection of networks in the data store.
+     * @throws XBRLException
+     */
+    public Networks getAllNetworks() throws XBRLException;
 
     /**
      * Utility method to return a list of fragments in a data store
@@ -552,5 +574,210 @@ public interface Store {
      * @throws XBRLException if the sync operation fails.
      */
     public void sync() throws XBRLException;
+
+
+    /**
+     * @return a list of all of the root-level facts in the data store (those facts
+     * that are children of the root element of an XBRL instance).  Returns an empty list 
+     * if no facts are found.
+     * @throws XBRLException
+     */
+    public FragmentList<Fact> getFacts() throws XBRLException;
+    
+    /**
+     * @return a list of all of the items in the data store.
+     * @throws XBRLException
+     */
+    public FragmentList<Item> getItems() throws XBRLException;
+    
+    /**
+     * @return a list of all of the tuples in the data store.
+     * @throws XBRLException
+     */
+    public FragmentList<Tuple> getTuples() throws XBRLException;
+
+    /**
+     * @param uri The URI of the document to get the facts from.
+     * @return a list of all of the root-level facts in the specified document.
+     * @throws XBRLException
+     */
+    public FragmentList<Fact> getFacts(URI uri) throws XBRLException;
+    
+    /**
+     * @param uri The URI of the document to get the items from.
+     * @return a list of all of the root-level items in the data store.
+     * @throws XBRLException
+     */
+    public FragmentList<Item> getItems(URI uri) throws XBRLException;
+    
+    /**
+     * @param uri The URI of the document to get the facts from.
+     * @return a list of all of the root-level tuples in the specified document.
+     * @throws XBRLException
+     */
+    public FragmentList<Tuple> getTuples(URI uri) throws XBRLException;
+    
+    /**
+     * This implementation is not as strict as the XBRL 2.1 specification
+     * requires but it is generally faster and delivers sensible results.
+     * It will only fail if people use the same link role and arc role but
+     * rely on arc or link element differences to distinguish networks.<br/><br/>
+     * 
+     * Implementation strategy is:<br/>
+     * 1. Get all extended link elements with the given link role.<br/>
+     * 2. Get all arcs with the given arc role.<br/>
+     * 3. Get all resources at the source of the arcs.<br/>
+     * 4. Return only those source resources that that are not target resources also.<br/>
+     * 
+     * @param linkRole the role on the extended links that contain the network arcs.
+     * @param arcRole the arcrole on the arcs describing the network.
+     * @return The list of fragments for each of the resources that is identified as a root
+     * of the specified network (noting that a root resource is defined as a resource that is
+     * at the source of one or more relationships in the network and that is not at the target 
+     * of any relationships in the network).
+     * @throws XBRLException
+     */
+    public FragmentList<Fragment> getNetworkRoots(String linkRole, String arcRole) throws XBRLException;
+   
+    /**
+     * @param namespace The namespace for the concept.
+     * @param name The local name for the concept.
+     * @return the concept fragment for the specified namespace and name.
+     * @throws XBRLException if more than one matching concept is found in the data store
+     * or if no matching concepts are found in the data store.
+     */
+    public Concept getConcept(URI namespace, String name) throws XBRLException;
+
+    /**
+     * @return a list of arcroleType fragments
+     * @throws XBRLException
+     */
+    public FragmentList<ArcroleType> getArcroleTypes() throws XBRLException;
+    
+    /**
+     * @return a list of arcroleType fragments with a given arcrole
+     * @throws XBRLException
+     */
+    public FragmentList<ArcroleType> getArcroleTypes(String uri) throws XBRLException;
+    
+    /**
+     * @return a list of roleType fragments
+     * @throws XBRLException
+     */
+    public FragmentList<RoleType> getRoleTypes() throws XBRLException;
+    
+
+    
+    /**
+     * @return a list of RoleType fragments with a given role
+     * @throws XBRLException
+     */
+    public FragmentList<RoleType> getRoleTypes(URI uri) throws XBRLException;    
+    
+    /**
+     * @return a hash map indexed by resource roles that are used in extended links in the data store.
+     * @throws XBRLException
+     */
+    public List<URI> getResourceRoles() throws XBRLException;    
+    
+    /**
+     * @param starters The list of URIs of the documents to use as 
+     * starting points for analysis.
+     * @return list of URIs for the documents in the data store
+     * that are referenced, directly or indirectly, by any of the documents
+     * identified by the supplied list of document URIs.  Each entry in the list is a String.
+     * @throws XBRLException if some of the referenced documents are not in
+     * the data store.
+     */
+    public List<URI> getMinimumDocumentSet(List<URI> starters) throws XBRLException;
+    
+    
+    /**
+     * This is just a convenience method.
+     * @param uri The single document URI to use as 
+     * starting points for analysis.
+     * @return list of URIs for the documents in the data store
+     * that are referenced, directly or indirectly, by the document
+     * identified by the supplied URI.  Each entry in the list is a String.
+     * @throws XBRLException if some of the referenced documents are not in
+     * the data store.
+     */
+    public List<URI> getMinimumDocumentSet(URI uri) throws XBRLException;
+
+    /**
+     * Implementation strategy is:<br/>
+     * <ol>
+     * <li>Get all extended link elements matching network requirements.</li>
+     * <li>Get all arcs defining relationships in the network.</li>
+     * <li>Get all resources at the source of the arcs.</li>
+     * <li>Return only those source resources that that are not target resources also.</li>
+     * </ol>
+     * @param linkNamespace The namespace of the link element.
+     * @param linkName The name of the link element.
+     * @param linkRole the role on the extended links that contain the network arcs.
+     * @param arcNamespace The namespace of the arc element.
+     * @param arcName The name of the arc element.
+     * @param arcRole the arcrole on the arcs describing the network.
+     * @return The list of fragments for each of the resources that is identified as a root
+     * of the specified network (noting that a root resource is defined as a resource that is
+     * at the source of one or more relationships in the network and that is not at the target 
+     * of any relationships in the network).
+     * @throws XBRLException
+     */
+    public <F extends Fragment> FragmentList<F> getNetworkRoots(String linkNamespace, String linkName, String linkRole, String arcNamespace, String arcName, String arcRole) throws XBRLException;
+ 
+    /**
+     * @param linkrole The required linkrole value.
+     * @return the list of extended links with the specified linkrole.
+     * @throws XBRLException
+     */
+    public FragmentList<ExtendedLink> getExtendedLinksWithRole(URI linkrole) throws XBRLException;
+
+    /**
+     * Get the networks that, at a minimum, contain the relationships
+     * from each of the given fragments working back through ancestor relationships
+     * as far as possible.
+     * @param fragments The fragments to analyse.
+     * @param arcrole The required arcrole.
+     * @return The networks containing the relationships.
+     * @throws XBRLException
+     */
+    public Networks getMinimalNetworksWithArcrole(FragmentList<Fragment> fragments, URI arcrole) throws XBRLException;
+    
+    /**
+     * Convenience method for a single fragment.
+     * @see XBRLStore#getMinimalNetworksWithArcrole(FragmentList,URI)
+     */
+    public Networks getMinimalNetworksWithArcrole(Fragment fragment, URI arcrole) throws XBRLException;
+
+    /**
+     * @return a list of arc roles that are used in extended links in the data store.
+     * @throws XBRLException
+     */
+    public Set<URI> getArcroles() throws XBRLException;
+    
+    /**
+     * @param linkRole the specified linkrole to use in selecting arcroles.
+     * @return a list of arc roles that are used in extended links 
+     * with the given link role.
+     * @throws XBRLException if any of the arcroles is not a valid URI.
+     */
+    public Set<URI> getArcroles(URI linkRole) throws XBRLException;    
+
+    /**
+     * @return a hash map indexed by link roles that are used in extended links in the data store.
+     * @throws XBRLException
+     */
+    public Set<URI> getLinkRoles() throws XBRLException;
+
+    /**
+     * @param arcrole The arcrole determining the extended links that are to be examined for
+     * linkroles that are used on links containing arcs with the required arcrole.
+     * @return a hashmap of link roles, with one entry for each link role that is used on an
+     * extended link that contains an arc with the required arcrole.
+     * @throws XBRLException
+     */
+    public Set<URI> getLinkRoles(URI arcrole) throws XBRLException;    
+    
     
 }

@@ -1,19 +1,17 @@
 package org.xbrlapi.data.exist;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xbrlapi.XML;
 import org.xbrlapi.FragmentList;
-import org.xbrlapi.data.XBRLStore;
-import org.xbrlapi.data.XBRLStoreImpl;
+import org.xbrlapi.XML;
+import org.xbrlapi.data.BaseStoreImpl;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentFactory;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.utilities.Constants;
@@ -33,7 +31,7 @@ import org.xmldb.api.modules.XPathQueryService;
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
+public class StoreImpl extends BaseStoreImpl implements Store {
 
 	/**
 	 * The database connection used by the data store.
@@ -202,23 +200,23 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * Add a fragment to the DTS.  Sets the fragment builder to null because it
 	 * is no longer required, stores the fragment data and metadata in the 
 	 * data store, sets the store property in the fragment.
-	 * @param fragment The fragment to be added to the DTS store.
+	 * @param xml The fragment to be added to the DTS store.
 	 * @throws XBRLException if the fragment cannot be added to the store 
 	 * (eg: because one with the same index is already in the store).
 	 */
-    public synchronized void persist(XML fragment) throws XBRLException {
+    public synchronized void persist(XML xml) throws XBRLException {
 
-		if (fragment == null) throw new XBRLException("The fragment is null so it cannot be added.");
-		String index = fragment.getIndex();
+		if (xml == null) throw new XBRLException("The fragment is null so it cannot be added.");
+		String index = xml.getIndex();
 		
 		if (hasFragment(index)) {
             this.remove(index);
         }
 
-        if (fragment.getStore() != null) {
+        if (xml.getStore() != null) {
 	    	try {
 	    		XMLResource resource = (XMLResource) collection.createResource(index, XMLResource.RESOURCE_TYPE);
-		        resource.setContent(DOM2String(fragment.getMetadataRootElement()));
+		        resource.setContent(DOM2String(xml.getMetadataRootElement()));
 		        collection.storeResource(resource);
 	        } catch (XMLDBException e) {
 	        	throw new XBRLException("The fragment data could not be added to the eXist data store.", e);
@@ -228,15 +226,15 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		
 		try {
 			XMLResource resource = (XMLResource) collection.createResource(index, XMLResource.RESOURCE_TYPE);
-            resource.setContent(DOM2String(fragment.getBuilder().getMetadata()));
+            resource.setContent(DOM2String(xml.getBuilder().getMetadata()));
 	        collection.storeResource(resource);
         } catch (XMLDBException e) {
         	throw new XBRLException("The fragment data could not be added to the eXist data store.", e);
         }
 
         // Finalise the fragment, ready for use
-        fragment.setResource(fragment.getBuilder().getMetadata());
-        fragment.setStore(this);
+        xml.setResource(xml.getBuilder().getMetadata());
+        xml.setStore(this);
 
 	}
 	
@@ -349,9 +347,28 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
     
     /**
+     * @see org.xbrlapi.data.Store#queryCount(String)
+     */
+    public synchronized long queryCount(String query) throws XBRLException {
+        
+        query = query + this.getURIFilteringQueryClause();
+        
+        ResourceSet resources = null;
+        try {
+            for (String namespace: this.namespaceBindings.keySet()) 
+                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
+            resources = xpathService.query(query);
+            return resources.getSize();
+        } catch (XMLDBException e) {
+            throw new XBRLException("The query service failed.", e);
+        }
+
+    }    
+    
+    /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public synchronized List<String> queryForIndices(String query) throws XBRLException {
+    public synchronized Set<String> queryForIndices(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
         
@@ -364,7 +381,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             throw new XBRLException("The XPath query service failed.", e);
         }
 
-        Map<String,String> indices = new HashMap<String,String>();
+        Set<String> indices = new TreeSet<String>();
         try {
             ResourceIterator iterator = resources.getIterator();
             String regex = "<xbrlapi:fragment.*? index=\"(\\w+)\".*?>";
@@ -375,21 +392,18 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
                 Matcher matcher = pattern.matcher(string);
                 matcher.matches();
                 String index = matcher.group(1);
-                indices.put(index,null);
+                indices.add(index);
             }
         } catch (XMLDBException e) {
             throw new XBRLException("The query failed.", e);
         }
-        List<String> result = new Vector<String>();
-        result.addAll(indices.keySet());
-        return result;
-
+        return indices;
     }
     
     /**
      * @see org.xbrlapi.data.Store#queryForStrings(String)
      */
-    public synchronized List<String> queryForStrings(String query) throws XBRLException {
+    public synchronized Set<String> queryForStrings(String query) throws XBRLException {
         if (query.startsWith("/*")) {
             query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
         } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
@@ -397,9 +411,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         } else {
             throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
         }
-                
-        logger.info("RUNNING: " + query);
-        
+
         ResourceSet resources = null;
         try {
             for (String namespace: this.namespaceBindings.keySet()) 
@@ -409,7 +421,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             throw new XBRLException("The XPath query service failed.", e);
         }
 
-        List<String> strings = new Vector<String>();
+        Set<String> strings = new TreeSet<String>();
         try {
             ResourceIterator iterator = resources.getIterator();
             while (iterator.hasMoreResources()) {

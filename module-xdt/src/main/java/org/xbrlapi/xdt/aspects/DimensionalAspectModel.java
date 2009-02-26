@@ -16,7 +16,7 @@ import org.xbrlapi.aspects.ConceptAspect;
 import org.xbrlapi.aspects.EntityIdentifierAspect;
 import org.xbrlapi.aspects.PeriodAspect;
 import org.xbrlapi.aspects.UnitAspect;
-import org.xbrlapi.data.XBRLStore;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.ExplicitDimension;
@@ -70,7 +70,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     }
     
     private void addNewAspects(org.xbrlapi.OpenContextComponent occ) throws XBRLException {
-        XBRLStore store = (XBRLStore) occ.getStore();
+        Store store = occ.getStore();
         
         List<Element> children = occ.getChildElements();
         

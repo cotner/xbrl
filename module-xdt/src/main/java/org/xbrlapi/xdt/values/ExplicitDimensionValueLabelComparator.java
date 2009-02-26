@@ -86,8 +86,8 @@ public class ExplicitDimensionValueLabelComparator extends DimensionValueCompara
         Concept m1 = (Concept) v1.getValue();
         Concept m2 = (Concept) v2.getValue();
         
-        FragmentList<LabelResource> m1Labels = m1.getLabelsWithLanguageAndRole(language, role.toString());
-        FragmentList<LabelResource> m2Labels = m2.getLabelsWithLanguageAndRole(language, role.toString());
+        FragmentList<LabelResource> m1Labels = m1.getLabelsWithLanguageAndRole(language, role);
+        FragmentList<LabelResource> m2Labels = m2.getLabelsWithLanguageAndRole(language, role);
         
         if (m1Labels.getLength() > 0 && m2Labels.getLength() > 0) {
             return m1Labels.get(0).getStringValue().compareTo(m2Labels.get(0).getStringValue());

@@ -8,7 +8,6 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
-import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
@@ -124,11 +123,11 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 
             Networks networks = new NetworksImpl(store);
             store.setStoredNetworks(networks);
-            FragmentList<Item> facts = ((XBRLStore) store).getItems();
+            FragmentList<Item> facts = store.getItems();
             assertEquals(1,facts.getLength());
             for (Item fact: facts) {
                 logger.info(fact.getConcept().getLabels().get(0).getStringValue());
-                networks = ((XBRLStore) store).getMinimalNetworksWithArcrole(fact.getConcept(),Constants.PresentationArcRole());
+                networks = store.getMinimalNetworksWithArcrole(fact.getConcept(),Constants.PresentationArcRole());
             }
             List<Network> presentationNetworks = networks.getNetworks(Constants.PresentationArcRole());
             

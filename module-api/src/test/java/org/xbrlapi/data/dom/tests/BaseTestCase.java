@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.dom.StoreImpl;
 import org.xbrlapi.data.resource.InStoreMatcherImpl;
 import org.xbrlapi.loader.Loader;
@@ -29,7 +28,7 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 	protected String cache = configuration.getProperty("local.cache");
     protected File cacheFile = new File(cache);
     protected CacheImpl cacheImpl = null;
-	protected XBRLStore store = null;
+	protected Store store = null;
 	protected Loader loader = null;
 	
 	protected List<Store> stores = new LinkedList<Store>();

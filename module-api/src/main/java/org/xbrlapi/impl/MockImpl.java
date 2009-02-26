@@ -6,8 +6,6 @@ package org.xbrlapi.impl;
  */
 
 import org.xbrlapi.Mock;
-import org.xbrlapi.builder.BuilderImpl;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 public class MockImpl extends FragmentImpl implements Mock {
@@ -18,11 +16,11 @@ public class MockImpl extends FragmentImpl implements Mock {
 	 */
 	public MockImpl() throws XBRLException {
 		super();
-		this.setBuilder(new BuilderImpl());
+/*		this.setBuilder(new BuilderImpl());
 		getBuilder().appendElement(
 		        Constants.XBRLAPINamespace,"fragment",
 		        Constants.XBRLAPIPrefix + ":fragment");	
-	}
+*/	}
 	
 	/**
 	 * @param id The unique id of the fragment being created,
@@ -60,14 +58,14 @@ public class MockImpl extends FragmentImpl implements Mock {
 	 * of the fragment.
 	 */
     public void setSequenceToParentElement(String sequence) throws XBRLException {
-    	this.setMetaAttribute("SequenceToParentElement", sequence);
+    	setMetaAttribute("SequenceToParentElement", sequence);
     }
 
     /**
      * Set the preceding siblings information for the mock fragment.
      */
     public void setPrecedingSiblings(String precedingSiblings) throws XBRLException {
-    	this.setMetaAttribute("precedingSiblings", precedingSiblings);
+    	setMetaAttribute("precedingSiblings", precedingSiblings);
     }
 	
 }

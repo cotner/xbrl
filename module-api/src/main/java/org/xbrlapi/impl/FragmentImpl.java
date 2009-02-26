@@ -184,7 +184,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getLabels()
      */
     public FragmentList<LabelResource> getLabels() throws XBRLException {
-
+        
         Networks labelNetworks = this.getNetworksWithArcrole(Constants.LabelArcRole());
         FragmentList<LabelResource> labels = labelNetworks.<LabelResource>getTargetFragments(this.getIndex(),Constants.LabelArcRole());
 
@@ -345,9 +345,9 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndRole(String, String)
+     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndRole(String, URI)
      */
-    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(String language, String role) throws XBRLException {
+    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(String language, URI role) throws XBRLException {
         
         Networks networks = this.getLabelNetworks();
         FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();

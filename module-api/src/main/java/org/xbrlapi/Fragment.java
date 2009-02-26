@@ -294,7 +294,7 @@ public interface Fragment extends XML {
      * @return the list of labels for this fragment with the specified language code and XLink role.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(String language, String role) throws XBRLException;    
+    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(String language, URI role) throws XBRLException;    
     
     /**
      * @return a list of references for the fragment based on XBRL 2.1 reference arcs.

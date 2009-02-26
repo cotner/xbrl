@@ -5,9 +5,9 @@ package org.xbrlapi.data.dom;
  */
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.xpath.domapi.XPathEvaluatorImpl;
@@ -19,15 +19,15 @@ import org.w3c.dom.xpath.XPathEvaluator;
 import org.w3c.dom.xpath.XPathResult;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.XML;
-import org.xbrlapi.data.XBRLStore;
-import org.xbrlapi.data.XBRLStoreImpl;
+import org.xbrlapi.data.BaseStoreImpl;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentFactory;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 
-public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
+public class StoreImpl extends BaseStoreImpl implements Store {
 
 	protected static Logger logger = Logger.getLogger(StoreImpl.class);
 	
@@ -95,30 +95,30 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#persist(XML)
 	 */
-	public synchronized void persist(XML fragment) throws XBRLException {
+	public synchronized void persist(XML xml) throws XBRLException {
 		
-	    logger.debug("Storing " + fragment.getType() + " " + fragment.getIndex());
+	    logger.debug("Storing " + xml.getType() + " " + xml.getIndex());
 	    
 		// If the fragment is already stored we are done.
-		if (fragment.getStore() != null) {			
+		if (xml.getStore() != null) {			
 			return;
 		}
 		
 		// Get the fragment index to delete existing fragments with the same index.
-		String index = fragment.getIndex();
+		String index = xml.getIndex();
 		if (hasFragment(index)) {
 		    this.remove(index);
         }
 
 		// TODO Eliminate this importNode call.
-        Element element = (Element) dom.importNode(fragment.getBuilder().getMetadata(),true);
+        Element element = (Element) dom.importNode(xml.getBuilder().getMetadata(),true);
         store.appendChild(element);
         fragmentMap.put(index, element);
         indexMap.put(element, index);
         
         // Finalise the fragment, ready for use
-        fragment.setResource(element);
-        fragment.setStore(this);
+        xml.setResource(element);
+        xml.setStore(this);
 
 	}
 
@@ -222,9 +222,24 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
     
     /**
+     * @see Store#queryCount(String)
+     */
+    public synchronized long queryCount(String query) throws XBRLException {
+        query = query + this.getURIFilteringQueryClause();
+        XPathResult result = runQuery(query);
+        @SuppressWarnings("unused")
+        Node n;
+        long count = 0;
+        while ((n = result.iterateNext()) != null) {
+            count++;
+        }
+        return count;
+    }    
+    
+    /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public synchronized List<String> queryForIndices(String query) throws XBRLException {
+    public synchronized Set<String> queryForIndices(String query) throws XBRLException {
         query = query + this.getURIFilteringQueryClause();
         
         XPathResult xpr = runQuery(query);
@@ -234,15 +249,13 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             String index = getIndex(n);
             indices.put(index,null);
         }
-        List<String> result = new Vector<String>();
-        result.addAll(indices.keySet());
-        return result;
+        return indices.keySet();
     }
     
     /**
      * @see org.xbrlapi.data.Store#queryForStrings(String)
      */
-    public synchronized List<String> queryForStrings(String query) throws XBRLException {
+    public synchronized Set<String> queryForStrings(String query) throws XBRLException {
         if (query.startsWith("/*")) {
             query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
         } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
@@ -252,7 +265,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
         }
                 
         XPathResult result = runQuery(query);
-        List<String> strings = new Vector<String>();
+        Set<String> strings = new TreeSet<String>();
         Node n = null;
         while ((n = result.iterateNext()) != null) {
             strings.add(n.getNodeValue());

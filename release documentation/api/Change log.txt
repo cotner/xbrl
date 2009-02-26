@@ -1,3 +1,27 @@
+26 Feb. 2009
+Eliminated the XBRLStore interface and 
+implementation, merging the functionality back into the base
+store interface and implementation.  This is a precursor to
+refactoring all network analysis code into the data store implementations
+and out of the fragment implementations so that data store specific
+optimisations are easier to exploit.
+
+24 Feb. 2009
+Completed a first cut of a network analyser that enables
+interaction and analysis of persisted networks of relationships.
+A lot of methods are available to facilitate easy interaction
+with labels and references.
+
+20 Feb. 2009
+Modified Store to provide a wider range of query options and
+to make query processing more efficient.
+Added a new store query method that returns the number of results
+generated rather than the actual results.
+Adjusted string and indices queries to work with sets rather than lists
+for efficiency purposes.
+Adjusted the getArcroles and getLinkroles methods of the XBRLStore
+to work with sets rather than lists for efficiency purposes.
+
 19 Feb. 2009
 Changed the store* method names in the org.xbrlapi.data.Store
 interface.

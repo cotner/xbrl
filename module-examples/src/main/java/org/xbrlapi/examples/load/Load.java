@@ -25,7 +25,6 @@ import org.xbrlapi.Resource;
 import org.xbrlapi.Unit;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
@@ -44,7 +43,7 @@ import org.xml.sax.EntityResolver;
  */
 public class Load {
 
-    private static XBRLStore store = null;
+    private static Store store = null;
 
     /**
      * @param args The array of commandline arguments.
@@ -212,9 +211,8 @@ public class Load {
      * @return the new store.
      * @throws XBRLException if the store cannot be initialised.
      */
-    private static XBRLStore createStore(String database, String container) throws XBRLException {
-        Store store = new StoreImpl(database,container);
-        return (XBRLStore) store;
+    private static Store createStore(String database, String container) throws XBRLException {
+        return new StoreImpl(database,container);
     }
     
     

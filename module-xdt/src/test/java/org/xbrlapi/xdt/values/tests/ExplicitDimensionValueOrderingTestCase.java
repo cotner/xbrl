@@ -7,7 +7,6 @@ import java.util.TreeSet;
 import org.xbrlapi.Concept;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
-import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.Constants;
@@ -54,7 +53,7 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             
             FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.getLength());
-            FragmentList<Item> items = ((XBRLStore) store).getItems();
+            FragmentList<Item> items = store.getItems();
             assertEquals(3,items.getLength());
 
             TreeSet <DimensionValue> values = new TreeSet<DimensionValue>(new DimensionValueComparator());
@@ -96,7 +95,7 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             
             FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.getLength());
-            FragmentList<Item> items = ((XBRLStore) store).getItems();
+            FragmentList<Item> items = store.getItems();
             assertEquals(3,items.getLength());
 
             TreeSet <DimensionValue> values = new TreeSet<DimensionValue>(new ExplicitDimensionValueLabelComparator("en",Constants.StandardLabelRole));
@@ -146,14 +145,14 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             
             FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.getLength());
-            FragmentList<Item> items = ((XBRLStore) store).getItems();
+            FragmentList<Item> items = store.getItems();
             assertEquals(3,items.getLength());
 
             Networks networks = store.getNetworks(Constants.StandardLinkRole(),XDTConstants.domainMemberArcrole());
             assertEquals(1,networks.getSize());
             Network network = networks.getNetwork(Constants.StandardLinkRole(),XDTConstants.domainMemberArcrole());
             assertNotNull(network);
-            Concept root = ((XBRLStore) store).getConcept(new URI("http://xbrlapi.org/test/xdt/001"),"dom1");
+            Concept root = store.getConcept(new URI("http://xbrlapi.org/test/xdt/001"),"dom1");
 
             TreeSet <DimensionValue> values = new TreeSet<DimensionValue>(new ExplicitDimensionValueTreeComparator(network, root));
 

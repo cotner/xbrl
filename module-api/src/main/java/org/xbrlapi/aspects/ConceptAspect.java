@@ -1,5 +1,8 @@
 package org.xbrlapi.aspects;
 
+import java.net.URI;
+
+import org.xbrlapi.ActiveRelationship;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -64,11 +67,26 @@ public class ConceptAspect extends BaseAspect implements Aspect {
          */
         public String getLabel(AspectValue value) throws XBRLException {
             String id = getIdentifier(value);
+            
+            // Check if we have the label already
             if (hasMapLabel(id)) {
                 return getMapLabel(id);
             }
-            Concept f = ((Concept) value.getFragment());
-            FragmentList<LabelResource> labels = f.getLabelsWithLanguageAndRole(getLanguageCode(),getLabelRole());
+            
+            Concept concept = ((Concept) value.getFragment());
+
+            // Check if we are using persisted networks
+            if (isUsingPersistedNetworks()) {
+                FragmentList<ActiveRelationship> relationships = getAnalyser().getLabelRelationshipsByLanguageAndRole(concept.getIndex(),getLanguageCode(),getLabelRole());
+                if (!relationships.isEmpty()) {
+                    String label = ((LabelResource) relationships.get(0).getTarget()).getStringValue();
+                    logger.info("Concept aspect value label is " + label);
+                    setMapLabel(id,label);
+                    return label;
+                }
+            }
+            
+            FragmentList<LabelResource> labels = concept.getLabelsWithLanguageAndRole(getLanguageCode(),getLabelRole());
             if (labels.isEmpty()) return id;
             String label = labels.get(0).getStringValue();
             logger.info("Concept aspect value label is " + label);
@@ -80,18 +98,19 @@ public class ConceptAspect extends BaseAspect implements Aspect {
          * The label role is used in constructing the label for the
          * concept aspect values.
          */
-        private String role = Constants.StandardLabelRole;
+        private URI role = Constants.StandardLabelRole();
+        
         /**
          * @return the label resource role.
          */
-        public String getLabelRole() {
+        public URI getLabelRole() {
             return role;
         }
         /**
          * @param role The label resource role to use in
          * selecting labels for the concept.
          */
-        public void setLabelRole(String role) {
+        public void setLabelRole(URI role) {
             this.role = role;
         }
 

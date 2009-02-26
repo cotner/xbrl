@@ -409,9 +409,6 @@ public class BuilderImpl implements Builder {
 	    throw new XBRLException("Not yet implemented.");
 	}
 
-    //===========================================================
-    // Metadata construction methods
-    //===========================================================	
 	
 	/**
 	 * Set a metadata attribute.

@@ -68,9 +68,23 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
             if (hasMapLabel(id)) {
                 return getMapLabel(id);
             }
+/*
+            Entity f = (Entity) value.getFragment();
+            
+            // Check if we are using persisted networks
+            if (isUsingPersistedNetworks()) {
+                FragmentList<ActiveRelationship> relationships = getAnalyser().getLabelRelationshipsByLanguageAndRole(entity.getIndex(),getLanguageCode(),getLabelRole());
+                if (!relationships.isEmpty()) {
+                    String label = ((LabelResource) relationships.get(0).getTarget()).getStringValue();
+                    logger.info("Concept aspect value label is " + label);
+                    setMapLabel(id,label);
+                    return label;
+                }
+            }
+            */
             String label = id;
-            Entity f = ((Entity) value.getFragment());
-            FragmentList<LabelResource> labels = f.getEntityLabels();
+            Entity entity = ((Entity) value.getFragment());
+            FragmentList<LabelResource> labels = entity.getEntityLabels();
             FINDLABEL: for (LabelResource l: labels) {
                 if (
                         l.getLanguage().equals(getLanguageCode()) &&

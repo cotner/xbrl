@@ -2,6 +2,7 @@ package org.xbrlapi.data.bdbxml.tests;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.FragmentList;
@@ -70,7 +71,7 @@ public class StoreImplTestCase extends BaseTestCase {
     public void testQueryForIndices() {
         try {
             String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
-            List<String> indices = store.queryForIndices(xpathQuery);
+            Set<String> indices = store.queryForIndices(xpathQuery);
             assertTrue(! indices.isEmpty());
             for (String index: indices) {
                 logger.info(index);

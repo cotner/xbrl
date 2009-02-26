@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,9 +18,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xbrlapi.FragmentList;
 import org.xbrlapi.XML;
+import org.xbrlapi.data.BaseStoreImpl;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.data.XBRLStore;
-import org.xbrlapi.data.XBRLStoreImpl;
 import org.xbrlapi.impl.FragmentFactory;
 import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.utilities.Constants;
@@ -51,7 +52,7 @@ import com.sleepycat.dbxml.XmlValue;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
+public class StoreImpl extends BaseStoreImpl implements Store {
 
     protected static Logger logger = Logger.getLogger(StoreImpl.class);    
     
@@ -322,25 +323,25 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	/**
 	 * @see org.xbrlapi.data.Store#persist(XML)
 	 */
-    synchronized public void persist(XML fragment) throws XBRLException {
+    synchronized public void persist(XML xml) throws XBRLException {
 
 	    incrementCallCount();
         XmlUpdateContext xmlUpdateContext = null;
 	    try {
 	        
-	        if (fragment.getStore() != null) return;
+	        if (xml.getStore() != null) return;
 
-	        String index = fragment.getIndex();
+	        String index = xml.getIndex();
 	        if (hasFragment(index)) remove(index);
 
-            String xml = serializeToString(fragment.getMetadataRootElement());
+            String string = serializeToString(xml.getMetadataRootElement());
             xmlUpdateContext = dataManager.createUpdateContext();
             XmlDocumentConfig documentConfiguration = new XmlDocumentConfig();
             documentConfiguration.setWellFormedOnly(true);
-            dataContainer.putDocument(index, xml, xmlUpdateContext, null);
+            dataContainer.putDocument(index, string, xmlUpdateContext, null);
 
-            fragment.setResource(fragment.getBuilder().getMetadata());
-            fragment.setStore(this);
+            xml.setResource(xml.getBuilder().getMetadata());
+            xml.setStore(this);
 	        
         } catch (XmlException e) {
             throw new XBRLException("The fragment could not be added to the BDB XML data store.", e);
@@ -483,7 +484,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
-    public synchronized List<String> queryForIndices(String query) throws XBRLException {
+    public synchronized Set<String> queryForIndices(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
         
@@ -507,9 +508,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
                     xmlValue.delete();
                     xmlValue = xmlResults.next();
                 }
-                List<String> result = new Vector<String>();
-                result.addAll(indices.keySet());
-                return result;
+                return indices.keySet();
     
             } catch (XmlException e) {
                 throw new XBRLException("Failed query: " + query,e);
@@ -525,7 +524,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
     /**
      * @see org.xbrlapi.data.Store#queryForStrings(String)
      */
-    public synchronized List<String> queryForStrings(String query) throws XBRLException {
+    public synchronized Set<String> queryForStrings(String query) throws XBRLException {
         if (query.startsWith("/*")) {
             query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
         } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
@@ -544,7 +543,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
                 xmlResults = performQuery(query);
                 double startTime = System.currentTimeMillis();
                 xmlValue = xmlResults.next();
-                List<String> strings = new Vector<String>();
+                Set<String> strings = new TreeSet<String>();
                 while (xmlValue != null) {
                     strings.add(xmlValue.getNodeValue());
                     xmlValue.delete();
@@ -564,6 +563,26 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
             if (xmlResults != null) xmlResults.delete();
         }        
     }
+    
+    /**
+     * @see Store#queryCount(String)
+     */
+    public synchronized long queryCount(String query) throws XBRLException {
+
+        query = query + this.getURIFilteringQueryClause();
+        
+        this.incrementCallCount();
+        
+        XmlResults xmlResults = null;
+        try {
+            xmlResults = performLazyQuery(query);        
+            return xmlResults.size();
+        } catch (XmlException e) {
+            throw new XBRLException("Failed query: " + query,e);
+        } finally {
+            if (xmlResults != null) xmlResults.delete();
+        }
+    }    
     
     
     /**
@@ -597,6 +616,38 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		}
     		
 	}
+	
+    /**
+     * Performs a lazy query evaluation
+     * @param myQuery The query to be performed.
+     * @return the results of the query.
+     * @throws XBRLException if the query fails to execute.
+     */
+    private XmlResults performLazyQuery(String myQuery) throws XBRLException {
+        // TODO provide a means of adding additional namespaces for querying.
+        // TODO provide a means of investigating namespace bindings for the query configuration.
+        
+        XmlQueryContext xmlQueryContext = null;
+        XmlQueryExpression xmlQueryExpression = null;
+        try {
+            String query = "collection('" + dataContainer.getName() + "')" + myQuery;
+            xmlQueryContext = createQueryContext();
+            xmlQueryContext.setEvaluationType(XmlQueryContext.Lazy);
+            xmlQueryExpression = dataManager.prepare(query,xmlQueryContext);
+            double startTime = System.currentTimeMillis();
+            XmlResults xmlResults = xmlQueryExpression.execute(xmlQueryContext);
+            Double time = new Double((System.currentTimeMillis()-startTime));
+            logger.debug(time + " milliseconds to evaluate " + myQuery);
+            return xmlResults;
+
+        } catch (XmlException e) {
+            throw new XBRLException("Failed query: " + myQuery,e);
+        } finally {
+            if (xmlQueryContext != null) xmlQueryContext.delete();
+            if (xmlQueryExpression != null) xmlQueryExpression.delete();
+        }
+            
+    }	
 	
 	/**
 	 * @return a XQuery context, prepared with namespace declarations etc.

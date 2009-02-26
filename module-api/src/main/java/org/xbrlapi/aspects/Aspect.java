@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -252,4 +253,18 @@ public interface Aspect {
      * @throws XBRLException
      */
     public List<AspectValue> getChildren(AspectValue parent) throws XBRLException;
+    
+    /**
+     * @return The persisted relationship analyser being used
+     * to construct the aspect model with this aspect,
+     * or null if there is none.
+     */
+    public Analyser getAnalyser();    
+
+    /**
+     * @return True if the aspect model is being built using
+     * persisted network information accessed via an Analyser.
+     * @see org.xbrlapi.networks.Analyser
+     */
+    public boolean isUsingPersistedNetworks();
 }

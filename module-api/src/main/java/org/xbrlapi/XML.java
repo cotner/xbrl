@@ -120,9 +120,8 @@ public abstract interface XML extends Comparable<XML> {
      * Get a fragment metadata attribute.
      * @param name the name of the attribute.
      * @return The value of the metadata attribute or null if none exists.
-     * @throws XBRLException
      */
-    public String getMetaAttribute(String name) throws XBRLException;
+    public String getMetaAttribute(String name);
 
     /**
      * Removes a metadata attribute
@@ -151,6 +150,8 @@ public abstract interface XML extends Comparable<XML> {
         
     /**
      * serializes the XML to standard output.
+     * @throws XBRLException if the XML resource is not
+     * associated with a data store.
      */
     public void serialize() throws XBRLException;
     

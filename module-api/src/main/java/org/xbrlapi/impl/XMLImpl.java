@@ -89,8 +89,8 @@ public class XMLImpl implements XML {
      * @see org.xbrlapi.XML#setResource(Element)
      */
     public void setResource(Element rootElement) throws XBRLException {
-        builder = null;
         if (rootElement == null) throw new XBRLException("The XML resource is null.");
+        builder = null;
         this.rootElement = rootElement;
     }    
     
@@ -219,7 +219,7 @@ public class XMLImpl implements XML {
     /**
      * @see org.xbrlapi.XML#getMetaAttribute(String)
      */
-    public String getMetaAttribute(String name) throws XBRLException {
+    public String getMetaAttribute(String name) {
         if (builder != null) {
             String value = getBuilder().getMetaAttribute(name);
             if (value == null) return null;
@@ -302,6 +302,7 @@ public class XMLImpl implements XML {
      * @see org.xbrlapi.XML#serialize()
      */
     public void serialize() throws XBRLException {
+        if (this.getStore() == null) throw new XBRLException("The fragment can only be serialized if it has been associated with a data store.");
         getStore().serialize(this);
     }
     

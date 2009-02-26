@@ -191,5 +191,12 @@ public interface Relationship {
 	 * @return the string expression of the relationship in terms of the fragment indices.
 	 */
 	public String toString();	
-	
+
+	/**
+	 * @return true if the relationship is from a source fragment that is
+	 * not also a target fragment in the network that the relationship is
+	 * defined in.  Returns false otherwise.
+	 * @throws XBRLException
+	 */
+	public boolean isFromRoot() throws XBRLException;
 }

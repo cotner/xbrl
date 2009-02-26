@@ -39,11 +39,15 @@ import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
 import org.xbrlapi.loader.discoverer.Discoverer;
+import org.xbrlapi.networks.Analyser;
+import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.NetworkImpl;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
 import org.xbrlapi.networks.Relationship;
+import org.xbrlapi.networks.Storer;
+import org.xbrlapi.networks.StorerImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -61,11 +65,11 @@ import freemarker.template.Template;
  * @author Steve Yang (steve2yang@yahoo.com) (YangSt1)
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class Run {
+public class RunWithPersistedNetworks {
 
     private static Store store = null;
 
-    protected static Logger logger = Logger.getLogger(Run.class);
+    protected static Logger logger = Logger.getLogger(RunWithPersistedNetworks.class);
 
     private static double startTime;
 
@@ -194,11 +198,13 @@ public class Run {
             }
             reportTime("Loading data");
 
-/*            logger.info("Documents in the data store include ...");            
-            for (String uri: store.getStoredURIs()) {
-                logger.info(uri);
-            }
-*/            
+            Storer storer = new StorerImpl(store);
+
+            storer.StoreAllNetworks();
+            reportTime("Storing all relationships");
+            
+            Analyser analyser = new AnalyserImpl(store);
+      
             // Get the Freemarker template ready to use.
             if (!arguments.containsKey("template"))
                 throw new XBRLException("The Freemarker template must be specified.");
@@ -208,15 +214,12 @@ public class Run {
                 throw new XBRLException("The template file location is invalid and resulted in a null file.");
             if (!templateFile.exists())
                 throw new XBRLException("The freemarker template does not exist.");
-            logger.info("The template file is " + templateFile);
-            logger.info("The template file name is " + templateFile.getName());
-            logger.info("The template file parent directory is " + templateFile.getParentFile());
             Configuration freemarker = new Configuration();
             freemarker.setDirectoryForTemplateLoading(templateFile.getParentFile());
             freemarker.setObjectWrapper(new DefaultObjectWrapper());
             Template template = freemarker.getTemplate(templateFile.getName());
 
-            Run.reportTime("Configuring Freemarker");
+            reportTime("Configuring Freemarker");
 
             // Create the Freemarker data-model that will populate the template
             Map<String, Object> model = new HashMap<String, Object>();
@@ -240,7 +243,7 @@ public class Run {
             model.put("contexts", instance.getContexts());
             model.put("units", instance.getUnits());
             reportTime("Adding report resources to the data model");
-            
+
             FragmentList<Item> items = instance.getItems();
             for (Item item: items) {
                 String key= item.getNamespace() + item.getLocalname();
@@ -263,13 +266,13 @@ public class Run {
                 store.setStoredNetworks(networks);
             }
             reportTime("Initialising the networks");
-            
+
             // Build the label networks.
             networks.addRelationships(Constants.LabelArcRole);
             reportTime("Getting standard labels");
             networks.addRelationships(Constants.GenericLabelArcRole);
             reportTime("Getting generic labels");
-            
+
             // Iterate the presentation networks in the DTS
             List<Map<String, Object>> tables = new Vector<Map<String, Object>>();
             model.put("tables", tables);
@@ -293,14 +296,11 @@ public class Run {
 
                 // Configure the aspect model (useful for sorting facts by their aspects)
                 aspectModel = new NonDimensionalAspectModel();
+                aspectModel.setAnalyser(analyser);
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
 
-                try {
-                    network = new NetworkImpl(store,linkrole,new URI(Constants.PresentationArcRole));
-                } catch (URISyntaxException e) {
-                    ;// Cannot actually be thrown
-                }
+                network = new NetworkImpl(store,linkrole,Constants.PresentationArcRole());
                 networks.addNetwork(network);
                 network.complete();
                 reportTime("Completing the network");
@@ -333,7 +333,7 @@ public class Run {
                 table.put("periods",periods);
                 table.put("maxLevel", maxLevel);
                 reportTime("Processing  " + title);
-                                
+
             }
 
             // TODO Extend the template to render the footnote information.
