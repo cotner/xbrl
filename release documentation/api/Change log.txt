@@ -5,6 +5,13 @@ store interface and implementation.  This is a precursor to
 refactoring all network analysis code into the data store implementations
 and out of the fragment implementations so that data store specific
 optimisations are easier to exploit.
+Added a new method for Networks to allow two Network collections to 
+be merged.
+Added more methods to get references for fragments.
+Removed remaining fragment data modification methods.
+Eliminated network analysis methods from the fragment interface,
+pushing responsibility for such operations to the store so that the
+store can optimise network analysis in various ways.
 
 24 Feb. 2009
 Completed a first cut of a network analyser that enables
