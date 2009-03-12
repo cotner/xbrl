@@ -1,8 +1,9 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+
 import org.xbrlapi.CustomType;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
 
 /**
  * Tests the implementation of the org.xbrlapi.CustomType interface.
@@ -31,8 +32,8 @@ public class CustomTypeTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetCustomRoleTypeDefinition() {
         try {
-            FragmentList<CustomType> fragments = store.<CustomType>getFragments("RoleType");
-            assertTrue(fragments.getLength() > 0);
+            List<CustomType> fragments = store.<CustomType>gets("RoleType");
+            assertTrue(fragments.size() > 0);
             for (CustomType fragment: fragments) {
                 if (fragment.getCustomURI().equals("http://mycompany.com/xbrl/roleE/newExtendedRoleType")) {
                     assertEquals("Test variation for defining a new role on a presentationLink", fragment.getDefinition());
@@ -50,8 +51,8 @@ public class CustomTypeTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetCustomTypeId() {
         try {
-            FragmentList<CustomType> fragments = store.<CustomType>getFragments("RoleType");
-            assertTrue(fragments.getLength() > 0);
+            List<CustomType> fragments = store.<CustomType>gets("RoleType");
+            assertTrue(fragments.size() > 0);
             for (CustomType fragment: fragments) {
                 if (fragment.getCustomURI().equals("http://mycompany.com/xbrl/roleE/newExtendedRoleType")) {
                     assertEquals("newExtendedRoleType", fragment.getCustomTypeId());
@@ -68,9 +69,9 @@ public class CustomTypeTestCase extends DOMLoadingTestCase {
 	public void testGetUsedOns() {
 
 		try {
-		    FragmentList<CustomType> types = store.<CustomType>getFragments("RoleType");
+		    List<CustomType> types = store.<CustomType>gets("RoleType");
 		    for (CustomType type: types) {
-	            assertTrue(type.getUsedOns().getLength() > 0);
+	            assertTrue(type.getUsedOns().size() > 0);
 		    }
 		} catch (Exception e) {
 			e.printStackTrace();

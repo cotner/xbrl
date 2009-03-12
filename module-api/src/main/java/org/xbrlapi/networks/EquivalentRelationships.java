@@ -11,7 +11,7 @@ public interface EquivalentRelationships {
     /**
      * @return the number of equivalent relationships in the set.
      */
-    public int getLength();
+    public int size();
     
 	/**
 	 * @param relationship The relationship to add.

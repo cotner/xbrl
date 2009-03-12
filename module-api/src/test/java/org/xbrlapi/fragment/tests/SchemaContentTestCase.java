@@ -2,7 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Locator;
 import org.xbrlapi.Schema;
 import org.xbrlapi.utilities.XBRLException;
@@ -34,8 +34,8 @@ public class SchemaContentTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetSchema() {		
 		try {
-		    FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
-		    assertTrue(concepts.getLength() > 0);
+		    List<Concept> concepts = store.<Concept>gets("Concept");
+		    assertTrue(concepts.size() > 0);
 		    for (Concept concept: concepts) {
 	            assertEquals(concept.getParent().getIndex(), concept.getSchema().getIndex());
 		    }
@@ -50,8 +50,8 @@ public class SchemaContentTestCase extends DOMLoadingTestCase {
 	public void testGetSchemaTargetNamespace() {		
 
 	    try {
-            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
-            assertTrue(concepts.getLength() > 0);
+            List<Concept> concepts = store.<Concept>gets("Concept");
+            assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 Schema schema = concept.getSchema();
                 assertEquals(concept.getTargetNamespace().toString(), schema.getDataRootElement().getAttribute("targetNamespace"));
@@ -66,11 +66,11 @@ public class SchemaContentTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLocators() {
         try {
-            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
-            assertTrue(concepts.getLength() > 0);
+            List<Concept> concepts = store.<Concept>gets("Concept");
+            assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
-                FragmentList<Locator> locators = concept.getReferencingLocators();
-                assertTrue(locators.getLength() > 0);
+                List<Locator> locators = concept.getReferencingLocators();
+                assertTrue(locators.size() > 0);
             }
         } catch (XBRLException e) {
             fail(e.getMessage());

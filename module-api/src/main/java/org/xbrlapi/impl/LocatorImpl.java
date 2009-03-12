@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Locator;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -76,9 +76,9 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
      * Get the single fragment that this locator references.
      * @return the single fragment referenced by the locator.
      * @throws XBRLException if the locator does not reference exactly one fragment.
-     * @see org.xbrlapi.Locator#getTargetFragment()
+     * @see org.xbrlapi.Locator#getTarget()
      */
-    public Fragment getTargetFragment() throws XBRLException {
+    public Fragment getTarget() throws XBRLException {
 
     	String pointerCondition = "";
     	String pointerValue = getTargetPointerValue();
@@ -86,10 +86,10 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
     		pointerCondition = " and "+ Constants.XBRLAPIPrefix+ ":" + "xptr/@value='" + pointerValue + "'";
 
     	String query = "/*[@uri='" + getTargetDocumentURI() + "'" + pointerCondition + "]";
-    	FragmentList<Fragment> fragments = getStore().<Fragment>query(query);
-    	if (fragments.getLength() == 0) throw new XBRLException("The simple link does not reference a fragment.");
-    	if (fragments.getLength() > 1) throw new XBRLException("The simple link references more than one fragment.");
-    	return fragments.getFragment(0);
+    	List<Fragment> fragments = getStore().<Fragment>query(query);
+    	if (fragments.size() == 0) throw new XBRLException("The simple link does not reference a fragment.");
+    	if (fragments.size() > 1) throw new XBRLException("The simple link references more than one fragment.");
+    	return fragments.get(0);
     }
     
 }

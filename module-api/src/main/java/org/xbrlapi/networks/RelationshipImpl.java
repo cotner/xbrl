@@ -41,14 +41,14 @@ public class RelationshipImpl implements Relationship {
 	public RelationshipImpl(Store store, String a, String s, String t) throws XBRLException {
 		setStore(store);
 		try {
-			setArc((Arc) getFragment(a));
+			setArc((Arc) get(a));
 		} catch (ClassCastException e) {
 			throw new XBRLException("The arc index does not correspond to an arc.",e);
 		}
-		setSource(getFragment(s));
-		setTarget(getFragment(t));
+		setSource(get(s));
+		setTarget(get(t));
 		try {
-			setLink((ExtendedLink) getFragment(s));
+			setLink((ExtendedLink) get(s));
 		} catch (ClassCastException e) {
 			throw new XBRLException("The link index does not correspond to an extended link.",e);
 		}
@@ -67,7 +67,7 @@ public class RelationshipImpl implements Relationship {
 		setArc(a);
 		setSource(s);
 		setTarget(t);
-		setLink((ExtendedLink) getFragment(a.getParentIndex()));
+		setLink((ExtendedLink) get(a.getParentIndex()));
 	}
 
 	/**
@@ -132,11 +132,11 @@ public class RelationshipImpl implements Relationship {
 	 * @return The fragment corresponding to the supplied index.
 	 * @throws XBRLException
 	 */
-	private Fragment getFragment(String index) throws XBRLException {
+	private Fragment get(String index) throws XBRLException {
 		if (network == null) {
-			return getStore().getFragment(index);
+			return getStore().get(index);
 		}
-		return network.getFragment(index);
+		return network.get(index);
 	}
 	
 	/**
@@ -243,8 +243,8 @@ public class RelationshipImpl implements Relationship {
 	/**
 	 * @see org.xbrlapi.networks.Relationship#getOrder()
 	 */
-	public String getOrder() throws XBRLException {
-	    return getArc().getOrder().trim();
+	public Double getOrder() throws XBRLException {
+	    return getArc().getOrder();
 	}
 
 	/**

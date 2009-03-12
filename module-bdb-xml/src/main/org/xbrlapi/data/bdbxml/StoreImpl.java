@@ -14,7 +14,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xbrlapi.Constants;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.XBRLException;
 import org.xbrlapi.data.XBRLStore;
 import org.xbrlapi.data.XBRLStoreImpl;
@@ -195,7 +195,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 			return;
 		}
 		
-		String index = fragment.getFragmentIndex();
+		String index = fragment.getIndex();
 		
 		if (hasFragment(index)) {
         	throw new XBRLException("A fragment with index " + index + " already exists.");
@@ -242,9 +242,9 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#getFragment(String)
+	 * @see org.xbrlapi.data.Store#get(String)
 	 */
-	public Fragment getFragment(String index) throws XBRLException {
+	public Fragment get(String index) throws XBRLException {
 		
 		// Get the Document from the container.
 		XmlDocument xmlDocument = null;
@@ -273,7 +273,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @see org.xbrlapi.data.Store#removeFragment(String)
 	 */
 	public void removeFragment(Fragment fragment) throws XBRLException {
-		removeFragment(fragment.getFragmentIndex());
+		removeFragment(fragment.getIndex());
 	}
 
 	/**
@@ -317,7 +317,7 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 	 * @see org.xbrlapi.data.Store#query(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	public <F extends Fragment> FragmentList<F> query(String myQuery) throws XBRLException {
+	public <F extends Fragment> List<F> query(String myQuery) throws XBRLException {
 		try {
 			
 		    XmlQueryContext xmlQueryContext = dataManager.createQueryContext();
@@ -331,14 +331,14 @@ public class StoreImpl extends XBRLStoreImpl implements XBRLStore {
 		    String query = "collection('" + dataContainer.getName() + "')" + myQuery;
 		    XmlResults results = dataManager.query(query,xmlQueryContext);
 		    XmlValue value = results.next();
-			FragmentList<F> fragments = new FragmentListImpl<F>();
+			List<F> fragments = new Vector<F>();
 		    while (value != null) {
 		        XmlDocument theDoc = value.asDocument();
 		        // TODO determine why the BDB XML query result cannot be accessed as an input stream.
 		        //Document document = builder.newDocument(theDoc.getContentAsInputStream());
 		        Document document = XMLUnit.buildTestDocument(new InputSource(new StringReader(value.asString())));
 		        Element root = document.getDocumentElement();
-				fragments.addFragment((F) FragmentFactory.newFragment(this, root));
+				fragments.add((F) FragmentFactory.newFragment(this, root));
 		        value = results.next();
 		     }
 	    	

@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.MixedContentResource;
 
 /**
@@ -32,8 +32,8 @@ public class MixedContentResourceTestCase extends DOMLoadingTestCase {
 	public void testGetLanguageCode() {	
 
 		try {			
-			FragmentList<MixedContentResource> fragments = store.<MixedContentResource>getFragments("LabelResource");
-			MixedContentResource fragment = fragments.getFragment(0);
+			List<MixedContentResource> fragments = store.<MixedContentResource>gets("LabelResource");
+			MixedContentResource fragment = fragments.get(0);
 			assertEquals("en", fragment.getLanguage());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,8 +47,8 @@ public class MixedContentResourceTestCase extends DOMLoadingTestCase {
 	public void testGetContent() {	
 
 		try {
-			FragmentList<MixedContentResource> fragments = store.<MixedContentResource>getFragments("LabelResource");
-			MixedContentResource fragment = fragments.getFragment(0);
+			List<MixedContentResource> fragments = store.<MixedContentResource>gets("LabelResource");
+			MixedContentResource fragment = fragments.get(0);
 			assertEquals(1, fragment.getContent().getLength());
 		} catch (Exception e) {
 			e.printStackTrace();

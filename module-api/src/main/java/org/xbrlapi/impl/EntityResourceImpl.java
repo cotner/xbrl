@@ -1,12 +1,12 @@
 package org.xbrlapi.impl;
 
 import java.net.URI;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.Entity;
 import org.xbrlapi.EntityResource;
-import org.xbrlapi.FragmentList;
-import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -34,14 +34,10 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
     /**
      * @see org.xbrlapi.EntityResource#getEquivalents()
      */
-    public FragmentList<EntityResource> getEquivalents() throws XBRLException { 
+    public Set<EntityResource> getEquivalents() throws XBRLException { 
         logger.debug("Getting equivalents to " + this.getStringIdentifier());
-        HashMap<String,EntityResource> map = new HashMap<String,EntityResource>();
-        getEquivalentsMap(map);
-        FragmentList<EntityResource> result = new FragmentListImpl<EntityResource>();
-        for (EntityResource entity: map.values()) {
-            result.add(entity);
-        }
+        Set<EntityResource> result = new HashSet<EntityResource>();
+        this.getEquivalentsSet(result);
         return result;        
     }    
     
@@ -58,57 +54,72 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      * of equivalent-entity relationships to this entity resource.
      * @throws XBRLException
      */
-    protected FragmentList<EntityResource> getDirectEquivalents() throws XBRLException {
-        Networks networks = this.getNetworks();
-        FragmentList<EntityResource> result = networks.<EntityResource>getTargetFragments(this.getIndex(),Constants.XBRLAPIEquivalentEntitiesArcrole());
-        result.addAll(networks.<EntityResource>getSourceFragments(this.getIndex(),Constants.XBRLAPIEquivalentEntitiesArcrole()));
-        return result;
+    protected List<EntityResource> getDirectEquivalents() throws XBRLException {
+        List<EntityResource> equivalents = this.getParentEquivalents();
+        equivalents.addAll(this.getChildEquivalents());
+        return equivalents;
     }
+    
+    /**
+     * @return a list of entity resources that are parents
+     * of equivalent-entity relationships with this entity resource
+     * as a target.
+     * @throws XBRLException
+     */
+    protected List<EntityResource> getParentEquivalents() throws XBRLException {
+        List<EntityResource> equivalents = getStore().<EntityResource>getTargets(this.getIndex(),null,Constants.XBRLAPIEquivalentEntitiesArcrole());
+        return equivalents;
+    }
+    
+    /**
+     * @return a list of entity resources that are children
+     * of equivalent-entity relationships with this entity resource
+     * as a source.
+     * @throws XBRLException
+     */
+    protected List<EntityResource> getChildEquivalents() throws XBRLException {
+        return getStore().<EntityResource>getSources(this.getIndex(),null,Constants.XBRLAPIEquivalentEntitiesArcrole());
+    }    
     
     /**
      * Augments a map of equivalent entities
      * @throws XBRLException
      */
-    protected void getEquivalentsMap(HashMap<String,EntityResource> map) throws XBRLException {
+    protected void getEquivalentsSet(Set<EntityResource> set) throws XBRLException {
 
-        logger.debug("Getting equivalents map for " + this.getStringIdentifier());
-        
-        String id = this.getStringIdentifier();
-        if (map.isEmpty()) {
-            map.put(id,this);
-        } else {
-            if(! map.containsKey(id)) {
-                logger.debug("Adding " + id + " to the equivalents map.");
-                map.put(id,this);
-            }
+        if (set == null) {
+            set = new HashSet<EntityResource>();
         }
         
-        FragmentList<EntityResource> directEquivalents = this.getDirectEquivalents();
-        logger.debug(id + " has " + directEquivalents.getLength() + " direct equivalents.");
-        for (EntityResource candidate: directEquivalents) {
-            EntityResourceImpl impl = (EntityResourceImpl) candidate;
-            if(! map.containsKey(impl.getStringIdentifier())) {
-                impl.getEquivalentsMap(map);
-            }
+        set.add(this);
+        
+        Set<EntityResource> newEquivalents = new HashSet<EntityResource>(this.getDirectEquivalents());
+        newEquivalents.removeAll(set);
+        if (newEquivalents.isEmpty()) return;
+        set.addAll(newEquivalents);
+        
+        for (EntityResource entityResource: newEquivalents) {
+            ((EntityResourceImpl) entityResource).getEquivalentsSet(set);
         }
+        
     }
     
     /**
      * @see org.xbrlapi.EntityResource#getEntities()
      */
-    public FragmentList<Entity> getEntities() throws XBRLException {
+    public List<Entity> getEntities() throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
-        FragmentList<Entity> entities = getStore().<Entity>query(query);
+        List<Entity> entities = getStore().<Entity>query(query);
         return entities;
     }
 
     /**
      * @see org.xbrlapi.EntityResource#getEntities(URI)
      */
-    public FragmentList<Entity> getEntities(URI uri) throws XBRLException {
+    public List<Entity> getEntities(URI uri) throws XBRLException {
         URI matchURI = getStore().getMatcher().getMatch(uri);
         String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and @uri='" + matchURI + "' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
-        FragmentList<Entity> entities = getStore().<Entity>query(query);
+        List<Entity> entities = getStore().<Entity>query(query);
         return entities;
     }
     

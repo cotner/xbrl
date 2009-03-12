@@ -1,6 +1,7 @@
 package org.xbrlapi;
 
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -22,34 +23,34 @@ public interface Schema extends SchemaContent {
      * import used by this schema.
      * @throws XBRLException
      */
-    public FragmentList<SimpleLink> getImports() throws XBRLException;
+    public List<SimpleLink> getImports() throws XBRLException;
     
     /**
      * @return a list of SimpleLink fragments, one per XML Schema 
      * include used by this schema.
      * @throws XBRLException
      */
-    public FragmentList<SimpleLink> getIncludes() throws XBRLException;
+    public List<SimpleLink> getIncludes() throws XBRLException;
     
     /**
      * @return a list of the extended links contained by the schema.
      * @throws XBRLException
      */
-    public FragmentList<ExtendedLink> getExtendedLinks() throws XBRLException;    
+    public List<ExtendedLink> getExtendedLinks() throws XBRLException;    
     
     /**
      * Get the fragment list of element declarations (that are not concepts) in the schema.
      * @return the list of element declarations in the schema.
      * @throws XBRLException.
      */
-    public FragmentList<Concept> getOtherElementDeclarations() throws XBRLException;
+    public List<Concept> getOtherElementDeclarations() throws XBRLException;
     
     /**
      * Get the fragment list of concepts in the schema.
      * @return the list of concepts in the schema.
      * @throws XBRLException.
      */
-    public FragmentList<Concept> getConcepts() throws XBRLException;
+    public List<Concept> getConcepts() throws XBRLException;
 
     
     
@@ -72,7 +73,7 @@ public interface Schema extends SchemaContent {
      * 
      * @throws XBRLException
      */
-    public FragmentList<Concept> getConceptsByType(URI namespace, String localName) throws XBRLException;
+    public List<Concept> getConceptsByType(URI namespace, String localName) throws XBRLException;
     
     /**
      * Get a list concepts based on their substitution group.
@@ -86,7 +87,7 @@ public interface Schema extends SchemaContent {
      * 
      * @throws XBRLException
      */
-    public FragmentList<Concept> getConceptsBySubstitutionGroup(URI namespace, String localname) throws XBRLException;
+    public List<Concept> getConceptsBySubstitutionGroup(URI namespace, String localname) throws XBRLException;
 
  		
 
@@ -106,7 +107,7 @@ public interface Schema extends SchemaContent {
      * @return a list of reference part declarations in the schema.
      * @throws XBRLException
      */
-    public FragmentList<ReferencePartDeclaration> getReferencePartDeclarations() throws XBRLException;    
+    public List<ReferencePartDeclaration> getReferencePartDeclarations() throws XBRLException;    
     
 
     

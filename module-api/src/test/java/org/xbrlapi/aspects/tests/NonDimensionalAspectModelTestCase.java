@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fact;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
@@ -39,8 +38,8 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 	
 	public void testCreatingNonDimensionalAspectModel() {
 		try {
-			FragmentList<Fact> facts = store.<Fact>getFragments("SimpleNumericItem");
-			assertEquals(2,facts.getLength());
+			List<Fact> facts = store.<Fact>gets("SimpleNumericItem");
+			assertEquals(2,facts.size());
             AspectModel model = new NonDimensionalAspectModel();
             model.arrangeAspect(Aspect.CONCEPT,"row");
             model.arrangeAspect(Aspect.ENTITY_IDENTIFIER,"row");

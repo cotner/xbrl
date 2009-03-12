@@ -11,11 +11,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.xbrlapi.ActiveRelationship;
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
@@ -32,11 +31,7 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		loader.discover(getURI("test.data.xlink.titles"));
-		FragmentList<LabelResource> labels = store.<LabelResource>getFragments("LabelResource");
-		label = labels.get(0);
-		FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
-		concept = concepts.get(0);
-		networks = label.getNetworks();
+		networks = store.getNetworks();
 	}
 
 	protected void tearDown() throws Exception {
@@ -131,9 +126,9 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
             Set<URI> arcroles = analyser.getArcroles();
             assertTrue(arcroles.size() > 0);
             for (URI arcrole: arcroles) {
-                FragmentList<ActiveRelationship> relationships = analyser.getRelationships(arcrole);
+                List<PersistedRelationship> relationships = analyser.getRelationships(arcrole);
                 assertTrue(relationships.size() > 0);
-                for (ActiveRelationship relationship: relationships) {
+                for (PersistedRelationship relationship: relationships) {
                     assertEquals(relationship.getArcrole(),arcrole);
                 }
             }
@@ -152,9 +147,9 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
                 Set<URI> arcroles = analyser.getArcroles(linkRole);
                 assertTrue(arcroles.size() > 0);
                 for (URI arcrole: arcroles) {
-                    FragmentList<ActiveRelationship> relationships = analyser.getRelationships(linkRole,arcrole);
+                    List<PersistedRelationship> relationships = analyser.getRelationships(linkRole,arcrole);
                     assertTrue(relationships.size() > 0);
-                    for (ActiveRelationship relationship: relationships) {
+                    for (PersistedRelationship relationship: relationships) {
                         assertEquals(relationship.getArcrole(),arcrole);
                         assertEquals(relationship.getLinkRole(),linkRole);
                     }
@@ -173,11 +168,11 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
             Set<URI> arcroles = analyser.getArcroles();
             assertTrue(arcroles.size() > 0);
             for (URI arcrole: arcroles) {
-                FragmentList<ActiveRelationship> relationships = analyser.getRelationships(arcrole);
+                List<PersistedRelationship> relationships = analyser.getRelationships(arcrole);
                 assertTrue(relationships.size() > 0);
-                for (ActiveRelationship relationship: relationships) {
+                for (PersistedRelationship relationship: relationships) {
                     String sourceIndex = relationship.getSourceIndex();
-                    FragmentList<ActiveRelationship> otherRelationships = analyser.getRelationshipsFrom(sourceIndex,arcrole);
+                    List<PersistedRelationship> otherRelationships = analyser.getRelationshipsFrom(sourceIndex,arcrole);
                     assertEquals(relationship.getArcrole(),arcrole);
                     assertEquals(sourceIndex,otherRelationships.get(0).getSourceIndex());
                 }
@@ -195,11 +190,11 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
             Set<URI> arcroles = analyser.getArcroles();
             assertTrue(arcroles.size() > 0);
             for (URI arcrole: arcroles) {
-                FragmentList<ActiveRelationship> relationships = analyser.getRelationships(arcrole);
+                List<PersistedRelationship> relationships = analyser.getRelationships(arcrole);
                 assertTrue(relationships.size() > 0);
-                for (ActiveRelationship relationship: relationships) {
+                for (PersistedRelationship relationship: relationships) {
                     String targetIndex = relationship.getTargetIndex();
-                    FragmentList<ActiveRelationship> otherRelationships = analyser.getRelationshipsTo(targetIndex,arcrole);
+                    List<PersistedRelationship> otherRelationships = analyser.getRelationshipsTo(targetIndex,arcrole);
                     assertEquals(relationship.getArcrole(),arcrole);
                     assertEquals(targetIndex,otherRelationships.get(0).getTargetIndex());
                 }
@@ -219,12 +214,12 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
             for (URI arcrole: arcroles) {
                 Set<URI> linkRoles= analyser.getLinkRoles(arcrole);
                 for (URI linkRole: linkRoles) {
-                    FragmentList<ActiveRelationship> relationships = analyser.getRootRelationships(linkRole, arcrole);
+                    List<PersistedRelationship> relationships = analyser.getRootRelationships(linkRole, arcrole);
                     assertTrue(relationships.size() > 0);
-                    for (ActiveRelationship relationship: relationships) {
+                    for (PersistedRelationship relationship: relationships) {
                         String sourceIndex = relationship.getSourceIndex();
-                        FragmentList<ActiveRelationship> otherRelationships = analyser.getRelationshipsTo(sourceIndex,arcrole);
-                        assertEquals(0,otherRelationships.getLength());
+                        List<PersistedRelationship> otherRelationships = analyser.getRelationshipsTo(sourceIndex,arcrole);
+                        assertEquals(0,otherRelationships.size());
                     }
                 }
             }
@@ -245,9 +240,9 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
                 for (URI arcrole: arcroles) {
                     Set<URI> arcroleSet = new TreeSet<URI>();
                     arcroleSet.add(arcrole);
-                    FragmentList<ActiveRelationship> relationships = analyser.getRelationships(linkRole,arcroleSet);
+                    List<PersistedRelationship> relationships = analyser.getRelationships(linkRole,arcroleSet);
                     assertTrue(relationships.size() > 0);
-                    for (ActiveRelationship relationship: relationships) {
+                    for (PersistedRelationship relationship: relationships) {
                         assertEquals(relationship.getArcrole(),arcrole);
                         assertEquals(relationship.getLinkRole(),linkRole);
                     }
@@ -266,12 +261,12 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
             Set<URI> arcroles = analyser.getArcroles();
             assertTrue(arcroles.size() > 0);
             for (URI arcrole: arcroles) {
-                FragmentList<ActiveRelationship> relationships = analyser.getRelationships(arcrole);
+                List<PersistedRelationship> relationships = analyser.getRelationships(arcrole);
                 assertTrue(relationships.size() > 0);
-                for (ActiveRelationship relationship: relationships) {
+                for (PersistedRelationship relationship: relationships) {
                     String sourceIndex = relationship.getSourceIndex();
-                    FragmentList<ActiveRelationship> labelRelationships = analyser.getLabelRelationships(sourceIndex);
-                    for (ActiveRelationship r: labelRelationships) {
+                    List<PersistedRelationship> labelRelationships = analyser.getLabelRelationships(sourceIndex);
+                    for (PersistedRelationship r: labelRelationships) {
                         assertEquals("label", r.getTargetName());
                         assertTrue(r.isToLabel());
                     }

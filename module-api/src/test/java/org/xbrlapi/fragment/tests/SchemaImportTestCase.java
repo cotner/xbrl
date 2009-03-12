@@ -2,7 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -31,14 +31,14 @@ public class SchemaImportTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test get target fragment
 	 */
-	public void testGetTargetFragment() {	
+	public void testGetTarget() {	
 
 		try {
-			FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
+			List<SimpleLink> links = store.<SimpleLink>gets("SimpleLink");
 			for (SimpleLink link: links) {
 				try {
-					Fragment targetFragment = link.getTargetFragment();
-					assertNotNull(targetFragment);
+					Fragment target = link.getTarget();
+					assertNotNull(target);
 				} catch (XBRLException e) {
 					store.serialize(link.getMetadataRootElement());
 					e.printStackTrace();

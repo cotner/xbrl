@@ -1,8 +1,9 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Entity;
-import org.xbrlapi.FragmentList;
 
 /**
  * Tests the implementation of the org.xbrlapi.ContextComponent interface.
@@ -32,8 +33,8 @@ public class ContextComponentTestCase extends DOMLoadingTestCase {
 	public void testGetContext() {
 
 		try {
-		    FragmentList<Entity> entities = store.getFragments("Entity");
-		    assertTrue(entities.getLength() > 0);
+		    List<Entity> entities = store.gets("Entity");
+		    assertTrue(entities.size() > 0);
 	        assertEquals("org.xbrlapi.impl.ContextImpl", entities.get(0).getContext().getType());
 		} catch (Exception e) {
 			e.printStackTrace();

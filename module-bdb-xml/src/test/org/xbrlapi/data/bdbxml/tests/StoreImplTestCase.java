@@ -2,7 +2,7 @@ package org.xbrlapi.data.bdbxml.tests;
 
 import org.xbrlapi.Constants;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.XBRLException;
 import org.xbrlapi.impl.MockFragmentImpl;
 
@@ -31,7 +31,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = store.getNextFragmentId();
 			MockFragmentImpl d = new MockFragmentImpl(index);
 			store.storeFragment(d);
-			assertEquals(index,store.getFragment(index).getFragmentIndex());
+			assertEquals(index,store.get(index).getIndex());
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail("The addition of a document fragment to the Xindice data store failed." + e.getMessage());
@@ -43,7 +43,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = store.getNextFragmentId();
 			store.storeFragment(new MockFragmentImpl(index));
 			assertTrue(store.hasFragment(index));
-			store.removeFragment(index);
+			store.remove(index);
 			assertFalse(store.hasFragment(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());
@@ -56,8 +56,8 @@ public class StoreImplTestCase extends BaseTestCase {
 			store.storeFragment(new MockFragmentImpl(index));
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
 	        FragmentList fragments = store.query(xpathQuery);
-			assertEquals("78",(new Long(fragments.getLength())).toString());
-	        Fragment fragment = fragments.getFragment(0);
+			assertEquals("78",(new Long(fragments.size())).toString());
+	        Fragment fragment = fragments.get(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
 		} catch (XBRLException e) {
 			fail(e.getMessage());
@@ -69,7 +69,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 	        String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XMLSchemaPrefix + ":element]";
 	        FragmentList fragments = store.query(query);
-	        Fragment fragment = fragments.getFragment(0);
+	        Fragment fragment = fragments.get(0);
 	        assertEquals("element",fragment.getDataRootElement().getLocalName());
 		} catch (Exception e) {
 			fail(e.getMessage());

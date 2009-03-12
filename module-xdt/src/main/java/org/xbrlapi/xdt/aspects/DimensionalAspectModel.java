@@ -64,8 +64,8 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
             if (segment != null) addNewAspects(segment);
             Scenario scenario = context.getScenario();
             if (scenario != null) addNewAspects(scenario);
-        }        
-        super.addFact(fact);
+            super.addFact(fact);
+        }
         
     }
     

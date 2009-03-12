@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Unit;
 
 /**
@@ -32,8 +32,8 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testHasDenominator() {
 
 		try {
-		    FragmentList<Unit> units = store.<Unit>getFragments("Unit");
-		    assertTrue(units.getLength() > 0);
+		    List<Unit> units = store.<Unit>gets("Unit");
+		    assertTrue(units.size() > 0);
 		    for (Unit unit: units) {
 	            assertFalse(unit.hasDenominator());
 		    }
@@ -48,8 +48,8 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testGetNumeratorMeasures() {
 
 		try {
-            FragmentList<Unit> units = store.<Unit>getFragments("Unit");
-            assertTrue(units.getLength() > 0);
+            List<Unit> units = store.<Unit>gets("Unit");
+            assertTrue(units.size() > 0);
             for (Unit unit: units) {
                 assertFalse(unit.hasDenominator());
                 assertEquals(2,unit.getNumeratorMeasures().getLength());
@@ -65,8 +65,8 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testGetDenominatorMeasures() {
 
         try {
-            FragmentList<Unit> units = store.<Unit>getFragments("Unit");
-            assertTrue(units.getLength() > 0);
+            List<Unit> units = store.<Unit>gets("Unit");
+            assertTrue(units.size() > 0);
             for (Unit unit: units) {
                 assertNull(unit.getDenominatorMeasures());
             }
@@ -81,8 +81,8 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testCheckEquality() {
 
         try {
-            FragmentList<Unit> units = store.<Unit>getFragments("Unit");
-            assertTrue(units.getLength() > 0);
+            List<Unit> units = store.<Unit>gets("Unit");
+            assertTrue(units.size() > 0);
             for (Unit unit: units) {
                 assertTrue(unit.equals(unit));
             }

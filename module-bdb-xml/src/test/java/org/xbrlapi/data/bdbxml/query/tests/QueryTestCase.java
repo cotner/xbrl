@@ -9,7 +9,6 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
 
@@ -44,9 +43,9 @@ public abstract class QueryTestCase extends TestCase {
     public final void testStubsRetrieval() throws Exception {
 
         String query = "/*[@stub]";
-        FragmentList<Fragment> fragments = store.<Fragment>query(query);
+        List<Fragment> fragments = store.<Fragment>query(query);
         for (Fragment stub: fragments) {
-            FragmentList<Fragment> referrers = store.<Fragment>query("/*[@targetDocumentURI='"+stub.getURI()+"']");
+            List<Fragment> referrers = store.<Fragment>query("/*[@targetDocumentURI='"+stub.getURI()+"']");
             TreeMap<URI,String> map = new TreeMap<URI,String>();
             for (Fragment referrer: referrers) {
                 if (! map.containsKey(referrer.getURI())) {
@@ -57,9 +56,9 @@ public abstract class QueryTestCase extends TestCase {
             logger.info(stub.getMetadataRootElement().getAttribute("reason") + ": " + stub.getURI());
             logger.info("This document is referred to by:");
             for (URI uri: map.keySet()) {
-                FragmentList<Fragment> sources = store.<Fragment>query("/*[@uri='"+ uri +"' and @targetDocumentURI='"+stub.getURI()+"']");
-                logger.info(uri + " contains " + sources.getLength() + " references.");
-                //if (sources.getLength() > 0) store.serialize(sources.get(0));
+                List<Fragment> sources = store.<Fragment>query("/*[@uri='"+ uri +"' and @targetDocumentURI='"+stub.getURI()+"']");
+                logger.info(uri + " contains " + sources.size() + " references.");
+                //if (sources.size() > 0) store.serialize(sources.get(0));
             }
         }
     }    
@@ -102,9 +101,9 @@ public abstract class QueryTestCase extends TestCase {
     private long runQuery(String query) throws Exception {
         long start = System.currentTimeMillis();
         logger.info(query);
-        FragmentList<Fragment> fragments = store.<Fragment>query(query);
+        List<Fragment> fragments = store.<Fragment>query(query);
         long result = (System.currentTimeMillis() - start);
-        assertTrue(fragments.getLength() == 1);
+        assertTrue(fragments.size() == 1);
         return result;
     }    
     

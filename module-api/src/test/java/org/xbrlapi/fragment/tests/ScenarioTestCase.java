@@ -30,8 +30,8 @@ public class ScenarioTestCase extends DOMLoadingTestCase {
 	public void testGetComplexContent() {
 
 /*		try {
-			OpenContextComponent fragment = (OpenContextComponent) store.getFragment("6");
-			assertEquals(4, fragment.getComplexContent().getLength());
+			OpenContextComponent fragment = (OpenContextComponent) store.get("6");
+			assertEquals(4, fragment.getComplexContent().size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

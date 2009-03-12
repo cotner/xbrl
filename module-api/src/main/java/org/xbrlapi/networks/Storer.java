@@ -17,7 +17,7 @@ public interface Storer {
      * @param networks The set of networks from 
      * which all active relationships
      * will be persisted in the data store.
-     * @see org.xbrlapi.ActiveRelationship
+     * @see org.xbrlapi.PersistedRelationship
      * @throws XBRLException
      */
     public void storeRelationships(Networks networks) throws XBRLException;
@@ -25,7 +25,7 @@ public interface Storer {
     /**
      * @param network The network from which all 
      * active relationships will be persisted in the data store.
-     * @see org.xbrlapi.ActiveRelationship
+     * @see org.xbrlapi.PersistedRelationship
      * @throws XBRLException
      */
     public void storeRelationships(Network network) throws XBRLException;
@@ -36,7 +36,7 @@ public interface Storer {
      * assessed on the basis of the relationship semantic key.
      * @see org.xbrlapi.networks.Relationship#getSemanticKey()
      * @param relationship The relationship that will be be persisted in the data store.
-     * @see org.xbrlapi.ActiveRelationship
+     * @see org.xbrlapi.PersistedRelationship
      * @throws XBRLException
      */
     public void storeRelationship(Relationship relationship) throws XBRLException;

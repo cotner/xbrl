@@ -1,8 +1,9 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+
 import org.xbrlapi.Context;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Unit;
 
 /**
@@ -33,7 +34,7 @@ public class FactDimensionContainerTestCase extends DOMLoadingTestCase {
 	public void testGetContextId() {
 
 		try {
-		    FragmentList<Context> contexts = store.getFragments("Context");
+		    List<Context> contexts = store.gets("Context");
 		    for (Context context: contexts) {
 	            assertEquals(context.getId(), context.getDataRootElement().getAttribute("id"));		        
 		    }
@@ -49,7 +50,7 @@ public class FactDimensionContainerTestCase extends DOMLoadingTestCase {
 	public void testGetUnitId() {
 
 		try {
-            FragmentList<Unit> units= store.getFragments("Unit");
+            List<Unit> units= store.gets("Unit");
             for (Unit unit: units) {
                 assertEquals(unit.getId(), unit.getDataRootElement().getAttribute("id"));             
             }

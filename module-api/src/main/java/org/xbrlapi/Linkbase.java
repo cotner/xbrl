@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.util.List;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -39,7 +41,7 @@ public interface Linkbase extends Fragment {
      * The list can be empty.
      * @throws XBRLException
      */
-    public FragmentList<SimpleLink> getArcroleRefs() throws XBRLException;
+    public List<SimpleLink> getArcroleRefs() throws XBRLException;
 
     /**
      * Adds an roleRef to a linkbase.
@@ -72,7 +74,7 @@ public interface Linkbase extends Fragment {
      * The list can be empty.
      * @throws XBRLException
      */
-    public FragmentList<SimpleLink> getRoleRefs() throws XBRLException;
+    public List<SimpleLink> getRoleRefs() throws XBRLException;
 
     /**
      * Adds an extended link to a linkbase.
@@ -96,14 +98,14 @@ public interface Linkbase extends Fragment {
      * @return the list of extended links in the linkbase or null if there are none.
      * @throws XBRLException
      */
-    public FragmentList<ExtendedLink> getExtendedLinks() throws XBRLException;
+    public List<ExtendedLink> getExtendedLinks() throws XBRLException;
 
     /**
      * Get the list of documentation fragments that are children of the linkbase.
      * Returns the list of documentation fragments in the linkbase.
      * @throws XBRLException
      */
-    public FragmentList<XlinkDocumentation> getDocumentations() throws XBRLException;    
+    public List<XlinkDocumentation> getDocumentations() throws XBRLException;    
     
     /**
      * Remove a link documentation child fragment from the linkbase.

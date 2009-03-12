@@ -1,11 +1,11 @@
 package org.xbrlapi.impl;
 
 import java.net.URI;
+import java.util.List;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -48,21 +48,21 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
     /**
      * @see org.xbrlapi.ArcEnd#getArcsFrom()
      */
-    public FragmentList<Arc> getArcsFrom() throws XBRLException {
+    public List<Arc> getArcsFrom() throws XBRLException {
     	return getExtendedLink().getArcsByFromLabel(this.getLabel());
     }
 
     /**
      * @see org.xbrlapi.ArcEnd#getArcsFromWithArcrole(URI)
      */
-    public FragmentList<Arc> getArcsFromWithArcrole(URI arcrole) throws XBRLException {
+    public List<Arc> getArcsFromWithArcrole(URI arcrole) throws XBRLException {
         return getExtendedLink().getArcsByFromLabelAndArcrole(this.getLabel(),arcrole);
     }
 
     /**
      * @see org.xbrlapi.ArcEnd#getArcsToWithArcrole(URI)
      */
-    public FragmentList<Arc> getArcsToWithArcrole(URI arcrole) throws XBRLException {
+    public List<Arc> getArcsToWithArcrole(URI arcrole) throws XBRLException {
         return getExtendedLink().getArcsByToLabelAndArcrole(this.getLabel(),arcrole);
     }
     
@@ -73,7 +73,7 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
      * if there are no arcs to the arc end.
      * @see org.xbrlapi.ArcEnd#getArcsTo()
      */
-    public FragmentList<Arc> getArcsTo() throws XBRLException {
+    public List<Arc> getArcsTo() throws XBRLException {
     	logger.debug("Getting the arcs to end with label " + getLabel());
     	return getExtendedLink().getArcsByToLabel(this.getLabel());
     }
@@ -93,9 +93,5 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
     		return root.getAttribute("id");
     	return null;
     }
-    
-
-    
-
     
 }

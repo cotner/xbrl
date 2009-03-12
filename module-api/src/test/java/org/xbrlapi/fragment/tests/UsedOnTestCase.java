@@ -3,7 +3,7 @@ package org.xbrlapi.fragment.tests;
 import java.net.URI;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.UsedOn;
 import org.xbrlapi.utilities.Constants;
 
@@ -34,8 +34,8 @@ public class UsedOnTestCase extends DOMLoadingTestCase {
 	 */
 	public void testUsedOnContentAnalysis() {
 	    try {
-	        FragmentList<UsedOn> fragments = store.<UsedOn>getFragments("UsedOn");
-	        assertTrue(fragments.getLength() > 0);
+	        List<UsedOn> fragments = store.<UsedOn>gets("UsedOn");
+	        assertTrue(fragments.size() > 0);
 	        for (UsedOn fragment: fragments) {
 	            if (fragment.getParent().getDataRootElement().getAttribute("id").equals("newExtendedRoleType")) {
                     assertEquals(Constants.XBRL21LinkNamespace,fragment.getUsedOnNamespace().toString());

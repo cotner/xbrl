@@ -3,7 +3,7 @@ package org.xbrlapi.fragment.tests;
 import org.xbrlapi.Arc;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Locator;
 
 /**
@@ -33,8 +33,8 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	public void testGetHref() {	
 
 		try {
-			FragmentList<Locator> fragments = store.<Locator>getFragments("Locator");
-			Locator fragment = fragments.getFragment(0);
+			List<Locator> fragments = store.<Locator>gets("Locator");
+			Locator fragment = fragments.get(0);
 			assertEquals("397-ABC.xsd#A", fragment.getHref());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -48,8 +48,8 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	public void testGetAbsoluteHref() {	
 
 		try {
-			FragmentList<Locator> fragments = store.<Locator>getFragments("Locator");
-			Locator fragment = fragments.getFragment(0);
+			List<Locator> fragments = store.<Locator>gets("Locator");
+			Locator fragment = fragments.get(0);
 			assertEquals(configuration.getProperty("test.data.baseURI") + "Common/instance/397-ABC.xsd#A", fragment.getAbsoluteHref().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,12 +60,12 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test getting target fragment.
 	 */
-	public void testGetTargetFragment() {
+	public void testGetTarget() {
 
 		try {
-			FragmentList<Locator> fragments = store.<Locator>getFragments("Locator");
-			Locator fragment = fragments.getFragment(0);
-			Fragment target = fragment.getTargetFragment();
+			List<Locator> fragments = store.<Locator>gets("Locator");
+			Locator fragment = fragments.get(0);
+			Fragment target = fragment.getTarget();
 			assertEquals(fragment.getTargetDocumentURI().toString(), target.getURI().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,10 +79,10 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	public void testGetArcsFrom() {
 
 		try {
-			FragmentList<Locator> fragments = store.<Locator>getFragments("Locator");
-			Locator fragment = fragments.getFragment(0);
-			FragmentList<Arc> arcs = fragment.getArcsFrom();
-			assertEquals(1, arcs.getLength());
+			List<Locator> fragments = store.<Locator>gets("Locator");
+			Locator fragment = fragments.get(0);
+			List<Arc> arcs = fragment.getArcsFrom();
+			assertEquals(1, arcs.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -95,10 +95,10 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	public void testGetArcsTo() {
 
 		try {
-			FragmentList<Locator> fragments = store.<Locator>getFragments("Locator");
-			Locator fragment = fragments.getFragment(0);
-			FragmentList<Arc> arcs = fragment.getArcsTo();
-			assertEquals(0, arcs.getLength());
+			List<Locator> fragments = store.<Locator>gets("Locator");
+			Locator fragment = fragments.get(0);
+			List<Arc> arcs = fragment.getArcsTo();
+			assertEquals(0, arcs.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

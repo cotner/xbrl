@@ -16,12 +16,10 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.XML;
 import org.xbrlapi.data.BaseStoreImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentFactory;
-import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
@@ -384,9 +382,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     }    	
 
 	/**
-	 * @see org.xbrlapi.data.Store#getFragment(String)
+	 * @see org.xbrlapi.data.Store#get(String)
 	 */
-     public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
+     public synchronized <F extends XML> F get(String index) throws XBRLException {
 	    this.incrementCallCount();
         XmlDocument xmlDocument = null;
         Document document = null;
@@ -439,7 +437,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @see org.xbrlapi.data.Store#query(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends XML> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
         
@@ -455,7 +453,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     			double startTime = System.currentTimeMillis();
 
                 xmlValue = xmlResults.next();
-    			FragmentList<F> fragments = new FragmentListImpl<F>();
+    			List<F> fragments = new Vector<F>();
     			XMLDOMBuilder builder = new XMLDOMBuilder();
     		    while (xmlValue != null) {
                     XmlDocument doc = xmlValue.asDocument();
@@ -463,7 +461,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     		        doc.delete();
     		        xmlValue.delete();
     		        Element root = document.getDocumentElement();
-    				fragments.addFragment((F) FragmentFactory.newFragment(this, root));
+    				fragments.add((F) FragmentFactory.newFragment(this, root));
     		        xmlValue = xmlResults.next();
     		    }
     	    	

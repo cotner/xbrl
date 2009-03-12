@@ -4,9 +4,9 @@ import java.net.URI;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.ActiveRelationship;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.impl.ActiveRelationshipImpl;
+import org.xbrlapi.impl.PersistedRelationshipImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -47,7 +47,7 @@ public class StorerImpl implements Storer {
      */
     public void storeRelationship(Relationship relationship)
             throws XBRLException {
-        ActiveRelationship xml = new ActiveRelationshipImpl(relationship);
+        PersistedRelationship xml = new PersistedRelationshipImpl(relationship);
         getStore().persist(xml);
     }
 

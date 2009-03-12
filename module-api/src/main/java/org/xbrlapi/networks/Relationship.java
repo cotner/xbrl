@@ -88,7 +88,6 @@ public interface Relationship {
 	 * @throws XBRLException
 	 */
 	public String getArcIndex() throws XBRLException;
-
 	
 	/**
 	 * The target fragment is the fragment that is identified
@@ -155,7 +154,7 @@ public interface Relationship {
 	 * the relationship.
 	 * @throws XBRLException
 	 */
-	public String getOrder() throws XBRLException;
+	public Double getOrder() throws XBRLException;
 	
 	/**
 	 * @param other The other relationship.

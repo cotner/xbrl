@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.util.List;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -13,7 +15,7 @@ public interface Instance extends Fragment {
      * Returns null if none are contained by the XBRL instance.
      * @throws XBRLException
      */
-    public FragmentList<SimpleLink> getSchemaRefs() throws XBRLException;    
+    public List<SimpleLink> getSchemaRefs() throws XBRLException;    
 
     
     
@@ -24,7 +26,7 @@ public interface Instance extends Fragment {
      * Returns null if none are contained by the XBRL instance.
      * @throws XBRLException
      */
-    public FragmentList<SimpleLink> getLinkbaseRefs() throws XBRLException;    
+    public List<SimpleLink> getLinkbaseRefs() throws XBRLException;    
 
     
     
@@ -35,7 +37,7 @@ public interface Instance extends Fragment {
      * Returns null if none are contained by the XBRL instance.
      * @throws XBRLException
      */
-    public FragmentList<Context> getContexts() throws XBRLException;    
+    public List<Context> getContexts() throws XBRLException;    
 
     /**
      * Get a specified context from the instance based on its id.
@@ -55,7 +57,7 @@ public interface Instance extends Fragment {
      *
      * @throws XBRLException
      */
-    public FragmentList<Unit> getUnits() throws XBRLException;    
+    public List<Unit> getUnits() throws XBRLException;    
 
     /**
      * Get a specified unit from the instance based on its id.
@@ -74,7 +76,7 @@ public interface Instance extends Fragment {
      * Returns null if none are contained by the XBRL instance.
      * @throws XBRLException
      */
-    public FragmentList<ExtendedLink> getFootnoteLinks() throws XBRLException;    
+    public List<ExtendedLink> getFootnoteLinks() throws XBRLException;    
 
     
     
@@ -86,14 +88,14 @@ public interface Instance extends Fragment {
      * @return the list of facts that are children of the instance.
      * @throws XBRLException
      */
-    public FragmentList<Fact> getFacts() throws XBRLException;
+    public List<Fact> getFacts() throws XBRLException;
     
     /**
      * @return the list of all items that are children of the instance.
      * Tuples are not included in the list.
      * @throws XBRLException
      */
-    public FragmentList<Item> getItems() throws XBRLException;    
+    public List<Item> getItems() throws XBRLException;    
 
     
     

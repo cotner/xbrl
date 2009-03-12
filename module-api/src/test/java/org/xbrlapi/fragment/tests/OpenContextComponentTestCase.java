@@ -3,7 +3,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.w3c.dom.NodeList;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Scenario;
 
 /**
@@ -33,8 +33,8 @@ public class OpenContextComponentTestCase extends DOMLoadingTestCase {
 	public void testGetComplexContent() {
 
 		try {
-            FragmentList<Scenario> scenarios = store.getFragments("Scenario");
-            assertTrue(scenarios.getLength() > 0);
+            List<Scenario> scenarios = store.gets("Scenario");
+            assertTrue(scenarios.size() > 0);
             for (Scenario scenario: scenarios) {
                 NodeList children = scenario.getDataRootElement().getChildNodes();
                 assertEquals(children.getLength(), scenario.getComplexContent().getLength());
@@ -51,8 +51,8 @@ public class OpenContextComponentTestCase extends DOMLoadingTestCase {
 	public void testGetCEquality() {
 
 		try {
-            FragmentList<Scenario> scenarios = store.getFragments("Scenario");
-            assertTrue(scenarios.getLength() > 0);
+            List<Scenario> scenarios = store.gets("Scenario");
+            assertTrue(scenarios.size() > 0);
             for (Scenario scenario: scenarios) {
                 assertTrue(scenario.equals(scenario));
             }

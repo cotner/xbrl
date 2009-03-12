@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.util.List;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,8 +10,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -57,24 +59,21 @@ public class LabelResourceImpl extends MixedContentResourceImpl implements Label
      * @return the list of Concepts in the data store that have this label.
      * @throws XBRLException
      */
-    public FragmentList<Concept> getConcepts() throws XBRLException	{
-        FragmentList<Concept> concepts = new FragmentListImpl<Concept>();
-        
-        FragmentList<Fragment> relatives = this.getRelatives(org.xbrlapi.utilities.Constants.LabelArcRole(),null,null,null,false);
-        for (Fragment relative: relatives) {
-            if (relative.isa("org.xbrlapi.impl.ConceptImpl")) {
-                concepts.add((Concept) relative);
-            }
-        }
+    public List<Concept> getConcepts() throws XBRLException	{
 
-        relatives = this.getRelatives(org.xbrlapi.utilities.Constants.GenericLabelArcRole(),null,null,null,false);
-        for (Fragment relative: relatives) {
-            if (relative.isa("org.xbrlapi.impl.ConceptImpl")) {
-                concepts.add((Concept) relative);
-            }
+        List<Fragment> fragments;
+        if (this.getNamespace().equals(Constants.GenericLabelNamespace()))
+            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.GenericLabelArcRole());
+        else 
+            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.XBRL21LinkNamespace());
+        
+        List<Concept> concepts = new Vector<Concept>();
+        for (Fragment fragment: fragments) {
+            if (fragment.isa("org.xbrlapi.impl.ConceptImpl")) concepts.add((Concept) fragment);
         }
         
         return concepts;
+
     }
 	
 }

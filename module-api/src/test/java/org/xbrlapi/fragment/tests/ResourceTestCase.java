@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Resource;
 import org.xbrlapi.utilities.Constants;
 
@@ -32,8 +32,8 @@ public class ResourceTestCase extends DOMLoadingTestCase {
 	public void testGetResourceRole() {	
 
 		try {
-			FragmentList<Resource> fragments = store.<Resource>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
-			Resource fragment = fragments.getFragment(0);
+			List<Resource> fragments = store.<Resource>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
+			Resource fragment = fragments.get(0);
 			assertEquals("http://www.xbrl.org/2003/role/label", fragment.getResourceRole().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,8 +47,8 @@ public class ResourceTestCase extends DOMLoadingTestCase {
 	public void testGetTitleAttribute() {	
 
 		try {
-			FragmentList<Resource> fragments = store.<Resource>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
-			Resource fragment = fragments.getFragment(0);
+			List<Resource> fragments = store.<Resource>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
+			Resource fragment = fragments.get(0);
 			assertEquals("label_CurrentAsset", fragment.getTitleAttribute());
 		} catch (Exception e) {
 			e.printStackTrace();

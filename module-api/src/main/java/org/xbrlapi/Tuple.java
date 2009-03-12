@@ -1,6 +1,7 @@
 package org.xbrlapi;
 
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -14,7 +15,7 @@ public interface Tuple extends Fact {
 	 * Get the child facts
 	 * @throws XBRLException
 	 */
-	public FragmentList<Fact> getChildFacts() throws XBRLException;
+	public List<Fact> getChildFacts() throws XBRLException;
 
 	/**
 	 * Get a list of facts matching the specified fact name.
@@ -23,7 +24,7 @@ public interface Tuple extends Fact {
 	 * @return the specified facts.
 	 * @throws XBRLException
 	 */
-	public FragmentList<Fact> getChildFacts(URI namespace, String localname) throws XBRLException;
+	public List<Fact> getChildFacts(URI namespace, String localname) throws XBRLException;
 	
 	/**
 	 * Get a list of facts matching the specified fact name and context id.
@@ -33,7 +34,7 @@ public interface Tuple extends Fact {
 	 * @return the specified facts.
 	 * @throws XBRLException
 	 */
-	public FragmentList<Fact> getChildFacts(URI namespace, String name, String contextRef) throws XBRLException;
+	public List<Fact> getChildFacts(URI namespace, String name, String contextRef) throws XBRLException;
 	
 
 

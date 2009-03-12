@@ -1,6 +1,7 @@
 package org.xbrlapi;
 
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -59,6 +60,6 @@ public interface CustomType extends Fragment {
 	 * @return the list of usedOn child fragments.
 	 * @throws XBRLException.
 	 */
-	public FragmentList<UsedOn> getUsedOns() throws XBRLException;    
+	public List<UsedOn> getUsedOns() throws XBRLException;    
 
 }

@@ -2,13 +2,12 @@ package org.xbrlapi.xdt;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Vector;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.Title;
-import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xpointer.ParseException;
@@ -53,8 +52,8 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     /**
      * @see org.xbrlapi.Xlink#getTitleElements()
      */
-    public FragmentList<Title> getTitleElements() throws XBRLException {
-        return new FragmentListImpl<Title>();
+    public List<Title> getTitleElements() throws XBRLException {
+        return new Vector<Title>();
     }
     
     /**
@@ -197,9 +196,9 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     }
     
     /**
-     * @see org.xbrlapi.SimpleLink#getTargetFragment()
+     * @see org.xbrlapi.SimpleLink#getTarget()
      */
-    public Fragment getTargetFragment() throws XBRLException {
+    public Fragment getTarget() throws XBRLException {
 
         String pointerCondition = " and @parentIndex='none'";
         String pointerValue = getTargetPointerValue();
@@ -208,10 +207,10 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
         }
         
         String query = "/*[@uri='" + getTargetDocumentURI() + "'" + pointerCondition + "]";
-        FragmentList<Fragment> fragments = getStore().query(query);
-        if (fragments.getLength() == 0) return null;
-        if (fragments.getLength() > 1) throw new XBRLException("The simple link references more than one fragment.");
-        return fragments.getFragment(0);
+        List<Fragment> fragments = getStore().query(query);
+        if (fragments.size() == 0) return null;
+        if (fragments.size() > 1) throw new XBRLException("The simple link references more than one fragment.");
+        return fragments.get(0);
     }    
     
 }

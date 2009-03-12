@@ -1,6 +1,7 @@
 package org.xbrlapi;
 
 import java.net.URI;
+import java.util.List;
 
 import org.w3c.dom.NamedNodeMap;
 import org.xbrlapi.utilities.XBRLException;
@@ -43,10 +44,6 @@ public interface Arc extends ExtendedLinkContent {
      */
     public boolean hasAttribute(String name) throws XBRLException;
     
-
-	
-
-
     /**
      * Get the xlink:show attribute value.
      * @return the value of the xlink:show value or null if the attribute is not there.
@@ -82,31 +79,27 @@ public interface Arc extends ExtendedLinkContent {
      * @throws XBRLException
      */
     public URI getArcrole() throws XBRLException;
-    
-
 	
     /**
      * Get the order attribute value.
      * @return the value of the order attribute or default value of 1 if none is provided.
      * @throws XBRLException
      */
-    public String getOrder() throws XBRLException;
-    
-
+    public Double getOrder() throws XBRLException;
 
     /**
      * Get the list of ArcEnd fragments that the arc runs from.
      * @return the list of ArcEnd fragment that the arc runs from.
      * @throws XBRLException
      */
-    public <E extends ArcEnd> FragmentList<E> getSourceFragments() throws XBRLException;
+    public <E extends ArcEnd> List<E> getSourceFragments() throws XBRLException;
     
     /**
      * Get the list of ArcEnd fragments that the arc runs to.
      * @return the list of ArcEnd fragment that the arc runs to.
      * @throws XBRLException
      */
-    public <E extends ArcEnd> FragmentList<E> getTargetFragments() throws XBRLException;
+    public <E extends ArcEnd> List<E> getTargets() throws XBRLException;
     
 
     /**

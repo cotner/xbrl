@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Title;
 import org.xbrlapi.Xlink;
 import org.xbrlapi.utilities.Constants;
@@ -54,9 +54,9 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetXLinkType() {		
 		try {
-			FragmentList<Xlink> fragments = store.<Xlink>getFragments("Arc");
-            assertTrue(fragments.getLength() > 0);
-			Xlink fragment = fragments.getFragment(0);
+			List<Xlink> fragments = store.<Xlink>gets("Arc");
+            assertTrue(fragments.size() > 0);
+			Xlink fragment = fragments.get(0);
 			assertEquals("arc", fragment.getXlinkType());
 		} catch (XBRLException e) {
 			fail(e.getMessage());
@@ -70,8 +70,8 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 
 		// Case where none exists
 		try {
-			FragmentList<Xlink> fragments = store.<Xlink>getFragments("Arc");
-			Xlink fragment = fragments.getFragment(0);
+			List<Xlink> fragments = store.<Xlink>gets("Arc");
+			Xlink fragment = fragments.get(0);
 			assertNull(fragment.getTitleAttribute());
 		} catch (XBRLException e) {
 			fail(e.getMessage());
@@ -80,8 +80,8 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			loader.discover(uri, document);
-			FragmentList<Xlink> fragments = store.<Xlink>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:title");
-			Xlink fragment = fragments.getFragment(0);
+			List<Xlink> fragments = store.<Xlink>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:title");
+			Xlink fragment = fragments.get(0);
 			assertEquals("stuff", fragment.getTitleAttribute());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,10 +96,10 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 
 		// Case where none exists
 		try {
-			FragmentList<Xlink> fragments = store.<Xlink>getFragments("Arc");
-			assertTrue(fragments.getLength() > 0);
-			Xlink fragment = fragments.getFragment(0);
-			assertEquals(0,fragment.getTitleElements().getLength());
+			List<Xlink> fragments = store.<Xlink>gets("Arc");
+			assertTrue(fragments.size() > 0);
+			Xlink fragment = fragments.get(0);
+			assertEquals(0,fragment.getTitleElements().size());
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}
@@ -107,15 +107,15 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			loader.discover(uri, document);
-			FragmentList<Title> fragments = store.getFragments("Title");
-			Fragment title = fragments.getFragment(0);
+			List<Title> fragments = store.gets("Title");
+			Fragment title = fragments.get(0);
 			Xlink fragment = (Xlink) title.getParent();
-			FragmentList<Title> titles = fragment.getTitleElements();
+			List<Title> titles = fragment.getTitleElements();
 			assertNotNull(titles);
-			assertEquals(1, titles.getLength());
-			assertEquals("title",titles.getFragment(0).getLocalname());
-			assertEquals("Title content",(titles.getFragment(0)).getValue());
-			assertEquals("en",(titles.getFragment(0)).getLanguage());
+			assertEquals(1, titles.size());
+			assertEquals("title",titles.get(0).getLocalname());
+			assertEquals("Title content",(titles.get(0)).getValue());
+			assertEquals("en",(titles.get(0)).getLanguage());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Language;
 
 /**
@@ -29,8 +29,8 @@ public class LanguageTestCase extends DOMLoadingTestCase {
 	public void testLanguagePropertyAccessors() {
 
 		try {
-			FragmentList<Language> fragments = store.<Language>getFragments("Language");
-			Language fragment = fragments.getFragment(0);
+			List<Language> fragments = store.<Language>gets("Language");
+			Language fragment = fragments.get(0);
 			assertEquals("Afar", fragment.getName());
 			assertEquals("aa", fragment.getCode());
 			assertEquals("en", fragment.getLanguage());

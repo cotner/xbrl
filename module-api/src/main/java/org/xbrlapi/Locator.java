@@ -32,7 +32,7 @@ public interface Locator extends ArcEnd {
      * is found.
      * @throws XBRLException
      */
-    public Fragment getTargetFragment() throws XBRLException;
+    public Fragment getTarget() throws XBRLException;
     
     /**
      * Get the absolute value of the HREF to the metadata.

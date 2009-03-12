@@ -2,7 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.LabelResource;
 /**
  * Tests the implementation of the org.xbrlapi.LabelResource interface.
@@ -31,8 +31,8 @@ public class LabelResourceTestCase extends DOMLoadingTestCase {
 	public void testGetStringValue() {	
 
 		try {
-			FragmentList<LabelResource> fragments = store.<LabelResource>getFragments("LabelResource");
-			LabelResource fragment = fragments.getFragment(0);
+			List<LabelResource> fragments = store.<LabelResource>gets("LabelResource");
+			LabelResource fragment = fragments.get(0);
 			assertEquals("Current Asset", fragment.getStringValue());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -46,10 +46,10 @@ public class LabelResourceTestCase extends DOMLoadingTestCase {
     public void testGetConcepts() {  
 
         try {
-            FragmentList<LabelResource> fragments = store.<LabelResource>getFragments("LabelResource");
-            LabelResource fragment = fragments.getFragment(0);
-            FragmentList<Concept> concepts = fragment.getConcepts();
-            assertTrue(concepts.getLength() > 0);
+            List<LabelResource> fragments = store.<LabelResource>gets("LabelResource");
+            LabelResource fragment = fragments.get(0);
+            List<Concept> concepts = fragment.getConcepts();
+            assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 assertEquals("org.xbrlapi.impl.ConceptImpl",concept.getType());
             }

@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.util.List;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -20,6 +22,6 @@ public interface FactDimensionContainer extends Fragment {
      * The list is empty if no facts in the instance reference this context.
      * @throws XBRLException
      */
-    public FragmentList<Item> getReferencingItems() throws XBRLException;
+    public List<Item> getReferencingItems() throws XBRLException;
 
 }

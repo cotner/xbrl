@@ -1,8 +1,9 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Entity;
-import org.xbrlapi.FragmentList;
 /**
  * Tests the implementation of the org.xbrlapi.Entity interface.
  * Uses the DOM-based data store to ensure rapid testing.
@@ -29,8 +30,8 @@ public class EntityTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetScenario() {
         try {
-            FragmentList<Entity> entities = store.<Entity>getFragments("Entity");
-            assertTrue(entities.getLength() > 0);
+            List<Entity> entities = store.<Entity>gets("Entity");
+            assertTrue(entities.size() > 0);
             for (Entity entity: entities) {
                 assertEquals("org.xbrlapi.impl.SegmentImpl", entity.getSegment().getType());
             }
@@ -45,8 +46,8 @@ public class EntityTestCase extends DOMLoadingTestCase {
 	public void testGetSchemeAndValue() {
 
         try {
-            FragmentList<Entity> entities = store.<Entity>getFragments("Entity");
-            assertTrue(entities.getLength() > 0);
+            List<Entity> entities = store.<Entity>gets("Entity");
+            assertTrue(entities.size() > 0);
             for (Entity entity: entities) {
                 assertEquals("www.dnb.com", entity.getIdentifierScheme());
                 assertEquals("121064880", entity.getIdentifierValue());

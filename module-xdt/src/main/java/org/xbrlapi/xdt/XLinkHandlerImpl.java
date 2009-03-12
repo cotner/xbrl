@@ -420,7 +420,7 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
             fragment.appendID(attrs.getValue("id"));
             this.getElementState().setId(attrs.getValue("id"));
         }
-        loader.addFragment(fragment,getElementState());
+        loader.add(fragment,getElementState());
     }
     
     

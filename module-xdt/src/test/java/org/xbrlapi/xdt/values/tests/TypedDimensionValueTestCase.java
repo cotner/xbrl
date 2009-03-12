@@ -1,7 +1,7 @@
 package org.xbrlapi.xdt.values.tests;
 
 import org.w3c.dom.Element;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Item;
 import org.xbrlapi.xdt.TypedDimension;
 import org.xbrlapi.xdt.tests.BaseTestCase;
@@ -37,10 +37,10 @@ public class TypedDimensionValueTestCase extends BaseTestCase {
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
 
             loader.discover(this.getURI(STARTING_POINT));
-            FragmentList<TypedDimension> dimensions = store.<TypedDimension>getFragments("org.xbrlapi.xdt.TypedDimensionImpl");
-            assertTrue(dimensions.getLength() > 0);
-            FragmentList<Item> items = store.<Item>getFragments("NonNumericItem");
-            assertTrue(items.getLength() > 0);
+            List<TypedDimension> dimensions = store.<TypedDimension>gets("org.xbrlapi.xdt.TypedDimensionImpl");
+            assertTrue(dimensions.size() > 0);
+            List<Item> items = store.<Item>gets("NonNumericItem");
+            assertTrue(items.size() > 0);
             
             boolean foundSomeValues = false;
             for (Item item: items) {

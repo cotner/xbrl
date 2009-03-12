@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.xbrlapi.Concept;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
@@ -51,10 +50,10 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
 
             loader.discover(uri);
             
-            FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
-            assertEquals(2,dimensions.getLength());
-            FragmentList<Item> items = store.getItems();
-            assertEquals(3,items.getLength());
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>gets("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            assertEquals(2,dimensions.size());
+            List<Item> items = store.getItems();
+            assertEquals(3,items.size());
 
             TreeSet <DimensionValue> values = new TreeSet<DimensionValue>(new DimensionValueComparator());
 
@@ -93,10 +92,10 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
 
             loader.discover(uri);
             
-            FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
-            assertEquals(2,dimensions.getLength());
-            FragmentList<Item> items = store.getItems();
-            assertEquals(3,items.getLength());
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>gets("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            assertEquals(2,dimensions.size());
+            List<Item> items = store.getItems();
+            assertEquals(3,items.size());
 
             TreeSet <DimensionValue> values = new TreeSet<DimensionValue>(new ExplicitDimensionValueLabelComparator("en",Constants.StandardLabelRole));
 
@@ -139,14 +138,14 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             List<URI> uris = store.getStoredURIs();
             for (URI myURI: uris) logger.info(myURI);
 
-            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
+            List<Concept> concepts = store.<Concept>gets("Concept");
             for (Concept c: concepts) store.serialize(c.getDataRootElement());
             
             
-            FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
-            assertEquals(2,dimensions.getLength());
-            FragmentList<Item> items = store.getItems();
-            assertEquals(3,items.getLength());
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>gets("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            assertEquals(2,dimensions.size());
+            List<Item> items = store.getItems();
+            assertEquals(3,items.size());
 
             Networks networks = store.getNetworks(Constants.StandardLinkRole(),XDTConstants.domainMemberArcrole());
             assertEquals(1,networks.getSize());

@@ -168,7 +168,7 @@ public interface Loader {
 	 * @return the fragment being built currently by the DTS loader.
 	 * @throws XBRLException if the loader is not building any fragments.
 	 */
-	public Fragment getFragment() throws XBRLException;
+	public Fragment get() throws XBRLException;
 	
 	/**
 	 * @return true if and only if the loader has one or more fragments
@@ -190,7 +190,7 @@ public interface Loader {
 	 * @param state The state of the element that is the root of the fragment.
 	 * @throws XBRLException
 	 */
-	public void addFragment(Fragment fragment, ElementState state) throws XBRLException;
+	public void add(Fragment fragment, ElementState state) throws XBRLException;
 
 	/**
 	 * Tests if the element that has just been found has triggered the addition of a fragment.

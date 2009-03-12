@@ -5,9 +5,11 @@ package org.xbrlapi.data.dom;
  */
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.apache.xpath.domapi.XPathEvaluatorImpl;
@@ -17,12 +19,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.xpath.XPathEvaluator;
 import org.w3c.dom.xpath.XPathResult;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.XML;
 import org.xbrlapi.data.BaseStoreImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentFactory;
-import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
@@ -131,9 +131,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#getFragment(String)
+	 * @see org.xbrlapi.data.Store#get(String)
 	 */
-	public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
+	public synchronized <F extends XML> F get(String index) throws XBRLException {
 
 		Element root = fragmentMap.get(index);
 		if (root == null) {
@@ -209,14 +209,14 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @throws XBRLException if the query cannot be executed.
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends XML> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
         query = query + this.getURIFilteringQueryClause();
         XPathResult result = runQuery(query);
-		FragmentList<F> fragments = new FragmentListImpl<F>();
+		List<F> fragments = new Vector<F>();
 		Node n;
 	    while ((n = result.iterateNext()) != null) {
 	    	String index = getIndex(n);
-	    	fragments.addFragment((F) getFragment(index));
+	    	fragments.add((F) get(index));
 	    }
 	    return fragments;
 	}

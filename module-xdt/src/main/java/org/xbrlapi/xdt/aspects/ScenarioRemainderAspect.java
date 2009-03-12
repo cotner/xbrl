@@ -95,7 +95,7 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = getFragment(fact);
+        Fragment fragment = get(fact);
         if (fragment == null) {
             return new MissingAspectValue(this);
         }            
@@ -103,10 +103,10 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
     }        
     
     /**
-     * @see Aspect#getFragmentFromStore(Fact)
+     * @see Aspect#getFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        Context context = (Context) super.getFragmentFromStore(fact);
+    public Fragment getFromStore(Fact fact) throws XBRLException {
+        Context context = (Context) super.getFromStore(fact);
         Scenario scenario = context.getScenario();
         if (scenario == null) return null;
         return scenario;

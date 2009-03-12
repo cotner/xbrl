@@ -3,7 +3,7 @@ package org.xbrlapi.impl;
 import java.net.URI;
 
 import org.xbrlapi.Fact;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -20,7 +20,7 @@ public class TupleImpl extends FactImpl implements Tuple {
 	 * @throws XBRLException
 	 * @see org.xbrlapi.Tuple#getChildFacts()
 	 */
-	public FragmentList<Fact> getChildFacts() throws XBRLException {
+	public List<Fact> getChildFacts() throws XBRLException {
     	return getStore().query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
 	}
 
@@ -32,7 +32,7 @@ public class TupleImpl extends FactImpl implements Tuple {
 	 * @throws XBRLException
 	 * @see org.xbrlapi.Tuple#getChildFacts(URI, String)
 	 */
-	public FragmentList<Fact> getChildFacts(URI namespace, String name) throws XBRLException {
+	public List<Fact> getChildFacts(URI namespace, String name) throws XBRLException {
 	    // TODO Improve query efficiency.
 		String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and namespace-uri("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+namespace+"' and local-name("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+name+"']";
 		return getStore().query(query);
@@ -47,7 +47,7 @@ public class TupleImpl extends FactImpl implements Tuple {
 	 * @throws XBRLException
 	 * @see org.xbrlapi.Tuple#getChildFacts(URI, String, String)
 	 */
-	public FragmentList<Fact> getChildFacts(URI namespace, String name, String contextRef) throws XBRLException {
+	public List<Fact> getChildFacts(URI namespace, String name, String contextRef) throws XBRLException {
 		String query = "/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@parentIndex='" + this.getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" +  "data/*[namespace-uri()='" + namespace + "' and local-name()='" + name + "'  and @contextRef='" + contextRef + "']]";
 		return getStore().query(query);
 	}

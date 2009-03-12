@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -35,7 +34,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = "1";
 			MockImpl d = new MockImpl(index);
 			store.persist(d);
-			assertEquals(index,store.getFragment(index).getIndex());	
+			assertEquals(index,store.get(index).getIndex());	
 			
 		} catch (XBRLException e) {
 			e.printStackTrace();
@@ -58,9 +57,9 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testQueryData() {
 		try {
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
-	        FragmentList<Fragment> fragments = store.<Fragment>query(xpathQuery);
-			assertTrue(fragments.getLength() > 1);
-	        Fragment fragment = fragments.getFragment(0);
+	        List<Fragment> fragments = store.<Fragment>query(xpathQuery);
+			assertTrue(fragments.size() > 1);
+	        Fragment fragment = fragments.get(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
 		} catch (XBRLException e) {
 		    e.printStackTrace();
@@ -89,8 +88,8 @@ public class StoreImplTestCase extends BaseTestCase {
 		
 		try {
 	        String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XMLSchemaPrefix + ":element]";
-	        FragmentList<Fragment> fragments = store.<Fragment>query(query);
-	        Fragment fragment = fragments.getFragment(0);
+	        List<Fragment> fragments = store.<Fragment>query(query);
+	        Fragment fragment = fragments.get(0);
 	        assertEquals("element",fragment.getDataRootElement().getLocalName());
 		} catch (Exception e) {
 			fail(e.getMessage());

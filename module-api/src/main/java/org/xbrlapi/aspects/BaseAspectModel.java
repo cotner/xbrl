@@ -11,7 +11,6 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fact;
-import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -33,27 +32,14 @@ abstract public class BaseAspectModel implements AspectModel {
     
     private Set<Fact> facts = new HashSet<Fact>();
     
-    // The persisted networks analyser
-    private Analyser analyser = null;
 
-    /**
-     * @see AspectModel#setAnalyser(Analyser)
-     */
-    public void setAnalyser(Analyser analyser) {
-        this.analyser = analyser;
-    }
+
+
     
 
-    /**
-     * @see AspectModel#getAnalyser()
-     */
-    public Analyser getAnalyser() {
-        return analyser;
-    }
+
     
-    public boolean isUsingPersistedNetworks() {
-        return (analyser != null);
-    }    
+    
     
     /**
      * @see AspectModel#getAspects()
@@ -179,11 +165,14 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#addFact(Fact)
      */
     public void addFact(Fact fact) throws XBRLException {
-        facts.add(fact);
-        Collection<Aspect> aspects = this.getAspects();
-        for (Aspect aspect: aspects) {
-            aspect.addFact(fact);
-            logger.debug(aspect.getValue(fact).getLabel());
+        
+        if (! fact.isTuple()) {
+            facts.add(fact);
+            Collection<Aspect> aspects = this.getAspects();
+            for (Aspect aspect: aspects) {
+                aspect.addFact(fact);
+                logger.debug(aspect.getValue(fact).getLabel());
+            }
         }
     }
  

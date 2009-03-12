@@ -2,6 +2,7 @@ package org.xbrlapi.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -12,7 +13,6 @@ import org.w3c.dom.Node;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
 import org.xbrlapi.ExtendedLink;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -109,10 +109,15 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     /**
      * @see org.xbrlapi.Arc#getOrder() 
      */
-    public String getOrder() throws XBRLException {
+    public Double getOrder() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (! root.hasAttribute("order")) return "1";
-    	return getDataRootElement().getAttribute("order");    
+    	if (! root.hasAttribute("order")) return new Double(1);
+    	String value = getDataRootElement().getAttribute("order").trim();
+    	try {
+    	    return new Double(value);    
+    	} catch (Exception e) {
+    	    throw new XBRLException("The arc order '" + value + "' is not a valid decimal value.",e);
+    	}
     }
     
     /**
@@ -144,20 +149,20 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     /**
      * @see org.xbrlapi.Arc#getSourceFragments() 
      */
-    public <E extends ArcEnd> FragmentList<E> getSourceFragments() throws XBRLException {
+    public <E extends ArcEnd> List<E> getSourceFragments() throws XBRLException {
     	ExtendedLink link = getExtendedLink();
-    	FragmentList<E> ends = link.<E>getArcEndsByLabel(this.getFrom()); 
-    	logger.debug("Link "+ link.getIndex() + " has " + ends.getLength() + " ends with label " + this.getFrom());
+    	List<E> ends = link.<E>getArcEndsByLabel(this.getFrom()); 
+    	logger.debug("Link "+ link.getIndex() + " has " + ends.size() + " ends with label " + this.getFrom());
     	return ends;
     }
     
     /**
-     * @see org.xbrlapi.Arc#getTargetFragments() 
+     * @see org.xbrlapi.Arc#getTargets() 
      */
-    public <E extends ArcEnd> FragmentList<E> getTargetFragments() throws XBRLException {
+    public <E extends ArcEnd> List<E> getTargets() throws XBRLException {
     	ExtendedLink link = getExtendedLink();
-    	FragmentList<E> ends = link.<E>getArcEndsByLabel(this.getTo());
-    	logger.debug("Link "+ link.getIndex() + " has " + ends.getLength() + " ends with label " + this.getTo());
+    	List<E> ends = link.<E>getArcEndsByLabel(this.getTo());
+    	logger.debug("Link "+ link.getIndex() + " has " + ends.size() + " ends with label " + this.getTo());
     	return ends;
     }
     

@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.ReferencePart;
 import org.xbrlapi.ReferencePartDeclaration;
 import org.xbrlapi.ReferenceResource;
@@ -30,14 +30,14 @@ public class ReferencePartTestCase extends DOMLoadingTestCase {
 	public void testGetValue() {	
 
 		try {
-			FragmentList<ReferenceResource> fragments = store.<ReferenceResource>getFragments("ReferenceResource");
-			assertTrue(fragments.getLength() > 0);
-			ReferenceResource fragment = fragments.getFragment(0);
+			List<ReferenceResource> fragments = store.<ReferenceResource>gets("ReferenceResource");
+			assertTrue(fragments.size() > 0);
+			ReferenceResource fragment = fragments.get(0);
 			
-			FragmentList<ReferencePart> parts = fragment.getReferenceParts();
-			assertTrue(parts.getLength() > 0);
+			List<ReferencePart> parts = fragment.getReferenceParts();
+			assertTrue(parts.size() > 0);
 			
-			ReferencePart part = parts.getFragment(0);
+			ReferencePart part = parts.get(0);
 			assertEquals("Fixed Assets", part.getValue());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,9 +47,9 @@ public class ReferencePartTestCase extends DOMLoadingTestCase {
 	
 	public void testGetReferencePartDeclaration() {	
 		try {
-			FragmentList<ReferenceResource> fragments = store.<ReferenceResource>getFragments("ReferenceResource");
-			ReferenceResource fragment = fragments.getFragment(0);			
-			ReferencePart part = fragment.getReferenceParts().getFragment(0);
+			List<ReferenceResource> fragments = store.<ReferenceResource>gets("ReferenceResource");
+			ReferenceResource fragment = fragments.get(0);			
+			ReferencePart part = fragment.getReferenceParts().get(0);
 			store.serialize(part.getDataRootElement());
 			ReferencePartDeclaration declaration = part.getDeclaration();
 			assertEquals(part.getLocalname(),declaration.getName());

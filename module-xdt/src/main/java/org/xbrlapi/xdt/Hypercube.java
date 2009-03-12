@@ -1,6 +1,7 @@
 package org.xbrlapi.xdt;
 
-import org.xbrlapi.FragmentList;
+import java.util.List;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -13,6 +14,6 @@ public interface Hypercube extends XDTConcept {
      * @return a list of the hypercube's XDT dimensions.
      * @throws XBRLException
      */
-    public FragmentList<Dimension> getDimensions() throws XBRLException;
+    public List<Dimension> getDimensions() throws XBRLException;
     
 }

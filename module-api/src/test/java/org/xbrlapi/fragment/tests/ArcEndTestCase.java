@@ -7,10 +7,10 @@ package org.xbrlapi.fragment.tests;
  */
 
 import java.net.URI;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Locator;
 
 public class ArcEndTestCase extends DOMLoadingTestCase {
@@ -50,7 +50,7 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 
 		// Case where one exists
 		try {
-			FragmentList<Locator> locators = store.<Locator>getFragments("Locator");
+			List<Locator> locators = store.<Locator>gets("Locator");
 			boolean gotParent = false;
             boolean gotChild = false;
 			for (Locator locator: locators) {
@@ -74,7 +74,7 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 
 		// Case where one exists
 		try {
-			FragmentList<Locator> locators = store.<Locator>getFragments("Locator");
+			List<Locator> locators = store.<Locator>gets("Locator");
             boolean gotRole = false;
             for (Locator locator: locators) {
                 if (locator.getRole() != null) {
@@ -96,7 +96,7 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 
 		// Case where one exists
 		try {
-			FragmentList<Locator> locators = store.<Locator>getFragments("Locator");
+			List<Locator> locators = store.<Locator>gets("Locator");
             boolean gotArcEndId = false;
             for (Locator locator: locators) {
                 if (locator.getArcEndId() != null) {

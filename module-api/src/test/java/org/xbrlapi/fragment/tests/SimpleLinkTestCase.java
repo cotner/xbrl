@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.SimpleLink;
 
 /**
@@ -31,8 +31,8 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetHref() {	
         try {
-            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
-            assertTrue(links.getLength() > 0);
+            List<SimpleLink> links = store.<SimpleLink>gets("SimpleLink");
+            assertTrue(links.size() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {
                     assertEquals("RoleE.xsd#newExtendedRoleType",link.getHref());
@@ -48,8 +48,8 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetAbsoluteHref() {	
         try {
-            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
-            assertTrue(links.getLength() > 0);
+            List<SimpleLink> links = store.<SimpleLink>gets("SimpleLink");
+            assertTrue(links.size() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {
                     assertEquals(configuration.getProperty("test.data.baseURI") + "Common/linkbase/RoleE.xsd#newExtendedRoleType",link.getAbsoluteHref().toString());
@@ -63,13 +63,13 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test get absolute target fragment
 	 */
-	public void testGetTargetFragment() {	
+	public void testGetTarget() {	
         try {
-            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
-            assertTrue(links.getLength() > 0);
+            List<SimpleLink> links = store.<SimpleLink>gets("SimpleLink");
+            assertTrue(links.size() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {
-                    assertEquals("roleType",link.getTargetFragment().getLocalname());
+                    assertEquals("roleType",link.getTarget().getLocalname());
                 }
             }
         } catch (Exception e) {
@@ -82,8 +82,8 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcrole() {	
         try {
-            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
-            assertTrue(links.getLength() > 0);
+            List<SimpleLink> links = store.<SimpleLink>gets("SimpleLink");
+            assertTrue(links.size() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {
                     assertEquals("http://www.w3.org/1999/xlink/properties/linkbase",link.getArcrole());

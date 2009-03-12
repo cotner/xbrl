@@ -409,9 +409,9 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * @see org.xbrlapi.loader.Loader#getFragment()
+     * @see org.xbrlapi.loader.Loader#get()
      */
-    public Fragment getFragment() throws XBRLException {
+    public Fragment get() throws XBRLException {
         if (fragments.isEmpty()) throw new XBRLException("No fragments are available to be retrieved.");
         return fragments.peek();
     }
@@ -423,9 +423,9 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * @see org.xbrlapi.loader.Loader#addFragment(Fragment, ElementState)
+     * @see org.xbrlapi.loader.Loader#add(Fragment, ElementState)
      */
-    public void addFragment(Fragment fragment, ElementState state)
+    public void add(Fragment fragment, ElementState state)
             throws XBRLException {
 
         // Get the XPointer expressions that identify the root of this fragment
@@ -438,7 +438,7 @@ public class LoaderImpl implements Loader {
         // Set the document reconstruction metadata for the fragment
         Vector<Long> children = getChildrenVector();
         if (children != null) { 
-            Fragment parent = getFragment();
+            Fragment parent = get();
             if (parent == null) throw new XBRLException("The parent fragment is missing.");
             String parentIndex = parent.getIndex();
             if (parentIndex == null) throw new XBRLException("The parent index is null.");

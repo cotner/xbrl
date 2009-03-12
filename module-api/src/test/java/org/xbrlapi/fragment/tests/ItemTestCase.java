@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Item;
 
 /**
@@ -31,8 +31,8 @@ public class ItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetContext() {
         try {
-            FragmentList<Item> fragments = store.<Item>getFragments("SimpleNumericItem");
-            assertTrue(fragments.getLength() > 0);
+            List<Item> fragments = store.<Item>gets("SimpleNumericItem");
+            assertTrue(fragments.size() > 0);
             for (Item fragment: fragments) {
                 assertEquals("org.xbrlapi.impl.ContextImpl", fragment.getContext().getType());
             }
@@ -46,8 +46,8 @@ public class ItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testIsNil() {
         try {
-            FragmentList<Item> fragments = store.<Item>getFragments("SimpleNumericItem");
-            assertTrue(fragments.getLength() > 0);
+            List<Item> fragments = store.<Item>gets("SimpleNumericItem");
+            assertTrue(fragments.size() > 0);
             for (Item fragment: fragments) {
                 assertEquals(false, fragment.isNil());
             }

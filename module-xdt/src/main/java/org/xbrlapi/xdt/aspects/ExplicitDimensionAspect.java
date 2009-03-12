@@ -1,11 +1,11 @@
 package org.xbrlapi.xdt.aspects;
 
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.aspects.Aspect;
@@ -110,7 +110,7 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
                 setMapLabel(id,"");
                 return "";
             }            
-            FragmentList<LabelResource> labels = f.getLabelsWithLanguageAndRole(getLanguageCode(),getLabelRole());
+            List<LabelResource> labels = f.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
             if (labels.isEmpty()) return id;
             String label = labels.get(0).getStringValue();
             logger.info("Explicit dimension aspect value label is " + label);
@@ -125,7 +125,7 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = getFragment(fact);
+        Fragment fragment = get(fact);
         if (fragment == null) {
             return new MissingAspectValue(this);
         }
@@ -133,18 +133,18 @@ public class ExplicitDimensionAspect extends BaseAspect implements Aspect {
     }
 
     /**
-     * @see Aspect#getFragmentFromStore(Fact)
+     * @see Aspect#getFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+    public Fragment getFromStore(Fact fact) throws XBRLException {
         DimensionValue value = accessor.getValue((Item) fact, dimension);
         if (value == null) return null; 
         return (Concept) value.getValue();
     }
     
     /**
-     * @see Aspect#getFragmentKey(Fact)
+     * @see Aspect#getKey(Fact)
      */
-    public String getFragmentKey(Fact fact) throws XBRLException {
+    public String getKey(Fact fact) throws XBRLException {
         DimensionValue dimensionValue = accessor.getValue((Item) fact, this.dimension);
         if (dimensionValue == null) return "";
         Concept concept = (Concept) dimensionValue.getValue();

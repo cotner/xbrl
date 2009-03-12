@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.util.List;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -22,6 +24,6 @@ public interface LabelResource extends MixedContentResource {
 	 * @return the list of Concepts in the data store that have this label.
 	 * @throws XBRLException
 	 */
-	public FragmentList<Concept> getConcepts() throws XBRLException;
+	public List<Concept> getConcepts() throws XBRLException;
 
 }

@@ -6,7 +6,6 @@ import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
@@ -41,8 +40,8 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 
         try {
             loader.discover(this.getURI(FOOTNOTELINKS));        
-            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
-            assertTrue(concepts.getLength() > 0);
+            List<Concept> concepts = store.<Concept>gets("Concept");
+            assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 if (concept.getName().equals("CurrentAsset"))
                     assertEquals("duration", concept.getPeriodType());
@@ -57,10 +56,10 @@ public class ConceptTestCase extends DOMLoadingTestCase {
         boolean testDone = false;
         try {
             loader.discover(this.getURI(FOOTNOTELINKS));        
-            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
-            assertTrue(concepts.getLength() > 0);
+            List<Concept> concepts = store.<Concept>gets("Concept");
+            assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
-                FragmentList<Fact> facts = concept.getFacts();
+                List<Fact> facts = concept.getFacts();
                 for (Fact fact: facts) {
                     assertEquals(fact.getLocalname(), fact.getConcept().getName());
                     testDone = true;
@@ -76,8 +75,8 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 
 		try {
 	        loader.discover(this.getURI(FOOTNOTELINKS));        
-            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
-            assertTrue(concepts.getLength() > 0);
+            List<Concept> concepts = store.<Concept>gets("Concept");
+            assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 if (concept.getName().equals("CurrentAsset"))
                     assertNull(concept.getBalance());
@@ -91,11 +90,11 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 
         try {
             loader.discover(this.getURI(FOOTNOTELINKS));        
-            FragmentList<Concept> concepts = store.<Concept>getFragments("Concept");
-            assertTrue(concepts.getLength() > 0);
+            List<Concept> concepts = store.<Concept>gets("Concept");
+            assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 if (concept.getName().equals("CurrentAsset"))
-                    assertEquals(0,concept.getReferencingLocators().getLength());
+                    assertEquals(0,concept.getReferencingLocators().size());
             }
         } catch (Exception e) {
             fail(e.getMessage());
@@ -106,10 +105,10 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 		try {
 	        loader.discover(this.getURI(LABELLINKS));       
 
-			FragmentList<Concept> concepts = store.getFragments("Concept");
+			List<Concept> concepts = store.gets("Concept");
 			for (Concept concept: concepts) {
 				if (concept.getName().equals("CurrentAsset"))
-					assertEquals(3,concept.getLabels().getLength());
+					assertEquals(3,concept.getLabels().size());
 			}
 
 		} catch (XBRLException e) {
@@ -122,9 +121,8 @@ public class ConceptTestCase extends DOMLoadingTestCase {
             loader.discover(this.getURI(this.PRESENTATIONLINKS));       
 
             Networks networks = new NetworksImpl(store);
-            store.setStoredNetworks(networks);
-            FragmentList<Item> facts = store.getItems();
-            assertEquals(1,facts.getLength());
+            List<Item> facts = store.getItems();
+            assertEquals(1,facts.size());
             for (Item fact: facts) {
                 logger.info(fact.getConcept().getLabels().get(0).getStringValue());
                 networks = store.getMinimalNetworksWithArcrole(fact.getConcept(),Constants.PresentationArcRole());
@@ -137,8 +135,8 @@ public class ConceptTestCase extends DOMLoadingTestCase {
             
             assertEquals(2,network.getNumberOfActiveRelationships());
 
-            FragmentList<Fragment> roots = network.getRootFragments(); 
-            assertEquals(1,roots.getLength());
+            List<Fragment> roots = network.getRootFragments(); 
+            assertEquals(1,roots.size());
 
             network.complete();
             

@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Period;
 
 /**
@@ -31,8 +31,8 @@ public class PeriodTestCase extends DOMLoadingTestCase {
 	public void testPeriodTypeDetermination() {
 
         try {
-            FragmentList<Period> periods = store.<Period>getFragments("Period");
-            assertTrue(periods.getLength() > 0);
+            List<Period> periods = store.<Period>gets("Period");
+            assertTrue(periods.size() > 0);
             for (Period period: periods) {
                 assertTrue(period.isFiniteDurationPeriod());
                 assertFalse(period.isForeverPeriod());
@@ -50,8 +50,8 @@ public class PeriodTestCase extends DOMLoadingTestCase {
 	public void testGetPeriodInformation() {
 
         try {
-            FragmentList<Period> periods = store.<Period>getFragments("Period");
-            assertTrue(periods.getLength() > 0);
+            List<Period> periods = store.<Period>gets("Period");
+            assertTrue(periods.size() > 0);
             for (Period period: periods) {
                 assertEquals("2001-08-01",period.getStart());
                 assertEquals("2001-08-31",period.getEnd());

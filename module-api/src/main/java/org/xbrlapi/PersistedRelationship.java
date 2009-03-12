@@ -12,7 +12,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public interface ActiveRelationship extends XML {
+public interface PersistedRelationship extends XML {
 
     /**
      * @return the fragment index for the source of the relationship.
@@ -46,6 +46,11 @@ public interface ActiveRelationship extends XML {
     public URI getArcrole();
     
     /**
+     * @return the XLink arc order for the relationship.
+     */
+    public Double getArcOrder();    
+    
+    /**
      * @return the source element namespace.
      */
     public URI getSourceNamespace();        
@@ -65,6 +70,12 @@ public interface ActiveRelationship extends XML {
      */
     public URI getLinkNamespace();            
 
+    /**
+     * @return the arc fragment defining the relationship.
+     * @throws XBRLException
+     */
+    public Arc getArc() throws XBRLException;
+    
     /**
      * @return the arc fragment index.
      */

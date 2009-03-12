@@ -2,12 +2,12 @@ package org.xbrlapi.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.CustomType;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.UsedOn;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -76,7 +76,7 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
      * @see org.xbrlapi.CustomType#isUsedCorrectly(Fragment)
      */
     public boolean isUsedCorrectly(Fragment fragment) throws XBRLException {
-    	FragmentList<UsedOn> usedOns = getUsedOns();
+    	List<UsedOn> usedOns = getUsedOns();
     	for (UsedOn usedOn: usedOns) {
     		if (usedOn.isUsedOn(fragment.getNamespace(),fragment.getLocalname())) {
     			return true;
@@ -91,9 +91,9 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
      * @see org.xbrlapi.CustomType#isUsedOn(URI,String)
      */
     public boolean isUsedOn(URI namespace, String localname) throws XBRLException {
-    	FragmentList<UsedOn> fragments = this.getUsedOns();
-    	for(int i=0; i<fragments.getLength(); i++) {
-        	UsedOn usedOn = fragments.getFragment(i);
+    	List<UsedOn> fragments = this.getUsedOns();
+    	for(int i=0; i<fragments.size(); i++) {
+        	UsedOn usedOn = fragments.get(i);
         	if (usedOn.isUsedOn(namespace,localname)) return true;
     	}
     	return false;
@@ -106,7 +106,7 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
 	/**
 	 * @see org.xbrlapi.CustomType#getUsedOns()
 	 */
-	public FragmentList<UsedOn> getUsedOns() throws XBRLException {
+	public List<UsedOn> getUsedOns() throws XBRLException {
 		return this.<UsedOn>getChildren("org.xbrlapi.impl.UsedOnImpl");
 	}    
     

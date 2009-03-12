@@ -3,10 +3,10 @@ package org.xbrlapi.impl;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.xbrlapi.ActiveRelationship;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.Resource;
 import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.Constants;
@@ -16,9 +16,9 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationship {
+public class PersistedRelationshipImpl extends XMLImpl implements PersistedRelationship {
 
-    public ActiveRelationshipImpl() {
+    public PersistedRelationshipImpl() {
         super();
     }
     
@@ -27,7 +27,7 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
      * within the scope of the containing data store.
      * @throws XBRLException
      */
-    public ActiveRelationshipImpl(Relationship relationship) throws XBRLException {
+    public PersistedRelationshipImpl(Relationship relationship) throws XBRLException {
         this();
         Fragment source = relationship.getSource();
         Fragment target = relationship.getTarget();
@@ -58,6 +58,7 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
         setArcName(arc.getLocalname());
         setArcNamespace(arc.getNamespace());
         setArcrole(arc.getArcrole());
+        setArcOrder(arc.getOrder());
         
         setLinkName(link.getLocalname());
         setLinkNamespace(link.getNamespace());
@@ -72,7 +73,14 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getArcIndex()
+     * @see org.xbrlapi.PersistedRelationship#getArc()
+     */
+    public Arc getArc() throws XBRLException {
+        return (Arc) this.getStore().get(getArcIndex());
+    }
+    
+    /**
+     * @see org.xbrlapi.PersistedRelationship#getArcIndex()
      */
     public String getArcIndex() {
         return getMetaAttribute("arcIndex");
@@ -86,14 +94,14 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
     
     /**
-     * @see org.xbrlapi.ActiveRelationship#getArcName()
+     * @see org.xbrlapi.PersistedRelationship#getArcName()
      */
     public String getArcName() {
         return getMetaAttribute("arcName");
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getArcNamespace()
+     * @see org.xbrlapi.PersistedRelationship#getArcNamespace()
      */
     public URI getArcNamespace() {
         try {
@@ -104,7 +112,7 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getArcRole()
+     * @see org.xbrlapi.PersistedRelationship#getArcrole()
      */
     public URI getArcrole() {
         try {
@@ -113,16 +121,23 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
             return null;
         }
     }
+    
+    /**
+     * @see org.xbrlapi.PersistedRelationship#getArcOrder()
+     */
+    public Double getArcOrder() {
+        return new Double(getMetaAttribute("arcOrder"));
+    }    
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getLinkName()
+     * @see org.xbrlapi.PersistedRelationship#getLinkName()
      */
     public String getLinkName() {
         return getMetaAttribute("linkName");
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getLinkNamespace()
+     * @see org.xbrlapi.PersistedRelationship#getLinkNamespace()
      */
     public URI getLinkNamespace() {
         try {
@@ -133,7 +148,7 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getLinkRole()
+     * @see org.xbrlapi.PersistedRelationship#getLinkRole()
      */
     public URI getLinkRole() {
         try {
@@ -144,29 +159,29 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getSource()
+     * @see org.xbrlapi.PersistedRelationship#getSource()
      */
     @SuppressWarnings("unchecked")
     public <F extends Fragment> F getSource() throws XBRLException {
-        return (F) this.getStore().getFragment(getSourceIndex());
+        return (F) this.getStore().get(getSourceIndex());
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getSourceIndex()
+     * @see org.xbrlapi.PersistedRelationship#getSourceIndex()
      */
     public String getSourceIndex() {
         return getMetaAttribute("sourceIndex");
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getSourceLanguageCode()
+     * @see org.xbrlapi.PersistedRelationship#getSourceLanguageCode()
      */
     public String getSourceLanguageCode() {
         return getMetaAttribute("sourceLanguage");
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getSourceRole()
+     * @see org.xbrlapi.PersistedRelationship#getSourceRole()
      */
     public URI getSourceRole() {
         try {
@@ -177,21 +192,21 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getSourceType()
+     * @see org.xbrlapi.PersistedRelationship#getSourceType()
      */
     public String getSourceType() {
         return getMetaAttribute("sourceType");
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getSourceName()
+     * @see org.xbrlapi.PersistedRelationship#getSourceName()
      */
     public String getSourceName() {
         return getMetaAttribute("sourceName");
     }    
     
     /**
-     * @see org.xbrlapi.ActiveRelationship#getSourceNamespace()
+     * @see org.xbrlapi.PersistedRelationship#getSourceNamespace()
      */
     public URI getSourceNamespace() {
         try {
@@ -202,29 +217,29 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getTarget()
+     * @see org.xbrlapi.PersistedRelationship#getTarget()
      */
     @SuppressWarnings("unchecked")
     public <F extends Fragment> F getTarget() throws XBRLException {
-        return (F) this.getStore().getFragment(getTargetIndex());
+        return (F) this.getStore().get(getTargetIndex());
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getTargetIndex()
+     * @see org.xbrlapi.PersistedRelationship#getTargetIndex()
      */
     public String getTargetIndex() {
         return getMetaAttribute("targetIndex");
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getTargetLanguageCode()
+     * @see org.xbrlapi.PersistedRelationship#getTargetLanguageCode()
      */
     public String getTargetLanguageCode() {
         return getMetaAttribute("targetLanguage");
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getTargetRole()
+     * @see org.xbrlapi.PersistedRelationship#getTargetRole()
      */
     public URI getTargetRole() {
         try {
@@ -235,21 +250,21 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getTargetType()
+     * @see org.xbrlapi.PersistedRelationship#getTargetType()
      */
     public String getTargetType() {
         return getMetaAttribute("targetType");
     }
 
     /**
-     * @see org.xbrlapi.ActiveRelationship#getTargetName()
+     * @see org.xbrlapi.PersistedRelationship#getTargetName()
      */
     public String getTargetName() {
         return getMetaAttribute("targetName");
     }    
     
     /**
-     * @see org.xbrlapi.ActiveRelationship#getTargetNamespace()
+     * @see org.xbrlapi.PersistedRelationship#getTargetNamespace()
      */
     public URI getTargetNamespace() {
         try {
@@ -280,6 +295,15 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     private void setArcrole(URI role) throws XBRLException {
         this.setMetaAttribute("arcRole",role.toString());
     }
+    
+    /**
+     * @param order The arc order
+     * @throws XBRLException if the order is null. 
+     */
+    private void setArcOrder(Double order) throws XBRLException {
+        if (order == null) throw new XBRLException("The order must not be null."); 
+        this.setMetaAttribute("arcOrder",order.toString());
+    }    
 
     /**
      * @param name The local name of the containing extended link element.
@@ -402,7 +426,7 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }        
     
     /**
-     * @see org.xbrlapi.ActiveRelationship#isToLabel()
+     * @see org.xbrlapi.PersistedRelationship#isToLabel()
      */
     public boolean isToLabel() {
         if (this.getMetaAttribute("label") != null) return true;
@@ -410,7 +434,7 @@ public class ActiveRelationshipImpl extends XMLImpl implements ActiveRelationshi
     }
     
     /**
-     * @see org.xbrlapi.ActiveRelationship#isToReference()
+     * @see org.xbrlapi.PersistedRelationship#isToReference()
      */
     public boolean isToReference() {
         if (this.getMetaAttribute("reference") != null) return true;

@@ -7,7 +7,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.SchemaDeclaration;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -116,7 +116,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
      * @throws XBRLException
      * @see org.xbrlapi.SchemaDeclaration#getAnnotations()
      */
-    public FragmentList<Fragment> getAnnotations() throws XBRLException {
+    public List<Fragment> getAnnotations() throws XBRLException {
     	throw new XBRLException("The getAnnotations method is not yet implemented.");
     }
     

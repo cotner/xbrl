@@ -1,10 +1,12 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+import java.util.Set;
+
 import org.xbrlapi.Context;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Entity;
 import org.xbrlapi.EntityResource;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
 
 /**
@@ -33,23 +35,23 @@ public class EntityResourceTestCase extends DOMLoadingTestCase {
     public void testEntityResourceManipulations() {
         try {
             
-            FragmentList<Context> contexts = store.<Context>getFragments("Context");
-            assertTrue("There are two contexts.",contexts.getLength() == 2);
+            List<Context> contexts = store.<Context>gets("Context");
+            assertTrue("There are two contexts.",contexts.size() == 2);
 
             for (Context context: contexts) {
                 if (context.getId().equals("c1")) {
                     Entity entity = context.getEntity();
                     assertEquals("http://xbrlapi.org/integer/entity/scheme/", entity.getIdentifierScheme());
                     assertEquals("1", entity.getIdentifierValue());
-                    FragmentList<EntityResource> resources = entity.getEntityResources();
-                    assertEquals(1,resources.getLength());
+                    List<EntityResource> resources = entity.getEntityResources();
+                    assertEquals(1,resources.size());
                     EntityResource resource = resources.get(0);
-                    FragmentList<EntityResource> equivalents = resource.getEquivalents();
-                    assertEquals(2,equivalents.getLength());
-                    FragmentList<LabelResource> labels = resource.getLabels();
-                    assertEquals(1,labels.getLength());
+                    Set<EntityResource> equivalents = resource.getEquivalents();
+                    assertEquals(2,equivalents.size());
+                    List<LabelResource> labels = resource.getLabels();
+                    assertEquals(1,labels.size());
                     labels = entity.getAllEntityLabels();
-                    assertEquals(2,labels.getLength());
+                    assertEquals(2,labels.size());
                     assertEquals("http://xbrlapi.org/integer/entity/scheme/",resource.getIdentifierScheme());
                     assertEquals("1",resource.getIdentifierValue());
                 }

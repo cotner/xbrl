@@ -1,12 +1,14 @@
 package org.xbrlapi.impl;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Entity;
 import org.xbrlapi.EntityResource;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.Segment;
 import org.xbrlapi.utilities.Constants;
@@ -48,15 +50,15 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
      * @see org.xbrlapi.Entity#getSegment()
      */
     public Segment getSegment() throws XBRLException {
-    	FragmentList<Segment> candidates = this.<Segment>getChildren("org.xbrlapi.impl.SegmentImpl");
-    	if (candidates.getLength()==0) return null;
-    	return candidates.getFragment(0);
+    	List<Segment> candidates = this.<Segment>getChildren("org.xbrlapi.impl.SegmentImpl");
+    	if (candidates.size()==0) return null;
+    	return candidates.get(0);
     }
     
     /**
      * @see org.xbrlapi.Entity#getEntityResources()
      */
-    public FragmentList<EntityResource> getEntityResources() throws XBRLException {
+    public List<EntityResource> getEntityResources() throws XBRLException {
 
         String value = this.getIdentifierValue().trim();
         try {
@@ -73,9 +75,9 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     /**
      * @see org.xbrlapi.Entity#getEntityLabels()
      */
-    public FragmentList<LabelResource> getEntityLabels() throws XBRLException {
-        FragmentList<EntityResource> resources = this.getEntityResources();
-        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
+    public List<LabelResource> getEntityLabels() throws XBRLException {
+        List<EntityResource> resources = this.getEntityResources();
+        List<LabelResource> labels = new Vector<LabelResource>();
         for (EntityResource resource: resources) {
             labels.addAll(resource.getLabels());
         }
@@ -85,11 +87,11 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     /**
      * @see org.xbrlapi.Entity#getAllEntityLabels()
      */
-    public FragmentList<LabelResource> getAllEntityLabels() throws XBRLException {
-        FragmentList<EntityResource> resources = this.getEntityResources();
-        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
+    public List<LabelResource> getAllEntityLabels() throws XBRLException {
+        List<EntityResource> resources = this.getEntityResources();
+        List<LabelResource> labels = new Vector<LabelResource>();
         for (EntityResource resource: resources) {
-            FragmentList<EntityResource> equivalents = resource.getEquivalents();
+            Set<EntityResource> equivalents = resource.getEquivalents();
             for (EntityResource equivalent: equivalents) {
                 labels.addAll(equivalent.getLabels());
             }
@@ -104,7 +106,7 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
         }
         
         // Convert map to a fragment list
-        FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
+        List<LabelResource> result = new Vector<LabelResource>();
         for (LabelResource label: map.values()) {
             result.add(label);
         }

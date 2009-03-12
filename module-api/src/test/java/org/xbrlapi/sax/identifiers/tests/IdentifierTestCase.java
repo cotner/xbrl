@@ -1,9 +1,9 @@
 package org.xbrlapi.sax.identifiers.tests;
 
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.Concept;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 
 /**
@@ -31,7 +31,7 @@ public class IdentifierTestCase extends BaseTestCase {
 		try {
 			loader.stashURI(uri);
 			loader.discoverNext();
-			FragmentList<Concept> concepts = store.getFragments("Concept");;
+			List<Concept> concepts = store.gets("Concept");;
 			for (Concept concept: concepts) {
 			    logger.info(concept.getName() + " " + concept.getTargetNamespace());
 			}

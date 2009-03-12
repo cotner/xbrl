@@ -7,7 +7,6 @@ import java.util.Set;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcroleType;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.utilities.Constants;
 
@@ -73,9 +72,9 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testGetRoleTypes() throws Exception {
 		try {
-			FragmentList<RoleType> roleTypes = store.getRoleTypes();
-            logger.info(roleTypes.getLength());
-			assertTrue(roleTypes.getLength() > 40);
+			List<RoleType> roleTypes = store.getRoleTypes();
+            logger.info(roleTypes.size());
+			assertTrue(roleTypes.size() > 40);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -83,8 +82,8 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
 	public void testGetArcroleTypes() throws Exception {
 		try {
-			FragmentList<ArcroleType> arcroleTypes = store.getArcroleTypes();
-			assertEquals(15, arcroleTypes.getLength());
+			List<ArcroleType> arcroleTypes = store.getArcroleTypes();
+			assertEquals(15, arcroleTypes.size());
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -106,8 +105,8 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testGetSpecificArcroleTypes() throws Exception {
 		try {
-			FragmentList<ArcroleType> arcroleTypes = store.getArcroleTypes(Constants.PresentationArcRole);
-			assertEquals(1, arcroleTypes.getLength());
+			List<ArcroleType> arcroleTypes = store.getArcroleTypes(Constants.PresentationArcRole);
+			assertEquals(1, arcroleTypes.size());
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -115,8 +114,8 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testGetSpecificRoleTypes() throws Exception {
 		try {
-			FragmentList<RoleType> roleTypes = store.getRoleTypes(Constants.VerboseLabelRole());
-			assertEquals(1, roleTypes.getLength());
+			List<RoleType> roleTypes = store.getRoleTypes(Constants.VerboseLabelRole());
+			assertEquals(1, roleTypes.size());
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -124,12 +123,12 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testCustomArcroleIsUsedCorrectly() throws Exception {
 		try {
-			FragmentList<ArcroleType> roleTypes = store.getArcroleTypes(Constants.PresentationArcRole);
+			List<ArcroleType> roleTypes = store.getArcroleTypes(Constants.PresentationArcRole);
 			ArcroleType type = roleTypes.get(0);
 			assertTrue(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"presentationArc"));
 			assertFalse(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"calculationArc"));
-			FragmentList<Arc> arcs = store.getFragments("Arc");
-			assertTrue(arcs.getLength() > 0);
+			List<Arc> arcs = store.gets("Arc");
+			assertTrue(arcs.size() > 0);
 			for (Arc arc: arcs) {
 			    if (arc.getLocalname().equals("presentationArc"))
 			        assertTrue(type.isUsedCorrectly(arc));
@@ -152,9 +151,9 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 
         logger.info("Done with loading the data.");
         
-        FragmentList<Fragment> allFragments = store.query("/*");
+        List<Fragment> allFragments = store.query("/*");
 
-        logger.info("Total number of fragments: " + allFragments.getLength());
+        logger.info("Total number of fragments: " + allFragments.size());
         
         List<URI> allURIs = store.getStoredURIs();
         logger.info("# URIs in store = " + allURIs.size());
@@ -167,12 +166,12 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
         
         store.setFilteringURIs(uris);
         
-        FragmentList<Fragment> filteredFragments = store.query("/*");
+        List<Fragment> filteredFragments = store.query("/*");
 
-        assertTrue(allFragments.getLength() > filteredFragments.getLength());        
+        assertTrue(allFragments.size() > filteredFragments.size());        
         
-        logger.info(allFragments.getLength());
-        logger.info(filteredFragments.getLength());
+        logger.info(allFragments.size());
+        logger.info(filteredFragments.size());
         
     }
 	

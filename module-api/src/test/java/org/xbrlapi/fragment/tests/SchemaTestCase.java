@@ -3,7 +3,7 @@ package org.xbrlapi.fragment.tests;
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.ExtendedLink;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Schema;
 
 /**
@@ -32,14 +32,14 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetConceptBySubstitutionGroup() {
 
 		try {
-			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
-			for (int i=0; i< fragments.getLength(); i++) {
-				Schema schema = fragments.getFragment(i);
+			List<Schema> fragments = store.<Schema>gets("Schema");
+			for (int i=0; i< fragments.size(); i++) {
+				Schema schema = fragments.get(i);
 				if (schema.getTargetNamespace().equals("schema.getTargetNamespaceURI")) {
-					FragmentList<Concept> concepts = schema.getConcepts();
-					assertTrue(concepts.getLength() > 0);
-					Concept concept = (Concept) fragments.getFragment(0);
-					assertEquals(4, schema.getConceptsBySubstitutionGroup(concept.getSubstitutionGroupNamespace(),concept.getSubstitutionGroupLocalname()).getLength());
+					List<Concept> concepts = schema.getConcepts();
+					assertTrue(concepts.size() > 0);
+					Concept concept = (Concept) fragments.get(0);
+					assertEquals(4, schema.getConceptsBySubstitutionGroup(concept.getSubstitutionGroupNamespace(),concept.getSubstitutionGroupLocalname()).size());
 				}
 			}
 		} catch (Exception e) {
@@ -52,13 +52,13 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetConceptByType() {
 
 		try {
-			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
-			for (int i=0; i< fragments.getLength(); i++) {
-				Schema schema = fragments.getFragment(i);
+			List<Schema> fragments = store.<Schema>gets("Schema");
+			for (int i=0; i< fragments.size(); i++) {
+				Schema schema = fragments.get(i);
 				if (schema.getTargetNamespace().equals("schema.getTargetNamespaceURI")) {
-					FragmentList<Concept> concepts = schema.getConcepts();
-					Concept concept = concepts.getFragment(0);
-					assertEquals(3, schema.getConceptsByType(concept.getTypeNamespace(),concept.getTypeLocalname()).getLength());
+					List<Concept> concepts = schema.getConcepts();
+					Concept concept = concepts.get(0);
+					assertEquals(3, schema.getConceptsByType(concept.getTypeNamespace(),concept.getTypeLocalname()).size());
 				}
 			}
 		} catch (Exception e) {
@@ -70,9 +70,9 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetConceptByName() {
 
 		try {
-			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
-			for (int i=0; i< fragments.getLength(); i++) {
-				Schema schema = fragments.getFragment(i);
+			List<Schema> fragments = store.<Schema>gets("Schema");
+			for (int i=0; i< fragments.size(); i++) {
+				Schema schema = fragments.get(i);
 				if (schema.getTargetNamespace().equals("schema.getTargetNamespaceURI")) {
 					String name = "managementName";
 					assertEquals(name, schema.getConceptByName(name).getName());
@@ -87,8 +87,8 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetReferencePartDeclarationByName() {
 		// TODO !!! Create an example with reference part declarations in the conformance suite
 		try {
-			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
-			Schema schema = fragments.getFragment(0);
+			List<Schema> fragments = store.<Schema>gets("Schema");
+			Schema schema = fragments.get(0);
 			String name = "managementName";
 			assertNull(schema.getReferencePartDeclaration(name));
 		} catch (Exception e) {
@@ -99,9 +99,9 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	
 	public void testGetReferencePartDeclarations() {
 		try {
-			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
-			Schema schema = fragments.getFragment(0);
-			assertEquals(0,schema.getReferencePartDeclarations().getLength());
+			List<Schema> fragments = store.<Schema>gets("Schema");
+			Schema schema = fragments.get(0);
+			assertEquals(0,schema.getReferencePartDeclarations().size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -111,11 +111,11 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetConcepts() {
 
 		try {
-			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
-			for (int i=0; i< fragments.getLength(); i++) {
-				Schema schema = fragments.getFragment(i);
-				FragmentList<Concept> concepts = schema.getConcepts();
-				if (concepts.getLength() > 0) {
+			List<Schema> fragments = store.<Schema>gets("Schema");
+			for (int i=0; i< fragments.size(); i++) {
+				Schema schema = fragments.get(i);
+				List<Concept> concepts = schema.getConcepts();
+				if (concepts.size() > 0) {
 					assertTrue(concepts.get(0).getType().equals("org.xbrlapi.impl.ConceptImpl"));
 				}
 			}
@@ -129,13 +129,13 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 
 		try {
 			loader.discover(this.getURI(this.SCHEMA_WITH_EMBEDDED_LINKS));
-			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
-			logger.debug("There are " + fragments.getLength() + " schemas.");
-			for (int i=0; i< fragments.getLength(); i++) {
-				Schema schema = fragments.getFragment(i);
-				FragmentList<ExtendedLink> links = schema.getExtendedLinks();
-				if (links.getLength() > 0) {
-					logger.debug("Schema " + schema.getURI() + " contains " + links.getLength() + " extended links.");
+			List<Schema> fragments = store.<Schema>gets("Schema");
+			logger.debug("There are " + fragments.size() + " schemas.");
+			for (int i=0; i< fragments.size(); i++) {
+				Schema schema = fragments.get(i);
+				List<ExtendedLink> links = schema.getExtendedLinks();
+				if (links.size() > 0) {
+					logger.debug("Schema " + schema.getURI() + " contains " + links.size() + " extended links.");
 					assertTrue(links.get(0).getType().equals("org.xbrlapi.impl.ExtendedLinkImpl"));
 				}
 			}
@@ -148,8 +148,8 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testIsElementFormQualified() {
 
 		try {
-			FragmentList<Schema> fragments = store.<Schema>getFragments("Schema");
-			Schema schema = fragments.getFragment(0);
+			List<Schema> fragments = store.<Schema>gets("Schema");
+			Schema schema = fragments.get(0);
 			assertEquals(true, schema.isElementFormQualified());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -159,8 +159,8 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	
 	public void testGetTargetNamespace() {
 		try {
-			FragmentList<Schema> schemas = store.<Schema>getFragments("Schema");
-			Schema schema = schemas.getFragment(0);
+			List<Schema> schemas = store.<Schema>gets("Schema");
+			Schema schema = schemas.get(0);
 			assertEquals("http://mycompany.com/xbrl/taxonomy", schema.getTargetNamespace().toString());
 		} catch (Exception e) {
 			e.printStackTrace();

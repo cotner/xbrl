@@ -1,8 +1,9 @@
 package org.xbrlapi.impl;
 
+import java.util.List;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.FactDimensionContainer;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -27,7 +28,7 @@ public class FactDimensionContainerImpl extends FragmentImpl implements FactDime
     /**
      * @see org.xbrlapi.FactDimensionContainer#getReferencingItems()
      */
-    public FragmentList<Item> getReferencingItems() throws XBRLException {
+    public List<Item> getReferencingItems() throws XBRLException {
         String query = "/*[*/*/@*='" + this.getId() + "']";
         return getStore().<Item>query(query);
     }

@@ -3,7 +3,7 @@ package org.xbrlapi.impl;
 import org.xbrlapi.Context;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.SimpleLink;
@@ -23,12 +23,12 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @throws XBRLException
      * @see org.xbrlapi.Instance#getSchemaRefs()
      */
-    public FragmentList<SimpleLink> getSchemaRefs() throws XBRLException {
-    	FragmentList<SimpleLink> candidates = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
+    public List<SimpleLink> getSchemaRefs() throws XBRLException {
+    	List<SimpleLink> candidates = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
     	int i = 0;
-    	while (i<candidates.getLength()) {
-    		SimpleLink c = candidates.getFragment(i);
-    		if (! c.getLocalname().equals("schemaRef")) candidates.removeFragment(c); else  i++;
+    	while (i<candidates.size()) {
+    		SimpleLink c = candidates.get(i);
+    		if (! c.getLocalname().equals("schemaRef")) candidates.remove(c); else  i++;
     	}
     	return candidates;
     }
@@ -44,12 +44,12 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @throws XBRLException
      * @see org.xbrlapi.Instance#getLinkbaseRefs()
      */
-    public FragmentList<SimpleLink> getLinkbaseRefs() throws XBRLException {
-    	FragmentList<SimpleLink> candidates = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
+    public List<SimpleLink> getLinkbaseRefs() throws XBRLException {
+    	List<SimpleLink> candidates = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
     	int i = 0;
-    	while (i<candidates.getLength()) {
-    		SimpleLink c = candidates.getFragment(i);
-    		if (! c.getLocalname().equals("linkbaseRef")) candidates.removeFragment(c); else  i++;
+    	while (i<candidates.size()) {
+    		SimpleLink c = candidates.get(i);
+    		if (! c.getLocalname().equals("linkbaseRef")) candidates.remove(c); else  i++;
     	}
     	return candidates;
     }
@@ -63,7 +63,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @throws XBRLException
      * @see org.xbrlapi.Instance#getContexts()
      */
-    public FragmentList<Context> getContexts() throws XBRLException {
+    public List<Context> getContexts() throws XBRLException {
     	return this.<Context>getChildren("org.xbrlapi.impl.ContextImpl");
     }
 
@@ -72,10 +72,10 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      */
     public Context getContext(String id) throws XBRLException {
     	String xpath = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ContextImpl' and @parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@id='" + id + "']";
-    	FragmentList<Context> list = getStore().<Context>query(xpath);
-    	if (list.getLength() == 0) throw new XBRLException("The instance does not contain a context with id: " + id);
-    	if (list.getLength() > 1) throw new XBRLException("The instance contains more than one context with id: " + id);
-    	return (list.getFragment(0));
+    	List<Context> list = getStore().<Context>query(xpath);
+    	if (list.size() == 0) throw new XBRLException("The instance does not contain a context with id: " + id);
+    	if (list.size() > 1) throw new XBRLException("The instance contains more than one context with id: " + id);
+    	return (list.get(0));
     }
     
 
@@ -88,7 +88,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @throws XBRLException
      * @see org.xbrlapi.Instance#getUnits()
      */
-    public FragmentList<Unit> getUnits() throws XBRLException {
+    public List<Unit> getUnits() throws XBRLException {
     	return this.<Unit>getChildren("org.xbrlapi.impl.UnitImpl");
     }    
 
@@ -100,10 +100,10 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getUnit(String)
      */
     public Unit getUnit(String id) throws XBRLException {
-    	FragmentList<Unit> list = getStore().query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.UnitImpl' and @parentIndex='" + this.getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@id='" + id + "']");
-    	if (list.getLength() == 0) throw new XBRLException("The instance does not contain a unit with id: " + id);
-    	if (list.getLength() > 1) throw new XBRLException("The instance contains more than one unit with id: " + id);
-    	return list.getFragment(0);
+    	List<Unit> list = getStore().query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.UnitImpl' and @parentIndex='" + this.getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@id='" + id + "']");
+    	if (list.size() == 0) throw new XBRLException("The instance does not contain a unit with id: " + id);
+    	if (list.size() > 1) throw new XBRLException("The instance contains more than one unit with id: " + id);
+    	return list.get(0);
     }
     
 
@@ -116,7 +116,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @throws XBRLException
      * @see org.xbrlapi.Instance#getFootnoteLinks()
      */
-    public FragmentList<ExtendedLink> getFootnoteLinks() throws XBRLException {
+    public List<ExtendedLink> getFootnoteLinks() throws XBRLException {
     	return this.<ExtendedLink>getChildren("org.xbrlapi.impl.ExtendedLinkImpl");
     }
 
@@ -126,14 +126,14 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     /**
      * @see org.xbrlapi.Instance#getFacts()
      */
-    public FragmentList<Fact> getFacts() throws XBRLException {
+    public List<Fact> getFacts() throws XBRLException {
     	return getStore().<Fact>query("/*[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
     }
     
     /**
      * @see org.xbrlapi.Instance#getItems()
      */
-    public FragmentList<Item> getItems() throws XBRLException {
+    public List<Item> getItems() throws XBRLException {
         return getStore().<Item>query("/*[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl')]");
     }
     

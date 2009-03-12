@@ -2,9 +2,9 @@ package org.xbrlapi.data.resource;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.MockImpl;
@@ -63,10 +63,10 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
         if (matchMap.containsKey(uri)) return matchMap.get(uri);
         
         String query = "/*[" + Constants.XBRLAPIPrefix + ":resource/@uri='" + uri +"']";
-        FragmentList<Fragment> matches = getStore().query(query);
-        if (matches.getLength() > 1) throw new XBRLException("The wrong number of match fragments was retrieved.  There must be just one.");
+        List<Fragment> matches = getStore().query(query);
+        if (matches.size() > 1) throw new XBRLException("The wrong number of match fragments was retrieved.  There must be just one.");
         
-        if (matches.getLength() == 0) {
+        if (matches.size() == 0) {
 
             String signature = null;
             try {
@@ -78,10 +78,10 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
             }
             
             if (getStore().hasFragment(signature)) {
-                Fragment match = getStore().getFragment(signature);
+                Fragment match = getStore().get(signature);
                 HashMap<String,String> attr = new HashMap<String,String>();
                 attr.put("uri",uri.toString());
-                match = getStore().getFragment(signature);
+                match = getStore().get(signature);
                 match.appendMetadataElement("resource",attr);
                 URI matchURI = match.getURI();
                 this.matchMap.put(uri,matchURI);

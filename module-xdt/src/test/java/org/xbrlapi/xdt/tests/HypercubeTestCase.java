@@ -1,6 +1,7 @@
 package org.xbrlapi.xdt.tests;
 
-import org.xbrlapi.FragmentList;
+import java.util.List;
+
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.Hypercube;
 
@@ -29,8 +30,8 @@ public class HypercubeTestCase extends BaseTestCase {
 
 		try {
 	        loader.discover(this.getURI(STARTING_POINT));
-			FragmentList<Hypercube> fragments = store.<Hypercube>getFragments("org.xbrlapi.xdt.HypercubeImpl");
-			assertTrue(fragments.getLength() > 0);
+			List<Hypercube> fragments = store.<Hypercube>gets("org.xbrlapi.xdt.HypercubeImpl");
+			assertTrue(fragments.size() > 0);
 			for (Hypercube fragment: fragments) {
 	            assertEquals("org.xbrlapi.xdt.HypercubeImpl",fragment.getType());
 			}
@@ -44,11 +45,11 @@ public class HypercubeTestCase extends BaseTestCase {
 
         try {
             loader.discover(this.getURI(STARTING_POINT));
-            FragmentList<Hypercube> fragments = store.<Hypercube>getFragments("org.xbrlapi.xdt.HypercubeImpl");
-            assertTrue(fragments.getLength() > 0);
+            List<Hypercube> fragments = store.<Hypercube>gets("org.xbrlapi.xdt.HypercubeImpl");
+            assertTrue(fragments.size() > 0);
             for (Hypercube fragment: fragments) {
-                FragmentList<Dimension> dimensions = fragment.getDimensions();
-                assertTrue(dimensions.getLength() == 0);
+                List<Dimension> dimensions = fragment.getDimensions();
+                assertTrue(dimensions.size() == 0);
             }
         } catch (Exception e) {
             e.printStackTrace();

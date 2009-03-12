@@ -7,16 +7,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Locator;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -112,15 +111,15 @@ public class NetworksImpl implements Networks {
 	/**
 	 * @see org.xbrlapi.networks.Networks#getSourceFragments(String, URI)
 	 */
-	public <F extends Fragment> FragmentList<F>  getSourceFragments(String targetIndex, URI arcrole) throws XBRLException {
+	public <F extends Fragment> List<F>  getSourceFragments(String targetIndex, URI arcrole) throws XBRLException {
 		
-		FragmentList<F> fragments = new FragmentListImpl<F>();
+		List<F> fragments = new Vector<F>();
 		
     	List<Network> selectedNetworks = this.getNetworks(arcrole);
     	for (Network network: selectedNetworks) {
-    		List<Relationship> relationships = network.getActiveRelationshipsTo(targetIndex);
+    		SortedSet<Relationship> relationships = network.getActiveRelationshipsTo(targetIndex);
         	for (Relationship relationship: relationships) {
-        		fragments.addFragment(relationship.<F>getSource());
+        		fragments.add(relationship.<F>getSource());
         	}
     	}
 		return fragments;
@@ -129,48 +128,48 @@ public class NetworksImpl implements Networks {
 	/**
 	 * @see org.xbrlapi.networks.Networks#getSourceFragments(String, URI, URI)
 	 */
-	public <F extends Fragment> FragmentList<F>  getSourceFragments(String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
-		FragmentList<F> fragments = new FragmentListImpl<F>();
+	public <F extends Fragment> List<F>  getSourceFragments(String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
+		List<F> fragments = new Vector<F>();
 		if (! hasNetwork(linkRole,arcrole)) return fragments;
     	Network network = this.getNetwork(linkRole,arcrole);
-		List<Relationship> relationships = network.getActiveRelationshipsTo(targetIndex);
+		SortedSet<Relationship> relationships = network.getActiveRelationshipsTo(targetIndex);
     	for (Relationship relationship: relationships) {
-    		fragments.addFragment(relationship.<F>getSource());
+    		fragments.add(relationship.<F>getSource());
     	}
 		return fragments;
 	}	
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getTargetFragments(String, URI)
+	 * @see org.xbrlapi.networks.Networks#getTargets(String, URI)
 	 */
-	public <F extends Fragment> FragmentList<F>  getTargetFragments(String sourceIndex, URI arcrole) throws XBRLException {
+	public <F extends Fragment> List<F>  getTargets(String sourceIndex, URI arcrole) throws XBRLException {
 		
-		FragmentList<F> fragments = new FragmentListImpl<F>();
+		List<F> fragments = new Vector<F>();
 		
     	List<Network> selectedNetworks = this.getNetworks(arcrole);
     	logger.debug("There are " + selectedNetworks.size() + " networks with arcrole " + arcrole);
     	for (Network network: selectedNetworks) {
             logger.debug("A network has linkrole " + network.getLinkRole());
-    		List<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
+    		SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
             logger.debug("The network contains " + relationships.size() + " relationships from " + sourceIndex);
         	for (Relationship relationship: relationships) {
-        		fragments.addFragment(relationship.<F>getTarget());
+        		fragments.add(relationship.<F>getTarget());
         	}
     	}
 		return fragments;
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getTargetFragments(String, URI, URI)
+	 * @see org.xbrlapi.networks.Networks#getTargets(String, URI, URI)
 	 */
-	public <F extends Fragment> FragmentList<F>  getTargetFragments(String sourceIndex, URI arcRole, URI linkRole) throws XBRLException {
+	public <F extends Fragment> List<F>  getTargets(String sourceIndex, URI arcRole, URI linkRole) throws XBRLException {
 		
-		FragmentList<F> fragments = new FragmentListImpl<F>();
+		List<F> fragments = new Vector<F>();
 		if (! hasNetwork(linkRole, arcRole)) return fragments;
     	Network network = this.getNetwork(linkRole, arcRole);
-		List<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
+		SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
     	for (Relationship relationship: relationships) {
-    		fragments.addFragment(relationship.<F>getTarget());
+    		fragments.add(relationship.<F>getTarget());
     	}
 		return fragments;
 	}	
@@ -211,16 +210,16 @@ public class NetworksImpl implements Networks {
     public void addRelationships(String arcrole) throws XBRLException {
 
         String query = "/*[@type='org.xbrlapi.impl.ArcImpl' and */*[@xlink:type='arc' and @xlink:arcrole='"+ arcrole +"']]";
-        FragmentList<Arc> arcs = this.getStore().<Arc>query(query);
+        List<Arc> arcs = this.getStore().<Arc>query(query);
         for (Arc arc: arcs) {
-            FragmentList<ArcEnd> sources = arc.getSourceFragments();
-            FragmentList<ArcEnd> targets = arc.getTargetFragments();
+            List<ArcEnd> sources = arc.getSourceFragments();
+            List<ArcEnd> targets = arc.getTargets();
             for (Fragment source: sources) {
                 Fragment s = source;
-                if (source.isa("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTargetFragment();
+                if (source.isa("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTarget();
                 for (Fragment target: targets) {
                     Fragment t = target;
-                    if (target.isa("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTargetFragment();
+                    if (target.isa("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTarget();
                     Relationship relationship = new RelationshipImpl(arc,s,t);
                     this.addRelationship(relationship);
                 }
@@ -287,6 +286,15 @@ public class NetworksImpl implements Networks {
      */
     public Store getStore() {
         return this.store;
+    }
+ 
+    /**
+     * @see Networks#addAll(Networks)
+     */
+    public void addAll(Networks networks) throws XBRLException {
+        for (Network network: networks) {
+            this.addNetwork(network);
+        }
     }
     
 }

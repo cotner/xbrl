@@ -3,9 +3,9 @@ package org.xbrlapi.xdt.values;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Comparator;
+import java.util.List;
 
 import org.xbrlapi.Concept;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -86,18 +86,18 @@ public class ExplicitDimensionValueLabelComparator extends DimensionValueCompara
         Concept m1 = (Concept) v1.getValue();
         Concept m2 = (Concept) v2.getValue();
         
-        FragmentList<LabelResource> m1Labels = m1.getLabelsWithLanguageAndRole(language, role);
-        FragmentList<LabelResource> m2Labels = m2.getLabelsWithLanguageAndRole(language, role);
+        List<LabelResource> m1Labels = m1.getLabelsWithLanguageAndResourceRole(language, role);
+        List<LabelResource> m2Labels = m2.getLabelsWithLanguageAndResourceRole(language, role);
         
-        if (m1Labels.getLength() > 0 && m2Labels.getLength() > 0) {
+        if (m1Labels.size() > 0 && m2Labels.size() > 0) {
             return m1Labels.get(0).getStringValue().compareTo(m2Labels.get(0).getStringValue());
         }
         
-        if (m1Labels.getLength() > 0) {
+        if (m1Labels.size() > 0) {
             return -1;
         }        
 
-        if (m2Labels.getLength() > 0) {
+        if (m2Labels.size() > 0) {
             return 1;
         }        
 

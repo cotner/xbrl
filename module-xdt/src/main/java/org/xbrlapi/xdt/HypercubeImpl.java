@@ -1,7 +1,8 @@
 package org.xbrlapi.xdt;
 
-import org.xbrlapi.FragmentList;
-import org.xbrlapi.impl.FragmentListImpl;
+import java.util.List;
+import java.util.Vector;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -13,7 +14,7 @@ public class HypercubeImpl extends XDTConceptImpl implements Hypercube {
     /**
      * @see org.xbrlapi.xdt.Hypercube#getDimensions()
      */
-    public FragmentList<Dimension> getDimensions() throws XBRLException {
-        return new FragmentListImpl<Dimension>();
+    public List<Dimension> getDimensions() throws XBRLException {
+        return new Vector<Dimension>();
     }    
 }

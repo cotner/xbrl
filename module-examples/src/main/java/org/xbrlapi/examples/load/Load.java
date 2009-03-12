@@ -17,7 +17,6 @@ import org.xbrlapi.Context;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.FootnoteResource;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.Locator;
@@ -28,7 +27,6 @@ import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
-import org.xbrlapi.networks.Networks;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -107,15 +105,15 @@ public class Load {
             
             // Analyse the presentation networks in the supporting DTS
             for (URI linkrole: store.getLinkRoles(Constants.PresentationArcRole())) {
-                FragmentList<Fragment> rootLocators = store.getNetworkRoots(Constants.XBRL21LinkNamespace,"presentationLink",arguments.get("linkrole"),Constants.XBRL21LinkNamespace,"presentationArc",Constants.PresentationArcRole);                            
+                List<Fragment> rootLocators = store.getNetworkRoots(Constants.XBRL21LinkNamespace(),"presentationLink",new URI(arguments.get("linkrole")),Constants.XBRL21LinkNamespace(),"presentationArc",Constants.PresentationArcRole());                            
                 for (Fragment rootLocator: rootLocators) {
-                    Concept rootConcept = (Concept) ((Locator) rootLocator).getTargetFragment();
+                    Concept rootConcept = (Concept) ((Locator) rootLocator).getTarget();
                     reportNode("",rootConcept,linkrole);
                 }
             }
 
             // Iterate the instances printing out lists of facts etc.
-            FragmentList<Instance> instances = store.<Instance>getFragments("Instance");
+            List<Instance> instances = store.<Instance>gets("Instance");
             for (Instance instance: instances) {
                 reportInstance(instance);
             }
@@ -141,9 +139,8 @@ public class Load {
     private static void reportNode(String indent, Fragment fragment, URI linkRole) throws XBRLException {
         Concept concept = (Concept) fragment;
         System.out.println(indent + concept.getTargetNamespace() + ":" + concept.getName());
-        Networks networks = concept.getNetworksWithArcrole(Constants.PresentationArcRole()); // Some fat can be trimmed here by only getting those networks with the required linkrole.
-        if (networks.getSize() > 0) {
-            FragmentList<Fragment> children = networks.getTargetFragments(concept.getIndex(),linkRole,Constants.PresentationArcRole());
+        List<Fragment> children = store.getTargets(concept.getIndex(),linkRole,Constants.PresentationArcRole());
+        if (children.size() > 0) {
             for (Fragment child: children) {
                 reportNode(indent + " ", child,linkRole);
             }  
@@ -151,28 +148,28 @@ public class Load {
     }
     
     private static void reportInstance(Instance instance) throws XBRLException {
-        FragmentList<Item> items = instance.getItems();
+        List<Item> items = instance.getItems();
         System.out.println("Top level items in the instance.");
         for (Item item: items) {
             System.out.println(item.getLocalname() + " " + item.getContextId());
         }
 
-        FragmentList<Context> contexts = instance.getContexts();
+        List<Context> contexts = instance.getContexts();
         System.out.println("Contexts in the instance.");
         for (Context context: contexts) {
             System.out.println("Context ID " + context.getId());
         }
     
-        FragmentList<Unit> units = instance.getUnits();
+        List<Unit> units = instance.getUnits();
         System.out.println("Units in the instance.");
         for (Unit unit: units) {
             System.out.println("Unit ID " + unit.getId());
         }
         
-        FragmentList<ExtendedLink> links = instance.getFootnoteLinks();
+        List<ExtendedLink> links = instance.getFootnoteLinks();
         System.out.println("Footnote links in the instance.");
         for (ExtendedLink link: links) {            
-            FragmentList<Resource> resources = link.getResources();
+            List<Resource> resources = link.getResources();
             for (Resource resource: resources) {
                 FootnoteResource fnr = (FootnoteResource) resource;
                 System.out.println("Footnote resource: " + fnr.getDataRootElement().getTextContent());

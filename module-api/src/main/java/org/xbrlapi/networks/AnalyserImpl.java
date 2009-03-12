@@ -3,12 +3,14 @@ package org.xbrlapi.networks;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.ActiveRelationship;
-import org.xbrlapi.FragmentList;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.impl.FragmentListImpl;
+import org.xbrlapi.impl.PersistedRelationshipOrderComparator;
 import org.xbrlapi.utilities.XBRLException;
 
 public class AnalyserImpl implements Analyser {
@@ -73,8 +75,8 @@ public class AnalyserImpl implements Analyser {
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationships(Set)
      */
-    public FragmentList<ActiveRelationship> getRelationships(Set<URI> arcroles) throws XBRLException {
-        FragmentList<ActiveRelationship> relationships = new FragmentListImpl<ActiveRelationship>();
+    public List<PersistedRelationship> getRelationships(Set<URI> arcroles) throws XBRLException {
+        List<PersistedRelationship> relationships = new Vector<PersistedRelationship>();
         for (URI arcrole: arcroles) {
             relationships.addAll(this.getRelationships(arcrole));
         }
@@ -84,8 +86,8 @@ public class AnalyserImpl implements Analyser {
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationships(URI, Set)
      */
-    public FragmentList<ActiveRelationship> getRelationships(URI linkRole, Set<URI> arcroles) throws XBRLException {
-        FragmentList<ActiveRelationship> relationships = new FragmentListImpl<ActiveRelationship>();
+    public List<PersistedRelationship> getRelationships(URI linkRole, Set<URI> arcroles) throws XBRLException {
+        List<PersistedRelationship> relationships = new Vector<PersistedRelationship>();
         for (URI arcrole: arcroles) {
             relationships.addAll(this.getRelationships(linkRole, arcrole));
         }
@@ -95,24 +97,24 @@ public class AnalyserImpl implements Analyser {
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationships(java.net.URI, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getRelationships(URI linkRole, URI arcrole) throws XBRLException {
+    public List<PersistedRelationship> getRelationships(URI linkRole, URI arcrole) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationships(java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getRelationships(URI arcrole) throws XBRLException {
+    public List<PersistedRelationship> getRelationships(URI arcrole) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationshipsFrom(java.lang.String, Set)
      */
-    public FragmentList<ActiveRelationship> getRelationshipsFrom(String sourceIndex, Set<URI> arcroles) throws XBRLException {
-        FragmentList<ActiveRelationship> relationships = new FragmentListImpl<ActiveRelationship>();
+    public List<PersistedRelationship> getRelationshipsFrom(String sourceIndex, Set<URI> arcroles) throws XBRLException {
+        List<PersistedRelationship> relationships = new Vector<PersistedRelationship>();
         for (URI arcrole: arcroles) {
             relationships.addAll(this.getRelationshipsFrom(sourceIndex, arcrole));
         }
@@ -122,8 +124,8 @@ public class AnalyserImpl implements Analyser {
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationshipsFrom(java.lang.String, java.net.URI, Set)
      */
-    public FragmentList<ActiveRelationship> getRelationshipsFrom(String sourceIndex, URI linkRole, Set<URI> arcroles) throws XBRLException {
-        FragmentList<ActiveRelationship> relationships = new FragmentListImpl<ActiveRelationship>();
+    public List<PersistedRelationship> getRelationshipsFrom(String sourceIndex, URI linkRole, Set<URI> arcroles) throws XBRLException {
+        List<PersistedRelationship> relationships = new Vector<PersistedRelationship>();
         for (URI arcrole: arcroles) {
             relationships.addAll(this.getRelationshipsFrom(sourceIndex, linkRole, arcrole));
         }
@@ -133,24 +135,27 @@ public class AnalyserImpl implements Analyser {
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationshipsFrom(java.lang.String, java.net.URI, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getRelationshipsFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException {
+    public SortedSet<PersistedRelationship> getRelationshipsFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @sourceIndex='"+ sourceIndex +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        List<PersistedRelationship> list = this.getStore().<PersistedRelationship>query(query);
+        SortedSet<PersistedRelationship> sortedSet = new TreeSet<PersistedRelationship>(new PersistedRelationshipOrderComparator());
+        sortedSet.addAll(list);
+        return sortedSet;
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationshipsFrom(java.lang.String, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getRelationshipsFrom(String sourceIndex, URI arcrole) throws XBRLException {
+    public List<PersistedRelationship> getRelationshipsFrom(String sourceIndex, URI arcrole) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @sourceIndex='"+ sourceIndex +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationshipsTo(java.lang.String, Set)
      */
-    public FragmentList<ActiveRelationship> getRelationshipsTo(String targetIndex, Set<URI> arcroles) throws XBRLException {
-        FragmentList<ActiveRelationship> relationships = new FragmentListImpl<ActiveRelationship>();
+    public List<PersistedRelationship> getRelationshipsTo(String targetIndex, Set<URI> arcroles) throws XBRLException {
+        List<PersistedRelationship> relationships = new Vector<PersistedRelationship>();
         for (URI arcrole: arcroles) {
             relationships.addAll(this.getRelationshipsTo(targetIndex, arcrole));
         }
@@ -160,8 +165,8 @@ public class AnalyserImpl implements Analyser {
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationshipsTo(java.lang.String, java.net.URI, Set)
      */
-    public FragmentList<ActiveRelationship> getRelationshipsTo(String targetIndex, URI linkRole, Set<URI> arcroles) throws XBRLException {
-        FragmentList<ActiveRelationship> relationships = new FragmentListImpl<ActiveRelationship>();
+    public List<PersistedRelationship> getRelationshipsTo(String targetIndex, URI linkRole, Set<URI> arcroles) throws XBRLException {
+        List<PersistedRelationship> relationships = new Vector<PersistedRelationship>();
         for (URI arcrole: arcroles) {
             relationships.addAll(this.getRelationshipsTo(targetIndex, linkRole, arcrole));
         }
@@ -171,236 +176,239 @@ public class AnalyserImpl implements Analyser {
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationshipsTo(java.lang.String, java.net.URI, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getRelationshipsTo(
+    public SortedSet<PersistedRelationship> getRelationshipsTo(
             String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @targetIndex='"+ targetIndex +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        List<PersistedRelationship> list = this.getStore().<PersistedRelationship>query(query);
+        SortedSet<PersistedRelationship> sortedSet = new TreeSet<PersistedRelationship>(new PersistedRelationshipOrderComparator());
+        sortedSet.addAll(list);
+        return sortedSet;
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getRelationshipsTo(java.lang.String, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getRelationshipsTo(String targetIndex, URI arcrole) throws XBRLException {
+    public List<PersistedRelationship> getRelationshipsTo(String targetIndex, URI arcrole) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @targetIndex='"+ targetIndex +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getRootRelationships(java.net.URI, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getRootRelationships(URI linkRole, URI arcrole) throws XBRLException {
+    public List<PersistedRelationship> getRootRelationships(URI linkRole, URI arcrole) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @root]";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getRootRelationships(java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getRootRelationships(URI arcrole) throws XBRLException {
+    public List<PersistedRelationship> getRootRelationships(URI arcrole) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @root]";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationships(java.lang.String)
      */
-    public FragmentList<ActiveRelationship> getLabelRelationships(String sourceIndex) throws XBRLException {
+    public List<PersistedRelationship> getLabelRelationships(String sourceIndex) throws XBRLException {
         String query = "/*[@label and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
     
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationships(java.lang.String,java.lang.String)
      */
-    public FragmentList<ActiveRelationship> getLabelRelationships(String sourceIndex, String language) throws XBRLException {
+    public List<PersistedRelationship> getLabelRelationships(String sourceIndex, String language) throws XBRLException {
         String query = "/*[@label and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationshipsByLanguage(java.lang.String, java.lang.String)
      */
-    public FragmentList<ActiveRelationship> getLabelRelationshipsByLanguage( 
+    public List<PersistedRelationship> getLabelRelationshipsByLanguage( 
             String sourceIndex, String language) 
             throws XBRLException {
         String query = "/*[@label and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationshipsByLanguageAndRole(java.lang.String, java.lang.String, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getLabelRelationshipsByLanguageAndRole(
+    public List<PersistedRelationship> getLabelRelationshipsByLanguageAndRole(
             String sourceIndex, String language, URI role) throws XBRLException {
         String query = "/*[@label and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"' and targetRole='"+ role +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationshipsByLanguages(java.lang.String, java.util.List)
      */
-    public FragmentList<ActiveRelationship> getLabelRelationshipsByLanguages(
+    public List<PersistedRelationship> getLabelRelationshipsByLanguages(
             String sourceIndex, List<String> languages) throws XBRLException {
         for (String language: languages) {
-            FragmentList<ActiveRelationship> relationships;
+            List<PersistedRelationship> relationships;
             if (language == null) { 
                 relationships = this.getLabelRelationships(sourceIndex);
             } else {
                 String query = "/*[@label and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"']";
-                relationships = this.getStore().<ActiveRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>query(query);
             }
             if (! relationships.isEmpty()) return relationships;
         }
-        return new FragmentListImpl<ActiveRelationship>();
+        return new Vector<PersistedRelationship>();
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationshipsByRole(java.lang.String, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getLabelRelationshipsByRole(
+    public List<PersistedRelationship> getLabelRelationshipsByRole(
             String sourceIndex, URI role) throws XBRLException {
         String query = "/*[@label and @sourceIndex='"+ sourceIndex+"' targetRole='"+ role +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationshipsByRoles(java.lang.String, java.util.List, java.util.List)
      */
-    public FragmentList<ActiveRelationship> getLabelRelationshipsByRoles(
+    public List<PersistedRelationship> getLabelRelationshipsByRoles(
             String sourceIndex, List<String> languages, List<URI> roles)
             throws XBRLException {
         for (String language: languages) {
             for (URI role: roles) {
-                FragmentList<ActiveRelationship> relationships;
+                List<PersistedRelationship> relationships;
                 String languagePhrase = "";
                 if (language != null) languagePhrase = " and targetLanguage='"+ language +"'";
                 String rolePhrase = "";
                 if (role != null) rolePhrase = " and targetRole='"+ role +"'";
                 String query = "/*[@label and @sourceIndex='"+ sourceIndex+"'" + languagePhrase + rolePhrase + "]";
-                relationships = this.getStore().<ActiveRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>query(query);
                 if (! relationships.isEmpty()) return relationships;
             }
         }
-        return new FragmentListImpl<ActiveRelationship>();
+        return new Vector<PersistedRelationship>();
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationshipsByRoles(java.lang.String, java.util.List)
      */
-    public FragmentList<ActiveRelationship> getLabelRelationshipsByRoles(
+    public List<PersistedRelationship> getLabelRelationshipsByRoles(
             String sourceIndex, List<URI> roles) throws XBRLException {
         for (URI role: roles) {
-            FragmentList<ActiveRelationship> relationships;
+            List<PersistedRelationship> relationships;
             if (role == null) { 
                 relationships = this.getLabelRelationships(sourceIndex);
             } else {
                 String query = "/*[@label and @sourceIndex='"+ sourceIndex+"' and targetRole='"+ role +"']";
-                relationships = this.getStore().<ActiveRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>query(query);
             }
             if (! relationships.isEmpty()) return relationships;
         }
-        return new FragmentListImpl<ActiveRelationship>();
+        return new Vector<PersistedRelationship>();
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getReferenceRelationships(java.lang.String)
      */
-    public FragmentList<ActiveRelationship> getReferenceRelationships(String sourceIndex) throws XBRLException {
+    public List<PersistedRelationship> getReferenceRelationships(String sourceIndex) throws XBRLException {
         String query = "/*[@reference and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
     
     /**
      * @see org.xbrlapi.networks.Analyser#getReferenceRelationships(java.lang.String,java.lang.String)
      */
-    public FragmentList<ActiveRelationship> getReferenceRelationships(String sourceIndex, String language) throws XBRLException {
+    public List<PersistedRelationship> getReferenceRelationships(String sourceIndex, String language) throws XBRLException {
         String query = "/*[@reference and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getReferenceRelationshipsByLanguage(java.lang.String, java.lang.String)
      */
-    public FragmentList<ActiveRelationship> getReferenceRelationshipsByLanguage( 
+    public List<PersistedRelationship> getReferenceRelationshipsByLanguage( 
             String sourceIndex, String language) 
             throws XBRLException {
         String query = "/*[@reference and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getReferenceRelationshipsByLanguageAndRole(java.lang.String, java.lang.String, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getReferenceRelationshipsByLanguageAndRole(
+    public List<PersistedRelationship> getReferenceRelationshipsByLanguageAndRole(
             String sourceIndex, String language, URI role) throws XBRLException {
         String query = "/*[@reference and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"' and targetRole='"+ role +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getReferenceRelationshipsByLanguages(java.lang.String, java.util.List)
      */
-    public FragmentList<ActiveRelationship> getReferenceRelationshipsByLanguages(
+    public List<PersistedRelationship> getReferenceRelationshipsByLanguages(
             String sourceIndex, List<String> languages) throws XBRLException {
         for (String language: languages) {
-            FragmentList<ActiveRelationship> relationships;
+            List<PersistedRelationship> relationships;
             if (language == null) { 
                 relationships = this.getReferenceRelationships(sourceIndex);
             } else {
                 String query = "/*[@reference and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"']";
-                relationships = this.getStore().<ActiveRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>query(query);
             }
             if (! relationships.isEmpty()) return relationships;
         }
-        return new FragmentListImpl<ActiveRelationship>();
+        return new Vector<PersistedRelationship>();
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getReferenceRelationshipsByRole(java.lang.String, java.net.URI)
      */
-    public FragmentList<ActiveRelationship> getReferenceRelationshipsByRole(
+    public List<PersistedRelationship> getReferenceRelationshipsByRole(
             String sourceIndex, URI role) throws XBRLException {
         String query = "/*[@reference and @sourceIndex='"+ sourceIndex+"' targetRole='"+ role +"']";
-        return this.getStore().<ActiveRelationship>query(query);
+        return this.getStore().<PersistedRelationship>query(query);
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getReferenceRelationshipsByRoles(java.lang.String, java.util.List, java.util.List)
      */
-    public FragmentList<ActiveRelationship> getReferenceRelationshipsByRoles(
+    public List<PersistedRelationship> getReferenceRelationshipsByRoles(
             String sourceIndex, List<String> languages, List<URI> roles)
             throws XBRLException {
         for (String language: languages) {
             for (URI role: roles) {
-                FragmentList<ActiveRelationship> relationships;
+                List<PersistedRelationship> relationships;
                 String languagePhrase = "";
                 if (language != null) languagePhrase = " and targetLanguage='"+ language +"'";
                 String rolePhrase = "";
                 if (role != null) rolePhrase = " and targetRole='"+ role +"'";
                 String query = "/*[@reference and @sourceIndex='"+ sourceIndex+"'" + languagePhrase + rolePhrase + "]";
-                relationships = this.getStore().<ActiveRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>query(query);
                 if (! relationships.isEmpty()) return relationships;
             }
         }
-        return new FragmentListImpl<ActiveRelationship>();
+        return new Vector<PersistedRelationship>();
     }
 
     /**
      * @see org.xbrlapi.networks.Analyser#getReferenceRelationshipsByRoles(java.lang.String, java.util.List)
      */
-    public FragmentList<ActiveRelationship> getReferenceRelationshipsByRoles(
+    public List<PersistedRelationship> getReferenceRelationshipsByRoles(
             String sourceIndex, List<URI> roles) throws XBRLException {
         for (URI role: roles) {
-            FragmentList<ActiveRelationship> relationships;
+            List<PersistedRelationship> relationships;
             if (role == null) { 
                 relationships = this.getReferenceRelationships(sourceIndex);
             } else {
                 String query = "/*[@reference and @sourceIndex='"+ sourceIndex+"' and targetRole='"+ role +"']";
-                relationships = this.getStore().<ActiveRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>query(query);
             }
             if (! relationships.isEmpty()) return relationships;
         }
-        return new FragmentListImpl<ActiveRelationship>();
+        return new Vector<PersistedRelationship>();
     }
     
     

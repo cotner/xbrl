@@ -4,7 +4,7 @@ import java.net.URI;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fact;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Item;
 import org.xbrlapi.Tuple;
 
@@ -36,10 +36,10 @@ public class TupleTestCase extends DOMLoadingTestCase {
 	public void testGetAllChildFacts() {
 
 		try {
-	        FragmentList<Tuple> fragments = store.getFragments("Tuple");
-	        assertTrue(fragments.getLength() > 0);
+	        List<Tuple> fragments = store.gets("Tuple");
+	        assertTrue(fragments.size() > 0);
 	        for (Tuple tuple: fragments) {
-	            assertEquals(tuple.getAllChildren().getLength(), tuple.getChildFacts().getLength());	            
+	            assertEquals(tuple.getAllChildren().size(), tuple.getChildFacts().size());	            
 	        }
 		
 		} catch (Exception e) {
@@ -55,18 +55,18 @@ public class TupleTestCase extends DOMLoadingTestCase {
 
 		try {
 
-		    FragmentList<Tuple> tuples = store.getFragments("Tuple");
-            assertTrue(tuples.getLength() > 0);
+		    List<Tuple> tuples = store.gets("Tuple");
+            assertTrue(tuples.size() > 0);
             for (Tuple tuple: tuples) {
-                FragmentList<Fact> children = tuple.getChildFacts();
-                assertTrue(children.getLength() > 0);
+                List<Fact> children = tuple.getChildFacts();
+                assertTrue(children.size() > 0);
                 for (Fact child: children) {
                     URI namespace = child.getNamespace();
                     String localname = child.getLocalname();
-                    assertTrue(tuple.getChildFacts(namespace,localname).getLength() > 0);
+                    assertTrue(tuple.getChildFacts(namespace,localname).size() > 0);
                     if (! child.isTuple()) {
                         String cr = ((Item) child).getContext().getId();
-                        assertTrue(tuple.getChildFacts(namespace,localname,cr).getLength() > 0);
+                        assertTrue(tuple.getChildFacts(namespace,localname,cr).size() > 0);
                     }
                 }
             }

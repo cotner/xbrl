@@ -6,8 +6,6 @@ import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xbrlapi.networks.Networks;
-import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -52,7 +50,7 @@ public interface Fragment extends XML {
      * @return a list of all locators that target this fragment.  The list can be empty.
      * @throws XBRLException.
      */
-    public FragmentList<Locator> getReferencingLocators() throws XBRLException;    
+    public List<Locator> getReferencingLocators() throws XBRLException;    
     
     /**
      * Get the index of the parent fragment or null if the fragment
@@ -117,13 +115,7 @@ public interface Fragment extends XML {
      */
     public void setPrecedingSiblings(Vector<Long> children) throws XBRLException;
 
-    /**
-     * Remove a DTS relationship to the fragment, identifying another
-     * DTS fragment that this fragment is no longer related to.
-     * @param index The index of the target of the relationship to be removed.
-     * @throws XBRLException.
-     */
-    public void removeRelationship(String index) throws XBRLException;
+
     
     /**
      * Add an ID (used in XPointer resolution) to the metadata.
@@ -132,12 +124,7 @@ public interface Fragment extends XML {
      */
     public void appendID(String id) throws XBRLException;
     
-    /**
-     * Remove an ID from the metadata.
-     * @param id The id to remove.
-     * @throws XBRLException
-     */
-    public void removeID(String id) throws XBRLException;
+
     
     
     
@@ -148,12 +135,7 @@ public interface Fragment extends XML {
      */
     public void appendElementSchemeXPointer(String expression) throws XBRLException;
     
-    /**
-     * Remove an element Scheme XPointer Expression from the metadata.
-     * @param expression The XPointer expression.
-     * @throws XBRLException.
-     */
-    public void removeElementSchemeXPointer(String expression) throws XBRLException;
+
     
     /**
      * Get the namespace of the fragment root element.
@@ -191,13 +173,13 @@ public interface Fragment extends XML {
      * fragments exist in the data store.
      * @throws XBRLException
      */
-    public FragmentList<Fragment> getAllChildren() throws XBRLException;
+    public List<Fragment> getAllChildren() throws XBRLException;
     
     /**
      * @return the list of simple links that are children of this fragment.
      * @throws XBRLException
      */
-    public FragmentList<SimpleLink> getSimpleLinks() throws XBRLException;    
+    public List<SimpleLink> getSimpleLinks() throws XBRLException;    
     
     /**
      * Gets the ancestor (or self) fragment with the specified fragment type.
@@ -240,141 +222,97 @@ public interface Fragment extends XML {
      * @return a list of label resources for the fragment.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getLabels() throws XBRLException;
+    public List<LabelResource> getLabels() throws XBRLException;
     
-    /**
-     * @param networks The networks to use to obtain the labels.
-     * @return a list of label resources for the fragment.
-     * @throws XBRLException
-     */
-    public FragmentList<LabelResource> getLabels(Networks networks) throws XBRLException;    
+    
     
     /**
      * @param role The XLink role value
      * @return the list of labels for this fragment with the specified XLink role.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getLabelsWithRole(String role) throws XBRLException;
+    public List<LabelResource> getLabelsWithRole(String role) throws XBRLException;
     
-    /**
-     * @param networks The networks to get the labels from.
-     * @param role The XLink role value
-     * @return the list of labels for this fragment with the specified XLink role.
-     * @throws XBRLException
-     */
-    public FragmentList<LabelResource> getLabelsWithRole(Networks networks, String role) throws XBRLException;    
+    
     
     /**
      * @param language The xml:lang language codevalue
      * @return the list of labels for this fragment with the specified language code.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getLabelsWithLanguage(String language) throws XBRLException;
+    public List<LabelResource> getLabelsWithLanguage(String language) throws XBRLException;
     
-    /**
-     * @param networks The networks to get the labels from.
-     * @param language The xml:lang language codevalue
-     * @return the list of labels for this fragment with the specified language code.
-     * @throws XBRLException
-     */
-    public FragmentList<LabelResource> getLabelsWithLanguage(Networks networks, String language) throws XBRLException;    
+    
 
+
+    
     /**
-     * @param networks The networks to get the labels from.
-     * @param language The xml:lang language codevalue
+     * @param language The xml:lang language code value
      * @param role The XLink role value
      * @return the list of labels for this fragment with the specified language code and XLink role.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(Networks networks, String language, URI role) throws XBRLException;
+    public List<LabelResource> getLabelsWithLanguageAndResourceRole(String language, URI role) throws XBRLException;
     
     /**
      * @param language The xml:lang language codevalue
-     * @param role The XLink role value
-     * @return the list of labels for this fragment with the specified language code and XLink role.
+     * @param resourceRole The XLink resource role value on the label
+     * @param linkRole The XLink extended link role value on the
+     * extended link containing the label.
+     * @return the list of labels for this fragment with the specified language code 
+     * and XLink resource and extended link roles.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(String language, URI role) throws XBRLException;    
+    public List<LabelResource> getLabelsWithLanguageAndResourceRoleAndLinkRole(String language, URI resourceRole, URI linkRole) throws XBRLException;    
     
     /**
      * @return a list of references for the fragment based on XBRL 2.1 reference arcs.
      * @throws XBRLException
      */
-    public FragmentList<ReferenceResource> getReferences() throws XBRLException;    
+    public List<ReferenceResource> getReferences() throws XBRLException;
     
     /**
-     * @return the collection of networks including
-     * relationships that involve this node as a source 
-     * or a target.  Note that the networks are not 
-     * completed in the sense that arcs are followed to
-     * nodes that are then used to gather further relationships. 
+     * @param language The xml:lang language code value
+     * @return the list of references for this fragment with the specified language code.
      * @throws XBRLException
      */
-    public Networks getNetworks() throws XBRLException;
+    public List<ReferenceResource> getReferencesWithLanguage(String language) throws XBRLException;
     
     /**
-     * @param arcrole the required arcrole value.
-     * @return the collection of networks including
-     * relationships that involve this node as a source 
-     * or a target and that are expressed by arcs with the given
-     * arcrole value.  Note that the networks are not 
-     * completed in the sense that arcs are followed to
-     * nodes that are then used to gather further relationships. 
+     * @param language The xml:lang language code value
+     * @param role The XLink role value
+     * @return the list of references for this fragment with the specified language code and XLink role.
      * @throws XBRLException
      */
-    public Networks getNetworksWithArcrole(URI arcrole) throws XBRLException;
+    public List<ReferenceResource> getReferencesWithLanguageAndRole(String language, URI role) throws XBRLException;
     
     /**
-     * @param arcrole the required arcrole value.
-     * @return the collection of networks including
-     * relationships that involve this node as a source 
-     * (not a target) and that are expressed by arcs with the given
-     * arcrole value.  Note that the networks are not 
-     * completed in the sense that arcs are followed to
-     * nodes that are then used to gather further relationships. 
+     * @param language The xml:lang language code value
+     * @param resourceRole The XLink resource role value on the reference
+     * @param linkRole The XLink extended link role value on the
+     * extended link containing the reference.
+     * @return the list of references for this fragment with the specified language code and XLink resource and link roles.
      * @throws XBRLException
      */
-    public Networks getNetworksFromWithArcrole(URI arcrole) throws XBRLException;
+    public List<ReferenceResource> getReferencesWithLanguageAndResourceRoleAndLinkRole(String language, URI resourceRole, URI linkRole) throws XBRLException;    
     
     /**
-     * @param arcrole the required arcrole value.
-     * @return a list of relationships (active and otherise) 
-     * that involve this fragment as a target node
-     * (not a source) and that are expressed by arcs with the given
-     * arcrole value. 
-     * @throws XBRLException
+     * Get a specific child fragment.
+     * @param type The fragment type of the required child
+     * @param index The index of the required child fragment (among other children of the same type)
+     * with the first child being at index 0.
+     * @return the child fragment or null if there are no children fragments of the specified type.
+     * @throws XBRLException if the index is out of bounds
      */
-    public List<Relationship> getRelationshipsToWithArcrole(URI arcrole) throws XBRLException;    
-    
-    /**
-     * @param linkRole the required linkrole value.
-     * @param arcrole the required arcrole value.
-     * @return the collection of networks including
-     * relationships that involve this node as a source 
-     * (not a target) and that are expressed by arcs with the given
-     * arcrole value in extended links with the given linkrole value.  
-     * Note that the networks are not 
-     * completed in the sense that arcs are followed to
-     * nodes that are then used to gather further relationships. 
-     * @throws XBRLException
-     */
-    public Networks getNetworksFromWithRoleAndArcrole(URI linkRole, URI arcrole) throws XBRLException;    
-    
-    /**
-     * @param arcrole The <code>xlink:arcrole</code> attribute on the arcs expressing the 
-     * relationships to the relative fragments.
-     * @param linkRole The <code>xlink:role</code> attribute on the extended links containing
-     * the relationships to the relative fragments.  This criteria is not used if the value is null.
-     * @param resourceRole The required <code>xlink:role</code> attribute value on the 
-     * related fragments. This criteria is not used if the value is null.
-     * @param language The required value of the <code>xml:language</code> language 
-     * encoding on the relative fragments.  This criteria is not used if the value is null.
-     * @param getTargets The boolean value that is set to true if the relatives are required
-     * to be targets of relationships from this fragment and that is set to false otherwise.
-     * @return a list of fragments that meet the specified selection criteria.
-     * @throws XBRLException
-     */
-    public <F extends Fragment> FragmentList<F> getRelatives(URI arcrole, URI linkRole, URI resourceRole, String language, boolean getTargets) throws XBRLException;    
-    
+    public Fragment getChild(String type, int index) throws XBRLException;
 
+    /**
+     * Gets the child fragments with the specified fragment type.
+     * @param type The required fragment type of the child.
+     * @return the fragment list of children fragments that match the specified fragment type
+     * @throws XBRLException
+     */
+    public <F extends Fragment> List<F> getChildren(String type) throws XBRLException;
+    
+    
 }

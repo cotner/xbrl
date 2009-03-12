@@ -2,10 +2,10 @@ package org.xbrlapi.impl;
 
 
 import java.net.URI;
+import java.util.List;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.ElementDeclaration;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -35,7 +35,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
          logger.debug(sgNamespace);
          String query = "/*[*/xsd:element/@name='" + sgName + "']";
          logger.debug(query);
-         FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
+         List<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
          for (ElementDeclaration declaration: declarations) {
              if (declaration.getTargetNamespace().equals(sgNamespace)) {
                  if (declaration.getName().equals("item") && declaration.getTargetNamespace().toString().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
@@ -59,7 +59,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
           if (sgName == null) return false;
           URI sgNS = this.getSubstitutionGroupNamespace();
           String query = "/*[*/xsd:element/@name='" + sgName + "']";
-          FragmentList<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
+          List<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
           for (ElementDeclaration declaration: declarations) {
               if (declaration.getTargetNamespace().equals(sgNS)) {
                   if (declaration.getName().equals("tuple") && declaration.getTargetNamespace().toString().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {

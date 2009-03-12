@@ -5,6 +5,7 @@ package org.xbrlapi;
  */
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -91,7 +92,7 @@ public interface SchemaDeclaration extends SchemaContent {
      * @return list of SchemaAnnotation fragments or null if the annotations do not exist.
      * @throws XBRLException
      */
-    public FragmentList<Fragment> getAnnotations() throws XBRLException;
+    public List<Fragment> getAnnotations() throws XBRLException;
     
     /**
      * Gets the complex content fragment

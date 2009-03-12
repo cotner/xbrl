@@ -1,8 +1,9 @@
 package org.xbrlapi.impl;
 
+import java.util.List;
+
 import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.Period;
 import org.xbrlapi.Scenario;
@@ -20,9 +21,9 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
      * @see org.xbrlapi.Context#getEntity()
      */
     public Entity getEntity() throws XBRLException {
-    	FragmentList<Entity> fs = this.<Entity>getChildren("org.xbrlapi.impl.EntityImpl");
-    	if (fs.getLength() == 0) throw new XBRLException("The entity is missing from the context.");
-    	if (fs.getLength() == 1) return fs.getFragment(0);
+    	List<Entity> fs = this.<Entity>getChildren("org.xbrlapi.impl.EntityImpl");
+    	if (fs.size() == 0) throw new XBRLException("The entity is missing from the context.");
+    	if (fs.size() == 1) return fs.get(0);
     	throw new XBRLException("There is more than one entity in this context.");
     }
     
@@ -34,9 +35,9 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
      * @see org.xbrlapi.Context#getPeriod()
      */
     public Period getPeriod() throws XBRLException {
-    	FragmentList<Period> fs = this.<Period>getChildren("org.xbrlapi.impl.PeriodImpl");
-    	if (fs.getLength() == 0) throw new XBRLException("The period is missing from the context.");
-    	if (fs.getLength() == 1) return fs.getFragment(0);
+    	List<Period> fs = this.<Period>getChildren("org.xbrlapi.impl.PeriodImpl");
+    	if (fs.size() == 0) throw new XBRLException("The period is missing from the context.");
+    	if (fs.size() == 1) return fs.get(0);
     	throw new XBRLException("There is more than one period in this context.");
     }
 
@@ -47,9 +48,9 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
      * @see org.xbrlapi.Context#getScenario()
      */
     public Scenario getScenario() throws XBRLException {
-    	FragmentList<Scenario> scenarios = this.<Scenario>getChildren("org.xbrlapi.impl.ScenarioImpl");
-    	if (scenarios.getLength() == 0) return null;
-    	if (scenarios.getLength() == 1) return scenarios.getFragment(0);
+    	List<Scenario> scenarios = this.<Scenario>getChildren("org.xbrlapi.impl.ScenarioImpl");
+    	if (scenarios.size() == 0) return null;
+    	if (scenarios.size() == 1) return scenarios.get(0);
     	throw new XBRLException("There is more than one scenario in this context.");
     }
 
@@ -80,7 +81,7 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     /**
      * @see org.xbrlapi.FactDimensionContainer#getReferencingItems()
      */
-    public FragmentList<Item> getReferencingItems() throws XBRLException {
+    public List<Item> getReferencingItems() throws XBRLException {
         String query = "/*[@uri='" + this.getURI() + "' and */*/@contextRef='" + this.getId() + "']";
         return getStore().<Item>query(query);
     }    

@@ -1,12 +1,11 @@
 package org.xbrlapi.aspects;
 
 import java.net.URI;
+import java.util.List;
 
-import org.xbrlapi.ActiveRelationship;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -75,18 +74,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
             
             Concept concept = ((Concept) value.getFragment());
 
-            // Check if we are using persisted networks
-            if (isUsingPersistedNetworks()) {
-                FragmentList<ActiveRelationship> relationships = getAnalyser().getLabelRelationshipsByLanguageAndRole(concept.getIndex(),getLanguageCode(),getLabelRole());
-                if (!relationships.isEmpty()) {
-                    String label = ((LabelResource) relationships.get(0).getTarget()).getStringValue();
-                    logger.info("Concept aspect value label is " + label);
-                    setMapLabel(id,label);
-                    return label;
-                }
-            }
-            
-            FragmentList<LabelResource> labels = concept.getLabelsWithLanguageAndRole(getLanguageCode(),getLabelRole());
+            List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
             if (labels.isEmpty()) return id;
             String label = labels.get(0).getStringValue();
             logger.info("Concept aspect value label is " + label);
@@ -141,20 +129,20 @@ public class ConceptAspect extends BaseAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        return new ConceptAspectValue(this,getFragment(fact));
+        return new ConceptAspectValue(this,get(fact));
     }
     
     /**
-     * @see Aspect#getFragmentFromStore(Fact)
+     * @see Aspect#getFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+    public Fragment getFromStore(Fact fact) throws XBRLException {
         return fact.getConcept();
     }
     
     /**
-     * @see Aspect#getFragmentKey(Fact)
+     * @see Aspect#getKey(Fact)
      */
-    public String getFragmentKey(Fact fact) throws XBRLException {
+    public String getKey(Fact fact) throws XBRLException {
         return fact.getNamespace() + fact.getLocalname();
     }
 

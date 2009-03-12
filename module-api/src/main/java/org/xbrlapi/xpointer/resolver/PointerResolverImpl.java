@@ -6,7 +6,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -107,12 +107,12 @@ public class PointerResolverImpl implements PointerResolver {
 				// Handle element scheme pointer parts
 				} else if (part.getSchemeNamespace().toString().equals(PointerPart.DefaultPointerNamespace) && part.getSchemeLocalName().equals("element")) {
 					String xpath = "/*[@uri='" + getDocumentURI() + "' and " + Constants.XBRLAPIPrefix + ":" + "xptr/@value='" + data + "']";
-					FragmentList<Fragment> fl = getStore().query(xpath);					
-					if (fl.getLength() != 0) {
-						if (fl.getLength() > 1) {
+					List<Fragment> fl = getStore().query(xpath);					
+					if (fl.size() != 0) {
+						if (fl.size() > 1) {
 							throw new XBRLException("A locator locates more than one fragment in the DTS.");
 						}
-						return fl.getFragment(0);
+						return fl.get(0);
 					}
 				}
 				

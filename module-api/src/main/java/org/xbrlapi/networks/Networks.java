@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -53,7 +52,7 @@ public interface Networks extends Iterable<Network> {
 	 * target fragment.
 	 * @throws XBRLException
 	 */
-	public <F extends Fragment> FragmentList<F> getSourceFragments(String targetIndex, URI arcrole) throws XBRLException;
+	public <F extends Fragment> List<F> getSourceFragments(String targetIndex, URI arcrole) throws XBRLException;
 	
 	/**
 	 * @param targetIndex The index of the fragment that is the target for the sources
@@ -67,7 +66,7 @@ public interface Networks extends Iterable<Network> {
 	 * target fragment.
 	 * @throws XBRLException
 	 */
-	public <F extends Fragment> FragmentList<F>  getSourceFragments(String targetIndex, URI arcrole, URI linkRole) throws XBRLException;
+	public <F extends Fragment> List<F>  getSourceFragments(String targetIndex, URI arcrole, URI linkRole) throws XBRLException;
 	
 
 	/**
@@ -80,7 +79,7 @@ public interface Networks extends Iterable<Network> {
 	 * source fragment.
 	 * @throws XBRLException
 	 */
-	public <F extends Fragment> FragmentList<F>  getTargetFragments(String sourceIndex, URI arcrole) throws XBRLException;
+	public <F extends Fragment> List<F>  getTargets(String sourceIndex, URI arcrole) throws XBRLException;
 	
 	/**
 	 * @param sourceIndex The index of the fragment that is the source for the targets
@@ -93,7 +92,7 @@ public interface Networks extends Iterable<Network> {
 	 * that are direct connections from the target fragments to the specified source fragment.
 	 * @throws XBRLException
 	 */
-	public <F extends Fragment> FragmentList<F>  getTargetFragments(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException;
+	public <F extends Fragment> List<F>  getTargets(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException;
 		
 	/**
      * @param linkRole The link role of the network to get.
@@ -145,5 +144,13 @@ public interface Networks extends Iterable<Network> {
 	 * collection of networks.
 	 */
 	public Store getStore();
+
+	/**
+	 * Merges the specified set of networks into this set of networks.
+	 * @param networks The networks to merge 
+	 * into this collection of networks.
+	 * @throws XBRLException
+	 */
+	public void addAll(Networks networks) throws XBRLException;
 	
 }

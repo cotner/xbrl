@@ -2,7 +2,7 @@ package org.xbrlapi.impl;
 
 import java.net.URI;
 
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.ReferencePart;
 import org.xbrlapi.ReferenceResource;
 import org.xbrlapi.utilities.XBRLException;
@@ -19,7 +19,7 @@ public class ReferenceResourceImpl extends MixedContentResourceImpl implements R
      * @throws XBRLException
      * @see org.xbrlapi.ReferenceResource#getReferenceParts()
      */
-    public FragmentList<ReferencePart> getReferenceParts() throws XBRLException {
+    public List<ReferencePart> getReferenceParts() throws XBRLException {
     	return this.getChildren("org.xbrlapi.impl.ReferencePartImpl");
     }
 
@@ -33,9 +33,9 @@ public class ReferenceResourceImpl extends MixedContentResourceImpl implements R
      * @see org.xbrlapi.ReferenceResource#getReferencePart(URI,String)
      */
     public ReferencePart getReferencePart(URI namespace, String localname) throws XBRLException {
-    	FragmentList<ReferencePart> candidates = getReferenceParts();
-    	for (int i=0; i<candidates.getLength(); i++) {
-    		ReferencePart part = candidates.getFragment(i);
+    	List<ReferencePart> candidates = getReferenceParts();
+    	for (int i=0; i<candidates.size(); i++) {
+    		ReferencePart part = candidates.get(i);
     		if (part.getNamespace().equals(namespace) & part.getLocalname().equals(localname)) {
     			return part;
     		}

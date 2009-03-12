@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.util.List;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -44,7 +46,7 @@ public interface Entity extends ContextComponent {
      * of this entity fragment.
      * @throws XBRLException
      */
-    public FragmentList<EntityResource> getEntityResources() throws XBRLException;
+    public List<EntityResource> getEntityResources() throws XBRLException;
     
     /**
      * @return the list of labels for the entity identified by this fragment,
@@ -52,7 +54,7 @@ public interface Entity extends ContextComponent {
      * for any equivalent identifiers.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getEntityLabels() throws XBRLException;
+    public List<LabelResource> getEntityLabels() throws XBRLException;
     
     /**
      * @return the list of labels for the entity identified by this fragment,
@@ -60,6 +62,6 @@ public interface Entity extends ContextComponent {
      * for any equivalent identifiers.
      * @throws XBRLException
      */
-    public FragmentList<LabelResource> getAllEntityLabels() throws XBRLException;   
+    public List<LabelResource> getAllEntityLabels() throws XBRLException;   
     
 }

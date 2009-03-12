@@ -1,9 +1,10 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+
 import org.xbrlapi.Context;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 
 /**
  * Tests the implementation of the org.xbrlapi.Context interface.
@@ -33,8 +34,8 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testGetEntity() {
 
 		try {
-		    FragmentList<Context> contexts = store.<Context>getFragments("Context");
-		    assertTrue(contexts.getLength() > 0);
+		    List<Context> contexts = store.<Context>gets("Context");
+		    assertTrue(contexts.size() > 0);
 		    for (Context context: contexts) {
 	            assertEquals("org.xbrlapi.impl.EntityImpl", context.getEntity().getType());
 		    }
@@ -49,8 +50,8 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testGetPeriod() {
 
 		try {
-            FragmentList<Context> contexts = store.<Context>getFragments("Context");
-            assertTrue(contexts.getLength() > 0);
+            List<Context> contexts = store.<Context>gets("Context");
+            assertTrue(contexts.size() > 0);
             for (Context context: contexts) {
                 assertEquals("org.xbrlapi.impl.PeriodImpl", context.getPeriod().getType());
             }
@@ -65,12 +66,12 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testGetScenario() {
 
 		try {
-            FragmentList<Context> contexts = store.<Context>getFragments("Context");
-            assertTrue(contexts.getLength() > 0);
+            List<Context> contexts = store.<Context>gets("Context");
+            assertTrue(contexts.size() > 0);
             int scenarios = 0;
             for (Context context: contexts) {
                 store.serialize(context);
-                FragmentList<Fragment> children = context.getAllChildren();
+                List<Fragment> children = context.getAllChildren();
                 for (Fragment child: children) {
                     store.serialize(child);
                 }
@@ -91,9 +92,9 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testCEquality() {
 
 		try {
-			FragmentList<Context> fragments = store.getFragments("Context");
-			Context fragment = fragments.getFragment(0); 
-			Context other = fragments.getFragment(0);
+			List<Context> fragments = store.gets("Context");
+			Context fragment = fragments.get(0); 
+			Context other = fragments.get(0);
 			assertTrue(fragment.equals(other));
 		} catch (Exception e) {
 			e.printStackTrace();

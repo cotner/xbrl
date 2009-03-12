@@ -15,7 +15,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -54,9 +53,9 @@ abstract public class BaseAspect implements Aspect {
     }
 
     /**
-     * @see org.xbrlapi.aspects.Aspect#getLength()
+     * @see org.xbrlapi.aspects.Aspect.size()
      */
-    public int getLength() {
+    public int size() {
         return this.values.size();
     }
     
@@ -81,7 +80,7 @@ abstract public class BaseAspect implements Aspect {
         int count = 0;
         for (Aspect aspect: aspects) {
             if (aspect.getType().equals(this.getType())) count = 1;
-            else if (! aspect.isEmpty()) count = count * aspect.getLength();
+            else if (! aspect.isEmpty()) count = count * aspect.size();
         }
         return count;
     }
@@ -100,7 +99,7 @@ abstract public class BaseAspect implements Aspect {
         int count = 1;
         for (Aspect aspect: aspects) {
             if (aspect.getType().equals(this.getType())) return count;
-            if (! aspect.isEmpty()) count = count * aspect.getLength();
+            if (! aspect.isEmpty()) count = count * aspect.size();
         }
         return count;
     }    
@@ -147,7 +146,7 @@ abstract public class BaseAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#isSingular()
      */
     public boolean isSingular() {
-        return (this.getLength() == 1);
+        return (this.size() == 1);
     }
     
     /**
@@ -228,12 +227,12 @@ abstract public class BaseAspect implements Aspect {
     
 
     private Map<String,Fragment> fragmentMap = new HashMap<String,Fragment>();
-    public Fragment getFragment(Fact fact) throws XBRLException {
-        String fragmentKey = getFragmentKey(fact);
+    public Fragment get(Fact fact) throws XBRLException {
+        String fragmentKey = getKey(fact);
         if (fragmentMap.containsKey(fragmentKey)) {
             return fragmentMap.get(fragmentKey);
         }
-        Fragment fragment = getFragmentFromStore(fact);
+        Fragment fragment = getFromStore(fact);
         fragmentMap.put(fragmentKey,fragment);
         return fragment;
     }
@@ -303,9 +302,9 @@ abstract public class BaseAspect implements Aspect {
      * This basic implementation has a unique key for each fact
      * which is not efficient from a 
      * memory footprint perspective.
-     * @see Aspect#getFragmentKey(Fact)
+     * @see Aspect#getKey(Fact)
      */
-    public String getFragmentKey(Fact fact) throws XBRLException {
+    public String getKey(Fact fact) throws XBRLException {
         return fact.getIndex();
     }
  
@@ -352,18 +351,8 @@ abstract public class BaseAspect implements Aspect {
         return label;
     }    
 
-    /**
-     * @see Aspect#getAnalyser()
-     */
-    public Analyser getAnalyser() {
-        return getAspectModel().getAnalyser();
-    }    
+    
  
-    /**
-     * @see Aspect#isUsingPersistedNetworks()
-     */
-    public boolean isUsingPersistedNetworks() {
-        return getAspectModel().isUsingPersistedNetworks();
-    }    
+    
     
 }

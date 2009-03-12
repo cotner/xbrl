@@ -15,9 +15,9 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships {
 	SortedMap<Integer,Relationship> relationships = new TreeMap<Integer,Relationship>();
 
     /**
-     * @see org.xbrlapi.networks.EquivalentRelationships#getLength()
+     * @see org.xbrlapi.networks.EquivalentRelationships.size()
      */
-	public int getLength() {
+	public int size() {
 	    return relationships.size();
 	}
 	

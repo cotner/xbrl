@@ -1,8 +1,9 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+
 import org.xbrlapi.ArcroleType;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
 
 /**
  * Tests the implementation of the org.xbrlapi.CustomType interface.
@@ -33,8 +34,8 @@ public class ArcroleTypeTestCase extends DOMLoadingTestCase {
 	public void testGetCustomArcRoleCyclesAllowed() {
 
 		try {
-			FragmentList<ArcroleType> fragments = store.<ArcroleType>getFragments("ArcroleType");
-			ArcroleType fragment = fragments.getFragment(0); 
+			List<ArcroleType> fragments = store.<ArcroleType>gets("ArcroleType");
+			ArcroleType fragment = fragments.get(0); 
 			assertEquals("none", fragment.getCyclesAllowed());
 		} catch (Exception e) {
 			e.printStackTrace();

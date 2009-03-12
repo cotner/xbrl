@@ -1,6 +1,7 @@
 package org.xbrlapi.xdt.aspects.tests;
 
-import org.xbrlapi.FragmentList;
+import java.util.List;
+
 import org.xbrlapi.Item;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.xdt.aspects.DimensionalAspectModel;
@@ -37,8 +38,8 @@ public class DimensionalAspectModelTestCase extends BaseTestCase {
 	        
 	        AspectModel model = new DimensionalAspectModel();
 	        
-			FragmentList<Item> fragments = store.<Item>getFragments("NonNumericItem");
-			assertTrue(fragments.getLength() > 0);
+			List<Item> fragments = store.<Item>gets("NonNumericItem");
+			assertTrue(fragments.size() > 0);
 			for (Item fragment: fragments) {
 			    model.addFact(fragment);
 			}

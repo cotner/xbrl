@@ -4,7 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -82,9 +82,9 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
     /**
      * @return the single fragment referenced by the simple link.
      * @throws XBRLException if the simple link does not reference exactly one fragment.
-     * @see org.xbrlapi.SimpleLink#getTargetFragment()
+     * @see org.xbrlapi.SimpleLink#getTarget()
      */
-    public Fragment getTargetFragment() throws XBRLException {
+    public Fragment getTarget() throws XBRLException {
 
     	String pointerCondition = " and @parentIndex='none'";
     	String pointerValue = getTargetPointerValue();
@@ -94,10 +94,10 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
     	
     	String query = "/*[@uri='" + getTargetDocumentURI() + "'" + pointerCondition + "]";
     	logger.debug(query);
-    	FragmentList<Fragment> fragments = getStore().query(query);
-    	if (fragments.getLength() == 0) return null;
-    	if (fragments.getLength() > 1) throw new XBRLException("The simple link references more than one fragment.");
-    	return fragments.getFragment(0);
+    	List<Fragment> fragments = getStore().query(query);
+    	if (fragments.size() == 0) return null;
+    	if (fragments.size() > 1) throw new XBRLException("The simple link references more than one fragment.");
+    	return fragments.get(0);
     	
     }
 

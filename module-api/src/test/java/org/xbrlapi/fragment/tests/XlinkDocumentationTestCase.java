@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.XlinkDocumentation;
 
 /**
@@ -32,8 +32,8 @@ public class XlinkDocumentationTestCase extends DOMLoadingTestCase {
 	public void testGetValue() {
 
 		try {
-			FragmentList<XlinkDocumentation> fragments = store.<XlinkDocumentation>getFragments("XlinkDocumentation");
-			XlinkDocumentation fragment = fragments.getFragment(0);
+			List<XlinkDocumentation> fragments = store.<XlinkDocumentation>gets("XlinkDocumentation");
+			XlinkDocumentation fragment = fragments.get(0);
 			assertEquals("Value of the documentation", fragment.getValue());
 		} catch (Exception e) {
 			e.printStackTrace();

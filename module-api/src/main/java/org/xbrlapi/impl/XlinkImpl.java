@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.util.Vector;
 
 import org.w3c.dom.Element;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Title;
 import org.xbrlapi.Xlink;
 import org.xbrlapi.utilities.Constants;
@@ -51,7 +51,7 @@ class XlinkImpl extends FragmentImpl implements Xlink {
      * @throws XBRLException
      * @see org.xbrlapi.Xlink#getTitleElements()
      */
-    public FragmentList<Title> getTitleElements() throws XBRLException {
+    public List<Title> getTitleElements() throws XBRLException {
     	return getChildren("org.xbrlapi.impl.TitleImpl");
     }
 

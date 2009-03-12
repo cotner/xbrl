@@ -200,7 +200,7 @@ public class LoaderImplTestCase extends BaseTestCase {
 	 */
 	public void testGetFragmentWhenNoFragmentsAreAvailable() {
 		try {
-			Fragment f = loader.getFragment();
+			Fragment f = loader.get();
             fail("Exception expected.");
             store.serialize(f);
 		} catch (XBRLException e) {

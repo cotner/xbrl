@@ -37,7 +37,7 @@ public interface SimpleLink extends Link {
      * null if none is found.
      * @throws XBRLException
      */
-    public Fragment getTargetFragment() throws XBRLException;
+    public Fragment getTarget() throws XBRLException;
 
     /**
      * Get the absolute value of the HREF to the metadata.

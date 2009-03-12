@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -110,7 +109,7 @@ public interface Aspect {
     /**
      * @return the number of values for this aspect.
      */
-    public int getLength();
+    public int size();
     
     /**
      * @return an iterator over the ordered values for this aspect.
@@ -179,7 +178,7 @@ public interface Aspect {
      * fact.
      * @throws XBRLException if the fragment cannot be obtained.
      */
-    public Fragment getFragment(Fact fact) throws XBRLException;
+    public Fragment get(Fact fact) throws XBRLException;
     
     /**
      * @param fact The fact to get the aspect value fragment from
@@ -187,7 +186,7 @@ public interface Aspect {
      * required to generate an aspect value from the fact.
      * @throws XBRLException if the fragment cannot be obtained.
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException;
+    public Fragment getFromStore(Fact fact) throws XBRLException;
     
     /**
      * @param fact The fact.
@@ -195,7 +194,7 @@ public interface Aspect {
      * that is part of the aspect value for the given fact.
      * @throws XBRLException
      */
-    public String getFragmentKey(Fact fact) throws XBRLException;
+    public String getKey(Fact fact) throws XBRLException;
     
     /**
      * @param value The aspect value to match
@@ -254,17 +253,7 @@ public interface Aspect {
      */
     public List<AspectValue> getChildren(AspectValue parent) throws XBRLException;
     
-    /**
-     * @return The persisted relationship analyser being used
-     * to construct the aspect model with this aspect,
-     * or null if there is none.
-     */
-    public Analyser getAnalyser();    
+    
 
-    /**
-     * @return True if the aspect model is being built using
-     * persisted network information accessed via an Analyser.
-     * @see org.xbrlapi.networks.Analyser
-     */
-    public boolean isUsingPersistedNetworks();
+
 }

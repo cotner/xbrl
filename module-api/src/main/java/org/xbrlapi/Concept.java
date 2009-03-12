@@ -33,7 +33,7 @@ public interface Concept extends ElementDeclaration {
      * @return the list of facts in the data store giving values for this concept
      * @throws XBRLException
      */
-    public FragmentList<Fact> getFacts() throws XBRLException;
+    public List<Fact> getFacts() throws XBRLException;
     
  
 

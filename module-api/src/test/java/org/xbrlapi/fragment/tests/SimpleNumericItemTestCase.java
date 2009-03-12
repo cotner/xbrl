@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.SimpleNumericItem;
 
 /**
@@ -31,8 +31,8 @@ public class SimpleNumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetValue() {
         try {
-            FragmentList<SimpleNumericItem> items = store.<SimpleNumericItem>getFragments("SimpleNumericItem");
-            assertTrue(items.getLength() > 0);
+            List<SimpleNumericItem> items = store.<SimpleNumericItem>gets("SimpleNumericItem");
+            assertTrue(items.size() > 0);
             for (SimpleNumericItem item: items) {
                 assertEquals("5.6", item.getValue());
             }
@@ -46,8 +46,8 @@ public class SimpleNumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetInferredPrecision() {
         try {
-            FragmentList<SimpleNumericItem> items = store.<SimpleNumericItem>getFragments("SimpleNumericItem");
-            assertTrue(items.getLength() > 0);
+            List<SimpleNumericItem> items = store.<SimpleNumericItem>gets("SimpleNumericItem");
+            assertTrue(items.size() > 0);
             for (SimpleNumericItem item: items) {
                 assertEquals("5", item.getInferredPrecision());
             }
@@ -62,8 +62,8 @@ public class SimpleNumericItemTestCase extends DOMLoadingTestCase {
 	public void testGetPrecisionAdjustedValue() {
 
         try {
-            FragmentList<SimpleNumericItem> items = store.<SimpleNumericItem>getFragments("SimpleNumericItem");
-            assertTrue(items.getLength() > 0);
+            List<SimpleNumericItem> items = store.<SimpleNumericItem>gets("SimpleNumericItem");
+            assertTrue(items.size() > 0);
             for (SimpleNumericItem item: items) {
                 assertEquals("5.6", item.getPrecisionAdjustedValue());
             }

@@ -1,8 +1,9 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+
 import org.xbrlapi.Arc;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.Constants;
 
 /**
@@ -33,8 +34,8 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetTo() {	
 
 		try {
-			FragmentList<Arc> fragments = store.<Arc>query("*/*/*[@xlink:type='arc']");
-			Arc fragment = fragments.getFragment(0);
+			List<Arc> fragments = store.<Arc>query("*/*/*[@xlink:type='arc']");
+			Arc fragment = fragments.get(0);
 			assertEquals("contributingItem", fragment.getTo());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -48,8 +49,8 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetFrom() {	
 
 		try {
-			FragmentList<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
-			Arc fragment = fragments.getFragment(0);
+			List<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			Arc fragment = fragments.get(0);
 			assertEquals("summationItem", fragment.getFrom());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,8 +64,8 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetShow() {	
 
 		try {
-			FragmentList<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
-			Arc fragment = fragments.getFragment(0);
+			List<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			Arc fragment = fragments.get(0);
 			assertNull(fragment.getShow());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,8 +79,8 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetActuate() {	
 
 		try {
-			FragmentList<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
-			Arc fragment = fragments.getFragment(0);
+			List<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			Arc fragment = fragments.get(0);
 			assertNull(fragment.getActuate());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,8 +94,8 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetOrder() {	
 
 		try {
-			FragmentList<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
-			Arc fragment = fragments.getFragment(0);
+			List<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			Arc fragment = fragments.get(0);
 			assertEquals("1", fragment.getOrder());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,9 +109,9 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetSourceFragments() {	
 
 		try {
-			FragmentList<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
-			Arc fragment = fragments.getFragment(0);
-			assertEquals(1, fragment.getSourceFragments().getLength());
+			List<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			Arc fragment = fragments.get(0);
+			assertEquals(1, fragment.getSourceFragments().size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -120,12 +121,12 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test getting list of fragments that the arc runs to.
 	 */
-	public void testGetTargetFragments() {	
+	public void testGetTargets() {	
 
 		try {
-			FragmentList<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
-			Arc fragment = fragments.getFragment(0);
-			assertEquals(2, fragment.getTargetFragments().getLength());
+			List<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			Arc fragment = fragments.get(0);
+			assertEquals(2, fragment.getTargets().size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

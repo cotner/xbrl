@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.ReferencePartDeclaration;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -34,7 +34,7 @@ public class ReferencePartDeclarationTestCase extends DOMLoadingTestCase {
 	public void testGetReferencePartDeclarations() {	
 
 		try {
-			FragmentList<ReferencePartDeclaration> rpds = store.<ReferencePartDeclaration>getFragments("ReferencePartDeclaration");
+			List<ReferencePartDeclaration> rpds = store.<ReferencePartDeclaration>gets("ReferencePartDeclaration");
 			for (ReferencePartDeclaration rpd: rpds) {
 				logger.info(rpd.getName() + " is a reference part");
 				assertEquals(Constants.XBRL21LinkNamespace,rpd.getSubstitutionGroupNamespace());

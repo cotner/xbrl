@@ -7,10 +7,8 @@ import java.util.Vector;
 import org.w3c.dom.Element;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Schema;
 import org.xbrlapi.networks.Network;
-import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -61,7 +59,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     /**
     * @see org.xbrlapi.Concept#getFacts()
     */
-    public FragmentList<Fact> getFacts() throws XBRLException {
+    public List<Fact> getFacts() throws XBRLException {
         getStore().setNamespaceBinding(this.getTargetNamespace().toString(),"xbrlapi_concept");
     	return getStore().<Fact>query("/*[*/xbrlapi_concept:"+ this.getName() + "]");
     }    
@@ -73,14 +71,9 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
      */
     public List<URI> getPresentationNetworkLinkroles() throws XBRLException {
         List<URI> roles = new Vector<URI>();
-        
-        Networks temp = null;
-        if (getStore().hasStoredNetworks()) temp = getStore().getStoredNetworks();
-        getStore().setStoredNetworks(null);
         for (Network network: getStore().getMinimalNetworksWithArcrole(this,Constants.PresentationArcRole())) {
             roles.add(network.getLinkRole());
         }
-        if (temp != null) getStore().setStoredNetworks(temp);
         return roles;
     }
 

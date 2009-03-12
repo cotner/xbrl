@@ -75,7 +75,7 @@ public class SegmentAspect extends ContextAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = getFragment(fact);
+        Fragment fragment = get(fact);
         if (fragment == null) {
             return new MissingAspectValue(this);
         }            
@@ -83,10 +83,10 @@ public class SegmentAspect extends ContextAspect implements Aspect {
     }
 
     /**
-     * @see Aspect#getFragmentFromStore(Fact)
+     * @see Aspect#getFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        Entity entity = ((Context) super.getFragmentFromStore(fact)).getEntity();
+    public Fragment getFromStore(Fact fact) throws XBRLException {
+        Entity entity = ((Context) super.getFromStore(fact)).getEntity();
         Segment segment = entity.getSegment();
         if (segment == null) return null;
         return segment;

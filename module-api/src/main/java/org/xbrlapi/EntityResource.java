@@ -1,6 +1,8 @@
 package org.xbrlapi;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -27,10 +29,11 @@ public interface EntityResource extends MixedContentResource {
     
     
     /**
-     * @return a list of all equivalent entity resources
+     * @return a list of all equivalent entity resources, including
+     * this entity resource that is naturally equivalent to itself.
      * @throws XBRLException
      */
-    public FragmentList<EntityResource> getEquivalents() throws XBRLException;
+    public Set<EntityResource> getEquivalents() throws XBRLException;
     
     /**
      * @return a list of entity identifier fragments from the contexts the
@@ -38,7 +41,7 @@ public interface EntityResource extends MixedContentResource {
      * matching this entity resource).
      * @throws XBRLException
      */
-    public FragmentList<Entity> getEntities() throws XBRLException;
+    public List<Entity> getEntities() throws XBRLException;
 
     /**
      * @param uri The URI of the document to get the entities from
@@ -47,6 +50,6 @@ public interface EntityResource extends MixedContentResource {
      * matching this entity resource).
      * @throws XBRLException
      */
-    public FragmentList<Entity> getEntities(URI uri) throws XBRLException;
+    public List<Entity> getEntities(URI uri) throws XBRLException;
     
 }

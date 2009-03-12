@@ -3,7 +3,6 @@ package org.xbrlapi.loader.tests;
 import java.net.URI;
 import java.util.List;
 
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Stub;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 
@@ -29,8 +28,8 @@ public class PartialLoadingTestCase extends BaseTestCase {
 	        loader.stashURI(getURI(this.NONEXISTENT_URI));
 	        loader.stashURI(getURI(this.VALID_URI));
             loader.discover();
-            FragmentList<Stub> stubs = store.getStubs();
-            assertEquals(1,stubs.getLength());
+            List<Stub> stubs = store.getStubs();
+            assertEquals(1,stubs.size());
             List<URI> uris = store.getDocumentsToDiscover();
             assertEquals(1,uris.size());
             assertEquals(uris.get(0),getURI(this.NONEXISTENT_URI));

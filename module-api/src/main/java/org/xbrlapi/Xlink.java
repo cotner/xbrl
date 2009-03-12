@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.util.List;
+
 import org.xbrlapi.utilities.XBRLException;
 
 
@@ -33,7 +35,7 @@ public interface Xlink extends Fragment {
      * @return a fragment list of title elements or null if there are none.
      * @throws XBRLException
      */
-    public FragmentList<Title> getTitleElements() throws XBRLException;
+    public List<Title> getTitleElements() throws XBRLException;
 
     /**
      * Get a list of titles (The xlink:title children elements).

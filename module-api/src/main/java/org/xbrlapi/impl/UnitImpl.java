@@ -7,7 +7,6 @@ import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.Measure;
 import org.xbrlapi.Unit;
@@ -23,7 +22,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
     /**
      * @see org.xbrlapi.FactDimensionContainer#getReferencingItems()
      */
-    public FragmentList<Item> getReferencingItems() throws XBRLException {
+    public List<Item> getReferencingItems() throws XBRLException {
         String query = "/*[@uri='" + this.getURI() + "' and */*/@unitRef='" + this.getId() + "']";
         return getStore().<Item>query(query);
     }

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.xbrlapi.Fact;
-import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -15,20 +14,9 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public interface AspectModel {
 
-    /**
-     * @param analyser The persisted network analyser
-     * to use for network analysis when building the
-     * aspect model.  Set to null if you do not want to 
-     * build the aspect model using persisted network information.
-     */
-    public void setAnalyser(Analyser analyser);
 
-    /**
-     * @return True if the aspect model is being built using
-     * persisted network information accessed via an Analyser.
-     * @see org.xbrlapi.networks.Analyser
-     */
-    public boolean isUsingPersistedNetworks();
+
+
     
     /**
      * @return The unique identifier of the aspect model.
@@ -191,9 +179,5 @@ public interface AspectModel {
      */
     public void clearFacts() throws XBRLException;
  
-    /**
-     * @return The persisted relationship analyser being used
-     * to construct the aspect model or null if there is none.
-     */
-    public Analyser getAnalyser(); 
+ 
 }

@@ -3,10 +3,10 @@ package org.xbrlapi.networks;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.SortedSet;
 import java.util.Vector;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -26,13 +26,13 @@ public class TreeIterator implements Iterator<Fragment> {
     
     // The state of the iterator
     private Fragment root = null;
-    private List<List<Relationship>> state = new Vector<List<Relationship>>();
+    private List<SortedSet<Relationship>> state = new Vector<SortedSet<Relationship>>();
 
-    private FragmentList<Fragment> initialise(Network network) throws XBRLException {
+    private List<Fragment> initialise(Network network) throws XBRLException {
         if (network == null) throw new XBRLException("The network must not be null.");
         this.network = network;
-        FragmentList<Fragment> roots = network.getRootFragments();
-        if (roots.getLength() == 0) throw new XBRLException("The network no nodes.");
+        List<Fragment> roots = network.getRootFragments();
+        if (roots.size() == 0) throw new XBRLException("The network no nodes.");
         return roots;
     }
     
@@ -42,9 +42,9 @@ public class TreeIterator implements Iterator<Fragment> {
      * @throws XBRLException if the network does not define a single tree.
      */
     public TreeIterator(Network network) throws XBRLException {
-        FragmentList<Fragment> roots = initialise(network);
-        if (roots.getLength() == 0) throw new XBRLException("The network no nodes.");
-        if (roots.getLength() > 1) throw new XBRLException("The network has 2 or more roots.  It must be a tree.");
+        List<Fragment> roots = initialise(network);
+        if (roots.size() == 0) throw new XBRLException("The network no nodes.");
+        if (roots.size() > 1) throw new XBRLException("The network has 2 or more roots.  It must be a tree.");
         this.root = roots.get(0);
     }    
 
@@ -56,7 +56,7 @@ public class TreeIterator implements Iterator<Fragment> {
      * @throws XBRLException
      */
     public TreeIterator(Network network, Fragment start) throws XBRLException {
-        FragmentList<Fragment> roots = initialise(network);
+        List<Fragment> roots = initialise(network);
         for (Fragment root: roots) {
             if (root.equals(start)) this.root = root;
         }
@@ -79,7 +79,7 @@ public class TreeIterator implements Iterator<Fragment> {
         try {
 
             if (root != null) {
-                List<Relationship> relationships = network.getActiveRelationshipsFrom(root.getIndex());
+                SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(root.getIndex());
                 if (! relationships.isEmpty()) state.add(relationships);
                 Fragment next = root;
                 root = null;
@@ -91,13 +91,13 @@ public class TreeIterator implements Iterator<Fragment> {
             }
 
             // Update the state
-            List<Relationship> first = state.get(0);
-            Relationship next = first.get(0);
-            first.remove(0);
+            SortedSet<Relationship> first = state.get(0);
+            Relationship next = first.first();
+            first.remove(next);
             if (first.isEmpty()) {
                 state.remove(0);
             }
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(next.getTargetIndex());
+            SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(next.getTargetIndex());
             if (! relationships.isEmpty()) state.add(relationships);
             return next.getTarget();
 

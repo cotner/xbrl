@@ -1,7 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Segment;
 
 /**
@@ -31,8 +31,8 @@ public class SegmentTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetComplexContent() {
         try {
-            FragmentList<Segment> fragments = store.<Segment>getFragments("Segment");
-            assertTrue(fragments.getLength() > 0);
+            List<Segment> fragments = store.<Segment>gets("Segment");
+            assertTrue(fragments.size() > 0);
             for (Segment fragment: fragments) {
                 assertEquals(3, fragment.getComplexContent().getLength());
             }
@@ -46,8 +46,8 @@ public class SegmentTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetEntity() {
         try {
-            FragmentList<Segment> fragments = store.<Segment>getFragments("Segment");
-            assertTrue(fragments.getLength() > 0);
+            List<Segment> fragments = store.<Segment>gets("Segment");
+            assertTrue(fragments.size() > 0);
             for (Segment fragment: fragments) {
                 assertEquals("org.xbrlapi.impl.EntityImpl", fragment.getEntity().getType());
             }

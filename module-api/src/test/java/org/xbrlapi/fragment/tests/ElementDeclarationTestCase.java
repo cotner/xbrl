@@ -7,11 +7,11 @@ package org.xbrlapi.fragment.tests;
  */
 
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.ElementDeclaration;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -61,20 +61,20 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 			
 			loader.discover(uri,xml);
 		
-			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element/@nillable='true']");
-			for (int i=0; i< fragments.getLength(); i++) {
-				ElementDeclaration fragment = fragments.getFragment(i);
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element/@nillable='true']");
+			for (int i=0; i< fragments.size(); i++) {
+				ElementDeclaration fragment = fragments.get(i);
 				assertTrue(fragment.getIndex() + " is nillable", fragment.isNillable());				
 			}
 			fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element/@nillable='false']");
-			for (int i=0; i< fragments.getLength(); i++) {
-				ElementDeclaration fragment = fragments.getFragment(i);
+			for (int i=0; i< fragments.size(); i++) {
+				ElementDeclaration fragment = fragments.get(i);
 				assertFalse(fragment.getIndex() + " is not nillable", fragment.isNillable());				
 			}
 
 			fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@nillable)=0]");
-			for (int i=0; i< fragments.getLength(); i++) {
-				ElementDeclaration fragment = fragments.getFragment(i);
+			for (int i=0; i< fragments.size(); i++) {
+				ElementDeclaration fragment = fragments.get(i);
 				assertFalse(fragment.getIndex() + " is not nillable", fragment.isNillable());		
 			}
 		} catch (Exception e) {
@@ -89,9 +89,9 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetFormQualified() {		
 		try {
-			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>getFragments("ElementDeclaration");
-			for (int i=0; i< fragments.getLength(); i++) {
-				ElementDeclaration fragment = fragments.getFragment(i);
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>gets("ElementDeclaration");
+			for (int i=0; i< fragments.size(); i++) {
+				ElementDeclaration fragment = fragments.get(i);
 				assertTrue(fragment.getIndex() + " is element form qualified", fragment.getSchema().isElementFormQualified());				
 			}
 		} catch (XBRLException e) {
@@ -121,9 +121,9 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 		
 		// Missing default attribute
 		try {
-			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=0]");
-			for (int i=0; i< fragments.getLength(); i++) {
-				ElementDeclaration fragment = fragments.getFragment(i);
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=0]");
+			for (int i=0; i< fragments.size(); i++) {
+				ElementDeclaration fragment = fragments.get(i);
 				assertNull(fragment.getIndex() + " has not default", fragment.getDefault());				
 			}
 		} catch (XBRLException e) {
@@ -132,9 +132,9 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 
 		// Available attribute
 		try {
-			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=1]");
-			for (int i=0; i< fragments.getLength(); i++) {
-				ElementDeclaration fragment = fragments.getFragment(i);
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=1]");
+			for (int i=0; i< fragments.size(); i++) {
+				ElementDeclaration fragment = fragments.get(i);
 				assertNotNull(fragment.getIndex() + " has not default", fragment.getDefault());				
 			}
 		} catch (Exception e) {
@@ -151,8 +151,8 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 
 		// Missing default attribute
 		try {
-			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>getFragments("ElementDeclaration");
-			ElementDeclaration fragment = fragments.getFragment(0);
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>gets("ElementDeclaration");
+			ElementDeclaration fragment = fragments.get(0);
 			assertNull(fragment.getFixed());
 		} catch (XBRLException e) {
 			fail(e.getMessage());
@@ -168,8 +168,8 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 			loader.discover(uri,xml);
 
 			String query = "/*[" + Constants.XBRLAPIPrefix + ":" + "data/*/@fixed='12.4']";
-			FragmentList<ElementDeclaration> fragments = store.<ElementDeclaration>query(query);
-			ElementDeclaration fragment = fragments.getFragment(0);
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>query(query);
+			ElementDeclaration fragment = fragments.get(0);
 			store.serialize(fragment.getMetadataRootElement());
 			assertEquals("12.4", fragment.getFixed());
 		} catch (Exception e) {
@@ -185,8 +185,8 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	public void testGetTypeInformation() {	
 		try {
 		    
-            FragmentList<Concept> fragments = store.getFragments("Concept");
-            assertTrue(fragments.getLength() > 0);
+            List<Concept> fragments = store.gets("Concept");
+            assertTrue(fragments.size() > 0);
             for (Concept fragment: fragments) {
 
                 String type = fragment.getDataRootElement().getAttribute("type");
@@ -216,8 +216,8 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	public void testGetSubstitutionGroupInformation() {		
 	    try {
 	        
-            FragmentList<Concept> fragments = store.getFragments("Concept");
-            assertTrue(fragments.getLength() > 0);
+            List<Concept> fragments = store.gets("Concept");
+            assertTrue(fragments.size() > 0);
             for (Concept fragment: fragments) {
 
                 String sg = fragment.getDataRootElement().getAttribute("substitutionGroup");
@@ -242,8 +242,8 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 		
     public void testDerterminationOfBeingATuple() {     
         try {
-            FragmentList<Concept> fragments = store.getFragments("Concept");
-            assertTrue(fragments.getLength() > 0);
+            List<Concept> fragments = store.gets("Concept");
+            assertTrue(fragments.size() > 0);
             for (Concept fragment: fragments) {
                 logger.info("Tuple" + fragment.isTuple());
                 logger.info("Item" + fragment.isItem());

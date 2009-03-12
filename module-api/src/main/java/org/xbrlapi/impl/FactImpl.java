@@ -1,9 +1,10 @@
 package org.xbrlapi.impl;
 
+import java.util.List;
+
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.utilities.Constants;
@@ -48,7 +49,7 @@ public class FactImpl extends FragmentImpl implements Fact {
 	 */
 	public Concept getConcept() throws XBRLException {
 		
-		FragmentList<Concept> candidates = getStore().<Concept>query("/*[@type='org.xbrlapi.impl.ConceptImpl' and */*/@name='" + this.getLocalname() + "']");
+		List<Concept> candidates = getStore().<Concept>query("/*[@type='org.xbrlapi.impl.ConceptImpl' and */*/@name='" + this.getLocalname() + "']");
 		for (Concept concept: candidates) {
 			if (this.getNamespace().equals(concept.getTargetNamespace())) 
 				return concept;

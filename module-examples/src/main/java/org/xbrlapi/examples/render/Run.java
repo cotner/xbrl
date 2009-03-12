@@ -18,12 +18,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Concept;
 import org.xbrlapi.ExtendedLink;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
@@ -222,10 +222,10 @@ public class Run {
             Map<String, Object> model = new HashMap<String, Object>();
 
             // Get the root fragment of the target XBRL instance
-            FragmentList<Instance> instances = store.getFragmentsFromDocument(targetURI, "Instance");
-            if (instances.getLength() > 1)
+            List<Instance> instances = store.getsFromDocument(targetURI, "Instance");
+            if (instances.size() > 1)
                 throw new XBRLException("The target instance is not a single XBRL instance.");
-            if (instances.getLength() == 0)
+            if (instances.size() == 0)
                 throw new XBRLException("The target document is not an XBRL instance.");
             instance = instances.get(0);
             reportTime("Getting the instance");
@@ -241,7 +241,7 @@ public class Run {
             model.put("units", instance.getUnits());
             reportTime("Adding report resources to the data model");
             
-            FragmentList<Item> items = instance.getItems();
+            List<Item> items = instance.getItems();
             for (Item item: items) {
                 String key= item.getNamespace() + item.getLocalname();
                 if (itemMap.containsKey(key)) {
@@ -255,13 +255,7 @@ public class Run {
             reportTime("Mapping items by concept");
 
             // Prepare to track networks
-            Networks networks = null;
-            if (store.hasStoredNetworks()) {
-                networks = store.getStoredNetworks();
-            } else {
-                networks = new NetworksImpl(store);
-                store.setStoredNetworks(networks);
-            }
+            Networks networks = new NetworksImpl(store);
             reportTime("Initialising the networks");
             
             // Build the label networks.
@@ -274,14 +268,14 @@ public class Run {
             List<Map<String, Object>> tables = new Vector<Map<String, Object>>();
             model.put("tables", tables);
 
-            logger.info("# linkroles = " + store.getLinkRoles(new URI(Constants.PresentationArcRole)).size());
+            logger.info("# linkroles = " + store.getLinkRoles(Constants.PresentationArcRole()).size());
             
-            for (URI linkrole : store.getLinkRoles(new URI(Constants.PresentationArcRole))) {
+            for (URI linkrole : store.getLinkRoles(Constants.PresentationArcRole())) {
                 HashMap<String, Object> table = new HashMap<String, Object>();
                 tables.add(table);
                 String title = linkrole.toString();
-                FragmentList<RoleType> roleDeclarations = store.getRoleTypes(linkrole);
-                if (roleDeclarations.getLength() > 0) {
+                List<RoleType> roleDeclarations = store.getRoleTypes(linkrole);
+                if (roleDeclarations.size() > 0) {
                     title = roleDeclarations.get(0).getDefinition();
                 }
                 table.put("title", title);
@@ -306,7 +300,7 @@ public class Run {
                 reportTime("Completing the network");
                 logger.info("# relationships = " + network.getNumberOfActiveRelationships());
                 
-                FragmentList<Concept> roots = network.<Concept>getRootFragments();
+                List<Concept> roots = network.<Concept>getRootFragments();
 
                 maxLevel = 1;
                 for (Concept root : roots) {
@@ -337,7 +331,7 @@ public class Run {
             }
 
             // TODO Extend the template to render the footnote information.
-            FragmentList<ExtendedLink> footnoteLinks = instance.getFootnoteLinks();
+            List<ExtendedLink> footnoteLinks = instance.getFootnoteLinks();
             model.put("footnotes", footnoteLinks);
             reportTime("Processing footnotes");
 
@@ -390,9 +384,9 @@ public class Run {
 
         // Get the standard concept label
         //logger.info(conceptKey + " " + labelRole);
-        FragmentList<LabelResource> labelResources = concept.getLabelsWithLanguageAndRole(store.getStoredNetworks(), "en-US",labelRole);
+        List<LabelResource> labelResources = concept.getLabelsWithLanguageAndResourceRole("en-US",labelRole);
         String label;
-        if (labelResources.getLength() > 0) {
+        if (labelResources.size() > 0) {
             label = labelResources.get(0).getStringValue().trim();
         } else {
             label = concept.getName();
@@ -401,7 +395,7 @@ public class Run {
         labels.add(label);
         reportTime(label);
 
-        List<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getIndex());
+        SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getIndex());
 
         for (Relationship relationship: relationships) {
             

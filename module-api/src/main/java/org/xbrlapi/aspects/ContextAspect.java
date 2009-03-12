@@ -12,9 +12,9 @@ import org.xbrlapi.utilities.XBRLException;
 public abstract class ContextAspect extends BaseAspect implements Aspect {
 
     /**
-     * @see Aspect#getFragmentFromStore(Fact)
+     * @see Aspect#getFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+    public Fragment getFromStore(Fact fact) throws XBRLException {
         try {
             Item item = (Item) fact;
             return item.getContext();
@@ -24,10 +24,10 @@ public abstract class ContextAspect extends BaseAspect implements Aspect {
     }
     
     /**
-     * @see Aspect#getFragmentKey(Fact)
+     * @see Aspect#getKey(Fact)
      */
-    public String getFragmentKey(Fact fact) throws XBRLException {
-        Context context = (Context) getFragmentFromStore(fact);
+    public String getKey(Fact fact) throws XBRLException {
+        Context context = (Context) getFromStore(fact);
         return context.getURI() + context.getId();
     }    
 }

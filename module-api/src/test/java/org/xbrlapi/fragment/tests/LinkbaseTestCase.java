@@ -2,7 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Linkbase;
 import org.xbrlapi.SimpleLink;
 
@@ -36,16 +36,16 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcroleRef() {	
 		try {
-            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
+            List<SimpleLink> links = store.<SimpleLink>gets("SimpleLink");
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("arcroleRef")) {
                     Linkbase parent = (Linkbase) link.getParent();
                     int count = 0;
-                    FragmentList<Fragment> children = parent.getAllChildren();
+                    List<Fragment> children = parent.getAllChildren();
                     for (Fragment child: children) {
                         if (child.getLocalname().equals("arcroleRef")) count++;                            
                     }
-                    assertEquals(count,parent.getArcroleRefs().getLength());
+                    assertEquals(count,parent.getArcroleRefs().size());
                 }
             }
 		} catch (Exception e) {
@@ -60,16 +60,16 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	public void testGetRoleRef() {	
 
 		try {
-            FragmentList<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
+            List<SimpleLink> links = store.<SimpleLink>gets("SimpleLink");
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleRef")) {
                     Linkbase parent = (Linkbase) link.getParent();
                     int count = 0;
-                    FragmentList<Fragment> children = parent.getAllChildren();
+                    List<Fragment> children = parent.getAllChildren();
                     for (Fragment child: children) {
                         if (child.getLocalname().equals("roleRef")) count++;                            
                     }
-                    assertEquals(count,parent.getRoleRefs().getLength());
+                    assertEquals(count,parent.getRoleRefs().size());
                 }
             }
 		} catch (Exception e) {
@@ -84,15 +84,15 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	public void testGetExtendedLinks() {	
 
 		try {
-            FragmentList<Linkbase> linkbases = store.<Linkbase>getFragments("Linkbase");
+            List<Linkbase> linkbases = store.<Linkbase>gets("Linkbase");
             for (Linkbase linkbase: linkbases) {
-                FragmentList<Fragment> children = linkbase.getAllChildren();
+                List<Fragment> children = linkbase.getAllChildren();
                 int count = 0;
                 for (Fragment child: children) {
                     if (child.getType().equals("org.xbrlapi.impl.ExtendedLinkImpl")) 
                         count++;
                 }
-                assertEquals(count,linkbase.getExtendedLinks().getLength());
+                assertEquals(count,linkbase.getExtendedLinks().size());
             }
 
 		} catch (Exception e) {
@@ -107,16 +107,16 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	public void testGetDocumentations() {	
 
 		try {
-            FragmentList<Linkbase> linkbases = store.<Linkbase>getFragments("Linkbase");
+            List<Linkbase> linkbases = store.<Linkbase>gets("Linkbase");
             for (Linkbase linkbase: linkbases) {
-                FragmentList<Fragment> children = linkbase.getAllChildren();
+                List<Fragment> children = linkbase.getAllChildren();
                 int count = 0;
                 for (Fragment child: children) {
                     if (child.getType().equals("org.xbrlapi.impl.XlinkDocumentationImpl")) 
                         count++;
                 }
                 logger.info(count);
-                assertEquals(count,linkbase.getDocumentations().getLength());
+                assertEquals(count,linkbase.getDocumentations().size());
             }
 		} catch (Exception e) {
 			fail(e.getMessage());

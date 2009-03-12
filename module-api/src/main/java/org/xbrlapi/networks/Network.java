@@ -3,9 +3,9 @@ package org.xbrlapi.networks;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.XBRLException;
 
 
@@ -101,7 +101,7 @@ public interface Network {
 	 * @return The requested fragment or null if the fragment is not
 	 * already included in the set of fragments stored by the network.
 	 */
-	public Fragment getFragment(String index) throws XBRLException;
+	public Fragment get(String index) throws XBRLException;
 	
 	/**
 	 * @param <F> The type of fragment to use for the fragments in the list.
@@ -109,7 +109,7 @@ public interface Network {
 	 * that are roots in the sense that they are sources of relationships 
 	 * but not targets of relationships.
 	 */
-	public <F extends Fragment> FragmentList<F> getRootFragments();
+	public <F extends Fragment> List<F> getRootFragments();
 	
 	/**
 	 * @return a list of the indexes of the fragments in the network 
@@ -136,7 +136,7 @@ public interface Network {
 	 * The list is ordered by the order attributes on the relationships from lowest to highest.
 	 * @throws XBRLException
 	 */
-	public List<Relationship> getActiveRelationshipsFrom(String index) throws XBRLException;
+	public SortedSet<Relationship> getActiveRelationshipsFrom(String index) throws XBRLException;
 
 	/**
 	 * @param index The index of the target fragment.
@@ -144,7 +144,7 @@ public interface Network {
 	 * relationships in the network and that run to the same target fragment.
 	 * @throws XBRLException
 	 */
-	public List<Relationship> getActiveRelationshipsTo(String index) throws XBRLException;
+	public SortedSet<Relationship> getActiveRelationshipsTo(String index) throws XBRLException;
 	
     /**
      * @return the list of all relationships (active and inactive)
@@ -167,7 +167,7 @@ public interface Network {
 	 * parent fragment, or an empty list if there are no children fragments.
 	 * @throws XBRLException
 	 */
-	public <F extends Fragment> FragmentList<F> getChildren(String index) throws XBRLException;
+	public <F extends Fragment> List<F> getChildren(String index) throws XBRLException;
 	
     /**
      * Note that a fragment can have more than one parent fragment given
@@ -178,7 +178,7 @@ public interface Network {
      * child fragment, or an empty list if there are no parent fragments.
      * @throws XBRLException
      */
-    public <F extends Fragment> FragmentList<F> getParents(String index) throws XBRLException;
+    public <F extends Fragment> List<F> getParents(String index) throws XBRLException;
     
     /**
      * @return the number of relationships (active or otherwise) in the network.

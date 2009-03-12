@@ -1,6 +1,7 @@
 package org.xbrlapi;
 
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -37,13 +38,13 @@ public interface ArcEnd extends ExtendedLinkContent {
      * @return Get the list of arcs that are from the arc end.  
      * The list is empty if there are no arcs from the arc end.
      */
-    public FragmentList<Arc> getArcsFrom() throws XBRLException;
+    public List<Arc> getArcsFrom() throws XBRLException;
 
     /**
      * @return Get the list of arcs that are to the arc end.  
      * The list is empty if there are no arcs to the arc end.
      */
-    public FragmentList<Arc> getArcsTo() throws XBRLException;
+    public List<Arc> getArcsTo() throws XBRLException;
     
     /**
      * @param arcrole the required arcrole.
@@ -51,7 +52,7 @@ public interface ArcEnd extends ExtendedLinkContent {
      * that are from the arc end.  
      * The list is empty if there are no matching arcs.
      */
-    public FragmentList<Arc> getArcsFromWithArcrole(URI arcrole) throws XBRLException;
+    public List<Arc> getArcsFromWithArcrole(URI arcrole) throws XBRLException;
     
 
 
@@ -61,6 +62,6 @@ public interface ArcEnd extends ExtendedLinkContent {
      * that are to the arc end.  
      * The list is empty if there are no matching arcs.
      */
-    public FragmentList<Arc> getArcsToWithArcrole(URI arcrole) throws XBRLException;
+    public List<Arc> getArcsToWithArcrole(URI arcrole) throws XBRLException;
     
 }

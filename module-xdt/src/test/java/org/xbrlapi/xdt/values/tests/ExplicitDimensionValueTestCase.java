@@ -1,7 +1,8 @@
 package org.xbrlapi.xdt.values.tests;
 
+import java.util.List;
+
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Item;
 import org.xbrlapi.xdt.ExplicitDimension;
 import org.xbrlapi.xdt.tests.BaseTestCase;
@@ -39,10 +40,10 @@ public class ExplicitDimensionValueTestCase extends BaseTestCase {
 	        DimensionValueAccessor dva = new DimensionValueAccessorImpl();
 
             loader.discover(this.getURI(STARTING_POINT));
-            FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
-            assertTrue(dimensions.getLength() > 0);
-            FragmentList<Item> items = store.<Item>getFragments("SimpleNumericItem");
-            assertTrue(items.getLength() > 0);
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>gets("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            assertTrue(dimensions.size() > 0);
+            List<Item> items = store.<Item>gets("SimpleNumericItem");
+            assertTrue(items.size() > 0);
 	        
             boolean foundSomeValues = false;
 	        for (Item item: items) {
@@ -71,10 +72,10 @@ public class ExplicitDimensionValueTestCase extends BaseTestCase {
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
 
             loader.discover(this.getURI(this.DEFAULTS_STARTING_POINT));
-            FragmentList<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
-            assertTrue(dimensions.getLength() > 0);
-            FragmentList<Item> items = store.<Item>getFragments("NonNumericItem");
-            assertTrue(items.getLength() > 0);
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>gets("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            assertTrue(dimensions.size() > 0);
+            List<Item> items = store.<Item>gets("NonNumericItem");
+            assertTrue(items.size() > 0);
             
             boolean foundSomeValues = false;
             for (Item item: items) {

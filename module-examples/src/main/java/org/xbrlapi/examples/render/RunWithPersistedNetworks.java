@@ -1,8 +1,12 @@
 /**
  * Commandline example showing:
- * 1. How to discover an XBRL instance document
- * 2. How to travers the presentation networks for that instance
- * 3. How to create an XBRL Inline document
+ * <ul>
+ * <li>How to discover an XBRL instance document</li>
+ * <li>How to travers the presentation networks for that instance</li>
+ * <li>How to create an XBRL Inline document</li>
+ * </ul>
+ * This example uses networks of persisted active relationships
+ * and it demonstrates working with a dimensional aspect model.
  */
 package org.xbrlapi.examples.render;
 
@@ -18,26 +22,26 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Arc;
 import org.xbrlapi.Concept;
 import org.xbrlapi.ExtendedLink;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
-import org.xbrlapi.aspects.NonDimensionalAspectModel;
 import org.xbrlapi.aspects.QuarterlyPeriodAspect;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.loader.Loader;
-import org.xbrlapi.loader.LoaderImpl;
 import org.xbrlapi.loader.discoverer.Discoverer;
 import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.networks.AnalyserImpl;
@@ -45,12 +49,13 @@ import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.NetworkImpl;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
-import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.networks.Storer;
 import org.xbrlapi.networks.StorerImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
+import org.xbrlapi.xdt.LoaderImpl;
+import org.xbrlapi.xdt.aspects.DimensionalAspectModel;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
@@ -74,13 +79,21 @@ public class RunWithPersistedNetworks {
     private static double startTime;
 
     private static ArrayList<String> labels = new ArrayList<String>();
+    /**
+     * A map of all lists of items in the instance, 
+     * indexed by the concept identifier, comprising
+     * the concept namespace and concept local name.
+     */
     private static Map<String,List<Item>> itemMap = new HashMap<String,List<Item>>();
     
     private static AspectModel aspectModel;
     
     private static Network network;
     private static Instance instance;
-    private static ArrayList<Concept> concepts = new ArrayList<Concept>();
+    /**
+     * The list of concepts in the order that they are to be rendered.
+     */
+    private static List<Concept> concepts = new ArrayList<Concept>();
     private static int maxLevel = 1;
 
     public static void main(String[] args) {
@@ -198,12 +211,12 @@ public class RunWithPersistedNetworks {
             }
             reportTime("Loading data");
 
+            // Persist network information in the data store
+            Analyser analyser = new AnalyserImpl(store);
+            store.setAnalyser(analyser);
             Storer storer = new StorerImpl(store);
-
             storer.StoreAllNetworks();
             reportTime("Storing all relationships");
-            
-            Analyser analyser = new AnalyserImpl(store);
       
             // Get the Freemarker template ready to use.
             if (!arguments.containsKey("template"))
@@ -225,10 +238,10 @@ public class RunWithPersistedNetworks {
             Map<String, Object> model = new HashMap<String, Object>();
 
             // Get the root fragment of the target XBRL instance
-            FragmentList<Instance> instances = store.getFragmentsFromDocument(targetURI, "Instance");
-            if (instances.getLength() > 1)
+            List<Instance> instances = store.getsFromDocument(targetURI, "Instance");
+            if (instances.size() > 1)
                 throw new XBRLException("The target instance is not a single XBRL instance.");
-            if (instances.getLength() == 0)
+            if (instances.size() == 0)
                 throw new XBRLException("The target document is not an XBRL instance.");
             instance = instances.get(0);
             reportTime("Getting the instance");
@@ -244,13 +257,13 @@ public class RunWithPersistedNetworks {
             model.put("units", instance.getUnits());
             reportTime("Adding report resources to the data model");
 
-            FragmentList<Item> items = instance.getItems();
+            List<Item> items = instance.getItems();
             for (Item item: items) {
                 String key= item.getNamespace() + item.getLocalname();
                 if (itemMap.containsKey(key)) {
                     itemMap.get(key).add(item);
                 } else {
-                    List<Item> newlist = new Vector<Item>();
+                    List<Item> newlist = new ArrayList<Item>();
                     newlist.add(item);
                     itemMap.put(key,newlist);
                 }
@@ -258,13 +271,7 @@ public class RunWithPersistedNetworks {
             reportTime("Mapping items by concept");
 
             // Prepare to track networks
-            Networks networks = null;
-            if (store.hasStoredNetworks()) {
-                networks = store.getStoredNetworks();
-            } else {
-                networks = new NetworksImpl(store);
-                store.setStoredNetworks(networks);
-            }
+            Networks networks = new NetworksImpl(store);
             reportTime("Initialising the networks");
 
             // Build the label networks.
@@ -283,8 +290,8 @@ public class RunWithPersistedNetworks {
                 HashMap<String, Object> table = new HashMap<String, Object>();
                 tables.add(table);
                 String title = linkrole.toString();
-                FragmentList<RoleType> roleDeclarations = store.getRoleTypes(linkrole);
-                if (roleDeclarations.getLength() > 0) {
+                List<RoleType> roleDeclarations = store.getRoleTypes(linkrole);
+                if (roleDeclarations.size() > 0) {
                     title = roleDeclarations.get(0).getDefinition();
                 }
                 table.put("title", title);
@@ -295,8 +302,7 @@ public class RunWithPersistedNetworks {
                 maxLevel = 1;
 
                 // Configure the aspect model (useful for sorting facts by their aspects)
-                aspectModel = new NonDimensionalAspectModel();
-                aspectModel.setAnalyser(analyser);
+                aspectModel = new DimensionalAspectModel();
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
 
@@ -306,7 +312,7 @@ public class RunWithPersistedNetworks {
                 reportTime("Completing the network");
                 logger.info("# relationships = " + network.getNumberOfActiveRelationships());
                 
-                FragmentList<Concept> roots = network.<Concept>getRootFragments();
+                List<Concept> roots = network.<Concept>getRootFragments();
 
                 maxLevel = 1;
                 for (Concept root : roots) {
@@ -314,7 +320,7 @@ public class RunWithPersistedNetworks {
                             "", 
                             null, 
                             root, 
-                            new Float(0.0).floatValue(), 
+                            new Double(0.0), 
                             linkrole,
                             Constants.StandardLabelRole());
                 }
@@ -337,7 +343,7 @@ public class RunWithPersistedNetworks {
             }
 
             // TODO Extend the template to render the footnote information.
-            FragmentList<ExtendedLink> footnoteLinks = instance.getFootnoteLinks();
+            List<ExtendedLink> footnoteLinks = instance.getFootnoteLinks();
             model.put("footnotes", footnoteLinks);
             reportTime("Processing footnotes");
 
@@ -369,13 +375,15 @@ public class RunWithPersistedNetworks {
             String indent,
             Concept parent, 
             Concept concept, 
-            float order,
+            Double order,
             URI linkRole,
             URI labelRole
             ) throws Exception {
 
+        // Add the concept to the list of concepts to be rendered.
         concepts.add(concept);
 
+        // Add all items for this concept to the aspect model
         String conceptKey = concept.getTargetNamespace() + concept.getName();
         if (itemMap.containsKey(conceptKey)) {
             List<Item> items = itemMap.get(conceptKey);
@@ -385,14 +393,14 @@ public class RunWithPersistedNetworks {
                 }
             }
         }
-        
+
+        // Update the maximum indentation level that is used by the rendering
         maxLevel = Math.max(indent.length(), maxLevel);
 
-        // Get the standard concept label
-        //logger.info(conceptKey + " " + labelRole);
-        FragmentList<LabelResource> labelResources = concept.getLabelsWithLanguageAndRole(store.getStoredNetworks(), "en-US",labelRole);
+        // Store the concept label in a list of concept labels in rendering order with indentation done.
+        List<LabelResource> labelResources = concept.getLabelsWithLanguageAndResourceRole("en-US",labelRole);
         String label;
-        if (labelResources.getLength() > 0) {
+        if (labelResources.size() > 0) {
             label = labelResources.get(0).getStringValue().trim();
         } else {
             label = concept.getName();
@@ -401,13 +409,15 @@ public class RunWithPersistedNetworks {
         labels.add(label);
         reportTime(label);
 
-        List<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getIndex());
+        // Get the active presentation relationships from.
+        SortedSet<PersistedRelationship> relationships = store.getPersistedActiveRelationshipsFrom(concept.getIndex(),linkRole,Constants.PresentationArcRole());
 
-        for (Relationship relationship: relationships) {
+        for (PersistedRelationship relationship: relationships) {
             
             labelRole = Constants.StandardLabelRole();
-            if (relationship.getArc().hasAttribute("preferredLabel")) {
-                String preferredLabelRole = relationship.getArcAttributeValue("preferredLabel");
+            Arc arc = relationship.getArc();
+            if (arc.hasAttribute("preferredLabel")) {
+                String preferredLabelRole = arc.getAttribute("preferredLabel");
                 try {
                     labelRole = new URI(preferredLabelRole);
                 } catch (URISyntaxException e) {
@@ -418,7 +428,7 @@ public class RunWithPersistedNetworks {
                     indent + " ", 
                     concept, 
                     (Concept) relationship.getTarget(), 
-                    new Float(relationship.getOrder()).floatValue(), 
+                    relationship.getArcOrder(), 
                     linkRole,
                     labelRole);
         }
@@ -490,13 +500,10 @@ public class RunWithPersistedNetworks {
     }
 
     /**
-     * @param store
-     *            The store to use for the loader.
-     * @param cache
-     *            The root directory of the document cache.
+     * @param store The store to use for the loader.
+     * @param cache The root directory of the document cache.
      * @return the loader to use for loading the instance and its DTS
-     * @throws XBRLException
-     *             if the loader cannot be initialised.
+     * @throws XBRLException if the loader cannot be initialised.
      */
     private static Loader createLoader(Store store, String cache)
             throws XBRLException {

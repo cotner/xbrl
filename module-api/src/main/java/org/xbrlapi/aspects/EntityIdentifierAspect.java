@@ -1,10 +1,15 @@
 package org.xbrlapi.aspects;
 
+import java.net.URI;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
+import org.xbrlapi.EntityResource;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -55,7 +60,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
                 return getMapId(value);
             }
             Entity f = ((Entity) value.getFragment());
-            String id = f.getIdentifierScheme() + ": " + f.getIdentifierValue().replaceFirst("^0+","");
+            String id = f.getIdentifierScheme() + ": " + f.getIdentifierValue().trim().replaceFirst("^0+","");
             setMapId(value,id);
             return id;
         }
@@ -68,32 +73,23 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
             if (hasMapLabel(id)) {
                 return getMapLabel(id);
             }
-/*
-            Entity f = (Entity) value.getFragment();
-            
-            // Check if we are using persisted networks
-            if (isUsingPersistedNetworks()) {
-                FragmentList<ActiveRelationship> relationships = getAnalyser().getLabelRelationshipsByLanguageAndRole(entity.getIndex(),getLanguageCode(),getLabelRole());
-                if (!relationships.isEmpty()) {
-                    String label = ((LabelResource) relationships.get(0).getTarget()).getStringValue();
-                    logger.info("Concept aspect value label is " + label);
-                    setMapLabel(id,label);
-                    return label;
-                }
-            }
-            */
+
             String label = id;
+            
             Entity entity = ((Entity) value.getFragment());
-            FragmentList<LabelResource> labels = entity.getEntityLabels();
-            FINDLABEL: for (LabelResource l: labels) {
-                if (
-                        l.getLanguage().equals(getLanguageCode()) &&
-                        l.getResourceRole().equals(getLabelRole())
-                   ) {
-                    label = l.getStringValue();
-                    break FINDLABEL;
-                }
+            List<EntityResource> entityResources = entity.getEntityResources();
+            Set<EntityResource> equivalentEntityResources = new HashSet<EntityResource>();
+            equivalentEntityResources.addAll(entityResources);
+            for (EntityResource entityResource: entityResources) {
+                equivalentEntityResources.addAll(entityResource.getEquivalents());
             }
+            
+            Set<LabelResource> labels = new HashSet<LabelResource>();
+            for (EntityResource entityResource: equivalentEntityResources) {
+                labels.addAll(entityResource.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole()));
+            }
+            if (! labels.isEmpty()) label = labels.iterator().next().getStringValue();
+
             logger.info("Entity id aspect value label is " + label);
             setMapLabel(id,label);
             return label;
@@ -103,18 +99,18 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
          * The label role is used in constructing the label for the
          * concept aspect values.
          */
-        private String role = Constants.StandardLabelRole;
+        private URI role = Constants.StandardLabelRole();
         /**
          * @return the label resource role.
          */
-        public String getLabelRole() {
+        public URI getLabelRole() {
             return role;
         }
         /**
          * @param role The label resource role to use in
          * selecting labels for the concept.
          */
-        public void setLabelRole(String role) {
+        public void setLabelRole(URI role) {
             this.role = role;
         }
 
@@ -146,17 +142,17 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
         try {
-            return new EntityIdentifierAspectValue(this,getFragment(fact));
+            return new EntityIdentifierAspectValue(this,get(fact));
         } catch (XBRLException e) {
             return null;
         }
     }
     
     /**
-     * @see Aspect#getFragmentFromStore(Fact)
+     * @see Aspect#getFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        return ((Context) super.getFragmentFromStore(fact)).getEntity();
+    public Fragment getFromStore(Fact fact) throws XBRLException {
+        return ((Context) super.getFromStore(fact)).getEntity();
     }
     
 }

@@ -2,7 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.ExtendedLink;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Link;
 import org.xbrlapi.utilities.Constants;
 
@@ -33,7 +33,7 @@ public class LinkTestCase extends DOMLoadingTestCase {
 	public void testGetLinkRoles() {	
 
 		try {
-		    FragmentList<ExtendedLink> links = store.<ExtendedLink>getFragments("ExtendedLink");
+		    List<ExtendedLink> links = store.<ExtendedLink>gets("ExtendedLink");
 		    for (Link link: links) {
     		    String role = link.getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"role");
     		    if (! role.equals(""))
@@ -52,8 +52,8 @@ public class LinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLinkRoleWhenItProvided() {	
         try {
-            FragmentList<Link> fragments = store.<Link>getFragments("ExtendedLink");
-            assertTrue(fragments.getLength() > 0);
+            List<Link> fragments = store.<Link>gets("ExtendedLink");
+            assertTrue(fragments.size() > 0);
             for (Link fragment: fragments) {
                 store.serialize(fragment);
                 if (fragment.getLocalname().equals("presentationLink")) {

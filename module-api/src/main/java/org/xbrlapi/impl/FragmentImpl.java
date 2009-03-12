@@ -11,21 +11,12 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xbrlapi.Arc;
-import org.xbrlapi.ArcEnd;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.Locator;
 import org.xbrlapi.ReferenceResource;
-import org.xbrlapi.Resource;
 import org.xbrlapi.SimpleLink;
-import org.xbrlapi.networks.Network;
-import org.xbrlapi.networks.Networks;
-import org.xbrlapi.networks.NetworksImpl;
-import org.xbrlapi.networks.Relationship;
-import org.xbrlapi.networks.RelationshipImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -49,46 +40,39 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * Gets the child fragments with the specified fragment type.
-     * @param type The required fragment type of the child.
-     * @return the fragment list of children fragments that match the specified fragment type
-     * @throws XBRLException
+     * @see org.xbrlapi.Fragment#getChildren(String)
      */
-    protected <F extends Fragment> FragmentList<F> getChildren(String type) throws XBRLException {
+    public <F extends Fragment> List<F> getChildren(String type) throws XBRLException {
     	String query = "/*[@parentIndex='" + getIndex() + "' and @type='" + type + "']";
-    	FragmentList<F> fragments = getStore().<F>query(query);
+    	List<F> fragments = getStore().<F>query(query);
     	return fragments;
     }
     
     /**
      * @see org.xbrlapi.Fragment#getSimpleLinks()
      */
-    public FragmentList<SimpleLink> getSimpleLinks() throws XBRLException {
+    public List<SimpleLink> getSimpleLinks() throws XBRLException {
     	return this.getStore().<SimpleLink>getChildFragments("SimpleLink",this.getIndex());
     }
     
     /**
      * @see org.xbrlapi.Fragment#getAllChildren()
      */
-    public FragmentList<Fragment> getAllChildren() throws XBRLException {
+    public List<Fragment> getAllChildren() throws XBRLException {
     	String xpath = "/*[@parentIndex='" + getIndex() + "']";
-    	FragmentList<Fragment> fragments = getStore().<Fragment>query(xpath);
+    	List<Fragment> fragments = getStore().<Fragment>query(xpath);
     	return fragments;
     }
     
     /**
-     * Get a specific child fragment.
-     * @param type The fragment type of the required child
-     * @param index The index of the required child fragment (among other children of the same type).
-     * @return the child fragment or null if there are no children fragments of the specified type.
-     * @throws XBRLException if the index is out of bounds
+     * @see org.xbrlapi.Fragment#getChild(String, int)
      */
-    protected Fragment getChild(String type, int index) throws XBRLException {
-    	FragmentList<Fragment> children = getChildren(type);
+    public Fragment getChild(String type, int index) throws XBRLException {
+    	List<Fragment> children = getChildren(type);
     	if (children == null) return null;
-    	if (index >= children.getLength()) throw new XBRLException("The index is too high.");
+    	if (index >= children.size()) throw new XBRLException("The index is too high.");
     	if (index < 0) throw new XBRLException("The index is too low.");
-    	return children.getFragment(index);   
+    	return children.get(index);   
     }
 
     /**
@@ -141,10 +125,10 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     /**
      * @see org.xbrlapi.Fragment#getReferencingLocators()
      */
-    public FragmentList<Locator> getReferencingLocators() throws XBRLException {
+    public List<Locator> getReferencingLocators() throws XBRLException {
     	
     	// Construct the Query
-    	String predicate = Constants.XBRLAPIPrefix + ":" + "data/link:loc and @targetDocumentURI='"+ getURI() +"' and (";
+    	String predicate = "*/link:loc and @targetDocumentURI='"+ getURI() +"' and (";
     	NodeList xptrs = this.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"xptr");
     	for (int i=0; i<xptrs.getLength(); i++) {
     		String value = ((Element) xptrs.item(i)).getAttribute("value").trim();
@@ -154,708 +138,195 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     		else
     			predicate += " or ";
     	}
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[" + predicate + "]";
+    	String query = "/*[" + predicate + "]";
     	
     	return getStore().<Locator>query(query);
     }
     
-    /**
-     * @see org.xbrlapi.Fragment#getLabels(org.xbrlapi.networks.Networks)
-     */
-    public FragmentList<LabelResource> getLabels(Networks networks) throws XBRLException {
 
-        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
-        for (Network network: networks.getNetworks(Constants.LabelArcRole())) {
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
-            for (Relationship relationship: relationships) {
-                labels.add((LabelResource) relationship.getTarget());
-            }
-        }
-        for (Network network: networks.getNetworks(Constants.GenericLabelArcRole())) {
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
-            for (Relationship relationship: relationships) {
-                labels.add((LabelResource) relationship.getTarget());
-            }
-        }
-    	return labels;
-    }
     
     /**
      * @see org.xbrlapi.Fragment#getLabels()
      */
-    public FragmentList<LabelResource> getLabels() throws XBRLException {
-        
-        Networks labelNetworks = this.getNetworksWithArcrole(Constants.LabelArcRole());
-        FragmentList<LabelResource> labels = labelNetworks.<LabelResource>getTargetFragments(this.getIndex(),Constants.LabelArcRole());
-
-        Networks genericLabelNetworks = this.getNetworksWithArcrole(Constants.GenericLabelArcRole());
-        FragmentList<LabelResource> genericLabels = genericLabelNetworks.<LabelResource>getTargetFragments(this.getIndex(),Constants.GenericLabelArcRole());
-
+    public List<LabelResource> getLabels() throws XBRLException {
+        List<LabelResource> labels = getStore().<LabelResource>getTargets(getIndex(),null,Constants.LabelArcRole());
+        List<LabelResource> genericLabels = getStore().<LabelResource>getTargets(getIndex(),null,Constants.GenericLabelArcRole());
         labels.addAll(genericLabels);
         return labels;
     }    
     
-    /**
-     * @see org.xbrlapi.Fragment#getLabelsWithRole(Networks, String)
-     */
-    public FragmentList<LabelResource> getLabelsWithRole(Networks networks, String role) throws XBRLException {
-        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
-        for (Network network: networks.getNetworks(Constants.LabelArcRole())) {
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
-            for (Relationship relationship: relationships) {
-                LabelResource label = (LabelResource) relationship.getTarget();
-                URI r = label.getResourceRole();
-                if (r != null) {
-                    if (r.equals(role)) labels.add(label);
-                }
-            }
-        }
-        for (Network network: networks.getNetworks(Constants.GenericLabelArcRole())) {
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
-            for (Relationship relationship: relationships) {
-                LabelResource label = (LabelResource) relationship.getTarget();
-                URI r = label.getResourceRole();
-                if (r != null) {
-                    if (r.equals(role)) labels.add(label);
-                }
-            }
-        }
-        return labels;
 
-    }
     
     /**
      * @see org.xbrlapi.Fragment#getLabelsWithRole(String)
      */
-    public FragmentList<LabelResource> getLabelsWithRole(String role) throws XBRLException {
-
-        Networks networks = this.getNetworksWithArcrole(Constants.LabelArcRole());
-        FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
-
-        FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getIndex(),Constants.LabelArcRole());
+    public List<LabelResource> getLabelsWithRole(String role) throws XBRLException {
+        
+        List<LabelResource> result = new Vector<LabelResource>();
+        List<LabelResource> labels = getLabels();
         for (LabelResource label: labels) {
             URI r = label.getResourceRole();
             if (r != null) {
                 if (r.equals(role)) result.add(label);
             }
         }
-        
-        networks = this.getNetworksWithArcrole(Constants.GenericLabelArcRole());
-        labels = networks.<LabelResource>getTargetFragments(this.getIndex(),Constants.GenericLabelArcRole());
-
-        for (LabelResource label: labels) {
-            URI r = label.getResourceRole();
-            if (r != null) {
-                if (r.equals(role)) result.add(label);
-            }
-        }
-        
         return result;
     }    
     
-    /**
-     * @see org.xbrlapi.Fragment#getLabelsWithLanguage(Networks, String)
-     */
-    public FragmentList<LabelResource> getLabelsWithLanguage(Networks networks, String language) throws XBRLException {
 
-        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
-        for (Network network: networks.getNetworks(Constants.LabelArcRole())) {
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
-            for (Relationship relationship: relationships) {
-                LabelResource label = (LabelResource) relationship.getTarget();
-                String l = label.getLanguage();
-                if (l != null) {
-                    if (label.getLanguage().equals(language)) labels.add(label);
-                }
-            }
-        }
-        for (Network network: networks.getNetworks(Constants.GenericLabelArcRole())) {
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
-            for (Relationship relationship: relationships) {
-                LabelResource label = (LabelResource) relationship.getTarget();
-                String l = label.getLanguage();
-                if (l != null) {
-                    if (label.getLanguage().equals(language)) labels.add(label);
-                }
-            }
-        }
-        return labels;
-
-    }
     
     /**
      * @see org.xbrlapi.Fragment#getLabelsWithLanguage(String)
      */
-    public FragmentList<LabelResource> getLabelsWithLanguage(String language) throws XBRLException {
-
-        Networks networks = this.getNetworksWithArcrole(Constants.LabelArcRole());
-        FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
-
-        FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getIndex(),Constants.LabelArcRole());
-        for (LabelResource label: labels) {
+    public List<LabelResource> getLabelsWithLanguage(String language) throws XBRLException {
+        List<LabelResource> labels = new Vector<LabelResource>();
+        List<LabelResource> candidates = this.getLabels();
+        for (LabelResource label: candidates) {
             String l = label.getLanguage();
-            if (l != null) {
-                if (label.getLanguage().equals(language)) result.add(label);
-            }
+            if (l == null) if (l == null) labels.add(label);
+            else if (l.equals(language)) labels.add(label);
         }
-
-        networks = this.getNetworksWithArcrole(Constants.GenericLabelArcRole());
-        labels = networks.<LabelResource>getTargetFragments(this.getIndex(),Constants.GenericLabelArcRole());
-
-        for (LabelResource label: labels) {
-            String l = label.getLanguage();
-            if (l != null) {
-                if (label.getLanguage().equals(language)) result.add(label);
-            }
-        }
-        
-        return result;
+        return labels;
     }
 
+
+    
     /**
-     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndRole(Networks, String, URI)
+     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndResourceRole(String, URI)
      */
-    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(Networks networks, String language, URI role) throws XBRLException {
-        
-        FragmentList<LabelResource> labels = new FragmentListImpl<LabelResource>();
-        for (Network network: networks.getNetworks(Constants.LabelArcRole())) {
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
-            for (Relationship relationship: relationships) {
-                LabelResource label = (LabelResource) relationship.getTarget();
-                String l = label.getLanguage();
-                URI r = label.getResourceRole();
-                if (l != null && r != null) {
-                    if (l.equals(language) && r.equals(role)) labels.add(label);
-                }
+    public List<LabelResource> getLabelsWithLanguageAndResourceRole(String language, URI role) throws XBRLException {
+        List<LabelResource> labels = new Vector<LabelResource>();
+        List<LabelResource> candidates = this.getLabels();
+        for (LabelResource label: candidates) {
+            String l = label.getLanguage();
+            URI r = label.getResourceRole();
+            if (l != null && r != null) {
+                if (l.equals(language) && r.equals(role)) labels.add(label);
+            } else if (l != null) {
+                if (l.equals(language) && role == null) labels.add(label);
+            } else if (r != null) {
+                if (r.equals(role) && language == null) labels.add(label);
+            } else {
+                if (role == null && language == null) labels.add(label);
             }
         }
-        for (Network network: networks.getNetworks(Constants.GenericLabelArcRole())) {
-            List<Relationship> relationships = network.getActiveRelationshipsFrom(this.getIndex());
-            for (Relationship relationship: relationships) {
-                LabelResource label = (LabelResource) relationship.getTarget();
+        return labels;
+    }
+    
+    /**
+     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndResourceRole(String, URI)
+     */
+    public List<LabelResource> getLabelsWithLanguageAndResourceRoleAndLinkRole(String language, URI resourceRole, URI linkRole) throws XBRLException {
+        List<LabelResource> labels = new Vector<LabelResource>();
+        List<LabelResource> candidates = this.getLabels();
+        for (LabelResource label: candidates) {
+            if (linkRole == null || label.getExtendedLink().getLinkRole().equals(linkRole)) {
                 String l = label.getLanguage();
                 URI r = label.getResourceRole();
                 if (l != null && r != null) {
-                    if (l.equals(language) && r.equals(role)) labels.add(label);
+                    if (l.equals(language) && r.equals(resourceRole)) labels.add(label);
+                } else if (l != null) {
+                    if (l.equals(language) && resourceRole == null) labels.add(label);
+                } else if (r != null) {
+                    if (r.equals(resourceRole) && language == null) labels.add(label);
+                } else {
+                    if (resourceRole == null && language == null) labels.add(label);
                 }
             }
         }
         return labels;
-
-    }
-    
-    /**
-     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndRole(String, URI)
-     */
-    public FragmentList<LabelResource> getLabelsWithLanguageAndRole(String language, URI role) throws XBRLException {
-        
-        Networks networks = this.getLabelNetworks();
-        FragmentList<LabelResource> result = new FragmentListImpl<LabelResource>();
-        FragmentList<LabelResource> labels = networks.<LabelResource>getTargetFragments(this.getIndex(),Constants.LabelArcRole());
-        for (LabelResource label: labels) {
-            String l = label.getLanguage();
-            URI r = label.getResourceRole();
-            if (l != null && r != null) {
-                if (l.equals(language) && r.equals(role)) result.add(label);
-            }
-        }
-        return result;
-    }
-    
-    /**
-     * @return a set of networks of relationships from the fragment to labels.
-     * @throws XBRLException
-     */
-    private Networks getLabelNetworks() throws XBRLException {
-
-        Relationship relationship = null;
-        Networks networks;
-        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
-        else networks = new NetworksImpl(getStore());
-
-        // If we have a resource, it could be related directly via arcs to relatives.
-        if (this.isa("org.xbrlapi.impl.ResourceImpl")) {
-            FragmentList<Arc> arcs = ((ArcEnd) this).getArcsFromWithArcrole(Constants.LabelArcRole());
-            arcs.addAll(((ArcEnd) this).getArcsFromWithArcrole(Constants.GenericLabelArcRole()));
-            
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                for (ArcEnd end: targets) {
-                    if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment target = ((Locator) end).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,this,target);
-                    } else {
-                        relationship = new RelationshipImpl(arc,this,end);
-                    }               
-                    networks.addRelationship(relationship);
-                }
-            }
-
-        }
-
-        // Next get the locators for the fragment to find indirect relatives
-        HashMap<String,ExtendedLink> links = new HashMap<String,ExtendedLink>();
-        FragmentList<Locator> locators = this.getReferencingLocators();
-        LOCATOR: for (Locator locator: locators) {
-            ExtendedLink link;
-            String pIndex = locator.getParentIndex();
-            if (links.containsKey(locator.getParentIndex())) {
-                link = links.get(pIndex);
-            } else {
-                link = locator.getExtendedLink();
-                links.put(pIndex,link);
-            }
-            if (! (link.getLocalname().equals("labelLink") || link.getLocalname().equals("link"))) continue LOCATOR; 
-            FragmentList<Arc> arcs = ((ArcEnd) locator).getArcsFromWithArcrole(Constants.LabelArcRole());
-            arcs.addAll(((ArcEnd) locator).getArcsFromWithArcrole(Constants.GenericLabelArcRole()));
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                for (ArcEnd end: targets) {
-                    if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment target = ((Locator) end).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,this,target);
-                    } else {
-                        relationship = new RelationshipImpl(arc,this,end);
-                    }
-                    networks.addRelationship(relationship);
-                }
-            }
-            
-        }
-
-        return networks;
     }    
     
+    
+    
 
     
     /**
-     * TODO Add methods to get references based on language and role.
      * @see org.xbrlapi.Fragment#getReferences()
      */
-    public FragmentList<ReferenceResource> getReferences() throws XBRLException {
-    	Networks networks = this.getNetworks();
-        FragmentList<ReferenceResource> references = networks.<ReferenceResource>getTargetFragments(this.getIndex(),Constants.ReferenceArcRole());
-        references.addAll(networks.<ReferenceResource>getTargetFragments(this.getIndex(),Constants.GenericReferenceArcRole()));
+    public List<ReferenceResource> getReferences() throws XBRLException {
+        List<ReferenceResource> references = getStore().getTargets(getIndex(),null,Constants.ReferenceArcRole());
+        List<ReferenceResource> genericReferences = getStore().getTargets(getIndex(),null,Constants.GenericReferenceArcRole());
+        references.addAll(genericReferences);
         return references;
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getNetworks()
+     * @see org.xbrlapi.Fragment#getReferencesWithLanguage(String)
      */
-    public Networks getNetworks() throws XBRLException {
-    	
-    	logger.debug("Getting networks for fragment " + getIndex());
-        Networks networks;
-        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
-        else networks = new NetworksImpl(getStore());
-		Relationship relationship = null;
-    	
-    	// If we have a resource, it could be related directly via arcs to relatives.
-    	if (this.isa("org.xbrlapi.impl.ResourceImpl")) {
-    		FragmentList<Arc> arcs = ((ArcEnd) this).getArcsFrom();
-    		logger.debug("Fragment " + this.getIndex() + " is a XLink resource with " + arcs.getLength() + " direct arcs FROM it.");
-        	for (Arc arc: arcs) {
-        		FragmentList<ArcEnd> targets = arc.getTargetFragments();
-        		for (ArcEnd end: targets) {
-            		if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-            			Fragment target = ((Locator) end).getTargetFragment();
-            			relationship = new RelationshipImpl(arc,this,target);
-            		} else {
-            			relationship = new RelationshipImpl(arc,this,end);
-            		}        		
-        			networks.addRelationship(relationship);
-        		}
-        	}
-        	
-    		arcs = ((ArcEnd) this).getArcsTo();
-    		logger.debug("Fragment " + this.getIndex() + " is an XLink resource with " + arcs.getLength() + " direct arcs TO it.");
-        	for (Arc arc: arcs) {
-        		FragmentList<ArcEnd> sources = arc.getSourceFragments();
-        		for (ArcEnd end: sources) {
-            		if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-            			Fragment source = ((Locator) end).getTargetFragment();
-            			relationship = new RelationshipImpl(arc,source,this);
-            		} else {
-            			relationship = new RelationshipImpl(arc,end,this);
-            		}        		
-        			networks.addRelationship(relationship);
-        		}
-        	}
-    	}
-
-    	// Next get the locators for the fragment to find indirect relatives
-    	FragmentList<Locator> locators = this.getReferencingLocators();
-		logger.debug("Fragment " + this.getIndex() + " has " + locators.getLength() + " locators locating it.");
-    	for (Locator locator: locators) {        	
-    		FragmentList<Arc> arcs = locator.getArcsFrom();
-    		logger.debug("Locator " + locator.getIndex() + " has " + arcs.getLength() + " direct arcs FROM it.");    		
-        	for (Arc arc: arcs) {
-        		FragmentList<ArcEnd> targets = arc.getTargetFragments();
-        		logger.debug("Arc " + arc.getIndex() + " has " + targets.getLength() + " targets.");    		
-        		for (ArcEnd end: targets) {
-            		if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-            			Fragment target = ((Locator) end).getTargetFragment();
-            			relationship = new RelationshipImpl(arc,this,target);
-            		} else {
-            			relationship = new RelationshipImpl(arc,this,end);
-            		}
-        			networks.addRelationship(relationship);
-        		}
-        		
-        	}
-    		
-    		arcs = locator.getArcsTo();
-    		logger.debug("Locator " + locator.getIndex() + " has " + arcs.getLength() + " direct arcs TO it.");    		
-        	for (Arc arc: arcs) {
-        		FragmentList<ArcEnd> sources = arc.getSourceFragments();
-        		logger.debug("Arc " + arc.getIndex() + " has " + sources.getLength() + " sources.");    		
-        		for (ArcEnd end: sources) {
-            		if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-            			Fragment source = ((Locator) end).getTargetFragment();
-            			relationship = new RelationshipImpl(arc,source,this);
-            		} else {
-            			relationship = new RelationshipImpl(arc,end,this);
-            		}        		
-        			networks.addRelationship(relationship);
-        		}
-        	}
-    	}
-
-    	return networks;
-    	
-    }
-
-    /**
-     * @see org.xbrlapi.Fragment#getNetworksWithArcrole(URI)
-     */
-    public Networks getNetworksWithArcrole(URI arcrole) throws XBRLException {
-        logger.debug("Getting relationships to and from fragment " + getIndex() + " with arcrole " + arcrole);
-        Networks networks;
-        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
-        else networks = new NetworksImpl(getStore());
-        Relationship relationship = null;
-
-        // If we have a resource, it could be related directly via arcs to relatives.
-        if (this.isa("org.xbrlapi.impl.ResourceImpl")) {
-            FragmentList<Arc> arcs = ((ArcEnd) this).getArcsFromWithArcrole(arcrole);
-
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                for (ArcEnd end: targets) {
-                    if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment target = ((Locator) end).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,this,target);
-                    } else {
-                        relationship = new RelationshipImpl(arc,this,end);
-                    }               
-                    networks.addRelationship(relationship);
-                }
-            }
-            
-            arcs = ((ArcEnd) this).getArcsToWithArcrole(arcrole);
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> sources = arc.getSourceFragments();
-                for (ArcEnd end: sources) {
-                    if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment source = ((Locator) end).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,source,this);
-                    } else {
-                        relationship = new RelationshipImpl(arc,end,this);
-                    }               
-                    networks.addRelationship(relationship);
-                }
-            }
+    public List<ReferenceResource> getReferencesWithLanguage(String language) throws XBRLException {
+        List<ReferenceResource> references = new Vector<ReferenceResource>();
+        List<ReferenceResource> candidates = this.getReferences();
+        for (ReferenceResource reference: candidates) {
+            String l = reference.getLanguage();
+            if (l == null) if (l == null) references.add(reference);
+            else if (l.equals(language)) references.add(reference);
         }
-
-        // Next get the locators for the fragment to find indirect relatives
-        FragmentList<Locator> locators = this.getReferencingLocators();
-        for (Locator locator: locators) {
-            FragmentList<Arc> arcs = locator.getArcsFromWithArcrole(arcrole);
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                for (ArcEnd end: targets) {
-                    if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment target = ((Locator) end).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,this,target);
-                    } else {
-                        relationship = new RelationshipImpl(arc,this,end);
-                    }
-                    networks.addRelationship(relationship);
-                }
-            }
-            
-            arcs = locator.getArcsToWithArcrole(arcrole);
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> sources = arc.getSourceFragments();
-                for (ArcEnd end: sources) {
-                    if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment source = ((Locator) end).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,source,this);
-                    } else {
-                        relationship = new RelationshipImpl(arc,end,this);
-                    }               
-                    networks.addRelationship(relationship);
-                }
-            }
-        }
-
-        return networks;
+        return references;
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getNetworksFromWithArcrole(URI)
+     * @see org.xbrlapi.Fragment#getReferencesWithLanguageAndRole(String, URI)
      */
-    public Networks getNetworksFromWithArcrole(URI arcrole) throws XBRLException {
-        logger.debug("Getting relationships from fragment " + getIndex() + " with arcrole " + arcrole);
-        Networks networks;
-        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
-        else networks = new NetworksImpl(getStore());
-        Relationship relationship = null;
-
-        // If we have a resource, it could be related directly via arcs to relatives.
-        if (this.isa("org.xbrlapi.impl.ResourceImpl")) {
-            FragmentList<Arc> arcs = ((ArcEnd) this).getArcsFromWithArcrole(arcrole);
-
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                for (ArcEnd end: targets) {
-                    if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment target = ((Locator) end).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,this,target);
-                    } else {
-                        relationship = new RelationshipImpl(arc,this,end);
-                    }               
-                    networks.addRelationship(relationship);
-                }
-            }
-            
-        }
-
-        // Next get the locators for the fragment to find indirect relatives
-        FragmentList<Locator> locators = this.getReferencingLocators();
-        for (Locator locator: locators) {
-            FragmentList<Arc> arcs = locator.getArcsFromWithArcrole(arcrole);
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                for (ArcEnd end: targets) {
-                    if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment target = ((Locator) end).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,this,target);
-                    } else {
-                        relationship = new RelationshipImpl(arc,this,end);
-                    }
-                    networks.addRelationship(relationship);
-                }
-            }
-        }
-
-        return networks;
-    }
-    
-    /**
-     * @see org.xbrlapi.Fragment#getNetworksFromWithRoleAndArcrole(URI, URI)
-     */
-    public Networks getNetworksFromWithRoleAndArcrole(URI linkRole, URI arcrole) throws XBRLException {
-        Networks networks;
-        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
-        else networks = new NetworksImpl(getStore());
-        Relationship relationship = null;
-
-        // If we have a resource, it could be related directly via arcs to relatives.
-        if (this.isa("org.xbrlapi.impl.ResourceImpl")) {
-            if (((Resource) this).getExtendedLink().getLinkRole().equals(linkRole)) {
-                FragmentList<Arc> arcs = ((ArcEnd) this).getArcsFromWithArcrole(arcrole);
-
-                for (Arc arc: arcs) {
-                    FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                    for (ArcEnd end: targets) {
-                        if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                            Fragment target = ((Locator) end).getTargetFragment();
-                            relationship = new RelationshipImpl(arc,this,target);
-                        } else {
-                            relationship = new RelationshipImpl(arc,this,end);
-                        }               
-                        networks.addRelationship(relationship);
-                    }
-                }
-            }
-        }
-
-        HashMap<String,ExtendedLink> links = new HashMap<String,ExtendedLink>();
-        
-        // Next get the locators for the fragment to find indirect relatives
-        FragmentList<Locator> locators = this.getReferencingLocators();
-        for (Locator locator: locators) {
-            ExtendedLink link = null;
-            String parentIndex = locator.getParentIndex();
-            if (links.containsKey(parentIndex)) {
-                link = links.get(parentIndex);
+    public List<ReferenceResource> getReferencesWithLanguageAndRole(String language, URI role) throws XBRLException {
+        List<ReferenceResource> references = new Vector<ReferenceResource>();
+        List<ReferenceResource> candidates = this.getReferences();
+        for (ReferenceResource reference: candidates) {
+            String l = reference.getLanguage();
+            URI r = reference.getResourceRole();
+            if (l != null && r != null) {
+                if (l.equals(language) && r.equals(role)) references.add(reference);
+            } else if (l != null) {
+                if (l.equals(language) && role == null) references.add(reference);
+            } else if (r != null) {
+                if (r.equals(role) && language == null) references.add(reference);
             } else {
-                link = locator.getExtendedLink();
-                links.put(parentIndex,link);
+                if (role == null && language == null) references.add(reference);
             }
-            if (! link.getLinkRole().equals(linkRole)) continue;
-            FragmentList<Arc> arcs = locator.getArcsFromWithArcrole(arcrole);
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                for (ArcEnd end: targets) {
-                    if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment target = ((Locator) end).getTargetFragment();
-                        relationship = new RelationshipImpl(arc,this,target);
-                    } else {
-                        relationship = new RelationshipImpl(arc,this,end);
-                    }
-                    networks.addRelationship(relationship);
+        }
+        return references;
+    }
+    
+    /**
+     * @see org.xbrlapi.Fragment#getReferencesWithLanguageAndResourceRole(String, URI)
+     */
+    public List<ReferenceResource> getReferencesWithLanguageAndResourceRoleAndLinkRole(String language, URI resourceRole, URI linkRole) throws XBRLException {
+        List<ReferenceResource> references = new Vector<ReferenceResource>();
+        List<ReferenceResource> candidates = this.getReferences();
+        for (ReferenceResource reference: candidates) {
+            if (linkRole == null || reference.getExtendedLink().getLinkRole().equals(linkRole)) {
+                String l = reference.getLanguage();
+                URI r = reference.getResourceRole();
+                if (l != null && r != null) {
+                    if (l.equals(language) && r.equals(resourceRole)) references.add(reference);
+                } else if (l != null) {
+                    if (l.equals(language) && resourceRole == null) references.add(reference);
+                } else if (r != null) {
+                    if (r.equals(resourceRole) && language == null) references.add(reference);
+                } else {
+                    if (resourceRole == null && language == null) references.add(reference);
                 }
             }
         }
+        return references;
+    }    
+    
 
-        return networks;        
-    }
+
+
+    
+
+    
+
 
     /**
      * Map of extended links.
      */
     private Map<String,ExtendedLink> links = new HashMap<String,ExtendedLink>();
     
-    /**
-     * Convenience method for checking link roles on arcs.
-     * TODO migrate linkrole checking to the arc class and expose the map as a static field.
-     * @param arc The arc to check
-     * @param linkRole The required link role
-     * @return true if the arc is in an extended link with the given link role.
-     * @throws XBRLException
-     */
-    private boolean arcHasLinkRole(Arc arc, URI linkRole) throws XBRLException {
-        String linkIndex = arc.getParentIndex();
-        ExtendedLink link = null;
-        if (links.containsKey(linkIndex)) {
-            link = links.get(linkIndex);
-        } else {
-            link = (ExtendedLink) arc.getParent();
-            links.put(link.getIndex(),link);
-        }
-        return (link.getLinkRole().equals(linkRole));
-    }
 
-    /**
-     * @see org.xbrlapi.Fragment#getRelatives(URI, URI, URI, String, boolean)
-     */
-    public <F extends Fragment> FragmentList<F> getRelatives(URI arcrole, URI linkRole, URI resourceRole, String language, boolean getTargets) throws XBRLException {
 
-        Networks networks;
-        if (getStore().hasStoredNetworks()) networks = getStore().getStoredNetworks();
-        else networks = new NetworksImpl(getStore());
-        Relationship relationship = null;
-        
-        // First get any direct arcs if this fragment is an XLink resource.
-        if (this.isa("org.xbrlapi.impl.ResourceImpl")) {
-            
-            if (getTargets) { // We want the relatives that are targets of relationships from this fragment.
-                FragmentList<Arc> arcs = ((ArcEnd) this).getArcsFromWithArcrole(arcrole);
-                for (Arc arc: arcs) {
-                    if ((linkRole != null) && ! arcHasLinkRole(arc,linkRole)) continue;
-                    FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                    for (ArcEnd end: targets) {
-                        Fragment target = null;
-                        if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                            target = ((Locator) end).getTargetFragment();
-                        } else {
-                            target = end;
-                        }
-                        if (target.isa("org.xbrlapi.impl.ResourceImpl")) {
-                            if ((resourceRole != null) && ! ((Resource) target).getResourceRole().equals(resourceRole)) continue;
-                            if ((language != null) && ! ((Resource) target).getLanguage().equals(language)) continue;
-                        }
-                        relationship = new RelationshipImpl(arc,this,target);
-                        networks.addRelationship(relationship);
-                    }
-                }
 
-            } else { // We want the relatives that are sources of relationships to this fragment.
-                FragmentList<Arc> arcs = ((ArcEnd) this).getArcsToWithArcrole(arcrole);
-                for (Arc arc: arcs) {
-                    if ((linkRole != null) && ! arcHasLinkRole(arc,linkRole)) continue;
-                    FragmentList<ArcEnd> sources = arc.getSourceFragments();
-                    for (ArcEnd end: sources) {
-                        Fragment source = null;
-                        if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                            source = ((Locator) end).getTargetFragment();
-                        } else {
-                            source = end;
-                        }
-                        if (source.isa("org.xbrlapi.impl.ResourceImpl")) {
-                            if ((resourceRole != null) && ! ((Resource) source).getResourceRole().equals(resourceRole)) continue;
-                            if ((language != null) && ! ((Resource) source).getLanguage().equals(language)) continue;                            
-                        }
-                        relationship = new RelationshipImpl(arc,source,this);
-                        networks.addRelationship(relationship);
-                    }
-                }
-            }
-
-        }
-
-        // Next get the locators for the fragment to find indirect relatives
-        FragmentList<Locator> locators = this.getReferencingLocators();
-        for (Locator locator: locators) {
-            
-            if (getTargets) {
-            
-                FragmentList<Arc> arcs = locator.getArcsFromWithArcrole(arcrole);
-                for (Arc arc: arcs) {
-                    if ((linkRole != null) && ! arcHasLinkRole(arc,linkRole)) continue;
-                    FragmentList<ArcEnd> targets = arc.getTargetFragments();
-                    for (ArcEnd end: targets) {
-                        Fragment target = null;
-                        if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                            target = ((Locator) end).getTargetFragment();
-                        } else {
-                            target = end;
-                        }
-                        if (target.isa("org.xbrlapi.impl.ResourceImpl")) {
-                            if ((resourceRole != null) && ! ((Resource) target).getResourceRole().equals(resourceRole)) continue;
-                            if ((language != null) && ! ((Resource) target).getLanguage().equals(language)) continue;                            
-                        }
-                        relationship = new RelationshipImpl(arc,this,target);
-                        networks.addRelationship(relationship);
-                    }
-                }
-
-            } else {
-                FragmentList<Arc> arcs = locator.getArcsToWithArcrole(arcrole);
-                for (Arc arc: arcs) {
-                    if ((linkRole != null) && ! arcHasLinkRole(arc,linkRole)) continue;
-                    FragmentList<ArcEnd> sources = arc.getSourceFragments();
-                    for (ArcEnd end: sources) {
-                        Fragment source = null;
-                        if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                            source = ((Locator) end).getTargetFragment();
-                        } else {
-                            source = end;
-                        }
-                        if (source.isa("org.xbrlapi.impl.ResourceImpl")) {
-                            if ((resourceRole != null) && ! ((Resource) source).getResourceRole().equals(resourceRole)) continue;
-                            if ((language != null) && ! ((Resource) source).getLanguage().equals(language)) continue;                            
-                        }
-                        relationship = new RelationshipImpl(arc,source,this);
-                        networks.addRelationship(relationship);
-                    }
-                }
-            }
-        }
-
-        // Make sure that the map of extended links does not get too large.
-        this.links = new HashMap<String,ExtendedLink>();
-        
-        if (getTargets) {
-            if (linkRole == null) return networks.<F>getTargetFragments(this.getIndex(),arcrole);
-            return networks.<F>getTargetFragments(this.getIndex(),linkRole,arcrole);
-        }
-        if (linkRole == null) return networks.<F>getSourceFragments(this.getIndex(),arcrole);
-        return networks.<F>getSourceFragments(this.getIndex(),linkRole,arcrole);
-    
-    }
 
     /**
      * @see org.xbrlapi.Fragment#getParentIndex()
@@ -938,14 +409,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	setMetaAttribute("precedingSiblings",precedingSiblings);
     }
 
-    /**
-     * @see org.xbrlapi.Fragment#removeRelationship(String)
-     */
-    public void removeRelationship(String index) throws XBRLException {
-    	HashMap<String,String> attributes = new HashMap<String,String>();
-    	attributes.put("targetIndex",index);
-    	removeMetadataElement("xlinkRelationship",attributes);
-    }
+
     
     /**
      * @see org.xbrlapi.Fragment#appendID(String)
@@ -957,15 +421,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
 		appendMetadataElement("ID",attributes);
     }
 
-    /**
-     * @see org.xbrlapi.Fragment#removeID(String)
-     * TODO remove the redundant parameter from this method.
-     */
-    public void removeID(String id) throws XBRLException {
-    	HashMap<String,String> attributes = new HashMap<String,String>();
-    	attributes.put("ID",id);
-    	removeMetadataElement("ID",attributes);
-    }    
+    
     
     /**
      * @see org.xbrlapi.Fragment#appendElementSchemeXPointer(String)
@@ -976,14 +432,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
 		appendMetadataElement("xptr",attributes);
     }
 
-    /**
-     * @see org.xbrlapi.Fragment#removeElementSchemeXPointer(String)
-     */
-    public void removeElementSchemeXPointer(String expression) throws XBRLException {
-    	HashMap<String,String> attributes = new HashMap<String,String>();
-    	attributes.put("value",expression);
-    	removeMetadataElement("xptr",attributes);
-    }    
+    
     
     /**
      * @see org.xbrlapi.Fragment#getNamespace()
@@ -1065,7 +514,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     public Fragment getParent() throws XBRLException {
     	String parentIndex = this.getParentIndex();
     	if (parentIndex == null) return null;
-    	return getStore().getFragment(parentIndex);
+    	return getStore().get(parentIndex);
     }
     
     /**
@@ -1113,50 +562,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	return localname;
     }
     
-    /**
-     * @see org.xbrlapi.Fragment#getRelationshipsToWithArcrole(URI)
-     */
-    public List<Relationship> getRelationshipsToWithArcrole(URI arcrole) throws XBRLException {
-        logger.debug("Getting relationships to fragment " + getIndex() + " with arcrole " + arcrole);
-        List<Relationship> relationships = new Vector<Relationship>();
-    
-        // If we have a resource, it could be related directly via arcs to relatives.
-        if (this.isa("org.xbrlapi.impl.ResourceImpl")) {
-            FragmentList<Arc> arcs = ((ArcEnd) this).getArcsToWithArcrole(arcrole);
-    
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> sources = arc.getSourceFragments();
-                for (ArcEnd source: sources) {
-                    if (source.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment s = ((Locator) source).getTargetFragment();
-                        relationships.add(new RelationshipImpl(arc,s,this));
-                    } else {
-                        relationships.add(new RelationshipImpl(arc,source,this));
-                    }
-                }
-            }
-            
-        }
-    
-        // Next get the locators for the fragment to find indirect relatives
-        FragmentList<Locator> locators = this.getReferencingLocators();
-        for (Locator locator: locators) {
-            FragmentList<Arc> arcs = locator.getArcsToWithArcrole(arcrole);
-            for (Arc arc: arcs) {
-                FragmentList<ArcEnd> sources = arc.getSourceFragments();
-                for (ArcEnd source: sources) {
-                    if (source.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
-                        Fragment s = ((Locator) source).getTargetFragment();
-                        relationships.add(new RelationshipImpl(arc,s,this));
-                    } else {
-                        relationships.add(new RelationshipImpl(arc,source,this));
-                    }
-                }
-            }
-        }
-    
-        return relationships;
-    }
+
 
 
 }

@@ -1,6 +1,7 @@
 package org.xbrlapi;
 
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -15,7 +16,7 @@ public interface ReferenceResource extends MixedContentResource {
      * @return the list of reference part fragments that are children of the reference.
      * @throws XBRLException
      */
-    public FragmentList<ReferencePart> getReferenceParts() throws XBRLException;
+    public List<ReferencePart> getReferenceParts() throws XBRLException;
 
     /**
      * Get a specific reference part from a reference.

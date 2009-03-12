@@ -1,8 +1,9 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+
 import org.xbrlapi.Arc;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.utilities.Constants;
 /**
  * Tests the implementation of the org.xbrlapi.ExtendedLinkContent interface.
@@ -31,8 +32,8 @@ public class ExtendedLinkContentTestCase extends DOMLoadingTestCase {
 	public void testGetExtendedLink() {
 
 		try {
-		    FragmentList<Arc> arcs = store.<Arc>getFragments("Arc");
-		    assertTrue(arcs.getLength() > 0);
+		    List<Arc> arcs = store.<Arc>gets("Arc");
+		    assertTrue(arcs.size() > 0);
 		    for (Arc arc: arcs) {
 	            assertEquals("extended", arc.getExtendedLink().getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"type"));
 		    }

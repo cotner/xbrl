@@ -8,7 +8,7 @@ import org.w3c.dom.NodeList;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.OpenContextComponent;
@@ -126,7 +126,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
                 TypedDimensionAspect aspect = (TypedDimensionAspect) value.getAspect();
                 Dimension dimension = aspect.dimension;
                 Concept concept = dimension;
-                FragmentList<LabelResource> labels = concept.getLabelsWithLanguageAndRole(getLanguageCode(),getLabelRole());
+                List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
                 if (labels.isEmpty()) dimensionLabel = dimension.getName();
                 else dimensionLabel = labels.get(0).getStringValue();
             }
@@ -144,7 +144,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = getFragment(fact);
+        Fragment fragment = get(fact);
         if (fragment == null) {
             return new MissingAspectValue(this);
         }
@@ -152,18 +152,18 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
     }
 
     /**
-     * @see Aspect#getFragmentFromStore(Fact)
+     * @see Aspect#getFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+    public Fragment getFromStore(Fact fact) throws XBRLException {
         DimensionValue value = accessor.getValue((Item) fact, dimension);
         if (value == null) return null; 
         return value.getOpenContextComponent();
     }
     
     /**
-     * @see Aspect#getFragmentKey(Fact)
+     * @see Aspect#getKey(Fact)
      */
-    public String getFragmentKey(Fact fact) throws XBRLException {
+    public String getKey(Fact fact) throws XBRLException {
         return fact.getIndex();
     }    
     

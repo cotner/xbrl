@@ -2,7 +2,7 @@ package org.xbrlapi.fragment.tests;
 
 
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.FragmentList;
+import java.util.List;
 import org.xbrlapi.NumericItem;
 
 /**
@@ -32,8 +32,8 @@ public class NumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetUnits() {
         try {
-            FragmentList<NumericItem> items = store.<NumericItem>getFragments("SimpleNumericItem");
-            assertTrue(items.getLength() > 0);
+            List<NumericItem> items = store.<NumericItem>gets("SimpleNumericItem");
+            assertTrue(items.size() > 0);
             for (NumericItem item: items) {
                 assertEquals("unit", item.getUnits().getLocalname());
             }
@@ -47,8 +47,8 @@ public class NumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetPrecision() {
         try {
-            FragmentList<NumericItem> items = store.<NumericItem>getFragments("SimpleNumericItem");
-            assertTrue(items.getLength() > 0);
+            List<NumericItem> items = store.<NumericItem>gets("SimpleNumericItem");
+            assertTrue(items.size() > 0);
             for (NumericItem item: items) {
                 assertEquals("2", item.getPrecision());
                 assertEquals(true, item.hasPrecision());
@@ -63,8 +63,8 @@ public class NumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetDecimals() {
         try {
-            FragmentList<NumericItem> items = store.<NumericItem>getFragments("SimpleNumericItem");
-            assertTrue(items.getLength() > 0);
+            List<NumericItem> items = store.<NumericItem>gets("SimpleNumericItem");
+            assertTrue(items.size() > 0);
             for (NumericItem item: items) {
                 assertEquals(false, item.hasDecimals());
                 try {

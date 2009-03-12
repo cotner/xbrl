@@ -6,9 +6,10 @@ package org.xbrlapi.fragment.tests;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
+import java.util.List;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.Schema;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
@@ -39,9 +40,9 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testExceptionExpectedChangingTheFragmentStore() {
 		try {
-		    FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
+		    List<Fragment> fragments = store.<Fragment>gets("Schema");
 		    for (Fragment fragment: fragments) {
-		        Fragment f = store.getFragment(fragment.getIndex());
+		        Fragment f = store.get(fragment.getIndex());
 		        try {
 		            f.setStore(store);
 	                fail("The store for a fragment cannot be changed once it is set.");
@@ -60,8 +61,8 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetFragmentTypeForAStoredFragment() {
 
         try {
-            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
-            assertTrue(fragments.getLength() > 0);
+            List<Fragment> fragments = store.<Fragment>gets("Schema");
+            assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 assertEquals("org.xbrlapi.impl.SchemaImpl",fragment.getType());
             }
@@ -90,8 +91,8 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetNamespaceOfAStoredFragmentWithANamespace() {
         try {
-            FragmentList<Schema> schemas = store.<Schema>getFragments("Schema");
-            assertTrue(schemas.getLength() > 0);
+            List<Schema> schemas = store.<Schema>gets("Schema");
+            assertTrue(schemas.size() > 0);
             for (Fragment fragment: schemas) {
                 assertEquals(Constants.XMLSchemaNamespace,fragment.getNamespace().toString());
             }
@@ -106,8 +107,8 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetLocalNameOfAStoredFragment() {
 
         try {
-            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
-            assertTrue(fragments.getLength() > 0);
+            List<Fragment> fragments = store.<Fragment>gets("Schema");
+            assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 assertEquals("schema",fragment.getLocalname());
             }
@@ -125,10 +126,10 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetSequenceToParentElement() {
 
         try {
-            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
-            assertTrue(fragments.getLength() > 0);
+            List<Fragment> fragments = store.<Fragment>gets("Schema");
+            assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
-                FragmentList<Fragment> children = fragment.getAllChildren();
+                List<Fragment> children = fragment.getAllChildren();
                 for (Fragment child: children) {
                     String required = "";
                     if (child.getMetaAttribute("SequenceToParentElement") != null) {
@@ -149,11 +150,11 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetChildSimpleLinks() {
 
 		try {
-			FragmentList<Schema> schemas = store.<Schema>getFragments("Schema");
+			List<Schema> schemas = store.<Schema>gets("Schema");
 			for (Schema schema: schemas) {
 				if (schema.getURI().equals(this.getURI(STARTING_POINT))) {
-					FragmentList<SimpleLink> links = schema.getSimpleLinks();
-					assertEquals(2,links.getLength());		
+					List<SimpleLink> links = schema.getSimpleLinks();
+					assertEquals(2,links.size());		
 				}
 			}
 		} catch (XBRLException e) {
@@ -170,10 +171,10 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetParentFragment() {
 
         try {
-            FragmentList<Fragment> fragments = store.<Fragment>getFragments("Schema");
-            assertTrue(fragments.getLength() > 0);
+            List<Fragment> fragments = store.<Fragment>gets("Schema");
+            assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
-                FragmentList<Fragment> children = fragment.getAllChildren();
+                List<Fragment> children = fragment.getAllChildren();
                 for (Fragment child: children) {
                     assertEquals(fragment.getIndex(),child.getParent().getIndex());
                 }
@@ -190,10 +191,10 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetXPathToParentElement() {
 	    
         try {
-            FragmentList<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='none']");
-            assertTrue(fragments.getLength() > 0);
+            List<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='none']");
+            assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
-                FragmentList<Fragment> children = fragment.getAllChildren();
+                List<Fragment> children = fragment.getAllChildren();
                 Fragment child = children.get(0);
                 assertEquals("./*[1]/*[1]",child.getXPath());
             }
@@ -208,10 +209,10 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetParentElement() {
         try {
-            FragmentList<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='none']");
-            assertTrue(fragments.getLength() > 0);
+            List<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='none']");
+            assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
-                FragmentList<Fragment> children = fragment.getAllChildren();
+                List<Fragment> children = fragment.getAllChildren();
                 Fragment child = children.get(0);
                 Fragment parent = child.getParent();
                 Element parentElement = child.getParentElement(parent.getDataRootElement());

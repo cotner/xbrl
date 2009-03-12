@@ -1,7 +1,9 @@
 package org.xbrlapi.data.xindice;
 
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,12 +12,10 @@ import org.apache.xindice.xml.dom.DocumentImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xbrlapi.FragmentList;
 import org.xbrlapi.XML;
 import org.xbrlapi.data.BaseStoreImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentFactory;
-import org.xbrlapi.impl.FragmentListImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xmldb.api.base.Collection;
@@ -228,7 +228,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * @see org.xbrlapi.data.Store#hasFragment(String)
      */
 	public synchronized boolean hasFragment(String index) throws XBRLException {
-    	if (getFragment(index) == null) {
+    	if (get(index) == null) {
     		return false;
     	}
     	return true;
@@ -243,7 +243,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * the fragment is not in the store.
      * @throws XBRLException if the fragment cannot be retrieved.
      */
-    public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
+    public synchronized <F extends XML> F get(String index) throws XBRLException {
     	try {
     		XMLResource resource = (XMLResource) collection.getResource(index);
     		if (resource == null) return null;
@@ -294,7 +294,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @see Store#query(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends XML> FragmentList<F> query(String query) throws XBRLException {
+	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
         
         query = query + this.getURIFilteringQueryClause();
         
@@ -307,12 +307,12 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 			throw new XBRLException("The XPath query service failed.", e);
 		}
 
-		FragmentList<F> fragments = new FragmentListImpl<F>();
+		List<F> fragments = new Vector<F>();
 		try {
 			ResourceIterator iterator = resources.getIterator();
 			while (iterator.hasMoreResources()) {
 				Element root = getResourceRootElement((XMLResource) iterator.nextResource());
-				fragments.addFragment((F) FragmentFactory.newFragment(this, root));
+				fragments.add((F) FragmentFactory.newFragment(this, root));
 			}
 		} catch (XMLDBException e) {
 			throw new XBRLException("The XPath query of the DTS failed.", e);
