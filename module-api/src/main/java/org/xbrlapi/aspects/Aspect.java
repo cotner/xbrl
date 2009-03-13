@@ -178,7 +178,7 @@ public interface Aspect {
      * fact.
      * @throws XBRLException if the fragment cannot be obtained.
      */
-    public Fragment get(Fact fact) throws XBRLException;
+    public Fragment getFragment(Fact fact) throws XBRLException;
     
     /**
      * @param fact The fact to get the aspect value fragment from
@@ -186,7 +186,7 @@ public interface Aspect {
      * required to generate an aspect value from the fact.
      * @throws XBRLException if the fragment cannot be obtained.
      */
-    public Fragment getFromStore(Fact fact) throws XBRLException;
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException;
     
     /**
      * @param fact The fact.

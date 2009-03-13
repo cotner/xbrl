@@ -89,7 +89,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetFormQualified() {		
 		try {
-			List<ElementDeclaration> fragments = store.<ElementDeclaration>gets("ElementDeclaration");
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>getFragments("ElementDeclaration");
 			for (int i=0; i< fragments.size(); i++) {
 				ElementDeclaration fragment = fragments.get(i);
 				assertTrue(fragment.getIndex() + " is element form qualified", fragment.getSchema().isElementFormQualified());				
@@ -151,7 +151,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 
 		// Missing default attribute
 		try {
-			List<ElementDeclaration> fragments = store.<ElementDeclaration>gets("ElementDeclaration");
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>getFragments("ElementDeclaration");
 			ElementDeclaration fragment = fragments.get(0);
 			assertNull(fragment.getFixed());
 		} catch (XBRLException e) {
@@ -185,7 +185,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	public void testGetTypeInformation() {	
 		try {
 		    
-            List<Concept> fragments = store.gets("Concept");
+            List<Concept> fragments = store.getFragments("Concept");
             assertTrue(fragments.size() > 0);
             for (Concept fragment: fragments) {
 
@@ -216,7 +216,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	public void testGetSubstitutionGroupInformation() {		
 	    try {
 	        
-            List<Concept> fragments = store.gets("Concept");
+            List<Concept> fragments = store.getFragments("Concept");
             assertTrue(fragments.size() > 0);
             for (Concept fragment: fragments) {
 
@@ -242,7 +242,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 		
     public void testDerterminationOfBeingATuple() {     
         try {
-            List<Concept> fragments = store.gets("Concept");
+            List<Concept> fragments = store.getFragments("Concept");
             assertTrue(fragments.size() > 0);
             for (Concept fragment: fragments) {
                 logger.info("Tuple" + fragment.isTuple());

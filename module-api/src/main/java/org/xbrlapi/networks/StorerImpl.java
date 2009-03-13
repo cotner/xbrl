@@ -89,7 +89,7 @@ public class StorerImpl implements Storer {
      */
     public void deleteRelationships(URI linkRole, URI arcrole) throws XBRLException {
         Store store = getStore();
-        Set<String> indices = store.queryForIndices("/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+arcrole+"' and @linkRole='"+linkRole+"']");
+        Set<String> indices = store.queryForIndices("/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+arcrole+"' and @linkRole='"+linkRole+"']");
         for (String index: indices) {
             store.remove(index);
         }
@@ -100,7 +100,7 @@ public class StorerImpl implements Storer {
      */
     public void deleteRelationships() throws XBRLException {
         Store store = getStore();
-        Set<String> indices = store.queryForIndices("/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl']");
+        Set<String> indices = store.queryForIndices("/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl']");
         for (String index: indices) {
             store.remove(index);
         }

@@ -1,6 +1,8 @@
 package org.xbrlapi.impl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,14 +67,14 @@ public class LabelResourceImpl extends MixedContentResourceImpl implements Label
         if (this.getNamespace().equals(Constants.GenericLabelNamespace()))
             fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.GenericLabelArcRole());
         else 
-            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.XBRL21LinkNamespace());
+            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.LabelArcRole());
         
-        List<Concept> concepts = new Vector<Concept>();
+        Set<Concept> concepts = new HashSet<Concept>();
         for (Fragment fragment: fragments) {
             if (fragment.isa("org.xbrlapi.impl.ConceptImpl")) concepts.add((Concept) fragment);
         }
         
-        return concepts;
+        return new Vector<Concept>(concepts);
 
     }
 	

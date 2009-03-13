@@ -144,7 +144,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = get(fact);
+        Fragment fragment = getFragment(fact);
         if (fragment == null) {
             return new MissingAspectValue(this);
         }
@@ -152,9 +152,9 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
     }
 
     /**
-     * @see Aspect#getFromStore(Fact)
+     * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFromStore(Fact fact) throws XBRLException {
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
         DimensionValue value = accessor.getValue((Item) fact, dimension);
         if (value == null) return null; 
         return value.getOpenContextComponent();

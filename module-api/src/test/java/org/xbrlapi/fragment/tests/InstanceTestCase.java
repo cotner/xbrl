@@ -31,7 +31,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetContexts() {
 	    try {
-	        List<Instance> instances = store.<Instance>gets("Instance");
+	        List<Instance> instances = store.<Instance>getFragments("Instance");
 	        assertTrue(instances.size() > 0);
 	        for (Instance instance: instances) {
 	            assertEquals(1, instance.getContexts().size());    
@@ -46,7 +46,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetSpecificContext() {
 	    try {
-	        List<Instance> instances = store.<Instance>gets("Instance");
+	        List<Instance> instances = store.<Instance>getFragments("Instance");
 	        assertTrue(instances.size() > 0);
 	        for (Instance instance: instances) {
 	            assertEquals("context", instance.getContext("ci").getLocalname());
@@ -61,7 +61,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetUnits() {
 	    try {
-	        List<Instance> instances = store.<Instance>gets("Instance");
+	        List<Instance> instances = store.<Instance>getFragments("Instance");
 	        assertTrue(instances.size() > 0);
 	        for (Instance instance: instances) {
 	            assertEquals(2, instance.getUnits().size());            }
@@ -75,7 +75,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetSpecificUnit() {
 	    try {
-	        List<Instance> instances = store.<Instance>gets("Instance");
+	        List<Instance> instances = store.<Instance>getFragments("Instance");
 	        assertTrue(instances.size() > 0);
 	        for (Instance instance: instances) {
 	            assertEquals("unit", instance.getUnit("u1").getLocalname());
@@ -90,7 +90,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetSchemaRefs() {
         try {
-            List<Instance> instances = store.<Instance>gets("Instance");
+            List<Instance> instances = store.<Instance>getFragments("Instance");
             assertTrue(instances.size() > 0);
             for (Instance instance: instances) {
                 assertEquals(1, instance.getSchemaRefs().size());
@@ -105,7 +105,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLinkbaseRefs() {
         try {
-            List<Instance> instances = store.<Instance>gets("Instance");
+            List<Instance> instances = store.<Instance>getFragments("Instance");
             assertTrue(instances.size() > 0);
             for (Instance instance: instances) {
                 assertEquals(0, instance.getLinkbaseRefs().size());
@@ -120,7 +120,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetFacts() {
         try {
-            List<Instance> instances = store.<Instance>gets("Instance");
+            List<Instance> instances = store.<Instance>getFragments("Instance");
             assertTrue(instances.size() > 0);
             for (Instance instance: instances) {
                 assertEquals(2, instance.getFacts().size());
@@ -135,7 +135,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetFootnoteLinks() {
         try {
-            List<Instance> instances = store.<Instance>gets("Instance");
+            List<Instance> instances = store.<Instance>getFragments("Instance");
             assertTrue(instances.size() > 0);
             for (Instance instance: instances) {
                 assertEquals(0, instance.getFootnoteLinks().size());

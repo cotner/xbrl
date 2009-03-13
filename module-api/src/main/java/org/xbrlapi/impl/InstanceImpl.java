@@ -71,7 +71,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getContext(String)
      */
     public Context getContext(String id) throws XBRLException {
-    	String xpath = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ContextImpl' and @parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@id='" + id + "']";
+    	String xpath = "/*[@type='org.xbrlapi.impl.ContextImpl' and @parentIndex='" + getIndex() + "' and */*/@id='" + id + "']";
     	List<Context> list = getStore().<Context>query(xpath);
     	if (list.size() == 0) throw new XBRLException("The instance does not contain a context with id: " + id);
     	if (list.size() > 1) throw new XBRLException("The instance contains more than one context with id: " + id);

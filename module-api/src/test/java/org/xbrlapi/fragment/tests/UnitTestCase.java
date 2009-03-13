@@ -32,7 +32,7 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testHasDenominator() {
 
 		try {
-		    List<Unit> units = store.<Unit>gets("Unit");
+		    List<Unit> units = store.<Unit>getFragments("Unit");
 		    assertTrue(units.size() > 0);
 		    for (Unit unit: units) {
 	            assertFalse(unit.hasDenominator());
@@ -48,7 +48,7 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testGetNumeratorMeasures() {
 
 		try {
-            List<Unit> units = store.<Unit>gets("Unit");
+            List<Unit> units = store.<Unit>getFragments("Unit");
             assertTrue(units.size() > 0);
             for (Unit unit: units) {
                 assertFalse(unit.hasDenominator());
@@ -65,7 +65,7 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testGetDenominatorMeasures() {
 
         try {
-            List<Unit> units = store.<Unit>gets("Unit");
+            List<Unit> units = store.<Unit>getFragments("Unit");
             assertTrue(units.size() > 0);
             for (Unit unit: units) {
                 assertNull(unit.getDenominatorMeasures());
@@ -81,7 +81,7 @@ public class UnitTestCase extends DOMLoadingTestCase {
 	public void testCheckEquality() {
 
         try {
-            List<Unit> units = store.<Unit>gets("Unit");
+            List<Unit> units = store.<Unit>getFragments("Unit");
             assertTrue(units.size() > 0);
             for (Unit unit: units) {
                 assertTrue(unit.equals(unit));

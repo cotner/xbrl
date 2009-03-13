@@ -40,9 +40,9 @@ public class ExplicitDimensionValueTestCase extends BaseTestCase {
 	        DimensionValueAccessor dva = new DimensionValueAccessorImpl();
 
             loader.discover(this.getURI(STARTING_POINT));
-            List<ExplicitDimension> dimensions = store.<ExplicitDimension>gets("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertTrue(dimensions.size() > 0);
-            List<Item> items = store.<Item>gets("SimpleNumericItem");
+            List<Item> items = store.<Item>getFragments("SimpleNumericItem");
             assertTrue(items.size() > 0);
 	        
             boolean foundSomeValues = false;
@@ -72,9 +72,9 @@ public class ExplicitDimensionValueTestCase extends BaseTestCase {
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
 
             loader.discover(this.getURI(this.DEFAULTS_STARTING_POINT));
-            List<ExplicitDimension> dimensions = store.<ExplicitDimension>gets("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>getFragments("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertTrue(dimensions.size() > 0);
-            List<Item> items = store.<Item>gets("NonNumericItem");
+            List<Item> items = store.<Item>getFragments("NonNumericItem");
             assertTrue(items.size() > 0);
             
             boolean foundSomeValues = false;

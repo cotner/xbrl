@@ -16,7 +16,7 @@ public class ItemImpl extends FactImpl implements Item {
 	 * @see org.xbrlapi.Item#getContext()
 	 */
 	public Context getContext() throws XBRLException {
-		return getInstance().getContext(this.getContextId());
+	    return getInstance().getContext(this.getContextId());
 	}
 	
     /** 

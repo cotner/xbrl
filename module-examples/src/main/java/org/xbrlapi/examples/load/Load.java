@@ -113,7 +113,7 @@ public class Load {
             }
 
             // Iterate the instances printing out lists of facts etc.
-            List<Instance> instances = store.<Instance>gets("Instance");
+            List<Instance> instances = store.<Instance>getFragments("Instance");
             for (Instance instance: instances) {
                 reportInstance(instance);
             }

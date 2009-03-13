@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
@@ -69,6 +70,14 @@ public class RelationshipImpl implements Relationship {
 		setTarget(t);
 		setLink((ExtendedLink) get(a.getParentIndex()));
 	}
+	
+    /**
+     * @param pr The persisted relationship.
+     * @throws XBRLException
+     */
+    public RelationshipImpl(PersistedRelationship pr) throws XBRLException {
+        this(pr.getArc(),pr.getSource(),pr.getTarget());
+    }	
 
 	/**
 	 * @param link The extended link containing the arc.
@@ -270,15 +279,11 @@ public class RelationshipImpl implements Relationship {
 
 		Fragment os = other.getSource();
 		Fragment ts = this.getSource();
-		if (! ts.getIndex().equals(
-				os.getIndex())
-				) return false;
+		if (! ts.getIndex().equals(os.getIndex())) return false;
 
 		Fragment tt = this.getTarget();
 		Fragment ot = other.getTarget();
-		if (! tt.getIndex().equals(
-				ot.getIndex())
-				) return false;
+		if (! tt.getIndex().equals(ot.getIndex())) return false;
 
 		if (! this.getArc().semanticEquals(other.getArc())) return false;
 

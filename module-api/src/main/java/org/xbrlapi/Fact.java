@@ -17,7 +17,7 @@ public interface Fact extends Fragment {
 	/**
 	 * Get the instance that this fact is a part of
 	 * @return the xbrl instance fragment
-	 * @throws XBRLException
+	 * @throws XBRLException if the fact is not part of an instance.
 	 */
 	public Instance getInstance() throws XBRLException;
 

@@ -34,7 +34,7 @@ public class FactDimensionContainerTestCase extends DOMLoadingTestCase {
 	public void testGetContextId() {
 
 		try {
-		    List<Context> contexts = store.gets("Context");
+		    List<Context> contexts = store.getFragments("Context");
 		    for (Context context: contexts) {
 	            assertEquals(context.getId(), context.getDataRootElement().getAttribute("id"));		        
 		    }
@@ -50,7 +50,7 @@ public class FactDimensionContainerTestCase extends DOMLoadingTestCase {
 	public void testGetUnitId() {
 
 		try {
-            List<Unit> units= store.gets("Unit");
+            List<Unit> units= store.getFragments("Unit");
             for (Unit unit: units) {
                 assertEquals(unit.getId(), unit.getDataRootElement().getAttribute("id"));             
             }

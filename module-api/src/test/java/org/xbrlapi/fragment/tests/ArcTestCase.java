@@ -94,9 +94,9 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetOrder() {	
 
 		try {
-			List<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			List<Arc> fragments = store.<Arc>query("/*[*/*/@xlink:type='arc']");
 			Arc fragment = fragments.get(0);
-			assertEquals("1", fragment.getOrder());
+			assertEquals(new Double(1.0), fragment.getOrder());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

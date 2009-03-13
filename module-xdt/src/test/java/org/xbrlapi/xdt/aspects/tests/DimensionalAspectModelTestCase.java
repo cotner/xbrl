@@ -38,7 +38,7 @@ public class DimensionalAspectModelTestCase extends BaseTestCase {
 	        
 	        AspectModel model = new DimensionalAspectModel();
 	        
-			List<Item> fragments = store.<Item>gets("NonNumericItem");
+			List<Item> fragments = store.<Item>getFragments("NonNumericItem");
 			assertTrue(fragments.size() > 0);
 			for (Item fragment: fragments) {
 			    model.addFact(fragment);

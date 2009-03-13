@@ -30,6 +30,14 @@ public class SegmentAspect extends ContextAspect implements Aspect {
     public String getType() {
         return Aspect.SEGMENT;
     }
+    
+    /**
+     * @see Aspect#getKey(Fact)
+     */
+    public String getKey(Fact fact) throws XBRLException {
+        Context context = (Context) super.getFragmentFromStore(fact);
+        return context.getURI().toString() + context.getId();
+    }    
 
     private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         /**
@@ -75,7 +83,7 @@ public class SegmentAspect extends ContextAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = get(fact);
+        Fragment fragment = getFragment(fact);
         if (fragment == null) {
             return new MissingAspectValue(this);
         }            
@@ -83,10 +91,10 @@ public class SegmentAspect extends ContextAspect implements Aspect {
     }
 
     /**
-     * @see Aspect#getFromStore(Fact)
+     * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFromStore(Fact fact) throws XBRLException {
-        Entity entity = ((Context) super.getFromStore(fact)).getEntity();
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+        Entity entity = ((Context) super.getFragmentFromStore(fact)).getEntity();
         Segment segment = entity.getSegment();
         if (segment == null) return null;
         return segment;

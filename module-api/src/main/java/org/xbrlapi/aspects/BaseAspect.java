@@ -227,12 +227,12 @@ abstract public class BaseAspect implements Aspect {
     
 
     private Map<String,Fragment> fragmentMap = new HashMap<String,Fragment>();
-    public Fragment get(Fact fact) throws XBRLException {
+    public Fragment getFragment(Fact fact) throws XBRLException {
         String fragmentKey = getKey(fact);
         if (fragmentMap.containsKey(fragmentKey)) {
             return fragmentMap.get(fragmentKey);
         }
-        Fragment fragment = getFromStore(fact);
+        Fragment fragment = getFragmentFromStore(fact);
         fragmentMap.put(fragmentKey,fragment);
         return fragment;
     }

@@ -117,17 +117,17 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
         try {
-            return new PeriodAspectValue(this,get(fact));
+            return new PeriodAspectValue(this,getFragment(fact));
         } catch (XBRLException e) {
             return null;
         }
     }
 
     /**
-     * @see Aspect#getFromStore(Fact)
+     * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFromStore(Fact fact) throws XBRLException {
-        return ((Context) super.getFromStore(fact)).getPeriod();
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+        return ((Context) super.getFragmentFromStore(fact)).getPeriod();
     }    
     
 }

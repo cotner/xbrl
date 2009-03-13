@@ -30,7 +30,7 @@ public class EntityTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetScenario() {
         try {
-            List<Entity> entities = store.<Entity>gets("Entity");
+            List<Entity> entities = store.<Entity>getFragments("Entity");
             assertTrue(entities.size() > 0);
             for (Entity entity: entities) {
                 assertEquals("org.xbrlapi.impl.SegmentImpl", entity.getSegment().getType());
@@ -46,7 +46,7 @@ public class EntityTestCase extends DOMLoadingTestCase {
 	public void testGetSchemeAndValue() {
 
         try {
-            List<Entity> entities = store.<Entity>gets("Entity");
+            List<Entity> entities = store.<Entity>getFragments("Entity");
             assertTrue(entities.size() > 0);
             for (Entity entity: entities) {
                 assertEquals("www.dnb.com", entity.getIdentifierScheme());

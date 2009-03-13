@@ -277,6 +277,7 @@ public class NetworkImpl implements Network {
 		for (EquivalentRelationships er: sr.values()) {
             activeRelationships.add(er.getActiveRelationship());
 		}
+		logger.debug("Returning " + activeRelationships.size() + " active relationships.");
 		
 		return activeRelationships;
 	}

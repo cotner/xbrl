@@ -1,7 +1,5 @@
 package org.xbrlapi.data.xindice.tests;
 
-import org.xbrlapi.data.exist.tests.QueryForStringsTestCase;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

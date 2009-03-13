@@ -39,7 +39,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetDocumentations() {
 		try {
-			List<Fragment> documentations = store.<Fragment>gets("XlinkDocumentation");
+			List<Fragment> documentations = store.<Fragment>getFragments("XlinkDocumentation");
 			for (int i=0; i<documentations.size(); i++) {
 				Fragment documentation = documentations.get(0);
 				Fragment parent = documentation.getParent();
@@ -60,7 +60,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLocatorsByLabel() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>gets("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Locator> locators = link.getLocatorsByLabel("summationItem");
 			assertEquals(1, locators.size());
@@ -77,7 +77,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcEndsByLabel() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>gets("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<ArcEnd> arcends = link.getArcEndsByLabel("summationItem");
 			assertEquals(1, arcends.size());
@@ -94,7 +94,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLocatorsByHref() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>gets("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Locator> locators = link.getLocatorsByHref(configuration.getProperty("test.data.baseURI") + "Common/instance/397-ABC.xsd#B");
 			assertEquals(1, locators.size());
@@ -109,7 +109,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcs() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>gets("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Arc> arcs = link.getArcs();		
 			assertEquals(1, arcs.size());
@@ -124,7 +124,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcsByFromLabel() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>gets("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Arc> arcs = link.getArcsByFromLabel("summationItem");
 			assertEquals(1, arcs.size());
@@ -139,7 +139,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcsByToLabel() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>gets("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Arc> arcs = link.getArcsByToLabel("contributingItem");
 			assertEquals(1, arcs.size());
@@ -154,7 +154,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLocators() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>gets("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Locator> locators = link.getLocators();		
 			assertEquals(3, locators.size());
@@ -169,7 +169,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetResources() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>gets("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(1);
 			List<Resource> resources = link.getResources();		
 			assertEquals(1, resources.size());
@@ -184,7 +184,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetResourcesByLabel() {
 		try {
-            List<ExtendedLink> links = store.<ExtendedLink>gets("ExtendedLink");
+            List<ExtendedLink> links = store.<ExtendedLink>getFragments("ExtendedLink");
 		    for (ExtendedLink link: links) {
 		        List<Resource> resources = link.getResources();
 		        for (Resource resource: resources) {

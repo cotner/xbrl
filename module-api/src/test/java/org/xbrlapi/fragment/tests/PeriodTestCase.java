@@ -31,7 +31,7 @@ public class PeriodTestCase extends DOMLoadingTestCase {
 	public void testPeriodTypeDetermination() {
 
         try {
-            List<Period> periods = store.<Period>gets("Period");
+            List<Period> periods = store.<Period>getFragments("Period");
             assertTrue(periods.size() > 0);
             for (Period period: periods) {
                 assertTrue(period.isFiniteDurationPeriod());
@@ -50,7 +50,7 @@ public class PeriodTestCase extends DOMLoadingTestCase {
 	public void testGetPeriodInformation() {
 
         try {
-            List<Period> periods = store.<Period>gets("Period");
+            List<Period> periods = store.<Period>getFragments("Period");
             assertTrue(periods.size() > 0);
             for (Period period: periods) {
                 assertEquals("2001-08-01",period.getStart());

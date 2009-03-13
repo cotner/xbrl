@@ -383,7 +383,7 @@ public interface Store {
      * @return a list of fragments with the given fragment type.
      * @throws XBRLException
      */
-    public <F extends XML> List<F> gets(String interfaceName) throws XBRLException;
+    public <F extends XML> List<F> getFragments(String interfaceName) throws XBRLException;
     
     /**
      * @param interfaceName The name of the interface.  EG: If a list of

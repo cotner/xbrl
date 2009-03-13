@@ -16,7 +16,6 @@ import org.xbrlapi.ArcEnd;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Locator;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -24,7 +23,7 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class NetworksImpl implements Networks {
 
-	protected static Logger logger = Logger.getLogger(Loader.class);	
+	protected static Logger logger = Logger.getLogger(NetworksImpl.class);	
 	
 	private HashMap<String,Arc> arcs = new HashMap<String,Arc>();
 	

@@ -34,7 +34,7 @@ public class SchemaContentTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetSchema() {		
 		try {
-		    List<Concept> concepts = store.<Concept>gets("Concept");
+		    List<Concept> concepts = store.<Concept>getFragments("Concept");
 		    assertTrue(concepts.size() > 0);
 		    for (Concept concept: concepts) {
 	            assertEquals(concept.getParent().getIndex(), concept.getSchema().getIndex());
@@ -50,7 +50,7 @@ public class SchemaContentTestCase extends DOMLoadingTestCase {
 	public void testGetSchemaTargetNamespace() {		
 
 	    try {
-            List<Concept> concepts = store.<Concept>gets("Concept");
+            List<Concept> concepts = store.<Concept>getFragments("Concept");
             assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 Schema schema = concept.getSchema();
@@ -66,7 +66,7 @@ public class SchemaContentTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLocators() {
         try {
-            List<Concept> concepts = store.<Concept>gets("Concept");
+            List<Concept> concepts = store.<Concept>getFragments("Concept");
             assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 List<Locator> locators = concept.getReferencingLocators();

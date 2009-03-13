@@ -98,7 +98,7 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRelationships(java.net.URI, java.net.URI)
      */
     public List<PersistedRelationship> getRelationships(URI linkRole, URI arcrole) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"']";
+        String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"']";
         return this.getStore().<PersistedRelationship>query(query);
     }
 
@@ -106,7 +106,7 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRelationships(java.net.URI)
      */
     public List<PersistedRelationship> getRelationships(URI arcrole) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"']";
+        String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+ arcrole +"']";
         return this.getStore().<PersistedRelationship>query(query);
     }
 
@@ -136,7 +136,7 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRelationshipsFrom(java.lang.String, java.net.URI, java.net.URI)
      */
     public SortedSet<PersistedRelationship> getRelationshipsFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @sourceIndex='"+ sourceIndex +"']";
+        String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @sourceIndex='"+ sourceIndex +"']";
         List<PersistedRelationship> list = this.getStore().<PersistedRelationship>query(query);
         SortedSet<PersistedRelationship> sortedSet = new TreeSet<PersistedRelationship>(new PersistedRelationshipOrderComparator());
         sortedSet.addAll(list);
@@ -147,7 +147,7 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRelationshipsFrom(java.lang.String, java.net.URI)
      */
     public List<PersistedRelationship> getRelationshipsFrom(String sourceIndex, URI arcrole) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @sourceIndex='"+ sourceIndex +"']";
+        String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+ arcrole +"' and @sourceIndex='"+ sourceIndex +"']";
         return this.getStore().<PersistedRelationship>query(query);
     }
 
@@ -178,7 +178,7 @@ public class AnalyserImpl implements Analyser {
      */
     public SortedSet<PersistedRelationship> getRelationshipsTo(
             String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @targetIndex='"+ targetIndex +"']";
+        String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @targetIndex='"+ targetIndex +"']";
         List<PersistedRelationship> list = this.getStore().<PersistedRelationship>query(query);
         SortedSet<PersistedRelationship> sortedSet = new TreeSet<PersistedRelationship>(new PersistedRelationshipOrderComparator());
         sortedSet.addAll(list);
@@ -189,7 +189,7 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRelationshipsTo(java.lang.String, java.net.URI)
      */
     public List<PersistedRelationship> getRelationshipsTo(String targetIndex, URI arcrole) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @targetIndex='"+ targetIndex +"']";
+        String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+ arcrole +"' and @targetIndex='"+ targetIndex +"']";
         return this.getStore().<PersistedRelationship>query(query);
     }
 
@@ -197,7 +197,7 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRootRelationships(java.net.URI, java.net.URI)
      */
     public List<PersistedRelationship> getRootRelationships(URI linkRole, URI arcrole) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @root]";
+        String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @root]";
         return this.getStore().<PersistedRelationship>query(query);
     }
 
@@ -205,7 +205,7 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRootRelationships(java.net.URI)
      */
     public List<PersistedRelationship> getRootRelationships(URI arcrole) throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.ActiveRelationshipImpl' and @arcRole='"+ arcrole +"' and @root]";
+        String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+ arcrole +"' and @root]";
         return this.getStore().<PersistedRelationship>query(query);
     }
 

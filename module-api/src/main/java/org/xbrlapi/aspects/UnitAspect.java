@@ -125,16 +125,16 @@ public class UnitAspect extends BaseAspect implements Aspect {
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
         try {
-            return new UnitAspectValue(this,get(fact));
+            return new UnitAspectValue(this,getFragment(fact));
         } catch (XBRLException e) {
             return new MissingAspectValue(this);
         }
     }
     
     /**
-     * @see Aspect#getFromStore(Fact)
+     * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFromStore(Fact fact) throws XBRLException {
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
         if (fact.isTuple()) {
             throw new XBRLException("The fact must not be a tuple.");
         }

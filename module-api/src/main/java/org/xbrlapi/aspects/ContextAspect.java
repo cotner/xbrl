@@ -12,13 +12,16 @@ import org.xbrlapi.utilities.XBRLException;
 public abstract class ContextAspect extends BaseAspect implements Aspect {
 
     /**
-     * @see Aspect#getFromStore(Fact)
+     * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFromStore(Fact fact) throws XBRLException {
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
         try {
             Item item = (Item) fact;
-            return item.getContext();
+            Context context = item.getContext();
+            context.serialize();
+            return context;
         } catch (ClassCastException e) {
+            logger.info("darn");
             throw new XBRLException("The fact must be an item.");
         }
     }
@@ -27,7 +30,7 @@ public abstract class ContextAspect extends BaseAspect implements Aspect {
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
-        Context context = (Context) getFromStore(fact);
-        return context.getURI() + context.getId();
+        Context context = (Context) getFragmentFromStore(fact);
+        return context.getURI().toString() + context.getId();
     }    
 }

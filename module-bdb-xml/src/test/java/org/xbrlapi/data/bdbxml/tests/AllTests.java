@@ -1,7 +1,5 @@
 package org.xbrlapi.data.bdbxml.tests;
 
-import org.xbrlapi.data.exist.tests.QueryForStringsTestCase;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

@@ -58,6 +58,7 @@ import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
 import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.networks.RelationshipImpl;
+import org.xbrlapi.networks.RelationshipOrderComparator;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
@@ -728,7 +729,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getStubs()
      */
     public List<Stub> getStubs() throws XBRLException {
-        return this.<Stub>gets("Stub");
+        return this.<Stub>getFragments("Stub");
     }
     
     /**
@@ -862,9 +863,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
  
     /**
-     * @see org.xbrlapi.data.Store#gets(String)
+     * @see org.xbrlapi.data.Store#getFragments(String)
      */
-    public <F extends XML> List<F> gets(String interfaceName) throws XBRLException {
+    public <F extends XML> List<F> getFragments(String interfaceName) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl." + interfaceName + "Impl']";
         if (interfaceName.indexOf(".") > -1) {
             query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='" + interfaceName + "']";
@@ -887,7 +888,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         Networks networks = new NetworksImpl(this);
         
         // First get the set of arcs using the arc role
-        List<Arc> arcs = this.<Arc>gets("Arc");
+        List<Arc> arcs = this.<Arc>getFragments("Arc");
         for (Arc arc: arcs) {
             List<ArcEnd> sources = arc.getSourceFragments();
             List<ArcEnd> targets = arc.getTargets();
@@ -917,7 +918,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         Networks networks = new NetworksImpl(this);
         
         // First get the set of arcs using the arc role
-        List<Arc> arcs = this.<Arc>gets("Arc");
+        List<Arc> arcs = this.<Arc>getFragments("Arc");
         for (Arc arc: arcs) {
             List<ArcEnd> sources = arc.getSourceFragments();
             List<ArcEnd> targets = arc.getTargets();
@@ -1053,7 +1054,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<Fact> getFacts() throws XBRLException {
-    	List<Instance> instances = this.<Instance>gets("Instance");
+    	List<Instance> instances = this.<Instance>getFragments("Instance");
     	return getFactsFromInstances(instances);
     }
     
@@ -1210,7 +1211,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<Item> getItems() throws XBRLException {
-        List<Instance> instances = this.<Instance>gets("Instance");
+        List<Instance> instances = this.<Instance>getFragments("Instance");
         return getItemsFromInstances(instances);
     }
     
@@ -1219,7 +1220,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<Tuple> getTuples() throws XBRLException {
-        List<Instance> instances = this.<Instance>gets("Instance");
+        List<Instance> instances = this.<Instance>getFragments("Instance");
         return this.getTuplesFromInstances(instances);
     }
 
@@ -1371,7 +1372,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<RoleType> getRoleTypes() throws XBRLException {
-        return this.<RoleType>gets("RoleType");
+        return this.<RoleType>getFragments("RoleType");
     }
     
     /**
@@ -1387,7 +1388,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<ArcroleType> getArcroleTypes() throws XBRLException {
-        return this.<ArcroleType>gets("ArcroleType");
+        return this.<ArcroleType>getFragments("ArcroleType");
     }
     
     /**
@@ -1614,7 +1615,6 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             }
             return new Vector<F>(targets);
         }
-        
         SortedSet<Relationship> relationships = this.getActiveRelationshipsFrom(sourceIndex,linkRole,arcrole);
         for (Relationship relationship: relationships) {
             targets.add((F) relationship.getTarget());
@@ -1653,7 +1653,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public SortedSet<Relationship> getActiveRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException {
 
-        SortedSet<Relationship> relationships = new TreeSet<Relationship>();
+        SortedSet<Relationship> relationships = new TreeSet<Relationship>(new RelationshipOrderComparator());
         Networks networks = this.getNetworksFrom(sourceIndex,linkRole,arcrole);
         for (Network network: networks) {
             relationships.addAll(network.getActiveRelationshipsFrom(sourceIndex));
@@ -1680,18 +1680,10 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public SortedSet<Relationship> getActiveRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException {
 
-        SortedSet<Relationship> relationships = new TreeSet<Relationship>();
-        if (this.isUsingPersistedNetworks()) {
-            Analyser analyser = this.getAnalyser();
-            SortedSet<PersistedRelationship> persistedRelationships = analyser.getRelationshipsTo(targetIndex,linkRole,arcrole);
-            for (PersistedRelationship pr: persistedRelationships) {
-                relationships.add(new RelationshipImpl(pr.getArc(),pr.getSource(),pr.getTarget()));
-            }
-        } else {
-            Networks networks = this.getNetworksFrom(targetIndex,linkRole,arcrole);
-            for (Network network: networks) {
-                relationships.addAll(network.getActiveRelationshipsTo(targetIndex));
-            }
+        SortedSet<Relationship> relationships = new TreeSet<Relationship>(new RelationshipOrderComparator());
+        Networks networks = this.getNetworksTo(targetIndex,linkRole,arcrole);
+        for (Network network: networks) {
+            relationships.addAll(network.getActiveRelationshipsTo(targetIndex));
         }
         
         return relationships;
@@ -1742,6 +1734,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         
         // Next get the locators for the fragment to find indirect relatives
         List<Locator> locators = source.getReferencingLocators();
+        
         LOCATORS: for (Locator locator: locators) {
             if (linkRole != null) {
                 ExtendedLink link = null;
@@ -1768,7 +1761,6 @@ public abstract class BaseStoreImpl implements Store, Serializable {
                 }
             }
         }
-
         return networks;        
 
     }

@@ -57,8 +57,8 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
      */
     public void testPersistingOfAllActiveRelationships() { 
         try {
-            storeNetworks();
             logger.info("Initial size = " + initialSize);
+            storeNetworks();
             int augmentedSize = store.getSize();
             assertTrue(augmentedSize > initialSize);
             logger.info("Augmented size = " + augmentedSize);
@@ -127,6 +127,9 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
             assertTrue(arcroles.size() > 0);
             for (URI arcrole: arcroles) {
                 List<PersistedRelationship> relationships = analyser.getRelationships(arcrole);
+                if (relationships.size() == 0) {
+                    logger.info(arcrole);
+                }
                 assertTrue(relationships.size() > 0);
                 for (PersistedRelationship relationship: relationships) {
                     assertEquals(relationship.getArcrole(),arcrole);

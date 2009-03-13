@@ -36,8 +36,8 @@
         <appender-ref ref="null"/>
     </category>
 
-    <category name="org.xbrlapi.data.bdbxml.StoreImpl" additivity="false">
-        <priority value="debug"/>
+    <category name="org.xbrlapi.networks" additivity="false">
+        <priority value="info"/>
         <appender-ref ref="console"/>
     </category>
 

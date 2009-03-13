@@ -55,6 +55,14 @@ public class PeriodAspect extends ContextAspect implements Aspect {
     public String getType() {
         return Aspect.PERIOD;
     }
+    
+    /**
+     * @see Aspect#getKey(Fact)
+     */
+    public String getKey(Fact fact) throws XBRLException {
+        Context context = (Context) super.getFragmentFromStore(fact);
+        return context.getURI().toString() + context.getId();
+    }    
 
     private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         public Transformer() {
@@ -118,17 +126,17 @@ public class PeriodAspect extends ContextAspect implements Aspect {
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
         try {
-            return new PeriodAspectValue(this,get(fact));
+            return new PeriodAspectValue(this,getFragment(fact));
         } catch (XBRLException e) {
             return null;
         }
     }
 
     /**
-     * @see Aspect#getFromStore(Fact)
+     * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFromStore(Fact fact) throws XBRLException {
-        return ((Context) super.getFromStore(fact)).getPeriod();
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+        return ((Context) super.getFragmentFromStore(fact)).getPeriod();
     }    
     
 }

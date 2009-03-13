@@ -129,13 +129,13 @@ public class ConceptAspect extends BaseAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        return new ConceptAspectValue(this,get(fact));
+        return new ConceptAspectValue(this,getFragment(fact));
     }
     
     /**
-     * @see Aspect#getFromStore(Fact)
+     * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFromStore(Fact fact) throws XBRLException {
+    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
         return fact.getConcept();
     }
     

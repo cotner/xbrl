@@ -32,7 +32,7 @@ public class MixedContentResourceTestCase extends DOMLoadingTestCase {
 	public void testGetLanguageCode() {	
 
 		try {			
-			List<MixedContentResource> fragments = store.<MixedContentResource>gets("LabelResource");
+			List<MixedContentResource> fragments = store.<MixedContentResource>getFragments("LabelResource");
 			MixedContentResource fragment = fragments.get(0);
 			assertEquals("en", fragment.getLanguage());
 		} catch (Exception e) {
@@ -47,7 +47,7 @@ public class MixedContentResourceTestCase extends DOMLoadingTestCase {
 	public void testGetContent() {	
 
 		try {
-			List<MixedContentResource> fragments = store.<MixedContentResource>gets("LabelResource");
+			List<MixedContentResource> fragments = store.<MixedContentResource>getFragments("LabelResource");
 			MixedContentResource fragment = fragments.get(0);
 			assertEquals(1, fragment.getContent().getLength());
 		} catch (Exception e) {

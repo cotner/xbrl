@@ -28,9 +28,9 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		loader.discover(getURI("test.data.xlink.titles"));
-		List<LabelResource> labels = store.<LabelResource>gets("LabelResource");
+		List<LabelResource> labels = store.<LabelResource>getFragments("LabelResource");
 		label = labels.get(0);
-		List<Concept> concepts = store.<Concept>gets("Concept");
+		List<Concept> concepts = store.<Concept>getFragments("Concept");
 		concept = concepts.get(0);
 	}
 
