@@ -298,11 +298,18 @@ public class RelationshipImpl implements Relationship {
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Relationship#getUse()
+	 * @see Relationship#getUse()
 	 */
 	public String getUse() throws XBRLException {
 		return this.getArc().getUse();
-	}	
+	}
+	
+	/**
+	 * @see Relationship#isProhibited()
+	 */
+	public boolean isProhibited() throws XBRLException {
+	    return getUse().equals("prohibited");
+	}
 
 	/**
 	 * @see org.xbrlapi.networks.Relationship#getSemanticKey()

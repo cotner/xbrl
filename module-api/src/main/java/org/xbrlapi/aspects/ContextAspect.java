@@ -18,10 +18,8 @@ public abstract class ContextAspect extends BaseAspect implements Aspect {
         try {
             Item item = (Item) fact;
             Context context = item.getContext();
-            context.serialize();
             return context;
         } catch (ClassCastException e) {
-            logger.info("darn");
             throw new XBRLException("The fact must be an item.");
         }
     }

@@ -126,7 +126,7 @@ public class ArcTestCase extends DOMLoadingTestCase {
 		try {
 			List<Arc> fragments = store.<Arc>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
 			Arc fragment = fragments.get(0);
-			assertEquals(2, fragment.getTargets().size());
+			assertEquals(2, fragment.getTargetFragments().size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

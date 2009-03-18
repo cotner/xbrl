@@ -157,9 +157,9 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     }
     
     /**
-     * @see org.xbrlapi.Arc#getTargets() 
+     * @see org.xbrlapi.Arc#getTargetFragments() 
      */
-    public <E extends ArcEnd> List<E> getTargets() throws XBRLException {
+    public <E extends ArcEnd> List<E> getTargetFragments() throws XBRLException {
     	ExtendedLink link = getExtendedLink();
     	List<E> ends = link.<E>getArcEndsByLabel(this.getTo());
     	logger.debug("Link "+ link.getIndex() + " has " + ends.size() + " ends with label " + this.getTo());

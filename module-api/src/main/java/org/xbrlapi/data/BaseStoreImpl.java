@@ -891,7 +891,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         List<Arc> arcs = this.<Arc>getFragments("Arc");
         for (Arc arc: arcs) {
             List<ArcEnd> sources = arc.getSourceFragments();
-            List<ArcEnd> targets = arc.getTargets();
+            List<ArcEnd> targets = arc.getTargetFragments();
             for (ArcEnd source: sources) {
                 for (ArcEnd target: targets) {
                     Fragment s = null;
@@ -921,7 +921,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         List<Arc> arcs = this.<Arc>getFragments("Arc");
         for (Arc arc: arcs) {
             List<ArcEnd> sources = arc.getSourceFragments();
-            List<ArcEnd> targets = arc.getTargets();
+            List<ArcEnd> targets = arc.getTargetFragments();
             for (ArcEnd source: sources) {
                 for (ArcEnd target: targets) {
                     Fragment s = null;
@@ -952,7 +952,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 		logger.info(arcs.size());
     	for (Arc arc: arcs) {
     		List<ArcEnd> sources = arc.getSourceFragments();
-    		List<ArcEnd> targets = arc.getTargets();
+    		List<ArcEnd> targets = arc.getTargetFragments();
     		for (ArcEnd source: sources) {
     			for (ArcEnd target: targets) {
     				Fragment s = null;
@@ -994,7 +994,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             URI myLinkrole = link.getLinkRole();
             if (myLinkrole.equals(linkRole)) {
                 List<ArcEnd> sources = arc.getSourceFragments();
-                List<ArcEnd> targets = arc.getTargets();
+                List<ArcEnd> targets = arc.getTargetFragments();
                 for (ArcEnd source: sources) {
                     for (ArcEnd target: targets) {
                         Fragment s = null;
@@ -1268,7 +1268,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
                     if (arc.getLocalname().equals(arcName))
                         if (arc.getArcrole().equals(arcrole)) {
                             List<ArcEnd> sources = arc.getSourceFragments();
-                            List<ArcEnd> targets = arc.getTargets();
+                            List<ArcEnd> targets = arc.getTargetFragments();
                             for (int k=0; k<sources.size(); k++) {
                                 sourceIds.put(sources.get(k).getIndex(),"");
                             }
@@ -1315,7 +1315,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             for (Arc arc: arcs) {
                 if (arc.getArcrole().equals(arcrole)) {
                     List<ArcEnd> sources = arc.getSourceFragments();
-                    List<ArcEnd> targets = arc.getTargets();
+                    List<ArcEnd> targets = arc.getTargetFragments();
                     for (int k=0; k<sources.size(); k++) {
                         sourceIds.put(sources.get(k).getIndex(),"");
                     }
@@ -1716,7 +1716,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
                 List<Arc> arcs = ((ArcEnd) source).getArcsFromWithArcrole(arcrole);
 
                 for (Arc arc: arcs) {
-                    List<ArcEnd> targets = arc.getTargets();
+                    List<ArcEnd> targets = arc.getTargetFragments();
                     for (ArcEnd end: targets) {
                         if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
                             Fragment target = ((Locator) end).getTarget();
@@ -1749,7 +1749,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             }
             List<Arc> arcs = locator.getArcsFromWithArcrole(arcrole);
             for (Arc arc: arcs) {
-                List<ArcEnd> targets = arc.getTargets();
+                List<ArcEnd> targets = arc.getTargetFragments();
                 for (ArcEnd end: targets) {
                     if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
                         Fragment target = ((Locator) end).getTarget();
@@ -1854,7 +1854,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public boolean isUsingPersistedNetworks() {
         return (analyser != null);
-    }    
+    }
+
+    
  
 
     

@@ -99,7 +99,7 @@ public interface Arc extends ExtendedLinkContent {
      * @return the list of ArcEnd fragment that the arc runs to.
      * @throws XBRLException
      */
-    public <E extends ArcEnd> List<E> getTargets() throws XBRLException;
+    public <E extends ArcEnd> List<E> getTargetFragments() throws XBRLException;
     
 
     /**

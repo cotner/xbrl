@@ -105,7 +105,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testGetSpecificArcroleTypes() throws Exception {
 		try {
-			List<ArcroleType> arcroleTypes = store.getArcroleTypes(Constants.PresentationArcRole);
+			List<ArcroleType> arcroleTypes = store.getArcroleTypes(Constants.PresentationArcrole);
 			assertEquals(1, arcroleTypes.size());
 		} catch (Exception e) {
 			fail(e.getMessage());
@@ -123,7 +123,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 	
 	public void testCustomArcroleIsUsedCorrectly() throws Exception {
 		try {
-			List<ArcroleType> roleTypes = store.getArcroleTypes(Constants.PresentationArcRole);
+			List<ArcroleType> roleTypes = store.getArcroleTypes(Constants.PresentationArcrole);
 			ArcroleType type = roleTypes.get(0);
 			assertTrue(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"presentationArc"));
 			assertFalse(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"calculationArc"));

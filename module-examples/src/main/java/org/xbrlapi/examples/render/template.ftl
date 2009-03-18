@@ -129,7 +129,7 @@
 	            [/#if]
               [/#list]<!-- Loop over indentation levels -->
               
-              [#assign conceptId = concept.targetNamespaceURI + ": " + concept.name /]
+              [#assign conceptId = concept.targetNamespace + ": " + concept.name /]
               [#assign conceptAspect = table.aspectModel.getAspect("concept") /]
               [#assign conceptHasData = conceptAspect.hasValue(conceptId) /]
               [#if conceptHasData]
@@ -155,7 +155,7 @@
 		                          <!-- Sort out the inline XBRL stuff. -->
 		                          <!-- Sort out the formatting to take unit information into account. -->
 		                          <ix:nonFraction 
-		                              xmlns="${concept.targetNamespaceURI}"
+		                              xmlns="${concept.targetNamespace}"
 		                              ix:name="${concept.name}"
 		                              ix:format="commadot" 
 		                              ix:scale="0"

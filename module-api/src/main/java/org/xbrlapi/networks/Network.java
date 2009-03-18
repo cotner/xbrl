@@ -191,7 +191,7 @@ public interface Network {
     public int getNumberOfActiveRelationships();
     
     /**
-     * Complete the network, finding all relationships in the data store
+     * Complete the network, finding all active relationships in the data store
      * that participate in the network.
      * @throws XBRLException
      */

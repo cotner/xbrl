@@ -16,6 +16,14 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public interface Networks extends Iterable<Network> {
 	
+    
+    /**
+     * Complete the networks, finding all active relationships in the data store
+     * that participate in the networks.
+     * @throws XBRLException
+     */
+    public void complete() throws XBRLException;
+    
 	/**
 	 * If the collection of networks already has a network with the 
 	 * same role and arcrole, then the relationships from the added

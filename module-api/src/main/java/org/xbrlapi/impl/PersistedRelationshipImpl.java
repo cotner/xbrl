@@ -59,6 +59,7 @@ public class PersistedRelationshipImpl extends XMLImpl implements PersistedRelat
         setArcNamespace(arc.getNamespace());
         setArcrole(arc.getArcrole());
         setArcOrder(arc.getOrder());
+        setArcPriority(arc.getPriority());
         
         setLinkName(link.getLocalname());
         setLinkNamespace(link.getNamespace());
@@ -127,7 +128,14 @@ public class PersistedRelationshipImpl extends XMLImpl implements PersistedRelat
      */
     public Double getArcOrder() {
         return new Double(getMetaAttribute("arcOrder"));
-    }    
+    }
+    
+    /**
+     * @see org.xbrlapi.PersistedRelationship#getArcPriority()
+     */
+    public Integer getArcPriority() {
+        return new Integer(getMetaAttribute("arcPriority"));
+    }
 
     /**
      * @see org.xbrlapi.PersistedRelationship#getLinkName()
@@ -303,6 +311,15 @@ public class PersistedRelationshipImpl extends XMLImpl implements PersistedRelat
     private void setArcOrder(Double order) throws XBRLException {
         if (order == null) throw new XBRLException("The order must not be null."); 
         this.setMetaAttribute("arcOrder",order.toString());
+    }
+    
+    /**
+     * @param priority The arc priority
+     * @throws XBRLException if the priority is null. 
+     */
+    private void setArcPriority(Integer priority) throws XBRLException {
+        if (priority == null) throw new XBRLException("The priority must not be null."); 
+        this.setMetaAttribute("arcPriority",priority.toString());
     }    
 
     /**
@@ -454,7 +471,7 @@ public class PersistedRelationshipImpl extends XMLImpl implements PersistedRelat
             URI namespace = getTargetNamespace();
             if (namespace.equals(Constants.XBRL21LinkNamespace()) || namespace.equals(Constants.GenericLabelNamespace())) {
                 URI arcrole = getArcrole();
-                if (arcrole.equals(Constants.LabelArcRole()) || arcrole.equals(Constants.GenericLabelArcRole())) {
+                if (arcrole.equals(Constants.LabelArcrole()) || arcrole.equals(Constants.GenericLabelArcrole())) {
                     this.setMetaAttribute("label","true");
                 }
             }
@@ -471,7 +488,7 @@ public class PersistedRelationshipImpl extends XMLImpl implements PersistedRelat
             URI namespace = getTargetNamespace();
             if (namespace.equals(Constants.XBRL21LinkNamespace()) || namespace.equals(Constants.GenericLabelNamespace())) {
                 URI arcrole = getArcrole();
-                if (arcrole.equals(Constants.ReferenceArcRole()) || arcrole.equals(Constants.GenericReferenceArcRole())) {
+                if (arcrole.equals(Constants.ReferenceArcrole()) || arcrole.equals(Constants.GenericReferenceArcrole())) {
                     this.setMetaAttribute("reference","true");
                 }
             }

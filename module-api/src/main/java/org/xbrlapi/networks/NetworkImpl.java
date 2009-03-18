@@ -15,6 +15,7 @@ import org.xbrlapi.ArcEnd;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Locator;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -396,24 +397,36 @@ public class NetworkImpl implements Network {
         
         logger.debug("Completing network with arcrole " + this.getArcrole() + " and link role " + getLinkRole());
 
-        // Get the arcs that define relationships in the network
-        List<ExtendedLink> links = getStore().getExtendedLinksWithRole(this.getLinkRole());
-        for (ExtendedLink link: links) {
-            List<Arc> arcs = link.getArcsByArcrole(this.getArcrole());
-            for (Arc arc: arcs) {
-                List<ArcEnd> sources = arc.getSourceFragments();
-                List<ArcEnd> targets = arc.getTargets();
-                for (Fragment source: sources) {
-                    Fragment s = source;
-                    if (source.isa("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTarget();
-                    for (Fragment target: targets) {
-                        Fragment t = target;
-                        if (target.isa("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTarget();
-                        Relationship relationship = new RelationshipImpl(arc,s,t);
-                        this.addRelationship(relationship);
+        if (this.getStore().isUsingPersistedNetworks()) {
+            
+            Analyser analyser = new AnalyserImpl(getStore());
+            List<PersistedRelationship> persistedRelationships = analyser.getRelationships(this.getLinkRole(), this.getArcrole());
+            for (PersistedRelationship persistedRelationship: persistedRelationships) {
+                this.addRelationship(new RelationshipImpl(persistedRelationship));
+            }
+            
+        } else {
+        
+            // Get the arcs that define relationships in the network
+            List<ExtendedLink> links = getStore().getExtendedLinksWithRole(this.getLinkRole());
+            for (ExtendedLink link: links) {
+                List<Arc> arcs = link.getArcsByArcrole(this.getArcrole());
+                for (Arc arc: arcs) {
+                    List<ArcEnd> sources = arc.getSourceFragments();
+                    List<ArcEnd> targets = arc.getTargetFragments();
+                    for (Fragment source: sources) {
+                        Fragment s = source;
+                        if (source.isa("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTarget();
+                        for (Fragment target: targets) {
+                            Fragment t = target;
+                            if (target.isa("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTarget();
+                            Relationship relationship = new RelationshipImpl(arc,s,t);
+                            this.addRelationship(relationship);
+                        }
                     }
                 }
             }
+
         }
 
     }

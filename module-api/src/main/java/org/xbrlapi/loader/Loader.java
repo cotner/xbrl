@@ -103,6 +103,11 @@ public interface Loader {
 	/**
 	 * Begin the XBRL DTS discovery process with the URIs that
 	 * are already in the loading/discovery queue.
+	 * If the store is using persisted networks, then once a discovery
+	 * process completes without having any failures and without being
+	 * interrupted, then it will automatically update the persisted
+	 * networks to reflect relationships defined by 
+	 * all newly added XLink arcs.
 	 * @throws XBRLException if the discovery process fails.
 	 */
 	public void discover() throws XBRLException;
@@ -112,6 +117,9 @@ public interface Loader {
 	 * to be discovered.  This updates the data store and
 	 * updates the queue with any new documents that are 
 	 * identified.
+	 * Note that this does not update the persisted relationships
+	 * because there is no guarantee that when the method finishes
+	 * the data store represents an actual DTS.
 	 * @throws XBRLException if the discovery process fails.
 	 */
 	public void discoverNext() throws XBRLException;

@@ -212,7 +212,7 @@ public class NetworksImpl implements Networks {
         List<Arc> arcs = this.getStore().<Arc>query(query);
         for (Arc arc: arcs) {
             List<ArcEnd> sources = arc.getSourceFragments();
-            List<ArcEnd> targets = arc.getTargets();
+            List<ArcEnd> targets = arc.getTargetFragments();
             for (Fragment source: sources) {
                 Fragment s = source;
                 if (source.isa("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTarget();
@@ -293,6 +293,15 @@ public class NetworksImpl implements Networks {
     public void addAll(Networks networks) throws XBRLException {
         for (Network network: networks) {
             this.addNetwork(network);
+        }
+    }
+
+    /**
+     * @see org.xbrlapi.networks.Networks#complete()
+     */
+    public void complete() throws XBRLException {
+        for (Network network: this) {
+            network.complete();
         }
     }
     

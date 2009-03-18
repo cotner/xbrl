@@ -7,6 +7,9 @@ package org.xbrlapi.impl;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.xbrlapi.Stub;
 import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.utilities.Constants;
@@ -35,5 +38,27 @@ public class StubImpl extends XMLImpl implements Stub {
 		this();
 		this.setIndex(id);
 	}
+
+    /**
+     * @see org.xbrlapi.Stub#getReason()
+     */
+    public String getReason() throws XBRLException {
+        return this.getMetaAttribute("reason"); 
+    }
+
+    /**
+     * @see org.xbrlapi.Stub#getURI()
+     */
+    public URI getURI() throws XBRLException {
+        String uri = "";
+        try {
+            uri  = this.getMetaAttribute("uri");
+            return new URI(uri);
+        } catch (URISyntaxException e) {
+            throw new XBRLException(" URI: " + uri + " has incorrect syntax .", e);
+        }
+    }
+	
+	
 	
 }

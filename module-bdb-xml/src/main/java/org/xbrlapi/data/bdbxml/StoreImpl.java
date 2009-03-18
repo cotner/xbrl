@@ -530,7 +530,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         } else {
             throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
         }
-        logger.info("Adapted query is " + query);
+        logger.debug("Adapted query is " + query);
         this.incrementCallCount();
         
         XmlResults xmlResults = null;

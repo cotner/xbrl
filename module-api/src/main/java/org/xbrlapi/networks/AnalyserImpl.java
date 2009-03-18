@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.PersistedRelationshipOrderComparator;
@@ -202,12 +203,48 @@ public class AnalyserImpl implements Analyser {
     }
 
     /**
-     * @see org.xbrlapi.networks.Analyser#getRootRelationships(java.net.URI)
+     * @see Analyser#getRootRelationships(java.net.URI)
      */
     public List<PersistedRelationship> getRootRelationships(URI arcrole) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+ arcrole +"' and @root]";
         return this.getStore().<PersistedRelationship>query(query);
     }
+    
+    /**
+     * @see Analyser#getRoots(java.net.URI)
+     */
+    @SuppressWarnings("unchecked")
+    public <F extends Fragment> Set<F> getRoots(URI arcrole) throws XBRLException {
+        List<PersistedRelationship> relationships = this.getRootRelationships(arcrole);
+        Set<F> roots = new TreeSet<F>();
+        for (PersistedRelationship relationship: relationships) {
+            try {
+                roots.add((F) relationship.getSource());
+            } catch (ClassCastException e) {
+                throw new XBRLException("Network roots are not of the required fragment type.",e);
+            }
+        }
+        return roots;
+    }
+    
+    /**
+     * @see Analyser#getRoots(java.net.URI, java.net.URI)
+     */
+    @SuppressWarnings("unchecked")
+    public <F extends Fragment> Set<F> getRoots(URI linkRole, URI arcrole) throws XBRLException {
+        List<PersistedRelationship> relationships = this.getRootRelationships(linkRole, arcrole);
+        Set<F> roots = new TreeSet<F>();
+        for (PersistedRelationship relationship: relationships) {
+            relationship.serialize();
+            try {
+                roots.add((F) relationship.getSource());
+            } catch (ClassCastException e) {
+                throw new XBRLException("Network roots are not of the required fragment type.",e);
+            }
+        }
+        return roots;
+    }    
+    
 
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationships(java.lang.String)
@@ -410,6 +447,20 @@ public class AnalyserImpl implements Analyser {
         }
         return new Vector<PersistedRelationship>();
     }
+
+
+    
+    
+
+    
+    /**
+     * @see Analyser#getRelationships(String, String, URI, URI)
+     */
+    public List<PersistedRelationship> getRelationships(String sourceIndex, String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
+        String query = "/*[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+arcrole+"' and @linkRole='"+linkRole+"' and @sourceIndex='"+sourceIndex+"' and @targetIndex='"+targetIndex+"']";
+        return getStore().<PersistedRelationship>query(query);
+    }
+    
     
     
 }

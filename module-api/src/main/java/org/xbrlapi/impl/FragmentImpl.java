@@ -149,8 +149,8 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getLabels()
      */
     public List<LabelResource> getLabels() throws XBRLException {
-        List<LabelResource> labels = getStore().<LabelResource>getTargets(getIndex(),null,Constants.LabelArcRole());
-        List<LabelResource> genericLabels = getStore().<LabelResource>getTargets(getIndex(),null,Constants.GenericLabelArcRole());
+        List<LabelResource> labels = getStore().<LabelResource>getTargets(getIndex(),null,Constants.LabelArcrole());
+        List<LabelResource> genericLabels = getStore().<LabelResource>getTargets(getIndex(),null,Constants.GenericLabelArcrole());
         labels.addAll(genericLabels);
         return labels;
     }    
@@ -245,8 +245,8 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getReferences()
      */
     public List<ReferenceResource> getReferences() throws XBRLException {
-        List<ReferenceResource> references = getStore().getTargets(getIndex(),null,Constants.ReferenceArcRole());
-        List<ReferenceResource> genericReferences = getStore().getTargets(getIndex(),null,Constants.GenericReferenceArcRole());
+        List<ReferenceResource> references = getStore().getTargets(getIndex(),null,Constants.ReferenceArcrole());
+        List<ReferenceResource> genericReferences = getStore().getTargets(getIndex(),null,Constants.GenericReferenceArcrole());
         references.addAll(genericReferences);
         return references;
     }

@@ -208,95 +208,95 @@ public class Constants {
     /**
      * XBRL 2.1 arcroles
      */
-    public final  static String LabelArcRole = "http://www.xbrl.org/2003/arcrole/concept-label";
-    public final static URI LabelArcRole() {
+    public final  static String LabelArcrole = "http://www.xbrl.org/2003/arcrole/concept-label";
+    public final static URI LabelArcrole() {
         try {
-            return new URI(LabelArcRole);
+            return new URI(LabelArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
-            System.err.println(LabelArcRole);
+            System.err.println(LabelArcrole);
             return null;
         }
     }    
-    public final  static String GenericLabelArcRole = "http://xbrl.org/arcrole/2008/element-label";
-    public final static URI GenericLabelArcRole() {
+    public final  static String GenericLabelArcrole = "http://xbrl.org/arcrole/2008/element-label";
+    public final static URI GenericLabelArcrole() {
         try {
-            return new URI(GenericLabelArcRole);
+            return new URI(GenericLabelArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }
     }      
-    public final  static String ReferenceArcRole = "http://www.xbrl.org/2003/arcrole/concept-reference";
-    public final static URI ReferenceArcRole() {
+    public final  static String ReferenceArcrole = "http://www.xbrl.org/2003/arcrole/concept-reference";
+    public final static URI ReferenceArcrole() {
         try {
-            return new URI(ReferenceArcRole);
+            return new URI(ReferenceArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }
     }    
-    public final  static String GenericReferenceArcRole = "http://xbrl.org/arcrole/2008/element-reference";
-    public final static URI GenericReferenceArcRole() {
+    public final  static String GenericReferenceArcrole = "http://xbrl.org/arcrole/2008/element-reference";
+    public final static URI GenericReferenceArcrole() {
         try {
-            return new URI(GenericReferenceArcRole);
+            return new URI(GenericReferenceArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }
     }    
     
-    public final  static String CalculationArcRole = "http://www.xbrl.org/2003/arcrole/summation-item";
-    public final static URI CalculationArcRole() {
+    public final  static String CalculationArcrole = "http://www.xbrl.org/2003/arcrole/summation-item";
+    public final static URI CalculationArcrole() {
         try {
-            return new URI(CalculationArcRole);
+            return new URI(CalculationArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }
     }    
 
-    public final  static String PresentationArcRole = "http://www.xbrl.org/2003/arcrole/parent-child";
-    public final static URI PresentationArcRole() {
+    public final  static String PresentationArcrole = "http://www.xbrl.org/2003/arcrole/parent-child";
+    public final static URI PresentationArcrole() {
         try {
-            return new URI(PresentationArcRole);
+            return new URI(PresentationArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }
     }    
 
-    public final  static String GeneralSpecialArcRole = "http://www.xbrl.org/2003/arcrole/general-special";
-    public final static URI GeneralSpecialArcRole() {
+    public final  static String GeneralSpecialArcrole = "http://www.xbrl.org/2003/arcrole/general-special";
+    public final static URI GeneralSpecialArcrole() {
         try {
-            return new URI(GeneralSpecialArcRole);
+            return new URI(GeneralSpecialArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }
     }    
-    public final  static String EssenceAliasArcRole = "http://www.xbrl.org/2003/arcrole/essence-alias";
-    public final static URI EssenceAliasArcRole() {
+    public final  static String EssenceAliasArcrole = "http://www.xbrl.org/2003/arcrole/essence-alias";
+    public final static URI EssenceAliasArcrole() {
         try {
-            return new URI(EssenceAliasArcRole);
+            return new URI(EssenceAliasArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }
     }        
-    public final  static String SimilarTuplesArcRole = "http://www.xbrl.org/2003/arcrole/similar-tuples";
-    public final static URI SimilarTuplesArcRole() {
+    public final  static String SimilarTuplesArcrole = "http://www.xbrl.org/2003/arcrole/similar-tuples";
+    public final static URI SimilarTuplesArcrole() {
         try {
-            return new URI(SimilarTuplesArcRole);
+            return new URI(SimilarTuplesArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }
     }        
-    public final  static String RequiresElementArcRole = "http://www.xbrl.org/2003/arcrole/requires-element";
-    public final static URI RequiresElementArcRole() {
+    public final  static String RequiresElementArcrole = "http://www.xbrl.org/2003/arcrole/requires-element";
+    public final static URI RequiresElementArcrole() {
         try {
-            return new URI(RequiresElementArcRole);
+            return new URI(RequiresElementArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }
     }        
     
-    public final  static String FactFootnoteArcRole = "http://www.xbrl.org/2003/arcrole/fact-footnote";
-    public final static URI FactFootnoteArcRole() {
+    public final  static String FactFootnoteArcrole = "http://www.xbrl.org/2003/arcrole/fact-footnote";
+    public final static URI FactFootnoteArcrole() {
         try {
-            return new URI(FactFootnoteArcRole);
+            return new URI(FactFootnoteArcrole);
         } catch (URISyntaxException e) { // Cannot be thrown.
             return null;
         }

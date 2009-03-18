@@ -178,6 +178,13 @@ public interface Relationship {
 	 * @throws XBRLException
 	 */
 	public String getUse() throws XBRLException;
+	
+    /**
+     * @return true if the relationship is prohibited
+     * and false otherwise.
+     * @throws XBRLException
+     */
+    public boolean isProhibited() throws XBRLException;	
 
 	/**
 	 * @return a String that will be identical for semantically

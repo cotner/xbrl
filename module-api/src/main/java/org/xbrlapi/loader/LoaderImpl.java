@@ -8,6 +8,7 @@ import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -21,6 +22,8 @@ import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.networks.Storer;
+import org.xbrlapi.networks.StorerImpl;
 import org.xbrlapi.sax.ContentHandlerImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
@@ -522,6 +525,8 @@ public class LoaderImpl implements Loader {
      */
     public void discover() throws XBRLException {
         
+        Set<URI> newDocuments = new TreeSet<URI>();
+        
         int discoveryCount = 1;
 
         if (isDiscovering()) {
@@ -548,6 +553,7 @@ public class LoaderImpl implements Loader {
                 try {
                     parse(uri);
                     markDocumentAsExplored(uri);
+                    newDocuments.add(uri);
                     getStore().sync();
                 } catch (XBRLException e) {
                     this.cleanupFailedLoad(uri,"XBRL Problem: " + e.getMessage(),e);
@@ -587,6 +593,15 @@ public class LoaderImpl implements Loader {
                 logger.info("Document discovery exited without completing.");
             }
         }
+        
+        if (getStore().isUsingPersistedNetworks() && documentQueue.isEmpty() && failures.isEmpty()) {
+            logger.info("Starting to persist the relationships.");
+            Storer storer = new StorerImpl(getStore());
+            storer.storeRelationships(newDocuments);
+            getStore().sync();
+            logger.info("Done with persisting the relationships.");
+        }
+
         failures = new TreeMap<URI,String>();
         documentQueue = new TreeSet<URI>();
         

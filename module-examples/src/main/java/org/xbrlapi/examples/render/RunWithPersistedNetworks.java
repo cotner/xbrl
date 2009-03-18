@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.Vector;
 
@@ -34,6 +35,7 @@ import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.RoleType;
+import org.xbrlapi.Stub;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
@@ -46,11 +48,6 @@ import org.xbrlapi.loader.discoverer.Discoverer;
 import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
-import org.xbrlapi.networks.NetworkImpl;
-import org.xbrlapi.networks.Networks;
-import org.xbrlapi.networks.NetworksImpl;
-import org.xbrlapi.networks.Storer;
-import org.xbrlapi.networks.StorerImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -178,6 +175,10 @@ public class RunWithPersistedNetworks {
             // Set up the data store to load the data
             store = createStore(arguments.get("database"), arguments.get("container"));
 
+            // Configure the store to use persisted networks
+            Analyser analyser = new AnalyserImpl(store);
+            store.setAnalyser(analyser);
+            
             // Set up the data loader (does the parsing and data discovery)
             Loader loader = createLoader(store, arguments.get("cache"));
 
@@ -210,14 +211,16 @@ public class RunWithPersistedNetworks {
                         + " documents still to load.");
             }
             reportTime("Loading data");
+            
+            // Check that all documents were loaded OK.
+            List<Stub> stubs = store.getStubs();
+            if (! stubs.isEmpty()) {
+                for (Stub stub: stubs) {
+                    logger.error(stub.getURI() + ": " + stub.getReason());
+                }
+                badUsage("Some documents were not loaded.");
+            }
 
-            // Persist network information in the data store
-            Analyser analyser = new AnalyserImpl(store);
-            store.setAnalyser(analyser);
-            Storer storer = new StorerImpl(store);
-            storer.StoreAllNetworks();
-            reportTime("Storing all relationships");
-      
             // Get the Freemarker template ready to use.
             if (!arguments.containsKey("template"))
                 throw new XBRLException("The Freemarker template must be specified.");
@@ -270,27 +273,18 @@ public class RunWithPersistedNetworks {
             }
             reportTime("Mapping items by concept");
 
-            // Prepare to track networks
-            Networks networks = new NetworksImpl(store);
-            reportTime("Initialising the networks");
-
-            // Build the label networks.
-            networks.addRelationships(Constants.LabelArcRole);
-            reportTime("Getting standard labels");
-            networks.addRelationships(Constants.GenericLabelArcRole);
-            reportTime("Getting generic labels");
-
             // Iterate the presentation networks in the DTS
             List<Map<String, Object>> tables = new Vector<Map<String, Object>>();
             model.put("tables", tables);
 
-            logger.info("# linkroles = " + store.getLinkRoles(new URI(Constants.PresentationArcRole)).size());
+            URI arcrole = Constants.PresentationArcrole();
             
-            for (URI linkrole : store.getLinkRoles(new URI(Constants.PresentationArcRole))) {
+            for (URI linkRole : store.getLinkRoles(arcrole)) {
+                
                 HashMap<String, Object> table = new HashMap<String, Object>();
                 tables.add(table);
-                String title = linkrole.toString();
-                List<RoleType> roleDeclarations = store.getRoleTypes(linkrole);
+                String title = linkRole.toString();
+                List<RoleType> roleDeclarations = store.getRoleTypes(linkRole);
                 if (roleDeclarations.size() > 0) {
                     title = roleDeclarations.get(0).getDefinition();
                 }
@@ -305,15 +299,9 @@ public class RunWithPersistedNetworks {
                 aspectModel = new DimensionalAspectModel();
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
-
-                network = new NetworkImpl(store,linkrole,Constants.PresentationArcRole());
-                networks.addNetwork(network);
-                network.complete();
-                reportTime("Completing the network");
-                logger.info("# relationships = " + network.getNumberOfActiveRelationships());
                 
-                List<Concept> roots = network.<Concept>getRootFragments();
-
+                Set<Concept> roots = analyser.<Concept>getRoots(linkRole,arcrole);
+                
                 maxLevel = 1;
                 for (Concept root : roots) {
                     parsePresentation(
@@ -321,7 +309,8 @@ public class RunWithPersistedNetworks {
                             null, 
                             root, 
                             new Double(0.0), 
-                            linkrole,
+                            linkRole,
+                            arcrole,
                             Constants.StandardLabelRole());
                 }
                 
@@ -377,6 +366,7 @@ public class RunWithPersistedNetworks {
             Concept concept, 
             Double order,
             URI linkRole,
+            URI arcrole,
             URI labelRole
             ) throws Exception {
 
@@ -407,10 +397,10 @@ public class RunWithPersistedNetworks {
         }
         label = indent + label;
         labels.add(label);
-        reportTime(label);
+        // reportTime(label);
 
         // Get the active presentation relationships from.
-        SortedSet<PersistedRelationship> relationships = store.getPersistedActiveRelationshipsFrom(concept.getIndex(),linkRole,Constants.PresentationArcRole());
+        SortedSet<PersistedRelationship> relationships = store.getPersistedActiveRelationshipsFrom(concept.getIndex(),linkRole,arcrole);
 
         for (PersistedRelationship relationship: relationships) {
             
@@ -430,6 +420,7 @@ public class RunWithPersistedNetworks {
                     (Concept) relationship.getTarget(), 
                     relationship.getArcOrder(), 
                     linkRole,
+                    arcrole,
                     labelRole);
         }
     }

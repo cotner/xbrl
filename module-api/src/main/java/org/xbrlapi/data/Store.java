@@ -467,6 +467,8 @@ public interface Store {
      */
     public void setAnalyser(Analyser analyser);
     
+
+    
     /**
      * @return the persisted network analyser if one is being used
      * and null otherwise.

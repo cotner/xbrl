@@ -65,9 +65,9 @@ public class LabelResourceImpl extends MixedContentResourceImpl implements Label
 
         List<Fragment> fragments;
         if (this.getNamespace().equals(Constants.GenericLabelNamespace()))
-            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.GenericLabelArcRole());
+            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.GenericLabelArcrole());
         else 
-            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.LabelArcRole());
+            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.LabelArcrole());
         
         Set<Concept> concepts = new HashSet<Concept>();
         for (Fragment fragment: fragments) {

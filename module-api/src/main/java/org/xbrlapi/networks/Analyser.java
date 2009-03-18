@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.xbrlapi.Fragment;
 import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -79,6 +80,13 @@ public interface Analyser {
      * @throws XBRLException
      */
     public List<PersistedRelationship> getRelationships(URI arcrole) throws XBRLException;
+    
+
+    
+
+    
+    
+    
 
     /**
      * @param linkRole The link role constraining the set of
@@ -206,12 +214,31 @@ public interface Analyser {
     public List<PersistedRelationship> getRootRelationships(URI linkRole, URI arcrole) throws XBRLException;
     
     /**
+     * @param <F> The fragment type
+     * @param linkRole The link role URI
+     * @param arcrole The arcrole URI
+     * @return the list of fragments that are roots of networks with the given
+     * link role and arcrole.
+     * @throws XBRLException
+     */
+    public <F extends Fragment> Set<F> getRoots(URI linkRole, URI arcrole) throws XBRLException;    
+    
+    /**
      * @param arcrole The arcrole of the network.
      * @return the relationships that run from root fragments in the 
      * networks with the specified arcrole.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRootRelationships(URI arcrole) throws XBRLException;    
+    public List<PersistedRelationship> getRootRelationships(URI arcrole) throws XBRLException;
+    
+    /**
+     * @param <F> The fragment type
+     * @param arcrole The arcrole URI
+     * @return the list of fragments that are roots of networks with the given
+     * arcrole.
+     * @throws XBRLException
+     */
+    public <F extends Fragment> Set<F> getRoots(URI arcrole) throws XBRLException;
 
     /**
      * @param sourceIndex The index of the fragment to get the labels for.
@@ -360,5 +387,15 @@ public interface Analyser {
      */
     public List<PersistedRelationship> getReferenceRelationshipsByRoles(String sourceIndex, List<String> languages, List<URI> roles) throws XBRLException;    
     
-    
+    /**
+     * @param sourceIndex The source index to match.
+     * @param targetIndex The target index to match.
+     * @param linkRole The link role to match.
+     * @param arcrole The arcrole to match.
+     * @return a list of persisted relationships matching the specified
+     * criteria.
+     * @throws XBRLException
+     */
+    public List<PersistedRelationship> getRelationships(String sourceIndex, String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
+
 }

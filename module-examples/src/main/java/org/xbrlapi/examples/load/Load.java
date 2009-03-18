@@ -104,8 +104,8 @@ public class Load {
             loader.discover(inputs);
             
             // Analyse the presentation networks in the supporting DTS
-            for (URI linkrole: store.getLinkRoles(Constants.PresentationArcRole())) {
-                List<Fragment> rootLocators = store.getNetworkRoots(Constants.XBRL21LinkNamespace(),"presentationLink",new URI(arguments.get("linkrole")),Constants.XBRL21LinkNamespace(),"presentationArc",Constants.PresentationArcRole());                            
+            for (URI linkrole: store.getLinkRoles(Constants.PresentationArcrole())) {
+                List<Fragment> rootLocators = store.getNetworkRoots(Constants.XBRL21LinkNamespace(),"presentationLink",new URI(arguments.get("linkrole")),Constants.XBRL21LinkNamespace(),"presentationArc",Constants.PresentationArcrole());                            
                 for (Fragment rootLocator: rootLocators) {
                     Concept rootConcept = (Concept) ((Locator) rootLocator).getTarget();
                     reportNode("",rootConcept,linkrole);
@@ -139,7 +139,7 @@ public class Load {
     private static void reportNode(String indent, Fragment fragment, URI linkRole) throws XBRLException {
         Concept concept = (Concept) fragment;
         System.out.println(indent + concept.getTargetNamespace() + ":" + concept.getName());
-        List<Fragment> children = store.getTargets(concept.getIndex(),linkRole,Constants.PresentationArcRole());
+        List<Fragment> children = store.getTargets(concept.getIndex(),linkRole,Constants.PresentationArcrole());
         if (children.size() > 0) {
             for (Fragment child: children) {
                 reportNode(indent + " ", child,linkRole);

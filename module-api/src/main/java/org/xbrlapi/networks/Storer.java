@@ -1,6 +1,7 @@
 package org.xbrlapi.networks;
 
 import java.net.URI;
+import java.util.Set;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -21,6 +22,15 @@ public interface Storer {
      * @throws XBRLException
      */
     public void storeRelationships(Networks networks) throws XBRLException;
+    
+    /**
+     * @param documents The list of URIs of the documents to store the relationships for.
+     * Relationships are sought among the XLink arcs in the documents.
+     * This is used by the discover to updated persisted relationships
+     * in the data store.
+     * @throws XBRLException
+     */
+    public void storeRelationships(Set<URI> documents) throws XBRLException;
     
     /**
      * @param network The network from which all 

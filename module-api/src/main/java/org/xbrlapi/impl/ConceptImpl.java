@@ -71,7 +71,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
      */
     public List<URI> getPresentationNetworkLinkroles() throws XBRLException {
         List<URI> roles = new Vector<URI>();
-        for (Network network: getStore().getMinimalNetworksWithArcrole(this,Constants.PresentationArcRole())) {
+        for (Network network: getStore().getMinimalNetworksWithArcrole(this,Constants.PresentationArcrole())) {
             roles.add(network.getLinkRole());
         }
         return roles;

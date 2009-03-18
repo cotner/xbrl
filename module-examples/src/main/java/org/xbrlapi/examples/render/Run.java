@@ -28,6 +28,7 @@ import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.RoleType;
+import org.xbrlapi.Stub;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
@@ -194,6 +195,15 @@ public class Run {
             }
             reportTime("Loading data");
 
+            // Check that all documents were loaded OK.
+            List<Stub> stubs = store.getStubs();
+            if (! stubs.isEmpty()) {
+                for (Stub stub: stubs) {
+                    logger.error(stub.getURI() + ": " + stub.getReason());
+                }
+                badUsage("Some documents were not loaded.");
+            }            
+            
 /*            logger.info("Documents in the data store include ...");            
             for (String uri: store.getStoredURIs()) {
                 logger.info(uri);
@@ -259,18 +269,18 @@ public class Run {
             reportTime("Initialising the networks");
             
             // Build the label networks.
-            networks.addRelationships(Constants.LabelArcRole);
+            networks.addRelationships(Constants.LabelArcrole);
             reportTime("Getting standard labels");
-            networks.addRelationships(Constants.GenericLabelArcRole);
+            networks.addRelationships(Constants.GenericLabelArcrole);
             reportTime("Getting generic labels");
             
             // Iterate the presentation networks in the DTS
             List<Map<String, Object>> tables = new Vector<Map<String, Object>>();
             model.put("tables", tables);
 
-            logger.info("# linkroles = " + store.getLinkRoles(Constants.PresentationArcRole()).size());
+            logger.info("# linkroles = " + store.getLinkRoles(Constants.PresentationArcrole()).size());
             
-            for (URI linkrole : store.getLinkRoles(Constants.PresentationArcRole())) {
+            for (URI linkrole : store.getLinkRoles(Constants.PresentationArcrole())) {
                 HashMap<String, Object> table = new HashMap<String, Object>();
                 tables.add(table);
                 String title = linkrole.toString();
@@ -291,7 +301,7 @@ public class Run {
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
 
                 try {
-                    network = new NetworkImpl(store,linkrole,new URI(Constants.PresentationArcRole));
+                    network = new NetworkImpl(store,linkrole,new URI(Constants.PresentationArcrole));
                 } catch (URISyntaxException e) {
                     ;// Cannot actually be thrown
                 }

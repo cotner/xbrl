@@ -39,6 +39,14 @@ public class SegmentRemainderAspect extends ContextAspect implements Aspect {
     public String getType() {
         return "segmentremainder";
     }
+    
+    /**
+     * @see Aspect#getKey(Fact)
+     */
+    public String getKey(Fact fact) throws XBRLException {
+        Context context = (Context) super.getFragmentFromStore(fact);
+        return context.getURI().toString() + context.getId();
+    }        
 
     private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         /**

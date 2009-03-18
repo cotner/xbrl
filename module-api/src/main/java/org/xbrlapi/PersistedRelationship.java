@@ -48,7 +48,13 @@ public interface PersistedRelationship extends XML {
     /**
      * @return the XLink arc order for the relationship.
      */
-    public Double getArcOrder();    
+    public Double getArcOrder();
+    
+    /**
+     * @return the XLink arc priority for the relationship.
+     */
+    public Integer getArcPriority();
+
     
     /**
      * @return the source element namespace.
