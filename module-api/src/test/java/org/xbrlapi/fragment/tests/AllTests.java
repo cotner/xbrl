@@ -14,6 +14,7 @@ public class AllTests {
         suite.addTestSuite(ConceptTestCase.class);
         suite.addTestSuite(ContextComponentTestCase.class);
         suite.addTestSuite(ContextTestCase.class);
+        suite.addTestSuite(FragmentTestCase.class);
 		suite.addTestSuite(FactDimensionContainerTestCase.class);
 		suite.addTestSuite(ReferencePartTestCase.class);
 		suite.addTestSuite(ElementDeclarationTestCase.class);
