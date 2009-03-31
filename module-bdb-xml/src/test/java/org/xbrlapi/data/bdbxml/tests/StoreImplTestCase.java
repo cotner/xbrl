@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.xbrlapi.Fragment;
+import org.xbrlapi.XML;
 import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -34,7 +35,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = "1";
 			MockImpl d = new MockImpl(index);
 			store.persist(d);
-			assertEquals(index,store.get(index).getIndex());	
+			assertEquals(index,store.getFragment(index).getIndex());	
 			
 		} catch (XBRLException e) {
 			e.printStackTrace();
@@ -46,9 +47,9 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 			String index = "1";
 			store.persist(new MockImpl(index));
-			assertTrue(store.hasFragment(index));
+			assertTrue(store.hasXML(index));
 			store.remove(index);
-			assertFalse(store.hasFragment(index));
+			assertFalse(store.hasXML(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());
 		}
@@ -56,10 +57,10 @@ public class StoreImplTestCase extends BaseTestCase {
 	
 	public void testQueryData() {
 		try {
-	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
-	        List<Fragment> fragments = store.<Fragment>query(xpathQuery);
+	        String xpathQuery = "/*";
+	        List<XML> fragments = store.<XML>query(xpathQuery);
 			assertTrue(fragments.size() > 1);
-	        Fragment fragment = fragments.get(0);
+	        XML fragment = fragments.get(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
 		} catch (XBRLException e) {
 		    e.printStackTrace();

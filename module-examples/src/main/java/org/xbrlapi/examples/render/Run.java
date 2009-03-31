@@ -199,7 +199,7 @@ public class Run {
             List<Stub> stubs = store.getStubs();
             if (! stubs.isEmpty()) {
                 for (Stub stub: stubs) {
-                    logger.error(stub.getURI() + ": " + stub.getReason());
+                    logger.error(stub.getResourceURI() + ": " + stub.getReason());
                 }
                 badUsage("Some documents were not loaded.");
             }            
@@ -232,7 +232,7 @@ public class Run {
             Map<String, Object> model = new HashMap<String, Object>();
 
             // Get the root fragment of the target XBRL instance
-            List<Instance> instances = store.getsFromDocument(targetURI, "Instance");
+            List<Instance> instances = store.getFragmentsFromDocument(targetURI, "Instance");
             if (instances.size() > 1)
                 throw new XBRLException("The target instance is not a single XBRL instance.");
             if (instances.size() == 0)

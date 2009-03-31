@@ -70,7 +70,7 @@ public interface Store {
      * fragment index.
      * @throws XBRLException If the test cannot be conducted.
      */
-    public boolean hasFragment(String index) throws XBRLException;
+    public boolean hasXML(String index) throws XBRLException;
     
     /**
      * Retrieves a fragment from a data store.
@@ -79,7 +79,7 @@ public interface Store {
      * @return The fragment corresponding to the specified index.
      * @throws XBRLException if the fragment cannot be retrieved.
      */
-    public <F extends XML> F get(String index) throws XBRLException;
+    public <F extends XML> F getFragment(String index) throws XBRLException;
 
 	/**
 	 * Remove a fragment from the underlying data structure.
@@ -304,7 +304,7 @@ public interface Store {
      * @return the composed data store as a DOM object.
      * @throws XBRLException if the composed data store cannot be constructed.
      */
-    public Document formCompositeDocument() throws XBRLException;
+    public Document getCompositeDocument() throws XBRLException;
     
     /**
      * Get a list of the URIs that have been stored.
@@ -499,7 +499,7 @@ public interface Store {
      * @throws XBRLException
      * @see org.xbrlapi.impl.ArcImpl
      */
-    public <F extends Fragment> List<F> getsFromDocument(URI uri, String interfaceName) throws XBRLException;
+    public <F extends Fragment> List<F> getFragmentsFromDocument(URI uri, String interfaceName) throws XBRLException;
 
     /**
      * @param <F> The fragment extension class
@@ -781,7 +781,7 @@ public interface Store {
      * @return the list of extended links with the specified linkrole.
      * @throws XBRLException
      */
-    public List<ExtendedLink> getExtendedLinksWithRole(URI linkrole) throws XBRLException;
+    public List<ExtendedLink> getExtendedLinks(URI linkrole) throws XBRLException;
 
     /**
      * Get the networks that, at a minimum, contain the relationships

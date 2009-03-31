@@ -33,7 +33,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = "1";
 			MockImpl d = new MockImpl(index);
 			store.persist(d);
-			assertEquals(index,store.get(index).getIndex());
+			assertEquals(index,store.getFragment(index).getIndex());
 		} catch (XBRLException e) {
 			fail("The addition of a document fragment to the Xindice data store failed." + e.getMessage());
 		}
@@ -43,9 +43,9 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 			String index = "1";
 			store.persist(new MockImpl(index));
-			assertTrue(store.hasFragment(index));
+			assertTrue(store.hasXML(index));
 			store.remove(index);
-			assertFalse(store.hasFragment(index));
+			assertFalse(store.hasXML(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());
 		}

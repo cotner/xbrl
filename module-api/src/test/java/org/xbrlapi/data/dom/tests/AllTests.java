@@ -11,7 +11,7 @@ public class AllTests {
 		suite.addTestSuite(ComposeTestCase.class);
 		suite.addTestSuite(DocumentRecoveryFromStoreTestCase.class);
 		suite.addTestSuite(StoreImplTestCase.class);
-		suite.addTestSuite(XBRLStoreImplTestCase.class);
+		suite.addTestSuite(StoreImplXBRLTestCase.class);
 		suite.addTestSuite(DocumentDeletionTestCase.class);
         suite.addTestSuite(QueryForStringsTestCase.class);
 		//$JUnit-END$

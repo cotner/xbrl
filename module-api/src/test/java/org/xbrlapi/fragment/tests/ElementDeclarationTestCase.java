@@ -203,9 +203,9 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
                 assertEquals(fragment.getTypeLocalname(), localname);
                 
             }
-
 			
 		} catch (XBRLException e) {
+		    e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
@@ -241,6 +241,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 	}
 		
     public void testDerterminationOfBeingATuple() {     
+
         try {
             List<Concept> fragments = store.getFragments("Concept");
             assertTrue(fragments.size() > 0);

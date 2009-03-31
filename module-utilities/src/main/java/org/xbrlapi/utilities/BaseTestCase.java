@@ -117,7 +117,7 @@ abstract public class BaseTestCase extends TestCase {
 		} catch (URISyntaxException e) {
 		    fail("The URI syntax is invalid.");
 		}
-        logger.info("Test URI is " + uri);
+        logger.debug("Test URI is " + uri);
 		return uri;
 
 	}	

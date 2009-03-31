@@ -32,7 +32,7 @@ public class QueryForStringsTestCase extends BaseTestCase {
 	        for (String result: results) {
 	            logger.info(result);
 	            if (result.length() > 10) {
-	                store.serialize(store.get(result));
+	                store.serialize(store.getFragment(result));
 	            }
 	        }
 		} catch (Exception e) {

@@ -5,10 +5,12 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.ExtendedLink;
@@ -17,6 +19,7 @@ import org.xbrlapi.LabelResource;
 import org.xbrlapi.Locator;
 import org.xbrlapi.ReferenceResource;
 import org.xbrlapi.SimpleLink;
+import org.xbrlapi.builder.Builder;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -336,10 +339,17 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
+     * @see org.xbrlapi.Fragment#isRoot()
+     */
+    public boolean isRoot() throws XBRLException {
+        return (getParentIndex() == null);
+    }
+    
+    /**
      * @see org.xbrlapi.Fragment#setParentIndex(String)
      */
     public void setParentIndex(String index) throws XBRLException {
-    	setMetaAttribute("parentIndex",index);
+        setMetaAttribute("parentIndex",index);
     }
 
     /**
@@ -358,22 +368,58 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	return xpath.toString();
     }
     
+    
     /**
-     * @see org.xbrlapi.Fragment#setSequenceToParentElement(Vector)
+     * Determines the sibling order of 
+     * @param current The element that we are determining
+     * the sibling order for.  
+     * @return the order of the element, counting sibling 
+     * elements from the left in document order.
      */
-    public void setSequenceToParentElement(Vector<Long> children) throws XBRLException {
-    	
-    	StringBuffer value = new StringBuffer("");
-    	for (int i=0; i<children.size()-1; i++) {
-    		String child = children.get(i).toString();
+    private int getSiblingOrder(Element current) {
+        
+        Node previous = current.getPreviousSibling();
+        
+        while (previous != null) {
+            if (previous.getNodeType() != Node.ELEMENT_NODE) 
+                previous = previous.getPreviousSibling();
+            else break;
+        }
+
+        if (previous == null) return 1;
+        return getSiblingOrder((Element) previous) + 1;
+    }
+    
+    /**
+     * @see org.xbrlapi.Fragment#setSequenceToParentElement(Fragment)
+     */
+    public void setSequenceToParentElement(Fragment parent) throws XBRLException {
+
+        Builder parentBuilder = parent.getBuilder();
+        if (parentBuilder == null) throw new XBRLException("This method is not usable after the fragment has been built.");
+        Element current = parentBuilder.getInsertionPoint();
+        Element next = (Element) current.getParentNode();
+        Stack<Integer> values = new Stack<Integer>();
+
+        while (! next.getNamespaceURI().equals(Constants.XBRLAPINamespace)) {
+            values.push(new Integer(getSiblingOrder(current)));
+            current = next;
+            next = (Element) next.getParentNode();
+        }
+
+        StringBuffer value = new StringBuffer("");
+    	while (! values.empty()) {
+    	    Integer v = values.pop();
 			if (value.length() == 0) {
-				value.append(child);
+				value.append(v.toString());
 			} else {
-				value.append(" " + child); 
+				value.append(" " + v.toString()); 
 			}
 		}
 
-    	setMetaAttribute("SequenceToParentElement",value.toString());
+    	String result = value.toString();
+    	if (! result.equals(""))
+    	setMetaAttribute("SequenceToParentElement",result);
     	
     }
     
@@ -400,14 +446,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	return getMetaAttribute("precedingSiblings");
     }
 
-    /**
-     * @see org.xbrlapi.Fragment#setPrecedingSiblings(Vector)
-     */
-    public void setPrecedingSiblings(Vector<Long> children) throws XBRLException {
-    	Long value = new Long((children.get(children.size()-1)).longValue() - 1);
-    	String precedingSiblings = value.toString();
-    	setMetaAttribute("precedingSiblings",precedingSiblings);
-    }
+
 
 
     
@@ -468,45 +507,96 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	return prefix;
     }
     
+
+    
     /**
+     * Algorithm is as follows:
+     * <ol>
+     *  <li>If the node is an attribute, redo with the parent node.</li>
+     *  <li>If the node is a XBRLAPI metadata element redo with right node in parent fragment.</li>
+     *  <li>If the node is an element in the fragment data:</li>
+     *   <ol>
+     *    <li>Generate namespace declaration attribute name - 'xmlns:...' to search for.</li>
+     *    <li>Try to match the QName prefix to the element's prefix to see if the element namespace is appropriate to return.</li>
+     *    <li>Try to find the attribute doing the namespace declaration on the element and use that.</li>
+     *    <li>If that fails, redo the search using the parent node.</li>
+     *   </ol>
+     * </ol>
+     * 
      * @see org.xbrlapi.Fragment#getNamespaceFromQName(String, Node)
      */
     public URI getNamespaceFromQName(String qname, Node node) throws XBRLException {
-    	
-        // Create NS prefix declaration for the QName being sought.
-        String prefix = getPrefixFromQName(qname);
-        String declaration = "xmlns";
-        if (!prefix.equals("")) {
-            declaration = declaration + ":" + prefix;
+                
+        // If we have an attribute - go straight to working with the parent element.
+        if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
+            Node parent = node.getParentNode();
+            if (parent == null) throw new XBRLException("The attribute has no parent element so the namespace for " + qname + " cannot be determined.");
+            return getNamespaceFromQName(qname, parent);
         }
-
+        
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
+
+            // Go to parent fragment if we are looking at the container element for the fragment data.
+            String elementNamespace = element.getNamespaceURI();
+            if (elementNamespace != null) {
+                if (elementNamespace.equals(Constants.XBRLAPINamespace)) {
+                    if (this.isRoot()) throw new XBRLException("No namespace is defined for QName " + qname);
+                    Fragment parent = getParent();
+                    if (parent == null) throw new XBRLException("A parent fragment is missing from the data store preventing QName resolution for " + qname);
+                    Element parentElement = getParentElement(parent.getDataRootElement());
+                    return parent.getNamespaceFromQName(qname, parentElement);
+                }
+            }
             
-            // Check for a namespace declaration on the current node
-            String ns = element.getAttribute(declaration);
-            if (! ns.equals("")) {
+            // Try to exploit a known namespace mapping for the element or one of its attributes
+            String prefix = getPrefixFromQName(qname);
+            if ((node.getPrefix() != null) && (node.getPrefix().equals(prefix))) {
+                try {
+                    return new URI(node.getNamespaceURI());
+                } catch (URISyntaxException e) {
+                    throw new XBRLException("The namespace URI " + node.getNamespaceURI() + " has invalid syntax.",e);
+                }
+            }
+            NamedNodeMap attrs = node.getAttributes();
+            for (int i=0; i<attrs.getLength(); i++) {
+                Node attr = attrs.item(i);
+                if ((attr.getPrefix() != null) && (attr.getPrefix().equals(prefix))) {
+                    try {
+                        return new URI(attr.getNamespaceURI());
+                    } catch (URISyntaxException e) {
+                        throw new XBRLException("The namespace URI " + attr.getNamespaceURI() + " has invalid syntax.",e);
+                    }
+                }
+            }
+            
+            // Create NS prefix declaration for the QName being sought.
+            String declaration = "xmlns";
+            if (!prefix.equals("")) {
+                declaration = declaration + ":" + prefix;
+            }
+            
+            // Check for a namespace declaration on the current element
+            if (element.hasAttribute(declaration)) {
+                String ns = element.getAttribute(declaration);
+                if (ns.equals("")) {
+                    return null;// The namespace prefix has been undefined by the declaration.
+                }
                 try {
                     return new URI(ns);
                 } catch (URISyntaxException e) {
-                    throw new XBRLException("The namespace is not a valid URI.",e);
+                    throw new XBRLException("The namespace URI " + ns + " has invalid syntax.",e);
                 }
-            }            
-            
-            if (element.isSameNode(this.getMetadataRootElement())) {
-                throw new XBRLException("the QName prefix is not declared for " + qname);
             }
+            
             return getNamespaceFromQName(qname, element.getParentNode());
             
-        } else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
-            Node parent = node.getParentNode();
-            if (parent == null) throw new XBRLException("No namespace is defined for QName " + qname);
-            return getNamespaceFromQName(qname, parent);
-        } else {
-            throw new XBRLException("An element node is expected.");
         }
+            
+        throw new XBRLException("An element or attribute node is expected.");
 
     }
+    
 
     /**
      * @see org.xbrlapi.Fragment#getParent()
@@ -514,37 +604,46 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     public Fragment getParent() throws XBRLException {
     	String parentIndex = this.getParentIndex();
     	if (parentIndex == null) return null;
-    	return getStore().get(parentIndex);
+    	return getStore().getFragment(parentIndex);
     }
     
     /**
+     * This method operates as follows:
+     * <ol>
+     *  <li>If the sequence to the parent element indicates that the 
+     *  data root element is the parent - use that.</li>
+     *  <li>Loop through the sequence to the parent element.</li>
+     * </ol>
      * @see org.xbrlapi.Fragment#getParentElement(Element)
      */
     public Element getParentElement(Element parentDataRootElement) throws XBRLException {
 
     	String[] sequence = getSequenceToParentElement();
+    	
+    	// If there is no data about the sequence then just return the given parent data root element
     	if (sequence[0].equals("")) {
     	    return parentDataRootElement;
     	}
 
-    	// Traverse the parent data DOM to find the parent element
+    	// Traverse the parent data DOM to find the parent element of this fragment's root element.
     	Element current = parentDataRootElement;
-    	for (int i=0; i<sequence.length; i++) { // Iterate the sequence of steps through the parent fragment
-    		int elementOrder = (new Integer(sequence[i])).intValue();  // The sibling position
-    		int elementsFound = 0;
-    		NodeList children = current.getChildNodes();
-    		int j = 0;
-    		while ((elementsFound < elementOrder) && (j < children.getLength())) {
-    			Node child = children.item(j);
-    			if (child.getNodeType() == Node.ELEMENT_NODE) {
-    				elementsFound++;
-    				if (elementsFound == elementOrder) current = (Element) child;
-    			}
-    			j++;
-    		}
-    		if ((j==children.getLength()) && (elementsFound < elementOrder)) {
-    		    throw new XBRLException("The sequence to the parent element is incorrect.");
-    		}
+    	for (String value: sequence) {
+            int elementOrder = (new Integer(value)).intValue();
+            int elementsFound = 0;
+            NodeList children = current.getChildNodes();
+            int j = 0;
+            // While there are still children to consider and we have not found 
+            while ((elementsFound < elementOrder) && (j < children.getLength())) {
+                Node child = children.item(j);
+                if (child.getNodeType() == Node.ELEMENT_NODE) {
+                    elementsFound++;
+                    if (elementsFound == elementOrder) current = (Element) child;
+                }
+                j++;
+            }
+            if ((j==children.getLength()) && (elementsFound < elementOrder)) {
+                throw new XBRLException("The sequence to the parent element is incorrect.");
+            }
     	}
     	return current;
 

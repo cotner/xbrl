@@ -18,12 +18,21 @@ public class FragmentComparator implements Comparator<Fragment> {
 	 * Compare two fragment objects and order such that fragments in different documents
 	 * are grouped separately and so that the fragments are ordered from the closest to the end
 	 * of the document in document order to the closest to the beginning in document order.
+	 * 
 	 * Fragments are sorted:
-	 * 1. in increasing alphanumeric ordering of the URI of the document that the fragment
-	 * belongs to; then
-	 * 2. in increasing order of the index of their parent fragment with root fragments being ordered first of all; then
-	 * 3. in increasing order of the XPath to the containing element in the parent fragment; then
-	 * 4. in increasing order of the number of preceding siblings to the fragment's root element.
+	 * <ol>
+	 *  <li>in INCREASING alphanumeric ordering of the URI of the document that the fragment belongs to; then</li>
+     *  <li>in INCREASING order of the index of their parent fragment with root fragments being ordered first of all; then</li>
+     *  <li>in DECREASING order of the XPath to the containing element in the parent fragment; then</li>
+     *  <li>in INCREASING order of the fragment index which implies being in increasing order of the number of preceding sibling fragments.</li>
+	 * </ol>
+	 * 
+	 * This sorting rule implies that a set of child fragments will be sorted into the order
+	 * necessary for insertion into a parent fragment without the insertion of child fragments
+	 * causing the later fragment insertions to be done in the wrong place.  This is because
+	 * the fragment insertions will be done from the end of the parent fragment, in document order
+	 * to the beginning of the parent fragment, again in document order.
+	 * 
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	public int compare(Fragment o1, Fragment o2) throws ClassCastException {
@@ -58,11 +67,10 @@ public class FragmentComparator implements Comparator<Fragment> {
 			// Compare sequence to containing elements
 			int sequenceComparison = f1.getSequenceToParentElementAsString().compareTo(f2.getSequenceToParentElementAsString());
 			if (sequenceComparison != 0)
-				return sequenceComparison; // Negative if f1 is ordered first
+				return -sequenceComparison;
 			
-			// Compare preceding siblings - the final way of distinguishing fragment order
-			int precedingSiblingComparison = f1.getPrecedingSiblings().compareTo(f2.getPrecedingSiblings());
-			return precedingSiblingComparison;
+			// Compare the fragment index as a last resort to discriminate between sibling fragments
+			return f1.getIndex().compareTo(f2.getIndex());
 
 		} catch (XBRLException e) {
 			throw new ClassCastException("XBRL metadata for fragments is not available to facilitate a comparison. " + e.getMessage());

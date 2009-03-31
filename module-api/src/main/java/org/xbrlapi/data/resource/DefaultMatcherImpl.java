@@ -16,22 +16,33 @@ public class DefaultMatcherImpl implements Matcher {
         ;
     }
 
+    /**
+     * @see Matcher#setSigner(Signer)
+     */
     public void setSigner(Signer signer) {
         return;
     }
     
     /**
-     * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
+     * @see Matcher#getMatch(URI)
      */
     public URI getMatch(URI uri) throws XBRLException {
         return uri;
     }
 
     /**
-     * @see org.xbrlapi.data.resource.Matcher#getSignature(URI)
+     * @see Matcher#getSignature(URI)
      */
     public String getSignature(URI uri) throws XBRLException {
         return uri.toString();
+    }
+    
+    /**
+     * @see Matcher#delete(URI)
+     */
+    public URI delete(URI uri) throws XBRLException {
+        if (uri == null) throw new XBRLException("The URI must not be null.");
+        return null;
     }
 
 }

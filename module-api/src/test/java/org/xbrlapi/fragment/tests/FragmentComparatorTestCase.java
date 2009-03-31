@@ -37,7 +37,7 @@ public class FragmentComparatorTestCase extends BaseTestCase {
     		f1.setParentIndex("1");
     		f1.setPrecedingSiblings("0");
     		
-    		f2 = new MockImpl("11");
+    		f2 = new MockImpl("10");
     		f2.setURI(new URI("http://uriA/"));
     		f2.setSequenceToParentElement("");
     		f2.setParentIndex("1");
@@ -94,7 +94,7 @@ public class FragmentComparatorTestCase extends BaseTestCase {
 	 * Test the comparison of two equivalent fragments
 	 */
 	public void testCompareEquivalentFragments() {
-		assertEquals(0,this.comparator.compare(f1,f2));
+	    assertEquals(0,this.comparator.compare(f1,f2));
 	}
 	
 	/**
@@ -115,7 +115,12 @@ public class FragmentComparatorTestCase extends BaseTestCase {
 	 * Test the comparison of two equivalent fragments
 	 */
 	public void testCompareFragmentsWithDifferentXPathsToContainerElements() {
-		assertTrue(this.comparator.compare(f1,f5) < 0);
+	    try {
+	        assertTrue(this.comparator.compare(f1,f5) > 0);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        fail(e.getMessage());
+	    }
 	}
 	
 	/**

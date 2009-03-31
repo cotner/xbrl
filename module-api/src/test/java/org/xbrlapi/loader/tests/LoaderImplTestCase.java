@@ -182,7 +182,8 @@ public class LoaderImplTestCase extends BaseTestCase {
 	 * Test discovery one URI at a time
 	 */
 	public void testDiscoverNext() {
-		try {
+
+	    try {
 			loader.stashURI(uri1);
 			loader.stashURI(uri2);
 			while (! loader.getDocumentsStillToAnalyse().isEmpty()) {
@@ -199,12 +200,12 @@ public class LoaderImplTestCase extends BaseTestCase {
 	 * where no data has been loaded.
 	 */
 	public void testGetFragmentWhenNoFragmentsAreAvailable() {
-		try {
-			Fragment f = loader.get();
-            fail("Exception expected.");
-            store.serialize(f);
+
+	    try {
+			Fragment f = loader.getFragment();
+			assertNull(f);
 		} catch (XBRLException e) {
-		    ;// An exception should have been thrown.
+		    fail("null should have been returned.");
 		}
 	}
 

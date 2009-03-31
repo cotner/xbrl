@@ -42,7 +42,7 @@ public abstract class QueryTestCase extends TestCase {
 
     public final void testStubsRetrieval() throws Exception {
 
-        String query = "/*[@stub]";
+        String query = "/*[@type='org.xbrlapi.impl.StubImpl']";
         List<Fragment> fragments = store.<Fragment>query(query);
         for (Fragment stub: fragments) {
             List<Fragment> referrers = store.<Fragment>query("/*[@targetDocumentURI='"+stub.getURI()+"']");
@@ -65,7 +65,7 @@ public abstract class QueryTestCase extends TestCase {
     
     public final void testWildcardQueryWithSingleResult() {
         try {
-            iterateURIs("/*[@uri='","' and @parentIndex='none']");
+            iterateURIs("/*[@uri='","' and not(@parentIndex)]");
         } catch (Exception e) {
             e.printStackTrace();    
             fail(e.getMessage());
@@ -74,7 +74,7 @@ public abstract class QueryTestCase extends TestCase {
 
     public final void testSpecificNameWithSingleResult() {
         try {
-            iterateURIs("/xbrlapi:fragment[@uri='","' and @parentIndex='none']");
+            iterateURIs("/xbrlapi:fragment[@uri='","' and not(@parentIndex)]");
         } catch (Exception e) {
             e.printStackTrace();    
             fail(e.getMessage());

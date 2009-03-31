@@ -36,4 +36,13 @@ public interface Matcher {
      */
 	public URI getMatch(URI uri) throws XBRLException;
 	
+	/**
+	 * Deletes the given URI from the matcher.
+	 * @param uri The URI to delete.
+	 * @return the new match URI for documents that used to 
+	 * match the given URI or null if there is none.
+	 * @throws XBRLException if the URI is null.
+	 */
+	public URI delete(URI uri) throws XBRLException;
+	
 }

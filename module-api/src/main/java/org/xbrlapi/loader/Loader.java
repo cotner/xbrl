@@ -2,7 +2,6 @@ package org.xbrlapi.loader;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Vector;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.cache.CacheImpl;
@@ -66,33 +65,13 @@ public interface Loader {
 	 */
 	public CacheImpl getCache() throws XBRLException;
 	
-	/**
-	 * The children vector has an element for each element that has been started and
-	 * that has not yet been ended in the SAX content handler.
-	 * @return The vector of children counts.
-	 */
-	public Vector<Long> getChildrenVector();
+
 	
-	/**
-	 * Add a new child tracking vector to the childrenStack to use for the new fragment
-	 * that is being built by the loader.
-	 * @throws XBRLException
-	 */
-	public void prepareToTrackChildrenForNewFragment() throws XBRLException;
+
 	
-	/**
-	 * Increment the children tracker to show 
-	 * that a new element has been found.
-	 */
-	public void incrementChildren();
+
 	
-	/**
-	 * Add a new node to the vector of children being tracked for the current fragment.
-	 * Initialise its value to zero to capture the fact that no children have been found
-	 * for the newly processed element - as yet.
-	 * @throws XBRLException
-	 */
-	public void extendChildren() throws XBRLException;
+
 
 	/**
 	 * @return the list of documents that are known to still need parsing
@@ -172,11 +151,11 @@ public interface Loader {
 
 
 	/**
-	 * Get the fragment that is currently being built by the DTS loader
-	 * @return the fragment being built currently by the DTS loader.
-	 * @throws XBRLException if the loader is not building any fragments.
+	 * @return the fragment being built currently by the loader 
+	 * or null if no fragments are currently being build by the loader.
+	 * @throws XBRLException
 	 */
-	public Fragment get() throws XBRLException;
+	public Fragment getFragment() throws XBRLException;
 	
 	/**
 	 * @return true if and only if the loader has one or more fragments

@@ -33,6 +33,7 @@ public class UsedOnTestCase extends DOMLoadingTestCase {
 	 * Test analysis of the content of a UsedOn fragment.
 	 */
 	public void testUsedOnContentAnalysis() {
+
 	    try {
 	        List<UsedOn> fragments = store.<UsedOn>getFragments("UsedOn");
 	        assertTrue(fragments.size() > 0);

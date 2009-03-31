@@ -44,8 +44,7 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
         if (signature == null) return uri;
         if (getMap().containsKey(signature)) {
             List<URI> matches = getMap().get(signature);
-            if (! matches.contains(uri))
-                matches.add(uri);
+            if (! matches.contains(uri)) matches.add(uri);
         } else {
             List<URI> list = new Vector<URI>();
             list.add(uri);
@@ -53,5 +52,25 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
         }
         return getMap().get(signature).get(0);
     }
+    
+    /**
+     * @see Matcher#delete(URI)
+     */
+    public URI delete(URI uri) throws XBRLException {
+        if (uri == null) throw new XBRLException("The URI must not be null.");
+        String signature = this.getSignature(uri);
+        
+        List<URI> uris = map.get(signature);
+        
+        for (URI item: uris) {
+            if (item.equals(uri)) uris.remove(item);
+        }
+
+        if (uris.isEmpty()) {
+            map.remove(signature);
+            return null;
+        }
+        return uris.get(0);
+    }    
 
 }

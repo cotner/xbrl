@@ -8,7 +8,8 @@ import org.w3c.dom.Element;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * Test the XBRLAPI Store implementation of DOM recovery methods.
+ * Test the XBRLAPI Store implementation 
+ * of Document DOM recovery methods.
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
 */
 
@@ -72,6 +73,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 			Element root = store.getDocumentAsDOM(this.getURI(STARTING_POINT));
 			assertNotNull(root);
 			assertEquals(root.getLocalName(),"schema");
+			store.serialize(root);
 		} catch (XBRLException e) {
 			fail("Unexpected " + e.getMessage());
 		}

@@ -101,7 +101,7 @@ public class Compose implements EntryPoint {
 			loader.discover();
 			
 			// Generate the necessary composed DOM Object.
-			Document composedDTS = loader.getStore().formCompositeDocument();
+			Document composedDTS = loader.getStore().getCompositeDocument();
 			
 			if (output != null) {
 				loader.getStore().serialize(composedDTS.getDocumentElement(),new File(output));

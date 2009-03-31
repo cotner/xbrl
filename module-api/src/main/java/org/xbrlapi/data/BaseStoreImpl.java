@@ -10,11 +10,9 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -202,8 +200,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         String documentId = getDocumentId(uri);
         Stub stub = new StubImpl(documentId);
         stub.setIndex(documentId);
-        stub.setMetaAttribute("uri",uri.toString());
-        stub.setMetaAttribute("stub","");
+        stub.setResourceURI(uri);
         stub.setMetaAttribute("reason",reason);
         persist(stub);
     }
@@ -230,7 +227,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         
         // The document is not in the data store so generate a new document ID.
         String randomString = random();
-        while (this.hasFragment(randomString + "_1") || this.hasFragment(randomString)) {
+        while (this.hasXML(randomString + "_1") || this.hasXML(randomString)) {
             randomString = random();
         }
         return randomString;
@@ -330,12 +327,30 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	  * @see org.xbrlapi.data.Store#deleteDocument(URI)
      */
     public void deleteDocument(URI uri) throws XBRLException {
-        URI matchURI = this.getMatcher().getMatch(uri);
+        logger.info("Doing a deletion");
+        URI matchURI = getMatcher().getMatch(uri);
+        
+        URI newMatchURI = getMatcher().delete(uri);
+
+        // Update the actual document fragments
         String query = "/*[@uri='"+ matchURI + "']";
-        List<XML> resources = this.<XML>query(query);
-        for (XML resource: resources) {
-            this.remove(resource.getIndex());
+        List<Fragment> resources = this.<Fragment>query(query);
+        for (Fragment resource: resources) {
+            if (newMatchURI != null) {
+                resource.setURI(newMatchURI);
+                this.persist(resource);
+            } else {
+                this.remove(resource.getIndex());
+            }
         }
+            
+        // Eliminate any document stub
+        query = "/*[@type='org.xbrlapi.impl.StubImpl' and @resourceURI='"+ uri + "']";
+        List<Stub> stubs = this.<Stub>query(query);
+        for (Stub stub: stubs) {
+            this.remove(stub.getIndex());
+        }
+        
     }
     
 
@@ -449,12 +464,12 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see Store#getStoredURIs()
      */
     public List<URI> getStoredURIs() throws XBRLException {
-    	LinkedList<URI> uris = new LinkedList<URI>();
-    	List<Fragment> rootFragments = this.getRootFragments();
-    	for (int i=0; i<rootFragments.size(); i++) {
-    		uris.add(rootFragments.get(i).getURI());
+    	Set<URI> uris = new TreeSet<URI>();
+    	List<Fragment> roots = this.getRootFragments();
+    	for (Fragment root: roots) {
+    		uris.add(root.getURI());
     	}
-    	return uris;
+    	return new Vector<URI>(uris);
     }
 
     /**
@@ -462,7 +477,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public boolean hasDocument(URI uri) throws XBRLException {
         URI matchURI = getMatcher().getMatch(uri);
-        List<Fragment> rootFragments = this.<Fragment>query("/*[@uri='" + matchURI + "' and @parentIndex='none']");
+        List<Fragment> rootFragments = this.<Fragment>query("/*[@uri='" + matchURI + "' and not(@parentIndex)]");
         return (rootFragments.size() > 0) ? true : false;
     }
 
@@ -496,7 +511,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     private Element getAnnotatedDocumentAsDOM(URI uri) throws XBRLException {
         URI matchURI = getMatcher().getMatch(uri);
-        List<Fragment> fragments = query("/*[@uri='" + matchURI + "' and @parentIndex='none']");
+        List<Fragment> fragments = query("/*[@uri='" + matchURI + "' and not(@parentIndex)]");
         if (fragments.size() > 1) throw new XBRLException("More than one document was found in the data store.");
         if (fragments.size() == 0) throw new XBRLException("No documents were found in the data store.");
         Fragment fragment = fragments.get(0);
@@ -527,48 +542,35 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 		try {
 		    d = (Element) storeDOM.importNode(f.getDataRootElement(), true);
 		} catch (Exception e) {
-		    f.getStore().serialize(f.getMetadataRootElement());
 		    throw new XBRLException("The data could not be plugged into the DOM for fragment " + f.getIndex(),e);
 		}
 		    
 		// Get the child fragment IDs
-		List<Fragment> fs = this.query("/"+ Constants.XBRLAPIPrefix + ":" + "fragment[@parentIndex='" + f.getIndex() + "']");
+		List<Fragment> unorderedFragments = this.query("/*[@parentIndex='" + f.getIndex() + "']");
 		
 		// With no children, just return the fragment
-		if (fs.size() == 0) {
+		if (unorderedFragments.size() == 0) {
 			return d;
-
 		}
 
 		// Sort the child fragments into insertion order
-		Comparator<Fragment> comparator = new FragmentComparator();
-		TreeSet<Fragment> fragments = new TreeSet<Fragment>(comparator);
-    	for (int i=0; i<fs.size(); i++) {
-    		fragments.add(fs.get(i));
+		TreeSet<Fragment> sortedFragments = new TreeSet<Fragment>(new FragmentComparator());
+    	for (Fragment fragment: unorderedFragments) {
+    		sortedFragments.add(fragment);
     	}
     	
-    	// Iterate child fragments in insertion order, inserting them
-    	Iterator<Fragment> iterator = fragments.iterator();
-    	while (iterator.hasNext()) {
+    	// Iterate sorted child fragments in insertion order, inserting them
+    	for (Fragment childFragment: sortedFragments) {
 
-    		//Get child fragment
-    		Fragment childFragment = iterator.next();
-
-    		// Get XML DOM for child fragment using recursion
+    		// Get XML DOM for child fragment
     		Element child = getSubtree(childFragment);
 
     		// Get parent element of child fragment in current fragment
     		Element parentElement = childFragment.getParentElement(d);
 
-    		// Determine the number of preceding siblings
-    		int precedingSiblings = (new Integer(childFragment.getPrecedingSiblings())).intValue();
-    		
-    		// Get the following sibling of this child fragment
-    		Element followingSibling = getFollowingSibling(parentElement, precedingSiblings);
+            // Do the fragment insertion
+    		parentElement.appendChild(child);
 
-    		// Do the fragment insertion
-            parentElement.insertBefore(child, followingSibling);
-    		
     	}
 		return d;
 	}
@@ -623,7 +625,6 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 		// With no children, just return the fragment
 		if (fs.size() == 0) {
 			return d;
-
 		}
 
 		// Sort the child fragments into insertion order
@@ -646,14 +647,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     		// Get parent element of child fragment in current fragment
     		Element parentElement = childFragment.getParentElement(d);
 
-    		// Determine the number of preceding siblings
-    		int precedingSiblings = (new Integer(childFragment.getPrecedingSiblings())).intValue();
-    		
-    		// Get the following sibling of this child fragment
-    		Element followingSibling = getFollowingSibling(parentElement, precedingSiblings);
-
     		// Do the fragment insertion
-            parentElement.insertBefore(child, followingSibling);
+            parentElement.appendChild(child);
     		
     	}
 		return d;
@@ -698,7 +693,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @return the composed data store as a DOM object.
      * @throws XBRLException if the composed data store cannot be constructed.
      */
-    public Document formCompositeDocument() throws XBRLException {
+    public Document getCompositeDocument() throws XBRLException {
     	
 		if (storeDOM == null) {
 			storeDOM = (new XMLDOMBuilder()).newDocument();
@@ -729,15 +724,16 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getStubs()
      */
     public List<Stub> getStubs() throws XBRLException {
-        return this.<Stub>getFragments("Stub");
+        List<Stub> stubs = this.<Stub>getFragments("Stub");
+        logger.info(stubs.size());
+        return stubs;
     }
     
     /**
      * @see org.xbrlapi.data.Store#getStub(URI)
      */
     public Stub getStub(URI uri) throws XBRLException {
-        URI matchURI = getMatcher().getMatch(uri);
-        List<Stub> stubs = this.<Stub>query("/*[@type='org.xbrlapi.impl.StubImpl' and @uri='" + matchURI + "']");
+        List<Stub> stubs = this.<Stub>query("/*[@type='org.xbrlapi.impl.StubImpl' and @resourceURI='" + uri + "']");
         if (stubs.size() == 0) return null;
         if (stubs.size() > 1) throw new XBRLException("There are " + stubs.size() + " stubs for " + uri);
         return stubs.get(0);
@@ -747,7 +743,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getStub(URI stubId)
      */
     public void removeStub(String stubId) throws XBRLException {
-        if (hasFragment(stubId)) remove(stubId);
+        if (hasXML(stubId)) remove(stubId);
     }
     
     /**
@@ -763,14 +759,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public synchronized List<URI> getDocumentsToDiscover() throws XBRLException {
         List<Stub> stubs = getStubs();
-        LinkedList<URI> list = new LinkedList<URI>();
+        Vector<URI> list = new Vector<URI>();
         for (Stub stub: stubs) {
-            String uri = stub.getMetaAttribute("uri");
-            try {
-                list.add(new URI(uri));
-            } catch (URISyntaxException e) {
-                throw new XBRLException("URI " + uri + " is malformed", e);
-            }
+            list.add(stub.getResourceURI());
         }
         return list;
     }
@@ -916,10 +907,11 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public Networks getNetworks() throws XBRLException {
 
         Networks networks = new NetworksImpl(this);
-        
+
         // First get the set of arcs using the arc role
-        List<Arc> arcs = this.<Arc>getFragments("Arc");
-        for (Arc arc: arcs) {
+        Set<String> arcIndices = getArcIndices();
+        for (String index: arcIndices) {
+            Arc arc = this.getFragment(index);
             List<ArcEnd> sources = arc.getSourceFragments();
             List<ArcEnd> targets = arc.getTargetFragments();
             for (ArcEnd source: sources) {
@@ -937,6 +929,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
                 }
             }
         }
+        logger.info("network size = " + networks.getSize());
         return networks;        
     }
 
@@ -947,27 +940,37 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
         Networks networks = new NetworksImpl(this);
     	
-    	// First get the set of arcs using the arc role
-		List<Arc> arcs = getArcs(arcrole);
-		logger.info(arcs.size());
-    	for (Arc arc: arcs) {
-    		List<ArcEnd> sources = arc.getSourceFragments();
-    		List<ArcEnd> targets = arc.getTargetFragments();
-    		for (ArcEnd source: sources) {
-    			for (ArcEnd target: targets) {
-    				Fragment s = null;
-    				Fragment t = null;
-            		if (source.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
-            			s = ((Locator) source).getTarget();
-            		else s = source;
-            		if (target.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
-            			t = ((Locator) target).getTarget();
-            		else t = target;
-        			Relationship relationship = new RelationshipImpl(arc,s,t);
-        			networks.addRelationship(relationship);
-    			}
-    		}
-    	}
+        // First get the relevant extended links
+        Set<URI> linkRoles = this.getLinkRoles(arcrole);
+        
+        for (URI linkRole: linkRoles) {
+            Set<String> linkIndices = getExtendedLinkIndices(linkRole);
+            for (String linkIndex: linkIndices) {
+
+                Set<String> arcIndices = getArcIndices(arcrole,linkIndex);
+                for (String index: arcIndices) {
+                    Arc arc = this.getFragment(index);
+                    List<ArcEnd> sources = arc.getSourceFragments();
+                    List<ArcEnd> targets = arc.getTargetFragments();
+                    for (ArcEnd source: sources) {
+                        for (ArcEnd target: targets) {
+                            Fragment s = null;
+                            Fragment t = null;
+                            if (source.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
+                                s = ((Locator) source).getTarget();
+                            else s = source;
+                            if (target.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
+                                t = ((Locator) target).getTarget();
+                            else t = target;
+                            Relationship relationship = new RelationshipImpl(arc,s,t);
+                            networks.addRelationship(relationship);
+                        }
+                    }
+                }
+            }
+        }
+        
+        logger.info("network size = " + networks.getSize());
     	return networks;    	
     }
     
@@ -978,21 +981,14 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
         Networks networks = new NetworksImpl(this);
 
-        Map<String,ExtendedLink> links = new HashMap<String,ExtendedLink>();
-        
-        // First get the set of arcs using the arc role
-        List<Arc> arcs = getArcs(arcrole);
-        for (Arc arc: arcs) {
-            ExtendedLink link = null;
-            String linkIndex = arc.getParentIndex();
-            if (links.containsKey(linkIndex)) {
-                link = links.get(linkIndex);
-            } else {
-                link = (ExtendedLink) arc.getParent();
-                links.put(link.getIndex(),link);
-            }
-            URI myLinkrole = link.getLinkRole();
-            if (myLinkrole.equals(linkRole)) {
+        Set<String> linkIndices = getExtendedLinkIndices(linkRole);
+        logger.info(linkIndices.size() + " extended links with given link and arc roles.");
+        for (String linkIndex: linkIndices) {
+
+            Set<String> arcIndices = getArcIndices(arcrole,linkIndex);
+            logger.info(arcIndices.size() + " arcs with arcrole in given extended link.");
+            for (String index: arcIndices) {
+                Arc arc = this.getFragment(index);
                 List<ArcEnd> sources = arc.getSourceFragments();
                 List<ArcEnd> targets = arc.getTargetFragments();
                 for (ArcEnd source: sources) {
@@ -1009,9 +1005,10 @@ public abstract class BaseStoreImpl implements Store, Serializable {
                         networks.addRelationship(relationship);
                     }
                 }
-                
             }
-        }
+        } 
+        
+        logger.info("network size = " + networks.getSize());
         return networks;        
     }
 
@@ -1022,9 +1019,74 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     private List<Arc> getArcs(URI arcrole) throws XBRLException {
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment["+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]";
-    	return this.<Arc>query(query);
+    	String query = "/*[*/*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]";
+    	List<Arc> arcs = this.<Arc>query(query);
+    	logger.debug("#arcs with given arcrole = " + arcs.size());
+    	return arcs;
     }
+    
+    /**
+     * @param arcrole The arcrole to use to identify the arcs to retrieve.
+     * @param linkIndex The index of the extended link containing the arcs to retrieve.
+     * @return the list of indices of arcs matching the selection criteria.
+     * @throws XBRLException
+     * @return the list of arc fragments matching the selection criteria.
+     * @throws XBRLException
+     */
+    private List<Arc> getArcs(URI arcrole, String linkIndex) throws XBRLException {
+        String query = "/*[@parentIndex='" + linkIndex + "' and */*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]";
+        List<Arc> arcs = this.<Arc>query(query);
+        logger.debug("#arcs with given arcrole in given extended link = " + arcs.size());
+        return arcs;
+    }    
+    
+    /**
+     * @param arcrole The arcrole to use to identify the arcs to retrieve.
+     * @return the list of indices of arcs with a given arc role value.
+     * @throws XBRLException
+     */
+    private Set<String> getArcIndices(URI arcrole) throws XBRLException {
+        String query = "/*[*/*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]/@index";
+        return this.queryForStrings(query);
+    }
+    
+    /**
+     * @param arcrole The arcrole to use to identify the arcs to retrieve.
+     * @param linkIndex The index of the extended link containing the arcs to retrieve.
+     * @return the list of indices of arcs matching the selection criteria.
+     * @throws XBRLException
+     */
+    private Set<String> getArcIndices(URI arcrole, String linkIndex) throws XBRLException {
+        String query = "/*[@parentIndex='" + linkIndex + "' and */*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]/@index";
+        Set<String> indices = this.queryForStrings(query);
+        logger.debug("# arcs with given arcrole in given link = " + indices.size());
+        return indices;
+    }    
+    
+    /**
+     * @param linkRole The link role to use to identify the extended links to retrieve.
+     * @return the list of indices of extended links with the given link role value.
+     * @throws XBRLException
+     */
+    private Set<String> getExtendedLinkIndices(URI linkRole) throws XBRLException {
+        String query = "/*[*/*[@xlink:role='" + linkRole + "' and @xlink:type='extended']]/@index";
+        Set<String> indices = this.queryForStrings(query);
+        logger.debug("# extended links with given link role = " + indices.size());
+        return indices;
+    }
+    
+
+    
+    
+    
+    /**
+     * @return the list of indices of arcs in the data store.
+     * @throws XBRLException
+     */
+    private Set<String> getArcIndices() throws XBRLException {
+        String query = "/*[*/*[@xlink:type='arc']]/@index";
+        return this.queryForStrings(query);
+    }    
     
     
     
@@ -1042,7 +1104,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @return a list of fragments with the given fragment type and in the given document.
      * @throws XBRLException
      */
-    public <F extends Fragment> List<F> getsFromDocument(URI uri, String interfaceName) throws XBRLException {
+    public <F extends Fragment> List<F> getFragmentsFromDocument(URI uri, String interfaceName) throws XBRLException {
         URI matchURI = getMatcher().getMatch(uri);
         return this.<F>query("/*[@uri='"+ matchURI + "' and @type='org.xbrlapi.impl." + interfaceName + "Impl']");
     }    
@@ -1088,7 +1150,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<Fact> getFacts(URI uri) throws XBRLException {
-    	List<Instance> instances = this.<Instance>getsFromDocument(uri,"Instance");
+    	List<Instance> instances = this.<Instance>getFragmentsFromDocument(uri,"Instance");
     	return this.getFactsFromInstances(instances);
     }
     
@@ -1100,7 +1162,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getRootFragmentForDocument(URI)
      */
     public <F extends Fragment> F getRootFragmentForDocument(URI uri) throws XBRLException {
-    	List<F> fragments = this.<F>query("/*[@uri='" + uri + "' and @parentIndex='none']");
+    	List<F> fragments = this.<F>query("/*[@uri='" + uri + "' and not(@parentIndex)]");
     	if (fragments.size() == 0) return null;
     	if (fragments.size() > 1) throw new XBRLException("Two fragments identify themselves as roots of the one document.");
     	return fragments.get(0);
@@ -1111,11 +1173,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getRootFragments()
      */
     public <F extends Fragment> List<F> getRootFragments() throws XBRLException {
-        long start = System.currentTimeMillis();
-        logger.debug("Getting all root fragments.");
-    	List<F> roots =  this.<F>query("/*[@parentIndex='none']");
-        logger.debug("Retrieval of root fragments took " + (System.currentTimeMillis() - start) + " milliseconds.");
-        return roots;
+    	List<F> roots =  this.<F>query("/*[@uri and not(@parentIndex)]");
+    	return roots;
     }
 
     /**
@@ -1232,7 +1291,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<Item> getItems(URI uri) throws XBRLException {
-        List<Instance> instances = this.<Instance>getsFromDocument(uri,"Instance");
+        List<Instance> instances = this.<Instance>getFragmentsFromDocument(uri,"Instance");
         return this.getItemsFromInstances(instances);
     }
     
@@ -1242,7 +1301,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<Tuple> getTuples(URI uri) throws XBRLException {
-        List<Instance> instances = this.<Instance>getsFromDocument(uri,"Instance");
+        List<Instance> instances = this.<Instance>getFragmentsFromDocument(uri,"Instance");
         return this.getTuplesFromInstances(instances);
     }
 
@@ -1285,7 +1344,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         while (iterator.hasNext()) {
             String id = iterator.next();
             if (! targetIds.containsKey(id)) {
-                Fragment target = this.get(id);
+                Fragment target = this.getFragment(id);
                 if (! target.isa("org.xbrlapi.impl.LocatorImpl"))
                     roots.add((F) target);
                 else {
@@ -1330,7 +1389,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         List<Fragment> roots = new Vector<Fragment>();
         for (String id: sourceIds.keySet()) {
             if (! targetIds.containsKey(id)) {
-                roots.add(this.<Fragment>get(id));
+                roots.add(this.<Fragment>getFragment(id));
             }
         }
         return roots;
@@ -1459,9 +1518,9 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
  
     /**
-     * @see XBRLStore#getExtendedLinksWithRole(URI)
+     * @see XBRLStore#getExtendedLinks(URI)
      */
-    public List<ExtendedLink> getExtendedLinksWithRole(URI linkrole) throws XBRLException {
+    public List<ExtendedLink> getExtendedLinks(URI linkrole) throws XBRLException {
         String query = "/*[*/*[@xlink:type='extended' and @xlink:role='" + linkrole + "']]";
         List<ExtendedLink> links = this.<ExtendedLink>query(query);
         return links;
@@ -1566,7 +1625,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         Set<String> linkIndices = this.queryForStrings(query);
         Set<URI> linkRoles = new TreeSet<URI>();
         for (String index: linkIndices) {
-            ExtendedLink link = this.get(index);
+            ExtendedLink link = this.getFragment(index);
             linkRoles.add(link.getLinkRole());
         }
         return linkRoles;
@@ -1705,7 +1764,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see Store#getNetworksFrom(String,URI,URI)
      */
     public Networks getNetworksFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException {
-        Fragment source = this.get(sourceIndex);
+        Fragment source = this.getFragment(sourceIndex);
 
         Networks networks = new NetworksImpl(this);
         Relationship relationship = null;
@@ -1769,7 +1828,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see Store#getNetworksTo(String,URI,URI)
      */
     public Networks getNetworksTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException {
-        Fragment target = this.get(targetIndex);
+        Fragment target = this.getFragment(targetIndex);
 
         Networks networks = new NetworksImpl(this);
         Relationship relationship = null;

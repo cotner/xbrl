@@ -333,7 +333,7 @@ public class XMLImpl implements XML {
     public void updateInStore() throws XBRLException {
         Store store = this.getStore();
         if (store == null) return;
-        if (store.hasFragment(this.getIndex())) {
+        if (store.hasXML(this.getIndex())) {
             store.remove(this.getIndex());
         }
         store.persist(this);

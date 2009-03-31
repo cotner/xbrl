@@ -15,7 +15,7 @@ import org.xbrlapi.utilities.Constants;
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
 */
 
-public class XBRLStoreImplTestCase extends BaseTestCase {
+public class StoreImplXBRLTestCase extends BaseTestCase {
 	
     private final String STARTING_POINTA = "test.data.custom.link.role";
 	private final String STARTING_POINTB = "test.data.custom.link.arcrole";
@@ -37,7 +37,7 @@ public class XBRLStoreImplTestCase extends BaseTestCase {
 		super.tearDown();
 	}
 
-	public XBRLStoreImplTestCase(String arg0) {
+	public StoreImplXBRLTestCase(String arg0) {
 		super(arg0);
 	}
 

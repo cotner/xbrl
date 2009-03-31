@@ -120,8 +120,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@parentIndex\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@uri\" type=\"xs:string\"/>\n"
 		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@absoluteHref\" type=\"xs:string\"/>\n"
-                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@stub\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "xptr/@value\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@resourceURI\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@value\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "xptr/@value\" type=\"xs:string\"/>\n"
 		        + "</index>\n"
 		        + "</collection>";
 			
@@ -209,7 +210,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		if (xml == null) throw new XBRLException("The fragment is null so it cannot be added.");
 		String index = xml.getIndex();
 		
-		if (hasFragment(index)) {
+		if (hasXML(index)) {
             this.remove(index);
         }
 
@@ -246,8 +247,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * fragment index.
      * @throws XBRLException If the test cannot be conducted.
      */
-	public synchronized boolean hasFragment(String index) throws XBRLException {
-    	if (get(index) == null) {
+	public synchronized boolean hasXML(String index) throws XBRLException {
+    	if (getFragment(index) == null) {
     		return false;
     	}
     	return true;
@@ -262,7 +263,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * the fragment is not in the store.
      * @throws XBRLException if the fragment cannot be retrieved.
      */
-    public synchronized <F extends XML> F get(String index) throws XBRLException {
+    public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
     	try {
     		XMLResource resource = (XMLResource) collection.getResource(index);
     		if (resource == null) return null;
@@ -297,7 +298,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 */
     public synchronized void remove(String index) throws XBRLException {
         try {
-            if (!hasFragment(index)) {
+            if (!hasXML(index)) {
             	return;
             }
 

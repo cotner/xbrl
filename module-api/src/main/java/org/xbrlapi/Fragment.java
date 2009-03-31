@@ -2,7 +2,6 @@ package org.xbrlapi;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -62,6 +61,13 @@ public interface Fragment extends XML {
     public String getParentIndex() throws XBRLException;
     
     /**
+     * @return true if the fragment is the root of an XML document
+     * and false otherwise.
+     * @throws XBRLException
+     */
+    public boolean isRoot() throws XBRLException;
+    
+    /**
      * Get the sequence of steps through the parent fragment DOM to the parent element.
      * @return The sequence through the parent fragment data to the parent element of this fragment.
      * @throws XBRLException
@@ -91,13 +97,16 @@ public interface Fragment extends XML {
     public String getXPath() throws XBRLException;
     
     /**
-     * Sets the sequence of child element counts that describe the
-     * path through the parent fragment from its root to the element
-     * that has this fragment's root as a child element.
-     * @param children The vector of long integers giving the children counts for the parent fragment.
+     * Specifies the set of ancestor elements of the element in the parent
+     * fragment that is the insertion point for this fragment's root element.
+     * The ancestor elements are identified by their sibling order in the 
+     * parent fragment (after all other fragments have been carved out of it).
+     * Note that the root element of the parent fragment is not part of the sequence
+     * because that is always identified by a value of 1 - being an only child.
+     * @param fragment The parent fragment.
      * @throws XBRLException
      */
-    public void setSequenceToParentElement(Vector<Long> children) throws XBRLException;
+    public void setSequenceToParentElement(Fragment parent) throws XBRLException;
     
     /**
      * Get the number of children that precede this fragment's root element
@@ -107,13 +116,7 @@ public interface Fragment extends XML {
      */
     public String getPrecedingSiblings() throws XBRLException;
     
-    /**
-     * Set the number of children that precede this fragment's root element
-     * in document order in the element that contains it (in the parent element).
-     * @param children The list of children counts for the parent fragment.
-     * @throws XBRLException if the parent fragment index cannot be set.
-     */
-    public void setPrecedingSiblings(Vector<Long> children) throws XBRLException;
+
 
 
     
@@ -200,6 +203,8 @@ public interface Fragment extends XML {
      * @throws XBRLException if the namespace is not declared
      */
     public URI getNamespaceFromQName(String qname, Node node) throws XBRLException;
+    
+    
     
     /**
      * Returns the local name for a QName

@@ -330,7 +330,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	        if (xml.getStore() != null) return;
 
 	        String index = xml.getIndex();
-	        if (hasFragment(index)) remove(index);
+	        if (hasXML(index)) remove(index);
 
             String string = serializeToString(xml.getMetadataRootElement());
             xmlUpdateContext = dataManager.createUpdateContext();
@@ -349,9 +349,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#hasFragment(String)
+	 * @see org.xbrlapi.data.Store#hasXML(String)
 	 */
-    public synchronized boolean hasFragment(String index) throws XBRLException {
+    public synchronized boolean hasXML(String index) throws XBRLException {
 	    incrementCallCount();
         XmlDocument xmlDocument = null;
 	    try {
@@ -372,7 +372,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	public synchronized boolean hasDocument(URI uri) throws XBRLException {
         XmlResults results = null;
         try {
-            results = performQuery("/*[@uri='" + uri + "' and @parentIndex='none']");
+            results = performQuery("/*[@uri='" + uri + "' and not(@parentIndex)]");
             return (results.size() == 1); 
         } catch (XmlException e) {
             throw new XBRLException("The size of the result set for the query could not be determined.", e);
@@ -382,9 +382,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     }    	
 
 	/**
-	 * @see org.xbrlapi.data.Store#get(String)
+	 * @see org.xbrlapi.data.Store#getFragment(String)
 	 */
-     public synchronized <F extends XML> F get(String index) throws XBRLException {
+     public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
 	    this.incrementCallCount();
         XmlDocument xmlDocument = null;
         Document document = null;
@@ -509,6 +509,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
                 return indices.keySet();
     
             } catch (XmlException e) {
+                throw new XBRLException("Failed query: " + query,e);
+            } catch (IllegalStateException e) {
                 throw new XBRLException("Failed query: " + query,e);
             }
             
@@ -690,7 +692,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     @Override
     public List<URI> getStoredURIs() throws XBRLException {
         
-        String query = "/*[@parentIndex='none']/@uri";
+        String query = "/*[not(@parentIndex)]/@uri";
         query = query + this.getURIFilteringQueryClause();
         this.incrementCallCount();
         

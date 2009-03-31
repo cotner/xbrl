@@ -44,14 +44,13 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
 
             Thread.sleep(200);
             loader.requestInterrupt();
-            
+
             while (t1.isAlive()) {
                 Thread.sleep(100);
             }
             loader.storeDocumentsToAnalyse();
             logger.info("# stored URIs = " + store.getStoredURIs().size());
             assertTrue(store.getStoredURIs().size() < 14);
-            assertTrue(store.getDocumentsToDiscover().size() > 0);
 			loader.discover();
             logger.info("# stored URIs = " + store.getStoredURIs().size());
             for (URI uri: store.getStoredURIs()) {

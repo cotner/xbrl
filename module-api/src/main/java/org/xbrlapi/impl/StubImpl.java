@@ -47,17 +47,33 @@ public class StubImpl extends XMLImpl implements Stub {
     }
 
     /**
-     * @see org.xbrlapi.Stub#getURI()
+     * @see org.xbrlapi.Stub#getResourceURI()
      */
-    public URI getURI() throws XBRLException {
+    public URI getResourceURI() throws XBRLException {
         String uri = "";
         try {
-            uri  = this.getMetaAttribute("uri");
+            uri  = this.getMetaAttribute("resourceURI");
             return new URI(uri);
         } catch (URISyntaxException e) {
             throw new XBRLException(" URI: " + uri + " has incorrect syntax .", e);
         }
     }
+    
+    /**
+     * @see org.xbrlapi.Stub#setResourceURI(URI)
+     */
+    public void setResourceURI(URI uri) throws XBRLException {
+        if (uri == null) throw new XBRLException("The stub URI must not be null.");
+        this.setMetaAttribute("resourceURI",uri.toString());
+    }
+    
+    /**
+     * @see org.xbrlapi.Stub#setReason()
+     */
+    public void setReason(String reason) throws XBRLException {
+        if (reason == null) throw new XBRLException("The reason must not be null.");
+        this.setMetaAttribute("reason",reason);
+    }    
 	
 	
 	

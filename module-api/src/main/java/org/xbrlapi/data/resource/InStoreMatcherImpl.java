@@ -4,10 +4,10 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 
-import org.xbrlapi.Fragment;
+import org.xbrlapi.Match;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.impl.MockImpl;
+import org.xbrlapi.impl.MatchImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -62,11 +62,14 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
         
         if (matchMap.containsKey(uri)) return matchMap.get(uri);
         
-        String query = "/*[" + Constants.XBRLAPIPrefix + ":resource/@uri='" + uri +"']";
-        List<Fragment> matches = getStore().query(query);
-        if (matches.size() > 1) throw new XBRLException("The wrong number of match fragments was retrieved.  There must be just one.");
+        Match match = this.getMatchXML(uri);
         
-        if (matches.size() == 0) {
+        if (match != null) {
+            logger.info("serialising the match XML");
+            match.serialize();
+        }
+        
+        if (match == null) {
 
             String signature = null;
             try {
@@ -77,35 +80,60 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
                 return uri;
             }
             
-            if (getStore().hasFragment(signature)) {
-                Fragment match = getStore().get(signature);
-                HashMap<String,String> attr = new HashMap<String,String>();
-                attr.put("uri",uri.toString());
-                match = getStore().get(signature);
-                match.appendMetadataElement("resource",attr);
-                URI matchURI = match.getURI();
-                this.matchMap.put(uri,matchURI);
-                return matchURI;
+            if (getStore().hasXML(signature)) {
+                match = getStore().<Match>getFragment(signature);
+                match.setResourceURI(uri);
+                getStore().persist(match);
+                URI result = match.getMatch();
+                logger.info(result);
+                return result;
             } 
 
-            Fragment match = new MockImpl(signature);
-            HashMap<String,String> attr = new HashMap<String,String>();
-            attr.put("uri",uri.toString());
-            match.setMetaAttribute("uri",uri.toString());
-            match.appendMetadataElement("resource",attr);
+            match = new MatchImpl(signature);
+            match.setResourceURI(uri);
             getStore().persist(match);
             this.matchMap.put(uri,uri);
+            logger.info(uri);
             return uri;
-            
         } 
 
-        Fragment match = matches.get(0);
-        URI matchURI = match.getURI();
+        URI matchURI = match.getMatch();
         this.matchMap.put(uri,matchURI);
+        logger.info(matchURI);
         return matchURI;
         
     }
     
+    /**
+     * @see Matcher#delete(URI)
+     */
+    public URI delete(URI uri) throws XBRLException {
+        if (uri == null) throw new XBRLException("The URI must not be null.");
 
+        Match match = this.getMatchXML(uri);
+        if (match == null) return null;
+        match.deleteURI(uri);
+        
+        // Update the memory map
+        URI matchURI = match.getMatch();
+        if (matchURI != null) {
+            matchMap.remove(uri);
+            if (uri.equals(this.getMatch(uri))) {
+                for (URI key: matchMap.keySet()) {
+                    if (matchMap.get(key).equals(uri)) matchMap.put(key,matchURI);
+                }
+            }
+        }
+        
+        return matchURI;
+    }    
+    
+    private Match getMatchXML(URI uri) throws XBRLException {
+        String query = "/*[@type='org.xbrlapi.impl.MatchImpl' and "+ Constants.XBRLAPIPrefix + ":match/@value='" + uri +"']";
+        List<Match> matches = getStore().<Match>query(query);
+        if (matches.size() > 1) throw new XBRLException("The wrong number of match fragments was retrieved.  There must be just one.");
+        if (matches.size() == 0) return null;
+        return matches.get(0);
+    }
 
 }

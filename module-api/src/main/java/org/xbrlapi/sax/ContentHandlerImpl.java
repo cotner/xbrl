@@ -91,11 +91,8 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
 
         Loader loader = getLoader();
         
-        // Update the information about the state of the current element
+        // Update the information about the state of the current element (tracks ancestor attributes)
         setElementState(new ElementState(getElementState(),attrs));
-
-        // Update the loader information about child elements.
-        loader.incrementChildren();
 
         // Stash new URIs in xsi:schemaLocation attributes if desired
         if (loader.useSchemaLocationAttributes()) {
@@ -134,7 +131,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             try {
                 identifier.startElement(namespaceURI,lName,qName,attrs);
                 if (loader.isBuildingAFragment()) {
-                    if (loader.get().isNewFragment()) {
+                    if (loader.getFragment().isNewFragment()) {
                         break;
                     }
                 }
@@ -148,35 +145,10 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         if (! loader.isBuildingAFragment()) {
             throw new SAXException("Some element has not been placed in a fragment.");
         }
-
-        // Extend the child count for a new element if 
-        // we have not started a new fragment.
-        try {
-            if (! getLoader().get().isNewFragment()) {
-                getLoader().extendChildren();   
-            }
-        } catch (XBRLException e) {
-            logger.error(this.getURI() + " : " + e.getMessage());
-            throw new SAXException("Could not handle children tracking at the fragment level.",e);
-        }
-
-        // Add the necessary xmlns namespace declarations to the fragment root.
-        try {
-            // if the element being started is the root of a new fragment.
-            if (getLoader().get().isNewFragment()) { 
-                Fragment f = getLoader().get();
-                for (String key: inheritedMap.keySet()) {
-                    f.setMetaAttribute(inheritedMap.get(key),key);
-                }
-            }
-        } catch (XBRLException e) {
-            logger.error(this.getURI() + " : " + e.getMessage());
-            throw new SAXException("The loader is not building a fragment so something is badly amiss.",e);
-        }
-
+        
         // Insert the current element into the fragment being built
         try {
-            Fragment fragment = getLoader().get();
+            Fragment fragment = getLoader().getFragment();
             if (fragment == null) throw new SAXException("A fragment should be being built.");
             Builder builder = fragment.getBuilder();
             if (builder == null) throw new SAXException("A fragment being built needs a builder.");
@@ -186,7 +158,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             logger.error(this.getURI() + " : " + e.getMessage());
             throw new SAXException("The element could not be appended to the fragment.",e);
         }
-
+        
     }
     
     /**
@@ -206,7 +178,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
 
         // Handle the ending of an element in the fragment builder
         try {
-            getLoader().get().getBuilder().endElement(namespaceURI, lName, qName);
+            getLoader().getFragment().getBuilder().endElement(namespaceURI, lName, qName);
         } catch (XBRLException e) {
             throw new SAXException("The XBRLAPI fragment endElement failed.",e);
         }
@@ -250,7 +222,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         try {
             String s = new String(buf, offset, len);
             if (!s.trim().equals(""))
-                getLoader().get().getBuilder().appendText(s);
+                getLoader().getFragment().getBuilder().appendText(s);
         } catch (XBRLException e) {
             throw new SAXException("Failed to handle ignorable white space." + getInputErrorInformation());
         }
@@ -263,7 +235,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
     throws SAXException
     {
         try {
-            Fragment fragment = getLoader().get();
+            Fragment fragment = getLoader().getFragment();
             if (fragment != null) {
                 fragment.getBuilder().appendProcessingInstruction(target,data);
             }
@@ -280,7 +252,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
     {
         try {
             String s = new String(buf, offset, len);
-            getLoader().get().getBuilder().appendText(s);
+            getLoader().getFragment().getBuilder().appendText(s);
         } catch (XBRLException e) {
             throw new SAXException("The characters could not be appended to the fragment." + getInputErrorInformation());
         }

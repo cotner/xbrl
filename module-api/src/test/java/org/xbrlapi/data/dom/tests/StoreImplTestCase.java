@@ -38,7 +38,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			d = new MockImpl(index);
 			store.persist(d);
 			Fragment f = null;
-			f = store.get(index);
+			f = store.getFragment(index);
 			assertNotNull(f);
 			assertEquals(index,f.getIndex());
 		} catch (XBRLException e) {
@@ -50,9 +50,9 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 			String index = "1";
 			store.persist(new MockImpl(index));
-			assertTrue(store.hasFragment(index));
+			assertTrue(store.hasXML(index));
 			store.remove(index);
-			assertFalse(store.hasFragment(index));
+			assertFalse(store.hasXML(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());
 		}
@@ -62,11 +62,11 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 			String index = "1";
 			store.persist(new MockImpl(index));
-			assertTrue(store.hasFragment(index));
-			MockImpl document = (MockImpl) store.get(index);
+			assertTrue(store.hasXML(index));
+			MockImpl document = (MockImpl) store.getFragment(index);
 			assertNotNull(document);
 			store.remove(index);
-			assertFalse(store.hasFragment(index));
+			assertFalse(store.hasXML(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());
 		}
@@ -110,11 +110,6 @@ public class StoreImplTestCase extends BaseTestCase {
         }
     }
     
-	
-	
-
-
-
 	public void testQueryLoadedFragments() {
 		try {
 			loader.discover();			
@@ -131,8 +126,6 @@ public class StoreImplTestCase extends BaseTestCase {
 			fail(e.getMessage());
 		}
 	}	
-	
-
 	
     public void testGetFragments() {
         try {

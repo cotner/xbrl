@@ -235,7 +235,6 @@ public class AnalyserImpl implements Analyser {
         List<PersistedRelationship> relationships = this.getRootRelationships(linkRole, arcrole);
         Set<F> roots = new TreeSet<F>();
         for (PersistedRelationship relationship: relationships) {
-            relationship.serialize();
             try {
                 roots.add((F) relationship.getSource());
             } catch (ClassCastException e) {

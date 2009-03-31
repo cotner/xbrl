@@ -29,7 +29,7 @@ public class ComposeTestCase extends BaseTestCase {
 	 */
 	public void testCompose() {
 		try {
-			Document d = store.formCompositeDocument();
+			Document d = store.getCompositeDocument();
 			assertEquals("dts",d.getDocumentElement().getLocalName());			
 		} catch (XBRLException e) {
 			e.printStackTrace();

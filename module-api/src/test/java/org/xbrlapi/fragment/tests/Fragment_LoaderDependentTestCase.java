@@ -42,7 +42,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 		try {
 		    List<Fragment> fragments = store.<Fragment>getFragments("Schema");
 		    for (Fragment fragment: fragments) {
-		        Fragment f = store.get(fragment.getIndex());
+		        Fragment f = store.getFragment(fragment.getIndex());
 		        try {
 		            f.setStore(store);
 	                fail("The store for a fragment cannot be changed once it is set.");
@@ -191,7 +191,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetXPathToParentElement() {
 	    
         try {
-            List<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='none']");
+            List<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and not(@parentIndex)]");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 List<Fragment> children = fragment.getAllChildren();
@@ -209,7 +209,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetParentElement() {
         try {
-            List<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='none']");
+            List<Schema> fragments = store.<Schema>query("/*[@uri='" + this.getURI(STARTING_POINT) + "' and not(@parentIndex)]");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 List<Fragment> children = fragment.getAllChildren();

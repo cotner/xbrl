@@ -144,5 +144,6 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 		}
 				
 		cleanup(connection);
+		logger.info("Cleaned up a store and connection.");
 	}
 }

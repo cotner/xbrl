@@ -143,7 +143,7 @@ public class RelationshipImpl implements Relationship {
 	 */
 	private Fragment get(String index) throws XBRLException {
 		if (network == null) {
-			return getStore().get(index);
+			return getStore().getFragment(index);
 		}
 		return network.get(index);
 	}

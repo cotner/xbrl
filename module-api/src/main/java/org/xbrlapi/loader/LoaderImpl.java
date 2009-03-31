@@ -129,10 +129,7 @@ public class LoaderImpl implements Loader {
      */
     private String documentId = null;
 
-    /**
-     * Stack of vectors used to track children.
-     */
-    private Stack<Vector<Long>> childrenStack = new Stack<Vector<Long>>();
+
 
     /**
      * The Xlink processor
@@ -325,79 +322,15 @@ public class LoaderImpl implements Loader {
         return pointerResolver;
     }
 
-    /**
-     * Add a new child tracking vector to the childrenStack to use for the new
-     * fragment that is being built by the loader. Initialise it with a single
-     * node containing the value of zero to signify that the root element of the
-     * new fragment has not had any child elements found for it yet.
-     * 
-     * @throws XBRLException
-     */
-    public void prepareToTrackChildrenForNewFragment() throws XBRLException {
-        Vector<Long> v = new Vector<Long>();
-        v.add(new Long(0));
-        childrenStack.add(v);
-    }
 
-    /**
-     * The children vector contains an item for each element that has been started
-     * by the SAX parser and that has not yet been ended by it.
-     * 
-     * @return The vector of children or null if none exist (implying no parent fragments).
-     */
-    public Vector<Long> getChildrenVector() {
-        if (childrenStack.isEmpty())
-            return null;
-        Vector<Long> children = childrenStack.peek();
-        return children;
-    }
 
-    /**
-     * @see Loader#incrementChildren()
-     */
-    public void incrementChildren() {
 
-        // Do nothing if the children stack is empty - we are at the root of a
-        // document
-        if (this.childrenStack.isEmpty()) {
-            return;
-        }
 
-        // record a new child for the parent element
-        Vector<Long> childrenVector = getChildrenVector();
-        if (childrenVector.isEmpty()) {
-            logger.error("Parsing " + getDocumentURI()+ ". The children vector is empty:");
-            logger.error("Problem occurred for fragment " + this.getCurrentFragmentId());
-        }
-        long c = (childrenVector.lastElement()).longValue() + 1;
-        getChildrenVector().setElementAt(new Long(c),
-                getChildrenVector().size() - 1);
-    }
 
-    /**
-     * Add a new node to the vector of children being tracked for the current
-     * fragment. Initialise its value to zero to capture the fact that no
-     * children have been found for the newly processed element - as yet.
-     * 
-     * @throws XBRLException
-     */
-    public void extendChildren() throws XBRLException {
-        getChildrenVector().add(new Long(0));
-    }
 
-    /**
-     * Remove the last element in the children vector. 
-     * This is done when we are finished with processing 
-     * an element or fragment.
-     * 
-     * @throws XBRLException
-     */
-    private void reduceChildren() throws XBRLException {
-        if (getChildrenVector().size() > 0)
-            getChildrenVector().removeElementAt(getChildrenVector().size() - 1);
-        else
-            throw new XBRLException("The element being completed has a corrupted child count.");
-    }
+
+
+
 
     /**
      * @see Loader#updateState(ElementState)
@@ -406,16 +339,14 @@ public class LoaderImpl implements Loader {
 
         if (getStates().peek() == state) {
             this.removeFragment();
-        } else {
-            this.reduceChildren();
         }
     }
 
     /**
-     * @see org.xbrlapi.loader.Loader#get()
+     * @see org.xbrlapi.loader.Loader#getFragment()
      */
-    public Fragment get() throws XBRLException {
-        if (fragments.isEmpty()) throw new XBRLException("No fragments are available to be retrieved.");
+    public Fragment getFragment() throws XBRLException {
+        if (fragments.isEmpty()) return null;
         return fragments.peek();
     }
     /**
@@ -439,19 +370,14 @@ public class LoaderImpl implements Loader {
         }
 
         // Set the document reconstruction metadata for the fragment
-        Vector<Long> children = getChildrenVector();
-        if (children != null) { 
-            Fragment parent = get();
-            if (parent == null) throw new XBRLException("The parent fragment is missing.");
+        Fragment parent = getFragment();
+        if (parent != null) {
             String parentIndex = parent.getIndex();
             if (parentIndex == null) throw new XBRLException("The parent index is null.");
             fragment.setParentIndex(parentIndex);
-            fragment.setSequenceToParentElement(children);
-            fragment.setPrecedingSiblings(children);
-
-        } else { // We have a document root fragment.
-            fragment.setParentIndex("none");
+            fragment.setSequenceToParentElement(parent);
         }
+
         fragment.setURI(getDocumentURI());
 
         // Push the fragment onto the stack of fragments
@@ -460,10 +386,9 @@ public class LoaderImpl implements Loader {
         // Push the element state onto the stack of fragment root element states
         getStates().add(state);
 
-        // Push a new child count vector onto the stack of child count vectors
-        prepareToTrackChildrenForNewFragment();
-
     }
+    
+
 
     /**
      * Remove a fragment from the stack of fragments that 
@@ -474,7 +399,7 @@ public class LoaderImpl implements Loader {
         try {
             
             getStates().pop();
-            childrenStack.pop();
+//            getChildrenStack().pop();
             Fragment f = fragments.pop();
             getStore().persist(f);
             return f;
@@ -539,14 +464,12 @@ public class LoaderImpl implements Loader {
             this.stashURI(uri);
         }
         
-        logger.debug(documentQueue.size() + " documents queued for discovery.");
-        
         URI uri = getNextDocumentToExplore();
         logger.debug("Next is " + uri);
         DOCUMENTS: while (uri != null) {
 
             long start = System.currentTimeMillis();
-            
+
             if (!getStore().hasDocument(uri)) {
                 setDocumentURI(uri);
                 this.setNextFragmentId("1");
@@ -574,7 +497,7 @@ public class LoaderImpl implements Loader {
                 break DOCUMENTS;
             }
             long duration = (System.currentTimeMillis() - start) / 1000;
-            logger.info("#" + discoveryCount + " took " + duration + " seconds. " + this.fragmentId + " fragments in " + uri);
+            logger.info("#" + discoveryCount + " took " + duration + " seconds. " + (fragmentId-1) + " fragments in " + uri);
 
             uri = getNextDocumentToExplore();
             discoveryCount++;
@@ -921,8 +844,11 @@ public class LoaderImpl implements Loader {
         } catch (Exception exception) {
             logger.error("Failed to clean up the document from the data store or cache. " + exception.getMessage());
         }
-        childrenStack = new Stack<Vector<Long>>();
         fragments = new Stack<Fragment>();
         states = new Stack<ElementState>();        
     }
+
+
+
+
 }

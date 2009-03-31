@@ -56,7 +56,7 @@ public class StorerImpl implements Storer {
             throws XBRLException {
         
         PersistedRelationship persistedRelationship = new PersistedRelationshipImpl(relationship);
-        if (! getStore().hasFragment(persistedRelationship.getIndex())) getStore().persist(persistedRelationship);
+        if (! getStore().hasXML(persistedRelationship.getIndex())) getStore().persist(persistedRelationship);
     }
 
     /**
@@ -83,8 +83,10 @@ public class StorerImpl implements Storer {
     public void StoreAllNetworks() throws XBRLException {
         
         Set<URI> arcroles = getStore().getArcroles();
+        logger.info("# of arcroles = " + arcroles.size());
         for (URI arcrole: arcroles) {
             Set<URI> linkRoles = getStore().getLinkRoles(arcrole);
+            logger.info(linkRoles.size() + " linkroles for arcrole "+ arcrole);
             for (URI linkRole: linkRoles) {
                 this.deleteRelationships(linkRole,arcrole);
                 this.storeRelationships(getStore().getNetworks(linkRole,arcrole));
@@ -123,7 +125,9 @@ public class StorerImpl implements Storer {
         List<Arc> arcs = new Vector<Arc>();
         for (URI document: documents) {
             String query = "/*[@uri='"+ document +"' and */*/@xlink:type='arc']";
-            arcs.addAll(getStore().<Arc>query(query));
+            List<Arc> newArcs = getStore().<Arc>query(query);
+            logger.info(document + " contains " + newArcs.size() + " arcs.");
+            arcs.addAll(newArcs);
         }
         
         logger.info("Got " + arcs.size() + " arcs to persist.");

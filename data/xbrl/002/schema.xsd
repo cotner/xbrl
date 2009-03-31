@@ -16,6 +16,10 @@
         xlink:role="http://www.xbrl.org/2003/role/labelLinkbaseRef"
         xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"/>
 
+      <link:linkbaseRef xlink:type="simple" xlink:href="label.xml"
+        xlink:role="http://www.xbrl.org/2003/role/labelLinkbaseRef"
+        xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"/>
+
     </appinfo>
   </annotation>
 

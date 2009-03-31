@@ -106,7 +106,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		
 		// Get the fragment index to delete existing fragments with the same index.
 		String index = xml.getIndex();
-		if (hasFragment(index)) {
+		if (hasXML(index)) {
 		    this.remove(index);
         }
 
@@ -123,17 +123,17 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#hasFragment(String)
+	 * @see org.xbrlapi.data.Store#hasXML(String)
 	 */
-	public synchronized boolean hasFragment(String index) throws XBRLException {
+	public synchronized boolean hasXML(String index) throws XBRLException {
 		if (fragmentMap.containsKey(index)) return true;
 		return false;
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#get(String)
+	 * @see org.xbrlapi.data.Store#getFragment(String)
 	 */
-	public synchronized <F extends XML> F get(String index) throws XBRLException {
+	public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
 
 		Element root = fragmentMap.get(index);
 		if (root == null) {
@@ -154,7 +154,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 */
 	public synchronized void remove(String index) throws XBRLException {
     	
-        if (! hasFragment(index)) return;
+        if (! hasXML(index)) return;
 
         Element d = fragmentMap.get(index);
         fragmentMap.remove(index);
@@ -216,7 +216,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		Node n;
 	    while ((n = result.iterateNext()) != null) {
 	    	String index = getIndex(n);
-	    	fragments.add((F) get(index));
+	    	fragments.add((F) getFragment(index));
 	    }
 	    return fragments;
 	}

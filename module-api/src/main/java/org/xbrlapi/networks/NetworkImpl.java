@@ -121,7 +121,7 @@ public class NetworkImpl implements Network {
 		Fragment fragment = fragments.get(index);
 		if (fragment == null) {
 			if (getStore()== null) return null;
-			fragment = getStore().get(index);
+			fragment = getStore().getFragment(index);
 			fragments.put(index,fragment);
 		}
 		return fragment;
@@ -408,7 +408,7 @@ public class NetworkImpl implements Network {
         } else {
         
             // Get the arcs that define relationships in the network
-            List<ExtendedLink> links = getStore().getExtendedLinksWithRole(this.getLinkRole());
+            List<ExtendedLink> links = getStore().getExtendedLinks(this.getLinkRole());
             for (ExtendedLink link: links) {
                 List<Arc> arcs = link.getArcsByArcrole(this.getArcrole());
                 for (Arc arc: arcs) {

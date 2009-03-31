@@ -48,6 +48,8 @@ import org.xbrlapi.loader.discoverer.Discoverer;
 import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.Storer;
+import org.xbrlapi.networks.StorerImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -175,10 +177,6 @@ public class RunWithPersistedNetworks {
             // Set up the data store to load the data
             store = createStore(arguments.get("database"), arguments.get("container"));
 
-            // Configure the store to use persisted networks
-            Analyser analyser = new AnalyserImpl(store);
-            store.setAnalyser(analyser);
-            
             // Set up the data loader (does the parsing and data discovery)
             Loader loader = createLoader(store, arguments.get("cache"));
 
@@ -204,19 +202,28 @@ public class RunWithPersistedNetworks {
             Thread discoveryThread = new Thread(discoverer);
             discoveryThread.start();
             while (discoveryThread.isAlive()) {
-                Thread.sleep(2000);
-                logger.info("Currently loading " + loader.getDocumentURI()
-                        + ".");
-                logger.info(loader.getDocumentsStillToAnalyse().size()
-                        + " documents still to load.");
+                Thread.sleep(5000);
+                logger.info("Currently loading " + loader.getDocumentURI() + ".");
+                logger.info(loader.getDocumentsStillToAnalyse().size() + " documents still to load.");
             }
             reportTime("Loading data");
+            
+            // Configure the store to use persisted networks
+            Analyser analyser = new AnalyserImpl(store);
+            store.setAnalyser(analyser);
+
+            // Re-persist the networks
+            Storer storer = new StorerImpl(store);
+            storer.StoreAllNetworks();
+            
+            
+            
             
             // Check that all documents were loaded OK.
             List<Stub> stubs = store.getStubs();
             if (! stubs.isEmpty()) {
                 for (Stub stub: stubs) {
-                    logger.error(stub.getURI() + ": " + stub.getReason());
+                    logger.error(stub.getResourceURI() + ": " + stub.getReason());
                 }
                 badUsage("Some documents were not loaded.");
             }
@@ -241,7 +248,7 @@ public class RunWithPersistedNetworks {
             Map<String, Object> model = new HashMap<String, Object>();
 
             // Get the root fragment of the target XBRL instance
-            List<Instance> instances = store.getsFromDocument(targetURI, "Instance");
+            List<Instance> instances = store.getFragmentsFromDocument(targetURI, "Instance");
             if (instances.size() > 1)
                 throw new XBRLException("The target instance is not a single XBRL instance.");
             if (instances.size() == 0)

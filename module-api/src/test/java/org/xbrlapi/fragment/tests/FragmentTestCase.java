@@ -32,12 +32,13 @@ public class FragmentTestCase extends DOMLoadingTestCase {
 	 * Test namespace resolution from QNames.
 	 */
 	public void testNamespaceResolution() {
+
         try {
             List<Unit> units = store.<Unit>getFragments("Unit");
             assertTrue(units.size() > 0);
             for (Unit unit: units) {
-                logger.info(unit.getId());
                 URI namespace = unit.getNamespaceFromQName(unit.getId()+":km",unit.getNumeratorMeasures().item(0));
+                logger.info(unit.getId() + " " + namespace);
                 assertEquals("http://xbrlapi.org/metric/"+ unit.getId(),namespace.toString());
             }
         } catch (Exception e) {

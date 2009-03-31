@@ -86,7 +86,7 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
      */
     public Fragment getTarget() throws XBRLException {
 
-    	String pointerCondition = " and @parentIndex='none'";
+    	String pointerCondition = " and not(@parentIndex)";
     	String pointerValue = getTargetPointerValue();
     	if (! pointerValue.equals("")) {
     		pointerCondition = " and "+ Constants.XBRLAPIPrefix+ ":" + "xptr/@value='" + pointerValue + "'";

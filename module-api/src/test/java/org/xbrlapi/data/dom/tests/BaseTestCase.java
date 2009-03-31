@@ -20,7 +20,8 @@ import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xml.sax.EntityResolver;
 
 /**
- * Provides a base test case for tests involving the XML DOM data store.
+ * Provides a base test case for tests 
+ * using the in-memory XML DOM data store.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
