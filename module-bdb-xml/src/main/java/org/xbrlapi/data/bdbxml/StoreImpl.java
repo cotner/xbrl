@@ -24,7 +24,6 @@ import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 
-import com.sleepycat.db.CheckpointConfig;
 import com.sleepycat.db.DatabaseException;
 import com.sleepycat.db.Environment;
 import com.sleepycat.db.EnvironmentConfig;
@@ -54,9 +53,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
     protected static Logger logger = Logger.getLogger(StoreImpl.class);    
     
-    private int callCount = 0;
-    private final int RESET_CALL_COUNT = 100000;
-    private final int CHECKPOINT_KILOBYTES = 1000;
+
+
+
     private String locationName = null;
     private String containerName = null;
 	private Environment environment = null;
@@ -100,32 +99,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         }
     }
     
-	private synchronized void resetConnection() throws XBRLException {
-        logger.info("Doing a connection reset.");
-		close();
-	    initContainer();
-        callCount = 0;
-	}
-	
-	private void incrementCallCount() throws XBRLException {
 
-	    callCount++;
-        
-        try {
-            CheckpointConfig checkpointConfig = new CheckpointConfig();
-            checkpointConfig.setKBytes(CHECKPOINT_KILOBYTES);
-            if (environment.getConfig().getTransactional())
-                environment.checkpoint(checkpointConfig);
-        } catch (DatabaseException e) {
-            throw new XBRLException("The checkpoint operation failed.", e);
-        }
-	    
-        if (callCount > this.RESET_CALL_COUNT) {
-            //logger.info("OB XML database call count = " + callCount);
-            //resetConnection();
-        }
-        
-	}
+	
+
 
 	/**
 	 * Initialises the database environment.
@@ -323,7 +299,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 */
     synchronized public void persist(XML xml) throws XBRLException {
 
-	    incrementCallCount();
         XmlUpdateContext xmlUpdateContext = null;
 	    try {
 	        
@@ -352,7 +327,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @see org.xbrlapi.data.Store#hasXML(String)
 	 */
     public synchronized boolean hasXML(String index) throws XBRLException {
-	    incrementCallCount();
+
         XmlDocument xmlDocument = null;
 	    try {
 			xmlDocument = dataContainer.getDocument(index);
@@ -385,7 +360,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @see org.xbrlapi.data.Store#getFragment(String)
 	 */
      public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
-	    this.incrementCallCount();
         XmlDocument xmlDocument = null;
         Document document = null;
 	    try {
@@ -420,7 +394,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @see org.xbrlapi.data.Store#remove(String)
 	 */
      public synchronized void remove(String index) throws XBRLException {
-	    incrementCallCount();
+
         XmlUpdateContext xmlUpdateContext = null;
         try {
             xmlUpdateContext = dataManager.createUpdateContext();
@@ -440,8 +414,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
-        
-        this.incrementCallCount();
         
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
@@ -485,8 +457,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     public synchronized Set<String> queryForIndices(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
-        
-        this.incrementCallCount();
         
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
@@ -533,7 +503,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
         }
         logger.debug("Adapted query is " + query);
-        this.incrementCallCount();
         
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
@@ -570,8 +539,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     public synchronized long queryCount(String query) throws XBRLException {
 
         query = query + this.getURIFilteringQueryClause();
-        
-        this.incrementCallCount();
         
         XmlResults xmlResults = null;
         try {
@@ -694,7 +661,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         
         String query = "/*[not(@parentIndex)]/@uri";
         query = query + this.getURIFilteringQueryClause();
-        this.incrementCallCount();
         
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
