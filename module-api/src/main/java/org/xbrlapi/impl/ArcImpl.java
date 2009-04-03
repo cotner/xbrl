@@ -150,20 +150,16 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      * @see org.xbrlapi.Arc#getSourceFragments() 
      */
     public <E extends ArcEnd> List<E> getSourceFragments() throws XBRLException {
-    	ExtendedLink link = getExtendedLink();
-    	List<E> ends = link.<E>getArcEndsByLabel(this.getFrom()); 
-    	logger.debug("Link "+ link.getIndex() + " has " + ends.size() + " ends with label " + this.getFrom());
-    	return ends;
+        String query = "/*[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getFrom() + "']";
+        return this.getStore().<E>query(query);
     }
     
     /**
      * @see org.xbrlapi.Arc#getTargetFragments() 
      */
     public <E extends ArcEnd> List<E> getTargetFragments() throws XBRLException {
-    	ExtendedLink link = getExtendedLink();
-    	List<E> ends = link.<E>getArcEndsByLabel(this.getTo());
-    	logger.debug("Link "+ link.getIndex() + " has " + ends.size() + " ends with label " + this.getTo());
-    	return ends;
+        String query = "/*[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getTo() + "']";
+        return this.getStore().<E>query(query);
     }
     
     /**
