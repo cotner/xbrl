@@ -10,14 +10,17 @@ import java.util.SortedSet;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xbrlapi.Arc;
 import org.xbrlapi.ArcroleType;
 import org.xbrlapi.Concept;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
+import org.xbrlapi.LabelResource;
 import org.xbrlapi.Language;
 import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.ReferenceResource;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Stub;
 import org.xbrlapi.Tuple;
@@ -497,9 +500,21 @@ public interface Store {
      *  types of arcs.
      * @return a list of fragments with the given fragment type and in the given document.
      * @throws XBRLException
-     * @see org.xbrlapi.impl.ArcImpl
      */
     public <F extends Fragment> List<F> getFragmentsFromDocument(URI uri, String interfaceName) throws XBRLException;
+    
+    /**
+     * @param uri The URI of the document to get the fragments from.
+     * @param interfaceName The name of the interface.  EG: If a list of
+     *   fragments is required then
+     *  this parameter would have a value of "ReferenceArc".
+     *  Note that this method does not yet recognise fragment subtypes so 
+     *  a request for an Arc would not return all ReferenceArcs as well as other
+     *  types of arcs.
+     * @return a list of fragment indices with the given fragment type and in the given document.
+     * @throws XBRLException
+     */
+    public Set<String> getFragmentIndicesFromDocument(URI uri, String interfaceName) throws XBRLException;  
 
     /**
      * @param <F> The fragment extension class
@@ -687,7 +702,7 @@ public interface Store {
      * of any relationships in the network).
      * @throws XBRLException
      */
-    public List<Fragment> getNetworkRoots(URI linkRole, URI arcrole) throws XBRLException;
+    public <F extends Fragment> Set<F> getNetworkRoots(URI linkRole, URI arcrole) throws XBRLException;
    
     /**
      * @param namespace The namespace for the concept.
@@ -754,27 +769,7 @@ public interface Store {
      */
     public List<URI> getMinimumDocumentSet(URI uri) throws XBRLException;
 
-    /**
-     * Implementation strategy is:<br/>
-     * <ol>
-     * <li>Get all extended link elements matching network requirements.</li>
-     * <li>Get all arcs defining relationships in the network.</li>
-     * <li>Get all resources at the source of the arcs.</li>
-     * <li>Return only those source resources that that are not target resources also.</li>
-     * </ol>
-     * @param linkNamespace The namespace of the link element.
-     * @param linkName The name of the link element.
-     * @param linkRole the role on the extended links that contain the network arcs.
-     * @param arcNamespace The namespace of the arc element.
-     * @param arcName The name of the arc element.
-     * @param arcrole the arcrole on the arcs describing the network.
-     * @return The list of fragments for each of the resources that is identified as a root
-     * of the specified network (noting that a root resource is defined as a resource that is
-     * at the source of one or more relationships in the network and that is not at the target 
-     * of any relationships in the network).
-     * @throws XBRLException
-     */
-    public <F extends Fragment> List<F> getNetworkRoots(URI linkNamespace, String linkName, URI linkRole, URI arcNamespace, String arcName, URI arcrole) throws XBRLException;
+
  
     /**
      * @param linkrole The required linkrole value.
@@ -782,6 +777,48 @@ public interface Store {
      * @throws XBRLException
      */
     public List<ExtendedLink> getExtendedLinks(URI linkrole) throws XBRLException;
+    
+    /**
+     * @param linkRole The link role to use to identify the extended links to retrieve.
+     * @return the list of indices of extended links with the given link role value.
+     * @throws XBRLException
+     */
+    public Set<String> getExtendedLinkIndices(URI linkRole) throws XBRLException;
+    
+    /**
+     * @param arcrole The arcrole to use to identify the arcs to retrieve.
+     * @param linkIndex The index of the extended link containing the arcs to retrieve.
+     * @return the list of indices of arcs matching the selection criteria.
+     * @throws XBRLException
+     * @return the list of arc fragments matching the selection criteria.
+     * @throws XBRLException
+     */
+    public List<Arc> getArcs(URI arcrole, String linkIndex) throws XBRLException;
+    
+    /**
+     * @param linkIndex The index of the extended link containing the arcs to retrieve.
+     * @return the list of indices of arcs matching the selection criteria.
+     * @throws XBRLException
+     */
+    public Set<String> getArcIndices(String linkIndex) throws XBRLException;
+    
+    /**
+     * @param arcrole The arcrole to use to identify the arcs to retrieve.
+     * @return the list of indices of arcs with a given arc role value.
+     * @throws XBRLException
+     */
+    public Set<String> getArcIndices(URI arcrole) throws XBRLException;    
+    
+    
+    /**
+     * @param linkIndex The index of the extended link containing the arcs to retrieve.
+     * @return the list of indices of arcs matching the selection criteria.
+     * @throws XBRLException
+     * @return the list of arc fragments matching the selection criteria.
+     * @throws XBRLException
+     */
+    public List<Arc> getArcs(String linkIndex) throws XBRLException;    
+    
 
     /**
      * Get the networks that, at a minimum, contain the relationships
@@ -831,13 +868,22 @@ public interface Store {
 
     /**
      * @param sourceIndex The source fragment index
+     * @param arcrole The XLink arcrole
+     * @return a set of networks comprising the relationships
+     * from the source fragment with the given arcrole.
+     * @throws XBRLException
+     */
+    public Networks getNetworksFrom(String sourceIndex, URI arcrole) throws XBRLException;
+    
+    /**
+     * @param sourceIndex The source fragment index
      * @param linkRole The XLink link role
      * @param arcrole The XLink arcrole
      * @return a set of networks comprising the relationships
      * from the source fragment with the given link role and arcrole.
      * @throws XBRLException
      */
-    public Networks getNetworksFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException;
+    public Networks getNetworksFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException;    
     
     /**
      * @param targetIndex The target fragment index
@@ -847,7 +893,16 @@ public interface Store {
      * to the target fragment with the given link role and arcrole.
      * @throws XBRLException
      */
-    public Networks getNetworksTo(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;    
+    public Networks getNetworksTo(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
+    
+    /**
+     * @param targetIndex The target fragment index
+     * @param arcrole The XLink arcrole
+     * @return a set of networks comprising the relationships
+     * to the target fragment with the given arcrole.
+     * @throws XBRLException
+     */
+    public Networks getNetworksTo(String targetIndex, URI arcrole) throws XBRLException;    
     
     
 
@@ -900,5 +955,94 @@ public interface Store {
      * @throws XBRLException
      */
     public SortedSet<PersistedRelationship> getPersistedActiveRelationshipsTo(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;    
+
+
+
+    /**
+     * @param fragment the index of the fragment that we are getting labels for
+     * @param linkRole The required link role or null if not used.
+     * @param resourceRole The required resource role or null if not used.
+     * @param language The required language code or null if not used.
+     * @return the set of labels matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<LabelResource> getLabels(String fragment, URI linkRole, URI resourceRole, String language) throws XBRLException;
+    
+    /**
+     * @param fragment the index of the fragment that we are getting labels for
+     * @param resourceRole The required resource role or null if not used.
+     * @param language The required language code or null if not used.
+     * @return the set of labels matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<LabelResource> getLabels(String fragment, URI resourceRole, String language) throws XBRLException;
+    
+    /**
+     * @param fragment the index of the fragment that we are getting labels for
+     * @param language The required language code or null if not used.
+     * @return the set of labels matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<LabelResource> getLabels(String fragment, String language) throws XBRLException;
+    
+    /**
+     * @param fragment the index of the fragment that we are getting labels for
+     * @return the set of labels matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<LabelResource> getLabels(String fragment) throws XBRLException;    
+    
+    /**
+     * @param fragment the index of the fragment that we are getting labels for
+     * @param resourceRole The required resource role or null if not used.
+     * @return the set of labels matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<LabelResource> getLabels(String fragment, URI resourceRole) throws XBRLException;
+    
+
+    
+    /**
+     * @param fragment the index of the fragment that we are getting references for
+     * @param linkRole The required link role or null if not used.
+     * @param resourceRole The required resource role or null if not used.
+     * @param language The required language code or null if not used.
+     * @return the set of references matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<ReferenceResource> getReferences(String fragment, URI linkRole, URI resourceRole, String language) throws XBRLException;
+    
+    /**
+     * @param fragment the index of the fragment that we are getting references for
+     * @param resourceRole The required resource role or null if not used.
+     * @param language The required language code or null if not used.
+     * @return the set of references matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<ReferenceResource> getReferences(String fragment, URI resourceRole, String language) throws XBRLException;
+    
+    /**
+     * @param fragment the index of the fragment that we are getting references for
+     * @param language The required language code or null if not used.
+     * @return the set of references matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<ReferenceResource> getReferences(String fragment, String language) throws XBRLException;
+    
+    /**
+     * @param fragment the index of the fragment that we are getting references for
+     * @return the set of references matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<ReferenceResource> getReferences(String fragment) throws XBRLException;    
+    
+    /**
+     * @param fragment the index of the fragment that we are getting references for
+     * @param resourceRole The required resource role or null if not used.
+     * @return the set of references matching the specified criteria.
+     * @throws XBRLException
+     */
+    public List<ReferenceResource> getReferences(String fragment, URI resourceRole) throws XBRLException;
+    
     
 }

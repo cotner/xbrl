@@ -1,7 +1,7 @@
 package org.xbrlapi.networks;
 
 import java.net.URI;
-import java.util.Set;
+import java.util.Collection;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -24,13 +24,13 @@ public interface Storer {
     public void storeRelationships(Networks networks) throws XBRLException;
     
     /**
-     * @param documents The list of URIs of the documents to store the relationships for.
+     * @param documents The collection of URIs of the documents to store the relationships for.
      * Relationships are sought among the XLink arcs in the documents.
      * This is used by the discover to updated persisted relationships
      * in the data store.
      * @throws XBRLException
      */
-    public void storeRelationships(Set<URI> documents) throws XBRLException;
+    public void storeRelationships(Collection<URI> documents) throws XBRLException;
     
     /**
      * @param network The network from which all 
@@ -44,7 +44,7 @@ public interface Storer {
      * When the relationship is persisted in the data store, any equivalent
      * relationship will be removed from the data store.  Equivalence is 
      * assessed on the basis of the relationship semantic key.
-     * @see org.xbrlapi.networks.Relationship#getSemanticKey()
+     * @see org.xbrlapi.networks.Relationship#getSignature()
      * @param relationship The relationship that will be be persisted in the data store.
      * @see org.xbrlapi.PersistedRelationship
      * @throws XBRLException
@@ -55,7 +55,7 @@ public interface Storer {
      * Stores all active relationships in the entire data store.
      * @throws XBRLException
      */
-    public void StoreAllNetworks() throws XBRLException;
+    public void storeAllRelationships() throws XBRLException;
     
     /**
      * Deletes the persisted relationships with the given link and arc role from 
@@ -73,4 +73,18 @@ public interface Storer {
      */
     public void deleteRelationships() throws XBRLException;
     
+    /**
+     * Removes persisted prohibited or overridden relationships from a network.
+     * @param linkRole The linkRole of the network to purge.
+     * @param arcrole The arcrole of the network to purge.
+     * @throws XBRLException
+     */
+    public void deleteInactiveRelationships(URI linkRole, URI arcrole) throws XBRLException;
+
+    /**
+     * Removes all persisted prohibited or overridden relationships from a network.
+     * @throws XBRLException
+     */
+    public void deleteInactiveRelationships() throws XBRLException;
+
 }

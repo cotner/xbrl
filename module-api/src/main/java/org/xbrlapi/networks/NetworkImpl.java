@@ -187,7 +187,7 @@ public class NetworkImpl implements Network {
 		if (! getLinkRole().equals(relationship.getLinkRole())) throw new XBRLException("The network link role does not match that of the relationship.");
 		if (! getArcrole().equals(relationship.getArcrole())) throw new XBRLException("The network arc role does not match that of the relationship.");
 
-        String semanticKey = relationship.getSemanticKey();
+        String semanticKey = relationship.getSignature();
         Fragment source = relationship.getSource();
         String sourceIndex = source.getIndex();
 		

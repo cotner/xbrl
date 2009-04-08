@@ -36,9 +36,11 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
+import org.xbrlapi.LabelResource;
 import org.xbrlapi.Language;
 import org.xbrlapi.Locator;
 import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.ReferenceResource;
 import org.xbrlapi.Resource;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.SchemaDeclaration;
@@ -725,7 +727,6 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public List<Stub> getStubs() throws XBRLException {
         List<Stub> stubs = this.<Stub>getFragments("Stub");
-        logger.info(stubs.size());
         return stubs;
     }
     
@@ -859,7 +860,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public <F extends XML> List<F> getFragments(String interfaceName) throws XBRLException {
         String query = "/*[@type='org.xbrlapi.impl." + interfaceName + "Impl']";
         if (interfaceName.indexOf(".") > -1) {
-            query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='" + interfaceName + "']";
+            query = "/*[@type='" + interfaceName + "']";
         }
     	return this.<F>query(query);
     }
@@ -1026,26 +1027,159 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @param arcrole The arcrole to use to identify the arcs to retrieve.
-     * @param linkIndex The index of the extended link containing the arcs to retrieve.
-     * @return the list of indices of arcs matching the selection criteria.
-     * @throws XBRLException
-     * @return the list of arc fragments matching the selection criteria.
-     * @throws XBRLException
+     * @see Store#getLabels(String, URI, URI, String)
      */
-    private List<Arc> getArcs(URI arcrole, String linkIndex) throws XBRLException {
+    public List<LabelResource> getLabels(String fragment, URI linkRole, URI resourceRole, String language) throws XBRLException {
+
+        if (this.isUsingPersistedNetworks()) {
+            String query = "/*[@label and @sourceIndex='" + fragment + "'";
+            if (linkRole != null) query += " and @linkRole='" + linkRole + "'"; 
+            if (resourceRole != null) query += " and @targetRole='" + resourceRole + "'"; 
+            if (language != null) query += " and @targetLanguage='" + language + "'"; 
+            query += "]";
+            List<PersistedRelationship> relationships = this.<PersistedRelationship>query(query);
+            List<LabelResource> labels = new Vector<LabelResource>();
+            for (PersistedRelationship relationship: relationships) {
+                labels.add(relationship.<LabelResource>getTarget());
+            }
+            return labels;
+        }
+
+        Networks labelNetworks = this.getNetworksFrom(fragment,linkRole,Constants.LabelArcrole());
+        labelNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericLabelArcrole()));
+        
+        List<LabelResource> labels = new Vector<LabelResource>();
+        for (Network network: labelNetworks) {
+            for (Relationship relationship: network.getAllActiveRelationships()) {
+                LabelResource label = (LabelResource) relationship.getTarget();
+                String l = label.getLanguage();
+                URI r = label.getResourceRole();
+                if (resourceRole == null && language == null) labels.add(label);
+                else if (resourceRole == null) if (label.getLanguage().equals(l)) labels.add(label); 
+                else if (language == null) if (label.getResourceRole().equals(r)) labels.add(label); 
+            }
+        }
+        return labels;
+        
+    }
+    
+    
+    /**
+     * @see Store#getLabels(String, URI, String)
+     */
+    public List<LabelResource> getLabels(String fragment, URI resourceRole, String language) throws XBRLException {
+        return this.getLabels(fragment,null,resourceRole,language);
+    }
+    
+    /**
+     * @see Store#getLabels(String, String)
+     */
+    public List<LabelResource> getLabels(String fragment, String language) throws XBRLException {
+        return this.getLabels(fragment,null,null,language);
+    }
+    
+    /**
+     * @see Store#getLabels(String)
+     */
+    public List<LabelResource> getLabels(String fragment) throws XBRLException {
+        return this.getLabels(fragment,null,null,null);
+    }    
+    
+    /**
+     * @see Store#getLabels(String, URI)
+     */
+    public List<LabelResource> getLabels(String fragment, URI resourceRole) throws XBRLException {
+        return this.getLabels(fragment,null,resourceRole,null);
+    }
+    
+    /**
+     * @see Store#getReferences(String, URI, URI, String)
+     */
+    public List<ReferenceResource> getReferences(String fragment, URI linkRole, URI resourceRole, String language) throws XBRLException {
+
+        if (this.isUsingPersistedNetworks()) {
+            String query = "/*[@reference and @sourceIndex='" + fragment + "'";
+            if (linkRole != null) query += " and @linkRole='" + linkRole + "'"; 
+            if (resourceRole != null) query += " and @targetRole='" + resourceRole + "'"; 
+            if (language != null) query += " and @targetLanguage='" + language + "'"; 
+            query += "]";
+            List<PersistedRelationship> relationships = this.<PersistedRelationship>query(query);
+            List<ReferenceResource> references = new Vector<ReferenceResource>();
+            for (PersistedRelationship relationship: relationships) {
+                references.add(relationship.<ReferenceResource>getTarget());
+            }
+            return references;
+        }
+
+        Networks referenceNetworks = this.getNetworksFrom(fragment,linkRole,Constants.ReferenceArcrole());
+        referenceNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericReferenceArcrole()));
+        
+        List<ReferenceResource> references = new Vector<ReferenceResource>();
+        for (Network network: referenceNetworks) {
+            for (Relationship relationship: network.getAllActiveRelationships()) {
+                ReferenceResource reference = (ReferenceResource) relationship.getTarget();
+                String l = reference.getLanguage();
+                URI r = reference.getResourceRole();
+                if (resourceRole == null && language == null) references.add(reference);
+                else if (resourceRole == null) if (reference.getLanguage().equals(l)) references.add(reference); 
+                else if (language == null) if (reference.getResourceRole().equals(r)) references.add(reference); 
+            }
+        }
+        return references;
+
+    }
+        
+    /**
+     * @see Store#getReferences(String, URI, String)
+     */
+    public List<ReferenceResource> getReferences(String fragment, URI resourceRole, String language) throws XBRLException {
+        return this.getReferences(fragment,null,resourceRole,language);
+    }
+    
+    /**
+     * @see Store#getReferences(String, String)
+     */
+    public List<ReferenceResource> getReferences(String fragment, String language) throws XBRLException {
+        return this.getReferences(fragment,null,null,language);
+    }
+    
+    /**
+     * @see Store#getReferences(String)
+     */
+    public List<ReferenceResource> getReferences(String fragment) throws XBRLException {
+        return this.getReferences(fragment,null,null,null);
+    }        
+    
+    /**
+     * @see Store#getReferences(String, URI)
+     */
+    public List<ReferenceResource> getReferences(String fragment, URI resourceRole) throws XBRLException {
+        return this.getReferences(fragment,null,resourceRole,null);
+    }
+    
+    /**
+     * @see Store#getArcs(URI, String)
+     */
+    public List<Arc> getArcs(URI arcrole, String linkIndex) throws XBRLException {
         String query = "/*[@parentIndex='" + linkIndex + "' and */*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]";
         List<Arc> arcs = this.<Arc>query(query);
         logger.debug("#arcs with given arcrole in given extended link = " + arcs.size());
         return arcs;
+    }
+    
+    /**
+     * @see Store#getArcs(String)
+     */
+    public List<Arc> getArcs(String linkIndex) throws XBRLException {
+        String query = "/*[@type='org.xbrlapi.impl.ArcImpl' and @parentIndex='" + linkIndex + "']";
+        List<Arc> arcs = this.<Arc>query(query);
+        return arcs;
     }    
     
     /**
-     * @param arcrole The arcrole to use to identify the arcs to retrieve.
-     * @return the list of indices of arcs with a given arc role value.
-     * @throws XBRLException
+     * @see Store#getArcIndices(URI)
      */
-    private Set<String> getArcIndices(URI arcrole) throws XBRLException {
+    public Set<String> getArcIndices(URI arcrole) throws XBRLException {
         String query = "/*[*/*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]/@index";
         return this.queryForStrings(query);
     }
@@ -1059,16 +1193,22 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     private Set<String> getArcIndices(URI arcrole, String linkIndex) throws XBRLException {
         String query = "/*[@parentIndex='" + linkIndex + "' and */*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]/@index";
         Set<String> indices = this.queryForStrings(query);
-        logger.debug("# arcs with given arcrole in given link = " + indices.size());
+        return indices;
+    }
+    
+    /**
+     * @see Store#getArcIndices(String)
+     */
+    public Set<String> getArcIndices(String linkIndex) throws XBRLException {
+        String query = "/*[@parentIndex='" + linkIndex + "' and */*/@xlink:type='arc']/@index";
+        Set<String> indices = this.queryForStrings(query);
         return indices;
     }    
     
     /**
-     * @param linkRole The link role to use to identify the extended links to retrieve.
-     * @return the list of indices of extended links with the given link role value.
-     * @throws XBRLException
+     * @see Store#getExtendedLinkIndices(URI)
      */
-    private Set<String> getExtendedLinkIndices(URI linkRole) throws XBRLException {
+    public Set<String> getExtendedLinkIndices(URI linkRole) throws XBRLException {
         String query = "/*[*/*[@xlink:role='" + linkRole + "' and @xlink:type='extended']]/@index";
         Set<String> indices = this.queryForStrings(query);
         logger.debug("# extended links with given link role = " + indices.size());
@@ -1087,27 +1227,35 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         String query = "/*[*/*[@xlink:type='arc']]/@index";
         return this.queryForStrings(query);
     }    
-    
-    
-    
+
     /**
-     * Utility method to return a list of fragments in a data store
-     * that have a type corresponding to the specified fragment interface name and
-     * that are in the document with the specified URI.
-     * @param uri The URI of the document to get the fragments from.
-     * @param interfaceName The name of the interface.  EG: If a list of
-     *  org.xbrlapi.impl.ReferenceArcImpl fragments is required then
-     *  this parameter would have a value of "ReferenceArc".
-     *  Note that this method does not yet recognise fragment subtypes so 
-     *  a request for an Arc would not return all ReferenceArcs as well as other
-     *  types of arcs.
-     * @return a list of fragments with the given fragment type and in the given document.
-     * @throws XBRLException
+     * @see Store#getFragmentsFromDocument(URI, String)
      */
     public <F extends Fragment> List<F> getFragmentsFromDocument(URI uri, String interfaceName) throws XBRLException {
         URI matchURI = getMatcher().getMatch(uri);
-        return this.<F>query("/*[@uri='"+ matchURI + "' and @type='org.xbrlapi.impl." + interfaceName + "Impl']");
+        String query = "/*[@uri='"+ matchURI + "' and @type='org.xbrlapi.impl." + interfaceName + "Impl']";        
+        if (interfaceName.indexOf(".") > -1) {
+            query = "/*[@uri='"+ matchURI + "' and @type='" + interfaceName + "']";
+        }
+        return this.<F>query(query);
+    }
+    
+    /**
+     * @see Store#getFragmentIndicesFromDocument(URI, String)
+     */
+    public Set<String> getFragmentIndicesFromDocument(URI uri, String interfaceName) throws XBRLException {
+        URI matchURI = getMatcher().getMatch(uri);
+        String query = "/*[@uri='"+ matchURI + "' and @type='org.xbrlapi.impl." + interfaceName + "Impl']";        
+        if (interfaceName.indexOf(".") > -1) {
+            query = "/*[@uri='"+ matchURI + "' and @type='" + interfaceName + "']";
+        }
+        query += "/@index";
+        return this.queryForStrings(query);
     }    
+    
+
+    
+
     
     /**
      * @return a list of all of the root-level facts in the data store (those facts
@@ -1305,63 +1453,19 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         return this.getTuplesFromInstances(instances);
     }
 
-    /**
-     * @see XBRLStore#getNetworkRoots(URI, String, URI, URI, String, URI)
-     */
-    @SuppressWarnings("unchecked")
-    public <F extends Fragment> List<F> getNetworkRoots(URI linkNamespace, String linkName, URI linkRole, URI arcNamespace, String arcName, URI arcrole) throws XBRLException {
-        
-        // Get the links that contain the network declaring arcs.
-        String linkQuery = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ExtendedLinkImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*[namespace-uri()='" + linkNamespace + "' and local-name()='" + linkName + "' and @xlink:role='" + linkRole + "']]";
-        List<ExtendedLink> links = this.<ExtendedLink>query(linkQuery);
-        
-        // Get the arcs that declare the relationships in the network.
-        // For each arc map the ids of the fragments at their sources and targets.
-        HashMap<String,String> sourceIds = new HashMap<String,String>();
-        HashMap<String,String> targetIds = new HashMap<String,String>();
-        for (int i=0; i<links.size(); i++) {
-            ExtendedLink link = links.get(i);
-            List<Arc> arcs = link.getArcs();
-            for (Arc arc: arcs) {
-                if (arc.getNamespace().equals(arcNamespace))
-                    if (arc.getLocalname().equals(arcName))
-                        if (arc.getArcrole().equals(arcrole)) {
-                            List<ArcEnd> sources = arc.getSourceFragments();
-                            List<ArcEnd> targets = arc.getTargetFragments();
-                            for (int k=0; k<sources.size(); k++) {
-                                sourceIds.put(sources.get(k).getIndex(),"");
-                            }
-                            for (int k=0; k<sources.size(); k++) {
-                                targetIds.put(targets.get(k).getIndex(),"");
-                            }
-                        }
-            }
-        }
-        
-        // Get the root resources in the network
-        List<F> roots = new Vector<F>();
-        Iterator<String> iterator = sourceIds.keySet().iterator();
-        while (iterator.hasNext()) {
-            String id = iterator.next();
-            if (! targetIds.containsKey(id)) {
-                Fragment target = this.getFragment(id);
-                if (! target.isa("org.xbrlapi.impl.LocatorImpl"))
-                    roots.add((F) target);
-                else {
-                    roots.add((F) ((Locator) target).getTarget());
-                }
-            }
-        }
-        return roots;
-    }
+
 
     /**
-     * @see XBRLStore#getNetworkRoots(URI, URI)
+     * @see Store#getNetworkRoots(URI, URI)
      */
-    public List<Fragment> getNetworkRoots(URI linkRole, URI arcrole) throws XBRLException {
+    public <F extends Fragment> Set<F> getNetworkRoots(URI linkRole, URI arcrole) throws XBRLException {
+        
+        if (this.isUsingPersistedNetworks()) {
+            return getAnalyser().<F>getRoots(linkRole,arcrole);
+        }
         
         // Get the links that contain the network declaring arcs.
-        String linkQuery = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ExtendedLinkImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:role='" + linkRole + "']]";
+        String linkQuery = "/*[@type='org.xbrlapi.impl.ExtendedLinkImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:role='" + linkRole + "']]";
         List<ExtendedLink> links = this.<ExtendedLink>query(linkQuery);
         
         // Get the arcs that declare the relationships in the network.
@@ -1386,10 +1490,10 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         }
         
         // Get the root resources in the network
-        List<Fragment> roots = new Vector<Fragment>();
+        Set<F> roots = new TreeSet<F>();
         for (String id: sourceIds.keySet()) {
             if (! targetIds.containsKey(id)) {
-                roots.add(this.<Fragment>getFragment(id));
+                roots.add(this.<F>getFragment(id));
             }
         }
         return roots;
@@ -1913,6 +2017,20 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public boolean isUsingPersistedNetworks() {
         return (analyser != null);
+    }
+
+    /**
+     * @see org.xbrlapi.data.Store#getNetworksFrom(java.lang.String, java.net.URI)
+     */
+    public Networks getNetworksFrom(String sourceIndex, URI arcrole) throws XBRLException {
+        return getNetworksFrom(sourceIndex,null,arcrole);       
+    }
+
+    /**
+     * @see org.xbrlapi.data.Store#getNetworksTo(java.lang.String, java.net.URI)
+     */
+    public Networks getNetworksTo(String targetIndex, URI arcrole) throws XBRLException {
+        return getNetworksTo(targetIndex,null,arcrole);
     }
 
     

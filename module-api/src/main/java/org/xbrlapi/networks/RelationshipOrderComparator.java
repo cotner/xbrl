@@ -30,7 +30,7 @@ public class RelationshipOrderComparator implements Comparator<Relationship> {
             if (! relationship1.getTargetIndex().equals(relationship2.getTargetIndex()))
                 return relationship1.getTargetIndex().compareTo(relationship2.getTargetIndex());
 
-            return relationship1.getSemanticKey().compareTo(relationship2.getSemanticKey());
+            return relationship1.getSignature().compareTo(relationship2.getSignature());
             
 		} catch (XBRLException e) {
 			throw new ClassCastException("The arc order could not be determined to support relationship order comparison. " + e.getMessage());

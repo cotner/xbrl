@@ -191,7 +191,7 @@ public interface Relationship {
 	 * equal relationships.
 	 * @throws XBRLException
 	 */
-	public String getSemanticKey() throws XBRLException;
+	public String getSignature() throws XBRLException;
 
 	/**
 	 * @return the string expression of the relationship in terms of the fragment indices.

@@ -29,7 +29,6 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import org.xbrlapi.Arc;
 import org.xbrlapi.Concept;
-import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
@@ -70,14 +69,14 @@ import freemarker.template.Template;
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class RunWithPersistedNetworks {
-
+    
     private static Store store = null;
 
     protected static Logger logger = Logger.getLogger(RunWithPersistedNetworks.class);
 
     private static double startTime;
 
-    private static ArrayList<String> labels = new ArrayList<String>();
+
     /**
      * A map of all lists of items in the instance, 
      * indexed by the concept identifier, comprising
@@ -89,10 +88,7 @@ public class RunWithPersistedNetworks {
     
     private static Network network;
     private static Instance instance;
-    /**
-     * The list of concepts in the order that they are to be rendered.
-     */
-    private static List<Concept> concepts = new ArrayList<Concept>();
+
     private static int maxLevel = 1;
 
     public static void main(String[] args) {
@@ -177,6 +173,11 @@ public class RunWithPersistedNetworks {
             // Set up the data store to load the data
             store = createStore(arguments.get("database"), arguments.get("container"));
 
+            List<Stub> stubs = store.getStubs();
+            for (Stub stub: stubs) {
+                stub.serialize();
+            }
+            
             // Set up the data loader (does the parsing and data discovery)
             Loader loader = createLoader(store, arguments.get("cache"));
 
@@ -197,36 +198,32 @@ public class RunWithPersistedNetworks {
             }
             reportTime("Setting URIs");
 
+            // Configure the store to use persisted networks
+            Analyser analyser = new AnalyserImpl(store);
+            store.setAnalyser(analyser);
+
             // Load the data required to render the XBRL instance.
             Discoverer discoverer = new Discoverer(loader);
             Thread discoveryThread = new Thread(discoverer);
             discoveryThread.start();
             while (discoveryThread.isAlive()) {
-                Thread.sleep(5000);
-                logger.info("Currently loading " + loader.getDocumentURI() + ".");
-                logger.info(loader.getDocumentsStillToAnalyse().size() + " documents still to load.");
+                Thread.sleep(1000);
             }
             reportTime("Loading data");
-            
-            // Configure the store to use persisted networks
-            Analyser analyser = new AnalyserImpl(store);
-            store.setAnalyser(analyser);
 
-            // Re-persist the networks
-            Storer storer = new StorerImpl(store);
-            storer.StoreAllNetworks();
-            
-            
-            
-            
             // Check that all documents were loaded OK.
-            List<Stub> stubs = store.getStubs();
+            stubs = store.getStubs();
             if (! stubs.isEmpty()) {
                 for (Stub stub: stubs) {
                     logger.error(stub.getResourceURI() + ": " + stub.getReason());
                 }
                 badUsage("Some documents were not loaded.");
             }
+
+            Storer storer = new StorerImpl(store);
+            storer.deleteInactiveRelationships();
+            System.exit(0);
+            
 
             // Get the Freemarker template ready to use.
             if (!arguments.containsKey("template"))
@@ -249,10 +246,8 @@ public class RunWithPersistedNetworks {
 
             // Get the root fragment of the target XBRL instance
             List<Instance> instances = store.getFragmentsFromDocument(targetURI, "Instance");
-            if (instances.size() > 1)
-                throw new XBRLException("The target instance is not a single XBRL instance.");
-            if (instances.size() == 0)
-                throw new XBRLException("The target document is not an XBRL instance.");
+            if (instances.size() > 1) throw new XBRLException("The target instance is not a single XBRL instance.");
+            if (instances.size() == 0) throw new XBRLException("The target document is not an XBRL instance.");
             instance = instances.get(0);
             reportTime("Getting the instance");
 
@@ -286,9 +281,15 @@ public class RunWithPersistedNetworks {
 
             URI arcrole = Constants.PresentationArcrole();
             
+            int counter = 0;
+            int target = 3;
             for (URI linkRole : store.getLinkRoles(arcrole)) {
+
+                counter++;
                 
-                HashMap<String, Object> table = new HashMap<String, Object>();
+                if (counter != target) continue;
+                
+                Map<String, Object> table = new HashMap<String, Object>();
                 tables.add(table);
                 String title = linkRole.toString();
                 List<RoleType> roleDeclarations = store.getRoleTypes(linkRole);
@@ -298,27 +299,27 @@ public class RunWithPersistedNetworks {
                 table.put("title", title);
                 logger.info("Setting up: " + title);
 
-                labels = new ArrayList<String>();
-                concepts = new ArrayList<Concept>();
-                maxLevel = 1;
-
                 // Configure the aspect model (useful for sorting facts by their aspects)
                 aspectModel = new DimensionalAspectModel();
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
                 
-                Set<Concept> roots = analyser.<Concept>getRoots(linkRole,arcrole);
+                Set<Concept> roots = store.<Concept>getNetworkRoots(linkRole,arcrole);
+                logger.info(roots.size() + " root concepts in " + linkRole);
                 
                 maxLevel = 1;
+                Concepts concepts = new Concepts();
                 for (Concept root : roots) {
-                    parsePresentation(
+                    concepts.addAll(
+                            parsePresentation(
                             "", 
                             null, 
                             root, 
                             new Double(0.0), 
                             linkRole,
                             arcrole,
-                            Constants.StandardLabelRole());
+                            Constants.StandardLabelRole())
+                    );
                 }
                 
                 // Get the sorted list of period aspect values
@@ -330,19 +331,23 @@ public class RunWithPersistedNetworks {
                 
                 // Map from concept name (resolved QName) to the concept label.
                 table.put("aspectModel", aspectModel);
-                table.put("concepts", concepts);
-                table.put("labels", labels);
+                logger.info("# concepts in " + table.get("title") +  " = " + concepts.size());
+                table.put("concepts", concepts.concepts);
+                table.put("labels", concepts.labels);
+                table.put("labelRoles", concepts.labelRoles);
                 table.put("periods",periods);
                 table.put("maxLevel", maxLevel);
                 reportTime("Processing  " + title);
 
+                if (counter==target) break;
+                
             }
 
             // TODO Extend the template to render the footnote information.
-            List<ExtendedLink> footnoteLinks = instance.getFootnoteLinks();
+/*            List<ExtendedLink> footnoteLinks = instance.getFootnoteLinks();
             model.put("footnotes", footnoteLinks);
             reportTime("Processing footnotes");
-
+*/
             // Process the template and data model to produce the rendered report.
             Writer out = new OutputStreamWriter(new FileOutputStream(arguments.get("output")));
             template.process(model, out);
@@ -367,7 +372,7 @@ public class RunWithPersistedNetworks {
 
     }
 
-    private static void parsePresentation(
+    private static Concepts parsePresentation(
             String indent,
             Concept parent, 
             Concept concept, 
@@ -377,13 +382,14 @@ public class RunWithPersistedNetworks {
             URI labelRole
             ) throws Exception {
 
-        // Add the concept to the list of concepts to be rendered.
-        concepts.add(concept);
-
+        Concepts myConcepts = new Concepts();
+        
         // Add all items for this concept to the aspect model
+        int itemCount = 0;
         String conceptKey = concept.getTargetNamespace() + concept.getName();
         if (itemMap.containsKey(conceptKey)) {
             List<Item> items = itemMap.get(conceptKey);
+            itemCount = items.size();
             if (! items.isEmpty()) {
                 for (Item item: items) {
                     aspectModel.addFact(item);
@@ -393,26 +399,20 @@ public class RunWithPersistedNetworks {
 
         // Update the maximum indentation level that is used by the rendering
         maxLevel = Math.max(indent.length(), maxLevel);
-
-        // Store the concept label in a list of concept labels in rendering order with indentation done.
-        List<LabelResource> labelResources = concept.getLabelsWithLanguageAndResourceRole("en-US",labelRole);
-        String label;
-        if (labelResources.size() > 0) {
-            label = labelResources.get(0).getStringValue().trim();
-        } else {
-            label = concept.getName();
-        }
-        label = indent + label;
-        labels.add(label);
-        // reportTime(label);
-
+        
         // Get the active presentation relationships from.
         SortedSet<PersistedRelationship> relationships = store.getPersistedActiveRelationshipsFrom(concept.getIndex(),linkRole,arcrole);
 
+        Concepts childConcepts = new Concepts();
         for (PersistedRelationship relationship: relationships) {
             
-            labelRole = Constants.StandardLabelRole();
             Arc arc = relationship.getArc();
+            //logger.info(arc.getURI());
+            if (! arc.getURI().getAuthority().equals("xbrl.us")) continue;
+
+            //logger.info(relationship.getIndex() + ": " + relationship.getArc().getURI());
+            
+            labelRole = Constants.StandardLabelRole();
             if (arc.hasAttribute("preferredLabel")) {
                 String preferredLabelRole = arc.getAttribute("preferredLabel");
                 try {
@@ -421,20 +421,45 @@ public class RunWithPersistedNetworks {
                     throw new XBRLException("The preferred label URI "+preferredLabelRole+" is invalid.",e);
                 }
             }
-            parsePresentation(
+            childConcepts.addAll( 
+                parsePresentation(
                     indent + " ", 
                     concept, 
                     (Concept) relationship.getTarget(), 
                     relationship.getArcOrder(), 
                     linkRole,
                     arcrole,
-                    labelRole);
+                    labelRole)
+                    );
         }
+        
+        if (childConcepts.size() > 0 || itemCount > 0) {
+
+            // Store the concept label in a list of concept labels in rendering order with indentation done.
+            List<LabelResource> labelResources = concept.getLabelsWithLanguageAndResourceRole("en-US",labelRole);
+            if (labelResources.size() == 0) {
+                labelResources = concept.getLabelsWithResourceRole(labelRole);
+            }
+            if (labelResources.size() == 0) {
+                labelResources = concept.getLabels();
+            }
+            String label;
+            if (labelResources.size() > 0) {
+                label = labelResources.get(0).getStringValue().trim();
+            } else {
+                label = concept.getName();
+            }
+            label = indent + label;
+            
+            myConcepts.add(concept,label,labelResources.get(0).getResourceRole());
+            myConcepts.addAll(childConcepts);
+
+            reportTime(label);
+        }
+        
+        return myConcepts;
+
     }
-
-
-
-
 
     /**
      * Convenience method to report durations required to perform various tasks.

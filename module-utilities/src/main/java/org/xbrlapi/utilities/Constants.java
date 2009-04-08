@@ -16,6 +16,11 @@ public class Constants {
      * XMLPrefix is the prefix for XML elements and attributes.
      */
     public final  static String XMLNamespace = "http://www.w3.org/XML/1998/namespace";
+    
+    /**
+     * XMLNSNamespace is the namespace for the XMLNS attributes.
+     */
+    public final  static String XMLNSNamespace = "http://www.w3.org/2000/xmlns/";
     public final static URI XMLNamespace() {
         try {
             return new URI(XMLNamespace);

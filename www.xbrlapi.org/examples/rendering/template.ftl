@@ -162,7 +162,7 @@
 		                              contextRef="${item.contextId}" 
 		                              unitRef="${item.unitId}"
 		                              decimals="0" 
-		                              id="${item.fragmentIndex}" >
+		                              id="${item.index}" >
                                       [#assign nMeasures = item.unit.resolvedNumeratorMeasures /]
                                       [#assign dMeasures = item.unit.resolvedDenominatorMeasures /]
                                       [#if nMeasures?size > 1 || dMeasures?size > 0]

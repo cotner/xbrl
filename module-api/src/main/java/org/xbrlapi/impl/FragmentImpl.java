@@ -30,8 +30,8 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class FragmentImpl extends XMLImpl implements Fragment {
 	
-	protected static Logger logger = Logger.getLogger(FragmentImpl.class);	
-
+	protected static Logger logger = Logger.getLogger(FragmentImpl.class);
+	
     /**
      * @see org.xbrlapi.Fragment#getAncestorOrSelf(String)
      */
@@ -152,29 +152,24 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getLabels()
      */
     public List<LabelResource> getLabels() throws XBRLException {
-        List<LabelResource> labels = getStore().<LabelResource>getTargets(getIndex(),null,Constants.LabelArcrole());
-        List<LabelResource> genericLabels = getStore().<LabelResource>getTargets(getIndex(),null,Constants.GenericLabelArcrole());
-        labels.addAll(genericLabels);
-        return labels;
+        return getStore().getLabels(getIndex());
     }    
     
 
     
     /**
-     * @see org.xbrlapi.Fragment#getLabelsWithRole(String)
+     * @see org.xbrlapi.Fragment#getLabelsWithResourceRole(URI)
      */
-    public List<LabelResource> getLabelsWithRole(String role) throws XBRLException {
-        
-        List<LabelResource> result = new Vector<LabelResource>();
-        List<LabelResource> labels = getLabels();
-        for (LabelResource label: labels) {
-            URI r = label.getResourceRole();
-            if (r != null) {
-                if (r.equals(role)) result.add(label);
-            }
-        }
-        return result;
-    }    
+    public List<LabelResource> getLabelsWithResourceRole(URI role) throws XBRLException {
+        return getStore().getLabels(getIndex(),role);
+    }
+    
+    /**
+     * @see org.xbrlapi.Fragment#getReferencesWithResourceRole(String)
+     */
+    public List<ReferenceResource> getReferencesWithResourceRole(String role) throws XBRLException {
+        return getStore().getReferences(getIndex(),role);
+    }
     
 
     
@@ -182,14 +177,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getLabelsWithLanguage(String)
      */
     public List<LabelResource> getLabelsWithLanguage(String language) throws XBRLException {
-        List<LabelResource> labels = new Vector<LabelResource>();
-        List<LabelResource> candidates = this.getLabels();
-        for (LabelResource label: candidates) {
-            String l = label.getLanguage();
-            if (l == null) if (l == null) labels.add(label);
-            else if (l.equals(language)) labels.add(label);
-        }
-        return labels;
+        return getStore().getLabels(getIndex(),language);
     }
 
 
@@ -198,46 +186,14 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndResourceRole(String, URI)
      */
     public List<LabelResource> getLabelsWithLanguageAndResourceRole(String language, URI role) throws XBRLException {
-        List<LabelResource> labels = new Vector<LabelResource>();
-        List<LabelResource> candidates = this.getLabels();
-        for (LabelResource label: candidates) {
-            String l = label.getLanguage();
-            URI r = label.getResourceRole();
-            if (l != null && r != null) {
-                if (l.equals(language) && r.equals(role)) labels.add(label);
-            } else if (l != null) {
-                if (l.equals(language) && role == null) labels.add(label);
-            } else if (r != null) {
-                if (r.equals(role) && language == null) labels.add(label);
-            } else {
-                if (role == null && language == null) labels.add(label);
-            }
-        }
-        return labels;
+        return getStore().getLabels(getIndex(),role, language);
     }
     
     /**
      * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndResourceRole(String, URI)
      */
     public List<LabelResource> getLabelsWithLanguageAndResourceRoleAndLinkRole(String language, URI resourceRole, URI linkRole) throws XBRLException {
-        List<LabelResource> labels = new Vector<LabelResource>();
-        List<LabelResource> candidates = this.getLabels();
-        for (LabelResource label: candidates) {
-            if (linkRole == null || label.getExtendedLink().getLinkRole().equals(linkRole)) {
-                String l = label.getLanguage();
-                URI r = label.getResourceRole();
-                if (l != null && r != null) {
-                    if (l.equals(language) && r.equals(resourceRole)) labels.add(label);
-                } else if (l != null) {
-                    if (l.equals(language) && resourceRole == null) labels.add(label);
-                } else if (r != null) {
-                    if (r.equals(resourceRole) && language == null) labels.add(label);
-                } else {
-                    if (resourceRole == null && language == null) labels.add(label);
-                }
-            }
-        }
-        return labels;
+        return getStore().getLabels(getIndex(),linkRole, resourceRole, language);
     }    
     
     

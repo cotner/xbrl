@@ -51,20 +51,15 @@ import com.sleepycat.dbxml.XmlValue;
 
 public class StoreImpl extends BaseStoreImpl implements Store {
 
-    protected static Logger logger = Logger.getLogger(StoreImpl.class);    
+    protected static Logger logger = Logger.getLogger(StoreImpl.class); 
     
-
-
-
     private String locationName = null;
     private String containerName = null;
 	private Environment environment = null;
 	public XmlManager dataManager = null;
 	public XmlContainer dataContainer = null;
 	
-	
     /**
-     * Initialise the BDB XML database data store.
      * @param location The location of the database (The path to where the database exists)
      * @param container The name of the container to hold the data in the store.
      * @throws XBRLException
@@ -99,10 +94,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         }
     }
     
-
-	
-
-
 	/**
 	 * Initialises the database environment.
 	 * @throws XBRLException if the environment files are not found or 
@@ -198,6 +189,48 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             xmlIndexSpecification.addIndex(Constants.GenericLabelNamespace,"label","node-element-substring-string");
             xmlIndexSpecification.addIndex("","name","node-attribute-substring-string");
             
+            xmlIndexSpecification.addIndex("","signature", "node-attribute-equality-string");
+
+            xmlIndexSpecification.addIndex("","arcIndex", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","arcName", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","arcNamespace", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","arcRole", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","arcOrder", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","arcPriority", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","use", "node-attribute-equality-string");
+
+            xmlIndexSpecification.addIndex("","linkName", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","linkNamespace", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","linkRole", "node-attribute-equality-string");
+            
+            xmlIndexSpecification.addIndex("","sourceIndex", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","sourceType", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","sourceName", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","sourceNamespace", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","sourceRole", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","sourceLanguage", "node-attribute-equality-string");
+
+            xmlIndexSpecification.addIndex("","targetIndex", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","targetType", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","targetName", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","targetNamespace", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","targetRole", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","targetLanguage", "node-attribute-equality-string");
+            
+/*            xmlIndexSpecification.addIndex("","active", "node-attribute-presence");
+*/            xmlIndexSpecification.addIndex("","label", "node-attribute-presence");
+            xmlIndexSpecification.addIndex("","reference", "node-attribute-presence");
+            xmlIndexSpecification.addIndex("","use", "node-attribute-presence");
+            xmlIndexSpecification.addIndex("","use", "node-attribute-equality-string");
+
+            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
+
+            
             xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","uri", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","type", "node-attribute-equality-string");
@@ -213,7 +246,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
             xmlIndexSpecification.addIndex("","contextRef", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","unitRef", "node-attribute-equality-string");
-            
             
             // Entity identification indexes
             xmlIndexSpecification.addIndex("","scheme", "node-attribute-equality-string");
@@ -542,7 +574,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         
         XmlResults xmlResults = null;
         try {
-            xmlResults = performLazyQuery(query);        
+            xmlResults = performQuery(query);        
             return xmlResults.size();
         } catch (XmlException e) {
             throw new XBRLException("Failed query: " + query,e);
@@ -569,6 +601,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             String query = "collection('" + dataContainer.getName() + "')" + myQuery;
             xmlQueryContext = createQueryContext();
             xmlQueryExpression = dataManager.prepare(query,xmlQueryContext);
+            logger.debug(xmlQueryExpression.getQueryPlan());
             double startTime = System.currentTimeMillis();
             XmlResults xmlResults = xmlQueryExpression.execute(xmlQueryContext);
             Double time = new Double((System.currentTimeMillis()-startTime));

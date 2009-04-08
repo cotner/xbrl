@@ -1,10 +1,13 @@
 package org.xbrlapi.networks;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Arc;
@@ -14,6 +17,7 @@ import org.xbrlapi.Locator;
 import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.PersistedRelationshipImpl;
+import org.xbrlapi.impl.PersistedRelationshipPriorityComparator;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -77,19 +81,16 @@ public class StorerImpl implements Storer {
         }
     }
 
-    /**
-     * @see org.xbrlapi.networks.Storer#StoreAllNetworks()
+    /**+++
+     * @see org.xbrlapi.networks.Storer#storeAllRelationships()
      */
-    public void StoreAllNetworks() throws XBRLException {
-        
+    public void storeAllRelationships() throws XBRLException {
         Set<URI> arcroles = getStore().getArcroles();
-        logger.info("# of arcroles = " + arcroles.size());
         for (URI arcrole: arcroles) {
-            Set<URI> linkRoles = getStore().getLinkRoles(arcrole);
-            logger.info(linkRoles.size() + " linkroles for arcrole "+ arcrole);
-            for (URI linkRole: linkRoles) {
-                this.deleteRelationships(linkRole,arcrole);
-                this.storeRelationships(getStore().getNetworks(linkRole,arcrole));
+            Set<String> arcIndices = getStore().getArcIndices(arcrole);
+            for (String arcIndex: arcIndices) {
+                Arc arc = getStore().<Arc>getFragment(arcIndex);
+                storeRelationships(arc);                    
             }
         }
     }
@@ -119,68 +120,139 @@ public class StorerImpl implements Storer {
     /**
      * @see org.xbrlapi.networks.Storer#storeRelationships(List<URI>)
      */
-    public void storeRelationships(Set<URI> documents) throws XBRLException {
+    public void storeRelationships(Collection<URI> documents) throws XBRLException {
 
-        // Get all of the arcs
-        List<Arc> arcs = new Vector<Arc>();
         for (URI document: documents) {
-            String query = "/*[@uri='"+ document +"' and */*/@xlink:type='arc']";
-            List<Arc> newArcs = getStore().<Arc>query(query);
-            logger.info(document + " contains " + newArcs.size() + " arcs.");
-            arcs.addAll(newArcs);
-        }
-        
-        logger.info("Got " + arcs.size() + " arcs to persist.");
-        
-        Networks networks = new NetworksImpl(getStore());
-        
-        for (Arc arc: arcs) {
-            List<ArcEnd> sources = arc.getSourceFragments();
-            List<ArcEnd> targets = arc.getTargetFragments();
-            
-            for (ArcEnd source: sources) {
-                for (ArcEnd target: targets) {
-                    Fragment s = source;
-                    Fragment t = target;
-                    if (source.getType().equals("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTarget();
-                    if (target.getType().equals("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTarget();
-                    Relationship relationship = new RelationshipImpl(arc,s,t);
-                    networks.addRelationship(relationship);
-                }
+            Set<String> arcIndices = getStore().getFragmentIndicesFromDocument(document,"Arc");
+            logger.info("Storing relationships for " + arcIndices.size() + " arcs in " + document);
+            long start = System.currentTimeMillis();
+            for (String index: arcIndices) {
+                storeRelationships(getStore().<Arc>getFragment(index));
             }
-        }
-        
-        networks.complete();
-        
-        // Add in the new relationships
-        Analyser analyser = new AnalyserImpl(getStore());
-        for (Network network: networks) {
-            for (Relationship relationship: network.getAllActiveRelationships()) {
-                this.storeRelationship(relationship);
-                List<PersistedRelationship> persistedRelationships = 
-                    analyser.getRelationships(
-                            relationship.getSourceIndex(),
-                            relationship.getTargetIndex(),
-                            relationship.getLinkRole(),
-                            relationship.getArcrole());
-                if (persistedRelationships.size() > 1) {
-                    HashMap<String,Relationship> relationshipMap = new HashMap<String,Relationship>();
-                    for (PersistedRelationship pr: persistedRelationships) {
-                        Relationship candidateRelationship = new RelationshipImpl(pr);
-                        String key = candidateRelationship.getSemanticKey();
-                        if (relationshipMap.containsKey(key)) {
-                            if (candidateRelationship.getPriority().intValue() > relationshipMap.get(key).getPriority().intValue()) {
-                                Relationship or = relationshipMap.get(key);
-                                PersistedRelationship opr = new PersistedRelationshipImpl(or);
-                                getStore().remove(opr.getIndex());
-                                relationshipMap.put(key,candidateRelationship);
-                            }
-                        }
-                    }
-                }
+            if (arcIndices.size() > 0) {
+                Double average = new Double(System.currentTimeMillis() - start) / new Double(arcIndices.size());
+                logger.info("Time per arc in "+ document + " = " + average);
             }
+            getStore().sync();
         }
 
     }
+    
+    /**
+     * @param arc The arc to store relationships for.
+     * @throws XBRLException
+     */
+    private void storeRelationships(Arc arc) throws XBRLException {
 
+        List<ArcEnd> sources = arc.getSourceFragments();
+        List<ArcEnd> targets = arc.getTargetFragments();
+        
+        for (ArcEnd source: sources) {
+            for (ArcEnd target: targets) {
+                Fragment s = source;
+                Fragment t = target;
+                if (source.getType().equals("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTarget();
+                if (target.getType().equals("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTarget();
+                storeRelationship(new RelationshipImpl(arc,s,t));
+            }
+        }
+    }
+
+    /**
+     * @see Storer#deleteInactiveRelationships()
+     */
+    public void deleteInactiveRelationships() throws XBRLException {
+
+        logger.info("Deleting inactive persisted relationships.");
+        Analyser analyser = new AnalyserImpl(getStore());
+        
+        Set<URI> arcroles = analyser.getArcroles();
+        for (URI arcrole: arcroles) {
+            Set<URI> linkRoles = analyser.getLinkRoles(arcrole);
+            for (URI linkRole: linkRoles) {
+                this.deleteInactiveRelationships(linkRole,arcrole);
+            }
+        }
+    }
+
+    /**
+     * @see Storer#deleteInactiveRelationships(URI, URI)
+     */
+    public void deleteInactiveRelationships(URI linkRole, URI arcrole)
+            throws XBRLException {
+
+        logger.info("Deleting inactive persisted relationships for linkRole: " + linkRole + " and arcrole " + arcrole);
+
+        String query = "/*[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"']/@sourceIndex";
+        Set<String> sourceIndices = getStore().queryForStrings(query);
+        logger.info("# sources = " + sourceIndices.size());
+        for (String sourceIndex: sourceIndices) {
+            query = "/*[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"' and @sourceIndex='"+sourceIndex+"']/@targetIndex";
+            Set<String> targetIndices = getStore().queryForStrings(query);
+            for (String targetIndex: targetIndices) {
+                Map<String,SortedSet<PersistedRelationship>> map = getEquivalentRelationships(linkRole,arcrole,sourceIndex,targetIndex);
+                for (String key: map.keySet()) {
+                    SortedSet<PersistedRelationship> equivalents = map.get(key);
+                    PersistedRelationship active = equivalents.first();
+                    for (PersistedRelationship equivalent: equivalents) {
+                        if (equivalent != active) {
+                            // getStore().remove(equivalent);
+                            logger.info("removing " + equivalent.getArc().getURI() + " " + equivalent.getIndex());
+                        }
+                    }
+                    //if (active.getArcUse().equals("prohibited") getStore().remove(active);
+                }
+            }
+        }
+        
+    }    
+
+    /**
+     * @see Storer#markActiveRelationships(URI, URI)
+     */
+    public void markActiveRelationships(URI linkRole, URI arcrole)
+            throws XBRLException {
+        
+        String query = "/*[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"']/@sourceIndex";
+        Set<String> sourceIndices = getStore().queryForStrings(query);
+        logger.info("# sources = " + sourceIndices.size());
+        for (String sourceIndex: sourceIndices) {
+            query = "/*[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"' and @sourceIndex='"+sourceIndex+"']/@targetIndex";
+            Set<String> targetIndices = getStore().queryForStrings(query);
+            for (String targetIndex: targetIndices) {
+                Map<String,SortedSet<PersistedRelationship>> map = getEquivalentRelationships(linkRole,arcrole,sourceIndex,targetIndex);
+                for (String key: map.keySet()) {
+                    map.get(key).first().setMetaAttribute("active","");
+                }
+            }
+        }
+        
+    }
+
+    /**
+     * @param linkRole The network link role
+     * @param arcrole The network arcrole
+     * @return a map of sorted sets of equivalent relationships in the network.
+     * @throws XBRLException
+     */
+    private Map<String,SortedSet<PersistedRelationship>> getEquivalentRelationships(URI linkRole, URI arcrole, String sourceIndex, String targetIndex)
+            throws XBRLException {
+        
+        Map<String,SortedSet<PersistedRelationship>> map = new HashMap<String,SortedSet<PersistedRelationship>>();
+        String query = "/*[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"' and @sourceIndex='"+sourceIndex+"' and @targetIndex='"+targetIndex+"']";
+        List<PersistedRelationship> relationships = this.getStore().<PersistedRelationship>query(query);
+        for (PersistedRelationship relationship: relationships) {
+            String key = relationship.getSourceIndex() + relationship.getTargetIndex() + relationship.getLinkRole() + relationship.getArcrole() + relationship.getSignature();
+            if (map.containsKey(key)) {
+                map.get(key).add(relationship);
+            } else {
+                SortedSet<PersistedRelationship> set = new TreeSet<PersistedRelationship>(new PersistedRelationshipPriorityComparator());
+                set.add(relationship);
+                map.put(key,set);
+            }
+        }
+
+        return map;
+    }
+    
 }

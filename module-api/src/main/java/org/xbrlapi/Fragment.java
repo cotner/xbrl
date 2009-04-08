@@ -236,7 +236,15 @@ public interface Fragment extends XML {
      * @return the list of labels for this fragment with the specified XLink role.
      * @throws XBRLException
      */
-    public List<LabelResource> getLabelsWithRole(String role) throws XBRLException;
+    public List<LabelResource> getLabelsWithResourceRole(URI role) throws XBRLException;
+    
+    /**
+     * @param role The XLink role value
+     * @return the list of references for this fragment with the specified XLink role.
+     * @throws XBRLException
+     */
+    public List<ReferenceResource> getReferencesWithResourceRole(String role) throws XBRLException;
+    
     
     
     

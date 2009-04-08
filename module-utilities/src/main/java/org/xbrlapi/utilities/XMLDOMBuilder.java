@@ -48,7 +48,7 @@ public class XMLDOMBuilder {
 		        builder = factory.newDocumentBuilder();
 				if (testEntityResolver != null) {
 					builder.setEntityResolver(testEntityResolver);
-				}	        
+				}
 	        }
 		} catch (Exception e) {
 			logger.error("The fragment builder could not be constructed.");
@@ -111,6 +111,6 @@ public class XMLDOMBuilder {
 		    logger.error(xml);
 			throw new XBRLException("A SAX exception is causing problems.",e);
 		}
-	}	 
+	}
  
 }

@@ -87,123 +87,125 @@
     	  </tr>
 
     	    [#assign counter = 1 /]
-            [#list 0..(table.concepts?size-1) as cIndex]
-
-    	      [#assign concept = table.concepts[cIndex] /]
-              [#assign label = table.labels[cIndex] /]
-
-              [#if counter = 1]
-                [#assign counter = 0 /]
-                [#assign classPrefix = "row1" /]
-              [#else]
-                [#assign counter = 1 /]
-                [#assign classPrefix = "row2" /]
-              [/#if]
-
-              [#if label?lower_case?trim?ends_with(", total")]
-                <tr class="${classPrefix}total">
-              [#else]
-                <tr class="${classPrefix}">
-              [/#if]
-    
-              [#assign continuing = true /]
-              [#assign indent = true /]
-              [#assign value = false /]
-              [#assign level = 0 /]
-              [#list 0..table.maxLevel as i]<!-- Loop over indentation levels -->
-                [#if continuing]
-	              [#if label[i] = " " && indent]
-	                [#assign level = level + 1 /]
-	                  <td class="indent" colspan="1"/>
+    	    [#if table.concepts?size > 0]
+	            [#list 0..(table.concepts?size-1) as cIndex]
+	
+	              [#assign concept = table.concepts[cIndex] /]
+	              [#assign label = table.labels[cIndex] /]
+	
+	              [#if counter = 1]
+	                [#assign counter = 0 /]
+	                [#assign classPrefix = "row1" /]
 	              [#else]
-	                [#assign indent = true /]
-	                [#if ! value]
-                      <td class="label" colspan="${table.maxLevel+1-level}">
-                        ${label?trim}
-                      </td>
-                      [#assign value = true /]
-	                [#else]
-                      [#assign continuing = false /]
-	                [/#if]
+	                [#assign counter = 1 /]
+	                [#assign classPrefix = "row2" /]
 	              [/#if]
-	            [/#if]
-              [/#list]<!-- Loop over indentation levels -->
-              
-              [#assign conceptId = concept.targetNamespace + ": " + concept.name /]
-              [#assign conceptAspect = table.aspectModel.getAspect("concept") /]
-              [#assign conceptHasData = conceptAspect.hasValue(conceptId) /]
-              [#if conceptHasData]
-                [#assign conceptValue = conceptAspect.getValue(conceptId) /]
-                ${conceptAspect.setSelectionCriterion(conceptValue)}
-              [/#if]
-              
-              [#list table.periods as period]
-
-                [#if conceptHasData]
-                  ${period.aspect.setSelectionCriterion(period)}
-                  [#assign items = table.aspectModel.matchingFacts /]
-                [#else]
-                  [#assign items = [] /]
-                [/#if]
-
-                [#if conceptHasData && items?exists && items?size > 0]
-                    [#assign item = items[0] /]
-                    [#if ! item.nil]
-	                    <td class="value">
-		                    [#if item.numeric]<!-- The item is numeric -->
-		                      <div class="numeric">
-		                          <!-- Sort out the inline XBRL stuff. -->
-		                          <!-- Sort out the formatting to take unit information into account. -->
-		                          <ix:nonFraction 
-		                              xmlns="${concept.targetNamespace}"
-		                              ix:name="${concept.name}"
-		                              ix:format="commadot" 
-		                              ix:scale="0"
-		                              contextRef="${item.contextId}" 
-		                              unitRef="${item.unitId}"
-		                              decimals="0" 
-		                              id="${item.fragmentIndex}" >
-                                      [#assign nMeasures = item.unit.resolvedNumeratorMeasures /]
-                                      [#assign dMeasures = item.unit.resolvedDenominatorMeasures /]
-                                      [#if nMeasures?size > 1 || dMeasures?size > 0]
-                                        ${item.value}
-                                      [/#if]
-                                      [#assign measure = nMeasures[0] /]
-                                      [#if measure.namespace = iso4217]
-                                        ${item.value?number?string.currency} ${measure.localname}
-                                      [/#if]
-		                              [#if measure.namespace == xbrli && measure.localname == "shares"]
-                                        ${item.value?number} shares
-		                              [/#if]
-                                      [#if measure.namespace == xbrli && measure.localname == "pure" && (item.value?number >= 1)]
-                                        ${item.value?number}
-                                      [/#if]
-                                      [#if measure.namespace == xbrli && measure.localname == "pure" && (item.value?number < 1)]
-                                        ${item.value?number * 100} %
-                                      [/#if]
-		                          </ix:nonFraction>
-		                      </div>
-		                    [#else]<!-- The item is non-numeric -->
-		                      <div class="nonnumeric">
-			                      <!-- Sort out the inline XBRL stuff. -->
-			                      [#assign value = item.value /]
-			                      [#if value?length > 255]
-			                        ${value?substring(0,255)} ...
-			                      [#else]
-			                        ${value}
-			                      [/#if]
-		                      </div>
-		                    [/#if]
-	                    </td>
+	
+	              [#if label?lower_case?trim?ends_with(", total")]
+	                <tr class="${classPrefix}total">
+	              [#else]
+	                <tr class="${classPrefix}">
+	              [/#if]
+	    
+	              [#assign continuing = true /]
+	              [#assign indent = true /]
+	              [#assign value = false /]
+	              [#assign level = 0 /]
+	              [#list 0..table.maxLevel as i]<!-- Loop over indentation levels -->
+	                [#if continuing]
+	                  [#if label[i] = " " && indent]
+	                    [#assign level = level + 1 /]
+	                      <td class="indent" colspan="1"/>
+	                  [#else]
+	                    [#assign indent = true /]
+	                    [#if ! value]
+	                      <td class="label" colspan="${table.maxLevel+1-level}" title="${table.labelRoles[i]}">
+	                        ${label?trim}
+	                      </td>
+	                      [#assign value = true /]
+	                    [#else]
+	                      [#assign continuing = false /]
+	                    [/#if]
+	                  [/#if]
+	                [/#if]
+	              [/#list]<!-- Loop over indentation levels -->
+	              
+	              [#assign conceptId = concept.targetNamespace + ": " + concept.name /]
+	              [#assign conceptAspect = table.aspectModel.getAspect("concept") /]
+	              [#assign conceptHasData = conceptAspect.hasValue(conceptId) /]
+	              [#if conceptHasData]
+	                [#assign conceptValue = conceptAspect.getValue(conceptId) /]
+	                ${conceptAspect.setSelectionCriterion(conceptValue)}
+	              [/#if]
+	              
+	              [#list table.periods as period]
+	
+	                [#if conceptHasData]
+	                  ${period.aspect.setSelectionCriterion(period)}
+	                  [#assign items = table.aspectModel.matchingFacts /]
 	                [#else]
-		                  <td class="value">nil</td>
-                    [/#if]
-                [#else]
-                  <td class="value"/>
-                [/#if]
-              [/#list]<!-- loop over periods -->
-              </tr>
-    	    [/#list]<!-- Loop over concepts - one per row -->
+	                  [#assign items = [] /]
+	                [/#if]
+	
+	                [#if conceptHasData && items?exists && items?size > 0]
+	                    [#assign item = items[0] /]
+	                    [#if ! item.nil]
+	                        <td class="value">
+	                            [#if item.numeric]<!-- The item is numeric -->
+	                              <div class="numeric">
+	                                  <!-- Sort out the inline XBRL stuff. -->
+	                                  <!-- Sort out the formatting to take unit information into account. -->
+	                                  <ix:nonFraction 
+	                                      xmlns="${concept.targetNamespace}"
+	                                      ix:name="${concept.name}"
+	                                      ix:format="commadot" 
+	                                      ix:scale="0"
+	                                      contextRef="${item.contextId}" 
+	                                      unitRef="${item.unitId}"
+	                                      decimals="0" 
+	                                      id="${item.index}" >
+	                                      [#assign nMeasures = item.unit.resolvedNumeratorMeasures /]
+	                                      [#assign dMeasures = item.unit.resolvedDenominatorMeasures /]
+	                                      [#if nMeasures?size > 1 || dMeasures?size > 0]
+	                                        ${item.value}
+	                                      [/#if]
+	                                      [#assign measure = nMeasures[0] /]
+	                                      [#if measure.namespace = iso4217]
+	                                        ${item.value?number?string.currency} ${measure.localname}
+	                                      [/#if]
+	                                      [#if measure.namespace == xbrli && measure.localname == "shares"]
+	                                        ${item.value?number} shares
+	                                      [/#if]
+	                                      [#if measure.namespace == xbrli && measure.localname == "pure" && (item.value?number >= 1)]
+	                                        ${item.value?number}
+	                                      [/#if]
+	                                      [#if measure.namespace == xbrli && measure.localname == "pure" && (item.value?number < 1)]
+	                                        ${item.value?number * 100} %
+	                                      [/#if]
+	                                  </ix:nonFraction>
+	                              </div>
+	                            [#else]<!-- The item is non-numeric -->
+	                              <div class="nonnumeric">
+	                                  <!-- Sort out the inline XBRL stuff. -->
+	                                  [#assign value = item.value /]
+	                                  [#if value?length > 255]
+	                                    ${value?substring(0,255)} ...
+	                                  [#else]
+	                                    ${value}
+	                                  [/#if]
+	                              </div>
+	                            [/#if]
+	                        </td>
+	                    [#else]
+	                          <td class="value">nil</td>
+	                    [/#if]
+	                [#else]
+	                  <td class="value"/>
+	                [/#if]
+	              [/#list]<!-- loop over periods -->
+	              </tr>
+	            [/#list]<!-- Loop over concepts - one per row -->
+            [/#if]
     	    
   	    </table>
       [/#list]<!--  Loop over presentation network tables -->

@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xbrlapi.XML;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.XML;
 import org.xbrlapi.builder.Builder;
 import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.data.Store;
@@ -18,6 +18,15 @@ import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 public class XMLImpl implements XML {
+
+    public XMLImpl() {
+        super();
+    }
+    
+    protected void finalize() throws Throwable
+    {
+      super.finalize(); 
+    }    
 
     protected static Logger logger = Logger.getLogger(XMLImpl.class);  
     
@@ -43,7 +52,7 @@ public class XMLImpl implements XML {
      * if the fragment has not been built.
      */
     private Element rootElement = null;
-
+    
     /**
      * @see org.xbrlapi.XML#isa(String)
      */
@@ -173,7 +182,7 @@ public class XMLImpl implements XML {
         if (index == null) throw new XBRLException("The index must not be null.");
         if (index.equals("")) throw new XBRLException("A fragment index must not be an empty string.");
         this.index = index;
-        if (this.getResource() == null) {
+        if (this.getMetadataRootElement() == null) {
             setBuilder(new BuilderImpl());
         }
         if (builder != null) builder.setMetaAttribute("index",index);

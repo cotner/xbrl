@@ -312,9 +312,9 @@ public class RelationshipImpl implements Relationship {
 	}
 
 	/**
-	 * @see org.xbrlapi.networks.Relationship#getSemanticKey()
+	 * @see org.xbrlapi.networks.Relationship#getSignature()
 	 */
-	public String getSemanticKey() throws XBRLException {
+	public String getSignature() throws XBRLException {
 		return this.getArc().getSemanticKey();
 	}
 

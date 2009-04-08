@@ -224,21 +224,15 @@ public interface Analyser {
     public <F extends Fragment> Set<F> getRoots(URI linkRole, URI arcrole) throws XBRLException;    
     
     /**
-     * @param arcrole The arcrole of the network.
-     * @return the relationships that run from root fragments in the 
-     * networks with the specified arcrole.
+     * @param linkRole The link role defining the network
+     * @param arcrole The arcrole defining the network
+     * @return the set of indices of the root fragments in the network.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRootRelationships(URI arcrole) throws XBRLException;
+    public Set<String> getRootIndices(URI linkRole, URI arcrole) throws XBRLException;
+
     
-    /**
-     * @param <F> The fragment type
-     * @param arcrole The arcrole URI
-     * @return the list of fragments that are roots of networks with the given
-     * arcrole.
-     * @throws XBRLException
-     */
-    public <F extends Fragment> Set<F> getRoots(URI arcrole) throws XBRLException;
+
 
     /**
      * @param sourceIndex The index of the fragment to get the labels for.

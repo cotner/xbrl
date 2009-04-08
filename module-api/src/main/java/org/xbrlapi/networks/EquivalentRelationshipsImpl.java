@@ -31,7 +31,7 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships {
 			return;
 		}
 		
-		if (! relationship.getSemanticKey().equals(getSemanticKey())) {
+		if (! relationship.getSignature().equals(getSemanticKey())) {
 			throw new XBRLException("The new relationship is not semantically equal to the existing relationships.");			
 		}
 
@@ -68,7 +68,7 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships {
 	private String getSemanticKey() throws XBRLException {
 		Relationship r = getActiveRelationship();
 		if (r == null) return null;
-		return r.getSemanticKey();
+		return r.getSignature();
 	}
 	
 	/**

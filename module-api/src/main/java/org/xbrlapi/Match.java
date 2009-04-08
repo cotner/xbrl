@@ -11,7 +11,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public interface Match extends XML {
+public interface Match extends NonFragmentXML {
 
     /**
      * @param uri The URI to add to the match XML resource.

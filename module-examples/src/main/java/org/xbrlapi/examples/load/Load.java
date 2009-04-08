@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.Context;
@@ -105,7 +106,7 @@ public class Load {
             
             // Analyse the presentation networks in the supporting DTS
             for (URI linkrole: store.getLinkRoles(Constants.PresentationArcrole())) {
-                List<Fragment> rootLocators = store.getNetworkRoots(Constants.XBRL21LinkNamespace(),"presentationLink",new URI(arguments.get("linkrole")),Constants.XBRL21LinkNamespace(),"presentationArc",Constants.PresentationArcrole());                            
+                Set<Fragment> rootLocators = store.<Fragment>getNetworkRoots(new URI(arguments.get("linkrole")),Constants.PresentationArcrole());                            
                 for (Fragment rootLocator: rootLocators) {
                     Concept rootConcept = (Concept) ((Locator) rootLocator).getTarget();
                     reportNode("",rootConcept,linkrole);

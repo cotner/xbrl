@@ -12,7 +12,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public interface PersistedRelationship extends XML {
+public interface PersistedRelationship extends NonFragmentXML {
 
     /**
      * @return the fragment index for the source of the relationship.
@@ -51,10 +51,14 @@ public interface PersistedRelationship extends XML {
     public Double getArcOrder();
     
     /**
-     * @return the XLink arc priority for the relationship.
+     * @return the arc priority for the relationship.
      */
     public Integer getArcPriority();
-
+    
+    /**
+     * @return the arc use for the relationship.
+     */
+    public String getArcUse();    
     
     /**
      * @return the source element namespace.
@@ -116,6 +120,13 @@ public interface PersistedRelationship extends XML {
      * @return the target XLink role or null if none exists.
      */
     public URI getTargetRole();
+    
+    /**
+     * @return the relationship signature which is what is 
+     * used to match up relationships that override or
+     * prohibit one another.
+     */
+    public String getSignature();    
 
     /**
      * @return the source XML language code or null if none exists.
@@ -151,7 +162,22 @@ public interface PersistedRelationship extends XML {
      * @return true if the relationship is from a source fragment that is
      * not also a target fragment in the same network of relationships that
      * this relationship participates in.  Returns false otherwise.
+     * @throws XBRLException
      */
-    public boolean isFromRoot();
+    public boolean isFromRoot() throws XBRLException;
+    
+    /**
+     * @return true if the relationship is marked as being
+     * not prohibited or overridden.
+     * @throws XBRLException
+     */
+/*    public boolean isActive() throws XBRLException;*/
+
+    /**
+     * @param active true if the relationship is set to active
+     * (not prohibited or overridden) and false otherwise.
+     * @throws XBRLException
+     */
+/*    public void setActiveStatus(boolean active) throws XBRLException;*/
     
 }

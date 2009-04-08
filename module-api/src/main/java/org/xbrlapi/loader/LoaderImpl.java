@@ -461,6 +461,7 @@ public class LoaderImpl implements Loader {
         setDiscovering(true);
 
         for (URI uri: getStore().getDocumentsToDiscover()) {
+            logger.info(" store indicates that " + uri + " needs to be discovered also.");
             this.stashURI(uri);
         }
         
