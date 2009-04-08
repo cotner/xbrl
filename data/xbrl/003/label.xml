@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linkbase
+  xmlns="http://www.xbrl.org/2003/linkbase"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xsi:schemaLocation="
+    http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd">
+
+  <labelLink xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <loc xlink:type="locator" xlink:label="concept" xlink:href="schema.xsd#root" />
+    <label xlink:type="resource" xlink:role="http://www.xbrl.org/2003/role/label" 
+    xlink:label="label" xml:lang="en">Distance</label>
+    <labelArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label" 
+    xmlns:garbage="http://www.garbage.com/" xlink:from="concept" xlink:to="label" garbage:asdf="stuff"
+    garbage:use="optional" use="prohibited" priority="1"/>
+  </labelLink>
+
+</linkbase>

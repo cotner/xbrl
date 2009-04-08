@@ -5,8 +5,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Vector;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -163,53 +163,47 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     }
     
     /**
+     * TODO Add in PSVI information re default and fixed attribute values.
      * @see org.xbrlapi.Arc#getSemanticAttributes()
      */
     public NamedNodeMap getSemanticAttributes() throws XBRLException {
 
     	// Clone the node to stop the attribute removal from impacting on the XML.
-    	NamedNodeMap attributes = this.getDataRootElement().cloneNode(true).getAttributes();    	
+    	NamedNodeMap attributes = this.getDataRootElement().cloneNode(true).getAttributes();
     	
-    	try {
-    		attributes.removeNamedItemNS(Constants.XLinkNamespace,"arcrole");
-    	} catch (DOMException e) {}
-    	try {
-    		attributes.removeNamedItemNS(Constants.XLinkNamespace,"type");
-    	} catch (DOMException e) {}
-    	try {
-    		attributes.removeNamedItemNS(Constants.XLinkNamespace,"from");
-    	} catch (DOMException e) {}
-    	try {
-			attributes.removeNamedItemNS(Constants.XLinkNamespace, "to");
-		} catch (DOMException e) {
-		}
-		try {
-			attributes.removeNamedItemNS(Constants.XLinkNamespace, "show");
-		} catch (DOMException e) {
-		}
-		try {
-			attributes.removeNamedItemNS(Constants.XLinkNamespace, "actuate");
-		} catch (DOMException e) {
-		}
-		try {
-			attributes.removeNamedItemNS(Constants.XLinkNamespace, "title");
-		} catch (DOMException e) {
-		}
-		try {
-			attributes.removeNamedItem("use");
-		} catch (DOMException e) {
-		}
-		try {
-			attributes.removeNamedItem("priority");
-		} catch (DOMException e) {
-		}
-    	try {
-    		attributes.removeNamedItemNS(Constants.XMLNamespace,"lang");
-    	} catch (DOMException e) {}
-    	try {
-    		attributes.removeNamedItemNS(Constants.XMLNamespace,"base");
-    	} catch (DOMException e) {}
-		return attributes;
+    	List<Node> badNodes = new Vector<Node>();
+    	for (int i=0; i< attributes.getLength(); i++) {
+    	    Node attribute = attributes.item(i);
+    	    String ns = attribute.getNamespaceURI();
+    	    logger.info("namespace=" + ns);
+            logger.info("localname=" + attribute.getLocalName());
+            logger.info("node name=" + attribute.getNodeName());
+            logger.info("value=" + attribute.getNodeValue());
+            if (ns != null) {
+                if (attribute.getNamespaceURI().equals(Constants.XLinkNamespace)) {
+                    badNodes.add(attribute);
+                } else if (attribute.getNamespaceURI().equals(Constants.XMLNSNamespace)) {
+                    badNodes.add(attribute);
+                }                
+            } else {
+        	    if (attribute.getNodeName().startsWith("xmlns:") || attribute.getNodeName().startsWith("xmlns=")) {
+                    badNodes.add(attribute);
+                } else if (attribute.getNodeName().equals("use") || attribute.getNodeName().equals("priority")) {
+                    badNodes.add(attribute);
+        	    }
+            }
+    	}
+
+    	for (Node node: badNodes) {
+            String ns = node.getNamespaceURI();
+            if (ns == null)
+                attributes.removeNamedItem(node.getNodeName());
+            else 
+                attributes.removeNamedItemNS(ns,node.getLocalName());
+    	}
+    	
+        return attributes;
+    	
 	}
 
     /**
@@ -220,32 +214,32 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     	SortedMap<String,String> map = new TreeMap<String,String>();
     	
     	// Handle the order attribute which takes a default value of 1 when not specified.
-    	String order = "1";
+    	String order = getOrder().toString();
     	if (attributes.getNamedItem("order") != null) {
-    		order = attributes.getNamedItem("order").getNodeValue();
     		attributes.removeNamedItem("order");
     	}
     	map.put("order",order);
+
     	for (int i=0; i<attributes.getLength(); i++) {
     		Node node = attributes.item(i);
 			String namespace = node.getNamespaceURI();
 	    	String key = null;
     		if (namespace == null) {
-    			key = node.getNodeName();
+        		key = node.getNodeName();
     		} else {
     			key = namespace + ":" + node.getLocalName();
     		}
     		map.put(key,node.getNodeValue());
     	}
-    	
+
     	String semanticKey = "";
     	while (! map.isEmpty()) {
     		String key = map.firstKey();
-    		semanticKey += key + "=" + map.get(key) + "|";
+    		semanticKey += key + "=" + map.get(key) + " ";
     		map.remove(key);
     	}
     	
-    	return semanticKey;
+    	return semanticKey.trim();
 
     }    
     

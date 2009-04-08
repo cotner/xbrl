@@ -10,6 +10,7 @@ public class AllTests {
 		//$JUnit-BEGIN$
         suite.addTestSuite(ArcEndTestCase.class);
         suite.addTestSuite(ArcroleTypeTestCase.class);
+        suite.addTestSuite(ArcSemanticKeyTestCase.class);
 		suite.addTestSuite(ArcTestCase.class);
         suite.addTestSuite(ConceptTestCase.class);
         suite.addTestSuite(ContextComponentTestCase.class);
