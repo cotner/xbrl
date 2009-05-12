@@ -136,7 +136,6 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
                     }
                 }
             } catch (XBRLException e) {
-                e.printStackTrace();
                 logger.error(this.getURI() + " : " + e.getMessage());
                 throw new SAXException("Fragment identification failed.",e);
             }

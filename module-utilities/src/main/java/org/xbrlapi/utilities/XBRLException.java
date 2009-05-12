@@ -6,7 +6,6 @@ package org.xbrlapi.utilities;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.lang.Exception;
 
 public class XBRLException extends Exception 
 {
@@ -26,7 +25,7 @@ public class XBRLException extends Exception
     	super("XBRLAPI Exception: " + reason);
     }
 
-    public XBRLException(String reason, Exception e) {
+    public XBRLException(String reason, Throwable e) {
     	super(" XBRLAPI Exception: " + reason);
     	cause = e;
     }

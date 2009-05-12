@@ -175,10 +175,6 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     	for (int i=0; i< attributes.getLength(); i++) {
     	    Node attribute = attributes.item(i);
     	    String ns = attribute.getNamespaceURI();
-    	    logger.info("namespace=" + ns);
-            logger.info("localname=" + attribute.getLocalName());
-            logger.info("node name=" + attribute.getNodeName());
-            logger.info("value=" + attribute.getNodeValue());
             if (ns != null) {
                 if (attribute.getNamespaceURI().equals(Constants.XLinkNamespace)) {
                     badNodes.add(attribute);

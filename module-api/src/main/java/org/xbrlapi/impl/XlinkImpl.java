@@ -124,7 +124,9 @@ class XlinkImpl extends FragmentImpl implements Xlink {
 		try {
 			pointerParts = parser.Pointer();
 		} catch (ParseException e) {
-			throw new XBRLException(pointer + " failed to parse as an XPointer for locator " + this.getIndex(), e);
+			throw new XBRLException("Parsing exception thrown for locator " + this.getIndex() + " with XPointer " + pointer, e);
+        } catch (Throwable e) {
+            throw new XBRLException("Other XPointer problem found for locator " + this.getIndex() + " with XPointer " + pointer, e);
 		}
 			
 		for (int i=0; i<pointerParts.size(); i++) {

@@ -65,7 +65,6 @@ import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 
 /**
- * @author Steve Yang (steve2yang@yahoo.com) (YangSt1)
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class RunWithPersistedNetworks {
@@ -222,8 +221,7 @@ public class RunWithPersistedNetworks {
 
             Storer storer = new StorerImpl(store);
             storer.deleteInactiveRelationships();
-            System.exit(0);
-            
+            // System.exit(0);
 
             // Get the Freemarker template ready to use.
             if (!arguments.containsKey("template"))

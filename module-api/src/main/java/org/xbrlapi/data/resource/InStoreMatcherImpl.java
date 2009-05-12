@@ -65,7 +65,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
         Match match = this.getMatchXML(uri);
         
         if (match != null) {
-            logger.info("serialising the match XML");
+            logger.debug("serialising the match XML");
             match.serialize();
         }
         
@@ -85,7 +85,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
                 match.setResourceURI(uri);
                 getStore().persist(match);
                 URI result = match.getMatch();
-                logger.info(result);
+                logger.debug(result);
                 return result;
             } 
 
@@ -93,13 +93,13 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
             match.setResourceURI(uri);
             getStore().persist(match);
             this.matchMap.put(uri,uri);
-            logger.info(uri);
+            logger.debug(uri);
             return uri;
         } 
 
         URI matchURI = match.getMatch();
         this.matchMap.put(uri,matchURI);
-        logger.info(matchURI);
+        logger.debug(matchURI);
         return matchURI;
         
     }

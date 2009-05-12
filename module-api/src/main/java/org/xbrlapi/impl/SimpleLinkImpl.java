@@ -21,7 +21,9 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
 	public void setTarget(URI uri) throws XBRLException {
 		setMetaAttribute("absoluteHref",uri.toString());
 		setMetaAttribute("targetDocumentURI",this.getTargetDocumentURI(uri).toString());
-		setMetaAttribute("targetPointerValue",this.getTargetPointerValue(uri.getFragment()));
+		
+		// TODO test that we can handle null URI fragments.
+	    setMetaAttribute("targetPointerValue",this.getTargetPointerValue(uri.getFragment()));
 	}
 
     /**
