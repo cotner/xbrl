@@ -330,24 +330,51 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			String actuate)
 			throws XLinkException {
 		
+        SimpleLink fragment = new SimpleLinkImpl();
 		try {
-            SimpleLink fragment = new SimpleLinkImpl();
             processFragment(fragment,attrs);
+        } catch (XBRLException e) {
+            throw new XLinkException("The simple link fragment could not be processed.",e);
+        }
 
-            URI uri = baseURIResolver.getBaseURI().resolve(new URI(href));
-            logger.debug("Got a simple link to " + uri);
-			Loader loader = getLoader();
+        URI uri = null;
+        try {
+            uri = new URI(href);
+        } catch (URISyntaxException e) {
+                throw new XLinkException("The simple link URI could not be queued up for exploration in DTS discovery.",e);
+        }
+
+        if (! uri.isAbsolute()) {
+            URI baseUri = null;
+            try {
+                baseUri = baseURIResolver.getBaseURI();
+            } catch (XMLBaseException e) {
+                throw new XLinkException("The base URI to use for URI resolution cannot be accessed.",e);
+            }
+            uri = baseUri.resolve(uri);
+        }
+
+        logger.debug("Got a simple link to " + uri);
+        
+        Loader loader = null;
+        try {
+            loader = getLoader();
+        } catch (XBRLException e) {
+            throw new XLinkException("The loader could not be accessed so the simple link URI cannot be stashed for discovery.",e);
+        }
+
+        try {
             fragment.setTarget(uri);
+        } catch (XBRLException e) {
+            throw new XLinkException("The simple link fragment target could not be set to " + uri,e);
+        }
+
+        try {
             loader.stashURI(uri);
-			
-		} catch (URISyntaxException e) {
-			throw new XLinkException("The URI on a simple link was malformed.",e);
-		} catch (XBRLException e) {
-			throw new XLinkException("The URI on a simple link could not be queued up for exploration in DTS discovery.",e);
-		} catch (XMLBaseException e) {
-			throw new XLinkException("The URI on a simple link could not be queued up for exploration in DTS discovery.",e);
-		}
-		
+        } catch (XBRLException e) {
+            throw new XLinkException("The simple link URI could not be stashed for future discovery: " + href,e);
+        }
+
 	}
 	
 	/**
