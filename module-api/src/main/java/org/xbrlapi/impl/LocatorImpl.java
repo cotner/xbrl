@@ -80,13 +80,19 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
      */
     public Fragment getTarget() throws XBRLException {
 
+        long start = System.currentTimeMillis();
+        
     	String pointerCondition = "";
     	String pointerValue = getTargetPointerValue();
     	if (! pointerValue.equals("")) 
     		pointerCondition = " and "+ Constants.XBRLAPIPrefix+ ":" + "xptr/@value='" + pointerValue + "'";
 
-    	String query = "/*[@uri='" + getTargetDocumentURI() + "'" + pointerCondition + "]";
+    	URI uri = this.getStore().getMatcher().getMatch(getTargetDocumentURI());
+    	String query = "/*[@uri='" + uri + "'" + pointerCondition + "]";
     	List<Fragment> fragments = getStore().<Fragment>query(query);
+
+    	logger.info("MS to get target = " + (System.currentTimeMillis() - start));
+
     	if (fragments.size() == 0) throw new XBRLException("The simple link does not reference a fragment.");
     	if (fragments.size() > 1) throw new XBRLException("The simple link references more than one fragment.");
     	return fragments.get(0);
