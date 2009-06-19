@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.w3c.dom.Element;
+import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
 import java.util.List;
 import org.xbrlapi.Locator;
@@ -82,20 +83,33 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
 
         long start = System.currentTimeMillis();
         
-    	String pointerCondition = "";
-    	String pointerValue = getTargetPointerValue();
-    	if (! pointerValue.equals("")) 
-    		pointerCondition = " and "+ Constants.XBRLAPIPrefix+ ":" + "xptr/@value='" + pointerValue + "'";
+        URI uri = this.getStore().getMatcher().getMatch(getTargetDocumentURI());
 
-    	URI uri = this.getStore().getMatcher().getMatch(getTargetDocumentURI());
-    	String query = "/*[@uri='" + uri + "'" + pointerCondition + "]";
-    	List<Fragment> fragments = getStore().<Fragment>query(query);
-
-    	logger.info("MS to get target = " + (System.currentTimeMillis() - start));
-
-    	if (fragments.size() == 0) throw new XBRLException("The simple link does not reference a fragment.");
-    	if (fragments.size() > 1) throw new XBRLException("The simple link references more than one fragment.");
-    	return fragments.get(0);
+        String pointerValue = getTargetPointerValue();
+    	if (! pointerValue.equals("")) {
+    	    String query = "#roots#[" + Constants.XBRLAPIPrefix+ ":" + "xptr/@value='" + pointerValue + "']";
+            List<Fragment> fragments = getStore().<Fragment>query(query);
+            for (Fragment fragment: fragments) {
+                if (fragment.getURI().equals(uri)) {
+                    logger.info("MS to get located fragment = " + (System.currentTimeMillis() - start));
+                    return fragment;
+                }
+            }
+            throw new XBRLException("The simple link does not reference a fragment.");
+    	}
+    	
+    	Fragment fragment = getStore().getRootFragmentForDocument(uri);
+        if (fragment == null) throw new XBRLException("The simple link does not reference a fragment.");
+        return fragment;
     }
+    
+    /**
+     * @see org.xbrlapi.ExtendedLinkContent#getExtendedLink()
+     */
+    public ExtendedLink getExtendedLink() throws XBRLException {
+        Fragment parent = this.getParent();
+        if (! parent.isa("org.xbrlapi.impl.ExtendedLinkImpl")) throw new XBRLException("The parent of locator " + this.getIndex() + " is not an extended link.");
+        return (ExtendedLink) parent;
+    }    
     
 }

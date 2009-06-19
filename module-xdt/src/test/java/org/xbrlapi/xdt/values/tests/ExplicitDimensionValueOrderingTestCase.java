@@ -2,6 +2,7 @@ package org.xbrlapi.xdt.values.tests;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.xbrlapi.Concept;
@@ -135,7 +136,7 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
 
             loader.discover(uri);
 
-            List<URI> uris = store.getStoredURIs();
+            Set<URI> uris = store.getStoredURIs();
             for (URI myURI: uris) logger.info(myURI);
 
             List<Concept> concepts = store.<Concept>getFragments("Concept");

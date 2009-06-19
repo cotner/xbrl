@@ -2,6 +2,7 @@ package org.xbrlapi;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -25,7 +26,7 @@ public interface ExtendedLink extends Link {
      * @return the list of matching fragments or the empty list if none are found.
      * @throws XBRLException
      */
-    public <E extends ArcEnd> List<E> getArcEndsByLabel(String label) throws XBRLException;
+    public <E extends ArcEnd> List<E> getArcEndsWithLabel(String label) throws XBRLException;
     
     /**
      * Get the list of locators with a specified label in the extended link.
@@ -33,7 +34,7 @@ public interface ExtendedLink extends Link {
      * @return the list of matching locator fragments or the empty list if none are found.
      * @throws XBRLException
      */
-    public List<Locator> getLocatorsByLabel(String label) throws XBRLException;
+    public List<Locator> getLocatorsWithLabel(String label) throws XBRLException;
     
     /**
      * Get the list of locators in the extended link with a specified absolute HREF.
@@ -41,7 +42,7 @@ public interface ExtendedLink extends Link {
      * @return the list of matching locator fragments or the empty list if none are found.
      * @throws XBRLException
      */
-    public List<Locator> getLocatorsByHref(String href) throws XBRLException;
+    public List<Locator> getLocatorsWithHref(String href) throws XBRLException;
 
     /**
      * Get the list of arcs contained by the extended link.
@@ -57,7 +58,7 @@ public interface ExtendedLink extends Link {
      * @return the list of matching arc fragments or the empty list if none are found.
      * @throws XBRLException
      */
-    public List<Arc> getArcsByArcrole(URI arcrole) throws XBRLException;
+    public List<Arc> getArcsWithArcrole(URI arcrole) throws XBRLException;
     
     
     /**
@@ -66,7 +67,7 @@ public interface ExtendedLink extends Link {
      * or the empty list if none are found.
      * @throws XBRLException
      */
-    public List<Arc> getArcsByFromLabel(String from) throws XBRLException;
+    public List<Arc> getArcsWithFromLabel(String from) throws XBRLException;
 
     /**
      * @param from The required value of the xlink:from attribute of the arcs.
@@ -75,7 +76,7 @@ public interface ExtendedLink extends Link {
      * and arcrole value or the empty list if none are found.
      * @throws XBRLException
      */
-    public List<Arc> getArcsByFromLabelAndArcrole(String from, URI arcrole) throws XBRLException;
+    public List<Arc> getArcsWithFromLabelAndArcrole(String from, URI arcrole) throws XBRLException;
     
     /**
      * @param to The required value of the xlink:to attribute of the arcs.
@@ -83,7 +84,7 @@ public interface ExtendedLink extends Link {
      * or the empty list if none are found.
      * @throws XBRLException
      */
-    public List<Arc> getArcsByToLabel(String to) throws XBRLException;
+    public List<Arc> getArcsWithToLabel(String to) throws XBRLException;
     
     /**
      * @param to The required value of the xlink:to attribute of the arcs.
@@ -92,7 +93,7 @@ public interface ExtendedLink extends Link {
      * and arcrole value or the empty list if none are found.
      * @throws XBRLException
      */
-    public List<Arc> getArcsByToLabelAndArcrole(String to, URI arcrole) throws XBRLException;
+    public List<Arc> getArcsWithToLabelAndArcrole(String to, URI arcrole) throws XBRLException;
 
     /**
      * Get the list of resources contained by the extended link.
@@ -107,12 +108,8 @@ public interface ExtendedLink extends Link {
      * @return the list of resource fragments with the given xlink:label attribute value.
      * @throws XBRLException
      */
-    public List<Resource> getResourcesByLabel(String label) throws XBRLException;    
+    public List<Resource> getResourcesWithLabel(String label) throws XBRLException;    
     
-
-
-
-
     /**
      * Get the list of documentation fragments contained by the extended link.
      * Returns the list of documentation fragments in the extended link.
@@ -120,8 +117,12 @@ public interface ExtendedLink extends Link {
      */
     public List<XlinkDocumentation> getDocumentations() throws XBRLException;
     
-
-
-
-
+    /**
+     * @return A map, indexed by XLink type (title,locator, resource, arc) of the XLink arc ends
+     * in an extended link.  The children are represented by a map from label to lists of indexes 
+     * of the arc ends with a given label.
+     * @throws XBRLException
+     */
+    public Map<String,List<String>> getArcEndIndicesByLabel() throws XBRLException;
+    
 }

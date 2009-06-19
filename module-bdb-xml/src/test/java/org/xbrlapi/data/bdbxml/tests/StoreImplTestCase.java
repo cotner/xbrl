@@ -57,7 +57,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	
 	public void testQueryData() {
 		try {
-	        String xpathQuery = "/*";
+	        String xpathQuery = "#roots#";
 	        List<XML> fragments = store.<XML>query(xpathQuery);
 			assertTrue(fragments.size() > 1);
 	        XML fragment = fragments.get(0);
@@ -70,7 +70,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	
     public void testQueryForIndices() {
         try {
-            String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
+            String xpathQuery = "#roots#";
             Set<String> indices = store.queryForIndices(xpathQuery);
             assertTrue(! indices.isEmpty());
             for (String index: indices) {
@@ -88,7 +88,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testQueryLoadedFragments() {
 		
 		try {
-	        String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XMLSchemaPrefix + ":element]";
+	        String query = "#roots#[*/" + Constants.XMLSchemaPrefix + ":element]";
 	        List<Fragment> fragments = store.<Fragment>query(query);
 	        Fragment fragment = fragments.get(0);
 	        assertEquals("element",fragment.getDataRootElement().getLocalName());
@@ -101,7 +101,7 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testHasDocument() {
 		try {
-		    List<URI> uris = store.getStoredURIs();
+		    Set<URI> uris = store.getStoredURIs();
 		    assertTrue(uris.size() > 0);
 		    for (URI uri: uris) {
 	            assertTrue(store.hasDocument(uri));

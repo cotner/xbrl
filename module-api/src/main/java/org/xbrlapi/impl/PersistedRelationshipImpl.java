@@ -27,26 +27,31 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }    
     
     /**
-     * @param id The unique id of the fragment being created,
+     * @param relationship The relationship that is to be persisted.
      * within the scope of the containing data store.
      * @throws XBRLException
      */
     public PersistedRelationshipImpl(Relationship relationship) throws XBRLException {
-
-        super();
-
-        if (relationship == null) {
-            throw new XBRLException("The relationship must not be null");
-        }
-
-        Fragment source = relationship.getSource();
-        Fragment target = relationship.getTarget();
-        Arc arc = relationship.getArc();
-        ExtendedLink link = relationship.getLink();
+        this(relationship.getArc(),relationship.getSource(),relationship.getTarget());
+    }
+    
+    /**
+     * @param arc The arc defining the relationship
+     * @param source The source of the relationship
+     * @param target The target of the relationship
+     * @throws XBRLException
+     */
+    public PersistedRelationshipImpl(Arc arc, Fragment source, Fragment target) throws XBRLException {
+        this();
+        
+        if (arc == null) throw new XBRLException("The arc must not be null");
+        if (source == null) throw new XBRLException("The source must not be null");
+        if (source == null) throw new XBRLException("The target must not be null");
+        ExtendedLink link = arc.getExtendedLink();
 
         setIndex(arc.getIndex() + source.getIndex() + target.getIndex());
 
-        setSourceIndex(relationship.getSourceIndex());
+        setSourceIndex(source.getIndex());
         setSourceType(source.getType());
         setSourceName(source.getLocalname());
         setSourceNamespace(source.getNamespace());
@@ -55,7 +60,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
             setSourceRole(((Resource) source).getResourceRole());
         }
 
-        setTargetIndex(relationship.getTargetIndex());
+        setTargetIndex(target.getIndex());
         setTargetType(target.getType());
         setTargetName(target.getLocalname());
         setTargetNamespace(target.getNamespace());
@@ -64,7 +69,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
             setTargetRole(((Resource) target).getResourceRole());
         }
 
-        setArcIndex(relationship.getArcIndex());
+        setArcIndex(arc.getIndex());
         setArcName(arc.getLocalname());
         setArcNamespace(arc.getNamespace());
         setArcrole(arc.getArcrole());
@@ -78,24 +83,21 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
 
         setLabelStatus();
         setReferenceStatus();
-        setSignature(relationship);
+        setSignature(arc);
 
-/*        long start = System.currentTimeMillis();
-        logger.info("First part took " + new Long(System.currentTimeMillis() - start));
-*/        
-        relationship.getStore().persist(this);
+        arc.getStore().persist(this);
         
-    }
+    }    
     
     
     /**
-     * @param relationship The relationship to use in generating
+     * @param key The relationship to use in generating
      * the relationship signature that will be persisted.  THe 
      * signature is matched for relationship prohibition and overriding.
      * @throws XBRLException
      */
-    private void setSignature(Relationship relationship) throws XBRLException {
-        this.setMetaAttribute("signature",relationship.getSignature());
+    private void setSignature(Arc arc) throws XBRLException {
+        this.setMetaAttribute("signature",arc.getSemanticKey());
     }
 
     /**
@@ -538,7 +540,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      */
 /*    private void updateActiveStatuses(Store store) throws XBRLException {
 
-        String query = "/*[@arcRole='"+ this.getArcrole() + "' and @linkRole='"+ this.getLinkRole() + "'  and @sourceIndex='"+ this.getSourceIndex() + "'  and @targetIndex='"+ this.getTargetIndex() + "'  and @signature='"+ this.getSignature() + "']";
+        String query = "#roots#[@arcRole='"+ this.getArcrole() + "' and @linkRole='"+ this.getLinkRole() + "'  and @sourceIndex='"+ this.getSourceIndex() + "'  and @targetIndex='"+ this.getTargetIndex() + "'  and @signature='"+ this.getSignature() + "']";
         List<PersistedRelationship> equivalentRelationships = store.<PersistedRelationship>query(query);
         for (PersistedRelationship equivalentRelationship: equivalentRelationships) {
             if (equivalentRelationship.getArcPriority() > this.getArcPriority()) {
@@ -590,7 +592,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      */
     public boolean isFromRoot() throws XBRLException {
         String sourceIndex = this.getSourceIndex();
-        String query = "/*[@active and @targetIndex='" + sourceIndex + "' and @arcRole='" + this.getArcrole() + "'  and @linkRole='"+this.getLinkRole()+"']";
+        String query = "#roots#[@active and @targetIndex='" + sourceIndex + "' and @arcRole='" + this.getArcrole() + "'  and @linkRole='"+this.getLinkRole()+"']";
         return (getStore().queryCount(query) == 0);
     }
     

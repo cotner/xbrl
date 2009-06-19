@@ -1,7 +1,7 @@
 package org.xbrlapi.data.exist.tests;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 /**
  * Tests of performance with larger data sets.
  * TODO Create a load test for other persistent data store implementations.
@@ -29,7 +29,7 @@ public abstract class LoadPerformanceTestCase extends BaseTestCase {
 	public void testLargerStore() {
 		try {
 
-			List<URI> uris = store.getStoredURIs();
+			Set<URI> uris = store.getStoredURIs();
 			assertTrue(uris.size() > 22);
 			
 		} catch (Exception e) {

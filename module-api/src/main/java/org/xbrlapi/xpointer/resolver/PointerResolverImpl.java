@@ -106,7 +106,7 @@ public class PointerResolverImpl implements PointerResolver {
 					 
 				// Handle element scheme pointer parts
 				} else if (part.getSchemeNamespace().toString().equals(PointerPart.DefaultPointerNamespace) && part.getSchemeLocalName().equals("element")) {
-					String xpath = "/*[@uri='" + getDocumentURI() + "' and " + Constants.XBRLAPIPrefix + ":" + "xptr/@value='" + data + "']";
+					String xpath = "#roots#[@uri='" + getDocumentURI() + "' and " + Constants.XBRLAPIPrefix + ":" + "xptr/@value='" + data + "']";
 					List<Fragment> fl = getStore().query(xpath);					
 					if (fl.size() != 0) {
 						if (fl.size() > 1) {

@@ -200,13 +200,13 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
      */
     public Fragment getTarget() throws XBRLException {
 
-        String pointerCondition = " and not(@parentIndex)";
+        String pointerCondition = " and @parentIndex=''";
         String pointerValue = getTargetPointerValue();
         if (! pointerValue.equals("")) {
             pointerCondition = " and "+ Constants.XBRLAPIPrefix+ ":" + "xptr/@value='" + pointerValue + "'";
         }
         
-        String query = "/*[@uri='" + getTargetDocumentURI() + "'" + pointerCondition + "]";
+        String query = "#roots#[@uri='" + getTargetDocumentURI() + "'" + pointerCondition + "]";
         List<Fragment> fragments = getStore().query(query);
         if (fragments.size() == 0) return null;
         if (fragments.size() > 1) throw new XBRLException("The simple link references more than one fragment.");

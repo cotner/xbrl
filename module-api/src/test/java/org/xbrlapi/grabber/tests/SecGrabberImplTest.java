@@ -19,7 +19,8 @@ public class SecGrabberImplTest extends BaseTestCase {
         URI feedURI = getURI("test.data.local.sec");             
         Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
-        assertTrue(resources.size() > 1900);
+        logger.info("# resources = " + resources.size());
+        assertTrue(resources.size() > 400);
 	}
 
 	protected void tearDown() throws Exception {

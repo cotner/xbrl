@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.w3c.dom.Element;
+import org.xbrlapi.ExtendedLink;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.Language;
 import org.xbrlapi.Resource;
 import org.xbrlapi.utilities.Constants;
@@ -47,5 +49,12 @@ public class ResourceImpl extends ArcEndImpl implements Resource {
         return l.getName();
     }    
 	
-	
+    /**
+     * @see org.xbrlapi.ExtendedLinkContent#getExtendedLink()
+     */
+    public ExtendedLink getExtendedLink() throws XBRLException {
+        Fragment parent = this.getParent();
+        if (! parent.isa("org.xbrlapi.impl.ExtendedLinkImpl")) throw new XBRLException("The parent of resource " + this.getIndex() + " is not an extended link.");
+        return (ExtendedLink) parent;
+    }	
 }

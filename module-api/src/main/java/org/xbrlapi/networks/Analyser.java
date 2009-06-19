@@ -19,6 +19,15 @@ import org.xbrlapi.utilities.XBRLException;
 public interface Analyser {
     
     /**
+     * @param document The document URI.
+     * @return true if all of the relationships expressed by
+     * the arcs in the document have been persisted in the data store
+     * and false otherwise.
+     * @throws XBRLException
+     */
+    public boolean hasAllRelationships(URI document) throws XBRLException;
+    
+    /**
      * @return a list of all extended link roles for persisted relationships.
      * @throws XBRLException
      */

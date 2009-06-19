@@ -11,14 +11,10 @@ import org.xbrlapi.utilities.XBRLException;
 public class ExtendedLinkContentImpl extends XlinkImpl implements ExtendedLinkContent {
     
     /**
-     * Get the extended link containing the locator.
-     * @return the extended link fragment containing the locator.
-     * @throws XBRLException
      * @see org.xbrlapi.ExtendedLinkContent#getExtendedLink()
      */
     public ExtendedLink getExtendedLink() throws XBRLException {
     	ExtendedLink link = (ExtendedLink) this.getAncestorOrSelf("org.xbrlapi.impl.ExtendedLinkImpl");
-    	logger.debug("The element is in extended link " + link.getIndex());
     	return link;
     }
 

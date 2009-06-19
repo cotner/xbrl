@@ -1,4 +1,4 @@
-package org.xbrlapi.data.bdbxml.volume.tests;
+package org.xbrlapi.data.bdbxml.utilities.tests;
 
 import java.net.URI;
 import java.util.List;
@@ -7,7 +7,8 @@ import java.util.Vector;
 import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
 import org.xbrlapi.grabber.Grabber;
 import org.xbrlapi.grabber.SecGrabberImpl;
-import org.xbrlapi.networks.AnalyserImpl;
+import org.xbrlapi.loader.Loader;
+import org.xbrlapi.loader.discoverer.Discoverer;
 
 /**
  * Use this unit test to load the entire SEC database.
@@ -21,21 +22,24 @@ public class LoadEntireSECDatabaseTest extends BaseTestCase {
     }
 
     private List<URI> resources = new Vector<URI>();
-
+    
+    Loader secondLoader = null;
+    
     protected void setUp() throws Exception {
         super.setUp();
 
         // Make the store persist networks
-        store.setAnalyser(new AnalyserImpl(store));
+        // store.setAnalyser(new AnalyserImpl(store));
         
         logger.info("Getting the SEC feed.");
         URI feedURI = this.getURI("real.data.sec");
         Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
-        assertTrue(resources.size() > 100);
         feedURI = this.getURI("test.data.local.sec");
         Grabber oldGrabber = new SecGrabberImpl(feedURI);
         resources.addAll(oldGrabber.getResources());
+        
+        secondLoader = createLoader(store);
     }
 
     protected void tearDown() throws Exception {
@@ -45,19 +49,26 @@ public class LoadEntireSECDatabaseTest extends BaseTestCase {
         }
     }   
     
-    public void testSecGrabberResourceRetrieval() {
-        try {
-            
-            loader.stashURI(new URI("http://www.sec.gov/Archives/edgar/data/796343/000079634309000021/adbe-20090227.xml"));
-            loader.discover();
-            
-            for (URI uri: resources) {
-                loader.stashURI(uri);
-                loader.discover();
-            }
+    public void testLoadingAllSECFilings() {
+        try {   
 
+            
+            int breakPoint = new Double(Math.floor(resources.size()/2)).intValue();
+            loader.stashURIs(resources.subList(0,breakPoint));
+            secondLoader.stashURIs(resources.subList(breakPoint+1,resources.size()-1));
+            Discoverer discoverer = new Discoverer(loader);
+            Discoverer secondDiscoverer = new Discoverer(secondLoader);
+            Thread t1 = new Thread(discoverer);
+            t1.start();
+            Thread t2 = new Thread(secondDiscoverer);
+            t2.start();
+
+            while (t1.isAlive() || t2.isAlive()) {
+                Thread.sleep(5000);
+            }
+            
+         
         } catch (Exception e) {
-            logger.error("Trapped exception: " + e.getMessage());
             e.printStackTrace();
             fail("An unexpected exception was thrown.");
         }

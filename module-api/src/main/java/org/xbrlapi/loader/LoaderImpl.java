@@ -376,6 +376,8 @@ public class LoaderImpl implements Loader {
             if (parentIndex == null) throw new XBRLException("The parent index is null.");
             fragment.setParentIndex(parentIndex);
             fragment.setSequenceToParentElement(parent);
+        } else {
+            fragment.setParentIndex("");
         }
 
         fragment.setURI(getDocumentURI());
@@ -461,7 +463,7 @@ public class LoaderImpl implements Loader {
         setDiscovering(true);
 
         for (URI uri: getStore().getDocumentsToDiscover()) {
-            logger.info(" store indicates that " + uri + " needs to be discovered also.");
+            logger.info(uri + " stashed for discovery.");
             this.stashURI(uri);
         }
         
@@ -476,6 +478,9 @@ public class LoaderImpl implements Loader {
                 this.setNextFragmentId("1");
                 try {
                     parse(uri);
+                    long duration = (System.currentTimeMillis() - start) / 1000;
+                    logger.info("#" + discoveryCount + " took " + duration + " seconds. " + (fragmentId-1) + " fragments in " + uri);
+                    discoveryCount++;
                     markDocumentAsExplored(uri);
                     newDocuments.add(uri);
                     getStore().sync();
@@ -497,11 +502,8 @@ public class LoaderImpl implements Loader {
                 cancelInterrupt();
                 break DOCUMENTS;
             }
-            long duration = (System.currentTimeMillis() - start) / 1000;
-            logger.info("#" + discoveryCount + " took " + duration + " seconds. " + (fragmentId-1) + " fragments in " + uri);
 
             uri = getNextDocumentToExplore();
-            discoveryCount++;
         }
 
         storeDocumentsToAnalyse();
@@ -518,7 +520,7 @@ public class LoaderImpl implements Loader {
             }
         }
         
-        if (getStore().isUsingPersistedNetworks() && documentQueue.isEmpty() && failures.isEmpty()) {
+        if (getStore().isUsingPersistedNetworks()) {
             logger.info("Starting to persist the relationships.");
             Storer storer = new StorerImpl(getStore());
             storer.storeRelationships(newDocuments);
@@ -758,6 +760,15 @@ public class LoaderImpl implements Loader {
     }
 
     /**
+     * @see Loader#stashURIs(List)
+     */
+    public void stashURIs(List<URI> uris) throws XBRLException {
+        for (URI uri: uris) {
+            this.stashURI(uri);
+        }
+    }
+
+    /**
      * Set the resolver for the resolution of entities found during the loading
      * and XLink processing
      * 
@@ -840,7 +851,7 @@ public class LoaderImpl implements Loader {
         documentQueue.remove(uri);
         try {
             getStore().deleteDocument(uri);
-            getCache().purge(uri);
+            // getCache().purge(uri);
             logger.info("Purged " + uri + " from the data store and cache.");
         } catch (Exception exception) {
             logger.error("Failed to clean up the document from the data store or cache. " + exception.getMessage());

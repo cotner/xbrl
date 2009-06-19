@@ -13,6 +13,7 @@ import org.w3c.dom.Node;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
 import org.xbrlapi.ExtendedLink;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -53,6 +54,15 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public boolean hasAttribute(String name) throws XBRLException {
         return getDataRootElement().hasAttribute(name);
+    }
+    
+    /**
+     * @see org.xbrlapi.ExtendedLinkContent#getExtendedLink()
+     */
+    public ExtendedLink getExtendedLink() throws XBRLException {
+        Fragment parent = this.getParent();
+        if (! parent.isa("org.xbrlapi.impl.ExtendedLinkImpl")) throw new XBRLException("The parent of arc " + this.getIndex() + " is not an extended link.");
+        return (ExtendedLink) parent;
     }
     
     /**
@@ -150,16 +160,22 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      * @see org.xbrlapi.Arc#getSourceFragments() 
      */
     public <E extends ArcEnd> List<E> getSourceFragments() throws XBRLException {
-        String query = "/*[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getFrom() + "']";
-        return this.getStore().<E>query(query);
+        long start = System.currentTimeMillis();
+        String query = "#roots#[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getFrom() + "']";
+        List<E> result = this.getStore().<E>query(query);
+        logger.info("MS to get source fragments = " + (System.currentTimeMillis()-start));
+        return result;
     }
     
     /**
      * @see org.xbrlapi.Arc#getTargetFragments() 
      */
     public <E extends ArcEnd> List<E> getTargetFragments() throws XBRLException {
-        String query = "/*[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getTo() + "']";
-        return this.getStore().<E>query(query);
+        long start = System.currentTimeMillis();
+        String query = "#roots#[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getTo() + "']";
+        List<E> result = this.getStore().<E>query(query);
+        logger.info("MS to get target fragments = " + (System.currentTimeMillis()-start));
+        return result;
     }
     
     /**

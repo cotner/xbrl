@@ -212,7 +212,7 @@ public class NetworkImpl implements Network {
 		String arcIndex = arc.getIndex();
 		if (! fragments.containsKey(arcIndex)) fragments.put(arcIndex,arc);
 		
-		ExtendedLink link = relationship.getLink();
+		ExtendedLink link = relationship.getExtendedLink();
 		String linkIndex = arc.getIndex();
 		if (! fragments.containsKey(linkIndex)) fragments.put(linkIndex,link);
 		
@@ -410,7 +410,7 @@ public class NetworkImpl implements Network {
             // Get the arcs that define relationships in the network
             List<ExtendedLink> links = getStore().getExtendedLinks(this.getLinkRole());
             for (ExtendedLink link: links) {
-                List<Arc> arcs = link.getArcsByArcrole(this.getArcrole());
+                List<Arc> arcs = link.getArcsWithArcrole(this.getArcrole());
                 for (Arc arc: arcs) {
                     List<ArcEnd> sources = arc.getSourceFragments();
                     List<ArcEnd> targets = arc.getTargetFragments();

@@ -3,6 +3,7 @@ package org.xbrlapi.loader.tests;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
@@ -133,7 +134,7 @@ public class LoaderImplTestCase extends BaseTestCase {
 			loader.stashURI(uri2);
 			loader.discover();
 			
-            List<URI> uris = store.getStoredURIs();
+            Set<URI> uris = store.getStoredURIs();
             assertTrue(uris.size() > 0);
             
             boolean found1 = false;

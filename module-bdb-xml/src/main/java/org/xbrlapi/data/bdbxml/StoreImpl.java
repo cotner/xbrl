@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +33,7 @@ import com.sleepycat.dbxml.XmlContainerConfig;
 import com.sleepycat.dbxml.XmlDocument;
 import com.sleepycat.dbxml.XmlDocumentConfig;
 import com.sleepycat.dbxml.XmlException;
+import com.sleepycat.dbxml.XmlIndexDeclaration;
 import com.sleepycat.dbxml.XmlIndexSpecification;
 import com.sleepycat.dbxml.XmlManager;
 import com.sleepycat.dbxml.XmlManagerConfig;
@@ -80,9 +82,29 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         }
         
         initContainer();
+        
+        //this.logIndexes();
 
     }
 
+    /**
+     * Log information about all the indexes in the data store.
+     */
+    public void logIndexes() {
+        try {
+            XmlIndexSpecification xis = dataContainer.getIndexSpecification();
+            int count = 0;
+            XmlIndexDeclaration idxDecl = null;
+            while((idxDecl = (xis.next())) != null) {
+                logger.info("For node '" + idxDecl.uri + ":" + idxDecl.name + "', found index: '" + idxDecl.index + "'.");
+                count ++;
+            }
+            System.out.println(count + " indices found.");
+        } catch (XmlException e) {
+            ;//
+        }        
+    }
+    
     /**
      * @see org.xbrlapi.data.Store#persist(XML)
      */
@@ -217,22 +239,16 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             xmlIndexSpecification.addIndex("","targetRole", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","targetLanguage", "node-attribute-equality-string");
             
-/*            xmlIndexSpecification.addIndex("","active", "node-attribute-presence");
-*/            xmlIndexSpecification.addIndex("","label", "node-attribute-presence");
+            xmlIndexSpecification.addIndex("","label", "node-attribute-presence");
             xmlIndexSpecification.addIndex("","reference", "node-attribute-presence");
             xmlIndexSpecification.addIndex("","use", "node-attribute-presence");
             xmlIndexSpecification.addIndex("","use", "node-attribute-equality-string");
 
             xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
-            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
-            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
-            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
-            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
-            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
 
-            
-            xmlIndexSpecification.addIndex("","parentIndex", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","uri", "node-attribute-equality-string");
+            xmlIndexSpecification.addIndex("","uri", "node-attribute-presence");
+
             xmlIndexSpecification.addIndex("","type", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","targetDocumentURI", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","targetPointerValue", "node-attribute-equality-string");
@@ -379,7 +395,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	public synchronized boolean hasDocument(URI uri) throws XBRLException {
         XmlResults results = null;
         try {
-            results = performQuery("/*[@uri='" + uri + "' and not(@parentIndex)]");
+            results = runQuery("#roots#[@uri='" + uri + "' and @parentIndex='']");
             return (results.size() == 1); 
         } catch (XmlException e) {
             throw new XBRLException("The size of the result set for the query could not be determined.", e);
@@ -445,14 +461,12 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     @SuppressWarnings(value = "unchecked")
 	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
 
-        query = query + this.getURIFilteringQueryClause();
-        
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
         try {
     
             try {
-    			xmlResults = performQuery(query);
+    			xmlResults = runQuery(query);
 
     			double startTime = System.currentTimeMillis();
 
@@ -488,14 +502,12 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public synchronized Set<String> queryForIndices(String query) throws XBRLException {
 
-        query = query + this.getURIFilteringQueryClause();
-        
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
         try {
     
             try {
-                xmlResults = performQuery(query);
+                xmlResults = runQuery(query);
                 xmlValue = xmlResults.next();
                 Map<String,String> indices = new HashMap<String,String>();
                 String regex = "<xbrlapi:fragment.*? index=\"(\\w+)\".*?>";
@@ -527,21 +539,13 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * @see org.xbrlapi.data.Store#queryForStrings(String)
      */
     public synchronized Set<String> queryForStrings(String query) throws XBRLException {
-        if (query.startsWith("/*")) {
-            query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
-        } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
-            query = "/*" + this.getURIFilteringQueryClause() + query.substring(Constants.XBRLAPIPrefix.length() + 9); 
-        } else {
-            throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
-        }
-        logger.debug("Adapted query is " + query);
-        
+                
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
         try {
     
             try {
-                xmlResults = performQuery(query);
+                xmlResults = runQuery(query);
                 double startTime = System.currentTimeMillis();
                 xmlValue = xmlResults.next();
                 Set<String> strings = new TreeSet<String>();
@@ -570,11 +574,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public synchronized long queryCount(String query) throws XBRLException {
 
-        query = query + this.getURIFilteringQueryClause();
-        
         XmlResults xmlResults = null;
         try {
-            xmlResults = performQuery(query);        
+            xmlResults = runQuery(query);        
             return xmlResults.size();
         } catch (XmlException e) {
             throw new XBRLException("Failed query: " + query,e);
@@ -585,22 +587,22 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     
     
     /**
+     * TODO provide a means of investigating namespace bindings for the query configuration.
      * Provides direct access to the query mechanism so that we can use
      * queries without constructing fragments for each query result.
      * @param myQuery The query to be performed.
      * @return the results of the query.
      * @throws XBRLException if the query fails to execute.
      */
-	private XmlResults performQuery(String myQuery) throws XBRLException {
-        // TODO provide a means of adding additional namespaces for querying.
-        // TODO provide a means of investigating namespace bindings for the query configuration.
+	private XmlResults runQuery(String myQuery) throws XBRLException {
 	    
 	    XmlQueryContext xmlQueryContext = null;
 	    XmlQueryExpression xmlQueryExpression = null;
 	    try {
-            String query = "collection('" + dataContainer.getName() + "')" + myQuery;
+	        String roots = "collection('" + dataContainer.getName() + "')/*" + this.getURIFilteringPredicate();
+	        myQuery = myQuery.replaceAll("#roots#",roots);
             xmlQueryContext = createQueryContext();
-            xmlQueryExpression = dataManager.prepare(query,xmlQueryContext);
+            xmlQueryExpression = dataManager.prepare(myQuery,xmlQueryContext);
             logger.debug(xmlQueryExpression.getQueryPlan());
             double startTime = System.currentTimeMillis();
             XmlResults xmlResults = xmlQueryExpression.execute(xmlQueryContext);
@@ -664,8 +666,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             xmlQueryContext.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace);
             xmlQueryContext.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace);
             xmlQueryContext.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
-            for (String namespace: this.namespaceBindings.keySet()) 
-                xmlQueryContext.setNamespace(this.namespaceBindings.get(namespace),namespace);
+            for (URI namespace: this.namespaceBindings.keySet()) 
+                xmlQueryContext.setNamespace(this.namespaceBindings.get(namespace),namespace.toString());
             // xmlQueryContext.setEvaluationType(XmlQueryContext.Lazy); 
             return xmlQueryContext;
         } catch (XmlException e) {
@@ -690,21 +692,20 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * @see org.xbrlapi.data.Store#getStoredURIs()
      */
     @Override
-    public List<URI> getStoredURIs() throws XBRLException {
+    public Set<URI> getStoredURIs() throws XBRLException {
         
-        String query = "/*[not(@parentIndex)]/@uri";
-        query = query + this.getURIFilteringQueryClause();
+        String query = "#roots#[@parentIndex='']/@uri";
         
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
         try {
     
             try {
-                xmlResults = performQuery(query);
+                xmlResults = runQuery(query);
                 double startTime = System.currentTimeMillis();
 
                 xmlValue = xmlResults.next();
-                List<URI> uris = new Vector<URI>();
+                Set<URI> uris = new HashSet<URI>();
                 while (xmlValue != null) {
                     try {
                         uris.add(new URI(xmlValue.getNodeValue()));
@@ -731,4 +732,30 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     }	
 
 
+    /**
+     * @param namespace The namespace of the node to index or null if the node does not have a namespace.
+     * @param name The local name of the node to index.
+     * @param type The index type.  See the Oracle Berkeley DB documentation for details on what strings to use.
+     * @throws XBRLException
+     */
+    public void addIndex(URI namespace, String name, String type) throws XBRLException {
+
+        XmlIndexSpecification xmlIndexSpecification = null;
+        XmlUpdateContext xmlUpdateContext = null;
+
+        try {
+            xmlIndexSpecification = dataContainer.getIndexSpecification();
+            String ns = "";
+            if (namespace != null) ns = namespace.toString();
+            xmlIndexSpecification.addIndex(ns,name,type);
+            logger.info("Adding index for " + ns + ":" + name + " " + type);
+            xmlUpdateContext = dataManager.createUpdateContext();
+            dataContainer.setIndexSpecification(xmlIndexSpecification,xmlUpdateContext);
+        } catch (XmlException e) {
+            throw new XBRLException("The new index could not be configured.", e);
+        } finally {
+            if (xmlIndexSpecification != null) xmlIndexSpecification.delete();
+        }        
+    }
+    
 }

@@ -4,6 +4,7 @@ package org.xbrlapi.data.dom;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,6 @@ import org.xbrlapi.XML;
 import org.xbrlapi.data.BaseStoreImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentFactory;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 
@@ -184,18 +184,14 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     private XPathResult runQuery(String query) throws XBRLException {
 
-        query = query + this.getURIFilteringQueryClause();
-        
-        if (query.charAt(0) == '/')
-            query = "/store" + query;
-        else
-            query = "/store/" + query;
+        String roots = "/store/*" + this.getURIFilteringPredicate();
+        query = query.replaceAll("#roots#",roots);
         
         // Create an XPath evaluator and pass in the document.
         XPathEvaluator evaluator = new XPathEvaluatorImpl(dom);
         XPathNSResolverImpl resolver = new XPathNSResolverImpl();
-        for (String namespace: this.namespaceBindings.keySet()) {
-            resolver.setNamespaceBinding(this.namespaceBindings.get(namespace),namespace);
+        for (URI namespace: this.namespaceBindings.keySet()) {
+            resolver.setNamespaceBinding(this.namespaceBindings.get(namespace),namespace.toString());
         }
         return (XPathResult) evaluator.evaluate(query, dom, resolver, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
     }
@@ -210,7 +206,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 */
     @SuppressWarnings(value = "unchecked")
 	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
-        query = query + this.getURIFilteringQueryClause();
         XPathResult result = runQuery(query);
 		List<F> fragments = new Vector<F>();
 		Node n;
@@ -225,7 +220,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * @see Store#queryCount(String)
      */
     public synchronized long queryCount(String query) throws XBRLException {
-        query = query + this.getURIFilteringQueryClause();
         XPathResult result = runQuery(query);
         @SuppressWarnings("unused")
         Node n;
@@ -240,7 +234,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * @see org.xbrlapi.data.Store#queryForIndices(String)
      */
     public synchronized Set<String> queryForIndices(String query) throws XBRLException {
-        query = query + this.getURIFilteringQueryClause();
         
         XPathResult xpr = runQuery(query);
         Node n;
@@ -256,13 +249,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * @see org.xbrlapi.data.Store#queryForStrings(String)
      */
     public synchronized Set<String> queryForStrings(String query) throws XBRLException {
-        if (query.startsWith("/*")) {
-            query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
-        } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
-            query = "/*" + this.getURIFilteringQueryClause() + query.substring(Constants.XBRLAPIPrefix.length() + 9); 
-        } else {
-            throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
-        }
                 
         XPathResult result = runQuery(query);
         Set<String> strings = new TreeSet<String>();

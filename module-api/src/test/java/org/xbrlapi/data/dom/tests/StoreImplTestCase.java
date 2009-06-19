@@ -80,7 +80,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		store.serialize(fragment);
 		List<Fragment> fragments = null;
 		try {
-	        String query = "/*[@type='org.xbrlapi.impl.MockImpl' and */xbrlapi:info]";
+	        String query = "#roots#[@type='org.xbrlapi.impl.MockImpl' and */xbrlapi:info]";
 	        logger.info(query);
 	        fragments = store.<Fragment>query(query);
 		} catch (Exception e) {
@@ -98,7 +98,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	
     public void testQueryForIndices() {
         try {
-            String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
+            String xpathQuery = "#roots#";
             Set<String> indices = store.queryForIndices(xpathQuery);
             assertTrue(! indices.isEmpty());
             for (String index: indices) {
@@ -118,7 +118,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		} 
 		
 		try {
-	        String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XMLSchemaPrefix + ":element";
+	        String query = "#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XMLSchemaPrefix + ":element";
 	        List<Fragment> fragments = store.<Fragment>query(query);
 	        Fragment fragment = fragments.get(0);
 	        assertEquals("element",fragment.getDataRootElement().getLocalName());

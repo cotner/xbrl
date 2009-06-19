@@ -197,7 +197,7 @@ public class RelationshipImpl implements Relationship {
 	 * @see org.xbrlapi.networks.Relationship#getLinkIndex()
 	 */
 	public String getLinkIndex() throws XBRLException {
-		return getLink().getIndex();
+		return getExtendedLink().getIndex();
 	}
 
 	/**
@@ -236,9 +236,9 @@ public class RelationshipImpl implements Relationship {
 	}
 
 	/**
-	 * @see org.xbrlapi.networks.Relationship#getLink()
+	 * @see org.xbrlapi.networks.Relationship#getExtendedLink()
 	 */
-	public ExtendedLink getLink() throws XBRLException {
+	public ExtendedLink getExtendedLink() throws XBRLException {
 		return link;
 	}
 
@@ -246,7 +246,7 @@ public class RelationshipImpl implements Relationship {
 	 * @see org.xbrlapi.networks.Relationship#getLinkRole()
 	 */
 	public URI getLinkRole() throws XBRLException {
-		return getLink().getLinkRole();
+		return getExtendedLink().getLinkRole();
 	}
 
 	/**

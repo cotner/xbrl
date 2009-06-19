@@ -2,6 +2,7 @@ package org.xbrlapi;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -179,6 +180,13 @@ public interface Fragment extends XML {
     public List<Fragment> getAllChildren() throws XBRLException;
     
     /**
+     * @return the set of indices of all child fragments of this fragment.
+     * @throws XBRLException
+     */
+    public Set<String> getAllChildrenIndices() throws XBRLException;
+    
+    
+    /**
      * @return the list of simple links that are children of this fragment.
      * @throws XBRLException
      */
@@ -326,6 +334,14 @@ public interface Fragment extends XML {
      * @throws XBRLException
      */
     public <F extends Fragment> List<F> getChildren(String type) throws XBRLException;
+
+    /**
+     * @param type The fragment type
+     * @return The list of all fragments of the given fragment type.
+     * @throws XBRLException
+     */
+    public Set<String> getChildrenIndices(String type) throws XBRLException;
+    
     
     
 }

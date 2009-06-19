@@ -33,7 +33,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
          if (sgName == null) return false;
          URI sgNamespace = this.getSubstitutionGroupNamespace();
          logger.debug(sgNamespace);
-         String query = "/*[*/xsd:element/@name='" + sgName + "']";
+         String query = "#roots#[*/xsd:element/@name='" + sgName + "']";
          logger.debug(query);
          List<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
          for (ElementDeclaration declaration: declarations) {
@@ -58,7 +58,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
           String sgName = this.getSubstitutionGroupLocalname();
           if (sgName == null) return false;
           URI sgNS = this.getSubstitutionGroupNamespace();
-          String query = "/*[*/xsd:element/@name='" + sgName + "']";
+          String query = "#roots#[*/xsd:element/@name='" + sgName + "']";
           List<ElementDeclaration> declarations = getStore().<ElementDeclaration>query(query);
           for (ElementDeclaration declaration: declarations) {
               if (declaration.getTargetNamespace().equals(sgNS)) {

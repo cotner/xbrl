@@ -68,7 +68,7 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
             ; // The conversion failed so use the original value
         }
         
-        String query = "/*[@type='org.xbrlapi.impl.EntityResourceImpl' and */*/@scheme='"+ this.getIdentifierScheme() +"' and */*/@value='" + value + "']";
+        String query = "#roots#[@type='org.xbrlapi.impl.EntityResourceImpl' and */*/@scheme='"+ this.getIdentifierScheme() +"' and */*/@value='" + value + "']";
         return getStore().<EntityResource>query(query);
     }
     

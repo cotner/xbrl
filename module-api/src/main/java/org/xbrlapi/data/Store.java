@@ -108,7 +108,7 @@ public interface Store {
 	 * @param prefix The prefix to bind to the namespace for querying
 	 * @throws XBRLException if either argument is null.
 	 */
-    public void setNamespaceBinding(String namespace, String prefix) throws XBRLException;
+    public void setNamespaceBinding(URI namespace, String prefix) throws XBRLException;
 
     /**
      * This deletion method does not ensure that all other documents that
@@ -131,7 +131,11 @@ public interface Store {
 	 * Run a query against the collection of all fragments in the store.
      * Implementations of this method must be synchronized.
 	 * @param query The XPath query to run against the set of fragments.
-	 * @return a list of matching fragments or the empty list if no matching fragments
+     * Any occurrences of the string #roots# in a query will be deemed to 
+     * be a marker for the root elements of the fragments in an XML database collection 
+     * and it will be substituted with the necessary
+     * expression to identify those roots in the data store.
+   	 * @return a list of matching fragments or the empty list if no matching fragments
 	 * exist.
 	 * @throws XBRLException if the query cannot be executed.
 	 */
@@ -141,6 +145,10 @@ public interface Store {
      * Run a query against the collection of all fragments in the store.
      * Implementations of this method must be synchronized.
      * @param query The XPath query to run against the set of fragments.
+     * Any occurrences of the string #roots# in a query will be deemed to 
+     * be a marker for the root elements of the fragments in an XML database collection 
+     * and it will be substituted with the necessary
+     * expression to identify those roots in the data store.
      * @return a set of the indices of fragments matching 
      * the query.
      * @throws XBRLException if the query cannot be executed.
@@ -150,6 +158,10 @@ public interface Store {
     /**
      * This method must be synchronised
      * @param query The XPath query to run.
+     * Any occurrences of the string #roots# in a query will be deemed to 
+     * be a marker for the root elements of the fragments in an XML database collection 
+     * and it will be substituted with the necessary
+     * expression to identify those roots in the data store.
      * @return a count of the number of results returned by the query.
      * @throws XBRLException if the query cannot be executed.
      */
@@ -159,6 +171,10 @@ public interface Store {
      * Run a query that is required to return a list of strings.
      * Implementations of this method must be synchronized.
      * @param query The XPath query to run against the set of fragments.
+     * Any occurrences of the string #roots# in a query will be deemed to 
+     * be a marker for the root elements of the fragments in an XML database collection 
+     * and it will be substituted with the necessary
+     * expression to identify those roots in the data store.
      * @return a list of strings, each of which is a query result.
      * @throws XBRLException if the query cannot be executed or if the
      * query results are not strings.
@@ -169,6 +185,10 @@ public interface Store {
      * Run a query that is required to return a single string.
      * Implementations of this method must be synchronized.
      * @param query The XPath query to run against the set of fragments.
+     * Any occurrences of the string #roots# in a query will be deemed to 
+     * be a marker for the root elements of the fragments in an XML database collection 
+     * and it will be substituted with the necessary
+     * expression to identify those roots in the data store.
      * @return a single string that is the query result or null if the query
      * does not return any strings.
      * @throws XBRLException if the query cannot be executed or if the
@@ -314,7 +334,7 @@ public interface Store {
      * @return a list of the URIs in the data store.
      * @throws XBRLException if the list cannot be constructed.
      */
-    public List<URI> getStoredURIs() throws XBRLException;
+    public Set<URI> getStoredURIs() throws XBRLException;
     
     /**
      * Test if a particular URI is already in the data store.
@@ -503,14 +523,25 @@ public interface Store {
      */
     public <F extends Fragment> List<F> getFragmentsFromDocument(URI uri, String interfaceName) throws XBRLException;
     
+
+    /**
+     * @param interfaceName The name of the interface.  EG: If a list of
+     *  Concept fragments is required then this parameter would have a value of "Concept".
+     *  Note that this method does not yet recognise fragment subtypes so 
+     *  a request for an ElementDeclaration would not return all concepts as well as
+     *  other XML Schema element declarations.
+     * @return a list of fragment indices with the given fragment type and in the given document.
+     * @throws XBRLException
+     */    public Set<String> getFragmentIndices(String interfaceName) throws XBRLException;
+    
     /**
      * @param uri The URI of the document to get the fragments from.
      * @param interfaceName The name of the interface.  EG: If a list of
-     *   fragments is required then
-     *  this parameter would have a value of "ReferenceArc".
+     *  concept fragments is required then
+     *  this parameter would have a value of "Concept".
      *  Note that this method does not yet recognise fragment subtypes so 
-     *  a request for an Arc would not return all ReferenceArcs as well as other
-     *  types of arcs.
+     *  a request for an ElementDeclaration would not return all concepts as well as
+     *  other XML Schema element declarations.
      * @return a list of fragment indices with the given fragment type and in the given document.
      * @throws XBRLException
      */
@@ -929,7 +960,16 @@ public interface Store {
      * attributes on the arcs expressing the relationships.
      * @throws XBRLException
      */
-    public SortedSet<PersistedRelationship> getPersistedActiveRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;    
+    public SortedSet<PersistedRelationship> getPersistedActiveRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;
+    
+    /**
+     * @param document The document URI.
+     * @return true if the store contains persisted relationships
+     * for all of the relationships expressed by the arcs in the 
+     * specified document and false otherwise.
+     * @throws XBRLException
+     */
+    public boolean hasAllPersistedRelationships(URI document) throws XBRLException;    
     
     /**
      * @param targetIndex The target fragment index
@@ -1042,7 +1082,6 @@ public interface Store {
      * @return the set of references matching the specified criteria.
      * @throws XBRLException
      */
-    public List<ReferenceResource> getReferences(String fragment, URI resourceRole) throws XBRLException;
-    
+    public List<ReferenceResource> getReferences(String fragment, URI resourceRole) throws XBRLException;    
     
 }

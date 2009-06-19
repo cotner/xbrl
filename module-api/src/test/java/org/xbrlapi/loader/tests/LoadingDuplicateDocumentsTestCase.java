@@ -1,7 +1,7 @@
 package org.xbrlapi.loader.tests;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 
@@ -30,7 +30,7 @@ public class LoadingDuplicateDocumentsTestCase extends BaseTestCase {
             logger.info(getURI(this.VALID_URI));
             
             loader.discover();
-            List<URI> uris = store.getStoredURIs();
+            Set<URI> uris = store.getStoredURIs();
             int first = uris.size();
 	        loader.stashURI(getURI(this.DUPLICATE_INSTANCE_URI));
             loader.discover();

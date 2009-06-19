@@ -49,21 +49,21 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
      * @see org.xbrlapi.ArcEnd#getArcsFrom()
      */
     public List<Arc> getArcsFrom() throws XBRLException {
-    	return getExtendedLink().getArcsByFromLabel(this.getLabel());
+    	return getExtendedLink().getArcsWithFromLabel(this.getLabel());
     }
 
     /**
      * @see org.xbrlapi.ArcEnd#getArcsFromWithArcrole(URI)
      */
     public List<Arc> getArcsFromWithArcrole(URI arcrole) throws XBRLException {
-        return getExtendedLink().getArcsByFromLabelAndArcrole(this.getLabel(),arcrole);
+        return getExtendedLink().getArcsWithFromLabelAndArcrole(this.getLabel(),arcrole);
     }
 
     /**
      * @see org.xbrlapi.ArcEnd#getArcsToWithArcrole(URI)
      */
     public List<Arc> getArcsToWithArcrole(URI arcrole) throws XBRLException {
-        return getExtendedLink().getArcsByToLabelAndArcrole(this.getLabel(),arcrole);
+        return getExtendedLink().getArcsWithToLabelAndArcrole(this.getLabel(),arcrole);
     }
     
 
@@ -75,7 +75,7 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
      */
     public List<Arc> getArcsTo() throws XBRLException {
     	logger.debug("Getting the arcs to end with label " + getLabel());
-    	return getExtendedLink().getArcsByToLabel(this.getLabel());
+    	return getExtendedLink().getArcsWithToLabel(this.getLabel());
     }
 
 

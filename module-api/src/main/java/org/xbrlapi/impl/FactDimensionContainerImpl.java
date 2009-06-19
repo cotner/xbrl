@@ -29,7 +29,7 @@ public class FactDimensionContainerImpl extends FragmentImpl implements FactDime
      * @see org.xbrlapi.FactDimensionContainer#getReferencingItems()
      */
     public List<Item> getReferencingItems() throws XBRLException {
-        String query = "/*[*/*/@*='" + this.getId() + "']";
+        String query = "#roots#[*/*/@*='" + this.getId() + "']";
         return getStore().<Item>query(query);
     }
 

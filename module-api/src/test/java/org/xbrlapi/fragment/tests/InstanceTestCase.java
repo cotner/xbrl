@@ -64,7 +64,8 @@ public class InstanceTestCase extends DOMLoadingTestCase {
 	        List<Instance> instances = store.<Instance>getFragments("Instance");
 	        assertTrue(instances.size() > 0);
 	        for (Instance instance: instances) {
-	            assertEquals(2, instance.getUnits().size());            }
+	            assertEquals(2, instance.getUnits().size());
+            }
 	    } catch (Exception e) {
 	        fail(e.getMessage());
 	    }

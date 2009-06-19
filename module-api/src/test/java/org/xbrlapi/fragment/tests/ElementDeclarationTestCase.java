@@ -72,7 +72,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 				assertFalse(fragment.getIndex() + " is not nillable", fragment.isNillable());				
 			}
 
-			fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@nillable)=0]");
+			fragments = store.<ElementDeclaration>query("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@nillable)=0]");
 			for (int i=0; i< fragments.size(); i++) {
 				ElementDeclaration fragment = fragments.get(i);
 				assertFalse(fragment.getIndex() + " is not nillable", fragment.isNillable());		
@@ -121,7 +121,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 		
 		// Missing default attribute
 		try {
-			List<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=0]");
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>query("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=0]");
 			for (int i=0; i< fragments.size(); i++) {
 				ElementDeclaration fragment = fragments.get(i);
 				assertNull(fragment.getIndex() + " has not default", fragment.getDefault());				
@@ -132,7 +132,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 
 		// Available attribute
 		try {
-			List<ElementDeclaration> fragments = store.<ElementDeclaration>query("/" + Constants.XBRLAPIPrefix + ":" + "fragment/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=1]");
+			List<ElementDeclaration> fragments = store.<ElementDeclaration>query("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/xsd:element[count(@default)=1]");
 			for (int i=0; i< fragments.size(); i++) {
 				ElementDeclaration fragment = fragments.get(i);
 				assertNotNull(fragment.getIndex() + " has not default", fragment.getDefault());				
@@ -167,7 +167,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 			URI uri = new URI("http://www.xbrlapi.org/default.xsd");
 			loader.discover(uri,xml);
 
-			String query = "/*[" + Constants.XBRLAPIPrefix + ":" + "data/*/@fixed='12.4']";
+			String query = "#roots#[" + Constants.XBRLAPIPrefix + ":" + "data/*/@fixed='12.4']";
 			List<ElementDeclaration> fragments = store.<ElementDeclaration>query(query);
 			ElementDeclaration fragment = fragments.get(0);
 			store.serialize(fragment.getMetadataRootElement());

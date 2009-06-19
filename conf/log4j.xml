@@ -36,11 +36,6 @@
         <appender-ref ref="null"/>
     </category>
 
-    <category name="org.xbrlapi.aspects" additivity="false">
-        <priority value="info"/>
-        <appender-ref ref="console"/>
-    </category>
-
     <root>
 	   <priority value="info"/>
      <appender-ref ref="console"/>

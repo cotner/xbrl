@@ -108,7 +108,7 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      * @see org.xbrlapi.EntityResource#getEntities()
      */
     public List<Entity> getEntities() throws XBRLException {
-        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
+        String query = "#roots#[@type='org.xbrlapi.impl.EntityImpl' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
         List<Entity> entities = getStore().<Entity>query(query);
         return entities;
     }
@@ -118,7 +118,7 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      */
     public List<Entity> getEntities(URI uri) throws XBRLException {
         URI matchURI = getStore().getMatcher().getMatch(uri);
-        String query = "/*[@type='org.xbrlapi.impl.EntityImpl' and @uri='" + matchURI + "' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
+        String query = "#roots#[@type='org.xbrlapi.impl.EntityImpl' and @uri='" + matchURI + "' and */*/*[@scheme='" + this.getIdentifierScheme() + "' and .='" + this.getIdentifierValue() + "']]";
         List<Entity> entities = getStore().<Entity>query(query);
         return entities;
     }

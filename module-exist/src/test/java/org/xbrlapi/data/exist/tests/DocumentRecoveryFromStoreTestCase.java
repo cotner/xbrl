@@ -2,7 +2,7 @@ package org.xbrlapi.data.exist.tests;
 
 
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,10 +34,10 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	 */
 	public void testGettingURIList() {
 		try {
-			List<URI> uris = store.getStoredURIs();
+			Set<URI> uris = store.getStoredURIs();
 			assertTrue(uris.size() >= 1);
 			
-			Element e = store.getDocumentAsDOM(uris.get(0));
+			Element e = store.getDocumentAsDOM(uris.iterator().next());
 			assertNotNull(e);
 			
 		} catch (XBRLException e) {

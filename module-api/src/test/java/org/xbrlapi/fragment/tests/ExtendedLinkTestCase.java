@@ -62,9 +62,9 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 		try {
 			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
-			List<Locator> locators = link.getLocatorsByLabel("summationItem");
+			List<Locator> locators = link.getLocatorsWithLabel("summationItem");
 			assertEquals(1, locators.size());
-			locators = link.getLocatorsByLabel("contributingItem");
+			locators = link.getLocatorsWithLabel("contributingItem");
 			assertEquals(2, locators.size());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,9 +79,9 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 		try {
 			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
-			List<ArcEnd> arcends = link.getArcEndsByLabel("summationItem");
+			List<ArcEnd> arcends = link.getArcEndsWithLabel("summationItem");
 			assertEquals(1, arcends.size());
-			arcends = link.getArcEndsByLabel("contributingItem");
+			arcends = link.getArcEndsWithLabel("contributingItem");
 			assertEquals(2, arcends.size());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,7 +96,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 		try {
 			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
-			List<Locator> locators = link.getLocatorsByHref(configuration.getProperty("test.data.baseURI") + "Common/instance/397-ABC.xsd#B");
+			List<Locator> locators = link.getLocatorsWithHref(configuration.getProperty("test.data.baseURI") + "Common/instance/397-ABC.xsd#B");
 			assertEquals(1, locators.size());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -126,7 +126,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 		try {
 			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
-			List<Arc> arcs = link.getArcsByFromLabel("summationItem");
+			List<Arc> arcs = link.getArcsWithFromLabel("summationItem");
 			assertEquals(1, arcs.size());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,7 +141,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 		try {
 			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
-			List<Arc> arcs = link.getArcsByToLabel("contributingItem");
+			List<Arc> arcs = link.getArcsWithToLabel("contributingItem");
 			assertEquals(1, arcs.size());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -188,7 +188,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 		    for (ExtendedLink link: links) {
 		        List<Resource> resources = link.getResources();
 		        for (Resource resource: resources) {
-		            assertTrue(link.getResourcesByLabel(resource.getLabel()).size() > 0);
+		            assertTrue(link.getResourcesWithLabel(resource.getLabel()).size() > 0);
 		        }
 		    }
 		} catch (Exception e) {

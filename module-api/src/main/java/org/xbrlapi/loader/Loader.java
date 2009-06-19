@@ -148,6 +148,12 @@ public interface Loader {
 	 * later exploration or if the URI is not absolute.
 	 */
 	public void stashURI(URI uri) throws XBRLException;
+	
+    /**
+     * @param uris The list of URIs to be stashed.
+     * @throws XBRLException
+     */
+    public void stashURIs(List<URI> uris) throws XBRLException;
 
 
 	/**

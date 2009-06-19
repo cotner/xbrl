@@ -61,7 +61,7 @@ public class MatchImpl extends XMLImpl implements Match {
 	        if (node.getNodeType() == Node.ELEMENT_NODE && node.getLocalName().equals("match")) {
 	            try {
 	                URI result = new URI(((Element) node).getAttribute("value"));
-	                logger.info(((Element) node).getAttribute("value"));
+	                logger.debug(((Element) node).getAttribute("value"));
 	                return result;
 	            } catch (URISyntaxException e) {
 	                throw new XBRLException("The matching URI is not valid.",e);

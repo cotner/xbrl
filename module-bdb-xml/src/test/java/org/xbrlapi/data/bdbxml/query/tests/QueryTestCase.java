@@ -3,6 +3,7 @@ package org.xbrlapi.data.bdbxml.query.tests;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 import junit.framework.TestCase;
@@ -42,10 +43,10 @@ public abstract class QueryTestCase extends TestCase {
 
     public final void testStubsRetrieval() throws Exception {
 
-        String query = "/*[@type='org.xbrlapi.impl.StubImpl']";
+        String query = "#roots#[@type='org.xbrlapi.impl.StubImpl']";
         List<Fragment> fragments = store.<Fragment>query(query);
         for (Fragment stub: fragments) {
-            List<Fragment> referrers = store.<Fragment>query("/*[@targetDocumentURI='"+stub.getURI()+"']");
+            List<Fragment> referrers = store.<Fragment>query("#roots#[@targetDocumentURI='"+stub.getURI()+"']");
             TreeMap<URI,String> map = new TreeMap<URI,String>();
             for (Fragment referrer: referrers) {
                 if (! map.containsKey(referrer.getURI())) {
@@ -56,7 +57,7 @@ public abstract class QueryTestCase extends TestCase {
             logger.info(stub.getMetadataRootElement().getAttribute("reason") + ": " + stub.getURI());
             logger.info("This document is referred to by:");
             for (URI uri: map.keySet()) {
-                List<Fragment> sources = store.<Fragment>query("/*[@uri='"+ uri +"' and @targetDocumentURI='"+stub.getURI()+"']");
+                List<Fragment> sources = store.<Fragment>query("#roots#[@uri='"+ uri +"' and @targetDocumentURI='"+stub.getURI()+"']");
                 logger.info(uri + " contains " + sources.size() + " references.");
                 //if (sources.size() > 0) store.serialize(sources.get(0));
             }
@@ -65,7 +66,7 @@ public abstract class QueryTestCase extends TestCase {
     
     public final void testWildcardQueryWithSingleResult() {
         try {
-            iterateURIs("/*[@uri='","' and not(@parentIndex)]");
+            iterateURIs("#roots#[@uri='","' and @parentIndex='']");
         } catch (Exception e) {
             e.printStackTrace();    
             fail(e.getMessage());
@@ -74,7 +75,7 @@ public abstract class QueryTestCase extends TestCase {
 
     public final void testSpecificNameWithSingleResult() {
         try {
-            iterateURIs("/xbrlapi:fragment[@uri='","' and not(@parentIndex)]");
+            iterateURIs("/xbrlapi:fragment[@uri='","' and @parentIndex='']");
         } catch (Exception e) {
             e.printStackTrace();    
             fail(e.getMessage());
@@ -82,7 +83,7 @@ public abstract class QueryTestCase extends TestCase {
     }
 
     private void iterateURIs(String prefix, String suffix) throws Exception {
-        List<URI> uris = store.getStoredURIs();
+        Set<URI> uris = store.getStoredURIs();
         int count = 1;
         long cumulativeDuration = 0;
         URI_LOOP: for (URI uri : uris) {

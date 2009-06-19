@@ -151,11 +151,11 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
 
         logger.info("Done with loading the data.");
         
-        List<Fragment> allFragments = store.query("/*");
+        List<Fragment> allFragments = store.query("#roots#");
 
         logger.info("Total number of fragments: " + allFragments.size());
         
-        List<URI> allURIs = store.getStoredURIs();
+        Set<URI> allURIs = store.getStoredURIs();
         logger.info("# URIs in store = " + allURIs.size());
         List<URI> uris = store.getMinimumDocumentSet(uri1);
         assertTrue(uris.size() > 1);
@@ -166,7 +166,7 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
         
         store.setFilteringURIs(uris);
         
-        List<Fragment> filteredFragments = store.query("/*");
+        List<Fragment> filteredFragments = store.query("#roots#");
 
         assertTrue(allFragments.size() > filteredFragments.size());        
         

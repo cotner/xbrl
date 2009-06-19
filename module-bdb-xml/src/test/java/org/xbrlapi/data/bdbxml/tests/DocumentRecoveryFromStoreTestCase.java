@@ -1,7 +1,7 @@
 package org.xbrlapi.data.bdbxml.tests;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.utilities.XBRLException;
@@ -31,10 +31,10 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	 */
 	public void testGettingURIList() {
 		try {
-			List<URI> uris = store.getStoredURIs();
+			Set<URI> uris = store.getStoredURIs();
 			assertTrue(uris.size() > 1);
 			
-			Element e = store.getDocumentAsDOM(uris.get(0));
+			Element e = store.getDocumentAsDOM(uris.iterator().next());
 			assertNotNull(e);
 			
 		} catch (XBRLException e) {

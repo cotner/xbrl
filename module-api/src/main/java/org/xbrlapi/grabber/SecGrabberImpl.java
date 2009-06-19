@@ -35,9 +35,14 @@ public class SecGrabberImpl extends AbstractGrabberImpl implements Grabber {
 		Document feed = getDocument(getSource());
 		NodeList nodes = feed.getElementsByTagNameNS(NAMESPACE,NAME);
 		logger.info(nodes.getLength());
-		for (int i=0; i<nodes.getLength(); i++) {
+		LOOP: for (int i=0; i<nodes.getLength(); i++) {
 			Element element = (Element) nodes.item(i);
-			String uri = element.getAttribute("url");
+            String type = element.getAttribute("type");
+            String uri = element.getAttribute("url");
+            if (! (type.equals("EX-100.INS") || type.equals("EX-101.INS"))) {
+                logger.debug("Skipping " + uri);
+                continue LOOP;// Skip over uninteresting entry points for discovery.
+            }
 			if (
 					(uri != null) &&
 					(

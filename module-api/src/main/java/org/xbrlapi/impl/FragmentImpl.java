@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -46,10 +47,18 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getChildren(String)
      */
     public <F extends Fragment> List<F> getChildren(String type) throws XBRLException {
-    	String query = "/*[@parentIndex='" + getIndex() + "' and @type='" + type + "']";
+    	String query = "#roots#[@parentIndex='" + getIndex() + "' and @type='" + type + "']";
     	List<F> fragments = getStore().<F>query(query);
     	return fragments;
     }
+    
+    /**
+     * @see org.xbrlapi.Fragment#getChildrenIndices(String)
+     */
+    public Set<String> getChildrenIndices(String type) throws XBRLException {
+        String query = "#roots#[@parentIndex='" + getIndex() + "' and @type='" + type + "']/@index";
+        return getStore().queryForIndices(query);
+    }    
     
     /**
      * @see org.xbrlapi.Fragment#getSimpleLinks()
@@ -62,10 +71,18 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getAllChildren()
      */
     public List<Fragment> getAllChildren() throws XBRLException {
-    	String xpath = "/*[@parentIndex='" + getIndex() + "']";
+    	String xpath = "#roots#[@parentIndex='" + getIndex() + "']";
     	List<Fragment> fragments = getStore().<Fragment>query(xpath);
     	return fragments;
     }
+    
+    /**
+     * @see org.xbrlapi.Fragment#getAllChildrenIndices()
+     */
+    public Set<String> getAllChildrenIndices() throws XBRLException {
+        String xpath = "#roots#[@parentIndex='" + getIndex() + "']/@index";
+        return getStore().queryForIndices(xpath);
+    }    
     
     /**
      * @see org.xbrlapi.Fragment#getChild(String, int)
@@ -141,7 +158,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     		else
     			predicate += " or ";
     	}
-    	String query = "/*[" + predicate + "]";
+    	String query = "#roots#[" + predicate + "]";
     	
     	return getStore().<Locator>query(query);
     }

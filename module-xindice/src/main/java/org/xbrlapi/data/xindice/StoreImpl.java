@@ -1,5 +1,6 @@
 package org.xbrlapi.data.xindice;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -297,12 +298,13 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     @SuppressWarnings(value = "unchecked")
 	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
         
-        query = query + this.getURIFilteringQueryClause();
+        String roots = "/*" + this.getURIFilteringPredicate();
+        query = query.replaceAll("#roots#",roots);
         
 		ResourceSet resources = null;
 		try {
-            for (String namespace: this.namespaceBindings.keySet()) 
-                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
+            for (URI namespace: this.namespaceBindings.keySet()) 
+                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
 			resources = xpathService.query(query);
 		} catch (XMLDBException e) {
 			throw new XBRLException("The XPath query service failed.", e);
@@ -327,12 +329,13 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public synchronized long queryCount(String query) throws XBRLException {
         
-        query = query + this.getURIFilteringQueryClause();
+        String roots = "/*" + this.getURIFilteringPredicate();
+        query = query.replaceAll("#roots#",roots);
         
         ResourceSet resources = null;
         try {
-            for (String namespace: this.namespaceBindings.keySet()) 
-                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
+            for (URI namespace: this.namespaceBindings.keySet()) 
+                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
             resources = xpathService.query(query);
             return resources.getSize();
         } catch (XMLDBException e) {
@@ -346,13 +349,13 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public synchronized Set<String> queryForIndices(String query) throws XBRLException {
 
-        
-        query = query + this.getURIFilteringQueryClause();
+        String roots = "/*" + this.getURIFilteringPredicate();
+        query = query.replaceAll("#roots#",roots);
         
         ResourceSet resources = null;
         try {
-            for (String namespace: this.namespaceBindings.keySet()) 
-                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
+            for (URI namespace: this.namespaceBindings.keySet()) 
+                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
             resources = xpathService.query(query);
         } catch (XMLDBException e) {
             throw new XBRLException("The XPath query service failed.", e);
@@ -378,21 +381,18 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     }
     
     /**
+     * TODO why do we get so many empty results for most queries?
      * @see org.xbrlapi.data.Store#queryForStrings(String)
      */
     public synchronized Set<String> queryForStrings(String query) throws XBRLException {
-        if (query.startsWith("/*")) {
-            query = "/*" + this.getURIFilteringQueryClause() + query.substring(2); 
-        } else if (query.startsWith("/"+Constants.XBRLAPIPrefix+":fragment")) {
-            query = "/*" + this.getURIFilteringQueryClause() + query.substring(Constants.XBRLAPIPrefix.length() + 9); 
-        } else {
-            throw new XBRLException(query + " cannot be adapted to handle URI filtering.");
-        }
                 
+        String roots = "/*" + this.getURIFilteringPredicate();
+        query = query.replaceAll("#roots#",roots);
+        
         ResourceSet resources = null;
         try {
-            for (String namespace: this.namespaceBindings.keySet()) 
-                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace);
+            for (URI namespace: this.namespaceBindings.keySet()) 
+                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
             resources = xpathService.query("string("+query+")");
         } catch (XMLDBException e) {
             throw new XBRLException("The XPath query service failed.", e);
@@ -404,8 +404,12 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             while (iterator.hasMoreResources()) {
                 XMLResource resource = (XMLResource) iterator.nextResource();
                 String content = (String) resource.getContent();
-                content = content.substring(content.indexOf(">")+1,content.indexOf("</"));
-                strings.add(content);
+                try {
+                    content = content.substring(content.indexOf(">")+1,content.indexOf("</"));
+                    strings.add(content);
+                } catch (Exception e) {
+                    ;// no such substring.
+                }
             }
         } catch (XMLDBException e) {
             throw new XBRLException("The query failed.", e);

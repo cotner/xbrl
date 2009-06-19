@@ -3,6 +3,8 @@ package org.xbrlapi.networks;
 import java.net.URI;
 import java.util.Collection;
 
+import org.xbrlapi.Arc;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -33,6 +35,15 @@ public interface Storer {
     public void storeRelationships(Collection<URI> documents) throws XBRLException;
     
     /**
+     * @param document The URI of the document to store the relationships for.
+     * Relationships are sought among the XLink arcs in the documents.
+     * This is used by the discover to updated persisted relationships
+     * in the data store.
+     * @throws XBRLException
+     */
+    public void storeRelationships(URI document) throws XBRLException;    
+    
+    /**
      * @param network The network from which all 
      * active relationships will be persisted in the data store.
      * @see org.xbrlapi.PersistedRelationship
@@ -50,6 +61,16 @@ public interface Storer {
      * @throws XBRLException
      */
     public void storeRelationship(Relationship relationship) throws XBRLException;
+
+    /**
+     * Persist the relationship defined by the given fragments.
+     * @param arc The relationship arc
+     * @param source The relationship source fragment
+     * @param target The relationship target fragment
+     * @throws XBRLException
+     */
+    public void storeRelationship(Arc arc, Fragment source, Fragment target) throws XBRLException;
+    
     
     /**
      * Stores all active relationships in the entire data store.

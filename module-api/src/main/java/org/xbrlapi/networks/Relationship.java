@@ -104,7 +104,7 @@ public interface Relationship {
 	 * relationship.
 	 * @throws XBRLException if the extended link is null.
 	 */
-	public ExtendedLink getLink() throws XBRLException;
+	public ExtendedLink getExtendedLink() throws XBRLException;
 
 	/**
 	 * @return the arc defining the relationship.
