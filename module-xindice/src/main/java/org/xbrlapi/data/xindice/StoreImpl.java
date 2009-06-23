@@ -293,10 +293,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	}
 
 	/**
-	 * @see Store#query(String)
+	 * @see Store#queryForFragments(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
+	public synchronized <F extends XML> List<F> queryForFragments(String query) throws XBRLException {
         
         String roots = "/*" + this.getURIFilteringPredicate();
         query = query.replaceAll("#roots#",roots);

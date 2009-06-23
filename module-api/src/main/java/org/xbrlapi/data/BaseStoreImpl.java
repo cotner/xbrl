@@ -352,7 +352,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             
         // Eliminate any document stub
         query = "#roots#[@type='org.xbrlapi.impl.StubImpl' and @resourceURI='"+ uri + "']";
-        List<Stub> stubs = this.<Stub>query(query);
+        List<Stub> stubs = this.<Stub>queryForFragments(query);
         for (Stub stub: stubs) {
             this.remove(stub.getIndex());
         }
@@ -366,7 +366,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	private static HashMap<URI,Boolean> documentsToDelete = new HashMap<URI,Boolean>(); 
     public void deleteRelatedDocuments(URI uri) throws XBRLException {
     	deleteDocument(uri);
-    	List<Fragment> fragments = this.<Fragment>query("#roots#[@targetDocumentURI='"+ uri + "']");
+    	List<Fragment> fragments = this.<Fragment>queryForFragments("#roots#[@targetDocumentURI='"+ uri + "']");
     	for (Fragment fragment: fragments) {
             if (! documentsToDelete.containsKey(fragment.getURI())) {
                 documentsToDelete.put(fragment.getURI(),new Boolean(true));
@@ -387,7 +387,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public List<URI> getReferencingDocuments(URI uri) throws XBRLException {
         String query = "#roots#[@targetDocumentURI='"+ uri + "']";
-        List<Fragment> fragments = this.<Fragment>query(query);
+        List<Fragment> fragments = this.<Fragment>queryForFragments(query);
 
         List<URI> uris = new Vector<URI>();
         HashMap<URI,String> map = new HashMap<URI,String>(); 
@@ -408,7 +408,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public List<URI> getReferencedDocuments(URI uri) throws XBRLException {
         String query = "#roots#[@uri='" + uri + "' and @targetDocumentURI]";
-        List<Fragment> fragments = this.<Fragment>query(query);
+        List<Fragment> fragments = this.<Fragment>queryForFragments(query);
 
         List<URI> uris = new Vector<URI>();
         HashMap<URI,String> map = new HashMap<URI,String>(); 
@@ -490,7 +490,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public boolean hasDocument(URI uri) throws XBRLException {
         URI matchURI = getMatcher().getMatch(uri);
-        List<Fragment> rootFragments = this.<Fragment>query("#roots#[@uri='" + matchURI + "' and @parentIndex='']");
+        List<Fragment> rootFragments = this.<Fragment>queryForFragments("#roots#[@uri='" + matchURI + "' and @parentIndex='']");
         return (rootFragments.size() > 0) ? true : false;
     }
 
@@ -524,7 +524,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     private Element getAnnotatedDocumentAsDOM(URI uri) throws XBRLException {
         URI matchURI = getMatcher().getMatch(uri);
-        List<Fragment> fragments = query("#roots#[@uri='" + matchURI + "' and @parentIndex='']");
+        List<Fragment> fragments = queryForFragments("#roots#[@uri='" + matchURI + "' and @parentIndex='']");
         if (fragments.size() > 1) throw new XBRLException("More than one document was found in the data store.");
         if (fragments.size() == 0) throw new XBRLException("No documents were found in the data store.");
         Fragment fragment = fragments.get(0);
@@ -541,10 +541,14 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 	 * @param f The fragment at the root of the subtree.
 	 * @return The root element of the subtree headed by the fragment
 	 * with the specified index.
-	 * @throws XBRLException if the subtree cannot be constructed.
+	 * @throws XBRLException if the fragment is null.
 	 */
 	public Element getSubtree(Fragment f) throws XBRLException {
 
+	    if (f == null) {
+	        throw new XBRLException("The fragment must not be null.");
+	    }
+	    
 		// Make sure that the DOM is initialised.
 		if (storeDOM == null) {
 			storeDOM = (new XMLDOMBuilder()).newDocument();
@@ -559,7 +563,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 		}
 		    
 		// Get the child fragment IDs
-		List<Fragment> unorderedFragments = this.query("#roots#[@parentIndex='" + f.getIndex() + "']");
+		List<Fragment> unorderedFragments = this.queryForFragments("#roots#[@parentIndex='" + f.getIndex() + "']");
 		
 		// With no children, just return the fragment
 		if (unorderedFragments.size() == 0) {
@@ -633,7 +637,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 		Element d = (Element) storeDOM.importNode(f.getDataRootElement(), true);
 		
 		// Get the child fragment IDs
-		List<Fragment> fs = this.query("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + f.getIndex() + "']");
+		List<Fragment> fs = this.queryForFragments("/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + f.getIndex() + "']");
 		
 		// With no children, just return the fragment
 		if (fs.size() == 0) {
@@ -743,7 +747,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getStub(URI)
      */
     public Stub getStub(URI uri) throws XBRLException {
-        List<Stub> stubs = this.<Stub>query("#roots#[@type='org.xbrlapi.impl.StubImpl' and @resourceURI='" + uri + "']");
+        List<Stub> stubs = this.<Stub>queryForFragments("#roots#[@type='org.xbrlapi.impl.StubImpl' and @resourceURI='" + uri + "']");
         if (stubs.size() == 0) return null;
         if (stubs.size() > 1) throw new XBRLException("There are " + stubs.size() + " stubs for " + uri);
         return stubs.get(0);
@@ -871,14 +875,14 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         if (interfaceName.indexOf(".") > -1) {
             query = "#roots#[@type='" + interfaceName + "']";
         }
-    	return this.<F>query(query);
+    	return this.<F>queryForFragments(query);
     }
     
     /**
      * @see org.xbrlapi.data.Store#getChildFragments(String, String)
      */
     public <F extends Fragment> List<F> getChildFragments(String interfaceName, String parentIndex) throws XBRLException {
-    	return this.<F>query("#roots#[@type='org.xbrlapi.impl." + interfaceName + "Impl' and @parentIndex='" + parentIndex + "']");
+    	return this.<F>queryForFragments("#roots#[@type='org.xbrlapi.impl." + interfaceName + "Impl' and @parentIndex='" + parentIndex + "']");
     }    
     
     /**
@@ -1030,7 +1034,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     private List<Arc> getArcs(URI arcrole) throws XBRLException {
     	String query = "#roots#[*/*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]";
-    	List<Arc> arcs = this.<Arc>query(query);
+    	List<Arc> arcs = this.<Arc>queryForFragments(query);
     	logger.debug("#arcs with given arcrole = " + arcs.size());
     	return arcs;
     }
@@ -1046,7 +1050,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             if (resourceRole != null) query += " and @targetRole='" + resourceRole + "'"; 
             if (language != null) query += " and @targetLanguage='" + language + "'"; 
             query += "]";
-            List<PersistedRelationship> relationships = this.<PersistedRelationship>query(query);
+            List<PersistedRelationship> relationships = this.<PersistedRelationship>queryForFragments(query);
             List<LabelResource> labels = new Vector<LabelResource>();
             for (PersistedRelationship relationship: relationships) {
                 labels.add(relationship.<LabelResource>getTarget());
@@ -1112,7 +1116,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             if (resourceRole != null) query += " and @targetRole='" + resourceRole + "'"; 
             if (language != null) query += " and @targetLanguage='" + language + "'"; 
             query += "]";
-            List<PersistedRelationship> relationships = this.<PersistedRelationship>query(query);
+            List<PersistedRelationship> relationships = this.<PersistedRelationship>queryForFragments(query);
             List<ReferenceResource> references = new Vector<ReferenceResource>();
             for (PersistedRelationship relationship: relationships) {
                 references.add(relationship.<ReferenceResource>getTarget());
@@ -1171,7 +1175,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public List<Arc> getArcs(URI arcrole, String linkIndex) throws XBRLException {
         String query = "#roots#[@parentIndex='" + linkIndex + "' and */*[@xlink:arcrole='" + arcrole + "' and @xlink:type='arc']]";
-        List<Arc> arcs = this.<Arc>query(query);
+        List<Arc> arcs = this.<Arc>queryForFragments(query);
         logger.debug("#arcs with given arcrole in given extended link = " + arcs.size());
         return arcs;
     }
@@ -1181,7 +1185,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public List<Arc> getArcs(String linkIndex) throws XBRLException {
         String query = "#roots#[@type='org.xbrlapi.impl.ArcImpl' and @parentIndex='" + linkIndex + "']";
-        List<Arc> arcs = this.<Arc>query(query);
+        List<Arc> arcs = this.<Arc>queryForFragments(query);
         return arcs;
     }    
     
@@ -1246,7 +1250,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         if (interfaceName.indexOf(".") > -1) {
             query = "#roots#[@uri='"+ matchURI + "' and @type='" + interfaceName + "']";
         }
-        return this.<F>query(query);
+        return this.<F>queryForFragments(query);
     }
     
     /**
@@ -1339,7 +1343,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getRootFragmentForDocument(URI)
      */
     public <F extends Fragment> F getRootFragmentForDocument(URI uri) throws XBRLException {
-    	List<F> fragments = this.<F>query("#roots#[@uri='" + uri + "' and @parentIndex='']");
+    	List<F> fragments = this.<F>queryForFragments("#roots#[@uri='" + uri + "' and @parentIndex='']");
     	if (fragments.size() == 0) return null;
     	if (fragments.size() > 1) throw new XBRLException("Two fragments identify themselves as roots of the one document.");
     	return fragments.get(0);
@@ -1350,7 +1354,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getRootFragments()
      */
     public <F extends Fragment> List<F> getRootFragments() throws XBRLException {
-    	List<F> roots =  this.<F>query("#roots#[@uri and @parentIndex='']");
+    	List<F> roots =  this.<F>queryForFragments("#roots#[@uri and @parentIndex='']");
     	return roots;
     }
 
@@ -1361,7 +1365,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         if (encoding == null) throw new XBRLException("The language code must not be null.");
         if (code == null) throw new XBRLException("The language name encoding must not be null.");
         String query = "#roots#[@type='org.xbrlapi.impl.LanguageImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/lang:language/lang:encoding='" + encoding.toUpperCase() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/lang:language/lang:code='" + code.toUpperCase() + "']";
-        List<Language> languages = this.<Language>query(query);
+        List<Language> languages = this.<Language>queryForFragments(query);
         if (languages.size() == 0) return null;
         return languages.get(0);
     }
@@ -1374,7 +1378,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public List<Language> getLanguages(String code) throws XBRLException {
         if (code == null) throw new XBRLException("The language code must not be null.");
         String query = "#roots#[@type='org.xbrlapi.impl.LanguageImpl' and */lang:language/lang:code='" + code.toUpperCase() + "']";
-        return this.<Language>query(query);
+        return this.<Language>queryForFragments(query);
     }
 
     private Networks networks = null;
@@ -1495,7 +1499,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         
         // Get the links that contain the network declaring arcs.
         String linkQuery = "#roots#[@type='org.xbrlapi.impl.ExtendedLinkImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*[@xlink:role='" + linkRole + "']]";
-        List<ExtendedLink> links = this.<ExtendedLink>query(linkQuery);
+        List<ExtendedLink> links = this.<ExtendedLink>queryForFragments(linkQuery);
         
         // Get the arcs that declare the relationships in the network.
         // For each arc map the ids of the fragments at their sources and targets.
@@ -1538,7 +1542,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public Concept getConcept(URI namespace, String name) throws XBRLException {
         
-        List<SchemaDeclaration> candidates = this.<SchemaDeclaration>query("#roots#[*/xsd:element[@name='" + name + "']]");
+        List<SchemaDeclaration> candidates = this.<SchemaDeclaration>queryForFragments("#roots#[*/xsd:element[@name='" + name + "']]");
         List<Concept> matches = new Vector<Concept>();
         for (SchemaDeclaration candidate: candidates) {
             if (candidate.getTargetNamespace().equals(namespace)) {
@@ -1572,7 +1576,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public List<RoleType> getRoleTypes(URI uri) throws XBRLException {
         String query = "#roots#["+ Constants.XBRLAPIPrefix+ ":" + "data/link:roleType/@roleURI='" + uri + "']";
-        return this.<RoleType>query(query);
+        return this.<RoleType>queryForFragments(query);
     }    
     
     /**
@@ -1589,7 +1593,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public List<ArcroleType> getArcroleTypes(String uri) throws XBRLException {
         String query = "#roots#["+ Constants.XBRLAPIPrefix+ ":" + "data/link:arcroleType/@arcroleURI='" + uri + "']";
-        return this.<ArcroleType>query(query);
+        return this.<ArcroleType>queryForFragments(query);
     }
     
     /**
@@ -1597,7 +1601,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public List<URI> getResourceRoles() throws XBRLException {
         HashMap<URI,String> roles = new HashMap<URI,String>();
-        List<Resource> resources = this.<Resource>query("#roots#["+ Constants.XBRLAPIPrefix+ ":" + "data/*/@xlink:type='resource']");
+        List<Resource> resources = this.<Resource>queryForFragments("#roots#["+ Constants.XBRLAPIPrefix+ ":" + "data/*/@xlink:type='resource']");
         for (Resource resource: resources) {
             URI role = resource.getResourceRole();
             if (! roles.containsKey(role)) roles.put(role,"");
@@ -1655,7 +1659,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public List<ExtendedLink> getExtendedLinks(URI linkrole) throws XBRLException {
         String query = "#roots#[*/*[@xlink:type='extended' and @xlink:role='" + linkrole + "']]";
-        List<ExtendedLink> links = this.<ExtendedLink>query(query);
+        List<ExtendedLink> links = this.<ExtendedLink>queryForFragments(query);
         return links;
     }
 

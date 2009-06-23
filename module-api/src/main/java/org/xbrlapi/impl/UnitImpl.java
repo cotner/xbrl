@@ -24,7 +24,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
      */
     public List<Item> getReferencingItems() throws XBRLException {
         String query = "#roots#[@uri='" + this.getURI() + "' and */*/@unitRef='" + this.getId() + "']";
-        return getStore().<Item>query(query);
+        return getStore().<Item>queryForFragments(query);
     }
     
     /**

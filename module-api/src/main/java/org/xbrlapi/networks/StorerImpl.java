@@ -301,7 +301,7 @@ public class StorerImpl implements Storer {
         
         Map<String,SortedSet<PersistedRelationship>> map = new HashMap<String,SortedSet<PersistedRelationship>>();
         String query = "#roots#[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"' and @sourceIndex='"+sourceIndex+"' and @targetIndex='"+targetIndex+"']";
-        List<PersistedRelationship> relationships = this.getStore().<PersistedRelationship>query(query);
+        List<PersistedRelationship> relationships = this.getStore().<PersistedRelationship>queryForFragments(query);
         for (PersistedRelationship relationship: relationships) {
             String key = relationship.getSourceIndex() + relationship.getTargetIndex() + relationship.getLinkRole() + relationship.getArcrole() + relationship.getSignature();
             if (map.containsKey(key)) {

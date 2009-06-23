@@ -96,7 +96,7 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
     	
     	String query = "#roots#[@uri='" + getTargetDocumentURI() + "'" + pointerCondition + "]";
     	logger.debug(query);
-    	List<Fragment> fragments = getStore().query(query);
+    	List<Fragment> fragments = getStore().queryForFragments(query);
     	if (fragments.size() == 0) return null;
     	if (fragments.size() > 1) throw new XBRLException("The simple link references more than one fragment.");
     	return fragments.get(0);

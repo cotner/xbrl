@@ -58,7 +58,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testQueryData() {
 		try {
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
-	        List<Fragment> fragments = store.<Fragment>query(xpathQuery);
+	        List<Fragment> fragments = store.<Fragment>queryForFragments(xpathQuery);
 			assertTrue(fragments.size() > 1);
 	        Fragment fragment = fragments.get(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
@@ -92,8 +92,8 @@ public class StoreImplTestCase extends BaseTestCase {
 		} 
 		
 		try {
-	        String query = "/" + Constants.XBRLAPIPrefix + ":" + "fragment[" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XMLSchemaPrefix + ":element]";
-	        List<Fragment> fragments = store.<Fragment>query(query);
+	        String query = "#roots#[*/" + Constants.XMLSchemaPrefix + ":element]";
+	        List<Fragment> fragments = store.<Fragment>queryForFragments(query);
 	        Fragment fragment = fragments.get(0);
 	        assertEquals("element",fragment.getDataRootElement().getLocalName());
 		} catch (Exception e) {

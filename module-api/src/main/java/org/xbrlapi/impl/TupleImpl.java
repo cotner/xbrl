@@ -21,7 +21,7 @@ public class TupleImpl extends FactImpl implements Tuple {
 	 * @see org.xbrlapi.Tuple#getChildFacts()
 	 */
 	public List<Fact> getChildFacts() throws XBRLException {
-    	return getStore().query("#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
+    	return getStore().queryForFragments("#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class TupleImpl extends FactImpl implements Tuple {
 	public List<Fact> getChildFacts(URI namespace, String name) throws XBRLException {
 	    // TODO Improve query efficiency.
 		String query = "#roots#[@parentIndex='" + this.getIndex() + "' and namespace-uri("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+namespace+"' and local-name("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+name+"']";
-		return getStore().query(query);
+		return getStore().queryForFragments(query);
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class TupleImpl extends FactImpl implements Tuple {
 	public List<Fact> getChildFacts(URI namespace, String name, String contextRef) throws XBRLException {
 	    getStore().setNamespaceBinding(namespace,"xbrlapi_tupleNamespacePrefix");
 		String query = "#roots#[@parentIndex='" + this.getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" +  "data/xbrlapi_tupleNamespacePrefix:" +  name + "[@contextRef='" + contextRef + "']]";
-		return getStore().query(query);
+		return getStore().queryForFragments(query);
 	}
 	
 

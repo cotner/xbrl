@@ -139,7 +139,7 @@ public interface Store {
 	 * exist.
 	 * @throws XBRLException if the query cannot be executed.
 	 */
-	public <F extends XML> List<F> query(String query) throws XBRLException;
+	public <F extends XML> List<F> queryForFragments(String query) throws XBRLException;
 
     /**
      * Run a query against the collection of all fragments in the store.

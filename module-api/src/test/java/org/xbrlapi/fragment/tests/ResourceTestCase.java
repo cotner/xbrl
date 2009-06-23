@@ -32,7 +32,7 @@ public class ResourceTestCase extends DOMLoadingTestCase {
 	public void testGetResourceRole() {	
 
 		try {
-			List<Resource> fragments = store.<Resource>query("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
+			List<Resource> fragments = store.<Resource>queryForFragments("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
 			Resource fragment = fragments.get(0);
 			assertEquals("http://www.xbrl.org/2003/role/label", fragment.getResourceRole().toString());
 		} catch (Exception e) {
@@ -47,7 +47,7 @@ public class ResourceTestCase extends DOMLoadingTestCase {
 	public void testGetTitleAttribute() {	
 
 		try {
-			List<Resource> fragments = store.<Resource>query("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
+			List<Resource> fragments = store.<Resource>queryForFragments("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
 			Resource fragment = fragments.get(0);
 			assertEquals("label_CurrentAsset", fragment.getTitleAttribute());
 		} catch (Exception e) {

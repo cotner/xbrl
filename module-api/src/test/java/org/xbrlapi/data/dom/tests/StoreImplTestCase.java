@@ -82,7 +82,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 	        String query = "#roots#[@type='org.xbrlapi.impl.MockImpl' and */xbrlapi:info]";
 	        logger.info(query);
-	        fragments = store.<Fragment>query(query);
+	        fragments = store.<Fragment>queryForFragments(query);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -118,8 +118,8 @@ public class StoreImplTestCase extends BaseTestCase {
 		} 
 		
 		try {
-	        String query = "#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/" + Constants.XMLSchemaPrefix + ":element";
-	        List<Fragment> fragments = store.<Fragment>query(query);
+	        String query = "#roots#[*/" + Constants.XMLSchemaPrefix + ":element]";
+	        List<Fragment> fragments = store.<Fragment>queryForFragments(query);
 	        Fragment fragment = fragments.get(0);
 	        assertEquals("element",fragment.getDataRootElement().getLocalName());
 		} catch (Exception e) {

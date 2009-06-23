@@ -107,7 +107,7 @@ public class PointerResolverImpl implements PointerResolver {
 				// Handle element scheme pointer parts
 				} else if (part.getSchemeNamespace().toString().equals(PointerPart.DefaultPointerNamespace) && part.getSchemeLocalName().equals("element")) {
 					String xpath = "#roots#[@uri='" + getDocumentURI() + "' and " + Constants.XBRLAPIPrefix + ":" + "xptr/@value='" + data + "']";
-					List<Fragment> fl = getStore().query(xpath);					
+					List<Fragment> fl = getStore().queryForFragments(xpath);					
 					if (fl.size() != 0) {
 						if (fl.size() > 1) {
 							throw new XBRLException("A locator locates more than one fragment in the DTS.");

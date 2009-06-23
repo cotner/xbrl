@@ -191,7 +191,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetXPathToParentElement() {
 	    
         try {
-            List<Schema> fragments = store.<Schema>query("#roots#[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='']");
+            List<Schema> fragments = store.<Schema>queryForFragments("#roots#[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='']");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 List<Fragment> children = fragment.getAllChildren();
@@ -209,7 +209,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetParentElement() {
         try {
-            List<Schema> fragments = store.<Schema>query("#roots#[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='']");
+            List<Schema> fragments = store.<Schema>queryForFragments("#roots#[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='']");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 List<Fragment> children = fragment.getAllChildren();

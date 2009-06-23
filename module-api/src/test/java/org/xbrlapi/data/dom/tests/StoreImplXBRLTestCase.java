@@ -151,7 +151,7 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
 
         logger.info("Done with loading the data.");
         
-        List<Fragment> allFragments = store.query("#roots#");
+        List<Fragment> allFragments = store.queryForFragments("#roots#");
 
         logger.info("Total number of fragments: " + allFragments.size());
         
@@ -166,7 +166,7 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
         
         store.setFilteringURIs(uris);
         
-        List<Fragment> filteredFragments = store.query("#roots#");
+        List<Fragment> filteredFragments = store.queryForFragments("#roots#");
 
         assertTrue(allFragments.size() > filteredFragments.size());        
         

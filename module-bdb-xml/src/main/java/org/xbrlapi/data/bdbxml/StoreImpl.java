@@ -456,10 +456,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
 	/**
      * TODO Make sure that queries finding a node within a fragment return the fragment itself.
-	 * @see org.xbrlapi.data.Store#query(String)
+	 * @see org.xbrlapi.data.Store#queryForFragments(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
+	public synchronized <F extends XML> List<F> queryForFragments(String query) throws XBRLException {
 
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;

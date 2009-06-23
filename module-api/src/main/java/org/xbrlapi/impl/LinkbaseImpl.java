@@ -148,7 +148,7 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
      */
     public List<ExtendedLink> getExtendedLinks() throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:type='extended']";
-    	List<ExtendedLink> fragments = getStore().<ExtendedLink>query(xpath);
+    	List<ExtendedLink> fragments = getStore().<ExtendedLink>queryForFragments(xpath);
     	if (fragments.size() == 0) return null;
     	return fragments;
     }

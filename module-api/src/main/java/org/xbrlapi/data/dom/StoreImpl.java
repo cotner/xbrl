@@ -6,24 +6,33 @@ package org.xbrlapi.data.dom;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XQueryCompiler;
+import net.sf.saxon.s9api.XQueryEvaluator;
+import net.sf.saxon.s9api.XQueryExecutable;
+import net.sf.saxon.s9api.XdmAtomicValue;
+import net.sf.saxon.s9api.XdmItem;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmValue;
+
 import org.apache.log4j.Logger;
-import org.apache.xpath.domapi.XPathEvaluatorImpl;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.xpath.XPathEvaluator;
-import org.w3c.dom.xpath.XPathResult;
 import org.xbrlapi.XML;
 import org.xbrlapi.data.BaseStoreImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentFactory;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 
@@ -175,25 +184,48 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
 
 
+
+    private Processor processor = null;
+    private XQueryCompiler compiler = null;
+    
     /**
      * Contains the logic common to queries that return fragments and
      * queries that return fragment indices.
      * @param query The query to run.
-     * @return The XPath query result.
+     * @return The query results as an iterable sequence.
      * @throws XBRLException
      */
-    private XPathResult runQuery(String query) throws XBRLException {
+    private XdmValue runQuery(String query) throws XBRLException {
 
+        if (compiler == null) {
+            processor = new Processor(false);
+            compiler = processor.newXQueryCompiler();
+            compiler.declareNamespace(Constants.XBRL21LinkPrefix,Constants.XBRL21LinkNamespace);
+            compiler.declareNamespace(Constants.XBRL21Prefix,Constants.XBRL21Namespace);
+            compiler.declareNamespace(Constants.XBRLAPIPrefix,Constants.XBRLAPINamespace);
+            compiler.declareNamespace(Constants.XBRLAPILanguagesPrefix,Constants.XBRLAPILanguagesNamespace);
+            compiler.declareNamespace(Constants.XLinkPrefix,Constants.XLinkNamespace);
+            compiler.declareNamespace(Constants.XMLPrefix,Constants.XMLNamespace);
+            compiler.declareNamespace(Constants.XMLSchemaPrefix,Constants.XMLSchemaNamespace);
+        }
+        
         String roots = "/store/*" + this.getURIFilteringPredicate();
         query = query.replaceAll("#roots#",roots);
+
+        logger.info(query);
         
-        // Create an XPath evaluator and pass in the document.
-        XPathEvaluator evaluator = new XPathEvaluatorImpl(dom);
-        XPathNSResolverImpl resolver = new XPathNSResolverImpl();
-        for (URI namespace: this.namespaceBindings.keySet()) {
-            resolver.setNamespaceBinding(this.namespaceBindings.get(namespace),namespace.toString());
+        try {
+            for (URI namespace: this.namespaceBindings.keySet()) {
+                compiler.declareNamespace(this.namespaceBindings.get(namespace),namespace.toString());
+            }
+            XQueryExecutable executable = compiler.compile(query);
+            XQueryEvaluator evaluator = executable.load();
+            XdmNode xdmNode = processor.newDocumentBuilder().wrap(dom);
+            evaluator.setContextItem(xdmNode);
+            return evaluator.evaluate();
+        } catch (SaxonApiException e) {
+            throw new XBRLException("Saxon failed to execute " + query,e);
         }
-        return (XPathResult) evaluator.evaluate(query, dom, resolver, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
     }
     
 
@@ -205,26 +237,33 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @throws XBRLException if the query cannot be executed.
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends XML> List<F> query(String query) throws XBRLException {
-        XPathResult result = runQuery(query);
-		List<F> fragments = new Vector<F>();
-		Node n;
-	    while ((n = result.iterateNext()) != null) {
-	    	String index = getIndex(n);
-	    	fragments.add((F) getFragment(index));
-	    }
+	public synchronized <F extends XML> List<F> queryForFragments(String query) throws XBRLException {
+        
+        query = "for $attr in "+ query + "/@index return string($attr)";
+        XdmValue result = runQuery(query);
+        List<F> fragments = new Vector<F>();
+        for (XdmItem item: result) {
+            String index = "";
+            if (item.isAtomicValue()) {
+                index = ((XdmAtomicValue)item).getStringValue();
+            } else {
+                index = ((XdmNode)item).getStringValue();
+            }
+            if (this.fragmentMap.containsKey(index)) {
+                fragments.add((F) getFragment(index));
+            }
+        }
 	    return fragments;
 	}
     
     /**
      * @see Store#queryCount(String)
      */
+    @SuppressWarnings("unused")
     public synchronized long queryCount(String query) throws XBRLException {
-        XPathResult result = runQuery(query);
-        @SuppressWarnings("unused")
-        Node n;
+        XdmValue result = runQuery(query);
         long count = 0;
-        while ((n = result.iterateNext()) != null) {
+        for (XdmItem item: result) {
             count++;
         }
         return count;
@@ -235,14 +274,14 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public synchronized Set<String> queryForIndices(String query) throws XBRLException {
         
-        XPathResult xpr = runQuery(query);
-        Node n;
-        HashMap<String,String> indices = new HashMap<String,String>();
-        while ((n = xpr.iterateNext()) != null) {
-            String index = getIndex(n);
-            indices.put(index,null);
+        query = query + "/@index";
+        XdmValue result = runQuery(query);
+        Set<String> indices = new HashSet<String>();
+        for (XdmItem item: result) {
+            indices.add(item.getStringValue());
         }
-        return indices.keySet();
+
+        return indices;
     }
     
     /**
@@ -250,11 +289,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public synchronized Set<String> queryForStrings(String query) throws XBRLException {
                 
-        XPathResult result = runQuery(query);
+        XdmValue result = runQuery(query);
         Set<String> strings = new TreeSet<String>();
-        Node n = null;
-        while ((n = result.iterateNext()) != null) {
-            strings.add(n.getNodeValue());
+        for (XdmItem item: result) {
+            strings.add(item.getStringValue());
         }
         return strings;
 
@@ -275,7 +313,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 			Attr a = (Attr) n;
 			parentNode = a.getOwnerElement();
 		}
-		if (parentNode == null) throw new XBRLException("The parent node for the matched node should not be null.");
+		if (parentNode == null) throw new XBRLException("The parent node for the matched node must not be null.");
 		if (parentNode.getNodeType() != Element.ELEMENT_NODE) throw new XBRLException("The fragment for the matching node could not be found.");
 		Element parent = (Element) parentNode;
     	if (parent.getTagName().equals(ROOT_NAME)) {

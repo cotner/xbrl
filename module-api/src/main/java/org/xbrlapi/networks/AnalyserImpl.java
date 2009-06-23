@@ -46,7 +46,7 @@ public class AnalyserImpl implements Analyser {
      * @throws XBRLException
      */
     private List<PersistedRelationship> getRelationships(String query) throws XBRLException {
-        List<PersistedRelationship> allRelationships = getStore().<PersistedRelationship>query(query);
+        List<PersistedRelationship> allRelationships = getStore().<PersistedRelationship>queryForFragments(query);
         return allRelationships;
 /*        List<PersistedRelationship> result = new Vector<PersistedRelationship>();
         for (PersistedRelationship relationship: allRelationships) {
@@ -291,7 +291,7 @@ public class AnalyserImpl implements Analyser {
      */
     public List<PersistedRelationship> getLabelRelationships(String sourceIndex) throws XBRLException {
         String query = "#roots#[not(@use) and @label and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
     
     /**
@@ -299,7 +299,7 @@ public class AnalyserImpl implements Analyser {
      */
     public List<PersistedRelationship> getLabelRelationships(String sourceIndex, String language) throws XBRLException {
         String query = "#roots#[not(@use) and @label and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
 
     /**
@@ -309,7 +309,7 @@ public class AnalyserImpl implements Analyser {
             String sourceIndex, String language) 
             throws XBRLException {
         String query = "#roots#[not(@use) and @label and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
 
     /**
@@ -318,7 +318,7 @@ public class AnalyserImpl implements Analyser {
     public List<PersistedRelationship> getLabelRelationshipsByLanguageAndRole(
             String sourceIndex, String language, URI role) throws XBRLException {
         String query = "#roots#[not(@use) and @label and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"' and targetRole='"+ role +"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
 
     /**
@@ -332,7 +332,7 @@ public class AnalyserImpl implements Analyser {
                 relationships = this.getLabelRelationships(sourceIndex);
             } else {
                 String query = "#roots#[not(@use) and @label and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"']";
-                relationships = this.getStore().<PersistedRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>queryForFragments(query);
             }
             if (! relationships.isEmpty()) return relationships;
         }
@@ -345,7 +345,7 @@ public class AnalyserImpl implements Analyser {
     public List<PersistedRelationship> getLabelRelationshipsByRole(
             String sourceIndex, URI role) throws XBRLException {
         String query = "#roots#[not(@use) and @label and @sourceIndex='"+ sourceIndex+"' targetRole='"+ role +"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
 
     /**
@@ -362,7 +362,7 @@ public class AnalyserImpl implements Analyser {
                 String rolePhrase = "";
                 if (role != null) rolePhrase = " and targetRole='"+ role +"'";
                 String query = "#roots#[not(@use) and @label and @sourceIndex='"+ sourceIndex+"'" + languagePhrase + rolePhrase + "]";
-                relationships = this.getStore().<PersistedRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>queryForFragments(query);
                 if (! relationships.isEmpty()) return relationships;
             }
         }
@@ -380,7 +380,7 @@ public class AnalyserImpl implements Analyser {
                 relationships = this.getLabelRelationships(sourceIndex);
             } else {
                 String query = "#roots#[not(@use) and @label and @sourceIndex='"+ sourceIndex+"' and targetRole='"+ role +"']";
-                relationships = this.getStore().<PersistedRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>queryForFragments(query);
             }
             if (! relationships.isEmpty()) return relationships;
         }
@@ -392,7 +392,7 @@ public class AnalyserImpl implements Analyser {
      */
     public List<PersistedRelationship> getReferenceRelationships(String sourceIndex) throws XBRLException {
         String query = "#roots#[not(@use) and @reference and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
     
     /**
@@ -400,7 +400,7 @@ public class AnalyserImpl implements Analyser {
      */
     public List<PersistedRelationship> getReferenceRelationships(String sourceIndex, String language) throws XBRLException {
         String query = "#roots#[not(@use) and @reference and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
 
     /**
@@ -410,7 +410,7 @@ public class AnalyserImpl implements Analyser {
             String sourceIndex, String language) 
             throws XBRLException {
         String query = "#roots#[not(@use) and @reference and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
 
     /**
@@ -419,7 +419,7 @@ public class AnalyserImpl implements Analyser {
     public List<PersistedRelationship> getReferenceRelationshipsByLanguageAndRole(
             String sourceIndex, String language, URI role) throws XBRLException {
         String query = "#roots#[not(@use) and @reference and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"' and targetRole='"+ role +"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
 
     /**
@@ -433,7 +433,7 @@ public class AnalyserImpl implements Analyser {
                 relationships = this.getReferenceRelationships(sourceIndex);
             } else {
                 String query = "#roots#[not(@use) and @reference and @sourceIndex='"+ sourceIndex+"' and targetLanguage='"+ language +"']";
-                relationships = this.getStore().<PersistedRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>queryForFragments(query);
             }
             if (! relationships.isEmpty()) return relationships;
         }
@@ -446,7 +446,7 @@ public class AnalyserImpl implements Analyser {
     public List<PersistedRelationship> getReferenceRelationshipsByRole(
             String sourceIndex, URI role) throws XBRLException {
         String query = "#roots#[not(@use) and @reference and @sourceIndex='"+ sourceIndex+"' targetRole='"+ role +"']";
-        return this.getStore().<PersistedRelationship>query(query);
+        return this.getStore().<PersistedRelationship>queryForFragments(query);
     }
 
     /**
@@ -463,7 +463,7 @@ public class AnalyserImpl implements Analyser {
                 String rolePhrase = "";
                 if (role != null) rolePhrase = " and targetRole='"+ role +"'";
                 String query = "#roots#[not(@use) and @reference and @sourceIndex='"+ sourceIndex+"'" + languagePhrase + rolePhrase + "]";
-                relationships = this.getStore().<PersistedRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>queryForFragments(query);
                 if (! relationships.isEmpty()) return relationships;
             }
         }
@@ -481,7 +481,7 @@ public class AnalyserImpl implements Analyser {
                 relationships = this.getReferenceRelationships(sourceIndex);
             } else {
                 String query = "#roots#[not(@use) and @reference and @sourceIndex='"+ sourceIndex+"' and targetRole='"+ role +"']";
-                relationships = this.getStore().<PersistedRelationship>query(query);
+                relationships = this.getStore().<PersistedRelationship>queryForFragments(query);
             }
             if (! relationships.isEmpty()) return relationships;
         }
@@ -493,7 +493,7 @@ public class AnalyserImpl implements Analyser {
      */
     public List<PersistedRelationship> getRelationships(String sourceIndex, String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
         String query = "#roots#[not(@use) and @arcRole='" + arcrole + "' and @linkRole='"+linkRole+"' and @sourceIndex='"+sourceIndex+"' and @targetIndex='"+targetIndex+"']";
-        return getStore().<PersistedRelationship>query(query);
+        return getStore().<PersistedRelationship>queryForFragments(query);
     }
     
 }

@@ -129,7 +129,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
     
     private Match getMatchXML(URI uri) throws XBRLException {
         String query = "#roots#[@type='org.xbrlapi.impl.MatchImpl' and "+ Constants.XBRLAPIPrefix + ":match/@value='" + uri +"']";
-        List<Match> matches = getStore().<Match>query(query);
+        List<Match> matches = getStore().<Match>queryForFragments(query);
         if (matches.size() > 1) throw new XBRLException("The wrong number of match fragments was retrieved.  There must be just one.");
         if (matches.size() == 0) return null;
         return matches.get(0);

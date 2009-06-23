@@ -33,7 +33,7 @@ public class ReferencePartImpl extends FragmentImpl implements ReferencePart {
     	String name = this.getLocalname();
     	URI namespace = this.getNamespace();
     	String query = "#roots#[@type='org.xbrlapi.impl.ReferencePartDeclarationImpl' and */xsd:element/@name='" + name + "']";
-    	List<ReferencePartDeclaration> declarations = getStore().<ReferencePartDeclaration>query(query);
+    	List<ReferencePartDeclaration> declarations = getStore().<ReferencePartDeclaration>queryForFragments(query);
     	for (ReferencePartDeclaration declaration: declarations) {
     		if (declaration.getTargetNamespace().equals(namespace)) {
     			return declaration;

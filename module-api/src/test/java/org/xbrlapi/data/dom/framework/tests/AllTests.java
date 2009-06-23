@@ -9,7 +9,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"Test for org.xbrlapi.data.dom.framework.tests");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(XalanXPathTestCase.class);
+        suite.addTestSuite(SaxonXQueryTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

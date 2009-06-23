@@ -49,7 +49,7 @@ public class FactImpl extends FragmentImpl implements Fact {
 	 */
 	public Concept getConcept() throws XBRLException {
 		
-		List<Concept> candidates = getStore().<Concept>query("#roots#[@type='org.xbrlapi.impl.ConceptImpl' and */*/@name='" + this.getLocalname() + "']");
+		List<Concept> candidates = getStore().<Concept>queryForFragments("#roots#[@type='org.xbrlapi.impl.ConceptImpl' and */*/@name='" + this.getLocalname() + "']");
 		for (Concept concept: candidates) {
 			if (this.getNamespace().equals(concept.getTargetNamespace())) 
 				return concept;

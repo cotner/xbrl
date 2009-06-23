@@ -22,7 +22,7 @@ public class QueryForStringsTestCase extends BaseTestCase {
 		super(arg0);
 	}
 	
-	public void testQueryForFragmentIndices() {
+	public void testQueryForStrings () {
 		try {
 	        loader.discover(this.getURI(START));
 		    

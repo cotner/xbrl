@@ -162,7 +162,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     public <E extends ArcEnd> List<E> getSourceFragments() throws XBRLException {
         long start = System.currentTimeMillis();
         String query = "#roots#[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getFrom() + "']";
-        List<E> result = this.getStore().<E>query(query);
+        List<E> result = this.getStore().<E>queryForFragments(query);
         logger.info("MS to get source fragments = " + (System.currentTimeMillis()-start));
         return result;
     }
@@ -173,7 +173,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     public <E extends ArcEnd> List<E> getTargetFragments() throws XBRLException {
         long start = System.currentTimeMillis();
         String query = "#roots#[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getTo() + "']";
-        List<E> result = this.getStore().<E>query(query);
+        List<E> result = this.getStore().<E>queryForFragments(query);
         logger.info("MS to get target fragments = " + (System.currentTimeMillis()-start));
         return result;
     }

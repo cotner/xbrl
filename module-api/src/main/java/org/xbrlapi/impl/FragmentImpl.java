@@ -48,7 +48,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      */
     public <F extends Fragment> List<F> getChildren(String type) throws XBRLException {
     	String query = "#roots#[@parentIndex='" + getIndex() + "' and @type='" + type + "']";
-    	List<F> fragments = getStore().<F>query(query);
+    	List<F> fragments = getStore().<F>queryForFragments(query);
     	return fragments;
     }
     
@@ -72,7 +72,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      */
     public List<Fragment> getAllChildren() throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "']";
-    	List<Fragment> fragments = getStore().<Fragment>query(xpath);
+    	List<Fragment> fragments = getStore().<Fragment>queryForFragments(xpath);
     	return fragments;
     }
     
@@ -160,7 +160,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	}
     	String query = "#roots#[" + predicate + "]";
     	
-    	return getStore().<Locator>query(query);
+    	return getStore().<Locator>queryForFragments(query);
     }
     
 

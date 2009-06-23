@@ -80,7 +80,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			loader.discover(uri, document);
-			List<Xlink> fragments = store.<Xlink>query("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:title");
+			List<Xlink> fragments = store.<Xlink>queryForFragments("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:title");
 			Xlink fragment = fragments.get(0);
 			assertEquals("stuff", fragment.getTitleAttribute());
 		} catch (Exception e) {
