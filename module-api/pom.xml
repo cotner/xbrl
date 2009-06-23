@@ -62,11 +62,23 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     </dependency-->
 
     <dependency>
-        <groupId>xalan</groupId>
-        <artifactId>xalan</artifactId>
-        <version>2.7.1</version>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>saxon</artifactId>
+        <version>9.1</version>
     </dependency>
 
+    <dependency>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>saxon-dom</artifactId>
+        <version>9.1</version>
+    </dependency>
+
+    <dependency>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>saxon-s9api</artifactId>
+        <version>9.1</version>
+    </dependency>
+    
   </dependencies>
   <build>
 
