@@ -53,47 +53,6 @@ local document cache.  This will be used when running all tests.</p>
 <p><code>nonexistent.url = http://some.rubbish.org/nonexistent.xml</code></p>
 <p>Specify a valid URL but one that does not resolve.</p>
 
-<h2>Xindice data store configuration</h2>
-
-<p>These configuration properties are only required if you are unit testing 
-the Xindice data store implementation.</p>
-
-<h3>xindice.xmldb.version</h3>
-<p><code>xindice.xmldb.version = 1.0</code></p>
-<p>Sets the version of XML:DB to use when running Xindice tests.  
-Ghis should always be set to 1.0.</p>
-
-<h3>xindice.scheme</h3>
-<p><code>xindice.scheme = xmldb:xindice</code></p>
-<p>Sets the URL scheme to use for accessing the Xindice database.  
-This should always be <code>xmldb:xindice</code>.</p>
-
-<h3>xindice.domain = localhost</h3>
-<p><code>xindice.domain = localhost</code></p>
-<p>Sets the value of the domain to use in Xindice database URLs.</p>
-
-<h3>xindice.port</h3>
-<p><code>xindice.port = 80</code></p>
-<p>Sets the port to use in Xindice database URLs</p>
-
-<h3>xindice.database</h3>
-<p><code>xindice.database = db</code></p>
-<p>Sets the value of the path to the root of the Xindice database 
-for use in Xindice database URLs.</p>
-<p>The Xindice database URL is formed from:<br/>
-<code>xindice.scheme + "://" + xindice.domain + ":" + xindice.port + "/" + xindice.database</code></p>
-
-<h3>xindice.data.collection.name</h3>
-<p><code>xindice.data.collection.name = collectionName</code></p>
-<p>Sets the name to use for the collection that will hold the data store in Xindice data store tests.</p>
-
-<h3>xindice.store.parent.path</h3>
-<p><code>xindice.store.parent.path = /</code></p>
-<p>The path to the collection that will be the parent collection of the 
-collection that actually holds XBRLAPI data. A value of <code>/</code> specifies 
-that the data store is in a collection that is a child of the database root.  If 
-some other value is used you will also need to ensure that the specified parent 
-collection actually exists.</p>
 
 <h2>Exist data store configuration</h2>
 
@@ -105,7 +64,7 @@ the eXist data store implementation.</p>
 <p>Sets the version of XML:DB to use when running Exist tests.  
 Generally this should always be set to 1.0.</p>
 
-<h3>xindice.scheme</h3>
+<h3>exist.scheme</h3>
 <p><code>exist.scheme = xmldb:exist</code></p>
 <p>Sets the URL scheme to use for accessing the Exist database.  
 This should always be <code>xmldb:exist</code>.</p>
@@ -120,7 +79,7 @@ This should always be <code>xmldb:exist</code>.</p>
 
 <h3>exist.database</h3>
 <p><code>exist.database = exist/xmlrpc/db</code></p>
-<p>Sets the value of the path to the root of the Xindice database for 
+<p>Sets the value of the path to the root of the eXist database for 
 use in Exist database URLs.</p>
 <p>The Exist database URL is formed from:<br/>
 <code>exist.scheme + "://" + exist.domain + ":" + exist.port + "/" + exist.database</code></p>

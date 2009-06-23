@@ -6,7 +6,6 @@
 	<classpathentry kind="src" path="module-xdt/src/main/java"/>
 	<classpathentry kind="src" path="module-xdt/src/test/java"/>
 	<classpathentry kind="src" path="conf"/>
-	<classpathentry kind="src" path="module-xindice/src/test/java"/>
 	<classpathentry kind="src" path="module-bdb-xml/src/main/java"/>
 	<classpathentry kind="src" path="module-xlink/src/main/java"/>
 	<classpathentry kind="src" path="module-exist/src/main/java"/>
@@ -14,7 +13,6 @@
 	<classpathentry kind="src" path="module-xlink/src/test/java"/>
 	<classpathentry kind="src" path="module-xpointer/src/test/java"/>
 	<classpathentry kind="src" path="module-utilities/src/main/java"/>
-	<classpathentry kind="src" path="module-xindice/src/main/java"/>
 	<classpathentry kind="src" path="module-bdb-xml/src/test/java"/>
 	<classpathentry kind="src" path="module-xmlbase/src/main/java"/>
 	<classpathentry kind="src" path="module-exist/src/test/java"/>
