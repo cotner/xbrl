@@ -30,7 +30,7 @@ import org.xbrlapi.utilities.XBRLException;
  * This class also provides a method for testing if a URI is a cache URI.
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
  */
-public class CacheImpl {
+public class CacheImpl implements Cache {
 
 	Logger logger = Logger.getLogger(CacheImpl.class);
 	
@@ -73,12 +73,7 @@ public class CacheImpl {
 	}	
 	
     /**
-     * Tests if a URI is a URI of a resource in the local cache.
-     * @param uri The URI to be tested to see if it identifies a 
-     * resource in the local cache.
-     * @return true if and only if the URI is for a resource in the 
-     * local cache.
-     * @throws XBRLException if the URI status as a cache URI cannot be determined.
+     * @see org.xbrlapi.cache.Cache#isCacheURI(java.net.URI)
      */
     public boolean isCacheURI(URI uri) throws XBRLException {
     	logger.debug("Checking if " + uri + " is in the cache.");
@@ -115,11 +110,7 @@ public class CacheImpl {
     }
     
     /**
-     * TODO Modify to use the java.net.URIEncoder and java.net.URIDecoder classes.
-     * Adds the resource at the original URI to the cache if it is not already cached.
-     * @param uri The URI to be translated into a cache URI (if necessary).
-     * @return the cache URI corresponding to the provided URI.
-     * @throws XBRLException if the resource cannot be cached.
+     * @see org.xbrlapi.cache.Cache#getCacheURI(java.net.URI)
      */
     public URI getCacheURI(URI uri) throws XBRLException {
 
@@ -157,10 +148,7 @@ public class CacheImpl {
     }
     
     /**
-     * @param uri The URI to be translated into an original URI (if necessary).
-     * @return the original (non-cache) URI corresponding to the provided URI.
-     * @throws XBRLException if a caching operation fails 
-     * or if a cache file cannot be translated into a URI.
+     * @see org.xbrlapi.cache.Cache#getOriginalURI(java.net.URI)
      */
     public URI getOriginalURI(URI uri) throws XBRLException {
     	
@@ -231,11 +219,7 @@ public class CacheImpl {
     }
     
     /**
-     * Gets the cache file for an original URI.
-     * @param uri The URI to obtain the cache file for,
-     * @return The File for the provided URI.
-     * @throws XBRLException if the URI cannot be translated into
-     * a location in the local cache.
+     * @see org.xbrlapi.cache.Cache#getCacheFile(java.net.URI)
      */
     public File getCacheFile(URI uri) throws XBRLException {
         
@@ -278,11 +262,7 @@ public class CacheImpl {
     }
     
     /**
-     * Copy the original resource into the local cache if the resource exists and is
-     * able to be copied into the cache and does nothing otherwise.  Thus, caching fails
-     * silently.
-     * @param originalURI the URI of the resource to be copied into the cache.
-     * @param cacheFile The file to be used to store the cache version of the resource.
+     * @see org.xbrlapi.cache.Cache#copyToCache(java.net.URI, java.io.File)
      */
     public void copyToCache(URI originalURI, File cacheFile) {
     	
@@ -331,10 +311,7 @@ public class CacheImpl {
     }
     
     /**
-     * Copy the original resource into the local cache.
-     * @param originalURI the URI of the resource to be copied into the cache.
-     * @param xml The XML to store in the cache at the given URI.
-     * @throws XBRLException if the resource cannot be copied into the local cache.
+     * @see org.xbrlapi.cache.Cache#copyToCache(java.net.URI, java.lang.String)
      */
     public void copyToCache(URI originalURI, String xml) throws XBRLException {
     	
@@ -357,14 +334,8 @@ public class CacheImpl {
 		}
     }    
     
-
-    
-
-    
     /**
-     * Delete a resource from the cache.
-     * @param uri The original or the cache URI.
-     * @throws XBRLException if the cache file cannot be determined.
+     * @see org.xbrlapi.cache.Cache#purge(java.net.URI)
      */
     public void purge(URI uri) throws XBRLException {
 		File file = this.getCacheFile(uri);
