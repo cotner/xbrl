@@ -8,10 +8,14 @@ package org.xbrlapi.impl;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xbrlapi.Match;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -41,9 +45,9 @@ public class MatchImpl extends XMLImpl implements Match {
 	}
 	
 	/**
-	 * @see Match#setResourceURI(URI)
+	 * @see Match#addMatchedURI(URI)
 	 */
-	public void setResourceURI(URI uri) throws XBRLException {
+	public void addMatchedURI(URI uri) throws XBRLException {
 	    if (uri == null) {
 	        throw new XBRLException("The URI must not be null.");
 	    }
@@ -72,6 +76,24 @@ public class MatchImpl extends XMLImpl implements Match {
         return null;
 
 	}
+	
+    /**
+     * @see Match#getURIs()
+     */
+    public List<URI> getURIs() throws XBRLException {
+        List<URI> result = new Vector<URI>();
+        NodeList nodes = this.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match");
+        for (int i=0; i<nodes.getLength(); i++) {
+            Element match = (Element) nodes.item(i);
+            try {
+                result.add(new URI(match.getAttribute("value")));
+            } catch (URISyntaxException e) {
+                throw new XBRLException("The URI is not valid.",e);
+            }
+        }
+        return result;
+
+    }	
 	
 	/**
 	 * @see Match#deleteURI(URI)

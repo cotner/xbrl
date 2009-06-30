@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.BaseTestCase;
@@ -63,7 +64,7 @@ public class EntityResolverTestCase extends BaseTestCase {
 			fail("The entity resolver constructor failed unexpectedly.");
 		} finally {
 			try {
-				CacheImpl cache = new CacheImpl(new File(cachePath));
+				Cache cache = new CacheImpl(new File(cachePath));
 				cache.purge(new URI(originalURI));
 			} catch (Exception e) {
 				fail(e.getMessage());
@@ -109,7 +110,7 @@ public class EntityResolverTestCase extends BaseTestCase {
 			fail(e.getMessage());
 		} finally {
 			try {
-				CacheImpl cache = new CacheImpl(new File(cachePath));
+				Cache cache = new CacheImpl(new File(cachePath));
 				cache.purge(uri);
 			} catch (Exception e) {
 			    e.printStackTrace();

@@ -40,12 +40,12 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 
 			Loader secondLoader = createLoader(secondStore);
 
-			int original = secondStore.getStoredURIs().size(); 
+			int original = secondStore.getDocumentURIs().size(); 
 			assertTrue(original >= 1);
 
 			secondLoader.discover(this.getURI("test.data.small.instance"));
 
-			assertTrue(secondStore.getStoredURIs().size() > original);
+			assertTrue(secondStore.getDocumentURIs().size() > original);
 
 		} catch (XBRLException e) {
 			e.printStackTrace();

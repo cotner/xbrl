@@ -31,7 +31,7 @@ public class LabelResourceTestCase extends DOMLoadingTestCase {
 	public void testGetStringValue() {	
 
 		try {
-			List<LabelResource> fragments = store.<LabelResource>getFragments("LabelResource");
+			List<LabelResource> fragments = store.<LabelResource>getXMLs("LabelResource");
 			LabelResource fragment = fragments.get(0);
 			assertEquals("Current Asset", fragment.getStringValue());
 		} catch (Exception e) {
@@ -46,7 +46,7 @@ public class LabelResourceTestCase extends DOMLoadingTestCase {
     public void testGetConcepts() {  
 
         try {
-            List<LabelResource> fragments = store.<LabelResource>getFragments("LabelResource");
+            List<LabelResource> fragments = store.<LabelResource>getXMLs("LabelResource");
             LabelResource fragment = fragments.get(0);
             List<Concept> concepts = fragment.getConcepts();
             assertTrue(concepts.size() > 0);

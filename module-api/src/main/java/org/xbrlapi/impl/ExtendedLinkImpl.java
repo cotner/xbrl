@@ -35,7 +35,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public <E extends ArcEnd> List<E> getArcEndsWithLabel(String label) throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@xlink:label='" + label + "']";
-    	List<E> ends = getStore().<E>queryForFragments(xpath);
+    	List<E> ends = getStore().<E>queryForXMLResources(xpath);
     	logger.debug("Extended link " + getIndex() + " has " + ends.size() + " ends with label " + label);
     	return ends;
     }    
@@ -45,7 +45,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public List<Locator> getLocatorsWithLabel(String label) throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and @type='org.xbrlapi.impl.LocatorImpl' and " + Constants.XBRLAPIPrefix + ":" + "data/link:loc/@xlink:label='" + label + "']";
-    	return getStore().<Locator>queryForFragments(xpath);
+    	return getStore().<Locator>queryForXMLResources(xpath);
     }
 
     /**
@@ -53,7 +53,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public List<Locator> getLocatorsWithHref(String href) throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and @type='org.xbrlapi.impl.LocatorImpl' and @absoluteHref='" + href + "']";
-    	return getStore().<Locator>queryForFragments(xpath);
+    	return getStore().<Locator>queryForXMLResources(xpath);
     }
     
     /**
@@ -61,7 +61,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public List<Arc> getArcs() throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:type='arc']";
-    	return getStore().<Arc>queryForFragments(xpath);
+    	return getStore().<Arc>queryForXMLResources(xpath);
     }
 
     /**
@@ -69,7 +69,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
 	 */
 	public List<Arc> getArcsWithToLabel(String to) throws XBRLException {
 		String xpath = "#roots#[@parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@xlink:to='" + to + "']";
-		return getStore().<Arc>queryForFragments(xpath);
+		return getStore().<Arc>queryForXMLResources(xpath);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public List<Arc> getArcsWithFromLabel(String from) throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@xlink:from='" + from + "']";
-    	List<Arc> arcs = getStore().<Arc>queryForFragments(xpath);
+    	List<Arc> arcs = getStore().<Arc>queryForXMLResources(xpath);
     	return arcs;
     }
     
@@ -86,7 +86,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public List<Arc> getArcsWithFromLabelAndArcrole(String from, URI arcrole) throws XBRLException {
         String xpath = "#roots#[@parentIndex='" + getIndex() + "' and */*[@xlink:from='" + from + "' and @xlink:arcrole='" + arcrole + "']]";
-        List<Arc> arcs = getStore().<Arc>queryForFragments(xpath);
+        List<Arc> arcs = getStore().<Arc>queryForXMLResources(xpath);
         return arcs;
     }
     
@@ -95,7 +95,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public List<Arc> getArcsWithArcrole(URI arcrole) throws XBRLException {
         String xpath = "#roots#[@parentIndex='" + getIndex() + "' and */*/@xlink:arcrole='" + arcrole + "']";
-        List<Arc> arcs = getStore().<Arc>queryForFragments(xpath);
+        List<Arc> arcs = getStore().<Arc>queryForXMLResources(xpath);
         return arcs;
     }    
     
@@ -104,7 +104,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public List<Arc> getArcsWithToLabelAndArcrole(String to, URI arcrole) throws XBRLException {
         String xpath = "#roots#[@parentIndex='" + getIndex() + "' and */*[@xlink:to='" + to + "' and @xlink:arcrole='" + arcrole + "']]";
-        List<Arc> arcs = getStore().<Arc>queryForFragments(xpath);
+        List<Arc> arcs = getStore().<Arc>queryForXMLResources(xpath);
         return arcs;
     }
     
@@ -114,7 +114,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public List<Resource> getResources() throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:type='resource']";
-    	return getStore().<Resource>queryForFragments(xpath);
+    	return getStore().<Resource>queryForXMLResources(xpath);
     }
     
     /**
@@ -122,7 +122,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
      */
     public List<Resource> getResourcesWithLabel(String label) throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']/@xlink:label='" + label + "']";
-    	return getStore().<Resource>queryForFragments(xpath);
+    	return getStore().<Resource>queryForXMLResources(xpath);
     }
 
     /**
@@ -136,17 +136,17 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     }
     
     /**
-     * @return A map, indexed by XLink type (title,locator, resource, arc) of the XLink sources and targets
-     * in an extended link.  The children are represented by a map from label to indexes of the children.
-     * @throws XBRLException
+     * @see org.xbrlapi.ExtendedLink#getArcEndIndicesByLabel()
      */
     public Map<String,List<String>> getArcEndIndicesByLabel() throws XBRLException {
-        Map<String,List<String>> result = new HashMap<String,List<String>>();
-        String query = "#roots#[@parentIndex='" + getIndex() + "' and */*[@xlink:type='resource' or @xlink:type='locator']]/@index";
-        Set<String> indices = getStore().queryForIndices(query);
-        for (String index: indices) {
-            ArcEnd arcEnd = (ArcEnd) getStore().getFragment(index);
-            String label = arcEnd.getLabel();
+        
+        Map<String,List<String>> result = new HashMap<String,List<String>>();        
+        String query = "for $fragment in #roots#[@parentIndex='" + getIndex() + "' and */*[@xlink:type='resource' or @xlink:type='locator']] return concat($fragment/@index,' ',$fragment/*/*/@xlink:label)";
+        Set<String> pairs = getStore().queryForStrings(query);
+        for (String pair: pairs) {
+            int split = pair.indexOf(" ");
+            String index = pair.substring(0,split);
+            String label = pair.substring(split+1);
             if (result.containsKey(label)) {
                 result.get(label).add(index);
             } else {
@@ -158,6 +158,25 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
 
         return result;
     }
+    
+    /**
+     * @see org.xbrlapi.ExtendedLink#getLocatorTargetIndices()
+     */
+    public Map<String,String> getLocatorTargetIndices() throws XBRLException {
+        
+        Map<String,String> result = new HashMap<String,String>();
+        
+        String query = "for $locator in #roots#[@parentIndex='" + getIndex() + "' and */*/@xlink:type='locator'] return concat($locator/@index,' ',#roots#[@uri=$locator/@targetDocumentURI and $locator/@targetPointerValue=" + Constants.XBRLAPIPrefix + ":xptr/@value]/@index)";
+        Set<String> pairs = getStore().queryForStrings(query);
+        for (String pair: pairs) {
+            int split = pair.indexOf(" ");
+            String locatorIndex = pair.substring(0,split);
+            String targetIndex = pair.substring(split+1);
+            result.put(locatorIndex,targetIndex);
+        }
+
+        return result;
+    }    
 
 
 }

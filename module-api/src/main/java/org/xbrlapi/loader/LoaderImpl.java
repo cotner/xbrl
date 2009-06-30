@@ -20,6 +20,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.networks.Storer;
@@ -99,19 +100,19 @@ public class LoaderImpl implements Loader {
      * The cache to use when discovering XML materials specified as a String
      * rather than just via a URI that resolves to the required XML.
      */
-    private CacheImpl cache = null;
+    private Cache cache = null;
 
     /**
      * @see org.xbrlapi.loader.Loader#setCache(CacheImpl)
      */
-    public void setCache(CacheImpl cache) {
+    public void setCache(Cache cache) {
         this.cache = cache;
     }
 
     /**
      * @see org.xbrlapi.loader.Loader#getCache()
      */
-    public CacheImpl getCache() throws XBRLException {
+    public Cache getCache() throws XBRLException {
         if (this.cache == null)
             throw new XBRLException(
                     "The loader cache is null and so cannot be used.");
@@ -715,17 +716,7 @@ public class LoaderImpl implements Loader {
     }
 
     /**
-     * Stash a URI to await loading into DTS.
-     * 
-     * @param uri
-     *            The absolute URI to be stashed (any relative URI gets resolved
-     *            against the Base URI before stashing. TODO put this
-     *            functionality at the SAX parse call for the document. TODO
-     *            make sure that the fragment after the # is handled for stashed
-     *            URIs in the loader.
-     * @throws XBRLException
-     *             if the URI cannot be stored for later exploration or if the
-     *             URI is not absolute
+     * @see org.xbrlapi.loader.Loader#stashURI(URI)
      */
     public synchronized void stashURI(URI uri) throws XBRLException {
 

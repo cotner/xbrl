@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.dom.StoreImpl;
@@ -28,7 +29,7 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 
 	protected String cache = configuration.getProperty("local.cache");
     protected File cacheFile = new File(cache);
-    protected CacheImpl cacheImpl = null;
+    protected Cache cacheImpl = null;
 	protected Store store = null;
 	protected Loader loader = null;
 	

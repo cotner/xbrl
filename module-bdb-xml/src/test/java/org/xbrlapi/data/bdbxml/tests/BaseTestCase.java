@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
@@ -25,7 +26,10 @@ import org.xml.sax.EntityResolver;
  */
 public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 
-	protected String location = configuration.getProperty("bdbxml.store.location");
+    // Create the logger
+    protected static Logger logger = Logger.getLogger(BaseTestCase.class);  
+
+    protected String location = configuration.getProperty("bdbxml.store.location");
 	protected String containerName = configuration.getProperty("bdbxml.container.name");
 	protected String cache = configuration.getProperty("local.cache");
 	

@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.cache.CacheImpl;
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -24,16 +26,16 @@ public abstract class BaseMatcherImpl implements Matcher {
      * The cache implementation to be used by the matcher when accessing
      * resources.  If this is null, then no cache is used.
      */
-    private CacheImpl cache = null;
-    protected CacheImpl getCache() {
+    private Cache cache = null;
+    protected Cache getCache() {
         return cache;
     }
-    protected void setCache(CacheImpl cache) {
+    protected void setCache(Cache cache) {
         this.cache = cache;
     }
     
     Signer signer = null;
-    protected Signer getSignature() {
+    protected Signer getSigner() {
         return signer;
     }
     public void setSigner(Signer signer) {
@@ -46,7 +48,7 @@ public abstract class BaseMatcherImpl implements Matcher {
      * @param signature The object used to generate resource signatures.
      * @throws XBRLException if either parameter is null.
      */
-    public BaseMatcherImpl(CacheImpl cache,Signer signature) throws XBRLException {
+    public BaseMatcherImpl(Cache cache,Signer signature) throws XBRLException {
         if (cache == null) {
             throw new XBRLException("Resource matchers must use a resource cache.");
         }
@@ -62,13 +64,16 @@ public abstract class BaseMatcherImpl implements Matcher {
      * @see org.xbrlapi.data.resource.Matcher#getSignature(URI)
      */
     public String getSignature(URI uri) throws XBRLException {
+        
         cache.getCacheURI(uri); // Caches the URI if it is not already cached.
         File cacheFile = cache.getCacheFile(uri);
+        
         if (cacheFile.exists()) {
-            List<String> lines = getResourceContent(cacheFile);
-            return getSignature().getSignature(lines);
+            return getSigner().getSignature(getResourceContent(cacheFile));
         }
-        throw new XBRLException(uri + " could not be cached so a signature could not be obtained.");
+
+        throw new XBRLException(uri + " could not be cached.");
+        
     }
 
     protected List<String> getResourceContent(File file) throws XBRLException {
@@ -85,5 +90,21 @@ public abstract class BaseMatcherImpl implements Matcher {
             throw new XBRLException("There was a problem reading " + file + " from the cache.",e);
         }
     }
+    
+    protected List<String> getResourceContent(URI uri) throws XBRLException {
+        try {
+            InputStream stream = uri.toURL().openStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            List<String> lines = new Vector<String>();
+            String line = null;
+            while ((line=reader.readLine()) != null) {
+                lines.add(line);
+            }
+            reader.close();
+            return lines;
+        } catch (IOException e) {
+            throw new XBRLException("There was a problem reading lines in from " + uri,e);
+        }
+    }    
 
 }

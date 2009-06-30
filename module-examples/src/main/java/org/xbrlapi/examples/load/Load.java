@@ -114,7 +114,7 @@ public class Load {
             }
 
             // Iterate the instances printing out lists of facts etc.
-            List<Instance> instances = store.<Instance>getFragments("Instance");
+            List<Instance> instances = store.<Instance>getXMLs("Instance");
             for (Instance instance: instances) {
                 reportInstance(instance);
             }

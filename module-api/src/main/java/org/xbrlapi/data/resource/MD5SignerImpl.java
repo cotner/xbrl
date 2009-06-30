@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.utilities.XBRLException;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
@@ -19,7 +18,7 @@ public class MD5SignerImpl implements Signer {
         super();
     }
     
-    public String getSignature(List<String> lines) throws XBRLException {
+    public String getSignature(List<String> lines) {
         String document = "";
         double divisor = Math.ceil(lines.size() / 21);
         for (int i=0; i<lines.size(); i++) {
@@ -37,7 +36,7 @@ public class MD5SignerImpl implements Signer {
         return (new Integer(lines.size())).toString() + MD5(document);
     }
     
-    private String MD5(String content) throws XBRLException {
+    private String MD5(String content) {
         try {
             MessageDigest algorithm = MessageDigest.getInstance("MD5");
             algorithm.reset();
@@ -55,7 +54,8 @@ public class MD5SignerImpl implements Signer {
             return hexString.toString();
             
         } catch (NoSuchAlgorithmException e) {
-            throw new XBRLException("There is no available MD5 algorithm.",e);
+            logger.error("Your system is missing an MD5 algorithm.");
+            return "corruptedSignature";
         }
     }
 

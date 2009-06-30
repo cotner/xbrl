@@ -35,7 +35,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
          logger.debug(sgNamespace);
          String query = "#roots#[*/xsd:element/@name='" + sgName + "']";
          logger.debug(query);
-         List<ElementDeclaration> declarations = getStore().<ElementDeclaration>queryForFragments(query);
+         List<ElementDeclaration> declarations = getStore().<ElementDeclaration>queryForXMLResources(query);
          for (ElementDeclaration declaration: declarations) {
              if (declaration.getTargetNamespace().equals(sgNamespace)) {
                  if (declaration.getName().equals("item") && declaration.getTargetNamespace().toString().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
@@ -59,7 +59,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
           if (sgName == null) return false;
           URI sgNS = this.getSubstitutionGroupNamespace();
           String query = "#roots#[*/xsd:element/@name='" + sgName + "']";
-          List<ElementDeclaration> declarations = getStore().<ElementDeclaration>queryForFragments(query);
+          List<ElementDeclaration> declarations = getStore().<ElementDeclaration>queryForXMLResources(query);
           for (ElementDeclaration declaration: declarations) {
               if (declaration.getTargetNamespace().equals(sgNS)) {
                   if (declaration.getName().equals("tuple") && declaration.getTargetNamespace().toString().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {

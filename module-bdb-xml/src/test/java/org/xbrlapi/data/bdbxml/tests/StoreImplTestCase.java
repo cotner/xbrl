@@ -35,7 +35,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = "1";
 			MockImpl d = new MockImpl(index);
 			store.persist(d);
-			assertEquals(index,store.getFragment(index).getIndex());	
+			assertEquals(index,store.getXMLResource(index).getIndex());	
 			
 		} catch (XBRLException e) {
 			e.printStackTrace();
@@ -47,9 +47,9 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 			String index = "1";
 			store.persist(new MockImpl(index));
-			assertTrue(store.hasXML(index));
+			assertTrue(store.hasXMLResource(index));
 			store.remove(index);
-			assertFalse(store.hasXML(index));
+			assertFalse(store.hasXMLResource(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());
 		}
@@ -58,7 +58,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testQueryData() {
 		try {
 	        String xpathQuery = "#roots#";
-	        List<XML> fragments = store.<XML>queryForFragments(xpathQuery);
+	        List<XML> fragments = store.<XML>queryForXMLResources(xpathQuery);
 			assertTrue(fragments.size() > 1);
 	        XML fragment = fragments.get(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
@@ -89,7 +89,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		
 		try {
 	        String query = "#roots#[*/" + Constants.XMLSchemaPrefix + ":element]";
-	        List<Fragment> fragments = store.<Fragment>queryForFragments(query);
+	        List<Fragment> fragments = store.<Fragment>queryForXMLResources(query);
 	        Fragment fragment = fragments.get(0);
 	        assertEquals("element",fragment.getDataRootElement().getLocalName());
 		} catch (Exception e) {
@@ -101,7 +101,7 @@ public class StoreImplTestCase extends BaseTestCase {
 
 	public void testHasDocument() {
 		try {
-		    Set<URI> uris = store.getStoredURIs();
+		    Set<URI> uris = store.getDocumentURIs();
 		    assertTrue(uris.size() > 0);
 		    for (URI uri: uris) {
 	            assertTrue(store.hasDocument(uri));

@@ -115,7 +115,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		
 		// Get the fragment index to delete existing fragments with the same index.
 		String index = xml.getIndex();
-		if (hasXML(index)) {
+		if (hasXMLResource(index)) {
 		    this.remove(index);
         }
 
@@ -132,17 +132,17 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#hasXML(String)
+	 * @see org.xbrlapi.data.Store#hasXMLResource(String)
 	 */
-	public synchronized boolean hasXML(String index) throws XBRLException {
+	public synchronized boolean hasXMLResource(String index) throws XBRLException {
 		if (fragmentMap.containsKey(index)) return true;
 		return false;
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#getFragment(String)
+	 * @see org.xbrlapi.data.Store#getXMLResource(String)
 	 */
-	public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
+	public synchronized <F extends XML> F getXMLResource(String index) throws XBRLException {
 
 		Element root = fragmentMap.get(index);
 		if (root == null) {
@@ -163,7 +163,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 */
 	public synchronized void remove(String index) throws XBRLException {
     	
-        if (! hasXML(index)) return;
+        if (! hasXMLResource(index)) return;
 
         Element d = fragmentMap.get(index);
         fragmentMap.remove(index);
@@ -212,8 +212,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         String roots = "/store/*" + this.getURIFilteringPredicate();
         query = query.replaceAll("#roots#",roots);
 
-        logger.info(query);
-        
         try {
             for (URI namespace: this.namespaceBindings.keySet()) {
                 compiler.declareNamespace(this.namespaceBindings.get(namespace),namespace.toString());
@@ -237,7 +235,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @throws XBRLException if the query cannot be executed.
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends XML> List<F> queryForFragments(String query) throws XBRLException {
+	public synchronized <F extends XML> List<F> queryForXMLResources(String query) throws XBRLException {
         
         query = "for $attr in "+ query + "/@index return string($attr)";
         XdmValue result = runQuery(query);
@@ -250,7 +248,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
                 index = ((XdmNode)item).getStringValue();
             }
             if (this.fragmentMap.containsKey(index)) {
-                fragments.add((F) getFragment(index));
+                fragments.add((F) getXMLResource(index));
             }
         }
 	    return fragments;

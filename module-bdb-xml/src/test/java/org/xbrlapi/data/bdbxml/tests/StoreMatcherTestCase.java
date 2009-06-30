@@ -31,7 +31,7 @@ public class StoreMatcherTestCase extends BaseTestCase {
 	public void testURIStashingWithMatcher() {
 		try {
 	        loader.discover(this.getURI(ORIGINAL));
-	        loader.discover(this.getURI(DUPLICATE));       
+	        loader.discover(this.getURI(DUPLICATE));
 		    
             URI uri1 = getURI(ORIGINAL);
 	        URI uri2 = getURI(DUPLICATE);

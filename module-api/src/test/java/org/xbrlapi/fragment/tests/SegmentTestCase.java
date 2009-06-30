@@ -31,7 +31,7 @@ public class SegmentTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetComplexContent() {
         try {
-            List<Segment> fragments = store.<Segment>getFragments("Segment");
+            List<Segment> fragments = store.<Segment>getXMLs("Segment");
             assertTrue(fragments.size() > 0);
             for (Segment fragment: fragments) {
                 assertEquals(3, fragment.getComplexContent().getLength());
@@ -46,7 +46,7 @@ public class SegmentTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetEntity() {
         try {
-            List<Segment> fragments = store.<Segment>getFragments("Segment");
+            List<Segment> fragments = store.<Segment>getXMLs("Segment");
             assertTrue(fragments.size() > 0);
             for (Segment fragment: fragments) {
                 assertEquals("org.xbrlapi.impl.EntityImpl", fragment.getEntity().getType());

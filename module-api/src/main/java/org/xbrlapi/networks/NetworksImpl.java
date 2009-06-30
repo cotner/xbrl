@@ -209,7 +209,7 @@ public class NetworksImpl implements Networks {
     public void addRelationships(String arcrole) throws XBRLException {
 
         String query = "#roots#[@type='org.xbrlapi.impl.ArcImpl' and */*[@xlink:type='arc' and @xlink:arcrole='"+ arcrole +"']]";
-        List<Arc> arcs = this.getStore().<Arc>queryForFragments(query);
+        List<Arc> arcs = this.getStore().<Arc>queryForXMLResources(query);
         for (Arc arc: arcs) {
             List<ArcEnd> sources = arc.getSourceFragments();
             List<ArcEnd> targets = arc.getTargetFragments();

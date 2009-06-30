@@ -33,7 +33,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = "1";
 			MockImpl d = new MockImpl(index);
 			store.persist(d);
-			assertEquals(index,store.getFragment(index).getIndex());
+			assertEquals(index,store.getXMLResource(index).getIndex());
 		} catch (XBRLException e) {
 			fail("The addition of a document fragment to the Xindice data store failed." + e.getMessage());
 		}
@@ -43,9 +43,9 @@ public class StoreImplTestCase extends BaseTestCase {
 		try {
 			String index = "1";
 			store.persist(new MockImpl(index));
-			assertTrue(store.hasXML(index));
+			assertTrue(store.hasXMLResource(index));
 			store.remove(index);
-			assertFalse(store.hasXML(index));
+			assertFalse(store.hasXMLResource(index));
 		} catch (XBRLException e) {
 			fail("Unexpected exception. " + e.getMessage());
 		}
@@ -58,7 +58,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	public void testQueryData() {
 		try {
 	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
-	        List<Fragment> fragments = store.<Fragment>queryForFragments(xpathQuery);
+	        List<Fragment> fragments = store.<Fragment>queryForXMLResources(xpathQuery);
 			assertTrue(fragments.size() > 1);
 	        Fragment fragment = fragments.get(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
@@ -69,7 +69,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	
     public void testQueryForIndices() {
         try {
-            String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
+            String xpathQuery = "#roots#";
             Set<String> indices = store.queryForIndices(xpathQuery);
             assertTrue(! indices.isEmpty());
             for (String index: indices) {
@@ -93,7 +93,7 @@ public class StoreImplTestCase extends BaseTestCase {
 		
 		try {
 	        String query = "#roots#[*/" + Constants.XMLSchemaPrefix + ":element]";
-	        List<Fragment> fragments = store.<Fragment>queryForFragments(query);
+	        List<Fragment> fragments = store.<Fragment>queryForXMLResources(query);
 	        Fragment fragment = fragments.get(0);
 	        assertEquals("element",fragment.getDataRootElement().getLocalName());
 		} catch (Exception e) {

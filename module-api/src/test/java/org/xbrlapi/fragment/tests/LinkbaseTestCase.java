@@ -36,7 +36,7 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcroleRef() {	
 		try {
-            List<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
+            List<SimpleLink> links = store.<SimpleLink>getXMLs("SimpleLink");
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("arcroleRef")) {
                     Linkbase parent = (Linkbase) link.getParent();
@@ -60,7 +60,7 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	public void testGetRoleRef() {	
 
 		try {
-            List<SimpleLink> links = store.<SimpleLink>getFragments("SimpleLink");
+            List<SimpleLink> links = store.<SimpleLink>getXMLs("SimpleLink");
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleRef")) {
                     Linkbase parent = (Linkbase) link.getParent();
@@ -84,7 +84,7 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	public void testGetExtendedLinks() {	
 
 		try {
-            List<Linkbase> linkbases = store.<Linkbase>getFragments("Linkbase");
+            List<Linkbase> linkbases = store.<Linkbase>getXMLs("Linkbase");
             for (Linkbase linkbase: linkbases) {
                 List<Fragment> children = linkbase.getAllChildren();
                 int count = 0;
@@ -107,7 +107,7 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	public void testGetDocumentations() {	
 
 		try {
-            List<Linkbase> linkbases = store.<Linkbase>getFragments("Linkbase");
+            List<Linkbase> linkbases = store.<Linkbase>getXMLs("Linkbase");
             for (Linkbase linkbase: linkbases) {
                 List<Fragment> children = linkbase.getAllChildren();
                 int count = 0;

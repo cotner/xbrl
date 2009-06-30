@@ -4,15 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -134,7 +130,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
             environment = new Environment(new File(locationName), environmentConfiguration);
             environment.trickleCacheWrite(20);
-            logger.info("Initialised the environment.");
+            logger.debug("Initialised the environment.");
         } catch (FileNotFoundException e) {
             throw new XBRLException("The physical location of the BDB XML database could not be found.", e);
         } catch (DatabaseException e) {
@@ -153,7 +149,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             managerConfiguration.setAdoptEnvironment(true);
             managerConfiguration.setAllowExternalAccess(true);
             dataManager = new XmlManager(environment, managerConfiguration);
-            logger.info("Initialised the data manager.");
+            logger.debug("Initialised the data manager.");
         } catch (XmlException e) {
             throw new XBRLException("The Berkeley XML database manager could not be set up.", e);
         }	    
@@ -171,7 +167,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             } else {
                 createContainer();
             }
-            logger.info("Initialised the data container.");
+            logger.debug("Initialised the data container.");
         } catch (XmlException e) {
             throw new XBRLException("The database container, " + containerName + ", could not be opened.");
         }
@@ -183,8 +179,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             XmlContainerConfig config = new XmlContainerConfig();
             config.setStatisticsEnabled(true);
             dataContainer = dataManager.createContainer(containerName,config);
-            
-            logger.info("Query optimisation statistics enabled? " + dataContainer.getContainerConfig().getStatisticsEnabled());
             
         } catch (XmlException e) {
             throw new XBRLException("The data container could not be created.", e);
@@ -199,10 +193,12 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
             xmlIndexSpecification.replaceDefaultIndex("node-element-presence");
 
+            // TODO Remove these indices - they are redundant given the default index.
             xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"fragment","node-element-presence");
             xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"data","node-element-presence");
             xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"xptr","node-element-presence");
-
+/*            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"match","node-element-presence");
+*/
             xmlIndexSpecification.addIndex("","stub","node-attribute-presence");
 
             xmlIndexSpecification.addIndex("","index", "unique-node-attribute-equality-string");
@@ -350,20 +346,20 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         XmlUpdateContext xmlUpdateContext = null;
 	    try {
 	        
-	        if (xml.getStore() != null) return;
+            String index = xml.getIndex();
+            if (hasXMLResource(index)) remove(index);
 
-	        String index = xml.getIndex();
-	        if (hasXML(index)) remove(index);
-
-            String string = serializeToString(xml.getMetadataRootElement());
+            String content = serializeToString(xml.getMetadataRootElement());
             xmlUpdateContext = dataManager.createUpdateContext();
             XmlDocumentConfig documentConfiguration = new XmlDocumentConfig();
             documentConfiguration.setWellFormedOnly(true);
-            dataContainer.putDocument(index, string, xmlUpdateContext, null);
+            dataContainer.putDocument(index, content, xmlUpdateContext, null);
 
-            xml.setResource(xml.getBuilder().getMetadata());
-            xml.setStore(this);
-	        
+            if (xml.getStore() == null) {
+                xml.setResource(xml.getBuilder().getMetadata());
+                xml.setStore(this);
+	        }
+	        	        
         } catch (XmlException e) {
             throw new XBRLException("The fragment could not be added to the BDB XML data store.", e);
 	    } finally {
@@ -372,9 +368,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	}
 
 	/**
-	 * @see org.xbrlapi.data.Store#hasXML(String)
+	 * @see org.xbrlapi.data.Store#hasXMLResource(String)
 	 */
-    public synchronized boolean hasXML(String index) throws XBRLException {
+    public synchronized boolean hasXMLResource(String index) throws XBRLException {
 
         XmlDocument xmlDocument = null;
 	    try {
@@ -405,9 +401,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     }    	
 
 	/**
-	 * @see org.xbrlapi.data.Store#getFragment(String)
+	 * @see org.xbrlapi.data.Store#getXMLResource(String)
 	 */
-     public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
+     public synchronized <F extends XML> F getXMLResource(String index) throws XBRLException {
         XmlDocument xmlDocument = null;
         Document document = null;
 	    try {
@@ -456,10 +452,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
 	/**
      * TODO Make sure that queries finding a node within a fragment return the fragment itself.
-	 * @see org.xbrlapi.data.Store#queryForFragments(String)
+	 * @see org.xbrlapi.data.Store#queryForXMLResources(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends XML> List<F> queryForFragments(String query) throws XBRLException {
+	public synchronized <F extends XML> List<F> queryForXMLResources(String query) throws XBRLException {
 
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
@@ -502,6 +498,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public synchronized Set<String> queryForIndices(String query) throws XBRLException {
 
+        query = "for $fragment in " + query + " return string($fragment/@index)";
+        
         XmlResults xmlResults = null;
         XmlValue xmlValue = null;
         try {
@@ -509,18 +507,21 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             try {
                 xmlResults = runQuery(query);
                 xmlValue = xmlResults.next();
-                Map<String,String> indices = new HashMap<String,String>();
-                String regex = "<xbrlapi:fragment.*? index=\"(\\w+)\".*?>";
+                Set<String> indices = new HashSet<String>();
+/*                String regex = "<xbrlapi:fragment.*? index=\"(\\w+)\".*?>";
                 Pattern pattern = Pattern.compile(regex,Pattern.DOTALL);
+*/                
                 while (xmlValue != null) {
-                    Matcher matcher = pattern.matcher(xmlValue.asString());
+/*                  Matcher matcher = pattern.matcher(xmlValue.asString());
                     matcher.matches();
                     String index = matcher.group(1);
-                    indices.put(index,null);
-                    xmlValue.delete();
+*/
+                    indices.add(xmlValue.asString());
+/*                    indices.put(index,null);
+*/                    xmlValue.delete();
                     xmlValue = xmlResults.next();
                 }
-                return indices.keySet();
+                return indices;
     
             } catch (XmlException e) {
                 throw new XBRLException("Failed query: " + query,e);
@@ -550,7 +551,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
                 xmlValue = xmlResults.next();
                 Set<String> strings = new TreeSet<String>();
                 while (xmlValue != null) {
-                    strings.add(xmlValue.getNodeValue());
+                    if (xmlValue.isNode())
+                        strings.add(xmlValue.getNodeValue());
+                    else if (xmlValue.isString())
+                        strings.add(xmlValue.asString());
                     xmlValue.delete();
                     xmlValue = xmlResults.next();
                 }
@@ -689,10 +693,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     }
 
     /**
-     * @see org.xbrlapi.data.Store#getStoredURIs()
+     * @see org.xbrlapi.data.Store#getDocumentURIs()
      */
     @Override
-    public Set<URI> getStoredURIs() throws XBRLException {
+    public Set<URI> getDocumentURIs() throws XBRLException {
         
         String query = "#roots#[@parentIndex='']/@uri";
         

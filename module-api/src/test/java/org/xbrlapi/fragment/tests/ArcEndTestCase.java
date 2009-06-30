@@ -50,7 +50,7 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 
 		// Case where one exists
 		try {
-			List<Locator> locators = store.<Locator>getFragments("Locator");
+			List<Locator> locators = store.<Locator>getXMLs("Locator");
 			boolean gotParent = false;
             boolean gotChild = false;
 			for (Locator locator: locators) {
@@ -74,7 +74,7 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 
 		// Case where one exists
 		try {
-			List<Locator> locators = store.<Locator>getFragments("Locator");
+			List<Locator> locators = store.<Locator>getXMLs("Locator");
             boolean gotRole = false;
             for (Locator locator: locators) {
                 if (locator.getRole() != null) {
@@ -96,7 +96,7 @@ public class ArcEndTestCase extends DOMLoadingTestCase {
 
 		// Case where one exists
 		try {
-			List<Locator> locators = store.<Locator>getFragments("Locator");
+			List<Locator> locators = store.<Locator>getXMLs("Locator");
             boolean gotArcEndId = false;
             for (Locator locator: locators) {
                 if (locator.getArcEndId() != null) {

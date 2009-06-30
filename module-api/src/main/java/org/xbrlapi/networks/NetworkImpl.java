@@ -121,7 +121,7 @@ public class NetworkImpl implements Network {
 		Fragment fragment = fragments.get(index);
 		if (fragment == null) {
 			if (getStore()== null) return null;
-			fragment = getStore().getFragment(index);
+			fragment = getStore().getXMLResource(index);
 			fragments.put(index,fragment);
 		}
 		return fragment;

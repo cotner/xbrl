@@ -29,7 +29,7 @@ public class LanguageTestCase extends DOMLoadingTestCase {
 	public void testLanguagePropertyAccessors() {
 
 		try {
-			List<Language> fragments = store.<Language>getFragments("Language");
+			List<Language> fragments = store.<Language>getXMLs("Language");
 			Language fragment = fragments.get(0);
 			assertEquals("Afar", fragment.getName());
 			assertEquals("aa", fragment.getCode());

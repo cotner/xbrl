@@ -5,22 +5,28 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import org.xbrlapi.Match;
 import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
+import org.xbrlapi.loader.Loader;
+import org.xbrlapi.utilities.Constants;
 
 /**
- * Use this unit test to persist all relationships in the data store.
+ * Use this unit test to analyse the matched documents.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ListStoredDocuments extends BaseTestCase {
+public class AnalyseMatchedDocuments extends BaseTestCase {
     
-    public ListStoredDocuments(String arg0) {
+    public AnalyseMatchedDocuments(String arg0) {
         super(arg0);
     }
 
     private List<URI> resources = new Vector<URI>();
     
+    Loader secondLoader = null;
+    
     protected void setUp() throws Exception {
         super.setUp();
+
     }
 
     protected void tearDown() throws Exception {
@@ -30,16 +36,19 @@ public class ListStoredDocuments extends BaseTestCase {
         }
     }   
     
-    public void testListStoredDocuments() {
+    public void testAnalyseDuplicateDocument() {
         try {
 
-
             Set<URI> uris = store.getDocumentURIs();
-            for (URI uri: uris) {
-                logger.info(uri);
-            }
-            logger.info("# documents = " + uris.size());
+            logger.info("# Documents = " + uris.size());
             
+            List<Match> matches = store.<Match>getXMLs("Match");
+            logger.info("# matches = " + matches.size());
+            for (Match match: matches) {
+                if (match.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match").getLength() > 1)
+                    match.serialize();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             fail("An unexpected exception was thrown.");

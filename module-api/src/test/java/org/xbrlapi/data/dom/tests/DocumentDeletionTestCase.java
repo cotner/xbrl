@@ -26,7 +26,7 @@ public class DocumentDeletionTestCase extends BaseTestCase {
 	public void testDeleteSingleDocument() {
 		try {
 			store.deleteDocument(this.getURI(STARTING_POINT));
-			assertFalse(store.getStoredURIs().contains(this.getURI(STARTING_POINT)));
+			assertFalse(store.getDocumentURIs().contains(this.getURI(STARTING_POINT)));
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -35,10 +35,10 @@ public class DocumentDeletionTestCase extends BaseTestCase {
 
 	public void testDeleteRelatedDocuments() {
 		try {
-			int initialSize = store.getStoredURIs().size();
+			int initialSize = store.getDocumentURIs().size();
 			store.deleteRelatedDocuments(this.getURI(STARTING_POINT));
-			assertFalse(store.getStoredURIs().contains(this.getURI(STARTING_POINT)));
-			assertEquals(initialSize-3,store.getStoredURIs().size());
+			assertFalse(store.getDocumentURIs().contains(this.getURI(STARTING_POINT)));
+			assertEquals(initialSize-3,store.getDocumentURIs().size());
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail(e.getMessage());

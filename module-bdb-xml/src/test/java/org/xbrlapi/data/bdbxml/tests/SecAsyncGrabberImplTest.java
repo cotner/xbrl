@@ -38,7 +38,7 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
 
             while (t1.isAlive()) {
                 Thread.sleep(2000);
-                if (store.getStoredURIs().size()>10)
+                if (store.getDocumentURIs().size()>10)
                     loader.requestInterrupt();
             }
             

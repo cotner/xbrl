@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.cache.CacheImpl;
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
@@ -57,13 +57,13 @@ public interface Loader {
 	 * loader can then be sought in the cache by the entity resolver.
 	 * @param cache The cache to use in the loader
 	 */
-	public void setCache(CacheImpl cache);
+	public void setCache(Cache cache);
 	
 	/**
 	 * @return The cache to be used by the loader.
 	 * @throws XBRLException if the cache is null.
 	 */
-	public CacheImpl getCache() throws XBRLException;
+	public Cache getCache() throws XBRLException;
 	
 
 	

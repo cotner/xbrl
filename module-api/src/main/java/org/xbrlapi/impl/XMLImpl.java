@@ -342,7 +342,7 @@ public class XMLImpl implements XML {
     public void updateInStore() throws XBRLException {
         Store store = this.getStore();
         if (store == null) return;
-        if (store.hasXML(this.getIndex())) {
+        if (store.hasXMLResource(this.getIndex())) {
             store.remove(this.getIndex());
         }
         store.persist(this);

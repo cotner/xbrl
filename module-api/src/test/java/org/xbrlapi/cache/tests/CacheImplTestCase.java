@@ -7,6 +7,7 @@ package org.xbrlapi.cache.tests;
 import java.io.File;
 import java.net.URI;
 
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.utilities.BaseTestCase;
 
@@ -49,7 +50,7 @@ public class CacheImplTestCase extends BaseTestCase {
 		try {
 
             logger.info("Original URI: " + originalURI);
-			CacheImpl cache = new CacheImpl(new File(cacheRoot));
+			Cache cache = new CacheImpl(new File(cacheRoot));
 			assertFalse(cache.isCacheURI(originalURI));
 			File cacheFile = cache.getCacheFile(originalURI);
 			assertNotNull(cacheFile);

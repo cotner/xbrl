@@ -37,6 +37,16 @@ public interface Cache {
      * or if a cache file cannot be translated into a URI.
      */
     public abstract URI getOriginalURI(URI uri) throws XBRLException;
+    
+    /**
+     * @param file The file to be translated into an original URI (if necessary).
+     * @return the original (non-cache) URI corresponding to the provided file.
+     * If the file is not a cache file then the returned URI is just a URI version of the
+     * file.  Otherwise, the original URI is derived from the file.
+     * @throws XBRLException if a caching operation fails 
+     * or if a cache file cannot be translated into a URI.
+     */
+    public abstract URI getOriginalURI(File file) throws XBRLException;    
 
     /**
      * Gets the cache file for an original URI.

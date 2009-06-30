@@ -36,7 +36,7 @@ public class FactTestCase extends DOMLoadingTestCase {
 	public void testGetInstance() {
 
 		try {
-			List<SimpleNumericItem> fragments = store.<SimpleNumericItem>getFragments("SimpleNumericItem");
+			List<SimpleNumericItem> fragments = store.<SimpleNumericItem>getXMLs("SimpleNumericItem");
 			Fact fragment = fragments.get(0);
 			assertEquals("xbrl", fragment.getInstance().getLocalname());
 		} catch (Exception e) {
@@ -52,10 +52,10 @@ public class FactTestCase extends DOMLoadingTestCase {
 	public void testGetTuple() {
 
 		try {
-			List<Fact> fragments = store.<Fact>getFragments("SimpleNumericItem");
+			List<Fact> fragments = store.<Fact>getXMLs("SimpleNumericItem");
 			Fact fragment = fragments.get(0);
 			assertEquals("org.xbrlapi.impl.TupleImpl", fragment.getTuple().getType());
-			fragments = store.getFragments("Tuple");
+			fragments = store.getXMLs("Tuple");
 			assertEquals(4,fragments.size());
 			for (int i=0; i<fragments.size();i++) {
 				fragment = fragments.get(i);
@@ -75,7 +75,7 @@ public class FactTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetConcept() {
 		try {
-			List<Fact> fragments = store.<Fact>getFragments("SimpleNumericItem");
+			List<Fact> fragments = store.<Fact>getXMLs("SimpleNumericItem");
 			for (int i=0; i< fragments.size(); i++) {
 				Fact fact = fragments.get(i);
 				if (fact.getLocalname().equals("managementAge")) {

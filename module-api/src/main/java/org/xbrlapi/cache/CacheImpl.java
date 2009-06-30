@@ -152,7 +152,7 @@ public class CacheImpl implements Cache {
      */
     public URI getOriginalURI(URI uri) throws XBRLException {
     	
-    	logger.debug("About to get the original URI for " + uri);
+    	logger.debug("Getting original URI for " + uri);
     	
     	// Just return the URI if it is not a cache URI
     	if (! isCacheURI(uri)) {
@@ -217,6 +217,90 @@ public class CacheImpl implements Cache {
 		}
 
     }
+    
+    /**
+     * @param file The file to test.
+     * @return true if the file is in the cache and false otherwise.
+     */
+    private boolean isCacheFile(File file) {
+        File parent = file;
+        while (parent != null) {
+            if (parent.equals(this.cacheRoot)) {
+                return true;
+            }
+            parent = parent.getParentFile();
+        }
+        return false;
+    }
+    
+    /**
+     * @see org.xbrlapi.cache.Cache#getOriginalURI(File)
+     */
+    public URI getOriginalURI(File file) throws XBRLException {
+        
+        logger.debug("Getting original URI for " + file);
+        
+        // Just return the URI version of the file if it is not a cache file
+        if (! isCacheFile(file)) {
+            return file.toURI();
+        }
+
+        String data = "";
+        try {
+            data = file.getCanonicalPath();
+        } catch (IOException e) {
+            throw new XBRLException("Canonical path could not be obtained from the URI.",e);
+        }
+
+        // Eliminate the cacheRoot part of the path
+        try {
+            data = data.replace(cacheRoot.getCanonicalPath().toString().substring(1),"").substring(2);
+        } catch (IOException e) {
+            throw new XBRLException("The original URI could not be determined for " + file);
+        }
+        
+        List<String> parts = new Vector<String>();
+        logger.debug(data);
+        StringTokenizer tokenizer = new StringTokenizer(data, File.separator);
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if (token != null)
+                if (! token.equals("")) {
+                    logger.debug(token);
+                    parts.add(token);
+                }
+        }
+        
+        String scheme = parts.get(0);
+        if (scheme.equals("null")) scheme = null;
+        String user = parts.get(1);
+        if (user.equals("null")) user = null;
+        String host = parts.get(2);
+        if (host.equals("null")) host = null;
+        int port = new Integer(parts.get(3)).intValue();
+        String query = parts.get(4);
+        if (query.equals("null")) query = null;
+        String fragment = parts.get(5);
+        if (fragment.equals("null")) fragment = null;
+
+        String path = "";
+        for (int i=6; i<parts.size(); i++) {
+            if (i == 6)
+                if (File.separator.matches("\\\\"))
+                    if (parts.get(i).matches("\\w_drive"))
+                        parts.set(i,parts.get(i).substring(0,0) + ":");          
+            path += "/" + parts.get(i);
+        }
+
+        try {
+            URI originalURI = new URI(scheme, user,host, port, path,query,fragment);
+            logger.debug("Got the original URI " + originalURI);
+            return originalURI;
+        } catch (URISyntaxException e) {
+            throw new XBRLException("Malformed original URI.",e);
+        }
+
+    }    
     
     /**
      * @see org.xbrlapi.cache.Cache#getCacheFile(java.net.URI)
@@ -341,6 +425,13 @@ public class CacheImpl implements Cache {
 		File file = this.getCacheFile(uri);
 		file.delete();
         logger.debug("Purged " + file);
+    }
+    
+    /**
+     * @return the root directory containing the cache.
+     */
+    public File getCacheRoot() {
+        return this.cacheRoot;
     }
     
 }

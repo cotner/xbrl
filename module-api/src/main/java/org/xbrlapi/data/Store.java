@@ -73,16 +73,16 @@ public interface Store {
      * fragment index.
      * @throws XBRLException If the test cannot be conducted.
      */
-    public boolean hasXML(String index) throws XBRLException;
+    public boolean hasXMLResource(String index) throws XBRLException;
     
     /**
-     * Retrieves a fragment from a data store.
+     * Retrieves an XML Resource from a data store.
      * Implementations of this method must be synchronized.
-     * @param index The index of the fragment.
-     * @return The fragment corresponding to the specified index.
-     * @throws XBRLException if the fragment cannot be retrieved.
+     * @param index The index of the XML resource.
+     * @return The XML resource corresponding to the specified index.
+     * @throws XBRLException if the XML resource cannot be retrieved.
      */
-    public <F extends XML> F getFragment(String index) throws XBRLException;
+    public <F extends XML> F getXMLResource(String index) throws XBRLException;
 
 	/**
 	 * Remove a fragment from the underlying data structure.
@@ -95,13 +95,13 @@ public interface Store {
 	public void remove(String index) throws XBRLException;
 	
     /**
-     * Remove a fragment from the underlying data structure.
-     * If a fragment with the same ID does not already exist in the 
+     * Remove a XML resource from the underlying data structure.
+     * If a XML resource with the same ID does not already exist in the 
      * data store then no action is required.
-     * @param fragment The fragment to remove.
-     * @throws XBRLException if the fragment cannot be removed from the store.
+     * @param xml The XML resource to remove.
+     * @throws XBRLException if the XML resource cannot be removed from the store.
      */
-    public void remove(XML fragment) throws XBRLException;	
+    public void remove(XML xml) throws XBRLException;	
 	
 	/**
 	 * @param namespace The namespace to bind a prefix to for querying
@@ -139,7 +139,7 @@ public interface Store {
 	 * exist.
 	 * @throws XBRLException if the query cannot be executed.
 	 */
-	public <F extends XML> List<F> queryForFragments(String query) throws XBRLException;
+	public <F extends XML> List<F> queryForXMLResources(String query) throws XBRLException;
 
     /**
      * Run a query against the collection of all fragments in the store.
@@ -149,7 +149,9 @@ public interface Store {
      * be a marker for the root elements of the fragments in an XML database collection 
      * and it will be substituted with the necessary
      * expression to identify those roots in the data store.
-     * @return a set of the indices of fragments matching 
+     * The query <strong>MUST</strong> return a sequence of XML resource metadata root elements
+     * matching the query.  Otherwise, results from the query will be unpredictable.
+     * @return a set of the indices of XML resources matching 
      * the query.
      * @throws XBRLException if the query cannot be executed.
      */
@@ -334,7 +336,7 @@ public interface Store {
      * @return a list of the URIs in the data store.
      * @throws XBRLException if the list cannot be constructed.
      */
-    public Set<URI> getStoredURIs() throws XBRLException;
+    public Set<URI> getDocumentURIs() throws XBRLException;
     
     /**
      * Test if a particular URI is already in the data store.
@@ -394,8 +396,8 @@ public interface Store {
     public void removeStub(String uri) throws XBRLException;
 
     /**
-     * Utility method to return a list of fragments in a data store
-     * that have a type corresponding to the specified fragment interface name.
+     * Return a list of XML resources in a data store
+     * that have a type corresponding to the specified XML resource interface name.
      * @param interfaceName The name of the interface.  EG: If a list of
      *  org.xbrlapi.impl.ReferenceArcImpl fragments is required then
      *  this parameter would have a value of "ReferenceArc".
@@ -403,10 +405,10 @@ public interface Store {
      *  as the value for the fragment type, enabling fragment extensions to exploit this
      *  method without placing fragment implementations in the org.xbrlapi package.
      *  
-     * @return a list of fragments with the given fragment type.
+     * @return a list of XML resources with the given fragment type.
      * @throws XBRLException
      */
-    public <F extends XML> List<F> getFragments(String interfaceName) throws XBRLException;
+    public <F extends XML> List<F> getXMLs(String interfaceName) throws XBRLException;
     
     /**
      * @param interfaceName The name of the interface.  EG: If a list of

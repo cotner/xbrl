@@ -34,7 +34,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 	 */
 	public void testGettingURIList() {
 		try {
-			Set<URI> uris = store.getStoredURIs();
+			Set<URI> uris = store.getDocumentURIs();
 			assertTrue(uris.size() > 0);
 			
 			boolean foundStartingPoint = false;

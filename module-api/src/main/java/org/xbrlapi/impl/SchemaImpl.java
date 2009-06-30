@@ -49,7 +49,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      */
     public List<SimpleLink> getImports() throws XBRLException {
     	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
-    	List<SimpleLink> links = getStore().<SimpleLink>queryForFragments(query);
+    	List<SimpleLink> links = getStore().<SimpleLink>queryForXMLResources(query);
     	List<SimpleLink> imports = new Vector<SimpleLink>();
     	for (SimpleLink link: links) {
         	if (link.getLocalname().equals("import") && link.getNamespace().equals(Constants.XMLSchemaNamespace)) {
@@ -64,7 +64,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      */
     public List<SimpleLink> getIncludes() throws XBRLException {
     	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
-    	List<SimpleLink> links = getStore().<SimpleLink>queryForFragments(query);
+    	List<SimpleLink> links = getStore().<SimpleLink>queryForXMLResources(query);
     	List<SimpleLink> includes = new Vector<SimpleLink>();
     	for (SimpleLink link: links) {
         	if (link.getLocalname().equals("include") && link.getNamespace().equals(Constants.XMLSchemaNamespace)) {
@@ -107,7 +107,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      */
     public Concept getConceptByName(String name) throws XBRLException {
     	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ConceptImpl' and @parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@name='" + name + "']";
-    	List<Concept> concepts = getStore().<Concept>queryForFragments(query);
+    	List<Concept> concepts = getStore().<Concept>queryForXMLResources(query);
     	if (concepts.size() == 0) return null;
     	if (concepts.size() > 1) throw new XBRLException("The concept name is not unique to the schema.");
     	return concepts.get(0);

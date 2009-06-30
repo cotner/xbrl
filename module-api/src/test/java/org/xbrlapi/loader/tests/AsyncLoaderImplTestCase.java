@@ -49,14 +49,14 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
                 Thread.sleep(100);
             }
             loader.storeDocumentsToAnalyse();
-            logger.info("# stored URIs = " + store.getStoredURIs().size());
-            assertTrue(store.getStoredURIs().size() < 14);
+            logger.info("# stored URIs = " + store.getDocumentURIs().size());
+            assertTrue(store.getDocumentURIs().size() < 14);
 			loader.discover();
-            logger.info("# stored URIs = " + store.getStoredURIs().size());
-            for (URI uri: store.getStoredURIs()) {
+            logger.info("# stored URIs = " + store.getDocumentURIs().size());
+            for (URI uri: store.getDocumentURIs()) {
                 logger.info(uri);
             }
-			assertTrue(store.getStoredURIs().size() > 14);
+			assertTrue(store.getDocumentURIs().size() > 14);
 		} catch (Exception e) {
 		    e.printStackTrace();
 			fail("Unexpected " + e.getMessage());

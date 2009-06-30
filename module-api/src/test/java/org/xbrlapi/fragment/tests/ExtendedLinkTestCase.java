@@ -1,6 +1,7 @@
 package org.xbrlapi.fragment.tests;
 
 import java.util.List;
+import java.util.Map;
 
 import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
@@ -39,7 +40,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetDocumentations() {
 		try {
-			List<Fragment> documentations = store.<Fragment>getFragments("XlinkDocumentation");
+			List<Fragment> documentations = store.<Fragment>getXMLs("XlinkDocumentation");
 			for (int i=0; i<documentations.size(); i++) {
 				Fragment documentation = documentations.get(0);
 				Fragment parent = documentation.getParent();
@@ -60,7 +61,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLocatorsByLabel() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getXMLs("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Locator> locators = link.getLocatorsWithLabel("summationItem");
 			assertEquals(1, locators.size());
@@ -77,7 +78,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcEndsByLabel() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getXMLs("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<ArcEnd> arcends = link.getArcEndsWithLabel("summationItem");
 			assertEquals(1, arcends.size());
@@ -87,14 +88,37 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-	}	
+	}
+	
+    /**
+     * Test getting the arc ends with a given label.
+     */
+    public void testGetArcEndIndicesByLabel() {
+        try {
+            List<ExtendedLink> links = store.<ExtendedLink>getXMLs("ExtendedLink");
+            ExtendedLink link = links.get(0);
+            Map<String,List<String>> map = link.getArcEndIndicesByLabel();
+            for (String label: map.keySet()) {
+                for (String index: map.get(label)) {
+                    logger.info(label + " " + index);
+                }
+            }
+            List<ArcEnd> arcends = link.getArcEndsWithLabel("summationItem");
+            assertEquals(1, arcends.size());
+            arcends = link.getArcEndsWithLabel("contributingItem");
+            assertEquals(2, arcends.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }	
 	
 	/**
 	 * Test getting the locators with a absolute Href.
 	 */
 	public void testGetLocatorsByHref() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getXMLs("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Locator> locators = link.getLocatorsWithHref(configuration.getProperty("test.data.baseURI") + "Common/instance/397-ABC.xsd#B");
 			assertEquals(1, locators.size());
@@ -109,7 +133,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcs() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getXMLs("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Arc> arcs = link.getArcs();		
 			assertEquals(1, arcs.size());
@@ -124,7 +148,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcsByFromLabel() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getXMLs("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Arc> arcs = link.getArcsWithFromLabel("summationItem");
 			assertEquals(1, arcs.size());
@@ -139,7 +163,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcsByToLabel() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getXMLs("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Arc> arcs = link.getArcsWithToLabel("contributingItem");
 			assertEquals(1, arcs.size());
@@ -154,7 +178,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLocators() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getXMLs("ExtendedLink");
 			ExtendedLink link = fragments.get(0);
 			List<Locator> locators = link.getLocators();		
 			assertEquals(3, locators.size());
@@ -169,7 +193,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetResources() {
 		try {
-			List<ExtendedLink> fragments = store.<ExtendedLink>getFragments("ExtendedLink");
+			List<ExtendedLink> fragments = store.<ExtendedLink>getXMLs("ExtendedLink");
 			ExtendedLink link = fragments.get(1);
 			List<Resource> resources = link.getResources();		
 			assertEquals(1, resources.size());
@@ -184,7 +208,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetResourcesByLabel() {
 		try {
-            List<ExtendedLink> links = store.<ExtendedLink>getFragments("ExtendedLink");
+            List<ExtendedLink> links = store.<ExtendedLink>getXMLs("ExtendedLink");
 		    for (ExtendedLink link: links) {
 		        List<Resource> resources = link.getResources();
 		        for (Resource resource: resources) {
@@ -195,6 +219,25 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-	}	
+	}
+
+    /**
+     * Test getting the locators in the extended link.
+     */
+    public void testGetLocatorTargetIndices() {
+    	try {
+    		List<ExtendedLink> links = store.<ExtendedLink>getXMLs("ExtendedLink");
+    		for (ExtendedLink link: links) {
+    		    Map<String,String> map = link.getLocatorTargetIndices();
+    		    for (String key: map.keySet()) {
+    		        logger.info(key + ": "+ map.get(key));
+    		        assertTrue(map.get(key).equals(((Locator)store.getXMLResource(key)).getTarget().getIndex()));
+    		    }
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		fail(e.getMessage());
+    	}
+    }	
 	
 }

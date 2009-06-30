@@ -211,7 +211,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		if (xml == null) throw new XBRLException("The fragment is null so it cannot be added.");
 		String index = xml.getIndex();
 		
-		if (hasXML(index)) {
+		if (hasXMLResource(index)) {
             this.remove(index);
         }
 
@@ -248,8 +248,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * fragment index.
      * @throws XBRLException If the test cannot be conducted.
      */
-	public synchronized boolean hasXML(String index) throws XBRLException {
-    	if (getFragment(index) == null) {
+	public synchronized boolean hasXMLResource(String index) throws XBRLException {
+    	if (getXMLResource(index) == null) {
     		return false;
     	}
     	return true;
@@ -264,7 +264,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * the fragment is not in the store.
      * @throws XBRLException if the fragment cannot be retrieved.
      */
-    public synchronized <F extends XML> F getFragment(String index) throws XBRLException {
+    public synchronized <F extends XML> F getXMLResource(String index) throws XBRLException {
     	try {
     		XMLResource resource = (XMLResource) collection.getResource(index);
     		if (resource == null) return null;
@@ -299,7 +299,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 */
     public synchronized void remove(String index) throws XBRLException {
         try {
-            if (!hasXML(index)) {
+            if (!hasXMLResource(index)) {
             	return;
             }
 
@@ -319,10 +319,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
 	
 	/**
-	 * @see org.xbrlapi.data.Store#queryForFragments(String)
+	 * @see org.xbrlapi.data.Store#queryForXMLResources(String)
 	 */
     @SuppressWarnings(value = "unchecked")
-	public synchronized <F extends XML> List<F> queryForFragments(String query) throws XBRLException {
+	public synchronized <F extends XML> List<F> queryForXMLResources(String query) throws XBRLException {
 		
         String roots = "/*" + this.getURIFilteringPredicate();
         query = query.replaceAll("#roots#",roots);

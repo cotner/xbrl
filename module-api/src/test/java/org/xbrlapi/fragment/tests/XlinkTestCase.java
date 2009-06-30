@@ -54,7 +54,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetXLinkType() {		
 		try {
-			List<Xlink> fragments = store.<Xlink>getFragments("Arc");
+			List<Xlink> fragments = store.<Xlink>getXMLs("Arc");
             assertTrue(fragments.size() > 0);
 			Xlink fragment = fragments.get(0);
 			assertEquals("arc", fragment.getXlinkType());
@@ -70,7 +70,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 
 		// Case where none exists
 		try {
-			List<Xlink> fragments = store.<Xlink>getFragments("Arc");
+			List<Xlink> fragments = store.<Xlink>getXMLs("Arc");
 			Xlink fragment = fragments.get(0);
 			assertNull(fragment.getTitleAttribute());
 		} catch (XBRLException e) {
@@ -80,7 +80,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			loader.discover(uri, document);
-			List<Xlink> fragments = store.<Xlink>queryForFragments("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:title");
+			List<Xlink> fragments = store.<Xlink>queryForXMLResources("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:title");
 			Xlink fragment = fragments.get(0);
 			assertEquals("stuff", fragment.getTitleAttribute());
 		} catch (Exception e) {
@@ -96,7 +96,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 
 		// Case where none exists
 		try {
-			List<Xlink> fragments = store.<Xlink>getFragments("Arc");
+			List<Xlink> fragments = store.<Xlink>getXMLs("Arc");
 			assertTrue(fragments.size() > 0);
 			Xlink fragment = fragments.get(0);
 			assertEquals(0,fragment.getTitleElements().size());
@@ -107,7 +107,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			loader.discover(uri, document);
-			List<Title> fragments = store.getFragments("Title");
+			List<Title> fragments = store.getXMLs("Title");
 			Fragment title = fragments.get(0);
 			Xlink fragment = (Xlink) title.getParent();
 			List<Title> titles = fragment.getTitleElements();

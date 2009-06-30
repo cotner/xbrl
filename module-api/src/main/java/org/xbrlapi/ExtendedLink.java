@@ -118,11 +118,18 @@ public interface ExtendedLink extends Link {
     public List<XlinkDocumentation> getDocumentations() throws XBRLException;
     
     /**
-     * @return A map, indexed by XLink type (title,locator, resource, arc) of the XLink arc ends
-     * in an extended link.  The children are represented by a map from label to lists of indexes 
-     * of the arc ends with a given label.
+     * @return A map, indexed by XLink label, of the XLink arc end indices
+     * in an extended link.
      * @throws XBRLException
      */
     public Map<String,List<String>> getArcEndIndicesByLabel() throws XBRLException;
+
+    /**
+     * @return a map of locator target indices indexed by the indices of the
+     * locators that target them.
+     * @throws XBRLException
+     */
+    public Map<String,String> getLocatorTargetIndices() throws XBRLException;
+    
     
 }

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import org.xbrlapi.cache.CacheImpl;
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -32,7 +32,7 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
      * resources to determine their signature.
      * @throws XBRLException if the cache parameter is null.
      */
-    public InMemoryMatcherImpl(CacheImpl cache) throws XBRLException {
+    public InMemoryMatcherImpl(Cache cache) throws XBRLException {
         super(cache,new MD5SignerImpl());
     }
 
@@ -41,7 +41,7 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
      */
     public URI getMatch(URI uri) throws XBRLException {
         String signature = this.getSignature(uri);
-        if (signature == null) return uri;
+        if (signature == null) throw new XBRLException("The signature could not be generated.");
         if (getMap().containsKey(signature)) {
             List<URI> matches = getMap().get(signature);
             if (! matches.contains(uri)) matches.add(uri);
@@ -52,6 +52,25 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
         }
         return getMap().get(signature).get(0);
     }
+    
+    /**
+     * @see org.xbrlapi.data.resource.Matcher#getAllMatchingURIs(java.net.URI)
+     */
+    public List<URI> getAllMatchingURIs(URI uri) throws XBRLException {
+
+        List<URI> result = new Vector<URI>();
+
+        String signature = this.getSignature(uri);
+
+        if (getMap().containsKey(signature)) {
+            List<URI> matches = getMap().get(signature);
+            return matches;
+        }
+
+        result.add(uri);
+        return result;
+
+    }    
     
     /**
      * @see Matcher#delete(URI)
@@ -71,6 +90,13 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
             return null;
         }
         return uris.get(0);
+    }
+
+    /**
+     * @see org.xbrlapi.data.resource.Matcher#hasURI(java.net.URI)
+     */
+    public boolean hasURI(URI uri) throws XBRLException {
+        return getMap().containsKey(getSignature(uri));
     }    
 
 }

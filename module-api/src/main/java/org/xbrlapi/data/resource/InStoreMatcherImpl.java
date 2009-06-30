@@ -1,11 +1,13 @@
 package org.xbrlapi.data.resource;
 
 import java.net.URI;
-import java.util.HashMap;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 import org.xbrlapi.Match;
-import org.xbrlapi.cache.CacheImpl;
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.MatchImpl;
 import org.xbrlapi.utilities.Constants;
@@ -37,7 +39,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
      * resources to determine their signature.
      * @throws XBRLException if the cache parameter is null.
      */
-    public InStoreMatcherImpl(Store store, CacheImpl cache) throws XBRLException {
+    public InStoreMatcherImpl(Store store, Cache cache) throws XBRLException {
         super(cache,new MD5SignerImpl());
         if (store == null) {
             throw new XBRLException("The store must not be null.");
@@ -46,93 +48,95 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
     }
 
 
-    /**
-     * The matches hashmap gets populated over time to 
-     * ensure that a match only has to be sought in the database
-     * once for each URI that is looked up.  This in-memory
-     * duplication should significantly improve search performance 
-     * over time as the matcher operates.
-     */
-    private HashMap<URI,URI> matchMap = new HashMap<URI,URI>();
+
     
     /**
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
     public URI getMatch(URI uri) throws XBRLException {
         
-        if (matchMap.containsKey(uri)) return matchMap.get(uri);
+        String query = "for $match in #roots#[@type='org.xbrlapi.impl.MatchImpl']/" + matchElement + " where $match/@value='"+ uri + "' return string($match/../" + matchElement + "[1]/@value)";
+        Set<String> matches = getStore().queryForStrings(query);
         
-        Match match = this.getMatchXML(uri);
-        
-        if (match != null) {
-            logger.debug("The match is not null.");
-        }
-        
-        if (match == null) {
-
-            String signature = null;
+        if (matches.size() == 1) { // We have already captured this URI in the matcher.
+            String matchURI = matches.iterator().next();
             try {
-                signature = this.getSignature(uri);
-            } catch (XBRLException e) {
-                logger.warn("The URI matching process failed. " + e.getMessage());
-                this.matchMap.put(uri,uri);
-                return uri;
+                return new URI(matchURI);
+            } catch (URISyntaxException e) {
+                throw new XBRLException("The matching URI syntax is invalid: " + matchURI);
             }
-            
-            if (getStore().hasXML(signature)) {
-                match = getStore().<Match>getFragment(signature);
-                match.setResourceURI(uri);
-                getStore().persist(match);
-                URI result = match.getMatch();
-                logger.debug(result);
-                return result;
-            } 
+        }
 
-            match = new MatchImpl(signature);
-            match.setResourceURI(uri);
+        if (matches.size() > 1) { // The matcher has two entries for this URI so we have a corruption.
+            throw new XBRLException("There is more than one matching URI for " + uri);
+        }
+
+        return addURI(uri); // This URI remains to be captured.
+
+    }
+    
+    /**
+     * @param uri The URI to add to the matcher system.
+     * @return the URI that matches the given URI, after the addition.
+     * @throws XBRLException
+     */
+    private URI addURI(URI uri) throws XBRLException {
+
+        String signature = this.getSignature(uri);
+
+        if (getStore().hasXMLResource(signature)) {
+            Match match = getStore().<Match>getXMLResource(signature);
+            match.addMatchedURI(uri);
             getStore().persist(match);
-            this.matchMap.put(uri,uri);
-            logger.debug(uri);
-            return uri;
+            return match.getMatch();
         } 
-
-        URI matchURI = match.getMatch();
-        this.matchMap.put(uri,matchURI);
-        logger.debug(matchURI);
-        return matchURI;
+        
+        Match match = new MatchImpl(signature);
+        match.addMatchedURI(uri);
+        getStore().persist(match);
+        return uri;
         
     }
+    
+    /**
+     * @see org.xbrlapi.data.resource.Matcher#getAllMatchingURIs(java.net.URI)
+     */
+    public List<URI> getAllMatchingURIs(URI uri) throws XBRLException {
+
+        Match match = this.getMatchXMLResource(uri);
+        if (match == null) return new Vector<URI>();
+        return match.getURIs();
+
+    }    
+    
+    private final String matchElement = Constants.XBRLAPIPrefix + ":match";
     
     /**
      * @see Matcher#delete(URI)
      */
     public URI delete(URI uri) throws XBRLException {
+        
         if (uri == null) throw new XBRLException("The URI must not be null.");
 
-        Match match = this.getMatchXML(uri);
+        Match match = this.getMatchXMLResource(uri);
         if (match == null) return null;
         match.deleteURI(uri);
-        
-        // Update the memory map
-        URI matchURI = match.getMatch();
-        if (matchURI != null) {
-            matchMap.remove(uri);
-            if (uri.equals(this.getMatch(uri))) {
-                for (URI key: matchMap.keySet()) {
-                    if (matchMap.get(key).equals(uri)) matchMap.put(key,matchURI);
-                }
-            }
-        }
-        
-        return matchURI;
+        return match.getMatch();
+
     }    
     
-    private Match getMatchXML(URI uri) throws XBRLException {
-        String query = "#roots#[@type='org.xbrlapi.impl.MatchImpl' and "+ Constants.XBRLAPIPrefix + ":match/@value='" + uri +"']";
-        List<Match> matches = getStore().<Match>queryForFragments(query);
+    private Match getMatchXMLResource(URI uri) throws XBRLException {
+        String query = "for $match in #roots#[@type='org.xbrlapi.impl.MatchImpl'] where $match/" + matchElement + "/@value='"+ uri + "' return $match";
+        List<Match> matches = getStore().<Match>queryForXMLResources(query);
         if (matches.size() > 1) throw new XBRLException("The wrong number of match fragments was retrieved.  There must be just one.");
         if (matches.size() == 0) return null;
         return matches.get(0);
+    }
+    /**
+     * @see org.xbrlapi.data.resource.Matcher#hasURI(java.net.URI)
+     */
+    public boolean hasURI(URI uri) throws XBRLException {
+        return (this.getMatchXMLResource(uri) == null);
     }
 
 }

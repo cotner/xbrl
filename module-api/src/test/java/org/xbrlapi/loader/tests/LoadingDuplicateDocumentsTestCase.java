@@ -30,11 +30,11 @@ public class LoadingDuplicateDocumentsTestCase extends BaseTestCase {
             logger.info(getURI(this.VALID_URI));
             
             loader.discover();
-            Set<URI> uris = store.getStoredURIs();
+            Set<URI> uris = store.getDocumentURIs();
             int first = uris.size();
 	        loader.stashURI(getURI(this.DUPLICATE_INSTANCE_URI));
             loader.discover();
-            uris = store.getStoredURIs();
+            uris = store.getDocumentURIs();
             int second = uris.size();
             
             for (URI uri: uris) {

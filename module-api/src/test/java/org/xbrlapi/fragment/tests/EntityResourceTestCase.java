@@ -35,7 +35,7 @@ public class EntityResourceTestCase extends DOMLoadingTestCase {
     public void testEntityResourceManipulations() {
         try {
             
-            List<Context> contexts = store.<Context>getFragments("Context");
+            List<Context> contexts = store.<Context>getXMLs("Context");
             assertTrue("There are two contexts.",contexts.size() == 2);
 
             for (Context context: contexts) {

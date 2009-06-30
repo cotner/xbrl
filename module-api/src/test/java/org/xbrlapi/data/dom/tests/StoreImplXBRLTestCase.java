@@ -127,7 +127,7 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
 			ArcroleType type = roleTypes.get(0);
 			assertTrue(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"presentationArc"));
 			assertFalse(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"calculationArc"));
-			List<Arc> arcs = store.getFragments("Arc");
+			List<Arc> arcs = store.getXMLs("Arc");
 			assertTrue(arcs.size() > 0);
 			for (Arc arc: arcs) {
 			    if (arc.getLocalname().equals("presentationArc"))
@@ -151,11 +151,11 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
 
         logger.info("Done with loading the data.");
         
-        List<Fragment> allFragments = store.queryForFragments("#roots#");
+        List<Fragment> allFragments = store.queryForXMLResources("#roots#");
 
         logger.info("Total number of fragments: " + allFragments.size());
         
-        Set<URI> allURIs = store.getStoredURIs();
+        Set<URI> allURIs = store.getDocumentURIs();
         logger.info("# URIs in store = " + allURIs.size());
         List<URI> uris = store.getMinimumDocumentSet(uri1);
         assertTrue(uris.size() > 1);
@@ -166,7 +166,7 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
         
         store.setFilteringURIs(uris);
         
-        List<Fragment> filteredFragments = store.queryForFragments("#roots#");
+        List<Fragment> filteredFragments = store.queryForXMLResources("#roots#");
 
         assertTrue(allFragments.size() > filteredFragments.size());        
         

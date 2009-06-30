@@ -83,7 +83,7 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
      */
     public List<Item> getReferencingItems() throws XBRLException {
         String query = "#roots#[@uri='" + this.getURI() + "' and */*/@contextRef='" + this.getId() + "']";
-        return getStore().<Item>queryForFragments(query);
+        return getStore().<Item>queryForXMLResources(query);
     }    
     
 }

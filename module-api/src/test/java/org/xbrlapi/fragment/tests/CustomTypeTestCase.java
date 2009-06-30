@@ -32,7 +32,7 @@ public class CustomTypeTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetCustomRoleTypeDefinition() {
         try {
-            List<CustomType> fragments = store.<CustomType>getFragments("RoleType");
+            List<CustomType> fragments = store.<CustomType>getXMLs("RoleType");
             assertTrue(fragments.size() > 0);
             for (CustomType fragment: fragments) {
                 if (fragment.getCustomURI().equals("http://mycompany.com/xbrl/roleE/newExtendedRoleType")) {
@@ -51,7 +51,7 @@ public class CustomTypeTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetCustomTypeId() {
         try {
-            List<CustomType> fragments = store.<CustomType>getFragments("RoleType");
+            List<CustomType> fragments = store.<CustomType>getXMLs("RoleType");
             assertTrue(fragments.size() > 0);
             for (CustomType fragment: fragments) {
                 if (fragment.getCustomURI().equals("http://mycompany.com/xbrl/roleE/newExtendedRoleType")) {
@@ -69,7 +69,7 @@ public class CustomTypeTestCase extends DOMLoadingTestCase {
 	public void testGetUsedOns() {
 
 		try {
-		    List<CustomType> types = store.<CustomType>getFragments("RoleType");
+		    List<CustomType> types = store.<CustomType>getXMLs("RoleType");
 		    for (CustomType type: types) {
 	            assertTrue(type.getUsedOns().size() > 0);
 		    }

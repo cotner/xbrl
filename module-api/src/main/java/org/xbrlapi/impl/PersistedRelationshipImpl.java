@@ -104,7 +104,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      * @see org.xbrlapi.PersistedRelationship#getArc()
      */
     public Arc getArc() throws XBRLException {
-        return (Arc) this.getStore().getFragment(getArcIndex());
+        return (Arc) this.getStore().getXMLResource(getArcIndex());
     }
     
     
@@ -208,7 +208,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      */
     @SuppressWarnings("unchecked")
     public <F extends Fragment> F getSource() throws XBRLException {
-        return (F) this.getStore().getFragment(getSourceIndex());
+        return (F) this.getStore().getXMLResource(getSourceIndex());
     }
 
     /**
@@ -266,7 +266,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      */
     @SuppressWarnings("unchecked")
     public <F extends Fragment> F getTarget() throws XBRLException {
-        return (F) this.getStore().getFragment(getTargetIndex());
+        return (F) this.getStore().getXMLResource(getTargetIndex());
     }
 
     /**

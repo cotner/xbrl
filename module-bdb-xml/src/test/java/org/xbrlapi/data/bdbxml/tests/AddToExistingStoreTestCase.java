@@ -41,12 +41,12 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 			
 			Loader secondLoader = createLoader(secondStore);
 
-			int count = secondStore.getStoredURIs().size();
+			int count = secondStore.getDocumentURIs().size();
 			assertTrue(count > 1);
 			
 			secondLoader.discover(this.getURI("test.data.small.instance"));
 
-			assertEquals(2,secondStore.getStoredURIs().size() - count);
+			assertEquals(2,secondStore.getDocumentURIs().size() - count);
 			
 			secondStore.close();
 			secondStore = null;

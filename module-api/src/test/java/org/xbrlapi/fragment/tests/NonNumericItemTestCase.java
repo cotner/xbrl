@@ -30,7 +30,7 @@ public class NonNumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetAllChildFacts() {
 		try {
-		    List<NonNumericItem> items = store.<NonNumericItem>getFragments("NonNumericItem");
+		    List<NonNumericItem> items = store.<NonNumericItem>getXMLs("NonNumericItem");
 		    assertTrue(items.size() > 0);
 		    for (NonNumericItem fact: items) {
 		        if (fact.getLocalname().equals("managementTitle") ) {

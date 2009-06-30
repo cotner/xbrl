@@ -40,9 +40,9 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testExceptionExpectedChangingTheFragmentStore() {
 		try {
-		    List<Fragment> fragments = store.<Fragment>getFragments("Schema");
+		    List<Fragment> fragments = store.<Fragment>getXMLs("Schema");
 		    for (Fragment fragment: fragments) {
-		        Fragment f = store.getFragment(fragment.getIndex());
+		        Fragment f = store.getXMLResource(fragment.getIndex());
 		        try {
 		            f.setStore(store);
 	                fail("The store for a fragment cannot be changed once it is set.");
@@ -61,7 +61,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetFragmentTypeForAStoredFragment() {
 
         try {
-            List<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            List<Fragment> fragments = store.<Fragment>getXMLs("Schema");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 assertEquals("org.xbrlapi.impl.SchemaImpl",fragment.getType());
@@ -91,7 +91,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetNamespaceOfAStoredFragmentWithANamespace() {
         try {
-            List<Schema> schemas = store.<Schema>getFragments("Schema");
+            List<Schema> schemas = store.<Schema>getXMLs("Schema");
             assertTrue(schemas.size() > 0);
             for (Fragment fragment: schemas) {
                 assertEquals(Constants.XMLSchemaNamespace,fragment.getNamespace().toString());
@@ -107,7 +107,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetLocalNameOfAStoredFragment() {
 
         try {
-            List<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            List<Fragment> fragments = store.<Fragment>getXMLs("Schema");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 assertEquals("schema",fragment.getLocalname());
@@ -126,7 +126,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetSequenceToParentElement() {
 
         try {
-            List<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            List<Fragment> fragments = store.<Fragment>getXMLs("Schema");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 List<Fragment> children = fragment.getAllChildren();
@@ -150,7 +150,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetChildSimpleLinks() {
 
 		try {
-			List<Schema> schemas = store.<Schema>getFragments("Schema");
+			List<Schema> schemas = store.<Schema>getXMLs("Schema");
 			for (Schema schema: schemas) {
 				if (schema.getURI().equals(this.getURI(STARTING_POINT))) {
 					List<SimpleLink> links = schema.getSimpleLinks();
@@ -171,7 +171,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetParentFragment() {
 
         try {
-            List<Fragment> fragments = store.<Fragment>getFragments("Schema");
+            List<Fragment> fragments = store.<Fragment>getXMLs("Schema");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 List<Fragment> children = fragment.getAllChildren();
@@ -191,7 +191,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	public void testGetXPathToParentElement() {
 	    
         try {
-            List<Schema> fragments = store.<Schema>queryForFragments("#roots#[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='']");
+            List<Schema> fragments = store.<Schema>queryForXMLResources("#roots#[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='']");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 List<Fragment> children = fragment.getAllChildren();
@@ -209,7 +209,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	 */
 	public void testGetParentElement() {
         try {
-            List<Schema> fragments = store.<Schema>queryForFragments("#roots#[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='']");
+            List<Schema> fragments = store.<Schema>queryForXMLResources("#roots#[@uri='" + this.getURI(STARTING_POINT) + "' and @parentIndex='']");
             assertTrue(fragments.size() > 0);
             for (Fragment fragment: fragments) {
                 List<Fragment> children = fragment.getAllChildren();

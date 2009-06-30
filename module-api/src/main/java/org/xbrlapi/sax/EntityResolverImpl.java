@@ -11,6 +11,7 @@ import org.apache.xerces.xni.XMLResourceIdentifier;
 import org.apache.xerces.xni.XNIException;
 import org.apache.xerces.xni.parser.XMLEntityResolver;
 import org.apache.xerces.xni.parser.XMLInputSource;
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.EntityResolver;
@@ -32,7 +33,7 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
     /**
      * The local document cache.
      */
-    private CacheImpl cache = null;
+    private Cache cache = null;
 
     /**
      * Construct the entity resolver without a cache.

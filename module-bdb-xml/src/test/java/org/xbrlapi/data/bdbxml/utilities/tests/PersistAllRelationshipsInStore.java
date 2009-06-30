@@ -42,12 +42,12 @@ public class PersistAllRelationshipsInStore extends BaseTestCase {
             // Set up the relationship persistence infrastructure.
             Storer storer = new StorerImpl(store);
             
-            Set<URI> uris = store.getStoredURIs();
+            Set<URI> uris = store.getDocumentURIs();
             logger.info("# documents = " + uris.size());
             int count = 1;
             for (URI uri: uris) {
                 storer.storeRelationships(uri);
-                if (count > 1) break;
+                if (count > 10) break;
                 count++;
             }
             

@@ -1,6 +1,7 @@
 package org.xbrlapi;
 
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -17,7 +18,7 @@ public interface Match extends NonFragmentXML {
      * @param uri The URI to add to the match XML resource.
      * @throws XBRLException if the URI is null.
      */
-    public void setResourceURI(URI uri) throws XBRLException;
+    public void addMatchedURI(URI uri) throws XBRLException;
     
     /**
      * @return the matching URI defined by this match resource or null
@@ -33,5 +34,13 @@ public interface Match extends NonFragmentXML {
      * @param uri The URI to eliminate from the match resource.
      * @throws XBRLException
      */
-    public void deleteURI(URI uri) throws XBRLException;    
+    public void deleteURI(URI uri) throws XBRLException;
+    
+    /**
+     * @return a list of all URIs matched through this match resource.
+     * @throws XBRLException
+     */
+    public List<URI> getURIs() throws XBRLException;
+    
+    
 }

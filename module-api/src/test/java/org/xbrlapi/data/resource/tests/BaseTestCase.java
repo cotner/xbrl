@@ -2,6 +2,7 @@ package org.xbrlapi.data.resource.tests;
 
 import java.io.File;
 
+import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.resource.Matcher;
 
@@ -12,7 +13,7 @@ import org.xbrlapi.data.resource.Matcher;
 public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
     
     protected Matcher matcher = null;
-    protected CacheImpl cache = null;
+    protected Cache cache = null;
 	protected String cacheLocation = configuration.getProperty("local.cache");
 
 	protected void setUp() throws Exception {

@@ -29,7 +29,7 @@ public abstract class LoadPerformanceTestCase extends BaseTestCase {
 	public void testLargerStore() {
 		try {
 
-			Set<URI> uris = store.getStoredURIs();
+			Set<URI> uris = store.getDocumentURIs();
 			assertTrue(uris.size() > 22);
 			
 		} catch (Exception e) {

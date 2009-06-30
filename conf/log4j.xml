@@ -16,6 +16,15 @@
         </layout>
     </appender>
 
+    <!-- File appender  -->
+    <appender name="file" class="org.apache.log4j.FileAppender">
+        <param name="File" value="log4j.log" />
+        <param name="Append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d [%t] %p - %m%n"/>
+        </layout>
+    </appender>
+
     <category name="xquery.profiling" additivity="false">
         <priority value="debug"/>
         <appender-ref ref="null"/>
@@ -35,6 +44,13 @@
         <priority value="info"/>
         <appender-ref ref="null"/>
     </category>
+
+    <category name="org.xbrlapi.data.bdbxml.utilities.tests.CacheMatcherTestCase" additivity="false">
+        <priority value="info"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+    </category>
+
 
     <root>
 	   <priority value="info"/>

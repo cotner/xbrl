@@ -44,9 +44,9 @@ public abstract class QueryTestCase extends TestCase {
     public final void testStubsRetrieval() throws Exception {
 
         String query = "#roots#[@type='org.xbrlapi.impl.StubImpl']";
-        List<Fragment> fragments = store.<Fragment>queryForFragments(query);
+        List<Fragment> fragments = store.<Fragment>queryForXMLResources(query);
         for (Fragment stub: fragments) {
-            List<Fragment> referrers = store.<Fragment>queryForFragments("#roots#[@targetDocumentURI='"+stub.getURI()+"']");
+            List<Fragment> referrers = store.<Fragment>queryForXMLResources("#roots#[@targetDocumentURI='"+stub.getURI()+"']");
             TreeMap<URI,String> map = new TreeMap<URI,String>();
             for (Fragment referrer: referrers) {
                 if (! map.containsKey(referrer.getURI())) {
@@ -57,7 +57,7 @@ public abstract class QueryTestCase extends TestCase {
             logger.info(stub.getMetadataRootElement().getAttribute("reason") + ": " + stub.getURI());
             logger.info("This document is referred to by:");
             for (URI uri: map.keySet()) {
-                List<Fragment> sources = store.<Fragment>queryForFragments("#roots#[@uri='"+ uri +"' and @targetDocumentURI='"+stub.getURI()+"']");
+                List<Fragment> sources = store.<Fragment>queryForXMLResources("#roots#[@uri='"+ uri +"' and @targetDocumentURI='"+stub.getURI()+"']");
                 logger.info(uri + " contains " + sources.size() + " references.");
                 //if (sources.size() > 0) store.serialize(sources.get(0));
             }
@@ -83,7 +83,7 @@ public abstract class QueryTestCase extends TestCase {
     }
 
     private void iterateURIs(String prefix, String suffix) throws Exception {
-        Set<URI> uris = store.getStoredURIs();
+        Set<URI> uris = store.getDocumentURIs();
         int count = 1;
         long cumulativeDuration = 0;
         URI_LOOP: for (URI uri : uris) {
@@ -102,7 +102,7 @@ public abstract class QueryTestCase extends TestCase {
     private long runQuery(String query) throws Exception {
         long start = System.currentTimeMillis();
         logger.info(query);
-        List<Fragment> fragments = store.<Fragment>queryForFragments(query);
+        List<Fragment> fragments = store.<Fragment>queryForXMLResources(query);
         long result = (System.currentTimeMillis() - start);
         assertTrue(fragments.size() == 1);
         return result;

@@ -31,7 +31,7 @@ public class IdentifierTestCase extends BaseTestCase {
 		try {
 			loader.stashURI(uri);
 			loader.discoverNext();
-			List<Concept> concepts = store.getFragments("Concept");;
+			List<Concept> concepts = store.getXMLs("Concept");;
 			for (Concept concept: concepts) {
 			    logger.info(concept.getName() + " " + concept.getTargetNamespace());
 			}

@@ -33,7 +33,7 @@ public class OpenContextComponentTestCase extends DOMLoadingTestCase {
 	public void testGetComplexContent() {
 
 		try {
-            List<Scenario> scenarios = store.getFragments("Scenario");
+            List<Scenario> scenarios = store.getXMLs("Scenario");
             assertTrue(scenarios.size() > 0);
             for (Scenario scenario: scenarios) {
                 NodeList children = scenario.getDataRootElement().getChildNodes();
@@ -51,7 +51,7 @@ public class OpenContextComponentTestCase extends DOMLoadingTestCase {
 	public void testGetCEquality() {
 
 		try {
-            List<Scenario> scenarios = store.getFragments("Scenario");
+            List<Scenario> scenarios = store.getXMLs("Scenario");
             assertTrue(scenarios.size() > 0);
             for (Scenario scenario: scenarios) {
                 assertTrue(scenario.equals(scenario));

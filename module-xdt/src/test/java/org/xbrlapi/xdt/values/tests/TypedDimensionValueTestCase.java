@@ -37,9 +37,9 @@ public class TypedDimensionValueTestCase extends BaseTestCase {
             DimensionValueAccessor dva = new DimensionValueAccessorImpl();
 
             loader.discover(this.getURI(STARTING_POINT));
-            List<TypedDimension> dimensions = store.<TypedDimension>getFragments("org.xbrlapi.xdt.TypedDimensionImpl");
+            List<TypedDimension> dimensions = store.<TypedDimension>getXMLs("org.xbrlapi.xdt.TypedDimensionImpl");
             assertTrue(dimensions.size() > 0);
-            List<Item> items = store.<Item>getFragments("NonNumericItem");
+            List<Item> items = store.<Item>getXMLs("NonNumericItem");
             assertTrue(items.size() > 0);
             
             boolean foundSomeValues = false;

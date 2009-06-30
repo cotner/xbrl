@@ -31,7 +31,7 @@ public class ArcSemanticKeyTestCase extends DOMLoadingTestCase {
 	public void testGetSemanticKeyIgnoringNSDeclaration() {	
 
 		try {
-			List<Arc> fragments = store.<Arc>getFragments("Arc");
+			List<Arc> fragments = store.<Arc>getXMLs("Arc");
 			Arc fragment = fragments.get(0);
 			String key = fragment.getSemanticKey();
 			logger.info(key);

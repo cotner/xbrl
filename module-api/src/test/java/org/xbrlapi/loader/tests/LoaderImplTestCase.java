@@ -134,7 +134,7 @@ public class LoaderImplTestCase extends BaseTestCase {
 			loader.stashURI(uri2);
 			loader.discover();
 			
-            Set<URI> uris = store.getStoredURIs();
+            Set<URI> uris = store.getDocumentURIs();
             assertTrue(uris.size() > 0);
             
             boolean found1 = false;
