@@ -294,13 +294,7 @@ public class AnalyserImpl implements Analyser {
         return this.getStore().<PersistedRelationship>queryForXMLResources(query);
     }
     
-    /**
-     * @see org.xbrlapi.networks.Analyser#getLabelRelationships(java.lang.String,java.lang.String)
-     */
-    public List<PersistedRelationship> getLabelRelationships(String sourceIndex, String language) throws XBRLException {
-        String query = "#roots#[not(@use) and @label and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<PersistedRelationship>queryForXMLResources(query);
-    }
+
 
     /**
      * @see org.xbrlapi.networks.Analyser#getLabelRelationshipsByLanguage(java.lang.String, java.lang.String)
@@ -395,13 +389,7 @@ public class AnalyserImpl implements Analyser {
         return this.getStore().<PersistedRelationship>queryForXMLResources(query);
     }
     
-    /**
-     * @see org.xbrlapi.networks.Analyser#getReferenceRelationships(java.lang.String,java.lang.String)
-     */
-    public List<PersistedRelationship> getReferenceRelationships(String sourceIndex, String language) throws XBRLException {
-        String query = "#roots#[not(@use) and @reference and @sourceIndex='"+ sourceIndex+"']";
-        return this.getStore().<PersistedRelationship>queryForXMLResources(query);
-    }
+
 
     /**
      * @see org.xbrlapi.networks.Analyser#getReferenceRelationshipsByLanguage(java.lang.String, java.lang.String)

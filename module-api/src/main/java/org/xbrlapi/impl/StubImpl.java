@@ -68,7 +68,7 @@ public class StubImpl extends XMLImpl implements Stub {
     }
     
     /**
-     * @see org.xbrlapi.Stub#setReason()
+     * @see org.xbrlapi.Stub#setReason(String)
      */
     public void setReason(String reason) throws XBRLException {
         if (reason == null) throw new XBRLException("The reason must not be null.");

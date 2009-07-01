@@ -125,7 +125,7 @@ public class StorerImpl implements Storer {
     }
 
     /**
-     * @see org.xbrlapi.networks.Storer#storeRelationships(List<URI>)
+     * @see org.xbrlapi.networks.Storer#storeRelationships(Collection)
      */
     public void storeRelationships(Collection<URI> documents) throws XBRLException {
         for (URI document: documents) {
@@ -301,9 +301,11 @@ public class StorerImpl implements Storer {
     }    
 
     /**
-     * @see Storer#markActiveRelationships(URI, URI)
+     * @param linkRole The link role of the relationships to mark.
+     * @param arcrole the arcrole  of the relationships to mark.
+     * @throws XBRLException
      */
-    public void markActiveRelationships(URI linkRole, URI arcrole)
+    private void markActiveRelationships(URI linkRole, URI arcrole)
             throws XBRLException {
         
         String query = "#roots#[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"']/@sourceIndex";

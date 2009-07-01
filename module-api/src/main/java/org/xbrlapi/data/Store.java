@@ -482,7 +482,7 @@ public interface Store {
      * arcrole is null then sources of relationships with any arcrole are returned.
      * @throws XBRLException
      */
-    public <F extends Fragment> List<F> getSources(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException;    
+    public <F extends Fragment> List<F> getSources(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;    
     
     /**
      * @param analyser The persisted network analyser
@@ -866,7 +866,7 @@ public interface Store {
     
     /**
      * Convenience method for a single fragment.
-     * @see XBRLStore#getMinimalNetworksWithArcrole(FragmentList,URI)
+     * @see Store#getMinimalNetworksWithArcrole(List,URI)
      */
     public Networks getMinimalNetworksWithArcrole(Fragment fragment, URI arcrole) throws XBRLException;
 
@@ -983,7 +983,7 @@ public interface Store {
      * rather than the persisted relationship fragments in the data store.
      * @throws XBRLException
      */
-    public SortedSet<Relationship> getActiveRelationshipsTo(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;
+    public SortedSet<Relationship> getActiveRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException;
     
     /**
      * @param targetIndex The target fragment index
@@ -996,7 +996,7 @@ public interface Store {
      * by the order attribute on the arcs expressing them.
      * @throws XBRLException
      */
-    public SortedSet<PersistedRelationship> getPersistedActiveRelationshipsTo(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;    
+    public SortedSet<PersistedRelationship> getPersistedActiveRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException;    
 
 
 

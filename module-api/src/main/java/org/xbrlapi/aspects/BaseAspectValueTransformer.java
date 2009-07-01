@@ -28,7 +28,7 @@ public class BaseAspectValueTransformer implements AspectValueTransformer {
 
     /**
      * @param value The aspect value to get the aspect ID from.
-     * @return
+     * @return the ID of the value
      */
     protected String getMapId(AspectValue value) {
         return idMap.get(value);

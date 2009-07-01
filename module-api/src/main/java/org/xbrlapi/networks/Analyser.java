@@ -180,7 +180,7 @@ public interface Analyser {
      * @param targetIndex The index of the fragment to get relationships to.
      * @param linkRole The link role constraining the set of
      * returned active relationships.
-     * @param arcrole The arcroles used to select the
+     * @param arcroles The arcroles used to select the
      * returned list of active relationships that have been
      * persisted in the data store.
      * @return A list of all active relationships that involve 
@@ -204,7 +204,7 @@ public interface Analyser {
 
     /**
      * @param targetIndex The index of the fragment to get relationships to.
-     * @param arcrole The arcroles used to select the
+     * @param arcroles The arcroles used to select the
      * returned list of active relationships that have been
      * persisted in the data store.
      * @return A list of all active relationships that involve 

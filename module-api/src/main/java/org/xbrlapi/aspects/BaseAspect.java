@@ -53,7 +53,7 @@ abstract public class BaseAspect implements Aspect {
     }
 
     /**
-     * @see org.xbrlapi.aspects.Aspect.size()
+     * @see org.xbrlapi.aspects.Aspect#size()
      */
     public int size() {
         return this.values.size();

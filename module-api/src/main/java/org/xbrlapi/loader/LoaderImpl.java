@@ -21,7 +21,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.cache.Cache;
-import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.networks.Storer;
 import org.xbrlapi.networks.StorerImpl;
@@ -103,7 +102,7 @@ public class LoaderImpl implements Loader {
     private Cache cache = null;
 
     /**
-     * @see org.xbrlapi.loader.Loader#setCache(CacheImpl)
+     * @see org.xbrlapi.loader.Loader#setCache(Cache)
      */
     public void setCache(Cache cache) {
         this.cache = cache;

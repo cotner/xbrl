@@ -55,7 +55,7 @@ public interface Loader {
 	 * is using the same local root folder as the cache used by the 
 	 * entityResolver.  This is because the documents cached by the 
 	 * loader can then be sought in the cache by the entity resolver.
-	 * @param cache The cache to use in the loader
+	 * @param cache The cache to use in the loader.
 	 */
 	public void setCache(Cache cache);
 	

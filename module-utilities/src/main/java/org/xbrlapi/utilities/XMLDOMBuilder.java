@@ -80,7 +80,7 @@ public class XMLDOMBuilder {
 	}
 
     /**
-     * @param URI The URI of a document to parse into a DOM object.
+     * @param uri The URI of a document to parse into a DOM object.
      * @return An XML DOM object for the given URI.
      * @throws XBRLException if the URI corresponds to a malformed URL.
      */

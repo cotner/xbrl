@@ -118,7 +118,7 @@ public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
     }
     
     /**
-     * @see org.xbrlapi.ExtendedLink#getResourcesByLabel(String)
+     * @see org.xbrlapi.ExtendedLink#getResourcesWithLabel(String)
      */
     public List<Resource> getResourcesWithLabel(String label) throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']/@xlink:label='" + label + "']";

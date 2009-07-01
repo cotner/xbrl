@@ -104,7 +104,7 @@ public interface Fragment extends XML {
      * parent fragment (after all other fragments have been carved out of it).
      * Note that the root element of the parent fragment is not part of the sequence
      * because that is always identified by a value of 1 - being an only child.
-     * @param fragment The parent fragment.
+     * @param parent The parent fragment.
      * @throws XBRLException
      */
     public void setSequenceToParentElement(Fragment parent) throws XBRLException;

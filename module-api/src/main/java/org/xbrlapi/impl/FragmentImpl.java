@@ -264,7 +264,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getReferencesWithLanguageAndResourceRole(String, URI)
+     * @see org.xbrlapi.Fragment#getReferencesWithLanguageAndResourceRoleAndLinkRole(String, URI, URI)
      */
     public List<ReferenceResource> getReferencesWithLanguageAndResourceRoleAndLinkRole(String language, URI resourceRole, URI linkRole) throws XBRLException {
         List<ReferenceResource> references = new Vector<ReferenceResource>();

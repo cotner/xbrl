@@ -1395,22 +1395,12 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         return this.<Language>queryForXMLResources(query);
     }
 
-    private Networks networks = null;
-    /**
-     * @see Store#getStoredNetworks()
-     */
-    public synchronized Networks getStoredNetworks() {
-        return networks;
-    }
 
 
 
-    /**
-     * @see Store#setStoredNetworks(org.xbrlapi.networks.Networks)
-     */
-    public synchronized void setStoredNetworks(Networks networks) {
-        this.networks = networks;
-    }
+
+
+
 
     /**
      * @see Store#queryForString(String)
@@ -1586,7 +1576,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.XBRLStore#getRoleTypes(URI)
+     * @see org.xbrlapi.data.Store#getRoleTypes(URI)
      */
     public List<RoleType> getRoleTypes(URI uri) throws XBRLException {
         String query = "#roots#["+ Constants.XBRLAPIPrefix+ ":" + "data/link:roleType/@roleURI='" + uri + "']";
@@ -1611,7 +1601,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.XBRLStore#getResourceRoles()
+     * @see org.xbrlapi.data.Store#getResourceRoles()
      */
     public List<URI> getResourceRoles() throws XBRLException {
         HashMap<URI,String> roles = new HashMap<URI,String>();
@@ -1627,7 +1617,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
 
     /**
-     * @see org.xbrlapi.data.XBRLStore#getMinimumDocumentSet(URI)
+     * @see org.xbrlapi.data.Store#getMinimumDocumentSet(URI)
      */
     public List<URI> getMinimumDocumentSet(URI uri) throws XBRLException {
         List<URI> starters = new Vector<URI>();
@@ -1636,7 +1626,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.XBRLStore#getMinimumDocumentSet(List)
+     * @see org.xbrlapi.data.Store#getMinimumDocumentSet(List)
      */
     public List<URI> getMinimumDocumentSet(List<URI> starters) throws XBRLException {
         
@@ -1669,7 +1659,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
  
     /**
-     * @see XBRLStore#getExtendedLinks(URI)
+     * @see Store#getExtendedLinks(URI)
      */
     public List<ExtendedLink> getExtendedLinks(URI linkrole) throws XBRLException {
         String query = "#roots#[*/*[@xlink:type='extended' and @xlink:role='" + linkrole + "']]";
@@ -1684,7 +1674,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
 
     /**
-     * @see XBRLStore#getMinimalNetworksWithArcrole(Fragment, URI)
+     * @see Store#getMinimalNetworksWithArcrole(Fragment, URI)
      */
     public Networks getMinimalNetworksWithArcrole(Fragment fragment, URI arcrole) throws XBRLException {
         List<Fragment> list = new Vector<Fragment>();
@@ -1693,7 +1683,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }    
     
     /**
-     * @see XBRLStore#getMinimalNetworksWithArcrole(FragmentList, URI)
+     * @see Store#getMinimalNetworksWithArcrole(List, URI)
      */
     public Networks getMinimalNetworksWithArcrole(List<Fragment> fragments, URI arcrole) throws XBRLException {
         
@@ -1734,7 +1724,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
 
     /**
-     * @see org.xbrlapi.data.XBRLStore#getArcroles()
+     * @see org.xbrlapi.data.Store#getArcroles()
      */
     public Set<URI> getArcroles() throws XBRLException {
         String query = "#roots#/*/*[@xlink:type='arc']/@xlink:arcrole";
@@ -1751,7 +1741,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
 
     /**
-     * @see org.xbrlapi.data.XBRLStore#getLinkRoles()
+     * @see org.xbrlapi.data.Store#getLinkRoles()
      */
     public Set<URI> getLinkRoles() throws XBRLException {
         String query = "#roots#[@type='org.xbrlapi.impl.ExtendedLinkImpl']/*/*/@xlink:role";
@@ -1768,7 +1758,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
 
     /**
-     * @see org.xbrlapi.data.XBRLStore#getLinkRoles(URI)
+     * @see org.xbrlapi.data.Store#getLinkRoles(URI)
      */
     public Set<URI> getLinkRoles(URI arcrole) throws XBRLException {
         
@@ -1783,7 +1773,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
     /**
-     * @see org.xbrlapi.data.XBRLStore#getArcroles(URI)
+     * @see org.xbrlapi.data.Store#getArcroles(URI)
      */
     public Set<URI> getArcroles(URI linkRole) throws XBRLException {
         
