@@ -1,7 +1,8 @@
 <project name="xlinkapi" default="dist" basedir=".">
 
   <property name="moduleName" value="xindice"/>
-  <property name="root" location="../.."/>
+  <property name="version" value="5.0"/>
+	<property name="root" location="../.."/>
   <property name="src" location="${root}/module-${moduleName}/src/main/java"/>
   <property name="srctest" location="${root}/module-${moduleName}/src/test/java"/>
   <property name="build" location="${root}/bin"/>

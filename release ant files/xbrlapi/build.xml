@@ -3,6 +3,7 @@
   	Build the XBRLAPI Release
   </description>
 
+  <property name="version" value="5.0"/>
 	<property name="root" location="../.."/>
 	<property name="build" location="${root}/bin"/>
 	<property name="dist"  location="${root}/dist"/>
@@ -17,7 +18,7 @@
 	<target name="dist" depends="doc" description="generate the executable JAR file." >
 		<tstamp/>
 		<jar  compress="yes" 
-    	jarfile="${dist}/xbrlapi-${DSTAMP}.jar"
+    	jarfile="${dist}/xbrlapi-${version}.jar"
     	manifest="${manifest}/MANIFEST.MF">
 			<fileset dir="${build}" includes="**/*"/>
 			<fileset dir="${root}" includes="module*/src/*/java/**/*"/>
@@ -26,7 +27,7 @@
 
 	 <target name="src" description="generate the source zip" >
 	    <tstamp/>
-	    <zip destfile="${dist}/xbrlapi-source-${DSTAMP}.zip">
+	    <zip destfile="${dist}/xbrlapi-source-${version}.zip">
 	      <fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
 	      <fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
 	    </zip>
@@ -60,7 +61,7 @@
 			
 		</javadoc>
 		<tstamp/>
-		<zip destfile="${dist}/xbrlapi-javadoc-${DSTAMP}.zip">
+		<zip destfile="${dist}/xbrlapi-javadoc-${version}.zip">
 			<fileset dir="${root}/docs/xbrlapi" includes="**/*"/>
 		</zip>
 	</target>

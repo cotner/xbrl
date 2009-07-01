@@ -1,6 +1,7 @@
 <project name="xlinkapi" default="dist" basedir=".">
 
   <property name="moduleName" value="api"/>
+  <property name="version" value="5.0"/>
   <property name="root" location="../.."/>
   <property name="src" location="${root}/module-${moduleName}/src/main/java"/>
   <property name="srctest" location="${root}/module-${moduleName}/src/test/java"/>
@@ -11,7 +12,7 @@
   <target name="dist" depends="src" description="generate the JAR" >
   	<tstamp/>
     <jar compress="yes" 
-    	jarfile="${dist}/xbrlapi-${moduleName}-${DSTAMP}.jar"
+    	jarfile="${dist}/xbrlapi-${moduleName}-${version}.jar"
     	manifest="${manifest}/MANIFEST.MF">
         <fileset dir="${build}">
         	<include name="**/*"/>
@@ -32,7 +33,7 @@
 
   <target name="src" description="generate the source archive" >
   	<tstamp/>
-    <zip destfile="${dist}/xbrlapi-${moduleName}-source-${DSTAMP}.zip">
+    <zip destfile="${dist}/xbrlapi-${moduleName}-source-${version}.zip">
         <fileset dir="${src}" includes="**/*"/>
         <fileset dir="${srctest}" includes="**/*"/>
     </zip>

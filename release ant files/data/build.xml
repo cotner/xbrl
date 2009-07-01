@@ -4,6 +4,7 @@
   </description>
 
 	<property name="root" location="../.."/>
+  <property name="version" value="5.0"/>
 	<property name="data" location="${root}/data"/>
   <property name="dist" location="${root}/dist"/>
 
@@ -15,7 +16,7 @@
 	
 	<target name="data" description="generate the data zip" >
 		<tstamp/>
-		<zip destfile="${dist}/xbrlapi-data-${DSTAMP}.zip">
+		<zip destfile="${dist}/xbrlapi-data-${version}.zip">
 			<fileset dir="${data}" includes="**/*.*" />
 		</zip>
 	</target>
