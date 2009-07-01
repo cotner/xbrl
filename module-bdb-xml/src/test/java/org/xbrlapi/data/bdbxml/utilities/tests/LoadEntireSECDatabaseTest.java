@@ -52,7 +52,6 @@ public class LoadEntireSECDatabaseTest extends BaseTestCase {
     public void testLoadingAllSECFilings() {
         try {   
 
-            
             int breakPoint = new Double(Math.floor(resources.size()/2)).intValue();
             loader.stashURIs(resources.subList(0,breakPoint));
             secondLoader.stashURIs(resources.subList(breakPoint+1,resources.size()-1));

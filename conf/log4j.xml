@@ -45,7 +45,7 @@
         <appender-ref ref="null"/>
     </category>
 
-    <category name="org.xbrlapi.data.bdbxml.utilities.tests.CacheMatcherTestCase" additivity="false">
+    <category name="org.xbrlapi.data.bdbxml.utilities.tests" additivity="false">
         <priority value="info"/>
         <appender-ref ref="console"/>
         <appender-ref ref="file"/>

@@ -47,9 +47,6 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
         setStore(store);
     }
 
-
-
-    
     /**
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
@@ -67,11 +64,11 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
             }
         }
 
-        if (matches.size() > 1) { // The matcher has two entries for this URI so we have a corruption.
-            throw new XBRLException("There is more than one matching URI for " + uri);
+        if (matches.size() == 0) { 
+            return addURI(uri); // This URI remains to be captured.
         }
 
-        return addURI(uri); // This URI remains to be captured.
+        throw new XBRLException("There is more than one matching URI for " + uri);
 
     }
     

@@ -76,7 +76,7 @@ import org.xbrlapi.utilities.XMLDOMBuilder;
 public abstract class BaseStoreImpl implements Store, Serializable {
 
 	protected static Logger logger = Logger.getLogger(BaseStoreImpl.class);
-	
+
     /**
      * The DOM document used to construct DOM representations
      * of subtrees of documents in the store.
@@ -505,8 +505,11 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public boolean hasDocument(URI uri) throws XBRLException {
         URI matchURI = getMatcher().getMatch(uri);
-        List<Fragment> rootFragments = this.<Fragment>queryForXMLResources("#roots#[@uri='" + matchURI + "' and @parentIndex='']");
-        return (rootFragments.size() > 0) ? true : false;
+        String query = "for $root in #roots# where $root/@uri='" + matchURI + "' and $root/@parentIndex='' return string($root/@index)";
+        Set<String> rootIndices = queryForStrings(query);
+        if (rootIndices.size() == 1) return true;
+        if (rootIndices.size() == 0) return false;
+        throw new XBRLException("There are two root fragments in the store for " + uri);
     }
 
     

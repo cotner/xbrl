@@ -469,7 +469,6 @@ public class LoaderImpl implements Loader {
         }
         
         URI uri = getNextDocumentToExplore();
-        logger.debug("Next is " + uri);
         DOCUMENTS: while (uri != null) {
 
             long start = System.currentTimeMillis();
@@ -573,7 +572,7 @@ public class LoaderImpl implements Loader {
             }
         }
 
-        logger.info("Finished the discoverNext call for " + uri);
+        logger.info("Finished discovery of " + uri);
         this.storeDocumentsToAnalyse();
         
         setDiscovering(false);
@@ -738,14 +737,17 @@ public class LoaderImpl implements Loader {
         // Stash the URI if it has not already been stashed
         if (!successes.contains(dereferencedURI)) {
 
-            // Only stash if the document does not already have a match.
+            // Queue up the original URI - ignoring issues of whether it matches another document.
+            documentQueue.add(dereferencedURI);
+            
+/*            // Only stash if the document does not already have a match.
             URI matchURI = getStore().getMatcher().getMatch(dereferencedURI);
             if (matchURI.equals(dereferencedURI)) {
                 documentQueue.add(dereferencedURI);
             } else {
                 logger.debug("No need to stash " + dereferencedURI + " because it has match " + matchURI);
             }
-            
+*/
         }
 
     }
@@ -827,7 +829,9 @@ public class LoaderImpl implements Loader {
     public void storeDocumentsToAnalyse() throws XBRLException {
         Map<URI,String> map = new HashMap<URI,String>();
         for (URI document : documentQueue) {
-            map.put(document,"Document has not yet been analysed");
+            if (document.equals(getStore().getMatcher().getMatch(document))) {
+                map.put(document,"Document has not yet been analysed");
+            }
         }
         for (URI document : failures.keySet()) {
             map.put(document,failures.get(document));

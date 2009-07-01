@@ -383,22 +383,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         }
 	}
 	
-    /**
-     * Overrides the base implementation to avoid the overhead of creating the
-     * various fragment objects.
-     * @see org.xbrlapi.data.Store#hasDocument(URI)
-     */
-	public synchronized boolean hasDocument(URI uri) throws XBRLException {
-        XmlResults results = null;
-        try {
-            results = runQuery("#roots#[@uri='" + uri + "' and @parentIndex='']");
-            return (results.size() == 1); 
-        } catch (XmlException e) {
-            throw new XBRLException("The size of the result set for the query could not be determined.", e);
-        } finally {
-            if (results != null) results.delete();
-        }
-    }    	
+    	
 
 	/**
 	 * @see org.xbrlapi.data.Store#getXMLResource(String)
