@@ -2,6 +2,22 @@ Release details:
 
 The XBRLAPI examples module.
 
+Release 5.0
+July 31, 2009
+Backward incompatible release of the API involving fundamental
+changes to the query language.  The query language is now
+XQuery 1.0 rather than XPath 2.0.  This change has meant
+that the Xindice data store is no longer supported.
+The new release also provides mature relationship
+persistence features, enabling XLink relationships
+to be documented in the persisted database to 
+dramatically improve the performance of operations
+relying on the analysis of XLink relationship networks.
+A number of significant changes have also been made to
+function signatures in the API, reflecting the fact that
+data stores now contain considerably more information
+than just fragments of XBRL documents.
+
 Release 4.0
 January 7, 2009
 Backward incompatible release of the API involving changes

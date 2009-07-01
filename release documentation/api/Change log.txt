@@ -1,3 +1,8 @@
+30. June 2009
+Finalised a broad range of modifications to the relationship
+persistence code; document matching performance improvements; 0
+and the XPath 2.0 to XQuery 1.0 query language change.
+
 18 Mar. 2009
 Enabled the loader to augment persisted relationships upon
 successful completion of a document discovery process if the
