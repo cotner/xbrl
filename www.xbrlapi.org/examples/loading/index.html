@@ -24,7 +24,7 @@
 <div class="content">
 
 <h1>
-XBRLAPI data loading sample application
+XBRL instance loading example.
 </h1>
 
 <h2>
@@ -62,7 +62,9 @@ You can browse the <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/tr
 <ul>
    <li>  A Java 1.5 or later compatible virtual machine for your operating system.</li>
    <li>  Xerces 2.6.2 or later version jar file.</li>
-   <li>  Xalan 2.7.0 or later version jar file.</li>
+   <li>  Saxon 9.0 or later version jar file.</li>
+   <li>  Saxon DOM 9.0 or later version jar file.</li>
+   <li>  Saxon S9API 9.0 or later version jar file.</li>
    <li>  Log4j 1.2.15 or later version jar file.</li>
    <li>  XBRLAPI module-examples jar file.</li>
    <li>  XBRLAPI module-utilities jar file.</li>
@@ -113,6 +115,102 @@ the mandatory options are:
 <li>-database [the directory containing the Oracle Berkeley XML database]</li>
 <li>-container [the name of the database container in the Oracle Berkeley XML database]</li>
 <li>-cache [the directory containing the document cache]</li>
+</ul>
+
+
+<h1>
+SEC XBRL filings loading example.
+</h1>
+
+<h2>
+Author: Geoff Shuetrim (geoff at galexy.net)
+</h2>
+
+<h2>
+What is it?
+</h2>
+
+<p>
+  This is a Java sample application to demonstrate loading large data volumes into the data store.
+  It uses the SEC voluntary filing system for the example.  The documents are identified by the 
+  <a href="http://www.sec.gov/Archives/edgar/xbrlrss.xml">SEC RSS feed http://www.sec.gov/Archives/edgar/xbrlrss.xml</a>.
+</p>
+
+<h2>
+  Where is it?
+</h2>
+
+<p>
+  The home page for the XBRL API project can be found on the XBRLAPI 
+  project web site (http://www.xbrlapi.org/). There you also find 
+  information on how to download the latest release as well as all the other 
+  information you might need regarding this project.
+</p>
+
+<p>
+You can browse the <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/trunk/module-examples/src/main/java/org/xbrlapi/examples/loading/">source code in SVN</a>.
+</p>
+
+<h2>
+  Requirements
+</h2>
+
+<ul>
+   <li>  A Java 1.5 or later compatible virtual machine for your operating system.</li>
+   <li>  Xerces 2.6.2 or later version jar file.</li>
+   <li>  Saxon 9.0 or later version jar file.</li>
+   <li>  Saxon DOM 9.0 or later version jar file.</li>
+   <li>  Saxon S9API 9.0 or later version jar file.</li>
+   <li>  Log4j 1.2.15 or later version jar file.</li>
+   <li>  XBRLAPI module-examples jar file.</li>
+   <li>  XBRLAPI module-utilities jar file.</li>
+   <li>  XBRLAPI module-xmlbase jar file.</li>
+   <li>  XBRLAPI module-xlink jar file.</li>
+   <li>  XBRLAPI module-xpointer jar file.</li>
+   <li>  XBRLAPI module-api jar file.</li>
+</ul>
+
+<p>
+  You can download the required XBRLAPI JARs from 
+  <a href="http://sourceforge.net/project/showfiles.php?group_id=135539">Sourceforge</a>.  
+  You can get suggestions on necessary installation and configuration steps
+  from <a href="/">http://www.xbrlapi.org/</a>. 
+</p>
+
+<p>
+  You can get the other jar files from <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/trunk/java/lib/">the XBRLAPI SVN repository</a>.
+</p>
+
+<h2> 
+  Commandline Arguments:
+</h2>
+
+<h3>
+  Java Virtual Machine Parameters:
+</h3>
+
+<pre>  
+  -Dlog4j.configuration=&lt;location of log4j.properties&gt;
+  -classpath=&lt;java class paths&gt;
+</pre>
+
+<h3>
+  Program execution involves: 
+</h3>
+
+<pre>
+  java org.xbrlapi.examples.load.LoadAllSECFilings &lt;OPTIONS&gt; 
+</pre>
+
+<p>
+Where the mandatory options are:
+</p>
+
+<ul>
+<li>-database [the directory containing the Oracle Berkeley XML database]</li>
+<li>-container [the name of the database container in the Oracle Berkeley XML database]</li>
+<li>-cache [the directory containing the document cache]</li>
+<li>-threads [integer specifying the number of threads to use for loading the data]</li>
 </ul>
 
 <h2>

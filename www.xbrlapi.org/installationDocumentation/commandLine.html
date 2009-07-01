@@ -93,10 +93,28 @@ JAR files:</p>
 	<td>xbrlapi-utilities</td>
 </tr>
 <tr>
-	<td>xalan.jar</td>
-	<td>2.7.0</td>
-	<td>Xalan XSLT 1.0 and XPath 1.0 processor</td>
+	<td>saxon9.jar</td>
+	<td>9.1</td>
+	<td>Saxon 9.1 processor</td>
 	<td>xbrlapi-api</td>
+</tr>
+<tr>
+  <td>saxon9.jar</td>
+  <td>9.1</td>
+  <td>Saxon 9.1 processor</td>
+  <td>xbrlapi-api</td>
+</tr>
+<tr>
+  <td>saxon9-dom.jar</td>
+  <td>9.1</td>
+  <td>Saxon 9.1 processor - to enable operations on XML DOM structures</td>
+  <td>xbrlapi-api</td>
+</tr>
+<tr>
+  <td>saxon9-s9api.jar</td>
+  <td>9.1</td>
+  <td>Saxon 9.1 processor - to enable S9API XQuery operations</td>
+  <td>xbrlapi-api</td>
 </tr>
 <tr>
 	<td>exist-1.1.1.jar</td>
@@ -179,7 +197,7 @@ instance schema</a> using XBRLAPI. An appropriate command is:<br/>
 
 <p>Alternatively, if you are identifying the JAR files that you require using the -classpath parameter,
 then something more like the following will be appropriate:<br/>
-<code>java -classpath xerces.jar:xalan.jar:xml-apis.jar:junit.jar:log4j-1.2.13.jar:xbrlapi-api-YYYYMMDD.jar:xbrlapi-xpointer-YYYYMMDD.jar:xbrlapi-xmlbase-YYYYMMDD.jar:xbrlapi-xlink-YYYYMMDD.jar:xbrlapi-utilities-YYYYMMDD.jar \
+<code>java -classpath xerces.jar:saxon9.jar:saxon9-dom.jar:saxon9-s9api.jar:xml-apis.jar:junit.jar:log4j-1.2.13.jar:xbrlapi-api-YYYYMMDD.jar:xbrlapi-xpointer-YYYYMMDD.jar:xbrlapi-xmlbase-YYYYMMDD.jar:xbrlapi-xlink-YYYYMMDD.jar:xbrlapi-utilities-YYYYMMDD.jar \
 org.xbrlapi.Run -logger [LOG4J.CONFIG] -class org.xbrlapi.data.dom.Load -cache [CACHE.LOCATION] [URL]+ </code><br/>
 This of course, assumes that the necessary JAR files are all in the current directory.</p>
 
