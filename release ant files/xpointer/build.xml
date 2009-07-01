@@ -1,7 +1,7 @@
 <project name="xlinkapi" default="dist" basedir=".">
 
   <property name="moduleName" value="xpointer"/>
-  <property name="version" location="5.0"/>
+  <property name="version" value="5.0"/>
   <property name="root" location="../.."/>
   <property name="src" location="${root}/module-${moduleName}/src/main/java"/>
   <property name="srctest" location="${root}/module-${moduleName}/src/test/java"/>
@@ -19,7 +19,7 @@
 
   <target name="src" description="generate the source archive" >
   	<tstamp/>
-    <zip destfile="${dist}/xbrlapi-${moduleName}-source-${version}.zip">
+    <zip destfile="${dist}/xbrlapi-${moduleName}-${version}-source.zip">
         <fileset dir="${src}" includes="**/*"/>
         <fileset dir="${srctest}" includes="**/*"/>
     </zip>

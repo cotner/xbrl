@@ -33,7 +33,7 @@
 
   <target name="src" description="generate the source archive" >
   	<tstamp/>
-    <zip destfile="${dist}/xbrlapi-${moduleName}-source-${version}.zip">
+    <zip destfile="${dist}/xbrlapi-${moduleName}-${version}-source.zip">
         <fileset dir="${src}" includes="**/*"/>
         <fileset dir="${srctest}" includes="**/*"/>
     </zip>

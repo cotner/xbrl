@@ -27,7 +27,7 @@
 
 	 <target name="src" description="generate the source zip" >
 	    <tstamp/>
-	    <zip destfile="${dist}/xbrlapi-source-${version}.zip">
+	    <zip destfile="${dist}/xbrlapi-${version}-source.zip">
 	      <fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
 	      <fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
 	    </zip>
@@ -61,7 +61,7 @@
 			
 		</javadoc>
 		<tstamp/>
-		<zip destfile="${dist}/xbrlapi-javadoc-${version}.zip">
+		<zip destfile="${dist}/xbrlapi-${version}-javadoc.zip">
 			<fileset dir="${root}/docs/xbrlapi" includes="**/*"/>
 		</zip>
 	</target>

@@ -16,7 +16,7 @@
 	
 	<target name="data" description="generate the data zip" >
 		<tstamp/>
-		<zip destfile="${dist}/xbrlapi-data-${version}.zip">
+		<zip destfile="${dist}/xbrlapi-${version}-data.zip">
 			<fileset dir="${data}" includes="**/*.*" />
 		</zip>
 	</target>
