@@ -188,7 +188,7 @@ public class Load {
             System.err.println(message);
         }
         
-        System.err.println("Command line usage: java org.xbrlapi.ng.eg0001 -database VALUE -container VALUE -cache VALUE URI1 URI2 ...");
+        System.err.println("Command line usage: java org.xbrlapi.examples.load.Load -database VALUE -container VALUE -cache VALUE URI1 URI2 ...");
         System.err.println("Mandatory arguments: ");
         System.err.println(" -database VALUE   directory containing the Oracle BDB XML database");
         System.err.println(" -container VALUE  name of the data container");
