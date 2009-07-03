@@ -36,7 +36,7 @@ public class TupleTestCase extends DOMLoadingTestCase {
 	public void testGetAllChildFacts() {
 
 		try {
-	        List<Tuple> fragments = store.getXMLs("Tuple");
+	        List<Tuple> fragments = store.getXMLResources("Tuple");
 	        assertTrue(fragments.size() > 0);
 	        for (Tuple tuple: fragments) {
 	            assertEquals(tuple.getAllChildren().size(), tuple.getChildFacts().size());	            
@@ -55,7 +55,7 @@ public class TupleTestCase extends DOMLoadingTestCase {
 
 		try {
 
-		    List<Tuple> tuples = store.getXMLs("Tuple");
+		    List<Tuple> tuples = store.getXMLResources("Tuple");
             assertTrue(tuples.size() > 0);
             for (Tuple tuple: tuples) {
                 List<Fact> children = tuple.getChildFacts();

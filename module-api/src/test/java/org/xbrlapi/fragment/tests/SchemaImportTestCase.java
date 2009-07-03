@@ -34,7 +34,7 @@ public class SchemaImportTestCase extends DOMLoadingTestCase {
 	public void testGetTarget() {	
 
 		try {
-			List<SimpleLink> links = store.<SimpleLink>getXMLs("SimpleLink");
+			List<SimpleLink> links = store.<SimpleLink>getXMLResources("SimpleLink");
 			for (SimpleLink link: links) {
 				try {
 					Fragment target = link.getTarget();

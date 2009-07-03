@@ -15,7 +15,7 @@ import org.xbrlapi.loader.discoverer.Discoverer;
  * @author Geoff Shuetrim (geoff@galexy.net)
  *
  */
-public class LoadEntireSECDatabaseTest extends BaseTestCase {
+public abstract class LoadEntireSECDatabaseTest extends BaseTestCase {
     
     public LoadEntireSECDatabaseTest(String arg0) {
         super(arg0);

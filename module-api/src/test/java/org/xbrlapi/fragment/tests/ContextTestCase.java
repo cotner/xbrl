@@ -34,7 +34,7 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testGetEntity() {
 
 		try {
-		    List<Context> contexts = store.<Context>getXMLs("Context");
+		    List<Context> contexts = store.<Context>getXMLResources("Context");
 		    assertTrue(contexts.size() > 0);
 		    for (Context context: contexts) {
 	            assertEquals("org.xbrlapi.impl.EntityImpl", context.getEntity().getType());
@@ -50,7 +50,7 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testGetPeriod() {
 
 		try {
-            List<Context> contexts = store.<Context>getXMLs("Context");
+            List<Context> contexts = store.<Context>getXMLResources("Context");
             assertTrue(contexts.size() > 0);
             for (Context context: contexts) {
                 assertEquals("org.xbrlapi.impl.PeriodImpl", context.getPeriod().getType());
@@ -66,7 +66,7 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testGetScenario() {
 
 		try {
-            List<Context> contexts = store.<Context>getXMLs("Context");
+            List<Context> contexts = store.<Context>getXMLResources("Context");
             assertTrue(contexts.size() > 0);
             int scenarios = 0;
             for (Context context: contexts) {
@@ -92,7 +92,7 @@ public class ContextTestCase extends DOMLoadingTestCase {
 	public void testCEquality() {
 
 		try {
-			List<Context> fragments = store.getXMLs("Context");
+			List<Context> fragments = store.getXMLResources("Context");
 			Context fragment = fragments.get(0); 
 			Context other = fragments.get(0);
 			assertTrue(fragment.equals(other));

@@ -10,7 +10,7 @@ import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
  * data in a data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class DeleteSpecificDocument extends BaseTestCase {
+public abstract class DeleteSpecificDocument extends BaseTestCase {
     
     public DeleteSpecificDocument(String arg0) {
         super(arg0);

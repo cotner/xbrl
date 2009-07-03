@@ -34,7 +34,7 @@ public class ArcroleTypeTestCase extends DOMLoadingTestCase {
 	public void testGetCustomArcRoleCyclesAllowed() {
 
 		try {
-			List<ArcroleType> fragments = store.<ArcroleType>getXMLs("ArcroleType");
+			List<ArcroleType> fragments = store.<ArcroleType>getXMLResources("ArcroleType");
 			ArcroleType fragment = fragments.get(0); 
 			assertEquals("none", fragment.getCyclesAllowed());
 		} catch (Exception e) {

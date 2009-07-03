@@ -33,7 +33,7 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	public void testGetHref() {	
 
 		try {
-			List<Locator> fragments = store.<Locator>getXMLs("Locator");
+			List<Locator> fragments = store.<Locator>getXMLResources("Locator");
 			Locator fragment = fragments.get(0);
 			assertEquals("397-ABC.xsd#A", fragment.getHref());
 		} catch (Exception e) {
@@ -48,7 +48,7 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	public void testGetAbsoluteHref() {	
 
 		try {
-			List<Locator> fragments = store.<Locator>getXMLs("Locator");
+			List<Locator> fragments = store.<Locator>getXMLResources("Locator");
 			Locator fragment = fragments.get(0);
 			assertEquals(configuration.getProperty("test.data.baseURI") + "Common/instance/397-ABC.xsd#A", fragment.getAbsoluteHref().toString());
 		} catch (Exception e) {
@@ -63,7 +63,7 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	public void testGetTarget() {
 
 		try {
-			List<Locator> fragments = store.<Locator>getXMLs("Locator");
+			List<Locator> fragments = store.<Locator>getXMLResources("Locator");
 			Locator fragment = fragments.get(0);
 			Fragment target = fragment.getTarget();
 			assertEquals(fragment.getTargetDocumentURI().toString(), target.getURI().toString());
@@ -79,7 +79,7 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	public void testGetArcsFrom() {
 
 		try {
-			List<Locator> fragments = store.<Locator>getXMLs("Locator");
+			List<Locator> fragments = store.<Locator>getXMLResources("Locator");
 			Locator fragment = fragments.get(0);
 			List<Arc> arcs = fragment.getArcsFrom();
 			assertEquals(1, arcs.size());
@@ -95,7 +95,7 @@ public class LocatorTestCase extends DOMLoadingTestCase {
 	public void testGetArcsTo() {
 
 		try {
-			List<Locator> fragments = store.<Locator>getXMLs("Locator");
+			List<Locator> fragments = store.<Locator>getXMLResources("Locator");
 			Locator fragment = fragments.get(0);
 			List<Arc> arcs = fragment.getArcsTo();
 			assertEquals(0, arcs.size());

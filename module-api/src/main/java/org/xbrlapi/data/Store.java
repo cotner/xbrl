@@ -343,7 +343,7 @@ public interface Store {
      * Test if a particular URI is already in the data store.
      * @param uri the string representation of the URI to be tested for.
      * @return true if the document is in the store and false otherwise.
-     * @throws XBRLException if the document cannot be constructed as a DOM.
+     * @throws XBRLException.
      */
     public boolean hasDocument(URI uri) throws XBRLException;
 
@@ -409,7 +409,7 @@ public interface Store {
      * @return a list of XML resources with the given fragment type.
      * @throws XBRLException
      */
-    public <F extends XML> List<F> getXMLs(String interfaceName) throws XBRLException;
+    public <F extends XML> List<F> getXMLResources(String interfaceName) throws XBRLException;
     
     /**
      * @param interfaceName The name of the interface.  EG: If a list of

@@ -31,7 +31,7 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetHref() {	
         try {
-            List<SimpleLink> links = store.<SimpleLink>getXMLs("SimpleLink");
+            List<SimpleLink> links = store.<SimpleLink>getXMLResources("SimpleLink");
             assertTrue(links.size() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {
@@ -48,7 +48,7 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetAbsoluteHref() {	
         try {
-            List<SimpleLink> links = store.<SimpleLink>getXMLs("SimpleLink");
+            List<SimpleLink> links = store.<SimpleLink>getXMLResources("SimpleLink");
             assertTrue(links.size() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {
@@ -65,7 +65,7 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetTarget() {	
         try {
-            List<SimpleLink> links = store.<SimpleLink>getXMLs("SimpleLink");
+            List<SimpleLink> links = store.<SimpleLink>getXMLResources("SimpleLink");
             assertTrue(links.size() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {
@@ -82,7 +82,7 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetArcrole() {	
         try {
-            List<SimpleLink> links = store.<SimpleLink>getXMLs("SimpleLink");
+            List<SimpleLink> links = store.<SimpleLink>getXMLResources("SimpleLink");
             assertTrue(links.size() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {

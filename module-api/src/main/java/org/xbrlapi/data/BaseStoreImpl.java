@@ -347,8 +347,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         logger.debug("Deleting " + uri + " from the data store.");
         URI matchURI = getMatcher().getMatch(uri);
         URI newMatchURI = getMatcher().delete(uri);
-
-        String query = "for $fragment in #roots# where @uri='"+ matchURI + "' return $fragment";
+        
+        String query = "for $fragment in #roots# where $fragment/@uri='"+ matchURI + "' return $fragment";
 
         if (newMatchURI == null) {
             Set<String> indices = this.queryForIndices(query);
@@ -503,7 +503,13 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#hasDocument(URI)
      */
     public boolean hasDocument(URI uri) throws XBRLException {
-        URI matchURI = getMatcher().getMatch(uri);
+        URI matchURI = null;
+        try {
+            matchURI = getMatcher().getMatch(uri);
+        } catch (XBRLException e) {
+            logger.warn(uri + " could not be matched. " + e.getMessage());
+            matchURI = uri;
+        }
         String query = "for $root in #roots# where $root/@uri='" + matchURI + "' and $root/@parentIndex='' return string($root/@index)";
         Set<String> rootIndices = queryForStrings(query);
         if (rootIndices.size() == 1) return true;
@@ -756,7 +762,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see org.xbrlapi.data.Store#getStubs()
      */
     public List<Stub> getStubs() throws XBRLException {
-        List<Stub> stubs = this.<Stub>getXMLs("Stub");
+        List<Stub> stubs = this.<Stub>getXMLResources("Stub");
         return stubs;
     }
     
@@ -885,12 +891,12 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
  
     /**
-     * @see org.xbrlapi.data.Store#getXMLs(String)
+     * @see org.xbrlapi.data.Store#getXMLResources(String)
      */
-    public <F extends XML> List<F> getXMLs(String interfaceName) throws XBRLException {
-        String query = "#roots#[@type='org.xbrlapi.impl." + interfaceName + "Impl']";
+    public <F extends XML> List<F> getXMLResources(String interfaceName) throws XBRLException {
+        String query = "for $root in #roots# where $root/@type='org.xbrlapi.impl." + interfaceName + "Impl' return $root";
         if (interfaceName.indexOf(".") > -1) {
-            query = "#roots#[@type='" + interfaceName + "']";
+            query = "for $root in #roots# where $root/@type='" + interfaceName + "' return $root";
         }
     	return this.<F>queryForXMLResources(query);
     }
@@ -910,7 +916,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         Networks networks = new NetworksImpl(this);
         
         // First get the set of arcs using the arc role
-        List<Arc> arcs = this.<Arc>getXMLs("Arc");
+        List<Arc> arcs = this.<Arc>getXMLResources("Arc");
         for (Arc arc: arcs) {
             List<ArcEnd> sources = arc.getSourceFragments();
             List<ArcEnd> targets = arc.getTargetFragments();
@@ -1310,7 +1316,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<Fact> getFacts() throws XBRLException {
-    	List<Instance> instances = this.<Instance>getXMLs("Instance");
+    	List<Instance> instances = this.<Instance>getXMLResources("Instance");
     	return getFactsFromInstances(instances);
     }
     
@@ -1454,7 +1460,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<Item> getItems() throws XBRLException {
-        List<Instance> instances = this.<Instance>getXMLs("Instance");
+        List<Instance> instances = this.<Instance>getXMLResources("Instance");
         return getItemsFromInstances(instances);
     }
     
@@ -1463,7 +1469,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<Tuple> getTuples() throws XBRLException {
-        List<Instance> instances = this.<Instance>getXMLs("Instance");
+        List<Instance> instances = this.<Instance>getXMLResources("Instance");
         return this.getTuplesFromInstances(instances);
     }
 
@@ -1571,7 +1577,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<RoleType> getRoleTypes() throws XBRLException {
-        return this.<RoleType>getXMLs("RoleType");
+        return this.<RoleType>getXMLResources("RoleType");
     }
     
     /**
@@ -1587,7 +1593,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @throws XBRLException
      */
     public List<ArcroleType> getArcroleTypes() throws XBRLException {
-        return this.<ArcroleType>getXMLs("ArcroleType");
+        return this.<ArcroleType>getXMLResources("ArcroleType");
     }
     
     /**

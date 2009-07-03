@@ -148,7 +148,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		if (root == null) {
 			throw new XBRLException("Index " + index + " does not map to a fragment in the store.");
 		}
-		return  FragmentFactory.newFragment(this, root);
+		return FragmentFactory.<F>newFragment(this, root);
 	}
 
 

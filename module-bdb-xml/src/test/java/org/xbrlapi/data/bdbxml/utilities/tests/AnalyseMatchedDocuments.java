@@ -14,7 +14,7 @@ import org.xbrlapi.utilities.Constants;
  * Use this unit test to analyse the matched documents.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class AnalyseMatchedDocuments extends BaseTestCase {
+public abstract class AnalyseMatchedDocuments extends BaseTestCase {
     
     public AnalyseMatchedDocuments(String arg0) {
         super(arg0);
@@ -42,7 +42,7 @@ public class AnalyseMatchedDocuments extends BaseTestCase {
             Set<URI> uris = store.getDocumentURIs();
             logger.info("# Documents = " + uris.size());
             
-            List<Match> matches = store.<Match>getXMLs("Match");
+            List<Match> matches = store.<Match>getXMLResources("Match");
             logger.info("# matches = " + matches.size());
             for (Match match: matches) {
                 if (match.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match").getLength() > 1)

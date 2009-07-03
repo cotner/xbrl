@@ -412,8 +412,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         String roots = "/*" + this.getURIFilteringPredicate();
         query = query.replaceAll("#roots#",roots);
         
-        logger.info(query);
-        
         ResourceSet resources = null;
         try {
             for (URI namespace: this.namespaceBindings.keySet()) 

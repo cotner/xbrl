@@ -32,7 +32,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetConceptBySubstitutionGroup() {
 
 		try {
-			List<Schema> fragments = store.<Schema>getXMLs("Schema");
+			List<Schema> fragments = store.<Schema>getXMLResources("Schema");
 			for (int i=0; i< fragments.size(); i++) {
 				Schema schema = fragments.get(i);
 				if (schema.getTargetNamespace().equals("schema.getTargetNamespaceURI")) {
@@ -52,7 +52,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetConceptByType() {
 
 		try {
-			List<Schema> fragments = store.<Schema>getXMLs("Schema");
+			List<Schema> fragments = store.<Schema>getXMLResources("Schema");
 			for (int i=0; i< fragments.size(); i++) {
 				Schema schema = fragments.get(i);
 				if (schema.getTargetNamespace().equals("schema.getTargetNamespaceURI")) {
@@ -70,7 +70,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetConceptByName() {
 
 		try {
-			List<Schema> fragments = store.<Schema>getXMLs("Schema");
+			List<Schema> fragments = store.<Schema>getXMLResources("Schema");
 			for (int i=0; i< fragments.size(); i++) {
 				Schema schema = fragments.get(i);
 				if (schema.getTargetNamespace().equals("schema.getTargetNamespaceURI")) {
@@ -87,7 +87,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetReferencePartDeclarationByName() {
 		// TODO !!! Create an example with reference part declarations in the conformance suite
 		try {
-			List<Schema> fragments = store.<Schema>getXMLs("Schema");
+			List<Schema> fragments = store.<Schema>getXMLResources("Schema");
 			Schema schema = fragments.get(0);
 			String name = "managementName";
 			assertNull(schema.getReferencePartDeclaration(name));
@@ -99,7 +99,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	
 	public void testGetReferencePartDeclarations() {
 		try {
-			List<Schema> fragments = store.<Schema>getXMLs("Schema");
+			List<Schema> fragments = store.<Schema>getXMLResources("Schema");
 			Schema schema = fragments.get(0);
 			assertEquals(0,schema.getReferencePartDeclarations().size());
 		} catch (Exception e) {
@@ -111,7 +111,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testGetConcepts() {
 
 		try {
-			List<Schema> fragments = store.<Schema>getXMLs("Schema");
+			List<Schema> fragments = store.<Schema>getXMLResources("Schema");
 			for (int i=0; i< fragments.size(); i++) {
 				Schema schema = fragments.get(i);
 				List<Concept> concepts = schema.getConcepts();
@@ -129,7 +129,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 
 		try {
 			loader.discover(this.getURI(this.SCHEMA_WITH_EMBEDDED_LINKS));
-			List<Schema> fragments = store.<Schema>getXMLs("Schema");
+			List<Schema> fragments = store.<Schema>getXMLResources("Schema");
 			logger.debug("There are " + fragments.size() + " schemas.");
 			for (int i=0; i< fragments.size(); i++) {
 				Schema schema = fragments.get(i);
@@ -148,7 +148,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	public void testIsElementFormQualified() {
 
 		try {
-			List<Schema> fragments = store.<Schema>getXMLs("Schema");
+			List<Schema> fragments = store.<Schema>getXMLResources("Schema");
 			Schema schema = fragments.get(0);
 			assertEquals(true, schema.isElementFormQualified());
 		} catch (Exception e) {
@@ -159,7 +159,7 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	
 	public void testGetTargetNamespace() {
 		try {
-			List<Schema> schemas = store.<Schema>getXMLs("Schema");
+			List<Schema> schemas = store.<Schema>getXMLResources("Schema");
 			Schema schema = schemas.get(0);
 			assertEquals("http://mycompany.com/xbrl/taxonomy", schema.getTargetNamespace().toString());
 		} catch (Exception e) {

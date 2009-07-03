@@ -14,7 +14,7 @@ import org.xbrlapi.loader.Loader;
  * to reload them properly.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ReloadDuplicateDocuments extends BaseTestCase {
+public abstract class ReloadDuplicateDocuments extends BaseTestCase {
     
     public ReloadDuplicateDocuments(String arg0) {
         super(arg0);

@@ -1,9 +1,9 @@
 package org.xbrlapi.fragment.tests;
 
-import org.xbrlapi.DOMLoadingTestCase;
 import java.util.List;
+
+import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Resource;
-import org.xbrlapi.utilities.Constants;
 
 /**
  * Tests the implementation of the org.xbrlapi.Resource interface.
@@ -32,7 +32,7 @@ public class ResourceTestCase extends DOMLoadingTestCase {
 	public void testGetResourceRole() {	
 
 		try {
-			List<Resource> fragments = store.<Resource>queryForXMLResources("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
+			List<Resource> fragments = store.<Resource>queryForXMLResources("#roots#[*/*/@xlink:type='resource']");
 			Resource fragment = fragments.get(0);
 			assertEquals("http://www.xbrl.org/2003/role/label", fragment.getResourceRole().toString());
 		} catch (Exception e) {
@@ -47,7 +47,7 @@ public class ResourceTestCase extends DOMLoadingTestCase {
 	public void testGetTitleAttribute() {	
 
 		try {
-			List<Resource> fragments = store.<Resource>queryForXMLResources("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='resource']");
+			List<Resource> fragments = store.<Resource>queryForXMLResources("#roots#[*/*/@xlink:type='resource']");
 			Resource fragment = fragments.get(0);
 			assertEquals("label_CurrentAsset", fragment.getTitleAttribute());
 		} catch (Exception e) {

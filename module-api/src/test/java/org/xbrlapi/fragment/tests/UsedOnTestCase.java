@@ -35,7 +35,7 @@ public class UsedOnTestCase extends DOMLoadingTestCase {
 	public void testUsedOnContentAnalysis() {
 
 	    try {
-	        List<UsedOn> fragments = store.<UsedOn>getXMLs("UsedOn");
+	        List<UsedOn> fragments = store.<UsedOn>getXMLResources("UsedOn");
 	        assertTrue(fragments.size() > 0);
 	        for (UsedOn fragment: fragments) {
 	            if (fragment.getParent().getDataRootElement().getAttribute("id").equals("newExtendedRoleType")) {

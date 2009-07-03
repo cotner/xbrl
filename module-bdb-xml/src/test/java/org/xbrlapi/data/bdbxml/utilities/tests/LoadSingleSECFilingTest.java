@@ -15,7 +15,7 @@ import org.xbrlapi.loader.Loader;
  * @author Geoff Shuetrim (geoff@galexy.net)
  *
  */
-public class LoadSingleSECFilingTest extends BaseTestCase {
+public abstract class LoadSingleSECFilingTest extends BaseTestCase {
     
     public LoadSingleSECFilingTest(String arg0) {
         super(arg0);

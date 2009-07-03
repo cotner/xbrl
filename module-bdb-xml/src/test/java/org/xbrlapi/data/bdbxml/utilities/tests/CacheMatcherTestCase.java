@@ -15,7 +15,7 @@ import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
-public class CacheMatcherTestCase extends BaseTestCase {
+public abstract class CacheMatcherTestCase extends BaseTestCase {
 	private Cache cache = null;
 	private Matcher matcher = null;
 	

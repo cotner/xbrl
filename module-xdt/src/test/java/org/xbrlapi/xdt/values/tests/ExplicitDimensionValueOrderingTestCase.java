@@ -51,7 +51,7 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
 
             loader.discover(uri);
             
-            List<ExplicitDimension> dimensions = store.<ExplicitDimension>getXMLs("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>getXMLResources("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.size());
             List<Item> items = store.getItems();
             assertEquals(3,items.size());
@@ -93,7 +93,7 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
 
             loader.discover(uri);
             
-            List<ExplicitDimension> dimensions = store.<ExplicitDimension>getXMLs("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>getXMLResources("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.size());
             List<Item> items = store.getItems();
             assertEquals(3,items.size());
@@ -139,11 +139,11 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             Set<URI> uris = store.getDocumentURIs();
             for (URI myURI: uris) logger.info(myURI);
 
-            List<Concept> concepts = store.<Concept>getXMLs("Concept");
+            List<Concept> concepts = store.<Concept>getXMLResources("Concept");
             for (Concept c: concepts) store.serialize(c.getDataRootElement());
             
             
-            List<ExplicitDimension> dimensions = store.<ExplicitDimension>getXMLs("org.xbrlapi.xdt.ExplicitDimensionImpl");
+            List<ExplicitDimension> dimensions = store.<ExplicitDimension>getXMLResources("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.size());
             List<Item> items = store.getItems();
             assertEquals(3,items.size());

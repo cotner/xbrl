@@ -12,7 +12,7 @@ import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
  * data in a data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class FailedDocumentReloadAttempt extends BaseTestCase {
+public abstract class FailedDocumentReloadAttempt extends BaseTestCase {
     
     public FailedDocumentReloadAttempt(String arg0) {
         super(arg0);

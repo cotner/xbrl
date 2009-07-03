@@ -31,7 +31,7 @@ public class DimensionIdentificationTestCase extends BaseTestCase {
 
 		try {
 	        loader.discover(this.getURI(EXPLICIT_DIMENSION_STARTING_POINT));
-			List<ExplicitDimension> fragments = store.<ExplicitDimension>getXMLs("org.xbrlapi.xdt.ExplicitDimensionImpl");
+			List<ExplicitDimension> fragments = store.<ExplicitDimension>getXMLResources("org.xbrlapi.xdt.ExplicitDimensionImpl");
 			assertTrue(fragments.size() > 0);
 			for (ExplicitDimension fragment: fragments) {
 	            assertEquals("org.xbrlapi.xdt.ExplicitDimensionImpl",fragment.getType());
@@ -46,7 +46,7 @@ public class DimensionIdentificationTestCase extends BaseTestCase {
 
         try {
             loader.discover(this.getURI(TYPED_DIMENSION_STARTING_POINT));
-            List<TypedDimension> fragments = store.<TypedDimension>getXMLs("org.xbrlapi.xdt.TypedDimensionImpl");
+            List<TypedDimension> fragments = store.<TypedDimension>getXMLResources("org.xbrlapi.xdt.TypedDimensionImpl");
             assertTrue(fragments.size() > 0);
             for (TypedDimension fragment: fragments) {
                 assertEquals("org.xbrlapi.xdt.TypedDimensionImpl",fragment.getType());

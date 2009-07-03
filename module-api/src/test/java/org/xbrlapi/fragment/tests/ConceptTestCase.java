@@ -40,7 +40,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 
         try {
             loader.discover(this.getURI(FOOTNOTELINKS));        
-            List<Concept> concepts = store.<Concept>getXMLs("Concept");
+            List<Concept> concepts = store.<Concept>getXMLResources("Concept");
             assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 if (concept.getName().equals("CurrentAsset"))
@@ -56,7 +56,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
         boolean testDone = false;
         try {
             loader.discover(this.getURI(FOOTNOTELINKS));        
-            List<Concept> concepts = store.<Concept>getXMLs("Concept");
+            List<Concept> concepts = store.<Concept>getXMLResources("Concept");
             assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 List<Fact> facts = concept.getFacts();
@@ -75,7 +75,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 
 		try {
 	        loader.discover(this.getURI(FOOTNOTELINKS));        
-            List<Concept> concepts = store.<Concept>getXMLs("Concept");
+            List<Concept> concepts = store.<Concept>getXMLResources("Concept");
             assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 if (concept.getName().equals("CurrentAsset"))
@@ -90,7 +90,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 
         try {
             loader.discover(this.getURI(FOOTNOTELINKS));        
-            List<Concept> concepts = store.<Concept>getXMLs("Concept");
+            List<Concept> concepts = store.<Concept>getXMLResources("Concept");
             assertTrue(concepts.size() > 0);
             for (Concept concept: concepts) {
                 if (concept.getName().equals("CurrentAsset"))
@@ -106,7 +106,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 	    try {
 	        loader.discover(this.getURI(LABELLINKS));
 
-			List<Concept> concepts = store.getXMLs("Concept");
+			List<Concept> concepts = store.getXMLResources("Concept");
 			for (Concept concept: concepts) {
 				if (concept.getName().equals("CurrentAsset"))
 					assertEquals(3,concept.getLabels().size());

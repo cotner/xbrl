@@ -31,7 +31,7 @@ public class SimpleNumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetValue() {
         try {
-            List<SimpleNumericItem> items = store.<SimpleNumericItem>getXMLs("SimpleNumericItem");
+            List<SimpleNumericItem> items = store.<SimpleNumericItem>getXMLResources("SimpleNumericItem");
             assertTrue(items.size() > 0);
             for (SimpleNumericItem item: items) {
                 assertEquals("5.6", item.getValue());
@@ -46,7 +46,7 @@ public class SimpleNumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetInferredPrecision() {
         try {
-            List<SimpleNumericItem> items = store.<SimpleNumericItem>getXMLs("SimpleNumericItem");
+            List<SimpleNumericItem> items = store.<SimpleNumericItem>getXMLResources("SimpleNumericItem");
             assertTrue(items.size() > 0);
             for (SimpleNumericItem item: items) {
                 assertEquals("5", item.getInferredPrecision());
@@ -62,7 +62,7 @@ public class SimpleNumericItemTestCase extends DOMLoadingTestCase {
 	public void testGetPrecisionAdjustedValue() {
 
         try {
-            List<SimpleNumericItem> items = store.<SimpleNumericItem>getXMLs("SimpleNumericItem");
+            List<SimpleNumericItem> items = store.<SimpleNumericItem>getXMLResources("SimpleNumericItem");
             assertTrue(items.size() > 0);
             for (SimpleNumericItem item: items) {
                 assertEquals("5.6", item.getPrecisionAdjustedValue());

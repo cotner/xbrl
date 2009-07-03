@@ -12,7 +12,7 @@ import org.xbrlapi.loader.Loader;
  * Use this unit test to persist all relationships in the data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class AddIndexes extends BaseTestCase {
+public abstract class AddIndexes extends BaseTestCase {
     
     public AddIndexes(String arg0) {
         super(arg0);

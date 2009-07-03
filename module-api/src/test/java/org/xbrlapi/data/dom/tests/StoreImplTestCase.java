@@ -129,8 +129,8 @@ public class StoreImplTestCase extends BaseTestCase {
 	
     public void testGetFragments() {
         try {
-            List<Fragment> fragments = store.<Fragment>getXMLs("Schema");
-            List<Fragment> sameFragments = store.<Fragment>getXMLs("org.xbrlapi.impl.SchemaImpl");
+            List<Fragment> fragments = store.<Fragment>getXMLResources("Schema");
+            List<Fragment> sameFragments = store.<Fragment>getXMLResources("org.xbrlapi.impl.SchemaImpl");
             assertTrue(sameFragments.size() > 0);
             assertTrue(fragments.size() == sameFragments.size());
         } catch (XBRLException e) {

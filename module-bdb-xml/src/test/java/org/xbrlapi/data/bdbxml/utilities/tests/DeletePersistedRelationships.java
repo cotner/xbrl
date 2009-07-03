@@ -13,7 +13,7 @@ import org.xbrlapi.networks.StorerImpl;
  * Use this unit test to persist all relationships in the data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class DeletePersistedRelationships extends BaseTestCase {
+public abstract class DeletePersistedRelationships extends BaseTestCase {
     
     public DeletePersistedRelationships(String arg0) {
         super(arg0);

@@ -38,7 +38,7 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 	
 	public void testCreatingNonDimensionalAspectModel() {
 		try {
-			List<Fact> facts = store.<Fact>getXMLs("SimpleNumericItem");
+			List<Fact> facts = store.<Fact>getXMLResources("SimpleNumericItem");
 			assertEquals(2,facts.size());
             AspectModel model = new NonDimensionalAspectModel();
             model.arrangeAspect(Aspect.CONCEPT,"row");

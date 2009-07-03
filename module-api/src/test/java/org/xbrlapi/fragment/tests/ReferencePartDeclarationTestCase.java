@@ -34,7 +34,7 @@ public class ReferencePartDeclarationTestCase extends DOMLoadingTestCase {
 	public void testGetReferencePartDeclarations() {	
 
 		try {
-			List<ReferencePartDeclaration> rpds = store.<ReferencePartDeclaration>getXMLs("ReferencePartDeclaration");
+			List<ReferencePartDeclaration> rpds = store.<ReferencePartDeclaration>getXMLResources("ReferencePartDeclaration");
 			for (ReferencePartDeclaration rpd: rpds) {
 				logger.info(rpd.getName() + " is a reference part");
 				assertEquals(Constants.XBRL21LinkNamespace,rpd.getSubstitutionGroupNamespace());

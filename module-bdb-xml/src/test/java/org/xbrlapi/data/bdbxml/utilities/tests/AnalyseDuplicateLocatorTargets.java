@@ -13,7 +13,7 @@ import org.xbrlapi.loader.Loader;
  * Use this unit test to find XLink locators with multiple targets.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class AnalyseDuplicateLocatorTargets extends BaseTestCase {
+public abstract class AnalyseDuplicateLocatorTargets extends BaseTestCase {
     
     public AnalyseDuplicateLocatorTargets(String arg0) {
         super(arg0);

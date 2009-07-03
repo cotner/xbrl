@@ -127,7 +127,7 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
 			ArcroleType type = roleTypes.get(0);
 			assertTrue(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"presentationArc"));
 			assertFalse(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"calculationArc"));
-			List<Arc> arcs = store.getXMLs("Arc");
+			List<Arc> arcs = store.getXMLResources("Arc");
 			assertTrue(arcs.size() > 0);
 			for (Arc arc: arcs) {
 			    if (arc.getLocalname().equals("presentationArc"))

@@ -10,7 +10,7 @@ import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
  * data in a data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class LoadSpecificDocument extends BaseTestCase {
+public abstract class LoadSpecificDocument extends BaseTestCase {
     
     public LoadSpecificDocument(String arg0) {
         super(arg0);

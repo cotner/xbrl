@@ -33,7 +33,7 @@ public class LinkTestCase extends DOMLoadingTestCase {
 	public void testGetLinkRoles() {	
 
 		try {
-		    List<ExtendedLink> links = store.<ExtendedLink>getXMLs("ExtendedLink");
+		    List<ExtendedLink> links = store.<ExtendedLink>getXMLResources("ExtendedLink");
 		    for (Link link: links) {
     		    String role = link.getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"role");
     		    if (! role.equals(""))
@@ -52,7 +52,7 @@ public class LinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetLinkRoleWhenItProvided() {	
         try {
-            List<Link> fragments = store.<Link>getXMLs("ExtendedLink");
+            List<Link> fragments = store.<Link>getXMLResources("ExtendedLink");
             assertTrue(fragments.size() > 0);
             for (Link fragment: fragments) {
                 store.serialize(fragment);

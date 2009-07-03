@@ -72,10 +72,10 @@ public class StoreImplTestCase extends BaseTestCase {
             String xpathQuery = "#roots#";
             Set<String> indices = store.queryForIndices(xpathQuery);
             assertTrue(! indices.isEmpty());
-            for (String index: indices) {
+/*            for (String index: indices) {
                 logger.info(index);
             }
-        } catch (Exception e) {
+*/        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }

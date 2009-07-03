@@ -31,7 +31,7 @@ public class ItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetContext() {
         try {
-            List<Item> fragments = store.<Item>getXMLs("SimpleNumericItem");
+            List<Item> fragments = store.<Item>getXMLResources("SimpleNumericItem");
             assertTrue(fragments.size() > 0);
             for (Item fragment: fragments) {
                 assertEquals("org.xbrlapi.impl.ContextImpl", fragment.getContext().getType());
@@ -46,7 +46,7 @@ public class ItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testIsNil() {
         try {
-            List<Item> fragments = store.<Item>getXMLs("SimpleNumericItem");
+            List<Item> fragments = store.<Item>getXMLResources("SimpleNumericItem");
             assertTrue(fragments.size() > 0);
             for (Item fragment: fragments) {
                 assertEquals(false, fragment.isNil());

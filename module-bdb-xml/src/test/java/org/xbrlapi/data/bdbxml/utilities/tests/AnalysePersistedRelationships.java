@@ -12,7 +12,7 @@ import org.xbrlapi.loader.Loader;
  * Use this unit test to persist all relationships in the data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class AnalysePersistedRelationships extends BaseTestCase {
+public abstract class AnalysePersistedRelationships extends BaseTestCase {
     
     public AnalysePersistedRelationships(String arg0) {
         super(arg0);

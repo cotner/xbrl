@@ -32,7 +32,7 @@ public class NumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetUnits() {
         try {
-            List<NumericItem> items = store.<NumericItem>getXMLs("SimpleNumericItem");
+            List<NumericItem> items = store.<NumericItem>getXMLResources("SimpleNumericItem");
             assertTrue(items.size() > 0);
             for (NumericItem item: items) {
                 assertEquals("unit", item.getUnits().getLocalname());
@@ -47,7 +47,7 @@ public class NumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetPrecision() {
         try {
-            List<NumericItem> items = store.<NumericItem>getXMLs("SimpleNumericItem");
+            List<NumericItem> items = store.<NumericItem>getXMLResources("SimpleNumericItem");
             assertTrue(items.size() > 0);
             for (NumericItem item: items) {
                 assertEquals("2", item.getPrecision());
@@ -63,7 +63,7 @@ public class NumericItemTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetDecimals() {
         try {
-            List<NumericItem> items = store.<NumericItem>getXMLs("SimpleNumericItem");
+            List<NumericItem> items = store.<NumericItem>getXMLResources("SimpleNumericItem");
             assertTrue(items.size() > 0);
             for (NumericItem item: items) {
                 assertEquals(false, item.hasDecimals());

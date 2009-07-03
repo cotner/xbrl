@@ -11,7 +11,7 @@ import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
  * data in a data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class AnalysisOfDocumentsThatFailedToLoad extends BaseTestCase {
+public abstract class AnalysisOfDocumentsThatFailedToLoad extends BaseTestCase {
     
     public AnalysisOfDocumentsThatFailedToLoad(String arg0) {
         super(arg0);

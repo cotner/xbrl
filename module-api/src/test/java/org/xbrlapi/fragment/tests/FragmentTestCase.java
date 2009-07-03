@@ -34,7 +34,7 @@ public class FragmentTestCase extends DOMLoadingTestCase {
 	public void testNamespaceResolution() {
 
         try {
-            List<Unit> units = store.<Unit>getXMLs("Unit");
+            List<Unit> units = store.<Unit>getXMLResources("Unit");
             assertTrue(units.size() > 0);
             for (Unit unit: units) {
                 URI namespace = unit.getNamespaceFromQName(unit.getId()+":km",unit.getNumeratorMeasures().item(0));

@@ -11,7 +11,7 @@ import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
  * Use this unit test to persist all relationships in the data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ListStoredDocuments extends BaseTestCase {
+public abstract class ListStoredDocuments extends BaseTestCase {
     
     public ListStoredDocuments(String arg0) {
         super(arg0);

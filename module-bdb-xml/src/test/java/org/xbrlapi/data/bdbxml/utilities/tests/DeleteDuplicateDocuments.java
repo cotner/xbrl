@@ -16,7 +16,7 @@ import org.xbrlapi.utilities.XBRLException;
  * Use this unit test to find XLink locators with multiple targets.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class DeleteDuplicateDocuments extends BaseTestCase {
+public abstract class DeleteDuplicateDocuments extends BaseTestCase {
     
     public DeleteDuplicateDocuments(String arg0) {
         super(arg0);

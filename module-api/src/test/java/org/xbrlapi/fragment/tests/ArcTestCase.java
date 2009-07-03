@@ -34,7 +34,7 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetTo() {	
 
 		try {
-			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#/*/*[@xlink:type='arc']");
+			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#[*/*/@xlink:type='arc']");
 			Arc fragment = fragments.get(0);
 			assertEquals("contributingItem", fragment.getTo());
 		} catch (Exception e) {

@@ -33,7 +33,7 @@ public class ContextComponentTestCase extends DOMLoadingTestCase {
 	public void testGetContext() {
 
 		try {
-		    List<Entity> entities = store.getXMLs("Entity");
+		    List<Entity> entities = store.getXMLResources("Entity");
 		    assertTrue(entities.size() > 0);
 	        assertEquals("org.xbrlapi.impl.ContextImpl", entities.get(0).getContext().getType());
 		} catch (Exception e) {

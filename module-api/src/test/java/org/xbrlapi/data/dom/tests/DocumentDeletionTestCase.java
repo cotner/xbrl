@@ -1,5 +1,7 @@
 package org.xbrlapi.data.dom.tests;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -25,8 +27,9 @@ public class DocumentDeletionTestCase extends BaseTestCase {
 
 	public void testDeleteSingleDocument() {
 		try {
-			store.deleteDocument(this.getURI(STARTING_POINT));
-			assertFalse(store.getDocumentURIs().contains(this.getURI(STARTING_POINT)));
+		    URI documentToDelete = this.getURI(STARTING_POINT);
+			store.deleteDocument(documentToDelete);
+			assertFalse(store.getDocumentURIs().contains(documentToDelete));
 		} catch (XBRLException e) {
 			e.printStackTrace();
 			fail(e.getMessage());

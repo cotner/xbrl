@@ -1,14 +1,13 @@
 package org.xbrlapi.fragment.tests;
 
 import java.net.URI;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fragment;
-import java.util.List;
 import org.xbrlapi.Title;
 import org.xbrlapi.Xlink;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -54,7 +53,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 	 */
 	public void testGetXLinkType() {		
 		try {
-			List<Xlink> fragments = store.<Xlink>getXMLs("Arc");
+			List<Xlink> fragments = store.<Xlink>getXMLResources("Arc");
             assertTrue(fragments.size() > 0);
 			Xlink fragment = fragments.get(0);
 			assertEquals("arc", fragment.getXlinkType());
@@ -70,7 +69,8 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 
 		// Case where none exists
 		try {
-			List<Xlink> fragments = store.<Xlink>getXMLs("Arc");
+			List<Xlink> fragments = store.<Xlink>getXMLResources("Arc");
+			assertTrue(fragments.size() > 0);
 			Xlink fragment = fragments.get(0);
 			assertNull(fragment.getTitleAttribute());
 		} catch (XBRLException e) {
@@ -80,7 +80,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			loader.discover(uri, document);
-			List<Xlink> fragments = store.<Xlink>queryForXMLResources("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:title");
+			List<Xlink> fragments = store.<Xlink>queryForXMLResources("#roots#[*/*/@xlink:title]");
 			Xlink fragment = fragments.get(0);
 			assertEquals("stuff", fragment.getTitleAttribute());
 		} catch (Exception e) {
@@ -96,7 +96,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 
 		// Case where none exists
 		try {
-			List<Xlink> fragments = store.<Xlink>getXMLs("Arc");
+			List<Xlink> fragments = store.<Xlink>getXMLResources("Arc");
 			assertTrue(fragments.size() > 0);
 			Xlink fragment = fragments.get(0);
 			assertEquals(0,fragment.getTitleElements().size());
@@ -107,7 +107,7 @@ public class XlinkTestCase extends DOMLoadingTestCase {
 		// Case where one exists
 		try {
 			loader.discover(uri, document);
-			List<Title> fragments = store.getXMLs("Title");
+			List<Title> fragments = store.getXMLResources("Title");
 			Fragment title = fragments.get(0);
 			Xlink fragment = (Xlink) title.getParent();
 			List<Title> titles = fragment.getTitleElements();

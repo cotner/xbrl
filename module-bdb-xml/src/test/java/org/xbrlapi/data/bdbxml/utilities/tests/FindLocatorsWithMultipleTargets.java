@@ -16,7 +16,7 @@ import org.xbrlapi.utilities.Constants;
  * Use this unit test to find XLink locators with multiple targets.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class FindLocatorsWithMultipleTargets extends BaseTestCase {
+public abstract class FindLocatorsWithMultipleTargets extends BaseTestCase {
     
     public FindLocatorsWithMultipleTargets(String arg0) {
         super(arg0);

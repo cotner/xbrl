@@ -32,7 +32,7 @@ public class XlinkDocumentationTestCase extends DOMLoadingTestCase {
 	public void testGetValue() {
 
 		try {
-			List<XlinkDocumentation> fragments = store.<XlinkDocumentation>getXMLs("XlinkDocumentation");
+			List<XlinkDocumentation> fragments = store.<XlinkDocumentation>getXMLResources("XlinkDocumentation");
 			XlinkDocumentation fragment = fragments.get(0);
 			assertEquals("Value of the documentation", fragment.getValue());
 		} catch (Exception e) {

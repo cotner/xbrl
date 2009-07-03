@@ -33,7 +33,7 @@ public class ReferenceResourceTestCase extends DOMLoadingTestCase {
 	public void testGetReferenceParts() {	
 
 		try {
-			List<ReferenceResource> fragments = store.<ReferenceResource>getXMLs("ReferenceResource");
+			List<ReferenceResource> fragments = store.<ReferenceResource>getXMLResources("ReferenceResource");
 			ReferenceResource fragment = fragments.get(0);
 			assertEquals(1, fragment.getReferenceParts().size());
 		} catch (Exception e) {
@@ -48,7 +48,7 @@ public class ReferenceResourceTestCase extends DOMLoadingTestCase {
 	public void testGetReferencePart() {	
 
 		try {
-			List<ReferenceResource> fragments = store.<ReferenceResource>getXMLs("ReferenceResource");
+			List<ReferenceResource> fragments = store.<ReferenceResource>getXMLResources("ReferenceResource");
 			ReferenceResource fragment = fragments.get(0);
 			ReferencePart part = fragment.getReferenceParts().get(0);
 			assertEquals("org.xbrlapi.impl.ReferencePartImpl", fragment.getReferencePart(part.getNamespace(),part.getLocalname()).getType());

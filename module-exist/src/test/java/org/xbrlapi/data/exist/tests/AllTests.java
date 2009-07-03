@@ -11,9 +11,9 @@ public class AllTests {
         suite.addTestSuite(AddToExistingStoreTestCase.class);
         suite.addTestSuite(DBConnectionTestCase.class);
         suite.addTestSuite(DocumentRecoveryFromStoreTestCase.class);
+        suite.addTestSuite(QueryForStringsTestCase.class);
 		suite.addTestSuite(StoreImplConstructorTestCase.class);
 		suite.addTestSuite(StoreImplTestCase.class);
-        suite.addTestSuite(QueryForStringsTestCase.class);
 		
 		suite.addTest(org.xbrlapi.data.exist.framework.tests.AllTests.suite());		
 		//$JUnit-END$

@@ -30,7 +30,7 @@ public class ReferencePartTestCase extends DOMLoadingTestCase {
 	public void testGetValue() {	
 
 		try {
-			List<ReferenceResource> fragments = store.<ReferenceResource>getXMLs("ReferenceResource");
+			List<ReferenceResource> fragments = store.<ReferenceResource>getXMLResources("ReferenceResource");
 			assertTrue(fragments.size() > 0);
 			ReferenceResource fragment = fragments.get(0);
 			
@@ -47,7 +47,7 @@ public class ReferencePartTestCase extends DOMLoadingTestCase {
 	
 	public void testGetReferencePartDeclaration() {	
 		try {
-			List<ReferenceResource> fragments = store.<ReferenceResource>getXMLs("ReferenceResource");
+			List<ReferenceResource> fragments = store.<ReferenceResource>getXMLResources("ReferenceResource");
 			ReferenceResource fragment = fragments.get(0);			
 			ReferencePart part = fragment.getReferenceParts().get(0);
 			store.serialize(part.getDataRootElement());
