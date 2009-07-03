@@ -35,7 +35,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = "1";
 			MockImpl d = new MockImpl(index);
 			store.persist(d);
-			assertEquals(index,store.getXMLResource(index).getIndex());	
+			assertEquals(index,store.<XML>getXMLResource(index).getIndex());	
 			
 		} catch (XBRLException e) {
 			e.printStackTrace();

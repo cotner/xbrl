@@ -1,9 +1,10 @@
 package org.xbrlapi.data.exist.tests;
 
+import java.util.List;
 import java.util.Set;
 
 import org.xbrlapi.Fragment;
-import java.util.List;
+import org.xbrlapi.XML;
 import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -33,7 +34,7 @@ public class StoreImplTestCase extends BaseTestCase {
 			String index = "1";
 			MockImpl d = new MockImpl(index);
 			store.persist(d);
-			assertEquals(index,store.getXMLResource(index).getIndex());
+			assertEquals(index,store.<XML>getXMLResource(index).getIndex());
 		} catch (XBRLException e) {
 			fail("The addition of a document fragment to the Xindice data store failed." + e.getMessage());
 		}

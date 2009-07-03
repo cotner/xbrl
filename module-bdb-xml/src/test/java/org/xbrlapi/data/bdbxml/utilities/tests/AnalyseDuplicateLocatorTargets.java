@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.xbrlapi.XML;
 import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
 import org.xbrlapi.loader.Loader;
 
@@ -47,7 +48,7 @@ public abstract class AnalyseDuplicateLocatorTargets extends BaseTestCase {
                 logger.info(result);
             }
             
-            store.getXMLResource("uqMF4V_1511").serialize();
+            store.<XML>getXMLResource("uqMF4V_1511").serialize();
             
 /*            Map<String,String> map = new HashMap<String,String>();
             Set<String> pairs = store.queryForStrings("for $root in #roots#[@parentIndex=''] return concat($root/@uri,' ',$root/@index)");
