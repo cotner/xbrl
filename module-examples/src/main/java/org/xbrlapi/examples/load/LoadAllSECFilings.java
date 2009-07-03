@@ -100,8 +100,10 @@ public class LoadAllSECFilings {
             for (int counter=0; counter<threadCount; counter++) {
                 Loader loader =createLoader(store,arguments.get("cache")); 
                 if (counter == threadCount-1) {
+                    System.out.println("Thread " + (counter+1) + " gets documents " + (counter*gap) + " to " + (resources.size()-1));
                     loader.stashURIs(resources.subList(counter*gap,resources.size()-1));
                 } else {
+                    System.out.println("Thread " + (counter+1) + " gets documents " + (counter*gap) + " to " + ((counter+1)*gap-1));
                     loader.stashURIs(resources.subList(counter*gap,(counter+1)*gap-1));
                 }
                 Discoverer discoverer = new Discoverer(loader);
