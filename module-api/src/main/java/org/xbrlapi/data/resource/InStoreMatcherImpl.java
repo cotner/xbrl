@@ -50,7 +50,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
     /**
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
-    public URI getMatch(URI uri) throws XBRLException {
+    public synchronized URI getMatch(URI uri) throws XBRLException {
         
         String query = "for $match in #roots#[@type='org.xbrlapi.impl.MatchImpl']/" + matchElement + " where $match/@value='"+ uri + "' return string($match/../" + matchElement + "[1]/@value)";
         Set<String> matches = getStore().queryForStrings(query);
@@ -111,7 +111,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
     /**
      * @see Matcher#delete(URI)
      */
-    public URI delete(URI uri) throws XBRLException {
+    public synchronized URI delete(URI uri) throws XBRLException {
         
         if (uri == null) throw new XBRLException("The URI must not be null.");
 

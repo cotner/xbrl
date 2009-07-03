@@ -26,6 +26,7 @@ import org.xbrlapi.Stub;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.XML;
 import org.xbrlapi.data.resource.Matcher;
+import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.Relationship;
@@ -1086,4 +1087,35 @@ public interface Store {
      */
     public List<ReferenceResource> getReferences(String fragment, URI resourceRole) throws XBRLException;    
     
+    /**
+     * @return a list of the URIs of documents that are discoverable given the 
+     * content of the data store but that are not themselves in the data store.
+     * @throws XBRLException
+     */
+    public Set<URI> getMissingDocumentURIs() throws XBRLException;
+
+    /**
+     * Loaders need to call this method to indicate that they are going to take 
+     * responsibility for loading the document.
+     * This can be used to prevent the same document from being loaded by several
+     * loaders operating in parallel.
+     * @param loader The loader claiming loading rights.
+     * @param document The URI of the document that a loader is about
+     * to start loading.
+     * @return false if the document is already claimed by a different loader and true otherwise.  
+     * Only start loading if this function returns true.
+     * @throws XBRLException
+     */
+    public boolean requestLoadingRightsFor(Loader loader, URI document) throws XBRLException;
+    
+    /**
+     * Loaders need to call this method to indicate that they are recinding 
+     * responsibility for loading the document.
+     * This can be used to prevent the same document from being loaded by several
+     * loaders operating in parallel.
+     * @param loader The loader recinding loading rights.
+     * @param document The URI of the document whose loading rights are being recinded.
+     * @link Store#loadingAboutToStart(URI)
+     */
+    public void recindLoadingRightsFor(Loader loader, URI document);
 }

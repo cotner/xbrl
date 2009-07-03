@@ -13,9 +13,9 @@ import org.xbrlapi.loader.Loader;
  * Use this unit test to find XLink locators with multiple targets.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class AnalyseDuplicateDocumentURIs extends BaseTestCase {
+public class AnalyseDuplicateLocatorTargets extends BaseTestCase {
     
-    public AnalyseDuplicateDocumentURIs(String arg0) {
+    public AnalyseDuplicateLocatorTargets(String arg0) {
         super(arg0);
     }
 
@@ -35,7 +35,7 @@ public class AnalyseDuplicateDocumentURIs extends BaseTestCase {
         }
     }   
     
-    public void testAnalyseDuplicateDocument() {
+    public void testAnalyseDuplicateLocatorTargets() {
         try {
 
             String query = "for $locator in #roots#,$target in #roots#/xbrlapi:xptr where ($locator/@uri='http://www.sec.gov/Archives/edgar/data/1160330/000129281407002220/bbd-20070618_pre.xml' and $locator/*/*/@xlink:type='locator' and $target/../@uri=$locator/@targetDocumentURI and $locator/@targetPointerValue=$target/@value) return concat($target/../@uri,' ',$target/@value,' ',$target/../@index)";

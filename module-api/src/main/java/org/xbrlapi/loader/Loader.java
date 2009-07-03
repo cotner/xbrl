@@ -3,6 +3,7 @@ package org.xbrlapi.loader;
 import java.net.URI;
 import java.util.List;
 
+import org.w3c.dom.Document;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.cache.Cache;
 import org.xbrlapi.data.Store;
@@ -65,13 +66,14 @@ public interface Loader {
 	 */
 	public Cache getCache() throws XBRLException;
 	
-
-	
-
-	
-
-	
-
+	/**
+	 * @return The document node of the XML DOM used
+	 * by this loader's fragment builders.
+	 * This should only be used when creating a new
+	 * fragment using the loader.
+	 * @throws XBRLException
+	 */
+	public Document getBuilderDOM() throws XBRLException;
 
 	/**
 	 * @return the list of documents that are known to still need parsing

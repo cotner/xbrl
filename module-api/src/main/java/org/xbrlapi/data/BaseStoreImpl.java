@@ -53,6 +53,7 @@ import org.xbrlapi.data.resource.DefaultMatcherImpl;
 import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.impl.FragmentComparator;
 import org.xbrlapi.impl.StubImpl;
+import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
@@ -202,7 +203,6 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
         String documentId = getDocumentId(uri);
         Stub stub = new StubImpl(documentId);
-        stub.setIndex(documentId);
         stub.setResourceURI(uri);
         stub.setMetaAttribute("reason",reason);
         persist(stub);
@@ -213,7 +213,6 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @see Store#sync()
      */
     public synchronized void sync() throws XBRLException {
-        ;
     }
 
     /**
@@ -2082,9 +2081,58 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     public Networks getNetworksTo(String targetIndex, URI arcrole) throws XBRLException {
         return getNetworksTo(targetIndex,null,arcrole);
     }
-
-    
  
+    /**
+     * @see Store#getMissingDocumentURIs()
+     */
+    public Set<URI> getMissingDocumentURIs() throws XBRLException {
+        Set<URI> result = new HashSet<URI>();
+        String query = "for $targetURI in #roots#[*/*[@xlink:type='locator' or @xlink:type='simple'], return distinct-values(string($fragment/@targetDocumentURI))";
+        Set<String> uris = this.queryForStrings(query);
+        for (String uri: uris) {
+            try {
+                result.add(new URI(uri));
+            } catch (URISyntaxException e) {
+                throw new XBRLException(uri + " has invalid syntax.",e);
+            }
+        }
+        Set<URI> storedURIs = this.getDocumentURIs();
+        result.removeAll(storedURIs);
+        return result;
+    }
 
+    /**
+     * This property is used to co-ordinate the document
+     * loading activities of loaders that are operating in
+     * parallel on the one data store.  It is used to 
+     * prevent the same document from being simultaneously
+     * loaded by several of the loaders.
+     */
+    private Map<URI,Loader> loadingRights = new HashMap<URI,Loader>();
     
+    /**
+     * @see Store#requestLoadingRightsFor(Loader, URI)
+     */
+    public synchronized boolean requestLoadingRightsFor(Loader loader, URI document) throws XBRLException {
+        if (document == null) throw new XBRLException("Cannot start loading a document with a null URI");
+        if (! loadingRights.containsKey(document)) {
+            loadingRights.put(document,loader);
+            return true;
+        }
+        if (loadingRights.get(document).equals(loader)) {
+            return true;
+        }
+        logger.debug("Two loaders have been seeking loading rights for " + document);
+        return false;
+    }
+
+    /**
+     * @see Store#recindLoadingRightsFor(Loader, URI)
+     */
+    public synchronized void recindLoadingRightsFor(Loader loader, URI document) {
+        if (document == null) return;
+        if (! loadingRights.containsKey(document)) return;
+        if (loadingRights.get(document).equals(loader)) loadingRights.remove(document);
+    }
+
 }

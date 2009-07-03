@@ -8,6 +8,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.Locator;
 import org.xbrlapi.Resource;
 import org.xbrlapi.SimpleLink;
+import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.impl.ArcImpl;
 import org.xbrlapi.impl.EntityResourceImpl;
 import org.xbrlapi.impl.ExtendedLinkImpl;
@@ -415,6 +416,7 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
      */
     private void processFragment(Fragment fragment,Attributes attrs) throws XBRLException {
         Loader loader = this.getLoader();
+        fragment.setBuilder(new BuilderImpl(loader.getBuilderDOM()));
         fragment.setIndex(getLoader().getNextFragmentId());
         if (attrs.getValue("id") != null) {
             fragment.appendID(attrs.getValue("id"));

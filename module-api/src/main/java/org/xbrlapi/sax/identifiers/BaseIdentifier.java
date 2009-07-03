@@ -2,6 +2,7 @@ package org.xbrlapi.sax.identifiers;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.ContentHandler;
 import org.xbrlapi.utilities.XBRLException;
@@ -98,6 +99,7 @@ public class BaseIdentifier implements Identifier {
      */
     public void processFragment(Fragment fragment,Attributes attrs) throws XBRLException {
         Loader loader = this.getLoader();
+        fragment.setBuilder(new BuilderImpl(loader.getBuilderDOM()));
         fragment.setIndex(getLoader().getNextFragmentId());
         if (attrs.getValue("id") != null) {
             fragment.appendID(attrs.getValue("id"));

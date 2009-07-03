@@ -19,6 +19,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.cache.Cache;
 import org.xbrlapi.data.Store;
@@ -28,6 +29,7 @@ import org.xbrlapi.sax.ContentHandlerImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
+import org.xbrlapi.utilities.XMLDOMBuilder;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xpointer.resolver.PointerResolver;
@@ -116,6 +118,16 @@ public class LoaderImpl implements Loader {
             throw new XBRLException(
                     "The loader cache is null and so cannot be used.");
         return this.cache;
+    }
+    
+    /**
+     * @see Loader#getBuilderDOM()
+     */
+    public Document getBuilderDOM() throws XBRLException {
+        if (this.dom == null) {
+            this.dom = (new XMLDOMBuilder()).newDocument();
+        }
+        return this.dom;
     }
 
     /**
@@ -211,6 +223,12 @@ public class LoaderImpl implements Loader {
     }
     
     /**
+     * The XML DOM used by this loader's fragment builders.
+     * This is initialised on creation of the loader.
+     */
+    private Document dom = null;
+    
+    /**
      * @param store The data store to hold the DTS
      * @param xlinkProcessor The XLink processor to use for link resolution
      * @throws XBRLException if the loader cannot be instantiated.
@@ -221,6 +239,7 @@ public class LoaderImpl implements Loader {
         setStore(store);
         setXlinkProcessor(xlinkProcessor);
         this.setPointerResolver(new PointerResolverImpl(getStore()));
+        this.dom = (new XMLDOMBuilder()).newDocument();
     }
 
     /**
@@ -469,7 +488,13 @@ public class LoaderImpl implements Loader {
         
         URI uri = getNextDocumentToExplore();
         DOCUMENTS: while (uri != null) {
-
+            boolean documentClaimedByThisLoader = store.requestLoadingRightsFor(this,uri);
+            if (! documentClaimedByThisLoader) {
+                markDocumentAsExplored(uri);
+                uri = getNextDocumentToExplore();
+                continue DOCUMENTS;
+            }
+            
             long start = System.currentTimeMillis();
 
             if (!getStore().hasDocument(uri)) {
@@ -490,6 +515,7 @@ public class LoaderImpl implements Loader {
                 } catch (IOException e) {
                     this.cleanupFailedLoad(uri,"IO Problem: " + e.getMessage(),e);
                 } catch (ParserConfigurationException e) {
+                    getStore().recindLoadingRightsFor(this,uri);
                     throw new XBRLException("The parser could not be correctly configured.",e);
                 }
             } else {
@@ -546,8 +572,13 @@ public class LoaderImpl implements Loader {
         setDiscovering(true);
 
         URI uri = getNextDocumentToExplore();
-        while (store.hasDocument(uri) && (uri != null)) {
-            this.markDocumentAsExplored(uri);
+        boolean documentClaimedByThisLoader = store.requestLoadingRightsFor(this,uri);
+        while ((store.hasDocument(uri) || !documentClaimedByThisLoader) && (uri != null)) {
+            if (documentClaimedByThisLoader) {
+                store.recindLoadingRightsFor(this,uri);
+            } else {
+                this.markDocumentAsExplored(uri);
+            }
             uri = getNextDocumentToExplore();
         }
 
@@ -624,16 +655,17 @@ public class LoaderImpl implements Loader {
         return documentQueue.first();
     }
     
+    /**
+     * Flag the document as being explored.  Ensure that loading
+     * rights for this document have been recinded so that other
+     * loaders can act as they deem appropriate.
+     * @throws XBRLException
+     */
     protected void markDocumentAsExplored(URI uri) {
         documentQueue.remove(uri);
         successes.add(uri);
+        getStore().recindLoadingRightsFor(this,uri);
     }
-    
-
-    
-
-    
-
 
     /**
      * Parse an XML Document supplied as a URI the next part of the DTS.
@@ -843,6 +875,7 @@ public class LoaderImpl implements Loader {
         logger.error(getDocumentURI() + "encountered loading problem: " + e.getMessage());
         failures.put(uri,reason);
         documentQueue.remove(uri);
+        getStore().recindLoadingRightsFor(this,uri);
         try {
             getStore().deleteDocument(uri);
             // getCache().purge(uri);

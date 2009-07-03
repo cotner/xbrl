@@ -668,10 +668,13 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * Ensures that the database container is flushed to disk.
      * @see Store#sync()
      */
+    private long lastSync = 0;
     public synchronized void sync() throws XBRLException {
+        if ((System.currentTimeMillis() - lastSync) < 10000) return;
         if (this.dataContainer == null) throw new XBRLException("The database container cannot be synced because it is null.");
         try {
             this.dataContainer.sync();
+            lastSync = System.currentTimeMillis();
         } catch (XmlException e) {
             throw new XBRLException("The database updates could not be flushed to disk using the sync method.",e);
         }

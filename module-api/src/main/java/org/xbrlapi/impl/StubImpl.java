@@ -12,7 +12,6 @@ import java.net.URISyntaxException;
 
 import org.xbrlapi.Stub;
 import org.xbrlapi.builder.BuilderImpl;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 public class StubImpl extends XMLImpl implements Stub {
@@ -23,10 +22,7 @@ public class StubImpl extends XMLImpl implements Stub {
 	 */
 	public StubImpl() throws XBRLException {
 		super();
-		this.setBuilder(new BuilderImpl());
-		getBuilder().appendElement(
-		        Constants.XBRLAPINamespace,"fragment",
-		        Constants.XBRLAPIPrefix + ":fragment");	
+        setBuilder(new BuilderImpl());
 	}
 	
 	/**

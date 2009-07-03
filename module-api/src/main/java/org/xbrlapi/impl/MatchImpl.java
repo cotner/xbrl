@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Match;
+import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -32,6 +33,7 @@ public class MatchImpl extends XMLImpl implements Match {
 	 */
 	public MatchImpl() throws XBRLException {
 		super();
+        setBuilder(new BuilderImpl());
 	}
 	
 	/**

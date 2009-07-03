@@ -93,9 +93,6 @@ class XlinkImpl extends FragmentImpl implements Xlink {
 	 */
 	protected URI getTargetDocumentURI(URI uri) throws XBRLException {
 		try {
-		    
-		    // TODO !!! Why use this method ever?
-		    
 			return new URI(uri.getScheme(),null,uri.getHost(),uri.getPort(),uri.getPath(),null,null);
 		} catch (URISyntaxException e) {
 			throw new XBRLException("This exception can never be thrown.");

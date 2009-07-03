@@ -8,6 +8,7 @@ import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.Resource;
+import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -24,6 +25,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      */
     public PersistedRelationshipImpl() throws XBRLException {
         super();
+        setBuilder(new BuilderImpl());
     }    
     
     /**

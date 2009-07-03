@@ -65,7 +65,7 @@ public class FragmentFactory<F> {
 		    	XML fragment = (XML) constructor.newInstance();
 	            fragment.setStore(store);
 	            fragment.setResource(root);
-	            fragment.setIndex(root.getAttribute("index"));
+	            //fragment.setIndex(root.getAttribute("index"));
 	            return (F) fragment;
 	            
 	        } catch (InvocationTargetException e) {

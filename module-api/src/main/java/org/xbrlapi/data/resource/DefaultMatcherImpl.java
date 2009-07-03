@@ -28,7 +28,7 @@ public class DefaultMatcherImpl implements Matcher {
     /**
      * @see Matcher#getMatch(URI)
      */
-    public URI getMatch(URI uri) throws XBRLException {
+    public synchronized URI getMatch(URI uri) throws XBRLException {
         return uri;
     }
     

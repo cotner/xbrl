@@ -21,7 +21,6 @@ import org.xbrlapi.impl.ReferencePartDeclarationImpl;
 import org.xbrlapi.impl.SchemaImpl;
 import org.xbrlapi.sax.ContentHandler;
 import org.xbrlapi.utilities.Constants;
-import org.xbrlapi.utilities.GrammarCacheImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.Attributes;
 
@@ -214,10 +213,9 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
     }    
     
     /**
+     * (Commented out!) Modified on 13 February, 2007 by Howard Ungar to use the static grammar pool provided by the GrammarCache implementation.
      * TODO Determine why a static grammar pool is needed to use included anonymous schemas.
-     * get the XML Schema grammar model for a particular XML Schema.
-     * Modified on 13 February, 2007 by Howard Ungar to use the static grammar pool 
-     * provided by the GrammarCache implementation.
+     * @return the XML Schema grammar model for the XML Schema being parsed.
      * @throws XBRLException
      */
     protected XSModel constructXSModel() throws XBRLException {
@@ -226,7 +224,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
             XMLGrammarPreparser preparser = new XMLGrammarPreparser();
             preparser.registerPreparser(XMLGrammarDescription.XML_SCHEMA, null);
             //preparser.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarCacheImpl.getGrammarPool());
-            preparser.setGrammarPool(GrammarCacheImpl.getGrammarPool());
+            //preparser.setGrammarPool(GrammarCacheImpl.getGrammarPool());
             preparser.setFeature("http://xml.org/sax/features/namespaces", true);
             preparser.setFeature("http://xml.org/sax/features/validation", true);
             preparser.setFeature("http://apache.org/xml/features/validation/schema", true);

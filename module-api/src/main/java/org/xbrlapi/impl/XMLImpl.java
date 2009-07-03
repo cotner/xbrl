@@ -12,7 +12,6 @@ import org.w3c.dom.NodeList;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.XML;
 import org.xbrlapi.builder.Builder;
-import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -35,7 +34,7 @@ public class XMLImpl implements XML {
      * data store that this fragment is in.  This property is immutable 
      * and is set during construction of the fragment.
      */
-    private String index;
+    //private String index;
         
     /**
      * The Fragment builder - used when building fragments during DTS discovery.
@@ -172,7 +171,8 @@ public class XMLImpl implements XML {
      * @see org.xbrlapi.XML#getIndex()
      */
     public String getIndex() {
-        return this.index;
+        return this.getMetaAttribute("index");
+        //return this.index;
     }
     
     /**
@@ -181,11 +181,8 @@ public class XMLImpl implements XML {
     public void setIndex(String index) throws XBRLException {
         if (index == null) throw new XBRLException("The index must not be null.");
         if (index.equals("")) throw new XBRLException("A fragment index must not be an empty string.");
-        this.index = index;
-        if (this.getMetadataRootElement() == null) {
-            setBuilder(new BuilderImpl());
-        }
         if (builder != null) builder.setMetaAttribute("index",index);
+        else setMetaAttribute("index",index);
     }
  
     /**

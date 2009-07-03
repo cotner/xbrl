@@ -39,7 +39,7 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
     /**
      * @see org.xbrlapi.data.resource.Matcher#getMatch(URI)
      */
-    public URI getMatch(URI uri) throws XBRLException {
+    public synchronized URI getMatch(URI uri) throws XBRLException {
         String signature = this.getSignature(uri);
         if (signature == null) throw new XBRLException("The signature could not be generated.");
         if (getMap().containsKey(signature)) {

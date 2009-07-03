@@ -33,7 +33,7 @@ public class BuilderImpl implements Builder {
 	/**
 	 * The XML DOM used to build up fragments.
 	 */
-	private static Document dom = null;
+	private Document dom = null;
 	
 	/**
 	 * The data root element.
@@ -56,18 +56,13 @@ public class BuilderImpl implements Builder {
 	private boolean isNewFragment = true;
 
 	/**
-	 * Create the builder making sure that the static DOM 
-	 * is instantiated and creating the metadata root element.
+	 * Create the builder controlling which XML DOM is being used.
 	 * @param dom The DOM to use in the builder.
-	 * @throws XBRLException if the DOM is not the same as an existing
-	 * DOM being used by the builder.
+	 * @throws XBRLException if the DOM is null.
 	 */
 	public BuilderImpl(Document dom) throws XBRLException {
-		if (BuilderImpl.dom != null) {
-			if (! BuilderImpl.dom.equals(dom))
-				throw new XBRLException("All builders used in a load must use the same DOM.");
-		}
-		BuilderImpl.dom = dom;
+	    if (dom == null) throw new XBRLException("The Builder DOM must not be null.");
+		this.dom = dom;
 		setupBuilder();
 	}
 	
@@ -83,7 +78,7 @@ public class BuilderImpl implements Builder {
 		metadata.appendChild(container);
 
 		// Declare the xml namespace to keep Xindice happy.
-        metadata.setAttribute("xmlns:" + Constants.XMLPrefix, Constants.XMLNamespace);
+        //metadata.setAttribute("xmlns:" + Constants.XMLPrefix, Constants.XMLNamespace);
 		
 	}
 	
@@ -103,7 +98,7 @@ public class BuilderImpl implements Builder {
 	 * Restores the builder to its pre-use state.
 	 */
 	public void close() {
-		BuilderImpl.dom = null;
+		dom = null;
 	}
 	
 	/**

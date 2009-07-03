@@ -6,6 +6,7 @@ package org.xbrlapi.impl;
  */
 
 import org.xbrlapi.Mock;
+import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 public class MockImpl extends FragmentImpl implements Mock {
@@ -16,11 +17,8 @@ public class MockImpl extends FragmentImpl implements Mock {
 	 */
 	public MockImpl() throws XBRLException {
 		super();
-/*		this.setBuilder(new BuilderImpl());
-		getBuilder().appendElement(
-		        Constants.XBRLAPINamespace,"fragment",
-		        Constants.XBRLAPIPrefix + ":fragment");	
-*/	}
+        setBuilder(new BuilderImpl());
+	}
 	
 	/**
 	 * @param id The unique id of the fragment being created,
