@@ -48,12 +48,12 @@ directory.</p>
 
 <p>Maven does a great job of providing the necessary JAR files based upon the 
 dependencies documented in the Maven program object models (POM files).  However, 
-some of the JAR files that XBRLAPI has dependencies on are not yet available from
+some of the JAR files that XBRLAPI has dependencies on are not available from
 the online Maven repositories.  These dependencies have to be addressed manually by 
 placing the appropriate JAR files into the local Maven repository.</p>
 
-<p>Adding a new custom JAR to the local MAVEN repository is done as follows (using eXist 1.1.1 as an example):</p>
-<p><code>mvn install:install-file -DgroupId=exist -DartifactId=exist -Dversion=1.1.1 -Dpackaging=jar -Dfile=exist-1.1.1.jar</code><br/>
+<p>Adding a new custom JAR to the local MAVEN repository is done as follows (using eXist 1.2.6 as an example):</p>
+<p><code>mvn install:install-file -DgroupId=exist -DartifactId=exist -Dversion=1.2.6 -Dpackaging=jar -Dfile=exist-1.2.6.jar</code><br/>
 This needs to be run from the directory containing the JAR file to be added to the local repository.
 </p>
 
@@ -75,10 +75,10 @@ JAR files are required in the local MAVEN repository.</p>
 
 	<tr>
 		<td>xbrlapi-exist</td>
-		<td>exist-1.1.1.jar</td>
+		<td>exist-1.2.6.jar</td>
 		<td>exist</td>
 		<td>exist</td>
-		<td>1.1.1</td>
+		<td>1.2.6</td>
 		<td><a href="http://exist.sourceforge.net/">eXist</a></td>
 		<td>This JAR contains the eXist implementation.  It must be obtained from
 		the eXist distribution. See
@@ -97,17 +97,6 @@ JAR files are required in the local MAVEN repository.</p>
 		the eXist distribution where it has been modified for eXist.  See the 
 		<a href="http://exist.sourceforge.net/devguide.html#N10D58">eXist required library 
 		documentation</a> for details.</td>
-	</tr>
-
-	<tr>
-		<td>xbrlapi-exist</td>
-		<td>xmlrpc-1.2-patched.jar</td>
-		<td>exist</td>
-		<td>xmlrpc</td>
-		<td>1.2-patched</td>
-		<td><a href="http://exist.sourceforge.net/">eXist</a></td>
-		<td>This JAR contains the XML RPC API.  It must be obtained from
-		the eXist distribution where it has been patched for eXist.</td>
 	</tr>
 
 	<tr>
@@ -135,6 +124,36 @@ JAR files are required in the local MAVEN repository.</p>
   		making sure that you use the appropriate version number for the installation directory.  
   		dbxml.jar can be found in the lib directory of the installation.<td>
 	</tr>
+
+  <tr>
+    <td>saxon9</td>
+    <td>saxon9.jar</td>
+    <td>net.sf.saxon</td>
+    <td>saxon</td>
+    <td>9.1</td>
+    <td><a href="http://saxon.sourceforge.net/">Saxon download information</a></td>
+    <td>This JAR enables Saxon to run XQueries.</td>
+  </tr>
+
+  <tr>
+    <td>saxon9-dom</td>
+    <td>saxon9.jar</td>
+    <td>net.sf.saxon</td>
+    <td>saxon-dom</td>
+    <td>9.1</td>
+    <td><a href="http://saxon.sourceforge.net/">Saxon download information</a></td>
+    <td>This JAR enables Saxon to run XQueries against XML DOM structures.</td>
+  </tr>
+
+  <tr>
+    <td>saxon9</td>
+    <td>saxon9.jar</td>
+    <td>net.sf.saxon</td>
+    <td>saxon-s9api</td>
+    <td>9.1</td>
+    <td><a href="http://saxon.sourceforge.net/">Saxon download information</a></td>
+    <td>This JAR provides Saxon's own XQuery API for version 9 of Saxon.</td>
+  </tr>
 
 </table>
 
