@@ -38,7 +38,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     <dependency>
         <groupId>exist</groupId>
         <artifactId>exist</artifactId>
-        <version>1.1.1</version>
+        <version>1.2.6</version>
     </dependency>
 
     <!-- Provides the XML:DB API -->
@@ -49,12 +49,23 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
         <version>custom</version>
     </dependency>
 
-    <!--  Provides the XML RPC API implementation patched for eXist requirements -->
-    <!-- Requires a custom installation in the local Maven repository -->
+    <!--  Provides the XML RPC common and client API implementation -->
     <dependency>
-        <groupId>exist</groupId>
-        <artifactId>xmlrpc</artifactId>
-        <version>1.2-patched</version>
+        <groupId>org.apache.xmlrpc</groupId>
+        <artifactId>xmlrpc-common</artifactId>
+        <version>3.1.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.xmlrpc</groupId>
+        <artifactId>xmlrpc-client</artifactId>
+        <version>3.1.1</version>
+    </dependency>
+
+    <!--  Provides the Apache commons WS utilities for XML serialisation -->
+    <dependency>
+        <groupId>org.apache.ws.commons.util</groupId>
+        <artifactId>ws-commons-util</artifactId>
+        <version>1.0.2</version>
     </dependency>
 
   </dependencies>
