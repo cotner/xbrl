@@ -3,7 +3,6 @@ package org.xbrlapi.data.bdbxml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -680,48 +679,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         }
     }
 
-    /**
-     * @see org.xbrlapi.data.Store#getDocumentURIs()
-     */
-    @Override
-    public Set<URI> getDocumentURIs() throws XBRLException {
-        
-        String query = "#roots#[@parentIndex='']/@uri";
-        
-        XmlResults xmlResults = null;
-        XmlValue xmlValue = null;
-        try {
-    
-            try {
-                xmlResults = runQuery(query);
-                double startTime = System.currentTimeMillis();
-
-                xmlValue = xmlResults.next();
-                Set<URI> uris = new HashSet<URI>();
-                while (xmlValue != null) {
-                    try {
-                        uris.add(new URI(xmlValue.getNodeValue()));
-                    } catch (URISyntaxException urie) {
-                        xmlValue.delete();
-                        throw new XBRLException("URI " + xmlValue.getNodeValue() + " does not have valid syntax.");
-                    }
-                    xmlValue.delete();
-                    xmlValue = xmlResults.next();
-                }
-                
-                Double time = new Double((System.currentTimeMillis()-startTime));
-                logger.debug(time + " milliseconds to create URI list from" + query);
-                return uris;
-    
-            } catch (XmlException e) {
-                throw new XBRLException("Failed query: " + query,e);
-            }
-            
-        } finally {
-            if (xmlValue != null) xmlValue.delete();
-            if (xmlResults != null) xmlResults.delete();
-        }        
-    }	
+	
 
 
     /**

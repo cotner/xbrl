@@ -487,7 +487,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
         Set<URI> uris = new HashSet<URI>();
         
-        Set<String> uriStrings =  this.queryForStrings("#roots#[@parentIndex='']/@uri");
+        Set<String> uriStrings =  this.queryForStrings("for $root in #roots#[@parentIndex=''] return string($root/@uri)");
 
         try {
             for (String uriString: uriStrings) {

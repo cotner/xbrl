@@ -26,8 +26,8 @@ public class QueryForStringsTestCase extends BaseTestCase {
 		try {
 	        loader.discover(this.getURI(START));
 		    
-	        String query = "#roots#/@index";
-	        Set<String> results = store.queryForStrings(query);
+	        String query = "#roots#";
+	        Set<String> results = store.queryForIndices(query);
 	        assertTrue(results.size() > 1);
 	        for (String result: results) {
 	            logger.info(result);

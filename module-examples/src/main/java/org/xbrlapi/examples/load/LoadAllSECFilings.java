@@ -90,12 +90,12 @@ public class LoadAllSECFilings {
             // Get the list of URIs to load from the SEC RSS feed.
             Grabber grabber = new SecGrabberImpl(new URI("http://www.sec.gov/Archives/edgar/xbrlrss.xml"));
             List<URI> resources = grabber.getResources();
-
             
             // Default to using 2 threads.
             int threadCount = 2;
             if (arguments.containsKey("threads")) threadCount = (new Integer(arguments.get("threads")).intValue());
             int gap = new Double(Math.floor(resources.size()/threadCount)).intValue();
+            System.out.println("# of URIs per thread = " + gap + " given # URIs = " + resources.size() + " and #threads = " + threadCount);
             List<Thread> threads = new Vector<Thread>();
             for (int counter=0; counter<threadCount; counter++) {
                 Loader loader =createLoader(store,arguments.get("cache")); 

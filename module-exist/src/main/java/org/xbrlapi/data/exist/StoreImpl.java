@@ -8,6 +8,7 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.exist.xmldb.XQueryService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,7 +25,6 @@ import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
-import org.xmldb.api.modules.XPathQueryService;
 
 /**
  * Implementation of the XBRL data store using eXist
@@ -50,9 +50,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	private CollectionManagementService manager = null;
 
 	/**
-	 * The XPath query service for the data collection.
+	 * The XQuery service for the data collection.
 	 */
-    private XPathQueryService xpathService = null;
+    private XQueryService xqueryService = null;
     	
 	/**
 	 * Initialise the database connection.
@@ -140,14 +140,13 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		}
 
 		try {
-			xpathService = (XPathQueryService) collection.getService("XPathQueryService","1.0");
-			// Not allowed to bind the xml prefix: xpathService.setNamespace(Constants.XMLPrefix, Constants.XMLNamespace);
-			xpathService.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace);
-			xpathService.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace);
-			xpathService.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace);
-			xpathService.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace);
-			xpathService.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace);
-			xpathService.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
+			xqueryService = (XQueryService) collection.getService("XQueryService","1.0");
+			xqueryService.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace);
+			xqueryService.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace);
+			xqueryService.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace);
+			xqueryService.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace);
+			xqueryService.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace);
+			xqueryService.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
 			// TODO add means for users to add their own namespace declarations to the data store xpath services
 			
 		} catch (XMLDBException e) {
@@ -330,8 +329,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		ResourceSet resources = null;
 		try {
 	        for (URI namespace: this.namespaceBindings.keySet()) 
-	            xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
-			resources = xpathService.query(query);
+	            xqueryService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
+			resources = xqueryService.query(query);
 		} catch (XMLDBException e) {
 			throw new XBRLException("The query service failed.", e);
 		}
@@ -360,8 +359,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         ResourceSet resources = null;
         try {
             for (URI namespace: this.namespaceBindings.keySet()) 
-                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
-            resources = xpathService.query(query);
+                xqueryService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
+            resources = xqueryService.query(query);
             return resources.getSize();
         } catch (XMLDBException e) {
             throw new XBRLException("The query service failed.", e);
@@ -380,8 +379,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         ResourceSet resources = null;
         try {
             for (URI namespace: this.namespaceBindings.keySet()) 
-                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
-            resources = xpathService.query(query);
+                xqueryService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
+            resources = xqueryService.query(query);
         } catch (XMLDBException e) {
             throw new XBRLException("The XPath query service failed.", e);
         }
@@ -413,13 +412,15 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         String roots = "/*" + this.getURIFilteringPredicate();
         query = query.replaceAll("#roots#",roots);
         
+        logger.info(query);
+        
         ResourceSet resources = null;
         try {
             for (URI namespace: this.namespaceBindings.keySet()) 
-                xpathService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
-            resources = xpathService.query(query + "/string()");
+                xqueryService.setNamespace(this.namespaceBindings.get(namespace), namespace.toString());
+            resources = xqueryService.query(query);
         } catch (XMLDBException e) {
-            throw new XBRLException("The XPath query service failed.", e);
+            throw new XBRLException("The XQuery service failed.", e);
         }
 
         Set<String> strings = new TreeSet<String>();

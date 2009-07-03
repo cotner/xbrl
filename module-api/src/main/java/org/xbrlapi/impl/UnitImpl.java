@@ -54,8 +54,10 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
         List<Measure> result = new Vector<Measure>();
         if (! this.hasDenominator()) return result;
         NodeList measures = getDenominatorMeasures();
-        for (int i=0; i<measures.getLength(); i++) {
-            result.add(new MeasureImpl(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)),this.getLocalnameFromQName(measures.item(i).getTextContent())));
+        if (measures != null) {
+            for (int i=0; i<measures.getLength(); i++) {
+                result.add(new MeasureImpl(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)),this.getLocalnameFromQName(measures.item(i).getTextContent())));
+            }
         }
         return result;
     }    

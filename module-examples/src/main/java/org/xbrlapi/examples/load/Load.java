@@ -112,7 +112,7 @@ public class Load {
             
             // Analyse the presentation networks in the supporting DTS
             for (URI linkrole: store.getLinkRoles(Constants.PresentationArcrole())) {
-                Set<Fragment> rootLocators = store.<Fragment>getNetworkRoots(new URI(arguments.get("linkrole")),Constants.PresentationArcrole());                            
+                Set<Fragment> rootLocators = store.<Fragment>getNetworkRoots(linkrole,Constants.PresentationArcrole());                            
                 for (Fragment rootLocator: rootLocators) {
                     Concept rootConcept = (Concept) ((Locator) rootLocator).getTarget();
                     reportNode("",rootConcept,linkrole);

@@ -34,14 +34,13 @@ public class SecGrabberImpl extends AbstractGrabberImpl implements Grabber {
 		List<URI> resources = new ArrayList<URI>();
 		Document feed = getDocument(getSource());
 		NodeList nodes = feed.getElementsByTagNameNS(NAMESPACE,NAME);
-		logger.info(nodes.getLength());
 		LOOP: for (int i=0; i<nodes.getLength(); i++) {
 			Element element = (Element) nodes.item(i);
             String type = element.getAttribute("type");
             String uri = element.getAttribute("url");
             if (! (type.equals("EX-100.INS") || type.equals("EX-101.INS"))) {
-                logger.debug("Skipping " + uri);
-                continue LOOP;// Skip over uninteresting entry points for discovery.
+                logger.info("Skipping " + uri);
+                continue LOOP;// Only interested in certain XBRL instances as entry points.
             }
 			if (
 					(uri != null) &&
@@ -54,10 +53,11 @@ public class SecGrabberImpl extends AbstractGrabberImpl implements Grabber {
 				try {
 					resources.add(new URI(uri));
 				} catch (URISyntaxException e) {
-					logger.info("The SEC source URI was malformed");
+					logger.warn("SEC source URI: " + uri + " is malformed and has been ignored.");
 				}
 			}
 		}
+        logger.info("# URIs in SEC feed = " + resources.size());
 		return resources;
 	}
 	
