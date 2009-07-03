@@ -875,13 +875,12 @@ public class LoaderImpl implements Loader {
         logger.error(getDocumentURI() + "encountered loading problem: " + e.getMessage());
         failures.put(uri,reason);
         documentQueue.remove(uri);
-        getStore().recindLoadingRightsFor(this,uri);
+        getStore().recindLoadingRightsFor(this,getDocumentURI());
         try {
-            getStore().deleteDocument(uri);
-            // getCache().purge(uri);
-            logger.info("Purged " + uri + " from the data store and cache.");
+            getStore().deleteDocument(getDocumentURI());
+            logger.info("Purged " + uri + " from the data store.");
         } catch (Exception exception) {
-            logger.error("Failed to clean up the document from the data store or cache. " + exception.getMessage());
+            logger.error("Failed to clean up the document from the data store. " + exception.getMessage());
         }
         fragments = new Stack<Fragment>();
         states = new Stack<ElementState>();        

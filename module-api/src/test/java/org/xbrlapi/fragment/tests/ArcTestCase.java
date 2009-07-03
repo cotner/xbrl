@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.xbrlapi.Arc;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.utilities.Constants;
 
 /**
  * Tests the implementation of the org.xbrlapi.Arc interface.
@@ -49,7 +48,7 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetFrom() {	
 
 		try {
-			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots[*/*/@xlink:type='arc']");
 			Arc fragment = fragments.get(0);
 			assertEquals("summationItem", fragment.getFrom());
 		} catch (Exception e) {
@@ -64,7 +63,7 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetShow() {	
 
 		try {
-			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#[*/*/@xlink:type='arc']");
 			Arc fragment = fragments.get(0);
 			assertNull(fragment.getShow());
 		} catch (Exception e) {
@@ -79,7 +78,7 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetActuate() {	
 
 		try {
-			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#[*/*/@xlink:type='arc']");
 			Arc fragment = fragments.get(0);
 			assertNull(fragment.getActuate());
 		} catch (Exception e) {
@@ -109,7 +108,7 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetSourceFragments() {	
 
 		try {
-			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#[*/*/@xlink:type='arc']");
 			Arc fragment = fragments.get(0);
 			assertEquals(1, fragment.getSourceFragments().size());
 		} catch (Exception e) {
@@ -124,7 +123,7 @@ public class ArcTestCase extends DOMLoadingTestCase {
 	public void testGetTargets() {	
 
 		try {
-			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#/" + Constants.XBRLAPIPrefix + ":" + "data/*[@xlink:type='arc']");
+			List<Arc> fragments = store.<Arc>queryForXMLResources("#roots#[*/*/@xlink:type='arc']");
 			Arc fragment = fragments.get(0);
 			assertEquals(2, fragment.getTargetFragments().size());
 		} catch (Exception e) {

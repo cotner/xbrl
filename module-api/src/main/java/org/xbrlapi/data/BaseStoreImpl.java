@@ -199,7 +199,11 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      */
     public void persistStub(URI uri, String reason) throws XBRLException {
 
-        deleteDocument(uri);
+        try {
+            deleteDocument(uri);
+        } catch (XBRLException e) {
+            reason += " (NB: Failed to delete the document from the data store. "+e.getMessage()+")";
+        }
 
         String documentId = getDocumentId(uri);
         Stub stub = new StubImpl(documentId);

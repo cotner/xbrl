@@ -18,6 +18,7 @@ public class AllTests {
         suite.addTestSuite(FragmentTestCase.class);
 		suite.addTestSuite(FactDimensionContainerTestCase.class);
 		suite.addTestSuite(ReferencePartTestCase.class);
+        suite.addTestSuite(ReferencePartDeclarationTestCase.class);
 		suite.addTestSuite(ElementDeclarationTestCase.class);
         suite.addTestSuite(EntityResourceTestCase.class);
 		suite.addTestSuite(Fragment_LoaderDependentTestCase.class);
