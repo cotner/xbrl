@@ -4,7 +4,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.xbrlapi</groupId>
-  <artifactId>xbrlapi-bdb-xml</artifactId>
+  <artifactId>xbrlapi-bdbxml</artifactId>
   <version>5.0</version>
   <packaging>jar</packaging>
   <name>XBRLAPI Oracle Berkeley Database XML data store</name>
@@ -108,4 +108,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     </testResources>
   
   </build>
+  
+    <repositories>
+        <repository>
+            <id>oracleReleases</id>
+            <name>Oracle Released Java Packages</name>
+            <url>http://download.oracle.com/maven</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+  
 </project>
