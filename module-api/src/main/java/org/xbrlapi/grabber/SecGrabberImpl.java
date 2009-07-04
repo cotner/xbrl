@@ -39,7 +39,7 @@ public class SecGrabberImpl extends AbstractGrabberImpl implements Grabber {
             String type = element.getAttribute("type");
             String uri = element.getAttribute("url");
             if (! (type.equals("EX-100.INS") || type.equals("EX-101.INS"))) {
-                logger.info("Skipping " + uri);
+                logger.debug("Skipping " + uri);
                 continue LOOP;// Only interested in certain XBRL instances as entry points.
             }
 			if (
