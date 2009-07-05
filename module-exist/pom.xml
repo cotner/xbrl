@@ -20,9 +20,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   </licenses>
 
   <scm>
-    <connection>scm:cvs:pserver:anonymous@xbrlapi.cvs.sourceforge.net:/cvsroot/xbrlapi:xbrlapi-alpha</connection>
-    <developerConnection>scm:cvs:ext:xbrlapi.cvs.sourceforge.net:/cvsroot/xbrlapi:xbrlapi-alpha</developerConnection>
-    <url>http://xbrlapi.cvs.sourceforge.net/xbrlapi/</url>
+    <connection>scm:svn:https://xbrlapi.svn.sourceforge.net/svnroot/xbrlapi/trunk</connection>
+    <developerConnection>scm:svn:https://xbrlapi.svn.sourceforge.net/svnroot/xbrlapi/trunk</developerConnection>
+    <tag>HEAD</tag>
+    <url>http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/trunk/</url>
   </scm>
 
   <dependencies>
