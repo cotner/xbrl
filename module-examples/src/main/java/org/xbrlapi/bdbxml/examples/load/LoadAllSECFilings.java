@@ -1,35 +1,24 @@
 /**
  * Commandline example showing:
- * 1. How to load an XBRL instance document
- * 2. How to analyse the presentation networks for that instance
+ * 1. How to load all of the filings published by the SEC.
  */
-package org.xbrlapi.examples.load;
+package org.xbrlapi.bdbxml.examples.load;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Vector;
 
-import org.xbrlapi.Concept;
-import org.xbrlapi.Context;
-import org.xbrlapi.ExtendedLink;
-import org.xbrlapi.FootnoteResource;
-import org.xbrlapi.Fragment;
-import org.xbrlapi.Instance;
-import org.xbrlapi.Item;
-import org.xbrlapi.Locator;
-import org.xbrlapi.Resource;
-import org.xbrlapi.Unit;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
+import org.xbrlapi.grabber.Grabber;
+import org.xbrlapi.grabber.SecGrabberImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
+import org.xbrlapi.loader.discoverer.Discoverer;
 import org.xbrlapi.sax.EntityResolverImpl;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
@@ -38,15 +27,12 @@ import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xml.sax.EntityResolver;
 
 /**
- *  This example loads a set of documents, including one or more XBRL instances,
- *  based on the list of URLs provided on the command line.  The documents
- *  are loaded into a Oracle Berkeley XML Database (but this can easily be modified
- *  by using a different data store) and then the information in the instances
- *  that have been loaded is analysed and reported on, demonstrating how
- *  the XBRLAPI can be used to access information in instances.
+ *  This example loads all of the data identified in the 
+ *  SEC RSS feed.  It does so using a series of threads
+ *  the number of which can be set at the command line.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class Load {
+public class LoadAllSECFilings {
 
     private static Store store = null;
 
@@ -58,7 +44,6 @@ public class Load {
         try {
             
             // Process command line arguments
-            List<URI> inputs = new LinkedList<URI>();
             HashMap<String,String> arguments = new HashMap<String,String>();
             int i = 0;
             if (i >= args.length)
@@ -73,25 +58,23 @@ public class Load {
                     } else if (args[i].equals("-container")) {
                         i++;
                         arguments.put("container", args[i]);
+                    } else if (args[i].equals("-threads")) {
+                        i++;
+                        arguments.put("threads", args[i]);
                     } else if (args[i].equals("-cache")) {
                         i++;
                         arguments.put("cache", args[i]);
                     } else
                         badUsage("Unknown argument: " + args[i]);
                 } else {
-                    try {
-                        inputs.add(new URI(args[i]));
-                    } catch (URISyntaxException e) {
-                        badUsage("Malformed discovery starting point URI: " + args[i]);
-                    }
+                    ;// Ignore the parameter
                 }
                 i++;
             }
-            
+
             if (! arguments.containsKey("database")) badUsage("You need to specify the database directory.");
             if (! arguments.containsKey("container")) badUsage("You need to specify the database container name.");
             if (! arguments.containsKey("cache")) badUsage("You need to specify the root of the document cache.");
-            if (inputs.size() < 1) badUsage("You need to specify at least one starting point for discovery.");
             
             // Make sure that the taxonomy cache exists
             try {
@@ -104,27 +87,41 @@ public class Load {
             // Set up the data store to load the data
             store = createStore(arguments.get("database"),arguments.get("container"));
 
-            // Set up the data loader (does the parsing and data discovery)
-            Loader loader = createLoader(store,arguments.get("cache"));
+            // Get the list of URIs to load from the SEC RSS feed.
+            Grabber grabber = new SecGrabberImpl(new URI("http://www.sec.gov/Archives/edgar/xbrlrss.xml"));
+            List<URI> resources = grabber.getResources();
             
-            // Load the instance data
-            loader.discover(inputs);
+            // Default to using 2 threads.
+            int threadCount = 2;
+            if (arguments.containsKey("threads")) threadCount = (new Integer(arguments.get("threads")).intValue());
+            int gap = new Double(Math.floor(resources.size()/threadCount)).intValue();
+            System.out.println("# of URIs per thread = " + gap + " given # URIs = " + resources.size() + " and #threads = " + threadCount);
+            List<Thread> threads = new Vector<Thread>();
+            for (int counter=0; counter<threadCount; counter++) {
+                Loader loader =createLoader(store,arguments.get("cache")); 
+                if (counter == threadCount-1) {
+                    System.out.println("Thread " + (counter+1) + " gets documents " + (counter*gap) + " to " + (resources.size()-1));
+                    loader.stashURIs(resources.subList(counter*gap,resources.size()-1));
+                } else {
+                    System.out.println("Thread " + (counter+1) + " gets documents " + (counter*gap) + " to " + ((counter+1)*gap-1));
+                    loader.stashURIs(resources.subList(counter*gap,(counter+1)*gap-1));
+                }
+                Discoverer discoverer = new Discoverer(loader);
+                Thread thread = new Thread(discoverer);
+                threads.add(thread);
+                thread.start();
+            }
             
-            // Analyse the presentation networks in the supporting DTS
-            for (URI linkrole: store.getLinkRoles(Constants.PresentationArcrole())) {
-                Set<Fragment> rootLocators = store.<Fragment>getNetworkRoots(linkrole,Constants.PresentationArcrole());                            
-                for (Fragment rootLocator: rootLocators) {
-                    Concept rootConcept = (Concept) ((Locator) rootLocator).getTarget();
-                    reportNode("",rootConcept,linkrole);
+            // Wait till data loading is done.
+            boolean stillGoing = true;
+            while (stillGoing) {
+                Thread.sleep(5000);
+                stillGoing = false;
+                for (Thread thread: threads) {
+                    if (thread.isAlive()) stillGoing = true;
                 }
             }
-
-            // Iterate the instances printing out lists of facts etc.
-            List<Instance> instances = store.<Instance>getXMLResources("Instance");
-            for (Instance instance: instances) {
-                reportInstance(instance);
-            }
-            
+                        
             // Clean up the data store and exit
             cleanup(store);
             System.exit(0);
@@ -132,55 +129,6 @@ public class Load {
         } catch (Exception e) {
             e.printStackTrace();
             badUsage(e.getMessage());
-        }
-        
-    }
-    
-    /**
-     * Report the information about a concept in the presentation heirarchy
-     * @param indent The indent to use for reporting the fragment
-     * @param fragment The fragment to report
-     * @param linkRole The linkrole of the network to use
-     * @throws XBRLExceptions
-     */
-    private static void reportNode(String indent, Fragment fragment, URI linkRole) throws XBRLException {
-        Concept concept = (Concept) fragment;
-        System.out.println(indent + concept.getTargetNamespace() + ":" + concept.getName());
-        List<Fragment> children = store.getTargets(concept.getIndex(),linkRole,Constants.PresentationArcrole());
-        if (children.size() > 0) {
-            for (Fragment child: children) {
-                reportNode(indent + " ", child,linkRole);
-            }  
-        }
-    }
-    
-    private static void reportInstance(Instance instance) throws XBRLException {
-        List<Item> items = instance.getItems();
-        System.out.println("Top level items in the instance.");
-        for (Item item: items) {
-            System.out.println(item.getLocalname() + " " + item.getContextId());
-        }
-
-        List<Context> contexts = instance.getContexts();
-        System.out.println("Contexts in the instance.");
-        for (Context context: contexts) {
-            System.out.println("Context ID " + context.getId());
-        }
-    
-        List<Unit> units = instance.getUnits();
-        System.out.println("Units in the instance.");
-        for (Unit unit: units) {
-            System.out.println("Unit ID " + unit.getId());
-        }
-        
-        List<ExtendedLink> links = instance.getFootnoteLinks();
-        System.out.println("Footnote links in the instance.");
-        for (ExtendedLink link: links) {            
-            List<Resource> resources = link.getResources();
-            for (Resource resource: resources) {
-                FootnoteResource fnr = (FootnoteResource) resource;
-                System.out.println("Footnote resource: " + fnr.getDataRootElement().getTextContent());
-            }
         }
         
     }
@@ -194,11 +142,13 @@ public class Load {
             System.err.println(message);
         }
         
-        System.err.println("Command line usage: java org.xbrlapi.examples.load.Load -database VALUE -container VALUE -cache VALUE URI1 URI2 ...");
+        System.err.println("Command line usage: java org.xbrlapi.examples.load.LoadAllSECFilings -database VALUE -container VALUE -cache VALUE");
         System.err.println("Mandatory arguments: ");
         System.err.println(" -database VALUE   directory containing the Oracle BDB XML database");
         System.err.println(" -container VALUE  name of the data container");
         System.err.println(" -cache VALUE      directory that is the root of the document cache");
+        System.err.println("Optional arguments: ");
+        System.err.println(" -threads VALUE    the number of threads to use when loading the data");
         
         if ("".equals(message)) {
             System.exit(0);

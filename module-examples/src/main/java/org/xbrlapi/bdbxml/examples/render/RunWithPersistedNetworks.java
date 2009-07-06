@@ -1,10 +1,14 @@
 /**
  * Commandline example showing:
- * 1. How to discover an XBRL instance document
- * 2. How to travers the presentation networks for that instance
- * 3. How to create an XBRL Inline document
+ * <ul>
+ * <li>How to discover an XBRL instance document</li>
+ * <li>How to travers the presentation networks for that instance</li>
+ * <li>How to create an XBRL Inline document</li>
+ * </ul>
+ * This example uses networks of persisted active relationships
+ * and it demonstrates working with a dimensional aspect model.
  */
-package org.xbrlapi.examples.render;
+package org.xbrlapi.bdbxml.examples.render;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,36 +22,38 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Arc;
 import org.xbrlapi.Concept;
-import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Stub;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
-import org.xbrlapi.aspects.NonDimensionalAspectModel;
 import org.xbrlapi.aspects.QuarterlyPeriodAspect;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.loader.Loader;
-import org.xbrlapi.loader.LoaderImpl;
 import org.xbrlapi.loader.discoverer.Discoverer;
+import org.xbrlapi.networks.Analyser;
+import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
-import org.xbrlapi.networks.NetworkImpl;
-import org.xbrlapi.networks.Networks;
-import org.xbrlapi.networks.NetworksImpl;
-import org.xbrlapi.networks.Relationship;
+import org.xbrlapi.networks.Storer;
+import org.xbrlapi.networks.StorerImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
+import org.xbrlapi.xdt.LoaderImpl;
+import org.xbrlapi.xdt.aspects.DimensionalAspectModel;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
@@ -59,25 +65,29 @@ import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 
 /**
- * @author Steve Yang (steve2yang@yahoo.com) (YangSt1)
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class Run {
-
+public class RunWithPersistedNetworks {
+    
     private static Store store = null;
 
-    protected static Logger logger = Logger.getLogger(Run.class);
+    protected static Logger logger = Logger.getLogger(RunWithPersistedNetworks.class);
 
     private static double startTime;
 
-    private static ArrayList<String> labels = new ArrayList<String>();
+
+    /**
+     * A map of all lists of items in the instance, 
+     * indexed by the concept identifier, comprising
+     * the concept namespace and concept local name.
+     */
     private static Map<String,List<Item>> itemMap = new HashMap<String,List<Item>>();
     
     private static AspectModel aspectModel;
     
     private static Network network;
     private static Instance instance;
-    private static ArrayList<Concept> concepts = new ArrayList<Concept>();
+
     private static int maxLevel = 1;
 
     public static void main(String[] args) {
@@ -162,6 +172,11 @@ public class Run {
             // Set up the data store to load the data
             store = createStore(arguments.get("database"), arguments.get("container"));
 
+            List<Stub> stubs = store.getStubs();
+            for (Stub stub: stubs) {
+                stub.serialize();
+            }
+            
             // Set up the data loader (does the parsing and data discovery)
             Loader loader = createLoader(store, arguments.get("cache"));
 
@@ -182,33 +197,32 @@ public class Run {
             }
             reportTime("Setting URIs");
 
+            // Configure the store to use persisted networks
+            Analyser analyser = new AnalyserImpl(store);
+            store.setAnalyser(analyser);
+
             // Load the data required to render the XBRL instance.
             Discoverer discoverer = new Discoverer(loader);
             Thread discoveryThread = new Thread(discoverer);
             discoveryThread.start();
             while (discoveryThread.isAlive()) {
-                Thread.sleep(2000);
-                logger.info("Currently loading " + loader.getDocumentURI()
-                        + ".");
-                logger.info(loader.getDocumentsStillToAnalyse().size()
-                        + " documents still to load.");
+                Thread.sleep(1000);
             }
             reportTime("Loading data");
 
             // Check that all documents were loaded OK.
-            List<Stub> stubs = store.getStubs();
+            stubs = store.getStubs();
             if (! stubs.isEmpty()) {
                 for (Stub stub: stubs) {
                     logger.error(stub.getResourceURI() + ": " + stub.getReason());
                 }
                 badUsage("Some documents were not loaded.");
-            }            
-            
-/*            logger.info("Documents in the data store include ...");            
-            for (String uri: store.getStoredURIs()) {
-                logger.info(uri);
             }
-*/            
+
+            Storer storer = new StorerImpl(store);
+            storer.deleteInactiveRelationships();
+            // System.exit(0);
+
             // Get the Freemarker template ready to use.
             if (!arguments.containsKey("template"))
                 throw new XBRLException("The Freemarker template must be specified.");
@@ -218,25 +232,20 @@ public class Run {
                 throw new XBRLException("The template file location is invalid and resulted in a null file.");
             if (!templateFile.exists())
                 throw new XBRLException("The freemarker template does not exist.");
-            logger.info("The template file is " + templateFile);
-            logger.info("The template file name is " + templateFile.getName());
-            logger.info("The template file parent directory is " + templateFile.getParentFile());
             Configuration freemarker = new Configuration();
             freemarker.setDirectoryForTemplateLoading(templateFile.getParentFile());
             freemarker.setObjectWrapper(new DefaultObjectWrapper());
             Template template = freemarker.getTemplate(templateFile.getName());
 
-            Run.reportTime("Configuring Freemarker");
+            reportTime("Configuring Freemarker");
 
             // Create the Freemarker data-model that will populate the template
             Map<String, Object> model = new HashMap<String, Object>();
 
             // Get the root fragment of the target XBRL instance
             List<Instance> instances = store.getFragmentsFromDocument(targetURI, "Instance");
-            if (instances.size() > 1)
-                throw new XBRLException("The target instance is not a single XBRL instance.");
-            if (instances.size() == 0)
-                throw new XBRLException("The target document is not an XBRL instance.");
+            if (instances.size() > 1) throw new XBRLException("The target instance is not a single XBRL instance.");
+            if (instances.size() == 0) throw new XBRLException("The target document is not an XBRL instance.");
             instance = instances.get(0);
             reportTime("Getting the instance");
 
@@ -250,77 +259,65 @@ public class Run {
             model.put("contexts", instance.getContexts());
             model.put("units", instance.getUnits());
             reportTime("Adding report resources to the data model");
-            
+
             List<Item> items = instance.getItems();
             for (Item item: items) {
                 String key= item.getNamespace() + item.getLocalname();
                 if (itemMap.containsKey(key)) {
                     itemMap.get(key).add(item);
                 } else {
-                    List<Item> newlist = new Vector<Item>();
+                    List<Item> newlist = new ArrayList<Item>();
                     newlist.add(item);
                     itemMap.put(key,newlist);
                 }
             }
             reportTime("Mapping items by concept");
 
-            // Prepare to track networks
-            Networks networks = new NetworksImpl(store);
-            reportTime("Initialising the networks");
-            
-            // Build the label networks.
-            networks.addRelationships(Constants.LabelArcrole);
-            reportTime("Getting standard labels");
-            networks.addRelationships(Constants.GenericLabelArcrole);
-            reportTime("Getting generic labels");
-            
             // Iterate the presentation networks in the DTS
             List<Map<String, Object>> tables = new Vector<Map<String, Object>>();
             model.put("tables", tables);
 
-            logger.info("# linkroles = " + store.getLinkRoles(Constants.PresentationArcrole()).size());
+            URI arcrole = Constants.PresentationArcrole();
             
-            for (URI linkrole : store.getLinkRoles(Constants.PresentationArcrole())) {
-                HashMap<String, Object> table = new HashMap<String, Object>();
+            int counter = 0;
+            int target = 3;
+            for (URI linkRole : store.getLinkRoles(arcrole)) {
+
+                counter++;
+                
+                if (counter != target) continue;
+                
+                Map<String, Object> table = new HashMap<String, Object>();
                 tables.add(table);
-                String title = linkrole.toString();
-                List<RoleType> roleDeclarations = store.getRoleTypes(linkrole);
+                String title = linkRole.toString();
+                List<RoleType> roleDeclarations = store.getRoleTypes(linkRole);
                 if (roleDeclarations.size() > 0) {
                     title = roleDeclarations.get(0).getDefinition();
                 }
                 table.put("title", title);
                 logger.info("Setting up: " + title);
 
-                labels = new ArrayList<String>();
-                concepts = new ArrayList<Concept>();
-                maxLevel = 1;
-
                 // Configure the aspect model (useful for sorting facts by their aspects)
-                aspectModel = new NonDimensionalAspectModel();
+                aspectModel = new DimensionalAspectModel();
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
-
-                try {
-                    network = new NetworkImpl(store,linkrole,new URI(Constants.PresentationArcrole));
-                } catch (URISyntaxException e) {
-                    ;// Cannot actually be thrown
-                }
-                networks.addNetwork(network);
-                network.complete();
-                reportTime("Completing the network");
-                logger.info("# relationships = " + network.getNumberOfActiveRelationships());
                 
-                List<Concept> roots = network.<Concept>getRootFragments();
-
+                Set<Concept> roots = store.<Concept>getNetworkRoots(linkRole,arcrole);
+                logger.info(roots.size() + " root concepts in " + linkRole);
+                
                 maxLevel = 1;
+                Concepts concepts = new Concepts();
                 for (Concept root : roots) {
-                    parsePresentation(
+                    concepts.addAll(
+                            parsePresentation(
                             "", 
                             null, 
                             root, 
-                            new Float(0.0).floatValue(), 
-                            linkrole,
-                            Constants.StandardLabelRole());
+                            new Double(0.0), 
+                            linkRole,
+                            arcrole,
+                            Constants.StandardLabelRole())
+                    );
                 }
                 
                 // Get the sorted list of period aspect values
@@ -332,19 +329,23 @@ public class Run {
                 
                 // Map from concept name (resolved QName) to the concept label.
                 table.put("aspectModel", aspectModel);
-                table.put("concepts", concepts);
-                table.put("labels", labels);
+                logger.info("# concepts in " + table.get("title") +  " = " + concepts.size());
+                table.put("concepts", concepts.concepts);
+                table.put("labels", concepts.labels);
+                table.put("labelRoles", concepts.labelRoles);
                 table.put("periods",periods);
                 table.put("maxLevel", maxLevel);
                 reportTime("Processing  " + title);
-                                
+
+                if (counter==target) break;
+                
             }
 
             // TODO Extend the template to render the footnote information.
-            List<ExtendedLink> footnoteLinks = instance.getFootnoteLinks();
+/*            List<ExtendedLink> footnoteLinks = instance.getFootnoteLinks();
             model.put("footnotes", footnoteLinks);
             reportTime("Processing footnotes");
-
+*/
             // Process the template and data model to produce the rendered report.
             Writer out = new OutputStreamWriter(new FileOutputStream(arguments.get("output")));
             template.process(model, out);
@@ -369,68 +370,94 @@ public class Run {
 
     }
 
-    private static void parsePresentation(
+    private static Concepts parsePresentation(
             String indent,
             Concept parent, 
             Concept concept, 
-            float order,
+            Double order,
             URI linkRole,
+            URI arcrole,
             URI labelRole
             ) throws Exception {
 
-        concepts.add(concept);
-
+        Concepts myConcepts = new Concepts();
+        
+        // Add all items for this concept to the aspect model
+        int itemCount = 0;
         String conceptKey = concept.getTargetNamespace() + concept.getName();
         if (itemMap.containsKey(conceptKey)) {
             List<Item> items = itemMap.get(conceptKey);
+            itemCount = items.size();
             if (! items.isEmpty()) {
                 for (Item item: items) {
                     aspectModel.addFact(item);
                 }
             }
         }
-        
+
+        // Update the maximum indentation level that is used by the rendering
         maxLevel = Math.max(indent.length(), maxLevel);
+        
+        // Get the active presentation relationships from.
+        SortedSet<PersistedRelationship> relationships = store.getPersistedActiveRelationshipsFrom(concept.getIndex(),linkRole,arcrole);
 
-        // Get the standard concept label
-        //logger.info(conceptKey + " " + labelRole);
-        List<LabelResource> labelResources = concept.getLabelsWithLanguageAndResourceRole("en-US",labelRole);
-        String label;
-        if (labelResources.size() > 0) {
-            label = labelResources.get(0).getStringValue().trim();
-        } else {
-            label = concept.getName();
-        }
-        label = indent + label;
-        labels.add(label);
-        reportTime(label);
+        Concepts childConcepts = new Concepts();
+        for (PersistedRelationship relationship: relationships) {
+            
+            Arc arc = relationship.getArc();
+            //logger.info(arc.getURI());
+            if (! arc.getURI().getAuthority().equals("xbrl.us")) continue;
 
-        SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getIndex());
-
-        for (Relationship relationship: relationships) {
+            //logger.info(relationship.getIndex() + ": " + relationship.getArc().getURI());
             
             labelRole = Constants.StandardLabelRole();
-            if (relationship.getArc().hasAttribute("preferredLabel")) {
-                String preferredLabelRole = relationship.getArcAttributeValue("preferredLabel");
+            if (arc.hasAttribute("preferredLabel")) {
+                String preferredLabelRole = arc.getAttribute("preferredLabel");
                 try {
                     labelRole = new URI(preferredLabelRole);
                 } catch (URISyntaxException e) {
                     throw new XBRLException("The preferred label URI "+preferredLabelRole+" is invalid.",e);
                 }
             }
-            parsePresentation(
+            childConcepts.addAll( 
+                parsePresentation(
                     indent + " ", 
                     concept, 
                     (Concept) relationship.getTarget(), 
-                    new Float(relationship.getOrder()).floatValue(), 
+                    relationship.getArcOrder(), 
                     linkRole,
-                    labelRole);
+                    arcrole,
+                    labelRole)
+                    );
         }
+        
+        if (childConcepts.size() > 0 || itemCount > 0) {
+
+            // Store the concept label in a list of concept labels in rendering order with indentation done.
+            List<LabelResource> labelResources = concept.getLabelsWithLanguageAndResourceRole("en-US",labelRole);
+            if (labelResources.size() == 0) {
+                labelResources = concept.getLabelsWithResourceRole(labelRole);
+            }
+            if (labelResources.size() == 0) {
+                labelResources = concept.getLabels();
+            }
+            String label;
+            if (labelResources.size() > 0) {
+                label = labelResources.get(0).getStringValue().trim();
+            } else {
+                label = concept.getName();
+            }
+            label = indent + label;
+            
+            myConcepts.add(concept,label,labelResources.get(0).getResourceRole());
+            myConcepts.addAll(childConcepts);
+
+            reportTime(label);
+        }
+        
+        return myConcepts;
+
     }
-
-
-
-
 
     /**
      * Convenience method to report durations required to perform various tasks.
@@ -494,13 +521,10 @@ public class Run {
     }
 
     /**
-     * @param store
-     *            The store to use for the loader.
-     * @param cache
-     *            The root directory of the document cache.
+     * @param store The store to use for the loader.
+     * @param cache The root directory of the document cache.
      * @return the loader to use for loading the instance and its DTS
-     * @throws XBRLException
-     *             if the loader cannot be initialised.
+     * @throws XBRLException if the loader cannot be initialised.
      */
     private static Loader createLoader(Store store, String cache)
             throws XBRLException {

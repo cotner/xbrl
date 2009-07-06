@@ -1,4 +1,4 @@
-package org.xbrlapi.examples.render;
+package org.xbrlapi.bdbxml.examples.render;
 
 import java.net.URI;
 import java.util.List;

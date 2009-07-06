@@ -14,7 +14,7 @@ import org.xbrlapi.networks.StorerImpl;
  * Use this unit test to persist all relationships in the data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public abstract class PersistAllRelationshipsInStore extends BaseTestCase {
+public class PersistAllRelationshipsInStore extends BaseTestCase {
     
     public PersistAllRelationshipsInStore(String arg0) {
         super(arg0);
