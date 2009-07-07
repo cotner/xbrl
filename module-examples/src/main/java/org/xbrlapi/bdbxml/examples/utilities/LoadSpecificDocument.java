@@ -4,16 +4,18 @@ import java.net.URI;
 
 /**
  * Loads a specific document, and all of the documents that it enables
- * discovery of, into the data store.
+ * discovery of, into the data store.  The document is first deleted from
+ * the data store if it is already in the data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class LoadSpecificDocument extends BaseUtilityExample {
     
     public LoadSpecificDocument(String[] args) {
-        usage = "Command line usage: java org.xbrlapi.examples.load.Load -database VALUE -container VALUE -cache VALUE URI1 URI2 ...";
+        usage = "java org.xbrlapi.bdbxml.examples.utilities.LoadSpecificDocument <ARGUMENTS>";
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
-        setUp();
+        String message = setUp();
+        if (! message.equals("")) badUsage(message);
         try {
             URI uri = new URI(arguments.get("document")); 
             if (store.hasDocument(uri)) store.deleteDocument(uri);
@@ -32,19 +34,7 @@ public class LoadSpecificDocument extends BaseUtilityExample {
         return explanation;
     }    
 
-    /**
-     * Adds a document argument that is used to provide
-     * the URI of the document to be loaded into the data store.
-     * @see BaseUtilityExample#mapArgument(String, String)
-     */
-    protected boolean mapArgument(String name, String value) {
-        if (super.mapArgument(name,value)) return true;
-        if (name.equals("-document")) {
-            arguments.put("document", value);
-            return true;
-        }
-        return false;
-    }
+
     
     /**
      * @param args The array of commandline arguments.
@@ -54,24 +44,17 @@ public class LoadSpecificDocument extends BaseUtilityExample {
         LoadSpecificDocument utility = new LoadSpecificDocument(args);
     }
 
-    protected void setUp() {
-        super.setUp();
+    protected String setUp() {
+        String message = super.setUp();
+        if (!arguments.containsKey("document")) 
+            message += "The document to be loaded is not specified.\n";
+        return message;
     }
 
     protected void tearDown() {
         super.tearDown();
     }   
     
-    public void testLoadSpecificDocument() {
-        try {
-           
-            URI uri = new URI("http://www.sec.gov/Archives/edgar/data/796343/000079634309000021/adbe-20090227.xsd"); 
-            if (store.hasDocument(uri)) store.deleteDocument(uri);
-            loader.discover(uri);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     
 }

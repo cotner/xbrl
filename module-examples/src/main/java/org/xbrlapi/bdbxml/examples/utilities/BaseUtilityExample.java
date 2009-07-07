@@ -29,7 +29,7 @@ public abstract class BaseUtilityExample {
         try {
             for (int i=0; i<args.length-1; i=i+2) {
                 if (args[i].charAt(0) != '-') {
-                    badUsage("There is a problem with argument: " + args[i]);
+                    badUsage("Each argument name must be followed by its value using space separation.");
                 }
                 mapArgument(args[i].substring(1),args[i+1]);
             }
@@ -60,26 +60,15 @@ public abstract class BaseUtilityExample {
     /**
      * @param name The argument name (including the leading hyphen).
      * @param value The argument value.
-     * @return true if the argument could be mapped and false otherwise.
      */
-    protected boolean mapArgument(String name, String value) {
-        if (name.equals("-database")) {
-            arguments.put("database", value);
-            return true;
-        } else if (name.equals("-container")) {
-            arguments.put("container", value);
-            return true;
-        } else if (name.equals("-cache")) {
-            arguments.put("cache", value);
-            return true;
-        }       
-        return false;
+    protected void mapArgument(String name, String value) {
+        arguments.put(name, value);
     }
     
     /**
      * Sets up the database store, the loader and the cache.
      */
-    protected void setUp() {
+    protected String setUp() {
         String message = "";
         if (!arguments.containsKey("database")) message += "The database directory is not specified.\n";
         if (!arguments.containsKey("container")) message += "The database container is not specified.\n";
@@ -103,7 +92,7 @@ public abstract class BaseUtilityExample {
                 message += e.getMessage() + "\n";
             }
         }
-        if (! message.equals("")) badUsage(message);
+        return message;
 
     }
     
@@ -126,15 +115,7 @@ public abstract class BaseUtilityExample {
         }
         System.err.println("Usage: " + usage);
         System.err.println(argumentDocumentation);
-        System.err.println(" -database VALUE   directory containing the Oracle BDB XML database");
-        System.err.println(" -container VALUE  name of the data container");
-        System.err.println(" -cache VALUE      directory that is the root of the document cache");
-        
-        if ("".equals(message)) {
-            System.exit(0);
-        } else {
-            System.exit(1);
-        }
+        System.exit(1);
     }    
     
     protected String addArgumentDocumentation() {
@@ -142,7 +123,7 @@ public abstract class BaseUtilityExample {
         explanation += "Arguments (optional ones marked with an *):\n";
         explanation += "-database\t\tPath to directory containing the database\n";
         explanation += "-container\t\tName of the database container\n";
-        explanation += "-cache\t\tPath to directory containing the XBRL cache\n";
+        explanation += "-cache\t\t\tPath to directory containing the XBRL cache\n";
         return explanation;
     }    
     
