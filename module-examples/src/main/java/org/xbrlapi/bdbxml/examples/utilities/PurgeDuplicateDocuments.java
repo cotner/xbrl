@@ -1,44 +1,21 @@
-package org.xbrlapi.data.bdbxml.utilities.tests;
+package org.xbrlapi.bdbxml.examples.utilities;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Set;
-import java.util.Vector;
-
-import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
-import org.xbrlapi.loader.Loader;
 
 /**
- * Use this unit test to find documents that have been stored 
- * more than once in the data store and to purge them and then
- * to reload them properly.
+ * Purges and then reloads any documents where there are multiple
+ * versions of them in the data store. This fixes a data store corruption.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public abstract class ReloadDuplicateDocuments extends BaseTestCase {
+public class PurgeDuplicateDocuments extends BaseUtilityExample {
     
-    public ReloadDuplicateDocuments(String arg0) {
-        super(arg0);
-    }
-
-    private List<URI> resources = new Vector<URI>();
-    
-    Loader secondLoader = null;
-    
-    protected void setUp() throws Exception {
-        super.setUp();
-
-    }
-
-    protected void tearDown() throws Exception {
-        // Close but DO NOT delete the data stores.
-        for (int i=0; i<stores.size(); i++) {
-            stores.get(i).close();
-        }
-    }
-    
-    public void testReloadDuplicateDocuments() {
+    public PurgeDuplicateDocuments(String[] args) {
+        argumentDocumentation = addArgumentDocumentation();
+        parseArguments(args);
+        String message = setUp();
+        if (! message.equals("")) badUsage(message);
         try {
-
             String query = "for $document in #roots#[@parentIndex=''], $duplicate in #roots#[@parentIndex=''] where ($document/@uri=$duplicate/@uri and $document/@index!=$duplicate/@index) return string($document/@uri)";
             Set<String> uris = store.queryForStrings(query);
             logger.info(uris.size());
@@ -55,12 +32,31 @@ public abstract class ReloadDuplicateDocuments extends BaseTestCase {
             logger.info("Now reloading the problem documents.");
             for (String uri: uris) {
                 loader.discover(new URI(uri));
-            }
-           
+            }        
         } catch (Exception e) {
             e.printStackTrace();
-            fail("An unexpected exception was thrown.");
+            badUsage(e.getMessage());
         }
+        
+        tearDown();
     }
+    
+    
+
+
+    
+    /**
+     * @param args The array of commandline arguments.
+     */
+    public static void main(String[] args) {
+        @SuppressWarnings("unused")
+        PurgeDuplicateDocuments utility = new PurgeDuplicateDocuments(args);
+    }
+
+
+
+   
+    
+
     
 }
