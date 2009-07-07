@@ -55,7 +55,7 @@ public abstract class BaseUtilityExample {
     // The list of commandline arguments
     protected HashMap<String,String> arguments = new HashMap<String,String>();
     protected String argumentDocumentation = "";
-    protected String usage = "";
+    protected String usage = "java " + this.getClass().getName() + " <ARGUMENTS>";
 
     /**
      * @param name The argument name (including the leading hyphen).

@@ -459,7 +459,7 @@ public class Run {
             System.err.println(message);
         }
 
-        System.err.println("Command line usage: java org.xbrlapi.examples.render.Run <OPTIONS> <ADDITIONAL URIS>");
+        System.err.println("Command line usage: java org.xbrlapi.bdbxml.examples.render.Run <OPTIONS> <ADDITIONAL URIS>");
         System.err.println("Mandatory arguments: ");
         System.err.println(" -database VALUE     directory containing the Oracle Berkeley XML database");
         System.err.println(" -container VALUE    name of the data container");
