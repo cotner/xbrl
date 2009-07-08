@@ -35,7 +35,7 @@ public abstract class BaseUtilityExample {
         try {
             for (int i=0; i<args.length-1; i=i+2) {
                 if (args[i].charAt(0) != '-') {
-                    badUsage("Each argument name must be followed by its value using space separation.");
+                    problems += "Each argument name must be followed by its value using space separation.\n";
                 }
                 mapArgument(args[i].substring(1),args[i+1]);
             }
@@ -54,6 +54,7 @@ public abstract class BaseUtilityExample {
     protected HashMap<String,String> arguments = new HashMap<String,String>();
     protected String argumentDocumentation = "";
     protected String usage = "java " + this.getClass().getName() + " <ARGUMENTS>";
+    protected String problems = "";
 
     /**
      * @param name The argument name (including the leading hyphen).
@@ -110,10 +111,10 @@ public abstract class BaseUtilityExample {
     protected void badUsage(String message) {
         if (!"".equals(message)) {
             System.err.println(message);
+            System.err.print(problems);
         }
         System.err.println("Usage: " + usage);
         System.err.println(argumentDocumentation);
-        System.exit(1);
     }    
     
     protected String addArgumentDocumentation() {

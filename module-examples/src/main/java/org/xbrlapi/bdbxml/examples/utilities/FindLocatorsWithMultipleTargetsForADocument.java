@@ -22,20 +22,23 @@ public class FindLocatorsWithMultipleTargetsForADocument extends BaseUtilityExam
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            String query = "for $locator in #roots#,$target in #roots#/xbrlapi:xptr where ($locator/@uri='"+arguments.get("document")+"' and $locator/*/*/@xlink:type='locator' and $target/../@uri=$locator/@targetDocumentURI and $locator/@targetPointerValue=$target/@value) return concat($target/../@uri,' ',$target/@value,' ',$target/../@index)";
-            Set<String> results = store.queryForStrings(query);
-            System.out.println("# locators with more than one target = " + results.size());
-            Set<String> sortedResults = new TreeSet<String>();
-            sortedResults.addAll(results);
-            for (String result: sortedResults) {
-                System.out.println(result);
+        if (message.equals("")) {
+            try {
+                String query = "for $locator in #roots#,$target in #roots#/xbrlapi:xptr where ($locator/@uri='"+arguments.get("document")+"' and $locator/*/*/@xlink:type='locator' and $target/../@uri=$locator/@targetDocumentURI and $locator/@targetPointerValue=$target/@value) return concat($target/../@uri,' ',$target/@value,' ',$target/../@index)";
+                Set<String> results = store.queryForStrings(query);
+                System.out.println("# locators with more than one target = " + results.size());
+                Set<String> sortedResults = new TreeSet<String>();
+                sortedResults.addAll(results);
+                for (String result: sortedResults) {
+                    System.out.println(result);
+                }
+                System.out.println("# locators with more than one target = " + results.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
             }
-            System.out.println("# locators with more than one target = " + results.size());
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        } else {
+            badUsage(message);
         }
         tearDown();
     }

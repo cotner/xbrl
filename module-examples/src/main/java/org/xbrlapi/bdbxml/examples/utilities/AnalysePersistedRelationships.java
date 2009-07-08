@@ -21,23 +21,26 @@ public class AnalysePersistedRelationships extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            
-            Set<String> indices = store.getFragmentIndices("PersistedRelationship");
-            System.out.println("# of persisted relationships = " + indices.size());
-            String query = "for $root in #roots# where ($root/@arcIndex) return distinct-values(substring-before($root/@arcIndex,'_'))";
-            Set<String> prefixes = store.queryForStrings(query);
-            for (String prefix: prefixes) {
-                System.out.println(store.<Fragment>getXMLResource(prefix + "_1").getURI() + " has persisted relationships.");
+        if (message.equals("")) {
+            try {
+                
+                Set<String> indices = store.getFragmentIndices("PersistedRelationship");
+                System.out.println("# of persisted relationships = " + indices.size());
+                String query = "for $root in #roots# where ($root/@arcIndex) return distinct-values(substring-before($root/@arcIndex,'_'))";
+                Set<String> prefixes = store.queryForStrings(query);
+                for (String prefix: prefixes) {
+                    System.out.println(store.<Fragment>getXMLResource(prefix + "_1").getURI() + " has persisted relationships.");
+                }
+                System.out.println("# of persisted relationships = " + indices.size());
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
             }
-            System.out.println("# of persisted relationships = " + indices.size());
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        } else {
+            badUsage(message);
         }
-        
+   
         tearDown();
     }
     

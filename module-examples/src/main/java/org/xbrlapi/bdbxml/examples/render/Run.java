@@ -354,7 +354,6 @@ public class Run {
             // Clean up the data store and exit
             cleanup(store);
             reportTime("Database cleanup");
-            System.exit(0);
 
         } catch (Exception e) {
             try {
@@ -469,11 +468,6 @@ public class Run {
         System.err.println(" -target VALUE       The URI of the target XBRL instance to render.");
         System.err.println(" The optional additional URIs allow control over the DTS supporting the rendering of the XBRL instance.");
 
-        if ("".equals(message)) {
-            System.exit(0);
-        } else {
-            System.exit(1);
-        }
     }
 
     /**

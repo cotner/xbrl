@@ -1,5 +1,8 @@
 package org.xbrlapi.bdbxml.examples.utilities;
 
+import java.util.Set;
+
+import org.xbrlapi.Fragment;
 import org.xbrlapi.networks.Storer;
 import org.xbrlapi.networks.StorerImpl;
 
@@ -20,15 +23,18 @@ public class DeletePersistedRelationships extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            
-            Storer storer = new StorerImpl(store);
-            storer.deleteRelationships();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        if (message.equals("")) {
+            try {
+                
+                Storer storer = new StorerImpl(store);
+                storer.deleteRelationships();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
+            }
+        } else {
+            badUsage(message);
         }
         
         tearDown();

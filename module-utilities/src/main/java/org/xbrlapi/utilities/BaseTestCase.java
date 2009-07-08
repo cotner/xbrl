@@ -33,7 +33,7 @@ abstract public class BaseTestCase extends TestCase {
 	 * Use this constant to determine the properties file that configures the Unit testing of the XBRLAPI.
 	 */  
 	private final String configurationPropertiesIdentifier = "test.configuration.properties";
-	protected Properties configuration;
+	protected Properties configuration = null;
 	
 	/**
 	 * Absolute path to the local document cache
@@ -47,6 +47,35 @@ abstract public class BaseTestCase extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
+        try {
+            // Load the test configuration details from the specified properties file
+            configuration = new Properties();
+            File configurationFile = new File(System.getProperty("xbrlapi.test.configuration"));
+            if (!configurationFile.exists()) {
+                configurationFile = new File(configurationPropertiesIdentifier);
+            }
+            if (!configurationFile.exists()) {
+                fail("The configuration File " + configurationFile + " does not exist.");
+            }
+            configuration.load(new FileInputStream(configurationFile));
+            if (!configuration.containsKey("local.cache")) {
+                fail("The test configuration file: " + configurationFile + " is not valid.");
+            }
+
+            // Local Cache location
+            cachePath = configuration.getProperty("local.cache");
+            
+            // Base URI for test data
+            baseURI = configuration.getProperty("test.data.baseURI");
+
+        } catch (NullPointerException e) {
+            // This additional error handling was contributed by Walter Hamscher (25 July 2008)
+            fail("Null system property xbrlapi.test.configuration");            
+        } catch (FileNotFoundException e) {
+            fail("The test suite configuration properties file was not found.");            
+        } catch (IOException e) {
+            fail("An I/O error occurred while accessing the test suite configuration properties file.");
+        }
 		GrammarCacheImpl.emptyGrammarPool();		
 	}
 
@@ -60,38 +89,7 @@ abstract public class BaseTestCase extends TestCase {
 	 * @param arg0
 	 */
 	public BaseTestCase(String arg0) {
-		super(arg0);
-		try {
-
-			// Load the test configuration details from the specified properties file
-			configuration = new Properties();
-			File configurationFile = new File(System.getProperty("xbrlapi.test.configuration"));
-			if (!configurationFile.exists()) {
-				configurationFile = new File(configurationPropertiesIdentifier);
-			}
-			if (!configurationFile.exists()) {
-				fail("The configuration File " + configurationFile + " does not exist.");
-			}
-			configuration.load(new FileInputStream(configurationFile));
-			if (!configuration.containsKey("local.cache")) {
-				fail("The test configuration file: " + configurationFile + " is not valid.");
-			}
-
-			// Local Cache location
-			cachePath = configuration.getProperty("local.cache");
-			
-			// Base URI for test data
-			baseURI = configuration.getProperty("test.data.baseURI");
-
-		} catch (NullPointerException e) {
-		    // This additional error handling was contributed by Walter Hamscher (25 July 2008)
-            fail("Null system property xbrlapi.test.configuration");			
-		} catch (FileNotFoundException e) {
-			fail("The test suite configuration properties file was not found.");			
-		} catch (IOException e) {
-			fail("An I/O error occurred while accessing the test suite configuration properties file.");
-		}
-		
+		super(arg0);		
 	}
 	
 	/**
@@ -99,7 +97,9 @@ abstract public class BaseTestCase extends TestCase {
 	 * @return the absolute URI of the test data
 	 */
 	public URI getURI(String property) {
+
 		String myProperty = configuration.getProperty(property);
+
 		URI uri = null;
 		try {
 	        if (myProperty.startsWith("http:/")) {
@@ -108,7 +108,6 @@ abstract public class BaseTestCase extends TestCase {
 	            uri = new URI(myProperty);
 	        } else if (property.startsWith("test.data.local.")) {
 	            File root = new File(configuration.getProperty("local.test.data.root"));
-	            logger.info(root);
 	            File file = new File(root,configuration.getProperty(property));
 	            uri = file.toURI();
 	        } else {

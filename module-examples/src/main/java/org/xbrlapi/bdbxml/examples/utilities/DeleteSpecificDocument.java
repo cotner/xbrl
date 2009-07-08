@@ -18,13 +18,16 @@ public class DeleteSpecificDocument extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            URI uri = new URI(arguments.get("document")); 
-            store.deleteDocument(uri);
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        if (message.equals("")) {
+            try {
+                URI uri = new URI(arguments.get("document")); 
+                store.deleteDocument(uri);
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
+            }
+        } else {
+            badUsage(message);
         }
         
         tearDown();

@@ -29,9 +29,9 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
     // Create the logger
     protected static Logger logger = Logger.getLogger(BaseTestCase.class);  
 
-    protected String location = configuration.getProperty("bdbxml.store.location");
-	protected String containerName = configuration.getProperty("bdbxml.container.name");
-	protected String cache = configuration.getProperty("local.cache");
+    protected String location = "";
+	protected String containerName = "";
+	protected String cache = "";
 	
 	protected Store store = null;
 	protected Loader loader = null;
@@ -40,6 +40,9 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
+	    location = configuration.getProperty("bdbxml.store.location");
+	    containerName = configuration.getProperty("bdbxml.container.name");
+	    cache = configuration.getProperty("local.cache");
 		store = createStore();
 		stores.add(store);
 		loader = createLoader(store);

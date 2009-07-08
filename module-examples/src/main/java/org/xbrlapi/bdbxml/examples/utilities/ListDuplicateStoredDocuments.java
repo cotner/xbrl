@@ -21,17 +21,21 @@ public class ListDuplicateStoredDocuments extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            String query = "for $document in #roots#[@parentIndex=''], $duplicate in #roots#[@parentIndex=''] where ($document/@uri=$duplicate/@uri and $document/@index!=$duplicate/@index) return string($document/@uri)";
-            Set<String> uris = store.queryForStrings(query);
-            System.out.println("# duplicated documents = " + uris.size());
-            for (String uri: uris) {
-                System.out.println(uri + " has duplicates in the data store.");
-            }        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
-        }
+        if (message.equals("")) {
+            try {
+                String query = "for $document in #roots#[@parentIndex=''], $duplicate in #roots#[@parentIndex=''] where ($document/@uri=$duplicate/@uri and $document/@index!=$duplicate/@index) return string($document/@uri)";
+                Set<String> uris = store.queryForStrings(query);
+                System.out.println("# duplicated documents = " + uris.size());
+                for (String uri: uris) {
+                    System.out.println(uri + " has duplicates in the data store.");
+                }        
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
+            }
+        } else {
+            badUsage(message);
+        }        
         
         tearDown();
     }

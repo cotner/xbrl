@@ -26,23 +26,26 @@ public class ReportIdenticalDocuments extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            List<Match> matches = store.<Match>getXMLResources("Match");
-            System.out.println("# sets of identical documents = " + matches.size());
-            for (Match match: matches) {
-                NodeList nodes = match.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match");
-                if (nodes.getLength() > 1) {
-                    System.out.println("Documents matching " + nodes.item(0).getTextContent() + " are:");
-                    for (int i=1; i<nodes.getLength(); i++) {
-                        System.out.println("\t" + i + "\t" + nodes.item(i).getTextContent());
+        if (message.equals("")) {
+            try {
+                List<Match> matches = store.<Match>getXMLResources("Match");
+                System.out.println("# sets of identical documents = " + matches.size());
+                for (Match match: matches) {
+                    NodeList nodes = match.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match");
+                    if (nodes.getLength() > 1) {
+                        System.out.println("Documents matching " + nodes.item(0).getTextContent() + " are:");
+                        for (int i=1; i<nodes.getLength(); i++) {
+                            System.out.println("\t" + i + "\t" + nodes.item(i).getTextContent());
+                        }
                     }
                 }
+                System.out.println("# sets of identical documents = " + matches.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
             }
-            System.out.println("# sets of identical documents = " + matches.size());
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        } else {
+            badUsage(message);
         }
         
         tearDown();

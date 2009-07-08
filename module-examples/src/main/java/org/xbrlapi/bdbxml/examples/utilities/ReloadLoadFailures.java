@@ -23,24 +23,27 @@ public class ReloadLoadFailures extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            
-            List<Stub> stubs = store.getStubs();
-            logger.info("The data store failed to load " + stubs.size() + " documents.");
+        if (message.equals("")) {
+            try {
+                
+                List<Stub> stubs = store.getStubs();
+                logger.info("The data store failed to load " + stubs.size() + " documents.");
 
-            for (Stub stub: stubs) {
-                URI uri = stub.getResourceURI();
-                logger.info(uri + " failed to load. " + stub.getReason());
-                if (store.hasDocument(uri)) {
-                    store.deleteDocument(uri);
+                for (Stub stub: stubs) {
+                    URI uri = stub.getResourceURI();
+                    logger.info(uri + " failed to load. " + stub.getReason());
+                    if (store.hasDocument(uri)) {
+                        store.deleteDocument(uri);
+                    }
+                    loader.discover(uri);
                 }
-                loader.discover(uri);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
             }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        } else {
+            badUsage(message);
         }
         
         tearDown();

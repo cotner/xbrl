@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.Context;
@@ -20,7 +19,6 @@ import org.xbrlapi.FootnoteResource;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
-import org.xbrlapi.Locator;
 import org.xbrlapi.Resource;
 import org.xbrlapi.Unit;
 import org.xbrlapi.cache.CacheImpl;
@@ -110,24 +108,8 @@ public class Load {
             // Load the instance data
             loader.discover(inputs);
             
-            // Analyse the presentation networks in the supporting DTS
-            for (URI linkrole: store.getLinkRoles(Constants.PresentationArcrole())) {
-                Set<Fragment> rootLocators = store.<Fragment>getNetworkRoots(linkrole,Constants.PresentationArcrole());                            
-                for (Fragment rootLocator: rootLocators) {
-                    Concept rootConcept = (Concept) ((Locator) rootLocator).getTarget();
-                    reportNode("",rootConcept,linkrole);
-                }
-            }
-
-            // Iterate the instances printing out lists of facts etc.
-            List<Instance> instances = store.<Instance>getXMLResources("Instance");
-            for (Instance instance: instances) {
-                reportInstance(instance);
-            }
-            
             // Clean up the data store and exit
             cleanup(store);
-            System.exit(0);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,11 +182,6 @@ public class Load {
         System.err.println(" -container VALUE  name of the data container");
         System.err.println(" -cache VALUE      directory that is the root of the document cache");
         
-        if ("".equals(message)) {
-            System.exit(0);
-        } else {
-            System.exit(1);
-        }
     }
     
     /**

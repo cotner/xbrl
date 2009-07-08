@@ -32,14 +32,17 @@ public class AnalyseCacheForMatchedDocuments extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            matcher = new InStoreMatcherImpl(store,cache);
-            testFiles(((CacheImpl) cache).getCacheRoot());
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        if (message.equals("")) {
+            try {
+                matcher = new InStoreMatcherImpl(store,cache);
+                testFiles(((CacheImpl) cache).getCacheRoot());
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
+            }
+        } else {
+            badUsage(message);
         }
         
         tearDown();
@@ -91,7 +94,8 @@ public class AnalyseCacheForMatchedDocuments extends BaseUtilityExample {
      * contained in the given directory.
      */
     private File[] getChildFiles(File directory) {
-        if (! directory.isDirectory()) badUsage(directory + " is not a directory.");
+        if (! directory.isDirectory()) 
+            problems += directory + " is not a directory.\n";
         FileFilter fileFilter = new FileFilter() {
             public boolean accept(File file) {
                 return (!file.isDirectory());
@@ -106,7 +110,8 @@ public class AnalyseCacheForMatchedDocuments extends BaseUtilityExample {
      * @return a list of all child directories. 
      */
     private File[] getChildDirectories(File directory) {
-        if (! directory.isDirectory()) badUsage(directory + " is not a directory.");
+        if (! directory.isDirectory()) 
+            problems += directory + " is not a directory.\n";
         FileFilter fileFilter = new FileFilter() {
             public boolean accept(File file) {
                 return (file.isDirectory());

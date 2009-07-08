@@ -22,21 +22,25 @@ public class PersistAllRelationshipsInStore extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            
-            Storer storer = new StorerImpl(store);
-            
-            Set<URI> uris = store.getDocumentURIs();
-            System.out.println("# documents = " + uris.size());
-            for (URI uri: uris) {
-                System.out.println("Processing " + uri);
-                storer.storeRelationships(uri);
+
+        if (message.equals("")) {
+            try {
+                
+                Storer storer = new StorerImpl(store);
+                
+                Set<URI> uris = store.getDocumentURIs();
+                System.out.println("# documents = " + uris.size());
+                for (URI uri: uris) {
+                    System.out.println("Processing " + uri);
+                    storer.storeRelationships(uri);
+                }
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
             }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        } else {
+            badUsage(message);
         }
         
         tearDown();

@@ -20,16 +20,19 @@ public class FindLinksToGivenDocument extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            URI uri = new URI(arguments.get("document"));
-            List<URI> referencingDocuments = store.getReferencingDocuments(uri);
-            for (URI ref: referencingDocuments) {
-                System.out.println(ref + " references " + uri);
-            }        
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        if (message.equals("")) {
+            try {
+                URI uri = new URI(arguments.get("document"));
+                List<URI> referencingDocuments = store.getReferencingDocuments(uri);
+                for (URI ref: referencingDocuments) {
+                    System.out.println(ref + " references " + uri);
+                }        
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
+            }
+        } else {
+            badUsage(message);
         }
         
         tearDown();

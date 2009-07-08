@@ -20,14 +20,17 @@ public class LoadSpecificDocument extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            URI uri = new URI(arguments.get("document")); 
-            if (store.hasDocument(uri)) store.deleteDocument(uri);
-            loader.discover(uri);
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        if (message.equals("")) {
+            try {
+                URI uri = new URI(arguments.get("document")); 
+                if (store.hasDocument(uri)) store.deleteDocument(uri);
+                loader.discover(uri);
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
+            }
+        } else {
+            badUsage(message);
         }
         
         tearDown();

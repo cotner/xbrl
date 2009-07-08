@@ -124,7 +124,6 @@ public class LoadAllSECFilings {
                         
             // Clean up the data store and exit
             cleanup(store);
-            System.exit(0);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,12 +148,7 @@ public class LoadAllSECFilings {
         System.err.println(" -cache VALUE      directory that is the root of the document cache");
         System.err.println("Optional arguments: ");
         System.err.println(" -threads VALUE    the number of threads to use when loading the data");
-        
-        if ("".equals(message)) {
-            System.exit(0);
-        } else {
-            System.exit(1);
-        }
+
     }
     
     /**

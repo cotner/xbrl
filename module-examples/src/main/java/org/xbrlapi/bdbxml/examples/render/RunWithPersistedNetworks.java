@@ -221,7 +221,6 @@ public class RunWithPersistedNetworks {
 
             Storer storer = new StorerImpl(store);
             storer.deleteInactiveRelationships();
-            // System.exit(0);
 
             // Get the Freemarker template ready to use.
             if (!arguments.containsKey("template"))
@@ -355,7 +354,6 @@ public class RunWithPersistedNetworks {
             // Clean up the data store and exit
             cleanup(store);
             reportTime("Database cleanup");
-            System.exit(0);
 
         } catch (Exception e) {
             try {
@@ -496,11 +494,6 @@ public class RunWithPersistedNetworks {
         System.err.println(" -target VALUE       The URI of the target XBRL instance to render.");
         System.err.println(" The optional additional URIs allow control over the DTS supporting the rendering of the XBRL instance.");
 
-        if ("".equals(message)) {
-            System.exit(0);
-        } else {
-            System.exit(1);
-        }
     }
 
     /**

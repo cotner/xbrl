@@ -20,20 +20,23 @@ public class AnalyseLoadFailures extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            
-            List<Stub> stubs = store.getStubs();
-            System.out.println("The data store failed to load " + stubs.size() + " documents.");
+        if (message.equals("")) {
+            try {
+                
+                List<Stub> stubs = store.getStubs();
+                System.out.println("The data store failed to load " + stubs.size() + " documents.");
 
-            for (Stub stub: stubs) {
-                System.out.println(stub.getResourceURI() + " failed to load. " + stub.getReason());
-                System.out.println("Store contains this document? " + store.hasDocument(stub.getResourceURI()));
+                for (Stub stub: stubs) {
+                    System.out.println(stub.getResourceURI() + " failed to load. " + stub.getReason());
+                    System.out.println("Store contains this document? " + store.hasDocument(stub.getResourceURI()));
+                }
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
             }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        } else {
+            badUsage(message);
         }
         
         tearDown();

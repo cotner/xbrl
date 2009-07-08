@@ -19,16 +19,19 @@ public class ListStoredDocuments extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            Set<URI> uris = store.getDocumentURIs();
-            for (URI uri: uris) {
-                System.out.println(uri);
+        if (message.equals("")) {
+            try {
+                Set<URI> uris = store.getDocumentURIs();
+                for (URI uri: uris) {
+                    System.out.println(uri);
+                }
+                System.out.println("# documents = " + uris.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
             }
-            System.out.println("# documents = " + uris.size());
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        } else {
+            badUsage(message);
         }
         
         tearDown();

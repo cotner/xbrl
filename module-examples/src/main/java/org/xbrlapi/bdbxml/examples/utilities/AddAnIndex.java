@@ -25,16 +25,21 @@ public class AddAnIndex extends BaseUtilityExample {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
-        if (! message.equals("")) badUsage(message);
-        try {
-            if (! arguments.containsKey("namespace"))
-                    ((StoreImpl) store).addIndex(null,arguments.get("name"),arguments.get("index"));
-            else
-                ((StoreImpl) store).addIndex(new URI(arguments.get("namespace")),arguments.get("name"),arguments.get("index"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            badUsage(e.getMessage());
+        if (message.equals("")) {
+            try {
+                if (! arguments.containsKey("namespace"))
+                        ((StoreImpl) store).addIndex(null,arguments.get("name"),arguments.get("index"));
+                else
+                    ((StoreImpl) store).addIndex(new URI(arguments.get("namespace")),arguments.get("name"),arguments.get("index"));
+            } catch (Exception e) {
+                e.printStackTrace();
+                badUsage(e.getMessage());
+            }
+        } else {
+            badUsage(message);
         }
+
+        
         tearDown();
     }
 
