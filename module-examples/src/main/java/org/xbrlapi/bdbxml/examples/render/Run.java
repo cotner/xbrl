@@ -362,7 +362,6 @@ public class Run {
             } catch (Exception neverThrown) {
                 ;
             }
-            e.printStackTrace();
             badUsage(e.getMessage());
         }
 

@@ -126,7 +126,6 @@ public class LoadAllSECFilings {
             cleanup(store);
 
         } catch (Exception e) {
-            e.printStackTrace();
             badUsage(e.getMessage());
         }
         

@@ -26,7 +26,6 @@ public class LoadSpecificDocument extends BaseUtilityExample {
                 if (store.hasDocument(uri)) store.deleteDocument(uri);
                 loader.discover(uri);
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

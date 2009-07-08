@@ -32,7 +32,6 @@ public class AddAnIndex extends BaseUtilityExample {
                 else
                     ((StoreImpl) store).addIndex(new URI(arguments.get("namespace")),arguments.get("name"),arguments.get("index"));
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

@@ -112,7 +112,6 @@ public class Load {
             cleanup(store);
 
         } catch (Exception e) {
-            e.printStackTrace();
             badUsage(e.getMessage());
         }
         

@@ -41,7 +41,6 @@ public class ReportIdenticalDocuments extends BaseUtilityExample {
                 }
                 System.out.println("# sets of identical documents = " + matches.size());
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

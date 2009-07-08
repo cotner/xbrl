@@ -34,7 +34,6 @@ public class FindLocatorsWithMultipleTargetsForADocument extends BaseUtilityExam
                 }
                 System.out.println("# locators with more than one target = " + results.size());
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

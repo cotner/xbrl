@@ -39,7 +39,6 @@ public class ReloadLoadFailures extends BaseUtilityExample {
                 }
                 
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

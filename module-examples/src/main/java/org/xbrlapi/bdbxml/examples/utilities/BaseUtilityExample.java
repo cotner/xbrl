@@ -40,7 +40,6 @@ public abstract class BaseUtilityExample {
                 mapArgument(args[i].substring(1),args[i+1]);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             badUsage("There is a problem with the command line arguments.");
         }
     }
@@ -87,7 +86,6 @@ public abstract class BaseUtilityExample {
                 loader.setEntityResolver(entityResolver);
                 xlinkHandler.setLoader(loader);                
             } catch (XBRLException e) {
-                e.printStackTrace();
                 message += e.getMessage() + "\n";
             }
         }
@@ -99,7 +97,6 @@ public abstract class BaseUtilityExample {
         try {
             store.close();
         } catch (Exception e) {
-            e.printStackTrace();
             badUsage(e.getMessage());
         }
     }

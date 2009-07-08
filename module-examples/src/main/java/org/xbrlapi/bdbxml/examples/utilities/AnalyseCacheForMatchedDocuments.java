@@ -38,7 +38,6 @@ public class AnalyseCacheForMatchedDocuments extends BaseUtilityExample {
                 testFiles(((CacheImpl) cache).getCacheRoot());
                 
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {
@@ -74,7 +73,6 @@ public class AnalyseCacheForMatchedDocuments extends BaseUtilityExample {
                 System.out.println(match + " matches " + originalURI);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             badUsage(e.getMessage());
         }
     }

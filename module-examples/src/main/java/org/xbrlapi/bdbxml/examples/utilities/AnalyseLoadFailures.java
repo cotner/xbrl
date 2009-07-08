@@ -32,7 +32,6 @@ public class AnalyseLoadFailures extends BaseUtilityExample {
                 }
                 
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

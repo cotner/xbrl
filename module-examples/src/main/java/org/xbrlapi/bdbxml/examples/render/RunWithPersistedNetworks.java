@@ -362,7 +362,6 @@ public class RunWithPersistedNetworks {
             } catch (Exception neverThrown) {
                 ;
             }
-            e.printStackTrace();
             badUsage(e.getMessage());
         }
 

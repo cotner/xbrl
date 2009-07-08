@@ -30,7 +30,6 @@ public class ListDuplicateStoredDocuments extends BaseUtilityExample {
                     System.out.println(uri + " has duplicates in the data store.");
                 }        
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

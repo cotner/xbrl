@@ -27,7 +27,6 @@ public class ListStoredDocuments extends BaseUtilityExample {
                 }
                 System.out.println("# documents = " + uris.size());
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

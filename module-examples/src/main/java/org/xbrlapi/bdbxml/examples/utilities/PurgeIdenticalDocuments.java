@@ -41,7 +41,6 @@ public class PurgeIdenticalDocuments extends BaseUtilityExample {
                     loader.discover(new URI(uri));
                 }        
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

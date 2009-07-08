@@ -30,7 +30,7 @@ public class LoadTestCase extends BaseTestCase {
 		super(arg0);
 	}
 
-    public void testLoadOfSingleDocument() {
+    public void testSuccessfulLoadOfSingleDocument() {
 
         URI uri = getURI(DOCUMENT_URI);
 
@@ -61,4 +61,35 @@ public class LoadTestCase extends BaseTestCase {
             fail(e.getMessage());
         }
     }
+    
+    public void testLoadOfSingleDocumentFailingBecauseDatabaseParameterIsMissing() {
+
+        URI uri = getURI(DOCUMENT_URI);
+
+        logger.info("The URI to load is " + uri);
+        
+        try {
+            assertFalse(store.hasDocument(uri));
+        } catch (XBRLException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        
+        String[] args = {
+                "-container",containerName, 
+                "-cache", cachePath, 
+                uri.toString() 
+                };
+        
+        logger.info("Starting the load process.");
+        Load.main(args);
+
+        try {
+            logger.info("Checking if the store has " + uri);
+            assertFalse(store.hasDocument(uri));
+        } catch (XBRLException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }    
 }

@@ -23,7 +23,6 @@ public class DeleteSpecificDocument extends BaseUtilityExample {
                 URI uri = new URI(arguments.get("document")); 
                 store.deleteDocument(uri);
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

@@ -34,7 +34,6 @@ public class AnalysePersistedRelationships extends BaseUtilityExample {
                 System.out.println("# of persisted relationships = " + indices.size());
                 
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {

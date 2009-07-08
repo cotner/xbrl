@@ -28,7 +28,6 @@ public class FindLinksToGivenDocument extends BaseUtilityExample {
                     System.out.println(ref + " references " + uri);
                 }        
             } catch (Exception e) {
-                e.printStackTrace();
                 badUsage(e.getMessage());
             }
         } else {
