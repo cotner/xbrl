@@ -3,8 +3,11 @@ package org.xbrlapi.bdbxml.examples.utilities;
 import java.net.URI;
 import java.util.Set;
 
+import org.xbrlapi.networks.Storer;
+import org.xbrlapi.networks.StorerImpl;
+
 /**
- * Lists all documents in the data store.
+ * Persists all of the relationships in the data store.
  * Additional commandline arguments (optional ones marked with an *)
  * <ul>
  *  <li>There are no additional commandline arguments for this utility.</li>
@@ -13,19 +16,24 @@ import java.util.Set;
  * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ListStoredDocuments extends BaseUtilityExample {
+public class PersistAllRelationshipsInStore extends BaseUtilityExample {
     
-    public ListStoredDocuments(String[] args) {
+    public PersistAllRelationshipsInStore(String[] args) {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
         if (! message.equals("")) badUsage(message);
         try {
+            
+            Storer storer = new StorerImpl(store);
+            
             Set<URI> uris = store.getDocumentURIs();
-            for (URI uri: uris) {
-                System.out.println(uri);
-            }
             System.out.println("# documents = " + uris.size());
+            for (URI uri: uris) {
+                System.out.println("Processing " + uri);
+                storer.storeRelationships(uri);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
             badUsage(e.getMessage());
@@ -43,7 +51,7 @@ public class ListStoredDocuments extends BaseUtilityExample {
      */
     public static void main(String[] args) {
         @SuppressWarnings("unused")
-        ListStoredDocuments utility = new ListStoredDocuments(args);
+        PersistAllRelationshipsInStore utility = new PersistAllRelationshipsInStore(args);
     }
 
 

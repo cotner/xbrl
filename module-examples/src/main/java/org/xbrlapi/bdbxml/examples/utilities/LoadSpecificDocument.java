@@ -6,6 +6,12 @@ import java.net.URI;
  * Loads a specific document, and all of the documents that it enables
  * discovery of, into the data store.  The document is first deleted from
  * the data store if it is already in the data store.
+ * Additional commandline arguments (optional ones marked with an *)
+ * <ul>
+ *  <li>-document [The URI of the document]</li>
+ * </ul> 
+ * These are in addition to those commandline arguments documented at
+ * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class LoadSpecificDocument extends BaseUtilityExample {

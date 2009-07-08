@@ -6,11 +6,17 @@ import java.util.Set;
 /**
  * Purges and then reloads any documents where there are multiple
  * versions of them in the data store. This fixes a data store corruption.
+ * Additional commandline arguments (optional ones marked with an *)
+ * <ul>
+ *  <li>There are no additional commandline arguments for this utility.</li>
+ * </ul> 
+ * These are in addition to those commandline arguments documented at
+ * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class PurgeDuplicateDocuments extends BaseUtilityExample {
+public class PurgeIdenticalDocuments extends BaseUtilityExample {
     
-    public PurgeDuplicateDocuments(String[] args) {
+    public PurgeIdenticalDocuments(String[] args) {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
@@ -50,7 +56,7 @@ public class PurgeDuplicateDocuments extends BaseUtilityExample {
      */
     public static void main(String[] args) {
         @SuppressWarnings("unused")
-        PurgeDuplicateDocuments utility = new PurgeDuplicateDocuments(args);
+        PurgeIdenticalDocuments utility = new PurgeIdenticalDocuments(args);
     }
 
 

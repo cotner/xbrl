@@ -6,12 +6,18 @@ import java.util.Set;
  * Lists the URIs of all documents that have multiple versions
  * stored with the same URI.  This indicates a data store corruption
  * that should be rectified.
- * @see PurgeDuplicateDocuments
+ * Additional commandline arguments (optional ones marked with an *)
+ * <ul>
+ *  <li>There are no additional commandline arguments for this utility.</li>
+ * </ul> 
+ * These are in addition to those commandline arguments documented at
+ * @link BaseUtilityExample
+ * @see PurgeIdenticalDocuments
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ListDuplicateDocuments extends BaseUtilityExample {
+public class ListDuplicateStoredDocuments extends BaseUtilityExample {
     
-    public ListDuplicateDocuments(String[] args) {
+    public ListDuplicateStoredDocuments(String[] args) {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
@@ -39,7 +45,7 @@ public class ListDuplicateDocuments extends BaseUtilityExample {
      */
     public static void main(String[] args) {
         @SuppressWarnings("unused")
-        ListDuplicateDocuments utility = new ListDuplicateDocuments(args);
+        ListDuplicateStoredDocuments utility = new ListDuplicateStoredDocuments(args);
     }
 
 

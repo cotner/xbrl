@@ -1,10 +1,14 @@
 package org.xbrlapi.bdbxml.examples.utilities;
 
 import java.net.URI;
-import java.util.Set;
+import java.util.List;
+
+import org.xbrlapi.Stub;
 
 /**
- * Lists all documents in the data store.
+ * Attempts to reload all of the documents that are identified
+ * in the data store as having not yet loaded properly.
+ * Each document is first deleted from the data store.
  * Additional commandline arguments (optional ones marked with an *)
  * <ul>
  *  <li>There are no additional commandline arguments for this utility.</li>
@@ -13,19 +17,27 @@ import java.util.Set;
  * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ListStoredDocuments extends BaseUtilityExample {
+public class ReloadLoadFailures extends BaseUtilityExample {
     
-    public ListStoredDocuments(String[] args) {
+    public ReloadLoadFailures(String[] args) {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
         if (! message.equals("")) badUsage(message);
         try {
-            Set<URI> uris = store.getDocumentURIs();
-            for (URI uri: uris) {
-                System.out.println(uri);
+            
+            List<Stub> stubs = store.getStubs();
+            logger.info("The data store failed to load " + stubs.size() + " documents.");
+
+            for (Stub stub: stubs) {
+                URI uri = stub.getResourceURI();
+                logger.info(uri + " failed to load. " + stub.getReason());
+                if (store.hasDocument(uri)) {
+                    store.deleteDocument(uri);
+                }
+                loader.discover(uri);
             }
-            System.out.println("# documents = " + uris.size());
+            
         } catch (Exception e) {
             e.printStackTrace();
             badUsage(e.getMessage());
@@ -34,22 +46,12 @@ public class ListStoredDocuments extends BaseUtilityExample {
         tearDown();
     }
     
-    
-
-
-    
     /**
      * @param args The array of commandline arguments.
      */
     public static void main(String[] args) {
         @SuppressWarnings("unused")
-        ListStoredDocuments utility = new ListStoredDocuments(args);
+        ReloadLoadFailures utility = new ReloadLoadFailures(args);
     }
 
-
-
-   
-    
-
-    
 }

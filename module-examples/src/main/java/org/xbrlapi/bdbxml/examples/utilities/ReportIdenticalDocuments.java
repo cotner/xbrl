@@ -12,6 +12,12 @@ import org.xbrlapi.utilities.Constants;
  * but at a different URI.  Such URI differences can be ignored by
  * the data store so that the documents at the different URIs are
  * treated as being the same document.
+ * Additional commandline arguments (optional ones marked with an *)
+ * <ul>
+ *  <li>There are no additional commandline arguments for this utility.</li>
+ * </ul> 
+ * These are in addition to those commandline arguments documented at
+ * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class ReportIdenticalDocuments extends BaseUtilityExample {

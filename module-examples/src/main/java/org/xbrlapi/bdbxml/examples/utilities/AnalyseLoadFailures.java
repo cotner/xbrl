@@ -1,10 +1,11 @@
 package org.xbrlapi.bdbxml.examples.utilities;
 
-import java.net.URI;
-import java.util.Set;
+import java.util.List;
+
+import org.xbrlapi.Stub;
 
 /**
- * Lists all documents in the data store.
+ * Reports information about the documents that failed to load properly.
  * Additional commandline arguments (optional ones marked with an *)
  * <ul>
  *  <li>There are no additional commandline arguments for this utility.</li>
@@ -13,19 +14,23 @@ import java.util.Set;
  * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ListStoredDocuments extends BaseUtilityExample {
+public class AnalyseLoadFailures extends BaseUtilityExample {
     
-    public ListStoredDocuments(String[] args) {
+    public AnalyseLoadFailures(String[] args) {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
         if (! message.equals("")) badUsage(message);
         try {
-            Set<URI> uris = store.getDocumentURIs();
-            for (URI uri: uris) {
-                System.out.println(uri);
+            
+            List<Stub> stubs = store.getStubs();
+            System.out.println("The data store failed to load " + stubs.size() + " documents.");
+
+            for (Stub stub: stubs) {
+                System.out.println(stub.getResourceURI() + " failed to load. " + stub.getReason());
+                System.out.println("Store contains this document? " + store.hasDocument(stub.getResourceURI()));
             }
-            System.out.println("# documents = " + uris.size());
+            
         } catch (Exception e) {
             e.printStackTrace();
             badUsage(e.getMessage());
@@ -43,7 +48,7 @@ public class ListStoredDocuments extends BaseUtilityExample {
      */
     public static void main(String[] args) {
         @SuppressWarnings("unused")
-        ListStoredDocuments utility = new ListStoredDocuments(args);
+        AnalyseLoadFailures utility = new AnalyseLoadFailures(args);
     }
 
 

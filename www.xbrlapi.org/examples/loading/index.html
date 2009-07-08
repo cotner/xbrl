@@ -37,7 +37,7 @@ What is it?
 
 <p>
   This is a Java sample application to demonstrate loading data into the data store
-  to facilitate XBRL operations using the XBRLAPI.
+  to facilitate XBRL operations using the XBRLAPI.  It uses the Oracle Berkeley XML database module.
 </p>
 
 <h2>
@@ -72,6 +72,7 @@ You can browse the <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/tr
    <li>  XBRLAPI module-xlink jar file.</li>
    <li>  XBRLAPI module-xpointer jar file.</li>
    <li>  XBRLAPI module-api jar file.</li>
+   <li>  XBRLAPI module-bdbxml jar file.</li>
 </ul>
 
 <p>
@@ -103,7 +104,7 @@ You can browse the <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/tr
 </h3>
 
 <pre>
-  java org.xbrlapi.examples.load.Load &lt;OPTIONS&gt; &lt;URLS&gt;
+  java org.xbrlapi.bdbxml.examples.load.Load &lt;OPTIONS&gt; &lt;URLS&gt;
 </pre>
 
 <p>
@@ -168,6 +169,7 @@ You can browse the <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/tr
    <li>  XBRLAPI module-xlink jar file.</li>
    <li>  XBRLAPI module-xpointer jar file.</li>
    <li>  XBRLAPI module-api jar file.</li>
+   <li>  XBRLAPI module-bdbxml jar file.</li>
 </ul>
 
 <p>
@@ -199,7 +201,7 @@ You can browse the <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/tr
 </h3>
 
 <pre>
-  java org.xbrlapi.examples.load.LoadAllSECFilings &lt;OPTIONS&gt; 
+  java org.xbrlapi.bdbxml.examples.load.LoadAllSECFilings &lt;OPTIONS&gt; 
 </pre>
 
 <p>
@@ -239,7 +241,6 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 </script>
 <p><img src="http://apps.sourceforge.net/piwik/xbrlapi/piwik.php?idsite=1" alt="piwik"/></p>
 <!-- End Piwik Tag -->
-
 
 </div>
 

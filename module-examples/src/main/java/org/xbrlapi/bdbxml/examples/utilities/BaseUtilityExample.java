@@ -21,6 +21,12 @@ import org.xml.sax.EntityResolver;
 
 /**
  * Provides a base class that all of the concrete utility examples extend.
+ * Commandline arguments (optional ones marked with an *)
+ * <ul>
+ *  <li>-database [Path to directory containing the database]</li>
+ *  <li>-container [Name of the database container]</li>
+ *  <li>-cache [Path to directory containing the XBRL cache]</li>
+ * </ul>
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 public abstract class BaseUtilityExample {
@@ -39,18 +45,10 @@ public abstract class BaseUtilityExample {
         }
     }
 
-    // Create the logger
     protected static Logger logger = Logger.getLogger(BaseUtilityExample.class);  
-
-
-
 	protected Cache cache = null;
 	protected Store store = null;
 	protected Loader loader = null;
-	
-
-
-
 	
     // The list of commandline arguments
     protected HashMap<String,String> arguments = new HashMap<String,String>();

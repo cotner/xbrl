@@ -4,6 +4,12 @@ import java.net.URI;
 
 /**
  * Deletes a specific document from the data store.
+ * Additional commandline arguments (optional ones marked with an *)
+ * <ul>
+ *  <li>-document [The URI of the document]</li>
+ * </ul> 
+ * These are in addition to those commandline arguments documented at
+ * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class DeleteSpecificDocument extends BaseUtilityExample {

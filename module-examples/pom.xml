@@ -36,7 +36,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 
     <dependency>
         <groupId>org.xbrlapi</groupId>
-        <artifactId>xbrlapi-bdb-xml</artifactId>
+        <artifactId>xbrlapi-bdbxml</artifactId>
         <version>5.0</version>
     </dependency>
 
@@ -63,7 +63,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
           </descriptorRefs>
 		  <archive>
 		    <manifest>
-		      <mainClass>org.xbrlapi.Run</mainClass>
 		    </manifest>
 		  </archive>
 		</configuration>

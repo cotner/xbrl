@@ -6,6 +6,12 @@ import java.util.List;
 /**
  * Lists all documents that enable XBRL discovery of the document
  * with the specified URI.
+ * Additional commandline arguments (optional ones marked with an *)
+ * <ul>
+ *  <li>-document [The URI of the document]</li>
+ * </ul> 
+ * These are in addition to those commandline arguments documented at
+ * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class FindLinksToGivenDocument extends BaseUtilityExample {

@@ -7,6 +7,12 @@ import java.util.TreeSet;
  * Finds all locators in a document that identify more than one locator target.
  * Generally such situations arise when the same document has been stored
  * in the data store more than once.
+ * Additional commandline arguments (optional ones marked with an *)
+ * <ul>
+ *  <li>-document [The URI of the document]</li>
+ * </ul> 
+ * These are in addition to those commandline arguments documented at
+ * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class FindLocatorsWithMultipleTargetsForADocument extends BaseUtilityExample {

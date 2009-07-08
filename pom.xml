@@ -36,6 +36,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     <module>module-xpointer</module>
     <module>module-exist</module>
     <module>module-bdbxml</module>
+    <module>module-xdt</module>
+    <module>module-examples</module>
   </modules>
 
 </project>

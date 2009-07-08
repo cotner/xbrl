@@ -1,10 +1,11 @@
 package org.xbrlapi.bdbxml.examples.utilities;
 
-import java.net.URI;
-import java.util.Set;
+import org.xbrlapi.networks.Storer;
+import org.xbrlapi.networks.StorerImpl;
 
 /**
- * Lists all documents in the data store.
+ * Deletes all of the persisted relationship XML resources from the
+ * data store.
  * Additional commandline arguments (optional ones marked with an *)
  * <ul>
  *  <li>There are no additional commandline arguments for this utility.</li>
@@ -13,19 +14,18 @@ import java.util.Set;
  * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ListStoredDocuments extends BaseUtilityExample {
+public class DeletePersistedRelationships extends BaseUtilityExample {
     
-    public ListStoredDocuments(String[] args) {
+    public DeletePersistedRelationships(String[] args) {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
         if (! message.equals("")) badUsage(message);
         try {
-            Set<URI> uris = store.getDocumentURIs();
-            for (URI uri: uris) {
-                System.out.println(uri);
-            }
-            System.out.println("# documents = " + uris.size());
+            
+            Storer storer = new StorerImpl(store);
+            storer.deleteRelationships();
+            
         } catch (Exception e) {
             e.printStackTrace();
             badUsage(e.getMessage());
@@ -43,7 +43,7 @@ public class ListStoredDocuments extends BaseUtilityExample {
      */
     public static void main(String[] args) {
         @SuppressWarnings("unused")
-        ListStoredDocuments utility = new ListStoredDocuments(args);
+        DeletePersistedRelationships utility = new DeletePersistedRelationships(args);
     }
 
 

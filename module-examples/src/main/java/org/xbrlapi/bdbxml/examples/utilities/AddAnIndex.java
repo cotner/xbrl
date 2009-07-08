@@ -8,6 +8,14 @@ import org.xbrlapi.data.bdbxml.StoreImpl;
  * Adds a new index to the data store.
  * Index string syntax documentation is available at:
  * @link http://www.oracle.com/technology/documentation/berkeley-db/xml/gsg_xml/java/indices.html
+ * Additional commandline arguments (optional ones marked with an *)
+ * <ul>
+ *  <li>-namespace* [The namespace of the node being indexed]</li>
+ *  <li>-name [The local name of the node being indexed]</li>
+ *  <li>-index [The string representation of the index being added]</li>
+ * </ul> 
+ * These are in addition to those commandline arguments documented at
+ * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class AddAnIndex extends BaseUtilityExample {
@@ -29,7 +37,7 @@ public class AddAnIndex extends BaseUtilityExample {
         }
         tearDown();
     }
-    
+
     protected String setUp() {
         String message = super.setUp();
         if (!arguments.containsKey("name")) 
@@ -55,8 +63,4 @@ public class AddAnIndex extends BaseUtilityExample {
         return explanation;
     }
 
-   
-    
-
-    
 }
