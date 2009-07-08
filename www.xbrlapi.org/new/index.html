@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>XBRLAPI.ORG What is new</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div id="navcontainer">
+<ul id="navlist">
+<li><a href="/">Home</a></li>
+</ul>
+</div>
+
+<div class="content">
+<h1>
+What is new for the XBRLAP? 
+</h1>
+
+<h2>
+  8 July 2009: Data store query changes
+</h2>
+
+<p>
+  XPath 1.0 has been replaced with XQuery 1.0 as the data store query language.
+  To handle differences in data stores between how all of the document root elements
+  can be identified, all queries are now preprocessed to replace occurrences of the 
+  string '#roots#' with the data store specific expression needed to select the
+  root elements of the full set of XML Resources in the data store.
+</p>
+
+<h2>
+  8 July 2009: More examples
+</h2>
+
+<p>
+  A new set of examples have been provided showing ways in which the XBRLAPI data 
+  store can be maintained.  These are available in the 
+  <a href="/javadoc/org/xbrlapi/data/bdbxml/examples/utilities/package-summary.html">org.xbrlapi.bdbxml.examples.utilities package</a>.
+  They are documented by their Javadoc.
+  Existing examples have been repackaged to reflect their data store dependencies.
+  Examples have also be adapted to make them easier to unit test.
+</p>
+
+<h2>
+  8 July 2009: Method signature changes
+</h2>
+
+<p>
+  In preparation for the release of XBRLAPI 5.0, a number of API changes have been
+  made.  These largely relate to a broadening of the kinds of data that can be stored 
+  in the data store and to an increased level of consistency in using the java.net.URI 
+  for URIs.
+</p>
+
+<h2>
+  8 July 2009: Relationship persistence
+</h2>
+
+<p>
+  In some situations the query cost involved in real-time XLink relationship analysis 
+  can be problematic.  In those situations, XLink relationship analysis can be
+  done in advance with relationship information being persisted to the data store.
+  This relationship persistence enables substantial improvements in
+  the performance of relationship network analysis.
+  Usage of persisted relationships is also largely hidden from the end user.
+</p>
+
+<p>
+<a href="http://sourceforge.net/projects/xbrlapi"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=135539&type=11" width="120" height="30" border="0" alt="Get Java XBRL API implementation at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/xbrlapi/" : "http://apps.sourceforge.net/piwik/xbrlapi/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<p><img src="http://apps.sourceforge.net/piwik/xbrlapi/piwik.php?idsite=1" alt="piwik"/></p>
+<!-- End Piwik Tag -->
+
+</div>
+
+</body>
+</html>
