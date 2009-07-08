@@ -232,7 +232,9 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      */
     public URI getSourceRole() {
         try {
-            return new URI(getMetaAttribute("sourceRole"));
+            String role = getMetaAttribute("sourceRole");
+            if (role == null) return null;
+            return new URI(role);
         } catch (URISyntaxException e) {
             return null;
         }
@@ -290,11 +292,15 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      */
     public URI getTargetRole() {
         try {
-            return new URI(getMetaAttribute("targetRole"));
+            String role = getMetaAttribute("targetRole");
+            if (role == null) return null;
+            return new URI(role);
         } catch (URISyntaxException e) {
             return null;
         }
     }
+
+    
     
     /**
      * @see org.xbrlapi.PersistedRelationship#getSignature()
@@ -431,7 +437,9 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      * @throws XBRLException 
      */
     private void setSourceRole(URI role) throws XBRLException {
-        this.setMetaAttribute("sourceRole",role.toString());
+        if (role != null) {
+            this.setMetaAttribute("sourceRole",role.toString());
+        }
     }
     
     /**
@@ -479,7 +487,9 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      * @throws XBRLException 
      */
     private void setTargetRole(URI role) throws XBRLException {
-        this.setMetaAttribute("targetRole",role.toString());
+        if (role != null) {
+            this.setMetaAttribute("targetRole",role.toString());
+        }
     }
 
     /**
