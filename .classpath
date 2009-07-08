@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="module-api/src/main/java"/>
+	<classpathentry kind="src" path="module-examples/src/test/java"/>
 	<classpathentry kind="src" path="module-bdbxml/src/test/java"/>
 	<classpathentry kind="src" path="module-bdbxml/src/main/java"/>
-	<classpathentry kind="src" path="module-examples/src/test/java"/>
 	<classpathentry kind="src" path="module-examples/src/main/java"/>
 	<classpathentry kind="src" path="module-xdt/src/main/java"/>
 	<classpathentry kind="src" path="module-xdt/src/test/java"/>

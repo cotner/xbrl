@@ -7,18 +7,18 @@ import org.xbrlapi.networks.Storer;
 import org.xbrlapi.networks.StorerImpl;
 
 /**
- * Persists all of the relationships in the data store.
+ * Persists all of the relationships defined by arcs in the specified document.
  * Additional commandline arguments (optional ones marked with an *)
  * <ul>
- *  <li>There are no additional commandline arguments for this utility.</li>
+ *  <li>-document [The URI of the document]</li>
  * </ul> 
  * These are in addition to those commandline arguments documented at
  * @link BaseUtilityExample
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class PersistAllRelationshipsInStore extends BaseUtilityExample {
+public class PersistRelationshipsInSpecifiedDocument extends BaseUtilityExample {
     
-    public PersistAllRelationshipsInStore(String[] args) {
+    public PersistRelationshipsInSpecifiedDocument(String[] args) {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
@@ -51,7 +51,7 @@ public class PersistAllRelationshipsInStore extends BaseUtilityExample {
      */
     public static void main(String[] args) {
         @SuppressWarnings("unused")
-        PersistAllRelationshipsInStore utility = new PersistAllRelationshipsInStore(args);
+        PersistRelationshipsInSpecifiedDocument utility = new PersistRelationshipsInSpecifiedDocument(args);
     }
 
 }
