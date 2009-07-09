@@ -21,13 +21,13 @@
       xsi:schemaLocation="
       http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
       http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd
-      http://xbrl.org/2008/label http://www.xbrl.org/2008/generic/generic-label.xsd
+      http://xbrl.org/2008/label http://www.xbrl.org/2008/generic-label.xsd
       http://xbrlapi.org/entities ../entities.xsd
       ">    
       <link:arcroleRef 
       xlink:type="simple" 
       arcroleURI="http://xbrl.org/arcrole/2008/element-label" 
-      xlink:href="http://www.xbrl.org/2008/generic/generic-label.xsd#element-label"/>
+      xlink:href="http://www.xbrl.org/2008/generic-label.xsd#element-label"/>
 
       <link:arcroleRef 
       xlink:type="simple" 
