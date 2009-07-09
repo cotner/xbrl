@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2007 XBRL International. All Rights Reserved. -->
 <link:linkbase
   xmlns:link="http://www.xbrl.org/2003/linkbase"
   xmlns:generic="http://xbrl.org/2008/generic"
@@ -8,8 +7,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
   http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
-  http://xbrl.org/2008/generic http://www.xbrl.org/Specification/formula/CR-2008-12-31/xml/core_schemas/generic-link.xsd
-  http://xbrl.org/2008/label http://www.xbrl.org/Specification/formula/CR-2008-12-31/xml/core_schemas/generic-label.xsd
+  http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd
+  http://xbrl.org/2008/label http://www.xbrl.org/2008/generic-label.xsd
   ">
 
   <link:arcroleRef 

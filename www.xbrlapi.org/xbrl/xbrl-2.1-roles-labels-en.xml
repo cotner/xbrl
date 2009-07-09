@@ -8,14 +8,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
   http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
-  http://xbrl.org/2008/generic http://www.xbrl.org/Specification/formula/CR-2008-12-31/xml/core_schemas/generic-link.xsd
-  http://xbrl.org/2008/label http://www.xbrl.org/Specification/formula/CR-2008-12-31/xml/core_schemas/generic-label.xsd
+  http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd
+  http://xbrl.org/2008/label http://www.xbrl.org/2008/generic-label.xsd
   ">
 
   <link:arcroleRef 
   xlink:type="simple" 
   arcroleURI="http://xbrl.org/arcrole/2008/element-label" 
-  xlink:href="http://www.xbrl.org/Specification/formula/CR-2008-12-31/xml/core_schemas/generic-label.xsd#element-label"/>
+  xlink:href="http://www.xbrl.org/2008/generic-label.xsd#element-label"/>
   
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
     <link:loc xlink:href="xbrl-2.1-roles.xsd#concept-label" xlink:type="locator" xlink:label="role"/>
@@ -458,7 +458,7 @@
   </generic:link>
 
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
-    <link:loc xlink:href="http://www.xbrl.org/Specification/formula/CR-2008-12-31/xml/core_schemas/generic-label.xsd#element-label" xlink:type="locator" xlink:label="role"/>
+    <link:loc xlink:href="http://www.xbrl.org/2008/generic-label.xsd#element-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       element label
@@ -468,7 +468,7 @@
   </generic:link>
   
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
-    <link:loc xlink:href="http://www.xbrl.org/Specification/formula/CR-2008-12-31/xml/core_schemas/generic-reference.xsd#element-reference" xlink:type="locator" xlink:label="role"/>
+    <link:loc xlink:href="http://www.xbrl.org/2008/generic-reference.xsd#element-reference" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       element reference

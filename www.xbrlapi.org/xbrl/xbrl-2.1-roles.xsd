@@ -3,14 +3,14 @@
   xmlns="http://www.w3.org/2001/XMLSchema" 
   xmlns:link="http://www.xbrl.org/2003/linkbase"
   xmlns:xlink="http://www.w3.org/1999/xlink" 
-  xmlns:generic="http://xbrl.org/2007/generic"
+  xmlns:generic="http://xbrl.org/2008/generic"
   targetNamespace="http://www.galexy.net/standardRoles" 
   xmlns:tns="http://www.galexy.net/standardRoles" 
   elementFormDefault="qualified">
 
   <import namespace="http://www.xbrl.org/2003/instance" schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
 
-  <import namespace="http://xbrl.org/2008/generic" schemaLocation="http://www.xbrl.org/Specification/formula/CR-2008-12-31/xml/core_schemas/generic-link.xsd"/>
+  <import namespace="http://xbrl.org/2008/generic" schemaLocation="http://www.xbrl.org/2008/generic-link.xsd"/>
 
   <annotation>
   <appinfo>

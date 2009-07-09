@@ -20,14 +20,14 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="
       http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
-      http://xbrl.org/2008/generic http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/gnl.xsd
-      http://xbrl.org/2008/label http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/generic-label.xsd
+      http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd
+      http://xbrl.org/2008/label http://www.xbrl.org/2008/generic/generic-label.xsd
       http://xbrlapi.org/entities ../entities.xsd
       ">    
       <link:arcroleRef 
       xlink:type="simple" 
       arcroleURI="http://xbrl.org/arcrole/2008/element-label" 
-      xlink:href="http://www.xbrl.org/Specification/formula/CR-2008-03-28/xml/core_schemas/generic-label.xsd#element-label"/>
+      xlink:href="http://www.xbrl.org/2008/generic/generic-label.xsd#element-label"/>
 
       <link:arcroleRef 
       xlink:type="simple" 
@@ -39,6 +39,7 @@
   </xsl:template>
 
   <xsl:template match="edgar:cikNumber">
+   <xsl:message>Adding CIK <xsl:value-of select="text()"/></xsl:message>
     <xsl:variable name="value" select="text()"/>
     <xsl:variable name="equivalents" select="//edgar:cikNumber[text() eq $value]"/>
     <xsl:if test=". is $equivalents[1]">
