@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<link:linkbase xmlns:entity="http://xbrlapi.org/entities" xmlns:label="http://xbrl.org/2008/label"
+<link:linkbase xmlns:entity="http://xbrlapi.org/entities" 
+               xmlns:label="http://xbrl.org/2008/label"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xmlns:edgar="http://www.sec.gov/Archives/edgar"
                xmlns:xbrli="http://www.xbrl.org/2003/instance"
