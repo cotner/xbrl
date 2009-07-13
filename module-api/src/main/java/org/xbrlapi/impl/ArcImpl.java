@@ -325,4 +325,47 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     	return true;
     }
 
+    /**
+     * @see org.xbrlapi.Arc#getPreferredLabelRole()
+     */
+    public URI getPreferredLabelRole() throws XBRLException {
+        String value = this.getMetaAttribute("preferredLabel");
+        if (value == null) return null;
+        if (! this.getLocalname().equals("labelArc")) {
+            return null;
+        }
+        if (! this.getNamespace().equals(Constants.XBRL21LinkNamespace)) {
+            return null;
+        }
+        if (! this.getArcrole().equals(Constants.LabelArcrole())) {
+            return null;
+        }
+        try {
+            URI preferredLabel = new URI(this.getMetaAttribute("preferredLabel"));
+            return preferredLabel;
+        } catch (URISyntaxException e) {
+            throw new XBRLException("The preferred label role is not a valid URI.",e);
+        }
+    }
+
+    /**
+     * @see org.xbrlapi.Arc#getWeight()
+     */
+    public Double getWeight() throws XBRLException {
+        String value = this.getMetaAttribute("weight");
+        if (! this.getLocalname().equals("calculationArc")) {
+            return null;
+        }
+        if (! this.getNamespace().equals(Constants.XBRL21LinkNamespace)) {
+            return null;
+        }
+        if (! this.getArcrole().equals(Constants.CalculationArcrole())) {
+            return null;
+        }
+        if (value == null) throw new XBRLException("The weight attribute cannot be missing on summation-item relationships.");
+        
+        return new Double(value);
+        
+    }
+
 }

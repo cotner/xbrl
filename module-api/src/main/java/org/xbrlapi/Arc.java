@@ -151,4 +151,24 @@ public interface Arc extends ExtendedLinkContent {
      * @throws XBRLException
      */
     public boolean isProhibited() throws XBRLException;
+    
+    /**
+     * This method is useful in the context of 
+     * summation-item calculation relationships
+     * as defined in the XBRL 2.1 specification.
+     * @return the value of the weight attribute or
+     * null if the relationship is not of the 
+     * necessary type.
+     */
+    public Double getWeight() throws XBRLException;
+    
+    /**
+     * This method is useful in the context of 
+     * parent-child presentation relationships
+     * as defined in the XBRL 2.1 specification.
+     * @return the value of the preferredLabel attribute
+     * or null if none is defined or the relationship
+     * is not of the necessary type.
+     */
+    public URI getPreferredLabelRole() throws XBRLException;
 }
