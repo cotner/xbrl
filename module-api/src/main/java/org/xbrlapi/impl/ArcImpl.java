@@ -330,7 +330,6 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public URI getPreferredLabelRole() throws XBRLException {
         String value = this.getMetaAttribute("preferredLabel");
-        if (value == null) return null;
         if (! this.getLocalname().equals("labelArc")) {
             return null;
         }
@@ -340,6 +339,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
         if (! this.getArcrole().equals(Constants.LabelArcrole())) {
             return null;
         }
+        if (value == null) return Constants.StandardLabelRole();
         try {
             URI preferredLabel = new URI(this.getMetaAttribute("preferredLabel"));
             return preferredLabel;

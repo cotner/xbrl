@@ -166,9 +166,12 @@ public interface Arc extends ExtendedLinkContent {
      * This method is useful in the context of 
      * parent-child presentation relationships
      * as defined in the XBRL 2.1 specification.
-     * @return the value of the preferredLabel attribute
-     * or null if none is defined or the relationship
-     * is not of the necessary type.
+     * @return null if the relationship
+     * is not of the necessary type.  Otherwise returns
+     * the value of the preferredLabel attribute if it
+     * is on the arc.  Otherwise returns the standard 
+     * label resource role
+     * {@link org.xbrlapi.utilities.Constants#StandardLabelRole()}
      */
     public URI getPreferredLabelRole() throws XBRLException;
 }
