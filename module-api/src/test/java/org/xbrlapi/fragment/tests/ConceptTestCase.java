@@ -127,9 +127,9 @@ public class ConceptTestCase extends DOMLoadingTestCase {
             assertEquals(1,facts.size());
             for (Item fact: facts) {
                 logger.info(fact.getConcept().getLabels().get(0).getStringValue());
-                networks = store.getMinimalNetworksWithArcrole(fact.getConcept(),Constants.PresentationArcrole());
+                networks = store.getMinimalNetworksWithArcrole(fact.getConcept(),Constants.PresentationArcrole);
             }
-            List<Network> presentationNetworks = networks.getNetworks(Constants.PresentationArcrole());
+            List<Network> presentationNetworks = networks.getNetworks(Constants.PresentationArcrole);
             
             assertEquals(1,presentationNetworks.size());
             

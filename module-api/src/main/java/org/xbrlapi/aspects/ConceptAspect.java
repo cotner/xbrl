@@ -86,7 +86,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
          * The label role is used in constructing the label for the
          * concept aspect values.
          */
-        private URI role = Constants.StandardLabelRole();
+        private URI role = Constants.StandardLabelRole;
         
         /**
          * @return the label resource role.

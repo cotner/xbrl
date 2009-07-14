@@ -49,15 +49,15 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 
 		try {
 
-		    networks = store.getNetworks(Constants.LabelArcrole());
+		    networks = store.getNetworks(Constants.LabelArcrole);
 
 			List<URI> arcroles = networks.getArcroles();
 			assertEquals(1, arcroles.size());
-			assertEquals(Constants.LabelArcrole(),arcroles.get(0));
+			assertEquals(Constants.LabelArcrole,arcroles.get(0));
 
 			List<URI> linkroles = networks.getLinkRoles(arcroles.get(0));
 			assertEquals(1, linkroles.size());
-			assertEquals(Constants.StandardLinkRole(),linkroles.get(0));
+			assertEquals(Constants.StandardLinkRole,linkroles.get(0));
 			
 		} catch (Exception e) {
 			fail(e.getMessage());
@@ -68,15 +68,15 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 
         try {
             
-            networks = store.getNetworks(Constants.LabelArcrole());
+            networks = store.getNetworks(Constants.LabelArcrole);
             
             List<URI> arcroles = networks.getArcroles();
             assertEquals(1, arcroles.size());
-            assertEquals(Constants.LabelArcrole(),arcroles.get(0));
+            assertEquals(Constants.LabelArcrole,arcroles.get(0));
 
             List<URI> linkRoles = networks.getLinkRoles(arcroles.get(0));
             assertEquals(1, linkRoles.size());
-            assertEquals(Constants.StandardLinkRole(),linkRoles.get(0));
+            assertEquals(Constants.StandardLinkRole,linkRoles.get(0));
             
             Networks myNetworks = store.getNetworks();
             networks.addAll(myNetworks);
@@ -99,13 +99,13 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 	public void testRetrievalOfANetwork() {	
 
 		try {
-            networks = store.getNetworks(Constants.LabelArcrole());
+            networks = store.getNetworks(Constants.LabelArcrole);
 
 			List<URI> arcroles = networks.getArcroles();
 			List<URI> linkroles = networks.getLinkRoles(arcroles.get(0));
 			Network network = networks.getNetwork(linkroles.get(0),arcroles.get(0));
-			assertEquals(Constants.LabelArcrole(),network.getArcrole());
-			assertEquals(Constants.StandardLinkRole(),network.getLinkRole());
+			assertEquals(Constants.LabelArcrole,network.getArcrole());
+			assertEquals(Constants.StandardLinkRole,network.getLinkRole());
 			SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(label.getIndex());
 			assertEquals(0,relationships.size());
 			relationships = network.getActiveRelationshipsTo(label.getIndex());
@@ -124,14 +124,14 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 		
 		try {
 
-		    networks = store.getNetworks(Constants.LabelArcrole());
+		    networks = store.getNetworks(Constants.LabelArcrole);
 			
 		    List<URI> arcroles = networks.getArcroles();
 			List<URI> linkroles = networks.getLinkRoles(arcroles.get(0));
 			Network network = networks.getNetwork(linkroles.get(0),arcroles.get(0));
 			SortedSet<Relationship> relationships = network.getActiveRelationshipsTo(label.getIndex());
 			Relationship relationship = relationships.first();
-			assertEquals(Constants.LabelArcrole(),relationship.getArc().getArcrole());
+			assertEquals(Constants.LabelArcrole,relationship.getArc().getArcrole());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,7 +147,7 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 		
 		try {
 
-			List<LabelResource> labels = store.getTargets(concept.getIndex(),null,Constants.LabelArcrole());
+			List<LabelResource> labels = store.getTargets(concept.getIndex(),null,Constants.LabelArcrole);
 			assertEquals(1,labels.size());
 			
 		} catch (Exception e) {
@@ -163,9 +163,9 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 		
 		try {
 
-			networks = store.getNetworks(Constants.LabelArcrole());
+			networks = store.getNetworks(Constants.LabelArcrole);
 			assertEquals(1,networks.getSize());
-			Network network = networks.getNetwork(Constants.StandardLinkRole(),Constants.LabelArcrole());
+			Network network = networks.getNetwork(Constants.StandardLinkRole,Constants.LabelArcrole);
 			assertNotNull(network);
 			Set<String> rootIndexes = network.getRootFragmentIndexes();
 			assertEquals(1,rootIndexes.size());

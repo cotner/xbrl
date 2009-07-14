@@ -121,7 +121,7 @@ public interface Networks extends Iterable<Network> {
 	 * @param arcrole The required arcrole.
 	 * @throws XBRLException
 	 */
-	public void addRelationships(String arcrole) throws XBRLException;
+	public void addRelationships(URI arcrole) throws XBRLException;
 	
 
 	/**

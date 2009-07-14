@@ -1,7 +1,6 @@
 package org.xbrlapi.xdt.values;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -35,16 +34,12 @@ public class ExplicitDimensionValueLabelComparator extends DimensionValueCompara
      * @param labelrole The XLink role value of the labels to be used.
      * @throws XBRLException if the XLink role value is null or not a valid URI.
      */
-    public ExplicitDimensionValueLabelComparator(String language, String labelrole)  throws XBRLException {
+    public ExplicitDimensionValueLabelComparator(String language, URI labelrole)  throws XBRLException {
         super();
         if (labelrole == null) throw new XBRLException("The label role must not be null.");
-        try {
-            role = new URI(labelrole);
-        } catch (URISyntaxException e) {
-            throw new XBRLException("The label role must be a valid absolute URI.",e);
-        }
+        role = labelrole;
         if (language == null) throw new XBRLException("The language must not be null.");
-            this.language = language;
+        this.language = language;
     }
     
     /**

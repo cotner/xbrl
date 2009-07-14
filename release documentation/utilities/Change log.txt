@@ -1,3 +1,7 @@
+14 Jul. 2009
+Simplified the org.xbrlapi.utilities.Constants class
+to use java.net.URI rather than strings for all URI constants.
+
 November 20, 2008
 Some new constants have been defined.
 

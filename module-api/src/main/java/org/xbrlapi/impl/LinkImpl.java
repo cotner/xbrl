@@ -19,8 +19,8 @@ public class LinkImpl extends XlinkImpl implements Link {
      */
     public URI getLinkRole() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (root.hasAttributeNS(Constants.XLinkNamespace,"role")) {
-    	    String role = root.getAttributeNS(Constants.XLinkNamespace,"role");
+    	if (root.hasAttributeNS(Constants.XLinkNamespace.toString(),"role")) {
+    	    String role = root.getAttributeNS(Constants.XLinkNamespace.toString(),"role");
     	    try {
     	        return new URI(role);
     	    } catch (URISyntaxException e) {

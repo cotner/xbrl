@@ -32,8 +32,8 @@ public class TitleImpl extends XlinkImpl implements Title {
      */
     public String getLanguage() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (root.hasAttributeNS(Constants.XMLNamespace,"lang"))
-    		return root.getAttributeNS(Constants.XMLNamespace,"lang");
+    	if (root.hasAttributeNS(Constants.XMLNamespace.toString(),"lang"))
+    		return root.getAttributeNS(Constants.XMLNamespace.toString(),"lang");
     	if (root.hasAttribute("xml:lang"))
     		return root.getAttribute("xml:lang");
     	return null;

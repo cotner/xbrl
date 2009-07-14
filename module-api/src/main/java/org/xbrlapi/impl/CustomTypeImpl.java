@@ -64,7 +64,7 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
 	 */
     public String getDefinition() throws XBRLException {
 		Element data = this.getDataRootElement();
-		NodeList definitions = data.getElementsByTagNameNS(Constants.XBRL21LinkNamespace,"definition");
+		NodeList definitions = data.getElementsByTagNameNS(Constants.XBRL21LinkNamespace.toString(),"definition");
 		if (definitions.getLength() == 0) return null;
 		Element definition = (Element) definitions.item(0);
 		return definition.getTextContent().trim();		 	

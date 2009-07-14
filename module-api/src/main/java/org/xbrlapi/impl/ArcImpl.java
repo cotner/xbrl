@@ -70,8 +70,8 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public String getShow() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"show")) return null;
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"show");
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace.toString(),"show")) return null;
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"show");
     }
 	
     /**
@@ -79,8 +79,8 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public String getActuate() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"actuate")) return null;
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"actuate");
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace.toString(),"actuate")) return null;
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"actuate");
     }
 	
     /**
@@ -88,8 +88,8 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public String getFrom() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"from")) return null;
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"from");
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace.toString(),"from")) return null;
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"from");
     }
     
     /**
@@ -97,8 +97,8 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public String getTo() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"to")) return null;
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"to");
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace.toString(),"to")) return null;
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"to");
     }
     
     /**
@@ -106,8 +106,8 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
      */
     public URI getArcrole() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"arcrole")) return null;
-    	String arcrole = getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"arcrole");
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace.toString(),"arcrole")) return null;
+    	String arcrole = getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"arcrole");
     	try {
     	    return new URI(arcrole);
     	} catch (URISyntaxException e) {
@@ -336,10 +336,10 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
         if (! this.getNamespace().equals(Constants.XBRL21LinkNamespace)) {
             return null;
         }
-        if (! this.getArcrole().equals(Constants.LabelArcrole())) {
+        if (! this.getArcrole().equals(Constants.LabelArcrole)) {
             return null;
         }
-        if (value == null) return Constants.StandardLabelRole();
+        if (value == null) return Constants.StandardLabelRole;
         try {
             URI preferredLabel = new URI(this.getMetaAttribute("preferredLabel"));
             return preferredLabel;
@@ -359,7 +359,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
         if (! this.getNamespace().equals(Constants.XBRL21LinkNamespace)) {
             return null;
         }
-        if (! this.getArcrole().equals(Constants.CalculationArcrole())) {
+        if (! this.getArcrole().equals(Constants.CalculationArcrole)) {
             return null;
         }
         if (value == null) throw new XBRLException("The weight attribute cannot be missing on summation-item relationships.");

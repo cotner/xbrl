@@ -36,7 +36,7 @@ public class ArcSemanticKeyTestCase extends DOMLoadingTestCase {
 			String key = fragment.getSemanticKey();
 			logger.info(key);
 			assertFalse(key.contains("xmlns"));
-            assertFalse(key.contains(Constants.XLinkNamespace));
+            assertFalse(key.contains(Constants.XLinkNamespace.toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

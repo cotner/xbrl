@@ -22,8 +22,8 @@ public class ResourceImpl extends ArcEndImpl implements Resource {
 	 */
 	public URI getResourceRole() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"role")) return null;
-        String value = getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"role");
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace.toString(),"role")) return null;
+        String value = getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"role");
         try {
             return new URI(value);
         } catch (URISyntaxException e) {
@@ -36,8 +36,8 @@ public class ResourceImpl extends ArcEndImpl implements Resource {
      */
     public String getLanguage() throws XBRLException {
         Element root = getDataRootElement();
-        if (! root.hasAttributeNS(Constants.XMLNamespace,"lang")) return null;
-        return getDataRootElement().getAttributeNS(Constants.XMLNamespace,"lang");        
+        if (! root.hasAttributeNS(Constants.XMLNamespace.toString(),"lang")) return null;
+        return getDataRootElement().getAttributeNS(Constants.XMLNamespace.toString(),"lang");        
     }
     
     /**

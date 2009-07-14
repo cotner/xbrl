@@ -26,8 +26,8 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
      */
     public String getPeriodType() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (root.hasAttributeNS(Constants.XBRL21Namespace,"periodType"))
-    		return root.getAttributeNS(Constants.XBRL21Namespace,"periodType");
+    	if (root.hasAttributeNS(Constants.XBRL21Namespace.toString(),"periodType"))
+    		return root.getAttributeNS(Constants.XBRL21Namespace.toString(),"periodType");
     	throw new XBRLException("The period attribute is mandatory on XBRL concepts.");
     }
     
@@ -41,8 +41,8 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
      */
     public String getBalance() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (root.hasAttributeNS(Constants.XBRL21Namespace,"balance"))
-    		return root.getAttributeNS(Constants.XBRL21Namespace,"balance");
+    	if (root.hasAttributeNS(Constants.XBRL21Namespace.toString(),"balance"))
+    		return root.getAttributeNS(Constants.XBRL21Namespace.toString(),"balance");
     	return null;
     }
     
@@ -71,7 +71,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
      */
     public List<URI> getPresentationNetworkLinkroles() throws XBRLException {
         List<URI> roles = new Vector<URI>();
-        for (Network network: getStore().getMinimalNetworksWithArcrole(this,Constants.PresentationArcrole())) {
+        for (Network network: getStore().getMinimalNetworksWithArcrole(this,Constants.PresentationArcrole)) {
             roles.add(network.getLinkRole());
         }
         return roles;

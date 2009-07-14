@@ -5,6 +5,8 @@ package org.xbrlapi.impl;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
+import java.net.URI;
+
 import org.xbrlapi.Mock;
 import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.utilities.XBRLException;
@@ -38,15 +40,15 @@ public class MockImpl extends FragmentImpl implements Mock {
 	 * @param qName The QName for the root element of the data in the fragment.
 	 * @throws XBRLException
 	 */
-	public MockImpl(String id, String namespace, String name, String qName) throws XBRLException {
+	protected MockImpl(String id, URI namespace, String name, String qName) throws XBRLException {
 		this(id);
 		getBuilder().appendElement(namespace, name, qName);
 	}
 	
     /**
-     * @see org.xbrlapi.Mock#appendDataElement(String, String, String)
+     * @see org.xbrlapi.Mock#appendDataElement(URI, String, String)
      */
-    public void appendDataElement(String namespace, String name, String qName) throws XBRLException {
+    public void appendDataElement(URI namespace, String name, String qName) throws XBRLException {
         if (this.getBuilder() == null) throw new XBRLException("The fragment is not still being built.");
         getBuilder().appendElement(namespace, name, qName);
     }

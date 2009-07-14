@@ -27,7 +27,7 @@ class XlinkImpl extends FragmentImpl implements Xlink {
      * @see org.xbrlapi.Xlink#getXlinkType()
      */
     public String getXlinkType() throws XBRLException {
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"type");
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"type");
     }
 
     /**
@@ -38,8 +38,8 @@ class XlinkImpl extends FragmentImpl implements Xlink {
      */
     public String getTitleAttribute() throws XBRLException {
     	Element e = getDataRootElement();
-    	if (e.hasAttributeNS(Constants.XLinkNamespace,"title"))
-    		return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"title");
+    	if (e.hasAttributeNS(Constants.XLinkNamespace.toString(),"title"))
+    		return getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"title");
     	return null;
     }
     

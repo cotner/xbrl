@@ -105,7 +105,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	}
 
     	Element metadata = getMetadataRootElement();
-    	Element dataContainer = (Element) metadata.getElementsByTagNameNS(Constants.XBRLAPINamespace,Constants.FragmentDataContainerElementName).item(0);
+    	Element dataContainer = (Element) metadata.getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),Constants.FragmentDataContainerElementName).item(0);
     	NodeList children = dataContainer.getChildNodes();
     	for (int i=0; i< children.getLength(); i++) 
     		if (children.item(i).getNodeType() == Node.ELEMENT_NODE) return (Element) children.item(i);
@@ -149,7 +149,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	
     	// Construct the Query
     	String predicate = "*/link:loc and @targetDocumentURI='"+ getURI() +"' and (";
-    	NodeList xptrs = this.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"xptr");
+    	NodeList xptrs = this.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),"xptr");
     	for (int i=0; i<xptrs.getLength(); i++) {
     		String value = ((Element) xptrs.item(i)).getAttribute("value").trim();
     		predicate += "@targetPointerValue='" + value +"'";
@@ -221,8 +221,8 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getReferences()
      */
     public List<ReferenceResource> getReferences() throws XBRLException {
-        List<ReferenceResource> references = getStore().getTargets(getIndex(),null,Constants.ReferenceArcrole());
-        List<ReferenceResource> genericReferences = getStore().getTargets(getIndex(),null,Constants.GenericReferenceArcrole());
+        List<ReferenceResource> references = getStore().getTargets(getIndex(),null,Constants.ReferenceArcrole);
+        List<ReferenceResource> genericReferences = getStore().getTargets(getIndex(),null,Constants.GenericReferenceArcrole);
         references.addAll(genericReferences);
         return references;
     }

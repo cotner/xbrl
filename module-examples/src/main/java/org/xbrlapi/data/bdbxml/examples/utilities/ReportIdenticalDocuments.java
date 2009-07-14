@@ -31,7 +31,7 @@ public class ReportIdenticalDocuments extends BaseUtilityExample {
                 List<Match> matches = store.<Match>getXMLResources("Match");
                 System.out.println("# sets of identical documents = " + matches.size());
                 for (Match match: matches) {
-                    NodeList nodes = match.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match");
+                    NodeList nodes = match.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),"match");
                     if (nodes.getLength() > 1) {
                         System.out.println("Documents matching " + nodes.item(0).getTextContent() + " are:");
                         for (int i=1; i<nodes.getLength(); i++) {

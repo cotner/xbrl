@@ -114,7 +114,7 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
 	
 	public void testGetSpecificRoleTypes() throws Exception {
 		try {
-			List<RoleType> roleTypes = store.getRoleTypes(Constants.VerboseLabelRole());
+			List<RoleType> roleTypes = store.getRoleTypes(Constants.VerboseLabelRole);
 			assertEquals(1, roleTypes.size());
 		} catch (Exception e) {
 			fail(e.getMessage());
@@ -125,8 +125,8 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
 		try {
 			List<ArcroleType> roleTypes = store.getArcroleTypes(Constants.PresentationArcrole);
 			ArcroleType type = roleTypes.get(0);
-			assertTrue(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"presentationArc"));
-			assertFalse(type.isUsedOn(new URI(Constants.XBRL21LinkNamespace),"calculationArc"));
+			assertTrue(type.isUsedOn(Constants.XBRL21LinkNamespace,"presentationArc"));
+			assertFalse(type.isUsedOn(Constants.XBRL21LinkNamespace,"calculationArc"));
 			List<Arc> arcs = store.getXMLResources("Arc");
 			assertTrue(arcs.size() > 0);
 			for (Arc arc: arcs) {

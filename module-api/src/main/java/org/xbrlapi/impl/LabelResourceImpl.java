@@ -64,10 +64,10 @@ public class LabelResourceImpl extends MixedContentResourceImpl implements Label
     public List<Concept> getConcepts() throws XBRLException	{
 
         List<Fragment> fragments;
-        if (this.getNamespace().equals(Constants.GenericLabelNamespace()))
-            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.GenericLabelArcrole());
+        if (this.getNamespace().equals(Constants.GenericLabelNamespace))
+            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.GenericLabelArcrole);
         else 
-            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.LabelArcrole());
+            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.LabelArcrole);
         
         Set<Concept> concepts = new HashSet<Concept>();
         for (Fragment fragment: fragments) {

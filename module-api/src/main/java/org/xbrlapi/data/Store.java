@@ -757,7 +757,7 @@ public interface Store {
      * @return a list of arcroleType fragments with a given arcrole
      * @throws XBRLException
      */
-    public List<ArcroleType> getArcroleTypes(String uri) throws XBRLException;
+    public List<ArcroleType> getArcroleTypes(URI uri) throws XBRLException;
     
     /**
      * @return a list of roleType fragments

@@ -1,5 +1,6 @@
 package org.xbrlapi.builder;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -72,8 +73,8 @@ public class BuilderImpl implements Builder {
 	 * The metadata element becomes the root of the XML fragment that is stored in the data store.
 	 */
 	private void setupBuilder() {
-		metadata = dom.createElementNS(Constants.XBRLAPINamespace,Constants.XBRLAPIPrefix + ":" + Constants.FragmentRootElementName);
-		Element container = dom.createElementNS(Constants.XBRLAPINamespace,Constants.XBRLAPIPrefix + ":" + Constants.FragmentDataContainerElementName);
+		metadata = dom.createElementNS(Constants.XBRLAPINamespace.toString(),Constants.XBRLAPIPrefix + ":" + Constants.FragmentRootElementName);
+		Element container = dom.createElementNS(Constants.XBRLAPINamespace.toString(),Constants.XBRLAPIPrefix + ":" + Constants.FragmentDataContainerElementName);
 		setInsertionPoint(container);
 		metadata.appendChild(container);
 
@@ -206,7 +207,7 @@ public class BuilderImpl implements Builder {
 	 * @throws XBRLException if the node cannot be appended.
 	 */
 	public void appendElement(
-			String namespaceURI, 
+			URI namespaceURI, 
 			String lName, 
 			String qName, 
 			Attributes attrs) throws XBRLException	
@@ -226,16 +227,16 @@ public class BuilderImpl implements Builder {
 	 * @param attrs The set of attributes found by the SAX parser.
 	 */
 	private Element createElement(
-			String namespaceURI, 
+			URI namespaceURI, 
 			String lName,
 			String qName, 
 			Attributes attrs)  {
 		
 		// Keep track of namespaces used by element or its attributes
 		HashMap<String,String> namespaces = new HashMap<String,String>();
-		namespaces.put(namespaceURI,"");
+		namespaces.put(namespaceURI.toString(),"");
 
-		Element newElement = getDOM().createElementNS(namespaceURI, qName);
+		Element newElement = getDOM().createElementNS(namespaceURI.toString(), qName);
 				
 		// Handle elements created with a null attrs array (not created from SAX parsing input)
 		if (attrs == null)
@@ -244,9 +245,9 @@ public class BuilderImpl implements Builder {
 		// Insert all attributes with namespaces
 		for (int i = 0; i < attrs.getLength(); i++) {
 			
-			if (attrs.getURI(i).equals(Constants.XMLNamespace)) {
+			if (attrs.getURI(i).equals(Constants.XMLNamespace.toString())) {
 				newElement.setAttribute(attrs.getQName(i), attrs.getValue(i));
-				namespaces.put(Constants.XMLNamespace,"");
+				namespaces.put(Constants.XMLNamespace.toString(),"");
 			} else if (! attrs.getURI(i).equals("")) {
 				newElement.setAttributeNS(attrs.getURI(i), attrs.getQName(i),attrs.getValue(i));
 				namespaces.put(attrs.getURI(i),"");
@@ -276,7 +277,7 @@ public class BuilderImpl implements Builder {
 	 * @throws XBRLException if the node cannot be appended.
 	 */
 	public void appendElement(
-			String namespaceURI, 
+			URI namespaceURI, 
 			String lName, 
 			String qName) throws XBRLException	
 	{
@@ -444,7 +445,7 @@ public class BuilderImpl implements Builder {
      */
     public void appendMetadataElement(String eName, HashMap<String,String> attributes) throws XBRLException {
 
-		Element child = getDOM().createElementNS(Constants.XBRLAPINamespace,Constants.XBRLAPIPrefix + ":" + eName);
+		Element child = getDOM().createElementNS(Constants.XBRLAPINamespace.toString(),Constants.XBRLAPIPrefix + ":" + eName);
 		Iterator<String> attributeNames = attributes.keySet().iterator();
 		while (attributeNames.hasNext()) {
 			String aName = attributeNames.next();
@@ -469,7 +470,7 @@ public class BuilderImpl implements Builder {
      */
     public void removeMetadataElement(String eName, HashMap<String,String> attributes) throws XBRLException {
 
-		NodeList children = getMetadata().getElementsByTagNameNS(Constants.XBRLAPINamespace,eName);
+		NodeList children = getMetadata().getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),eName);
 		for (int i=0; i<children.getLength(); i++) {
 			boolean match = true;
 			Element child = (Element) children.item(i);

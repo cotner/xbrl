@@ -141,12 +141,12 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
 		try {
 			xqueryService = (XQueryService) collection.getService("XQueryService","1.0");
-			xqueryService.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace);
-			xqueryService.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace);
-			xqueryService.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace);
-			xqueryService.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace);
-			xqueryService.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace);
-			xqueryService.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
+			xqueryService.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace.toString());
+			xqueryService.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace.toString());
+			xqueryService.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace.toString());
+			xqueryService.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace.toString());
+			xqueryService.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace.toString());
+			xqueryService.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace.toString());
 			// TODO add means for users to add their own namespace declarations to the data store xpath services
 			
 		} catch (XMLDBException e) {

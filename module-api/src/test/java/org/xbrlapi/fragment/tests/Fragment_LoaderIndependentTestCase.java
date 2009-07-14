@@ -1,8 +1,11 @@
 package org.xbrlapi.fragment.tests;
 
+import java.net.URI;
+
 import org.xbrlapi.Fragment;
 import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.BaseTestCase;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -62,7 +65,7 @@ public class Fragment_LoaderIndependentTestCase extends BaseTestCase {
 	 */
 	public void testGetNamespaceOfAnInConstructionFragmentWithANamespace() {
 	    try {
-			String ns = "http://xbrlapi.org/";
+			URI ns = Constants.XBRLAPINamespace;
 			MockImpl f = new MockImpl("Mockery");
 			f.appendDataElement(ns, "root", "my:root");
 			assertEquals(ns, f.getNamespace().toString());

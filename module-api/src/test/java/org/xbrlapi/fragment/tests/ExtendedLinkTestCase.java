@@ -44,7 +44,7 @@ public class ExtendedLinkTestCase extends DOMLoadingTestCase {
 			for (int i=0; i<documentations.size(); i++) {
 				Fragment documentation = documentations.get(0);
 				Fragment parent = documentation.getParent();
-				if (parent.getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"type").equals("extended")) {
+				if (parent.getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"type").equals("extended")) {
 					ExtendedLink link = (ExtendedLink) parent;
 					List<XlinkDocumentation> fragments = link.getDocumentations();
 					assertEquals(1, fragments.size());

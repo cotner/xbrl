@@ -1,4 +1,8 @@
-30. June 2009
+14 Jul. 2009
+Simplified the org.xbrlapi.utilities.Constants class
+to use java.net.URI rather than strings for all URI constants.
+
+30 Jun. 2009
 Finalised a broad range of modifications to the relationship
 persistence code; document matching performance improvements; 0
 and the XPath 2.0 to XQuery 1.0 query language change.

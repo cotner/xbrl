@@ -67,7 +67,7 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      * @throws XBRLException
      */
     protected List<EntityResource> getParentEquivalents() throws XBRLException {
-        List<EntityResource> equivalents = getStore().<EntityResource>getTargets(this.getIndex(),null,Constants.XBRLAPIEquivalentEntitiesArcrole());
+        List<EntityResource> equivalents = getStore().<EntityResource>getTargets(this.getIndex(),null,Constants.XBRLAPIEquivalentEntitiesArcrole);
         return equivalents;
     }
     
@@ -78,7 +78,7 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      * @throws XBRLException
      */
     protected List<EntityResource> getChildEquivalents() throws XBRLException {
-        return getStore().<EntityResource>getSources(this.getIndex(),null,Constants.XBRLAPIEquivalentEntitiesArcrole());
+        return getStore().<EntityResource>getSources(this.getIndex(),null,Constants.XBRLAPIEquivalentEntitiesArcrole);
     }    
     
     /**

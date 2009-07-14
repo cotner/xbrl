@@ -1,9 +1,8 @@
 package org.xbrlapi.fragment.tests;
 
-import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.DOMLoadingTestCase;
-import java.util.List;
 import org.xbrlapi.UsedOn;
 import org.xbrlapi.utilities.Constants;
 
@@ -42,7 +41,7 @@ public class UsedOnTestCase extends DOMLoadingTestCase {
                     assertEquals(Constants.XBRL21LinkNamespace,fragment.getUsedOnNamespace().toString());
                     assertEquals("presentationLink", fragment.getUsedOnLocalname());
                     store.serialize(fragment);
-                    assertTrue(fragment.isUsedOn(new URI(Constants.XBRL21LinkNamespace), "presentationLink"));
+                    assertTrue(fragment.isUsedOn(Constants.XBRL21LinkNamespace, "presentationLink"));
 	            }
 	        }
 	    } catch (Exception e) {

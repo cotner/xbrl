@@ -535,9 +535,9 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     private void setLabelStatus() throws XBRLException {
         if (getTargetName().equals("label")) {
             URI namespace = getTargetNamespace();
-            if (namespace.equals(Constants.XBRL21LinkNamespace()) || namespace.equals(Constants.GenericLabelNamespace())) {
+            if (namespace.equals(Constants.XBRL21LinkNamespace) || namespace.equals(Constants.GenericLabelNamespace)) {
                 URI arcrole = getArcrole();
-                if (arcrole.equals(Constants.LabelArcrole()) || arcrole.equals(Constants.GenericLabelArcrole())) {
+                if (arcrole.equals(Constants.LabelArcrole) || arcrole.equals(Constants.GenericLabelArcrole)) {
                     this.setMetaAttribute("label","true");
                 }
             }
@@ -590,9 +590,9 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     private void setReferenceStatus() throws XBRLException {
         if (getTargetName().equals("reference")) {
             URI namespace = getTargetNamespace();
-            if (namespace.equals(Constants.XBRL21LinkNamespace()) || namespace.equals(Constants.GenericLabelNamespace())) {
+            if (namespace.equals(Constants.XBRL21LinkNamespace) || namespace.equals(Constants.GenericLabelNamespace)) {
                 URI arcrole = getArcrole();
-                if (arcrole.equals(Constants.ReferenceArcrole()) || arcrole.equals(Constants.GenericReferenceArcrole())) {
+                if (arcrole.equals(Constants.ReferenceArcrole) || arcrole.equals(Constants.GenericReferenceArcrole)) {
                     this.setMetaAttribute("reference","true");
                 }
             }

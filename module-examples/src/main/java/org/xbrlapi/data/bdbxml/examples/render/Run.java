@@ -278,9 +278,9 @@ public class Run {
             List<Map<String, Object>> tables = new Vector<Map<String, Object>>();
             model.put("tables", tables);
 
-            logger.info("# linkroles = " + store.getLinkRoles(Constants.PresentationArcrole()).size());
+            logger.info("# linkroles = " + store.getLinkRoles(Constants.PresentationArcrole).size());
             
-            for (URI linkrole : store.getLinkRoles(Constants.PresentationArcrole())) {
+            for (URI linkrole : store.getLinkRoles(Constants.PresentationArcrole)) {
                 HashMap<String, Object> table = new HashMap<String, Object>();
                 tables.add(table);
                 String title = linkrole.toString();
@@ -300,11 +300,7 @@ public class Run {
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
                 aspectModel.arrangeAspect(Aspect.PERIOD,"column");
 
-                try {
-                    network = new NetworkImpl(store,linkrole,new URI(Constants.PresentationArcrole));
-                } catch (URISyntaxException e) {
-                    ;// Cannot actually be thrown
-                }
+                network = new NetworkImpl(store,linkrole,Constants.PresentationArcrole);
                 networks.addNetwork(network);
                 network.complete();
                 reportTime("Completing the network");
@@ -320,7 +316,7 @@ public class Run {
                             root, 
                             new Float(0.0).floatValue(), 
                             linkrole,
-                            Constants.StandardLabelRole());
+                            Constants.StandardLabelRole);
                 }
                 
                 // Get the sorted list of period aspect values
@@ -407,7 +403,7 @@ public class Run {
 
         for (Relationship relationship: relationships) {
             
-            labelRole = Constants.StandardLabelRole();
+            labelRole = Constants.StandardLabelRole;
             if (relationship.getArc().hasAttribute("preferredLabel")) {
                 String preferredLabelRole = relationship.getArcAttributeValue("preferredLabel");
                 try {

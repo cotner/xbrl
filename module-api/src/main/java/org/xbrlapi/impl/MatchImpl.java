@@ -84,7 +84,7 @@ public class MatchImpl extends XMLImpl implements Match {
      */
     public List<URI> getURIs() throws XBRLException {
         List<URI> result = new Vector<URI>();
-        NodeList nodes = this.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace,"match");
+        NodeList nodes = this.getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),"match");
         for (int i=0; i<nodes.getLength(); i++) {
             Element match = (Element) nodes.item(i);
             try {

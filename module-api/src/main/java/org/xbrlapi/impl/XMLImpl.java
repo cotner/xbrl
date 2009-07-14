@@ -251,7 +251,7 @@ public class XMLImpl implements XML {
 
         Element root = getMetadataRootElement();
         Document document = root.getOwnerDocument();
-        Element child = document.createElementNS(Constants.XBRLAPINamespace,Constants.XBRLAPIPrefix + ":" + eName);
+        Element child = document.createElementNS(Constants.XBRLAPINamespace.toString(),Constants.XBRLAPIPrefix + ":" + eName);
 
         for (String aName: attributes.keySet()) {
             String aValue = attributes.get(aName);
@@ -279,7 +279,7 @@ public class XMLImpl implements XML {
         // If the fragment has been stored update the data store
         Element element = this.getMetadataRootElement();
         if (element == null) throw new XBRLException("The metadata does not contain a root element.");
-        NodeList children = element.getElementsByTagNameNS(Constants.XBRLAPINamespace,eName);
+        NodeList children = element.getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),eName);
         for (int i=0; i<children.getLength(); i++) {
             boolean match = true;
             Element child = (Element) children.item(i);

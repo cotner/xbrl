@@ -96,7 +96,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
 
         // Stash new URIs in xsi:schemaLocation attributes if desired
         if (loader.useSchemaLocationAttributes()) {
-            String schemaLocations = attrs.getValue(Constants.XMLSchemaInstanceNamespace,"schemaLocation");
+            String schemaLocations = attrs.getValue(Constants.XMLSchemaInstanceNamespace.toString(),"schemaLocation");
             if (schemaLocations != null) {
                 logger.debug("Processing schema locations: " + schemaLocations);
                 String[] fields = schemaLocations.trim().split("\\s+");
@@ -151,8 +151,11 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             if (fragment == null) throw new SAXException("A fragment should be being built.");
             Builder builder = fragment.getBuilder();
             if (builder == null) throw new SAXException("A fragment being built needs a builder.");
-            builder.appendElement(namespaceURI, lName, qName, attrs);
+            builder.appendElement(new URI(namespaceURI), lName, qName, attrs);
 
+        } catch (URISyntaxException e) {
+            logger.error(namespaceURI + " : " + e.getMessage());
+            throw new SAXException("The element namespace is not a valid URI.",e);
         } catch (XBRLException e) {
             logger.error(this.getURI() + " : " + e.getMessage());
             throw new SAXException("The element could not be appended to the fragment.",e);

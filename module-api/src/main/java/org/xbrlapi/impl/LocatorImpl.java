@@ -34,8 +34,8 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
      */
     public String getHref() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (! root.hasAttributeNS(Constants.XLinkNamespace,"href")) throw new XBRLException("Locators must have xlink:href attributes.");
-    	return root.getAttributeNS(Constants.XLinkNamespace,"href");
+    	if (! root.hasAttributeNS(Constants.XLinkNamespace.toString(),"href")) throw new XBRLException("Locators must have xlink:href attributes.");
+    	return root.getAttributeNS(Constants.XLinkNamespace.toString(),"href");
     }
     
 

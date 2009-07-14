@@ -276,7 +276,7 @@ public class RunWithPersistedNetworks {
             List<Map<String, Object>> tables = new Vector<Map<String, Object>>();
             model.put("tables", tables);
 
-            URI arcrole = Constants.PresentationArcrole();
+            URI arcrole = Constants.PresentationArcrole;
             
             int counter = 0;
             int target = 3;
@@ -315,7 +315,7 @@ public class RunWithPersistedNetworks {
                             new Double(0.0), 
                             linkRole,
                             arcrole,
-                            Constants.StandardLabelRole())
+                            Constants.StandardLabelRole)
                     );
                 }
                 
@@ -407,7 +407,7 @@ public class RunWithPersistedNetworks {
 
             //logger.info(relationship.getIndex() + ": " + relationship.getArc().getURI());
             
-            labelRole = Constants.StandardLabelRole();
+            labelRole = Constants.StandardLabelRole;
             if (arc.hasAttribute("preferredLabel")) {
                 String preferredLabelRole = arc.getAttribute("preferredLabel");
                 try {

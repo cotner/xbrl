@@ -1,5 +1,7 @@
 package org.xbrlapi;
 
+import java.net.URI;
+
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -14,5 +16,5 @@ public interface Mock extends Fragment {
      * @param qName The QName for the root element of the data in the fragment.
      * @throws XBRLException
      */
-    public void appendDataElement(String namespace, String name, String qName) throws XBRLException;    
+    public void appendDataElement(URI namespace, String name, String qName) throws XBRLException;    
 }

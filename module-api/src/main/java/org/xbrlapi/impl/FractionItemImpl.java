@@ -20,7 +20,7 @@ public class FractionItemImpl extends NumericItemImpl implements FractionItem {
 	 * @see org.xbrlapi.FractionItem#getNumerator()
 	 */
     public String getNumerator() throws XBRLException {
-    	NodeList candidates = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace,"numerator");
+    	NodeList candidates = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"numerator");
     	if (candidates.getLength() == 0) throw new XBRLException("The fraction numerator is missing.");
     	if (candidates.getLength() > 1) throw new XBRLException("The fraction numerator is not unique.");
     	return candidates.item(0).getTextContent().trim();
@@ -36,7 +36,7 @@ public class FractionItemImpl extends NumericItemImpl implements FractionItem {
 	 * @see org.xbrlapi.FractionItem#getDenominator()
 	 */
     public String getDenominator() throws XBRLException {
-    	NodeList candidates = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace,"denominator");
+    	NodeList candidates = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"denominator");
     	if (candidates.getLength() == 0) throw new XBRLException("The fraction denominator is missing.");
     	if (candidates.getLength() > 1) throw new XBRLException("The fraction denominator is not unique.");
     	return candidates.item(0).getTextContent().trim();

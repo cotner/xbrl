@@ -193,17 +193,17 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             xmlIndexSpecification.replaceDefaultIndex("node-element-presence");
 
             // TODO Remove these indices - they are redundant given the default index.
-            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"fragment","node-element-presence");
-            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"data","node-element-presence");
-            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"xptr","node-element-presence");
-/*            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace,"match","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace.toString(),"fragment","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace.toString(),"data","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace.toString(),"xptr","node-element-presence");
+/*            xmlIndexSpecification.addIndex(Constants.XBRLAPINamespace.toString(),"match","node-element-presence");
 */
             xmlIndexSpecification.addIndex("","stub","node-attribute-presence");
 
             xmlIndexSpecification.addIndex("","index", "unique-node-attribute-equality-string");
 
-            xmlIndexSpecification.addIndex(Constants.XBRL21LinkNamespace,"label","node-element-substring-string");
-            xmlIndexSpecification.addIndex(Constants.GenericLabelNamespace,"label","node-element-substring-string");
+            xmlIndexSpecification.addIndex(Constants.XBRL21LinkNamespace.toString(),"label","node-element-substring-string");
+            xmlIndexSpecification.addIndex(Constants.GenericLabelNamespace.toString(),"label","node-element-substring-string");
             xmlIndexSpecification.addIndex("","name","node-attribute-substring-string");
             
             xmlIndexSpecification.addIndex("","signature", "node-attribute-equality-string");
@@ -261,22 +261,22 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             // Entity identification indexes
             xmlIndexSpecification.addIndex("","scheme", "node-attribute-equality-string");
             xmlIndexSpecification.addIndex("","value", "node-attribute-equality-string");
-            xmlIndexSpecification.addIndex(Constants.XBRL21Namespace,"identifier", "node-element-equality-string");            
+            xmlIndexSpecification.addIndex(Constants.XBRL21Namespace.toString(),"identifier", "node-element-equality-string");            
             
-            xmlIndexSpecification.addIndex(Constants.XMLNamespace,"lang","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XMLNamespace.toString(),"lang","node-attribute-equality-string");
 
-            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"label","node-attribute-equality-string");
-            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"from","node-attribute-equality-string");
-            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"to","node-attribute-equality-string");
-            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"type","node-attribute-equality-string");
-            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"arcrole","node-attribute-equality-string");
-            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"role","node-attribute-equality-string");
-            xmlIndexSpecification.addIndex(Constants.XLinkNamespace,"label","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace.toString(),"label","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace.toString(),"from","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace.toString(),"to","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace.toString(),"type","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace.toString(),"arcrole","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace.toString(),"role","node-attribute-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XLinkNamespace.toString(),"label","node-attribute-equality-string");
 
-            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace,"language","node-element-presence");
-            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace,"code","node-element-equality-string");
-            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace,"value","node-element-equality-string");
-            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace,"encoding","node-element-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace.toString(),"language","node-element-presence");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace.toString(),"code","node-element-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace.toString(),"value","node-element-equality-string");
+            xmlIndexSpecification.addIndex(Constants.XBRLAPILanguagesNamespace.toString(),"encoding","node-element-equality-string");
 
             xmlUpdateContext = dataManager.createUpdateContext();
             dataContainer.setIndexSpecification(xmlIndexSpecification,xmlUpdateContext);
@@ -648,12 +648,12 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         try {
             xmlQueryContext = dataManager.createQueryContext();
             xmlQueryContext.setReturnType(XmlQueryContext.LiveValues);
-            xmlQueryContext.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace);
-            xmlQueryContext.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace);
-            xmlQueryContext.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace);
-            xmlQueryContext.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace);
-            xmlQueryContext.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace);
-            xmlQueryContext.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace);
+            xmlQueryContext.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace.toString());
+            xmlQueryContext.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace.toString());
+            xmlQueryContext.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace.toString());
+            xmlQueryContext.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace.toString());
+            xmlQueryContext.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace.toString());
+            xmlQueryContext.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace.toString());
             for (URI namespace: this.namespaceBindings.keySet()) 
                 xmlQueryContext.setNamespace(this.namespaceBindings.get(namespace),namespace.toString());
             // xmlQueryContext.setEvaluationType(XmlQueryContext.Lazy); 

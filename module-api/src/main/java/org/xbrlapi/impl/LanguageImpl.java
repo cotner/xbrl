@@ -17,7 +17,7 @@ public class LanguageImpl extends FragmentImpl implements Language {
 	 */
 	public String getLanguage() throws XBRLException {
     	Element root = getDataRootElement();
-    	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace,"encoding");
+    	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace.toString(),"encoding");
     	Element encoding = (Element) nodes.item(0);
     	return encoding.getTextContent().toLowerCase();		
 	}
@@ -27,7 +27,7 @@ public class LanguageImpl extends FragmentImpl implements Language {
 	 */
 	public String getCode() throws XBRLException {
     	Element root = getDataRootElement();
-    	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace,"code");
+    	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace.toString(),"code");
     	Element code = (Element) nodes.item(0);
     	return code.getTextContent().toLowerCase();		
 	}	
@@ -37,7 +37,7 @@ public class LanguageImpl extends FragmentImpl implements Language {
 	 */
 	public String getName() throws XBRLException {
     	Element root = getDataRootElement();
-    	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace,"name");
+    	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace.toString(),"name");
     	Element name = (Element) nodes.item(0);
     	return name.getTextContent();		
 	}

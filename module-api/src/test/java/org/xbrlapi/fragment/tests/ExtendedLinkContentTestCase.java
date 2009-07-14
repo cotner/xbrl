@@ -35,7 +35,7 @@ public class ExtendedLinkContentTestCase extends DOMLoadingTestCase {
 		    List<Arc> arcs = store.<Arc>getXMLResources("Arc");
 		    assertTrue(arcs.size() > 0);
 		    for (Arc arc: arcs) {
-	            assertEquals("extended", arc.getExtendedLink().getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"type"));
+	            assertEquals("extended", arc.getExtendedLink().getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"type"));
 		    }
 		} catch (Exception e) {
 			fail(e.getMessage());

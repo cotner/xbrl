@@ -3,6 +3,7 @@ package org.xbrlapi.builder.tests;
 import org.xbrlapi.builder.Builder;
 import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.utilities.BaseTestCase;
+import org.xbrlapi.utilities.Constants;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
@@ -34,7 +35,7 @@ public class BuilderImplTestCase extends BaseTestCase {
 	public void testGetInsertionPoint() {
 		try {
 			Builder b = new BuilderImpl();
-			b.appendElement("http://my.namespace.com/","root","my:root");
+			b.appendElement(Constants.XBRLAPINamespace,"root","my:root");
 			logger.info(b.getInsertionPoint().getClass().getName());
 			assertEquals("org.apache.xerces.dom.ElementNSImpl",b.getInsertionPoint().getClass().getName());
 		} catch (Exception e) {
@@ -57,8 +58,8 @@ public class BuilderImplTestCase extends BaseTestCase {
 	public void testAppendElement() {
 		try {
 			Builder b = new BuilderImpl();
-			b.appendElement("http://www.xbrlapi.org/","root","xbrlapi:root");
-			assertEquals("http://www.xbrlapi.org/",(b.getInsertionPoint()).getNamespaceURI());
+			b.appendElement(Constants.XBRLAPINamespace,"root","xbrlapi:root");
+			assertEquals(Constants.XBRLAPINamespace,(b.getInsertionPoint()).getNamespaceURI());
 			assertEquals("root",(b.getInsertionPoint()).getLocalName());
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
@@ -68,7 +69,7 @@ public class BuilderImplTestCase extends BaseTestCase {
 	public void testEndElement() {
 		try {
 			Builder b = new BuilderImpl();
-			b.appendElement("http://www.xbrlapi.org/","root","xbrlapi:root");
+			b.appendElement(Constants.XBRLAPINamespace,"root","xbrlapi:root");
 			assertEquals("org.apache.xerces.dom.ElementNSImpl",b.getInsertionPoint().getClass().getName());
 			b.endElement("http://www.xbrlapi.org/","root","xbrlapi:root");
 			assertEquals("org.apache.xerces.dom.ElementNSImpl",b.getInsertionPoint().getClass().getName());

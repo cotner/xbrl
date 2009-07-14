@@ -34,10 +34,10 @@ public class TitleHandler extends XLinkHandlerDefaultImpl {
     		test.confirmFail("Titles must be children of XLink elements.");
     	}
 		if (lName.equals("child3")) {
-    		test.checkEqual("title",attrs.getValue(Constants.XLinkNamespace,"type"));
+    		test.checkEqual("title",attrs.getValue(Constants.XLinkNamespace.toString(),"type"));
     	}
 		if (lName.equals("child5")) {
-    		test.checkEqual("title",attrs.getValue(Constants.XLinkNamespace,"type"));
+    		test.checkEqual("title",attrs.getValue(Constants.XLinkNamespace.toString(),"type"));
     	}
 		if (lName.equals("child6")) {
     		test.confirmFail("XLink title elements cannot be children of XLink title elements");

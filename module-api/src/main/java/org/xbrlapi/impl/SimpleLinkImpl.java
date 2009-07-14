@@ -33,7 +33,7 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
      * @see org.xbrlapi.SimpleLink#getHref()
      */
     public String getHref() throws XBRLException {
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"href");
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"href");
     }
     
 
@@ -78,7 +78,7 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
      * @see org.xbrlapi.SimpleLink#getArcrole()
      */
     public String getArcrole() throws XBRLException {
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"arcrole");
+    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"arcrole");
     }
     
     /**

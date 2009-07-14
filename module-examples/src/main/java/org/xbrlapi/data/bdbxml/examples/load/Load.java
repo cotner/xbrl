@@ -127,7 +127,7 @@ public class Load {
     private static void reportNode(String indent, Fragment fragment, URI linkRole) throws XBRLException {
         Concept concept = (Concept) fragment;
         System.out.println(indent + concept.getTargetNamespace() + ":" + concept.getName());
-        List<Fragment> children = store.getTargets(concept.getIndex(),linkRole,Constants.PresentationArcrole());
+        List<Fragment> children = store.getTargets(concept.getIndex(),linkRole,Constants.PresentationArcrole);
         if (children.size() > 0) {
             for (Fragment child: children) {
                 reportNode(indent + " ", child,linkRole);

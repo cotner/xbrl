@@ -200,13 +200,13 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         if (compiler == null) {
             processor = new Processor(false);
             compiler = processor.newXQueryCompiler();
-            compiler.declareNamespace(Constants.XBRL21LinkPrefix,Constants.XBRL21LinkNamespace);
-            compiler.declareNamespace(Constants.XBRL21Prefix,Constants.XBRL21Namespace);
-            compiler.declareNamespace(Constants.XBRLAPIPrefix,Constants.XBRLAPINamespace);
-            compiler.declareNamespace(Constants.XBRLAPILanguagesPrefix,Constants.XBRLAPILanguagesNamespace);
-            compiler.declareNamespace(Constants.XLinkPrefix,Constants.XLinkNamespace);
-            compiler.declareNamespace(Constants.XMLPrefix,Constants.XMLNamespace);
-            compiler.declareNamespace(Constants.XMLSchemaPrefix,Constants.XMLSchemaNamespace);
+            compiler.declareNamespace(Constants.XBRL21LinkPrefix,Constants.XBRL21LinkNamespace.toString());
+            compiler.declareNamespace(Constants.XBRL21Prefix,Constants.XBRL21Namespace.toString());
+            compiler.declareNamespace(Constants.XBRLAPIPrefix,Constants.XBRLAPINamespace.toString());
+            compiler.declareNamespace(Constants.XBRLAPILanguagesPrefix,Constants.XBRLAPILanguagesNamespace.toString());
+            compiler.declareNamespace(Constants.XLinkPrefix,Constants.XLinkNamespace.toString());
+            compiler.declareNamespace(Constants.XMLPrefix,Constants.XMLNamespace.toString());
+            compiler.declareNamespace(Constants.XMLSchemaPrefix,Constants.XMLSchemaNamespace.toString());
         }
         
         String roots = "/store/*" + this.getURIFilteringPredicate();

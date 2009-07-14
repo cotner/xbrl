@@ -1,5 +1,6 @@
 package org.xbrlapi.builder;
 
+import java.net.URI;
 import java.util.HashMap;
 
 import org.w3c.dom.Element;
@@ -67,7 +68,7 @@ public interface Builder {
 	 * @throws XBRLException if the node cannot be appended.
 	 */
 	public void appendElement(
-			String namespaceURI, 
+			URI namespaceURI, 
 			String lName, 
 			String qName, 
 			Attributes attrs) throws XBRLException;
@@ -80,7 +81,7 @@ public interface Builder {
 	 * @throws XBRLException if the node cannot be appended.
 	 */
 	public void appendElement(
-			String namespaceURI, 
+			URI namespaceURI, 
 			String lName, 
 			String qName) throws XBRLException;
 	

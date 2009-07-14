@@ -71,7 +71,7 @@ public class FactImpl extends FragmentImpl implements Fact {
      * @see org.xbrlapi.Fact#isNil()
      */
     public boolean isNil() throws XBRLException {
-        if (this.getDataRootElement().getAttributeNS(Constants.XMLSchemaInstanceNamespace,"nil").equals("true")) return true;
+        if (this.getDataRootElement().getAttributeNS(Constants.XMLSchemaInstanceNamespace.toString(),"nil").equals("true")) return true;
         return false;
     }
 }

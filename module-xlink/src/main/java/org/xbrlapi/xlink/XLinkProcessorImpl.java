@@ -109,13 +109,13 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 	public void startElement(String namespaceURI, String lName, String qName, Attributes attrs) throws XLinkException {
 				
 		// Handle the XML Base attribute on the element (even when it does not exist or has "" value)
-		xlinkHandler.xmlBaseStart(attrs.getValue(Constants.XMLNamespace,"base"));
+		xlinkHandler.xmlBaseStart(attrs.getValue(Constants.XMLNamespace.toString(),"base"));
 
         // Complain about any unexpected attributes in the XLink namespace.
         // Added by Henry S Thompson
         boolean hasSomeXLinkAttributes = false;
         for (int i=0; i<attrs.getLength(); i++) {
-            if (attrs.getURI(i).equals(Constants.XLinkNamespace)) {
+            if (attrs.getURI(i).equals(Constants.XLinkNamespace.toString())) {
                 String aName = attrs.getLocalName(i);
                 if ( XLINKATTRS.get(aName) == null ) {
                     xlinkHandler.error(namespaceURI, lName, qName, attrs, aName + " is not defined in the XLink namespace.");
@@ -151,9 +151,9 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		
 		// If not an XLink Type element, handle accordingly.
 		// Improved by Henry S Thompson
-		String xlType = attrs.getValue(Constants.XLinkNamespace, "type");
+		String xlType = attrs.getValue(Constants.XLinkNamespace.toString(), "type");
 		if (xlType == null) {
-			if (attrs.getValue(Constants.XLinkNamespace, "href") == null) {
+			if (attrs.getValue(Constants.XLinkNamespace.toString(), "href") == null) {
 				ancestorTypes.push(NOT_XLINK);
 				// Throw an error if XLink attributes are used but 
 				// the xlink:type or xlink:href attributes are missing.
@@ -171,20 +171,20 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		if (xlType.equals("simple")) {
 			
 			if (isXLink(namespaceURI, lName, qName, attrs,SIMPLE_LINK) &&
-				validateHref(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "href")) &&
-				validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "role")) &&
-				validateArcrole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "arcrole")) &&
-				validateShow(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "show")) &&
-				validateActuate(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "actuate"))) {
+				validateHref(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "href")) &&
+				validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "role")) &&
+				validateArcrole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "arcrole")) &&
+				validateShow(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "show")) &&
+				validateActuate(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "actuate"))) {
 
 				ancestorTypes.push(SIMPLE_LINK);
 				xlinkHandler.startSimpleLink(namespaceURI, lName, qName, attrs,
-						attrs.getValue(Constants.XLinkNamespace, "href"),
-						attrs.getValue(Constants.XLinkNamespace, "role"),
-						attrs.getValue(Constants.XLinkNamespace, "arcrole"),
-						attrs.getValue(Constants.XLinkNamespace, "title"),
-						attrs.getValue(Constants.XLinkNamespace, "show"),
-						attrs.getValue(Constants.XLinkNamespace, "actuate")
+						attrs.getValue(Constants.XLinkNamespace.toString(), "href"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "role"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "arcrole"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "title"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "show"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "actuate")
 				);
 			} else {
 				ancestorTypes.push(NOT_XLINK);
@@ -193,13 +193,13 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		} else if (xlType.equals("extended")) {
 			
 			if (isXLink(namespaceURI, lName, qName, attrs,EXTENDED_LINK) &&
-			    validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "role"))) {
+			    validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "role"))) {
 				
 				insideAnExtendedLink = true;
 				ancestorTypes.push(EXTENDED_LINK);
 				xlinkHandler.startExtendedLink(namespaceURI, lName, qName, attrs,
-					attrs.getValue(Constants.XLinkNamespace, "role"),
-					attrs.getValue(Constants.XLinkNamespace, "title")
+					attrs.getValue(Constants.XLinkNamespace.toString(), "role"),
+					attrs.getValue(Constants.XLinkNamespace.toString(), "title")
 				);				
 			} else {
 				ancestorTypes.push(NOT_XLINK);
@@ -208,16 +208,16 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		} else if (xlType.equals("locator")) {
 			
 			if (isXLink(namespaceURI, lName, qName, attrs,LOCATOR) &&
-				validateHref(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "href")) &&
-				validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "role")) &&
-				validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "label"))) {
+				validateHref(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "href")) &&
+				validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "role")) &&
+				validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "label"))) {
 				
 				ancestorTypes.push(LOCATOR);
 				xlinkHandler.startLocator(namespaceURI, lName, qName, attrs,
-						attrs.getValue(Constants.XLinkNamespace, "href"),
-						attrs.getValue(Constants.XLinkNamespace, "role"),
-						attrs.getValue(Constants.XLinkNamespace, "title"),
-						attrs.getValue(Constants.XLinkNamespace, "label")
+						attrs.getValue(Constants.XLinkNamespace.toString(), "href"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "role"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "title"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "label")
 				);
 			} else {
 				ancestorTypes.push(NOT_XLINK);
@@ -226,20 +226,20 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		} else if (xlType.equals("arc")) {
 			
 			if (isXLink(namespaceURI, lName, qName, attrs,ARC) &&
-			    validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "from")) &&
-				validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "to")) &&
-				validateArcrole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "arcrole")) &&
-				validateShow(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "show")) &&
-				validateActuate(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "actuate"))) {
+			    validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "from")) &&
+				validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "to")) &&
+				validateArcrole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "arcrole")) &&
+				validateShow(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "show")) &&
+				validateActuate(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "actuate"))) {
 				
 				ancestorTypes.push(ARC);
 				xlinkHandler.startArc(namespaceURI, lName, qName, attrs,
-						attrs.getValue(Constants.XLinkNamespace, "from"),
-						attrs.getValue(Constants.XLinkNamespace, "to"),
-						attrs.getValue(Constants.XLinkNamespace, "arcrole"),
-						attrs.getValue(Constants.XLinkNamespace, "title"),
-						attrs.getValue(Constants.XLinkNamespace, "show"),
-						attrs.getValue(Constants.XLinkNamespace, "actuate")
+						attrs.getValue(Constants.XLinkNamespace.toString(), "from"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "to"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "arcrole"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "title"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "show"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "actuate")
 				);				
 				
 			} else {
@@ -249,14 +249,14 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		} else if (xlType.equals("resource")) {
 			
 			if (isXLink(namespaceURI, lName, qName, attrs,RESOURCE) &&
-			    validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "label")) &&
-				validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace, "role"))) {
+			    validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "label")) &&
+				validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "role"))) {
 				
 				ancestorTypes.push(RESOURCE);
 				xlinkHandler.startResource(namespaceURI, lName, qName, attrs,
-						attrs.getValue(Constants.XLinkNamespace, "role"),
-						attrs.getValue(Constants.XLinkNamespace, "title"),
-						attrs.getValue(Constants.XLinkNamespace, "label")
+						attrs.getValue(Constants.XLinkNamespace.toString(), "role"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "title"),
+						attrs.getValue(Constants.XLinkNamespace.toString(), "label")
 				);
 			} else {
 				ancestorTypes.push(NOT_XLINK);

@@ -24,7 +24,7 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
      * @see org.xbrlapi.Entity#getIdentifierScheme()
      */
     public String getIdentifierScheme() throws XBRLException {
-    	NodeList identifiers = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace,"identifier");
+    	NodeList identifiers = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"identifier");
     	if (identifiers.getLength() == 0) throw new XBRLException("An entity identifier is missing from the entity.");
     	if (identifiers.getLength() > 1) throw new XBRLException("There are too many entity identifiers in the entity.");
     	Element identifier = (Element) identifiers.item(0);
@@ -36,7 +36,7 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
      * @see org.xbrlapi.Entity#getIdentifierValue()
      */
     public String getIdentifierValue() throws XBRLException {
-    	NodeList identifiers = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace,"identifier");
+    	NodeList identifiers = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"identifier");
     	if (identifiers.getLength() == 0) throw new XBRLException("An entity identifier is missing from the entity.");
     	if (identifiers.getLength() > 1) throw new XBRLException("There are too many entity identifiers in the entity.");
     	Element identifier = (Element) identifiers.item(0);

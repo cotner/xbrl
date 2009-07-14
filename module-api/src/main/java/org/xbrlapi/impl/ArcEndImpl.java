@@ -22,8 +22,8 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
      */
     public String getLabel() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (root.hasAttributeNS(Constants.XLinkNamespace,"label"))
-    		return root.getAttributeNS(Constants.XLinkNamespace,"label");
+    	if (root.hasAttributeNS(Constants.XLinkNamespace.toString(),"label"))
+    		return root.getAttributeNS(Constants.XLinkNamespace.toString(),"label");
     	throw new XBRLException("XLink arc ends must have an xlink:label attribute");
     }
     
@@ -38,8 +38,8 @@ public class ArcEndImpl extends ExtendedLinkContentImpl implements ArcEnd {
      */
     public String getRole() throws XBRLException {
     	Element root = getDataRootElement();
-    	if (root.hasAttributeNS(Constants.XLinkNamespace,"role"))
-    		return root.getAttributeNS(Constants.XLinkNamespace,"role");
+    	if (root.hasAttributeNS(Constants.XLinkNamespace.toString(),"role"))
+    		return root.getAttributeNS(Constants.XLinkNamespace.toString(),"role");
     	return null;
     }
     

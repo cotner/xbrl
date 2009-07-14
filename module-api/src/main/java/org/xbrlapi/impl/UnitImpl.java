@@ -32,7 +32,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
      */
     public NodeList getNumeratorMeasures() throws XBRLException {
     	Element numerator = this.getNumeratorContainer();
-    	return numerator.getElementsByTagNameNS(Constants.XBRL21Namespace,"measure");
+    	return numerator.getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"measure");
     }
     
     /**
@@ -71,7 +71,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
      * @see org.xbrlapi.Unit#hasDenominator()
      */
     public boolean hasDenominator() throws XBRLException {
-    	NodeList candidates = this.getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace,"divide");
+    	NodeList candidates = this.getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"divide");
     	if (candidates.getLength() == 1) return true;
     	return false;
     }
@@ -81,7 +81,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
 	 * @throws XBRLException
 	 */
     private Element getDivide() throws XBRLException {
-    	if (hasDenominator()) return (Element) this.getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace,"divide").item(0);
+    	if (hasDenominator()) return (Element) this.getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"divide").item(0);
     	return null;
 	}
 
@@ -92,7 +92,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
 	 */
     private Element getDenominatorContainer() throws XBRLException {
     	if (! hasDenominator()) return null;
-		NodeList candidates = getDivide().getElementsByTagNameNS(Constants.XBRL21Namespace,"unitDenominator");
+		NodeList candidates = getDivide().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"unitDenominator");
 		if (candidates.getLength() == 1) return (Element) candidates.item(0);
 		throw new XBRLException("The denominator container could not be retrieved.");
 	}
@@ -104,7 +104,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
 	 */
     private Element getNumeratorContainer() throws XBRLException {
     	if (! hasDenominator()) return this.getDataRootElement();
-    	NodeList candidates = getDivide().getElementsByTagNameNS(Constants.XBRL21Namespace,"unitNumerator");
+    	NodeList candidates = getDivide().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"unitNumerator");
 		if (candidates.getLength() == 1) return (Element) candidates.item(0);
 		throw new XBRLException("The numerator container could not be retrieved.");
 	}    
@@ -118,7 +118,7 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
     public NodeList getDenominatorMeasures() throws XBRLException {
     	if (this.hasDenominator()) {
         	Element denominator = this.getDenominatorContainer();
-        	return denominator.getElementsByTagNameNS(Constants.XBRL21Namespace,"measure");
+        	return denominator.getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"measure");
     	}
     	return null;
     }

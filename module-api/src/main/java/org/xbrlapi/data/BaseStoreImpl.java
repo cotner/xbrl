@@ -556,7 +556,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         if (fragments.size() == 0) throw new XBRLException("No documents were found in the data store.");
         Fragment fragment = fragments.get(0);
         Element document = this.getAnnotatedSubtree(fragment);
-        document.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",fragment.getIndex());
+        document.setAttributeNS(Constants.CompNamespace.toString(),Constants.CompPrefix + ":index",fragment.getIndex());
         return document;
     }
     
@@ -686,7 +686,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 
     		// Get XML DOM for child fragment using recursion
     		Element child = getAnnotatedSubtree(childFragment);
-	    	child.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index",childFragment.getIndex());
+	    	child.setAttributeNS(Constants.CompNamespace.toString(),Constants.CompPrefix + ":index",childFragment.getIndex());
 
     		// Get parent element of child fragment in current fragment
     		Element parentElement = childFragment.getParentElement(d);
@@ -717,7 +717,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 			storeDOM = (new XMLDOMBuilder()).newDocument();
 		}
 		
-    	Element root = storeDOM.createElementNS(Constants.XBRLAPINamespace,Constants.XBRLAPIPrefix + ":dts");
+    	Element root = storeDOM.createElementNS(Constants.XBRLAPINamespace.toString(),Constants.XBRLAPIPrefix + ":dts");
 		
 		Set<URI> uris = getDocumentURIs();
 		for (URI uri: uris) {
@@ -741,18 +741,18 @@ public abstract class BaseStoreImpl implements Store, Serializable {
 			storeDOM = (new XMLDOMBuilder()).newDocument();
 		}
 		
-    	Element root = storeDOM.createElementNS(Constants.CompNamespace,Constants.CompPrefix + ":dts");
+    	Element root = storeDOM.createElementNS(Constants.CompNamespace.toString(),Constants.CompPrefix + ":dts");
 		
 		Set<URI> uris = getDocumentURIs();
 		long counter = 1;
 		for (URI uri: uris) {
-	    	Element file = storeDOM.createElementNS(Constants.CompNamespace,Constants.CompPrefix + ":file");
-	    	file.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":uri", uri.toString());
-	    	file.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index","composite_" + new Long(counter++).toString());
+	    	Element file = storeDOM.createElementNS(Constants.CompNamespace.toString(),Constants.CompPrefix + ":file");
+	    	file.setAttributeNS(Constants.CompNamespace.toString(),Constants.CompPrefix + ":uri", uri.toString());
+	    	file.setAttributeNS(Constants.CompNamespace.toString(),Constants.CompPrefix + ":index","composite_" + new Long(counter++).toString());
 			root.appendChild(file);
 			file.appendChild(getAnnotatedDocumentAsDOM(uri));
 		}
-    	root.setAttributeNS(Constants.CompNamespace,Constants.CompPrefix + ":index","composite_" + new Long(counter++).toString());
+    	root.setAttributeNS(Constants.CompNamespace.toString(),Constants.CompPrefix + ":index","composite_" + new Long(counter++).toString());
     	storeDOM.appendChild(root);
     	return storeDOM;
     	
@@ -1085,8 +1085,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             return labels;
         }
 
-        Networks labelNetworks = this.getNetworksFrom(fragment,linkRole,Constants.LabelArcrole());
-        labelNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericLabelArcrole()));
+        Networks labelNetworks = this.getNetworksFrom(fragment,linkRole,Constants.LabelArcrole);
+        labelNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericLabelArcrole));
         
         List<LabelResource> labels = new Vector<LabelResource>();
         for (Network network: labelNetworks) {
@@ -1151,8 +1151,8 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             return references;
         }
 
-        Networks referenceNetworks = this.getNetworksFrom(fragment,linkRole,Constants.ReferenceArcrole());
-        referenceNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericReferenceArcrole()));
+        Networks referenceNetworks = this.getNetworksFrom(fragment,linkRole,Constants.ReferenceArcrole);
+        referenceNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericReferenceArcrole));
         
         List<ReferenceResource> references = new Vector<ReferenceResource>();
         for (Network network: referenceNetworks) {
@@ -1604,7 +1604,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @return a list of arcroleType fragments that define a given arcrole.
      * @throws XBRLException
      */
-    public List<ArcroleType> getArcroleTypes(String uri) throws XBRLException {
+    public List<ArcroleType> getArcroleTypes(URI uri) throws XBRLException {
         String query = "#roots#["+ Constants.XBRLAPIPrefix+ ":" + "data/link:arcroleType/@arcroleURI='" + uri + "']";
         return this.<ArcroleType>queryForXMLResources(query);
     }

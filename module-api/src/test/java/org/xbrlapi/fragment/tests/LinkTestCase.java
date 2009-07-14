@@ -35,7 +35,7 @@ public class LinkTestCase extends DOMLoadingTestCase {
 		try {
 		    List<ExtendedLink> links = store.<ExtendedLink>getXMLResources("ExtendedLink");
 		    for (Link link: links) {
-    		    String role = link.getDataRootElement().getAttributeNS(Constants.XLinkNamespace,"role");
+    		    String role = link.getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"role");
     		    if (! role.equals(""))
     		        assertEquals(role,link.getLinkRole().toString());
     		    else

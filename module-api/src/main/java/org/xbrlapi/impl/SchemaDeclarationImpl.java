@@ -50,7 +50,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
      * @see org.xbrlapi.SchemaDeclaration#getBlock()
      */
     public String getBlock() throws XBRLException {
-    	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace,"block");
+    	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace.toString(),"block");
     }
     
     /**
@@ -60,7 +60,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
      * @see org.xbrlapi.SchemaDeclaration#getFinal()
      */
     public String getFinal() throws XBRLException {
-    	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace,"final");
+    	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace.toString(),"final");
     }
 
     /**
@@ -69,7 +69,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
      *  @see org.xbrlapi.SchemaDeclaration#getSchemaDeclarationId()
      */
     public String getSchemaDeclarationId() throws XBRLException {
-    	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace,"id");
+    	return getDataRootElement().getAttributeNS(Constants.XMLSchemaNamespace.toString(),"id");
     }
     
     /**
@@ -127,7 +127,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
      */
     public Element getComplexContent() throws XBRLException {
     	try {
-	    	NodeList complexContent = getDataRootElement().getElementsByTagNameNS(Constants.XMLSchemaNamespace,"complexContent");
+	    	NodeList complexContent = getDataRootElement().getElementsByTagNameNS(Constants.XMLSchemaNamespace.toString(),"complexContent");
 	    	return (Element) complexContent.item(0);
 
     	} catch (Exception e) {
