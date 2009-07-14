@@ -300,6 +300,9 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 			String show, 
 			String actuate) throws XLinkException {
 		try {
+		    if (from == null || to == null) {
+	            throw new XLinkException("The XBRL XLink arc must have a 'from' and a 'to' label.");
+		    }
 		    processFragment(new ArcImpl(),attrs);
 		} catch (XBRLException e) {
 			throw new XLinkException("The arc could not be created.",e);
