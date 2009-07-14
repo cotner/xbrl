@@ -109,7 +109,7 @@ public class SimpleLinkHandler extends XLinkHandlerDefaultImpl {
 			test.checkEqual("The XLink role must have valid URI syntax",message);
 			test.noteE8();
 		} else {
-			test.confirmFail("Unexpected error: "+message);	
+			test.confirmFail("Unexpected error: " + message);	
 		}
 	}
 	

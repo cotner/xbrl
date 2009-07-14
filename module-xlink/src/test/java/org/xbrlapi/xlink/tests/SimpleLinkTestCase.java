@@ -19,9 +19,7 @@ public class SimpleLinkTestCase extends TestCase {
 
 	private String xmlS1;
 
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(SimpleLinkTestCase.class);
-	}
+
 
 	/*
 	 * @see TestCase#setUp()
@@ -78,7 +76,7 @@ public class SimpleLinkTestCase extends TestCase {
 		reader.setFeature("http://xml.org/sax/features/namespaces",true);
 		reader.parse(new InputSource(new StringReader(xmlS1)));
 		if ( ! e8 ) {
-			fail("child8 malformed role not signalled");
+			fail("child8 malformed role not signalled.");
 		}
 	}
 

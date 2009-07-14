@@ -52,7 +52,7 @@ public class ContentHandlerImpl extends DefaultHandler {
     /**
      * Fire off necessary XLink events on start of elements
      */
-    public void startElement( String namespaceURI, String lName, String qName, Attributes attrs) throws SAXException 
+    public void startElement(String namespaceURI, String lName, String qName, Attributes attrs) throws SAXException 
 	{
 
         // Update the information about the state of the current element

@@ -38,6 +38,8 @@ public class LocatorHandler extends XLinkHandlerDefaultImpl {
     		test.confirmFail("Locators should not be recognised outside of extended links.");
     	}
 
+		System.out.println(lName + " " + role);
+		
 		if (lName.equals("child5")) {
     		test.checkEqual("http://www.xbrlapi.org/role/",role);
     	}
@@ -74,7 +76,7 @@ public class LocatorHandler extends XLinkHandlerDefaultImpl {
 			Attributes attrs,String message) throws XLinkException {
 		
 		if (lName.equals("child5a")) {
-			test.checkEqual("show attribute not allowed for this type of XLink.",message);
+			test.checkEqual("The XLink show attribute is only valid on simple links and arcs.",message);
 			e5a = true;
 		} else {
 			test.checkEqual("The XLink href attribute must be provided on a locator.",message);

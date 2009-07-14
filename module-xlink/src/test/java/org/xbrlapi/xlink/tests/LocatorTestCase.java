@@ -19,9 +19,7 @@ public class LocatorTestCase extends TestCase {
 
 	private String xmlS1;
 
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(LocatorTestCase.class);
-	}
+
 
 	/*
 	 * @see TestCase#setUp()
@@ -79,7 +77,7 @@ public class LocatorTestCase extends TestCase {
 		try {
 			assertEquals(expected,actual);
 		} catch (Exception e) {
-			fail("Unexpected Exception when testing SAX Base URI handling. " + e.getMessage());
+			fail("Unexpected Exception when testing SAX-based URI handling. " + e.getMessage());
 		}
 	}
 	
@@ -87,7 +85,7 @@ public class LocatorTestCase extends TestCase {
 		try {
 			assertNull(actual);
 		} catch (Exception e) {
-			fail("Unexpected Exception when testing SAX Base URI handling. " + e.getMessage());
+			fail("Unexpected Exception when testing SAX-based URI handling. " + e.getMessage());
 		}
 	}
 	

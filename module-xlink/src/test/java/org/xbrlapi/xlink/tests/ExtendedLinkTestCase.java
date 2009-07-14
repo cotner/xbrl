@@ -19,9 +19,7 @@ public class ExtendedLinkTestCase extends TestCase {
 
 	private String xmlS1;
 
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(ExtendedLinkTestCase.class);
-	}
+
 
 	/*
 	 * @see TestCase#setUp()

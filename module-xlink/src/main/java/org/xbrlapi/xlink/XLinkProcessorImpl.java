@@ -104,7 +104,7 @@ public class XLinkProcessorImpl implements XLinkProcessor {
     }
 
 	/**
-	 * @see org.xbrlapi.xlink.XLinkProcessor#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 * @see XLinkProcessor#startElement(String, String, String, Attributes)
 	 */
 	public void startElement(String namespaceURI, String lName, String qName, Attributes attrs) throws XLinkException {
 				
@@ -124,6 +124,25 @@ public class XLinkProcessorImpl implements XLinkProcessor {
                 }
             }
         }
+
+        // Try to get XLink attribute values directly from the set of attributes on the element
+        String href = attrs.getValue(Constants.XLinkNamespace.toString(), "href");
+        String role = attrs.getValue(Constants.XLinkNamespace.toString(), "role");
+        String arcrole = attrs.getValue(Constants.XLinkNamespace.toString(), "arcrole");
+        String from = attrs.getValue(Constants.XLinkNamespace.toString(), "from");
+        String to = attrs.getValue(Constants.XLinkNamespace.toString(), "to");
+        String title = attrs.getValue(Constants.XLinkNamespace.toString(), "title");
+        String show = attrs.getValue(Constants.XLinkNamespace.toString(), "show");
+        String actuate = attrs.getValue(Constants.XLinkNamespace.toString(), "actuate");
+        String label = attrs.getValue(Constants.XLinkNamespace.toString(), "label");
+        String type = attrs.getValue(Constants.XLinkNamespace.toString(), "type");
+
+        if (type != null) {
+            if (type.equals("none")) {
+                ancestorTypes.push(NOT_XLINK);
+                return; // We definitely do not have any XLink meaning for this element.
+            }
+        }
         
 		// Handle any custom links
 		if (! (customLinkRecogniser == null))
@@ -131,28 +150,37 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 				
 			    logger.debug("Found a custom link: " + lName);
 			    
-				String href = customLinkRecogniser.getHref(namespaceURI, lName, qName, attrs);
-				String role = customLinkRecogniser.getRole(namespaceURI, lName, qName, attrs);
-				String arcrole = customLinkRecogniser.getArcrole(namespaceURI, lName, qName, attrs);
-				String title = customLinkRecogniser.getTitle(namespaceURI, lName, qName, attrs);
-				String show = customLinkRecogniser.getShow(namespaceURI, lName, qName, attrs);
-				String actuate = customLinkRecogniser.getActuate(namespaceURI, lName, qName, attrs);
+                type = "simple";
+				href = customLinkRecogniser.getHref(namespaceURI, lName, qName, attrs);
+				role = customLinkRecogniser.getRole(namespaceURI, lName, qName, attrs);
+				arcrole = customLinkRecogniser.getArcrole(namespaceURI, lName, qName, attrs);
+				title = customLinkRecogniser.getTitle(namespaceURI, lName, qName, attrs);
+				show = customLinkRecogniser.getShow(namespaceURI, lName, qName, attrs);
+				actuate = customLinkRecogniser.getActuate(namespaceURI, lName, qName, attrs);
 				
-				validateHref(namespaceURI,lName,qName,attrs,href);
-				validateRole(namespaceURI,lName,qName,attrs,role);
-				validateArcrole(namespaceURI,lName,qName,attrs,arcrole);
-				validateShow(namespaceURI,lName,qName,attrs,show);
-				validateActuate(namespaceURI,lName,qName,attrs,actuate);
+		        if (
+		                validateType(namespaceURI,lName,qName,attrs,type)
+		                && validateLabel(type,namespaceURI,lName,qName,attrs,label)
+		                && validateHref(type,namespaceURI,lName,qName,attrs,href)
+		                && validateRole(type,namespaceURI,lName,qName,attrs,role)
+		                && validateArcrole(type,namespaceURI,lName,qName,attrs,arcrole)
+		                && validateFrom(type,namespaceURI,lName,qName,attrs,from)
+		                && validateTo(type,namespaceURI,lName,qName,attrs,to)
+		                && validateShow(type,namespaceURI,lName,qName,attrs,show)
+		                && validateActuate(type,namespaceURI,lName,qName,attrs,actuate)
+		            ) {
+		                ancestorTypes.push(NOT_XLINK);
+		                return;// An error was found
+		            }
 				
 				xlinkHandler.startSimpleLink(namespaceURI, lName, qName, attrs,href,role,arcrole,title,show,actuate);
 				ancestorTypes.push(NOT_XLINK);
 				return;
 			}
-		
+
 		// If not an XLink Type element, handle accordingly.
 		// Improved by Henry S Thompson
-		String xlType = attrs.getValue(Constants.XLinkNamespace.toString(), "type");
-		if (xlType == null) {
+		if (type == null) {
 			if (attrs.getValue(Constants.XLinkNamespace.toString(), "href") == null) {
 				ancestorTypes.push(NOT_XLINK);
 				// Throw an error if XLink attributes are used but 
@@ -163,124 +191,93 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 				return;
 			} 
 			// XLink 1.1 says we default to 'simple' if xlink:type is missing but xlink:href is present
-			xlType = "simple";
+			type = "simple";
+		}
+		
+		if (
+            validateType(namespaceURI,lName,qName,attrs,type)
+            && validateLabel(type,namespaceURI,lName,qName,attrs,label)
+            && validateHref(type,namespaceURI,lName,qName,attrs,href)
+            && validateRole(type,namespaceURI,lName,qName,attrs,role)
+            && validateArcrole(type,namespaceURI,lName,qName,attrs,arcrole)
+            && validateFrom(type,namespaceURI,lName,qName,attrs,from)
+            && validateTo(type,namespaceURI,lName,qName,attrs,to)
+            && validateShow(type,namespaceURI,lName,qName,attrs,show)
+            && validateActuate(type,namespaceURI,lName,qName,attrs,actuate)
+		) {
+            ancestorTypes.push(NOT_XLINK);
+		    return;// An error was found
 		}
 		
 		// We have a potential XLink candidate
 		// Improved by Henry S Thompson		
-		if (xlType.equals("simple")) {
+		if (type.equals("simple")) {
 			
-			if (isXLink(namespaceURI, lName, qName, attrs,SIMPLE_LINK) &&
-				validateHref(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "href")) &&
-				validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "role")) &&
-				validateArcrole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "arcrole")) &&
-				validateShow(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "show")) &&
-				validateActuate(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "actuate"))) {
+			if (isXLink(namespaceURI, lName, qName, attrs,SIMPLE_LINK)) {
 
 				ancestorTypes.push(SIMPLE_LINK);
 				xlinkHandler.startSimpleLink(namespaceURI, lName, qName, attrs,
-						attrs.getValue(Constants.XLinkNamespace.toString(), "href"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "role"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "arcrole"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "title"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "show"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "actuate")
-				);
+						href,role,arcrole,title,show,actuate);
 			} else {
 				ancestorTypes.push(NOT_XLINK);
-			}			
+			}
 			
-		} else if (xlType.equals("extended")) {
+		} else if (type.equals("extended")) {
 			
-			if (isXLink(namespaceURI, lName, qName, attrs,EXTENDED_LINK) &&
-			    validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "role"))) {
+			if (isXLink(namespaceURI, lName, qName, attrs,EXTENDED_LINK)) {
 				
 				insideAnExtendedLink = true;
 				ancestorTypes.push(EXTENDED_LINK);
 				xlinkHandler.startExtendedLink(namespaceURI, lName, qName, attrs,
-					attrs.getValue(Constants.XLinkNamespace.toString(), "role"),
-					attrs.getValue(Constants.XLinkNamespace.toString(), "title")
-				);				
+				        role,title);				
 			} else {
 				ancestorTypes.push(NOT_XLINK);
 			}
 
-		} else if (xlType.equals("locator")) {
+		} else if (type.equals("locator")) {
 			
-			if (isXLink(namespaceURI, lName, qName, attrs,LOCATOR) &&
-				validateHref(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "href")) &&
-				validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "role")) &&
-				validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "label"))) {
+			if (isXLink(namespaceURI, lName, qName, attrs,LOCATOR)) {
 				
 				ancestorTypes.push(LOCATOR);
 				xlinkHandler.startLocator(namespaceURI, lName, qName, attrs,
-						attrs.getValue(Constants.XLinkNamespace.toString(), "href"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "role"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "title"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "label")
-				);
+						href,role,title,label);
 			} else {
 				ancestorTypes.push(NOT_XLINK);
 			}
 
-		} else if (xlType.equals("arc")) {
+		} else if (type.equals("arc")) {
 			
-			if (isXLink(namespaceURI, lName, qName, attrs,ARC) &&
-			    validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "from")) &&
-				validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "to")) &&
-				validateArcrole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "arcrole")) &&
-				validateShow(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "show")) &&
-				validateActuate(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "actuate"))) {
+			if (isXLink(namespaceURI, lName, qName, attrs,ARC)) {
 				
 				ancestorTypes.push(ARC);
 				xlinkHandler.startArc(namespaceURI, lName, qName, attrs,
-						attrs.getValue(Constants.XLinkNamespace.toString(), "from"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "to"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "arcrole"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "title"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "show"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "actuate")
-				);				
+				        from,to,arcrole,title,show,actuate);
 				
 			} else {
 				ancestorTypes.push(NOT_XLINK);
 			}
 			
-		} else if (xlType.equals("resource")) {
+		} else if (type.equals("resource")) {
 			
-			if (isXLink(namespaceURI, lName, qName, attrs,RESOURCE) &&
-			    validateLabel(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "label")) &&
-				validateRole(namespaceURI,lName,qName,attrs,attrs.getValue(Constants.XLinkNamespace.toString(), "role"))) {
+			if (isXLink(namespaceURI, lName, qName, attrs,RESOURCE)) {
 				
 				ancestorTypes.push(RESOURCE);
 				xlinkHandler.startResource(namespaceURI, lName, qName, attrs,
-						attrs.getValue(Constants.XLinkNamespace.toString(), "role"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "title"),
-						attrs.getValue(Constants.XLinkNamespace.toString(), "label")
-				);
+				        role,title,label);
 			} else {
 				ancestorTypes.push(NOT_XLINK);
 			}
 			
-		} else if (xlType.equals("title")) {
+		} else if (type.equals("title")) {
 			
-			if (isXLink(namespaceURI, lName, qName, attrs,TITLE)) {
+			if (isXLink(namespaceURI, lName, qName, attrs, TITLE)) {
 				ancestorTypes.push(TITLE);				
 				xlinkHandler.startTitle(namespaceURI, lName, qName, attrs);
 			} else {
 				ancestorTypes.push(NOT_XLINK);
 			}
-
-		// XLink type attributes with a value of none should generate a warning
-		// because they are not doing anything, even though they are valid.
-		} else if (xlType.equals("none")) {
-			xlinkHandler.warning(namespaceURI, lName, qName, attrs,"The XLink type attribute equals none.  This is valid but rarely makes sense.");
-			ancestorTypes.push(NOT_XLINK);
-
-			// Any other value of the xlink type attribute is an error
 		} else {
-			xlinkHandler.error(namespaceURI, lName, qName, attrs,"The XLink type attribute must take one of the following values: extended, simple, locator, arc, resource or title or none.");
-			ancestorTypes.push(NOT_XLINK);
+		    ancestorTypes.push(NOT_XLINK);	    
 		}
 
 	}
@@ -349,36 +346,71 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 	 * after escaping of disallowed characters, is not required by
 	 * the XLink specification.  
 	 * TODO figure out how to test URI reference validity of XLink hrefs.
-	 * @param value
+     * @param type The type of XLink element that the attribute is on.
+     * @param namespaceURI The namespace of the element.
+     * @param lName The local name of the element.
+     * @param qName The QName of the element.
+     * @param attrs The attributes of the element.
+     * @param value The value of the parameter being validated.
 	 * @return true if the parameter is valid.
 	 * @throws XLinkException if the href does not specify a value.
 	 */
-	private boolean validateHref(String namespaceURI, String lName, String qName,
+	private boolean validateHref(String type, String namespaceURI, String lName, String qName,
 			Attributes attrs,String value) throws XLinkException {
-		if (value == "") {
-			xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink href attribute must not be empty.");
-			return false;
-		}
-		if (value == null) {
-			xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink href attribute must be provided on a locator.");
-			return false;
-		}
+	    
+        if (value != null) {
+            if (! (type.equals("locator") || type.equals("simple"))) {
+                xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink href attribute is only valid on simple links and locators.");
+                return false;
+            }
+        }        
+	    
+        if (type.equals("simple")) {
+            if (value == null) return true;
+            if (value.equals("")) {
+                xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink href attribute must not be empty if it is provided on a simple link.");
+                return false;
+            }
+        } else if (type.equals("locator")) {
+            if (value == null) {
+                xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink href attribute must be provided on a locator.");
+                return false;
+            }
+    		if (value.equals("")) {
+    			xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink href attribute must not be empty on a locator.");
+    			return false;
+    		}
+        }
 		return true;
 	}
 
 	/**
 	 * The role attribute, if supplied, must be an absolute URI
-	 * @param value
+     * @param type The type of XLink element that the attribute is on.
+     * @param namespaceURI The namespace of the element.
+     * @param lName The local name of the element.
+     * @param qName The QName of the element.
+     * @param attrs The attributes of the element.
+     * @param value The value of the parameter being validated.
 	 * @return true if the parameter is valid.
 	 * @throws XLinkException if the role is not an absolute URI
 	 */
 	private boolean validateRole(
-			String namespaceURI, 
+	        String type, 
+	        String namespaceURI, 
 			String lName, 
 			String qName,
 			Attributes attrs,
 			String value) throws XLinkException {
-		if (value == null) return true;
+
+	    if (value != null) {
+	        if (type.equals("arc") || type.equals("title")) {
+                xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink role attribute is not valid on XLink arcs or XLink titles.");
+                return false;
+            }
+	    }
+	    
+	    if (value == null) return true;
 		try {
 			URI uri = new URI(value);
 			if (! uri.isAbsolute()) {
@@ -394,13 +426,23 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 
 	/**
 	 * The arcrole attribute, if supplied, must be an absolute URI
-	 * @param value
+     * @param type The type of XLink element that the attribute is on.
+     * @param namespaceURI The namespace of the element.
+     * @param lName The local name of the element.
+     * @param qName The QName of the element.
+     * @param attrs The attributes of the element.
+     * @param value The value of the parameter being validated.
 	 * @return true if the parameter is valid.
 	 * @throws XLinkException if the arcrole is not an absolute URI
 	 */
-	private boolean validateArcrole(String namespaceURI, String lName, String qName,
+	private boolean validateArcrole(String type, String namespaceURI, String lName, String qName,
 			Attributes attrs,String value) throws XLinkException {
 		if (value == null) return true;
+        if (! (type.equals("arc") || type.equals("simple"))) {
+            xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink arcrole attribute is only valid on simple links and arcs.");
+            return false;
+        }
+        
 		try {			
 			URI uri = new URI(value);
 			if (! uri.isAbsolute()) {
@@ -417,30 +459,112 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 	/**
 	 * Labels must be NCNames if provided.
 	 * Uses the Apache XML11Chars to test validity.
-	 * @param value The value of the label attribute
+     * @param type The type of XLink element that the attribute is on.
+     * @param namespaceURI The namespace of the element.
+     * @param lName The local name of the element.
+     * @param qName The QName of the element.
+     * @param attrs The attributes of the element.
+     * @param value The value of the parameter being validated.
 	 * @return true if the parameter is valid.
 	 * @throws XLinkException
 	 */
-	private boolean validateLabel(String namespaceURI, String lName, String qName,
+	private boolean validateLabel(String type, String namespaceURI, String lName, String qName,
 			Attributes attrs,String value) throws XLinkException {
-		if (value == null) return true;
+
+        if (value != null) {
+            if (! (type.equals("locator") || type.equals("resource"))) {
+                xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink label attribute is only valid on extended link resources and locators.");
+                return false;
+            }
+        }
+	    
+	    if (value == null) return true;
+	    
 		if (! XML11Char.isXML11ValidNCName(value)) {
 			xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink traversal attribute must be an NCName.");
 			return false;
 		}
+
 		return true;
 	}
+	
+    /**
+     * The XLink from attribute is only valid on arcs and must be an NCName.
+     * @param type The type of XLink element that the attribute is on.
+     * @param namespaceURI The namespace of the element.
+     * @param lName The local name of the element.
+     * @param qName The QName of the element.
+     * @param attrs The attributes of the element.
+     * @param value The value of the parameter being validated.
+     * @return true if the parameter is valid.
+     * @throws XLinkException
+     */
+    private boolean validateFrom(String type, String namespaceURI, String lName, String qName,
+            Attributes attrs,String value) throws XLinkException {
+
+        if (value == null) return true;
+        
+        if (! type.equals("arc")) {
+            xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink from attribute is only valid on extended link arcs.");
+            return false;
+        }
+        
+        if (! XML11Char.isXML11ValidNCName(value)) {
+            xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink from attribute must be an NCName.");
+            return false;
+        }
+
+        return true;
+    }
+    
+    /**
+     * The XLink to attribute is only valid on arcs and must be an NCName.
+     * @param type The type of XLink element that the attribute is on.
+     * @param namespaceURI The namespace of the element.
+     * @param lName The local name of the element.
+     * @param qName The QName of the element.
+     * @param attrs The attributes of the element.
+     * @param value The value of the parameter being validated.
+     * @return true if the parameter is valid.
+     * @throws XLinkException
+     */
+    private boolean validateTo(String type, String namespaceURI, String lName, String qName,
+            Attributes attrs,String value) throws XLinkException {
+
+        if (value == null) return true;
+        
+        if (! type.equals("arc")) {
+            xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink to attribute is only valid on extended link arcs.");
+            return false;
+        }
+        
+        if (! XML11Char.isXML11ValidNCName(value)) {
+            xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink to attribute must be an NCName.");
+            return false;
+        }
+
+        return true;
+    }    
 
 	/**
 	 * Show attributes must take one of a the values, new
 	 * replace, embed, other or none if supplied.
-	 * @param value
+     * @param type The type of XLink element that the attribute is on.
+     * @param namespaceURI The namespace of the element.
+     * @param lName The local name of the element.
+     * @param qName The QName of the element.
+     * @param attrs The attributes of the element.
+     * @param value The value of the parameter being validated.
 	 * @return true if the parameter is valid.
 	 * @throws XLinkException
 	 */
-	private boolean validateShow(String namespaceURI, String lName, String qName,
+	private boolean validateShow(String type, String namespaceURI, String lName, String qName,
 			Attributes attrs,String value) throws XLinkException {
 		if (value == null) return true;
+        if (! (type.equals("arc") || type.equals("simple"))) {
+            xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink show attribute is only valid on simple links and arcs.");
+            return false;
+        }
 		if (
 				(!value.equals("new")) && 
 				(!value.equals("replace")) && 
@@ -451,19 +575,61 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 			xlinkHandler.error(namespaceURI,lName,qName,attrs,"If supplied, the XLink show attribute must be one of new, replace, embed, other or none. Instead it was " + value);
 			return false;
 		}
+		
 		return true;
 	}
 	
-	/**
-	 * Actuate attributes must take one of the values: onLoad, onRequest
-	 * other or none if supplied.
-	 * @param value
-	 * @return true if the parameter is valid.
-	 * @throws XLinkException
-	 */
-	private boolean validateActuate(String namespaceURI, String lName, String qName,
+    /**
+     * Type attributes must equal simple, extended, arc, locator, resource or title.
+     * @param namespaceURI The namespace of the element.
+     * @param lName The local name of the element.
+     * @param qName The QName of the element.
+     * @param attrs The attributes of the element.
+     * @param value The value of the parameter being validated.
+     * @return true if the parameter is valid.
+     * @throws XLinkException
+     */
+    private boolean validateType(String namespaceURI, String lName, String qName,
+            Attributes attrs,String value) throws XLinkException {
+        if (value == null) return true;
+        if (
+                (!value.equals("simple")) && 
+                (!value.equals("extended")) && 
+                (!value.equals("arc")) && 
+                (!value.equals("none")) && 
+                (!value.equals("locator")) && 
+                (!value.equals("title")) && 
+                (!value.equals("resource"))
+            ){
+            xlinkHandler.error(namespaceURI,lName,qName,attrs,"An illegal XLink type attribute value was found:" + value);
+            return false;
+        }
+
+        return true;
+    }
+	
+    /**
+     * Actuate attributes must take one of the values: onLoad, onRequest
+     * other or none if supplied.
+     * @param type The type of XLink element that the attribute is on.
+     * @param namespaceURI The namespace of the element.
+     * @param lName The local name of the element.
+     * @param qName The QName of the element.
+     * @param attrs The attributes of the element.
+     * @param value The value of the parameter being validated.
+     * @return true if the parameter is valid.
+     * @throws XLinkException
+     */
+    private boolean validateActuate(String type, String namespaceURI, String lName, String qName,
 			Attributes attrs,String value) throws XLinkException {
-		if (value == null) return true;
+
+        if (value == null) return true;
+        
+        if (! (type.equals("arc") || type.equals("simple"))) {
+            xlinkHandler.error(namespaceURI,lName,qName,attrs,"The XLink actuate attribute is only valid on simple links and arcs.");
+            return false;
+        }
+        
 		if (
 				(!value.equals("onLoad")) && 
 				(!value.equals("onRequest")) && 
@@ -473,6 +639,7 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 			xlinkHandler.error(namespaceURI,lName,qName,attrs,"If supplied, the XLink actuate attribute must be one of onLoad, onRequest, other or none.  Instead it was " + value);
 			return false;
 		}
+		
 		return true;
 	}
 

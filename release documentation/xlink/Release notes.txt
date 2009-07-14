@@ -2,7 +2,9 @@ Release details:
 
 Release 5.0
 July 31, 2009
-New release to keep version in line with other modules.
+New release that strengthens the validation of XLink attributes.
+This ensures that various XLink attributes are not used incorrectly
+on the wrong kinds of XLink elements.
 
 Release 4.0
 January 7, 2009
