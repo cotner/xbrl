@@ -3,6 +3,8 @@ package org.xbrlapi.utilities;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.log4j.Logger;
+
 /**
  * Defines a range of constants (namespaces etc) that are used throughout the
  * XBRLAPI implementation
@@ -31,14 +33,17 @@ public class Constants {
     public final static String FragmentRootElementName = "fragment";
     public final static String FragmentDataContainerElementName = "data";
 
+    protected static Logger logger = Logger.getLogger(Constants.class);
+    
     static {
+        
         try {
             XMLNamespace = new URI("http://www.w3.org/XML/1998/namespace");
             XMLNSNamespace = new URI("http://www.w3.org/2000/xmlns/");
             XLinkNamespace = new URI("http://www.w3.org/1999/xlink");
             XBRL21Namespace = new URI("http://www.xbrl.org/2003/instance");
             XBRL21LinkNamespace = new URI("http://www.xbrl.org/2003/linkbase");
-            GenericLinkNamespace = new URI(" http://xbrl.org/2008/generic");
+            GenericLinkNamespace = new URI("http://xbrl.org/2008/generic");
             GenericLabelNamespace = new URI("http://xbrl.org/2008/label");
             GenericReferenceNamespace = new URI("http://xbrl.org/2008/reference");
             XBRLAPINamespace = new URI("http://xbrlapi.org/");
@@ -94,7 +99,7 @@ public class Constants {
             StandardLinkRole = new URI("http://www.xbrl.org/2003/role/link");
             ISO4217 = new URI("http://www.xbrl.org/2003/iso4217");
         } catch (URISyntaxException e) {
-            ;// Never thrown
+            logger.error("Exception thrown though.");
         }
         
     }
