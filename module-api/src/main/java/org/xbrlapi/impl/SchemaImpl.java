@@ -63,7 +63,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getIncludes()
      */
     public List<SimpleLink> getIncludes() throws XBRLException {
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
+    	String query = "#roots#[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
     	List<SimpleLink> links = getStore().<SimpleLink>queryForXMLResources(query);
     	List<SimpleLink> includes = new Vector<SimpleLink>();
     	for (SimpleLink link: links) {

@@ -43,7 +43,7 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
 
         Fragment fragment = null;
 
-        if (namespaceURI.equals(Constants.XMLSchemaNamespace)) {
+        if (namespaceURI.equals(Constants.XMLSchemaNamespace.toString())) {
             
             if (lName.equals("schema")) {
                 
@@ -123,7 +123,7 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
                             }
                         }
                         
-                        if (sgDeclaration.getNamespace().equals(Constants.XBRL21Namespace)) {
+                        if (sgDeclaration.getNamespace().equals(Constants.XBRL21Namespace.toString())) {
                             if (sgDeclaration.getName().equals("item")) {
                                 fragment = new ConceptImpl();
                                 break;
@@ -133,7 +133,7 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
                             }
                         }
 
-                        if (sgDeclaration.getNamespace().equals(Constants.XBRL21LinkNamespace)) {
+                        if (sgDeclaration.getNamespace().equals(Constants.XBRL21LinkNamespace.toString())) {
                             if (sgDeclaration.getName().equals("part"))
                                 fragment = new ReferencePartDeclarationImpl();
                                 break;

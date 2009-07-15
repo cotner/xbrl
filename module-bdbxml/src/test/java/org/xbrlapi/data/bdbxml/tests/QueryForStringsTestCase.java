@@ -26,7 +26,7 @@ public class QueryForStringsTestCase extends BaseTestCase {
 		try {
 	        loader.discover(this.getURI(START));
 		    
-	        String query = "#roots#/@index";
+	        String query = "for $root in #roots# return string($root/@index)";
 	        Set<String> results = store.queryForStrings(query);
 	        assertTrue(results.size() > 1);
 /*	        for (String result: results) {
@@ -36,6 +36,7 @@ public class QueryForStringsTestCase extends BaseTestCase {
 	            }
 	        }
 */		} catch (Exception e) {
+            e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}

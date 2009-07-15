@@ -51,7 +51,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
 
         Fragment fragment = null;
 
-        if (namespaceURI.equals(Constants.XMLSchemaNamespace)) {
+        if (namespaceURI.equals(Constants.XMLSchemaNamespace.toString())) {
             
             if (lName.equals("schema")) {
                 
@@ -117,7 +117,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                     XSElementDeclaration sgDeclaration = declaration.getSubstitutionGroupAffiliation();
                     while (sgDeclaration != null) {
                         
-                        if (sgDeclaration.getNamespace().equals(Constants.XBRL21Namespace)) {
+                        if (sgDeclaration.getNamespace().equals(Constants.XBRL21Namespace.toString())) {
                             if (sgDeclaration.getName().equals("item")) {
                                 fragment = new ConceptImpl();
                                 break;
@@ -127,7 +127,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                             }
                         }
 
-                        if (sgDeclaration.getNamespace().equals(Constants.XBRL21LinkNamespace)) {
+                        if (sgDeclaration.getNamespace().equals(Constants.XBRL21LinkNamespace.toString())) {
                             if (sgDeclaration.getName().equals("part"))
                                 fragment = new ReferencePartDeclarationImpl();
                                 break;
@@ -165,7 +165,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
         
         // This assumes that XML schemas do not nest XML schemas
         if (lName.equals("schema"))
-            if (namespaceURI.equals(Constants.XMLSchemaNamespace)) {
+            if (namespaceURI.equals(Constants.XMLSchemaNamespace.toString())) {
                 setTargetNamespace(null);
             }
 

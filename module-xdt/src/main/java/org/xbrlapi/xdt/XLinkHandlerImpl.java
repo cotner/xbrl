@@ -199,7 +199,7 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 		try {
 
 		    Resource fragment = null;
-			if (namespaceURI.equals(Constants.XBRL21LinkNamespace)) {
+			if (namespaceURI.equals(Constants.XBRL21LinkNamespace.toString())) {
 				if (lName.equals("label")) {
 					fragment = new LabelResourceImpl();
 				} else if (lName.equals("reference")) {
@@ -209,19 +209,19 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 				} else {
 					fragment = new ResourceImpl();				
 				}
-			} else if (namespaceURI.equals(Constants.GenericLabelNamespace)) {
+			} else if (namespaceURI.equals(Constants.GenericLabelNamespace.toString())) {
 				if (lName.equals("label")) {
 					fragment = new LabelResourceImpl();			
 				} else {
 	                fragment = new ResourceImpl();
 	            }
-			} else if (namespaceURI.equals(Constants.GenericReferenceNamespace)) {
+			} else if (namespaceURI.equals(Constants.GenericReferenceNamespace.toString())) {
 				if (lName.equals("reference")) {
 					fragment = new ReferenceResourceImpl();				
 				} else {
 	                fragment = new ResourceImpl();
 	            }
-            } else if (namespaceURI.equals(Constants.XBRLAPIEntitiesNamespace)) {
+            } else if (namespaceURI.equals(Constants.XBRLAPIEntitiesNamespace.toString())) {
                 if (lName.equals("identifier")) {
                     fragment = new EntityResourceImpl();             
                 } else {

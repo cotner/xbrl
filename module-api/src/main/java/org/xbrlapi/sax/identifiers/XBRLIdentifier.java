@@ -61,7 +61,7 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
             Attributes attrs) throws XBRLException {
 
         Fragment xbrlFragment = null;
-        if (namespaceURI.equals(Constants.XBRL21Namespace)) {
+        if (namespaceURI.equals(Constants.XBRL21Namespace.toString())) {
             if (lName.equals("xbrl")) {
                 xbrlFragment = new InstanceImpl();
                 this.parsingAnXBRLInstance = true;
@@ -88,7 +88,7 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
         }
 
         Fragment xbrlLinkFragment = null;
-        if (namespaceURI.equals(Constants.XBRL21LinkNamespace)) {
+        if (namespaceURI.equals(Constants.XBRL21LinkNamespace.toString())) {
             if (lName.equals("roleType")) {
                 xbrlLinkFragment = new RoleTypeImpl();
             } else if (lName.equals("arcroleType")) {
@@ -151,7 +151,7 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
             String qName,
             Attributes attrs) throws XBRLException {
 
-        if (namespaceURI.equals(Constants.XBRL21Namespace)) {
+        if (namespaceURI.equals(Constants.XBRL21Namespace.toString())) {
             if (lName.equals("xbrl")) {
                 this.parsingAnXBRLInstance = false;
                 this.canBeATuple = false;
@@ -161,7 +161,7 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                 this.canBeATuple = false;
             }
 
-        } else if (namespaceURI.equals(Constants.XBRL21LinkNamespace)) {
+        } else if (namespaceURI.equals(Constants.XBRL21LinkNamespace.toString())) {
             if (lName.equals("footnoteLink")) {
                 this.canBeATuple = true;
             } else if (lName.equals("schemaRef")) {

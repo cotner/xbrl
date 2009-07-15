@@ -70,7 +70,7 @@ class XlinkImpl extends FragmentImpl implements Xlink {
      * @see org.xbrlapi.Xlink#getAttribute(String, String)
      */
     public String getAttribute(String namespaceURI, String localname) throws XBRLException {
-    	if (namespaceURI.equals(Constants.XLinkNamespace)) throw new XBRLException("XLink attributes must not be accessed using the getAttribute method on XLink fragments.");
+    	if (namespaceURI.equals(Constants.XLinkNamespace.toString())) throw new XBRLException("XLink attributes must not be accessed using the getAttribute method on XLink fragments.");
     	return getDataRootElement().getAttributeNS(namespaceURI,localname);
     }
 

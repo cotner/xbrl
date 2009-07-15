@@ -374,7 +374,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
         Element next = (Element) current.getParentNode();
         Stack<Integer> values = new Stack<Integer>();
 
-        while (! next.getNamespaceURI().equals(Constants.XBRLAPINamespace)) {
+        while (! next.getNamespaceURI().equals(Constants.XBRLAPINamespace.toString())) {
             values.push(new Integer(getSiblingOrder(current)));
             current = next;
             next = (Element) next.getParentNode();
@@ -513,7 +513,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
             // Go to parent fragment if we are looking at the container element for the fragment data.
             String elementNamespace = element.getNamespaceURI();
             if (elementNamespace != null) {
-                if (elementNamespace.equals(Constants.XBRLAPINamespace)) {
+                if (elementNamespace.equals(Constants.XBRLAPINamespace.toString())) {
                     if (this.isRoot()) throw new XBRLException("No namespace is defined for QName " + qname);
                     Fragment parent = getParent();
                     if (parent == null) throw new XBRLException("A parent fragment is missing from the data store preventing QName resolution for " + qname);

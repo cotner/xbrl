@@ -28,7 +28,7 @@ public class XBRLCustomLinkRecogniserImpl extends CustomLinkRecogniser {
 	 */
 	public boolean isLink(String namespaceURI, String lName, String qName, Attributes attrs) {
 	    boolean result = false;
-		if (namespaceURI.equals(Constants.XMLSchemaNamespace))
+		if (namespaceURI.equals(Constants.XMLSchemaNamespace.toString()))
 			if (lName.equals("import") || lName.equals("include"))
 				result = true;
         return result;

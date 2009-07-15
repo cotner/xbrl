@@ -304,7 +304,7 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		// Complain about any inappropriate attributes in the xlink namespace
 		// Contributed by Henry S Thompson
 		for (int i=0; i<attrs.getLength(); i++) {
-			if (attrs.getURI(i).equals(Constants.XLinkNamespace)) {
+			if (attrs.getURI(i).equals(Constants.XLinkNamespace.toString())) {
 				String aName = attrs.getLocalName(i);
 				Integer allowed = XLINKATTRS.get(aName);
 				if ( allowed!=null && ((allowed.intValue()&type.intValue())==0) ) {

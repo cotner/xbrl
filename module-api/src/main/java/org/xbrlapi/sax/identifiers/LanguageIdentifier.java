@@ -32,7 +32,7 @@ public class LanguageIdentifier extends BaseIdentifier implements Identifier {
             Attributes attrs) throws XBRLException {
 
         Fragment languageFragment = null;
-        if (namespaceURI.equals(Constants.XBRLAPILanguagesNamespace)) {
+        if (namespaceURI.equals(Constants.XBRLAPILanguagesNamespace.toString())) {
             if (lName.equals("language")) {
                 languageFragment = new LanguageImpl();
             }

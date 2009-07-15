@@ -83,7 +83,7 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
     	LinkedList<Node> otherAttributes = new LinkedList<Node>();
     	for (int i=0; i<attributes.getLength(); i++) {
     		String ns = attributes.item(i).getNamespaceURI();
-    		if (! ns.equals(Constants.XMLSchemaNamespace) && ! ns.equals(Constants.XBRL21Namespace)) {
+    		if (! ns.equals(Constants.XMLSchemaNamespace.toString()) && ! ns.equals(Constants.XBRL21Namespace.toString())) {
     			otherAttributes.add(attributes.item(i));
     		}
     	}
