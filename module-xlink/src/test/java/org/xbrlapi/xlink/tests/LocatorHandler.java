@@ -57,6 +57,16 @@ public class LocatorHandler extends XLinkHandlerDefaultImpl {
 		if (lName.equals("child7")) {
     		test.confirmFail("child7 should not have been found as it is not an extended link child");
     	}
+		
+        if (lName.equals("child8")) {
+            test.confirmFail("child8 should not have been found because it has an xlink:wrong attribute.");
+        }
+
+        if (lName.equals("child9")) {
+            test.confirmFail("child9 should not have been found because it has an xlink:invalid attribute.");
+        }
+        
+        
 	}
 
 	/**
@@ -78,6 +88,10 @@ public class LocatorHandler extends XLinkHandlerDefaultImpl {
 		if (lName.equals("child5a")) {
 			test.checkEqual("The XLink show attribute is only valid on simple links and arcs.",message);
 			e5a = true;
+		} else if (lName.equals("child8")) {
+            test.checkEqual("Xlink wrong attribute is illegal.",message);
+        } else if (lName.equals("child9")) {
+            test.checkEqual("Xlink invalid attribute is illegal.",message);
 		} else {
 			test.checkEqual("The XLink href attribute must be provided on a locator.",message);
 		}

@@ -111,20 +111,19 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 		// Handle the XML Base attribute on the element (even when it does not exist or has "" value)
 		xlinkHandler.xmlBaseStart(attrs.getValue(Constants.XMLNamespace.toString(),"base"));
 
-        // Complain about any unexpected attributes in the XLink namespace.
-        // Added by Henry S Thompson
-        boolean hasSomeXLinkAttributes = false;
-        for (int i=0; i<attrs.getLength(); i++) {
-            if (attrs.getURI(i).equals(Constants.XLinkNamespace.toString())) {
-                String aName = attrs.getLocalName(i);
-                if ( XLINKATTRS.get(aName) == null ) {
-                    xlinkHandler.error(namespaceURI, lName, qName, attrs, aName + " is not defined in the XLink namespace.");
-                } else {
-                    hasSomeXLinkAttributes = true;
+		String xlinkNamespace = Constants.XLinkNamespace.toString();
+		for (int i=0; i < attrs.getLength(); i++) {
+            if (attrs.getURI(i).equals(xlinkNamespace)) {
+                String name = attrs.getLocalName(i);
+                if (! XLINKATTRS.containsKey(name)) {
+                    xlinkHandler.error(namespaceURI, lName, qName, attrs,
+                            "Xlink " + name + " attribute is illegal.");
+                    ancestorTypes.push(NOT_XLINK);
+                    return; // XLink spec conformance problem.
                 }
             }
         }
-
+		
         // Try to get XLink attribute values directly from the set of attributes on the element
         String href = attrs.getValue(Constants.XLinkNamespace.toString(), "href");
         String role = attrs.getValue(Constants.XLinkNamespace.toString(), "role");
@@ -137,6 +136,9 @@ public class XLinkProcessorImpl implements XLinkProcessor {
         String label = attrs.getValue(Constants.XLinkNamespace.toString(), "label");
         String type = attrs.getValue(Constants.XLinkNamespace.toString(), "type");
 
+        
+        
+        
         if (type != null) {
             if (type.equals("none")) {
                 ancestorTypes.push(NOT_XLINK);
@@ -178,19 +180,29 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 				return;
 			}
 
+		boolean hasOtherXLinkAttributes = 
+		    (role != null)
+		    || (arcrole != null)
+            || (from != null)
+            || (to != null)
+            || (title != null)
+            || (show != null)
+            || (actuate != null)
+            || (label != null);
+		
 		// If not an XLink Type element, handle accordingly.
 		// Improved by Henry S Thompson
 		if (type == null) {
-			if (attrs.getValue(Constants.XLinkNamespace.toString(), "href") == null) {
+			if (href == null) {
 				ancestorTypes.push(NOT_XLINK);
 				// Throw an error if XLink attributes are used but 
 				// the xlink:type or xlink:href attributes are missing.
-				if (hasSomeXLinkAttributes) {
+				if (hasOtherXLinkAttributes) {
 					xlinkHandler.error(namespaceURI,lName,qName,attrs,"Attributes in the XLink namespace must be accompanied by xlink:type or xlink:href");
 				}
 				return;
 			} 
-			// XLink 1.1 says we default to 'simple' if xlink:type is missing but xlink:href is present
+			// Default to 'simple' if xlink:type is missing but xlink:href is present
 			type = "simple";
 		}
 		
@@ -300,20 +312,20 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 
 		Integer parentType = ancestorTypes.peek();
 		
-		boolean OK = true;
+		boolean result = true;
 		// Complain about any inappropriate attributes in the xlink namespace
 		// Contributed by Henry S Thompson
-		for (int i=0; i<attrs.getLength(); i++) {
+		// This is now handled by the attribute validation methods.
+/*		for (int i=0; i<attrs.getLength(); i++) {
 			if (attrs.getURI(i).equals(Constants.XLinkNamespace.toString())) {
 				String aName = attrs.getLocalName(i);
 				Integer allowed = XLINKATTRS.get(aName);
-				if ( allowed!=null && ((allowed.intValue()&type.intValue())==0) ) {
-					xlinkHandler.error(namespaceURI,lName,qName,attrs,aName+" attribute not allowed for this type of XLink.");
-					OK = false;
+				if (allowed != null && ((allowed.intValue() & type.intValue())==0) ) {
+					xlinkHandler.error(namespaceURI,lName,qName,attrs,"Xlink " + aName + " attribute not allowed for this type of XLink element.");
+					result = false;
 				}
 			}
-		}
-		
+		}*/
 		
 		// Extended links cannot contain simple links or extended links
 		if (insideAnExtendedLink)
@@ -336,7 +348,7 @@ public class XLinkProcessorImpl implements XLinkProcessor {
 				return false;
 			}
 
-		return OK;
+		return result;
 		
 	}
 

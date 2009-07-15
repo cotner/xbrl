@@ -42,6 +42,8 @@ public class LocatorTestCase extends TestCase {
 			+ "<child6 xlink:type=\"locator\" xlink:href=\"http://www.xbrlapi.org/\" xlink:role=\"http://www.xbrlapi.org/role/\" xlink:title=\"Human readable title\">"
 			+ "<child7 xlink:type=\"locator\" xlink:href=\"http://www.xbrlapi.org/\" xlink:role=\"http://www.xbrlapi.org/role/\" xlink:title=\"Human readable title\"/>"
 			+ "</child6>"
+            + "<child8 xlink:type=\"locator\" xlink:wrong=\"invalid attribute\"/>"
+            + "<child9 xlink:invalid=\"wrong attribute\"/>"
 
 			+ "</root>";
 	}
