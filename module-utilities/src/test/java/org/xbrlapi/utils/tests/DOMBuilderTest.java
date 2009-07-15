@@ -2,16 +2,16 @@ package org.xbrlapi.utils.tests;
 
 import java.net.URI;
 
-import junit.framework.TestCase;
-
-import org.apache.log4j.Logger;
+import org.xbrlapi.utilities.BaseTestCase;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class DOMBuilderTest extends TestCase {
-    protected static Logger logger = Logger.getLogger(DOMBuilderTest.class);    
+public class DOMBuilderTest extends BaseTestCase {
+    
+    private final String DOCUMENT = "test.data.small.schema";
+    private URI uri = null;
     
     public DOMBuilderTest(String arg0) {
         super(arg0);
@@ -19,15 +19,17 @@ public class DOMBuilderTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
+        uri = getURI(DOCUMENT);
     }
 
     protected void tearDown() throws Exception {
+        super.tearDown();
     }   
     
     public void testDOMConstructionFromAURI() {
         try {
             XMLDOMBuilder builder = new XMLDOMBuilder();
-            builder.newDocument(new URI("http://www.sec.gov/Archives/edgar/data/1316631/000119312508210779/lbtya-20080331.xml"));
+            builder.newDocument(uri);
         } catch (Exception e) {
             e.printStackTrace();
             fail("An unexpected exception was thrown.");
