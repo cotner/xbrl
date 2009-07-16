@@ -1,3 +1,6 @@
+16 Jul. 2009
+Added arc URI to the information persisted for each relationship. 
+
 14 Jul. 2009
 Simplified the org.xbrlapi.utilities.Constants class
 to use java.net.URI rather than strings for all URI constants.
