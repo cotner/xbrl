@@ -29,7 +29,7 @@ import com.sleepycat.dbxml.XmlUpdateContext;
 public class LoadTestCase extends TestCase {
     protected static Logger logger = Logger.getLogger(LoadTestCase.class);  
     
-    private final int iterations = 10000;
+    private final int iterations = 1000;
     private String container = "container";
     private String location = null;
     private String prefix = "<a_node>";
