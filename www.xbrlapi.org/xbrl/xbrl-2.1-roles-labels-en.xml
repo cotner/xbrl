@@ -128,7 +128,7 @@
   </generic:link>      
 
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
-    <link:loc xlink:href="xbrl-2.1-roles.xsd#positive-label" xlink:type="locator" xlink:label="role"/>
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#positive-standard-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       positive values
@@ -158,7 +158,7 @@
   </generic:link>      
 
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
-    <link:loc xlink:href="xbrl-2.1-roles.xsd#negative-label" xlink:type="locator" xlink:label="role"/>
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#negative-standard-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       negative
@@ -188,7 +188,7 @@
   </generic:link>      
 
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
-    <link:loc xlink:href="xbrl-2.1-roles.xsd#zero-label" xlink:type="locator" xlink:label="role"/>
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#zero-standard-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       zero
@@ -318,7 +318,7 @@
   </generic:link>      
     
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
-    <link:loc xlink:href="xbrl-2.1-roles.xsd#reference" xlink:type="locator" xlink:label="role"/>
+    <link:loc xlink:href="xbrl-2.1-roles.xsd#standard-reference" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       standard
