@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Set;
 
 import org.w3c.dom.Element;
+import org.xbrlapi.data.bdbxml.BaseTestCase;
 import org.xbrlapi.utilities.XBRLException;
 /**
  * Test the BDB XML XBRLAPI Store implementation of DOM recovery methods.

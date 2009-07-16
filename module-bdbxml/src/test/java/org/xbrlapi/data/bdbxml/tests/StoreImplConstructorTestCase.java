@@ -1,6 +1,7 @@
 package org.xbrlapi.data.bdbxml.tests;
 
 import org.xbrlapi.data.Store;
+import org.xbrlapi.data.bdbxml.BaseTestCase;
 import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.XBRLException;

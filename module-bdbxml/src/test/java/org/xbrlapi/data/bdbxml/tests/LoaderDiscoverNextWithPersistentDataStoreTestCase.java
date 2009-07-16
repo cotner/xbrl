@@ -2,6 +2,7 @@ package org.xbrlapi.data.bdbxml.tests;
 
 import java.net.URI;
 
+import org.xbrlapi.data.bdbxml.BaseTestCase;
 import org.xbrlapi.utilities.XBRLException;
 
 /**

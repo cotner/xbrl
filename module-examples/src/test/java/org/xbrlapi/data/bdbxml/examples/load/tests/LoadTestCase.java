@@ -3,8 +3,8 @@ package org.xbrlapi.data.bdbxml.examples.load.tests;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.data.bdbxml.BaseTestCase;
 import org.xbrlapi.data.bdbxml.examples.load.Load;
-import org.xbrlapi.data.bdbxml.tests.BaseTestCase;
 import org.xbrlapi.utilities.XBRLException;
 
 /**

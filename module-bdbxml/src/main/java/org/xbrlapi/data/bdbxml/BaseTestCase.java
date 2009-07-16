@@ -1,4 +1,4 @@
-package org.xbrlapi.data.bdbxml.tests;
+package org.xbrlapi.data.bdbxml;
 
 import java.io.File;
 import java.util.HashMap;
@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.data.resource.InStoreMatcherImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;

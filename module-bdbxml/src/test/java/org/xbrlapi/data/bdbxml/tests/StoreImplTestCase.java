@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.XML;
+import org.xbrlapi.data.bdbxml.BaseTestCase;
 import org.xbrlapi.impl.MockImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;

@@ -3,6 +3,7 @@ package org.xbrlapi.data.bdbxml.tests;
 import java.net.URI;
 import java.util.List;
 
+import org.xbrlapi.data.bdbxml.BaseTestCase;
 import org.xbrlapi.grabber.Grabber;
 import org.xbrlapi.grabber.SecGrabberImpl;
 

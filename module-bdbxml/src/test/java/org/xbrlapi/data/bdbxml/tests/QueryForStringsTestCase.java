@@ -2,6 +2,8 @@ package org.xbrlapi.data.bdbxml.tests;
 
 import java.util.Set;
 
+import org.xbrlapi.data.bdbxml.BaseTestCase;
+
 /**
  * Tests the query for strings method.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
