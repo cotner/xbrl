@@ -11,6 +11,8 @@ public class AllTests {
 		//$JUnit-BEGIN$
 		suite.addTestSuite(NetworksTestCase.class);
         suite.addTestSuite(PersistedNetworksTestCase.class);
+        suite.addTestSuite(PersistedRelationshipLoadingTestCase.class);
+        suite.addTestSuite(PersistedRelationshipErrorsTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

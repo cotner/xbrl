@@ -205,7 +205,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             reason += " (NB: Failed to delete the document from the data store. "+e.getMessage()+")";
         }
 
-        String documentId = getDocumentId(uri);
+        String documentId = getId(uri.toString() + "_stub");
         Stub stub = new StubImpl(documentId);
         stub.setResourceURI(uri);
         stub.setMetaAttribute("reason",reason);
@@ -227,9 +227,10 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * used for another document in the data store, then 
      * another random string is generated and this repeats until
      * the random string is unique in the data store.
+     * @param input The string that may be used to generate the ID.
      * @see org.xbrlapi.data.Store#getDocumentId(URI)
      */    
-    public String getDocumentId(URI document) throws XBRLException {
+    public String getId(String input) throws XBRLException {
         
         // The document is not in the data store so generate a new document ID.
         String randomString = random();

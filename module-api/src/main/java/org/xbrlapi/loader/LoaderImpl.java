@@ -284,7 +284,7 @@ public class LoaderImpl implements Loader {
      */
     private void setDocumentURI(URI uri) throws XBRLException {
         documentURI = uri;
-        documentId = getStore().getDocumentId(uri);
+        documentId = getStore().getId(uri.toString());
     }
     
     /**

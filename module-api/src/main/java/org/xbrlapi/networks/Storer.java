@@ -89,6 +89,15 @@ public interface Storer {
     public void deleteRelationships(URI linkRole, URI arcrole) throws XBRLException;
     
     /**
+     * Deletes the persisted relationships that are related to arcs 
+     * in the specified document.
+     * @param document The URI of the document to delete the persisted
+     * relationships for.
+     * @throws XBRLException
+     */
+    public void deleteRelationships(URI document) throws XBRLException;    
+    
+    /**
      * Deletes all persisted relationships in the data store.
      * @throws XBRLException
      */

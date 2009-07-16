@@ -1,5 +1,7 @@
 16 Jul. 2009
 Added arc URI to the information persisted for each relationship. 
+Added in persisted error information capture using the data store
+to track problems as they arise during persistence of relationships. 
 
 14 Jul. 2009
 Simplified the org.xbrlapi.utilities.Constants class

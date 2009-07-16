@@ -574,14 +574,15 @@ public interface Store {
     public void delete() throws XBRLException;    
 
     /**
-     * @param document The URI for the document.
-     * @return the ID to be used for the document when forming
-     * fragment IDs for all fragments in the data store.
-     * This ID needs to be unique for each document in the 
-     * data store or the data store will corrupt.
+     * @param input The string that may be used to generate the id.
+     * @return the ID to be used for storing XML resources in the data store.
+     * One of these IDs is generated for each document in the data store and 
+     * then a counter is appended to that ID to get uniqueness for each fragment
+     * in that document.  These IDs are also used for a variety of other kinds
+     * of XML resources stored in the data store.
      * @throws XBRLException
      */
-    public String getDocumentId(URI document) throws XBRLException;
+    public String getId(String input) throws XBRLException;
     
     /**
      * @param encoding The code identifying the language that the name of the

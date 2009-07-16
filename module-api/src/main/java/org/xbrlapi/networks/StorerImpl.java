@@ -17,6 +17,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.Locator;
 import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.impl.ErrorImpl;
 import org.xbrlapi.impl.PersistedRelationshipImpl;
 import org.xbrlapi.impl.PersistedRelationshipPriorityComparator;
 import org.xbrlapi.utilities.Constants;
@@ -63,17 +64,30 @@ public class StorerImpl implements Storer {
      */
     public void storeRelationship(Relationship relationship)
             throws XBRLException {
-        
-        PersistedRelationship persistedRelationship = new PersistedRelationshipImpl(relationship);
-        if (! getStore().hasXMLResource(persistedRelationship.getIndex())) getStore().persist(persistedRelationship);
+        try {
+            PersistedRelationship persistedRelationship = new PersistedRelationshipImpl(relationship);
+            if (! getStore().hasXMLResource(persistedRelationship.getIndex())) getStore().persist(persistedRelationship);
+        } catch (XBRLException e) {
+            String arcIndex = relationship.getArcIndex();
+            URI document = relationship.getArc().getURI();
+            logger.error("Had problems persisting relationships for arc " + arcIndex);
+            store.persist(new ErrorImpl(getStore().getId(document.toString() + arcIndex + "_error"), document,arcIndex,"Relationship persistence failed."));
+        }
     }
 
     /**
      * @see org.xbrlapi.networks.Storer#storeRelationship(Arc, Fragment, Fragment)
      */
     public void storeRelationship(Arc arc, Fragment source, Fragment target) throws XBRLException {
-        PersistedRelationship persistedRelationship = new PersistedRelationshipImpl(arc, source, target);
-        if (! getStore().hasXMLResource(persistedRelationship.getIndex())) getStore().persist(persistedRelationship);
+        try {
+            PersistedRelationship persistedRelationship = new PersistedRelationshipImpl(arc, source, target);
+            if (! getStore().hasXMLResource(persistedRelationship.getIndex())) getStore().persist(persistedRelationship);
+        } catch (XBRLException e) {
+            String arcIndex = arc.getIndex();
+            URI document = arc.getURI();
+            logger.error("Had problems persisting relationships for arc " + arcIndex);
+            store.persist(new ErrorImpl(getStore().getId(document.toString() + arcIndex + "_error"), document,arcIndex,"Relationship persistence failed."));
+        }            
     }    
     
 
@@ -103,11 +117,22 @@ public class StorerImpl implements Storer {
     }
 
     /**
-     * @see org.xbrlapi.networks.Storer#deleteRelationships(java.net.URI, java.net.URI)
+     * @see Storer#deleteRelationships(URI, URI)
      */
     public void deleteRelationships(URI linkRole, URI arcrole) throws XBRLException {
         Store store = getStore();
         Set<String> indices = store.queryForIndices("#roots#[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+arcrole+"' and @linkRole='"+linkRole+"']");
+        for (String index: indices) {
+            store.remove(index);
+        }
+    }
+    
+    /**
+     * @see Storer#deleteRelationships(URI)
+     */
+    public void deleteRelationships(URI document) throws XBRLException {
+        Store store = getStore();
+        Set<String> indices = store.queryForIndices("#roots#[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcURI='"+document+"']");
         for (String index: indices) {
             store.remove(index);
         }
@@ -141,82 +166,87 @@ public class StorerImpl implements Storer {
 
         Store store = getStore();
 
-        // Get indices of all arcs in the document.
-        Set<String> arcIndices = store.getFragmentIndicesFromDocument(document,"Arc");
-
-        if (arcIndices.size() > 0) {
-            logger.info("# arcs = " + arcIndices.size() + " in " + document);
-            long start = System.currentTimeMillis();
-
-            // Get indices of arc ends in the document.
-            Map<String,List<String>> endIndices = new HashMap<String,List<String>>();
-            String query = "for $fragment in #roots#[@uri='" + document + "' and */*[@xlink:type='resource' or @xlink:type='locator']] return concat($fragment/@index,' ',$fragment/@parentIndex,$fragment/*/*/@xlink:label)";
-            Set<String> pairs = getStore().queryForStrings(query);
-            for (String pair: pairs) {
-                int split = pair.indexOf(" ");
-                String index = pair.substring(0,split);
-                String label = pair.substring(split+1);
-                if (endIndices.containsKey(label)) {
-                    endIndices.get(label).add(index);
-                } else {
-                    List<String> list = new Vector<String>();
-                    list.add(index);
-                    endIndices.put(label,list);
-                }
-            }
+        try {
+            // Get indices of all arcs in the document.
+            Set<String> arcIndices = store.getFragmentIndicesFromDocument(document,"Arc");
     
-            // Get indices of locator target fragments
-            Map<String,String> locatorTargets = new HashMap<String,String>();
-            query = "for $locator in #roots#[@uri='" + document + "' and */*/@xlink:type='locator'] return concat($locator/@index,' ',#roots#[@uri=$locator/@targetDocumentURI and $locator/@targetPointerValue=" + Constants.XBRLAPIPrefix + ":xptr/@value]/@index)";
-            pairs = getStore().queryForStrings(query);
-            for (String pair: pairs) {
-                int split = pair.indexOf(" ");
-                String locatorIndex = pair.substring(0,split);
-                String targetIndex = pair.substring(split+1);
-                locatorTargets.put(locatorIndex,targetIndex);
-            }
-            
-            // Iterate arcs, storing relationships defined by each
-            for (String index: arcIndices) {
-                Arc arc = getStore().<Arc>getXMLResource(index);
-                String parentIndex = arc.getParentIndex();
-                String from = parentIndex + arc.getFrom();
-                String to = parentIndex + arc.getTo();
-                if (endIndices.containsKey(from) && endIndices.containsKey(to)) {
-                    for (String sourceIndex: endIndices.get(from)) {
-                        for (String targetIndex: endIndices.get(to)) {
-                            Fragment source = null;
-                            if (locatorTargets.containsKey(sourceIndex))
-                                source = store.getXMLResource(locatorTargets.get(sourceIndex));
-                            else 
-                                source = store.getXMLResource(sourceIndex);
-                            Fragment target = null;
-                            if (locatorTargets.containsKey(targetIndex))
-                                target = store.getXMLResource(locatorTargets.get(targetIndex));
-                            else 
-                                target = store.getXMLResource(targetIndex);
-                            this.storeRelationship(arc,source,target);
+            if (arcIndices.size() > 0) {
+                logger.info("# arcs = " + arcIndices.size() + " in " + document);
+                long start = System.currentTimeMillis();
+    
+                // Get indices of arc ends in the document.
+                Map<String,List<String>> endIndices = new HashMap<String,List<String>>();
+                String query = "for $fragment in #roots#[@uri='" + document + "' and */*[@xlink:type='resource' or @xlink:type='locator']] return concat($fragment/@index,' ',$fragment/@parentIndex,$fragment/*/*/@xlink:label)";
+                Set<String> pairs = getStore().queryForStrings(query);
+                for (String pair: pairs) {
+                    int split = pair.indexOf(" ");
+                    String index = pair.substring(0,split);
+                    String parentIndexPlusLabel = pair.substring(split+1);
+                    if (endIndices.containsKey(parentIndexPlusLabel)) {
+                        endIndices.get(parentIndexPlusLabel).add(index);
+                    } else {
+                        List<String> list = new Vector<String>();
+                        list.add(index);
+                        endIndices.put(parentIndexPlusLabel,list);
+                    }
+                }
+        
+                // Get indices of locator target fragments
+                Map<String,String> locatorTargets = new HashMap<String,String>();
+                query = "for $locator in #roots#[@uri='" + document + "' and */*/@xlink:type='locator'] return concat($locator/@index,' ',#roots#[@uri=$locator/@targetDocumentURI and $locator/@targetPointerValue=" + Constants.XBRLAPIPrefix + ":xptr/@value]/@index)";
+                pairs = getStore().queryForStrings(query);
+                for (String pair: pairs) {
+                    int split = pair.indexOf(" ");
+                    String locatorIndex = pair.substring(0,split);
+                    String targetIndex = pair.substring(split+1);
+                    locatorTargets.put(locatorIndex,targetIndex);
+                }
+                
+                // Iterate arcs, storing relationships defined by each
+                for (String arcIndex: arcIndices) {
+                    Arc arc = getStore().<Arc>getXMLResource(arcIndex);
+                    logger.debug("Arc index = " + arcIndex);
+                    String parentIndex = arc.getParentIndex();
+                    String fromKey = parentIndex + arc.getFrom();
+                    String toKey = parentIndex + arc.getTo();
+                    if (endIndices.containsKey(fromKey) && endIndices.containsKey(toKey)) {
+                        for (String sourceIndex: endIndices.get(fromKey)) {
+                            for (String targetIndex: endIndices.get(toKey)) {
+                                try {
+                                    Fragment source = null;
+                                    if (locatorTargets.containsKey(sourceIndex)) {
+                                        logger.debug("Source locator index = " + sourceIndex);
+                                        logger.debug("Source resource index = " + locatorTargets.get(sourceIndex));
+                                        source = store.getXMLResource(locatorTargets.get(sourceIndex));
+                                    } else {
+                                        logger.debug("Source resource index = " + sourceIndex);
+                                        source = store.getXMLResource(sourceIndex);
+                                    }
+                                    Fragment target = null;
+                                    if (locatorTargets.containsKey(targetIndex)) {
+                                        logger.debug("Target locator index = " + targetIndex);
+                                        logger.debug("Target resource index = " + locatorTargets.get(targetIndex));
+                                        target = store.getXMLResource(locatorTargets.get(targetIndex));
+                                    } else {
+                                        logger.debug("Target resource index = " + targetIndex);
+                                        target = store.getXMLResource(targetIndex);
+                                    }
+                                    this.storeRelationship(arc,source,target);
+                                } catch (XBRLException e) {
+                                    logger.error("Had problems persisting relationships for arc " + arcIndex);
+                                    store.persist(new ErrorImpl(getStore().getId(document.toString() + arcIndex + "_error"), document,arcIndex,"Relationship persistence failed because of trouble finding sources/targets."));
+                                }
+                            }
                         }
                     }
                 }
+                logger.info("Average ms to persist " + arcIndices.size() + " arcs = " + (System.currentTimeMillis() - start)/arcIndices.size());
             }
-            logger.info("Average ms to persist " + arcIndices.size() + " arcs = " + (System.currentTimeMillis() - start)/arcIndices.size());
+        } catch (XBRLException e) {
+            logger.error("Had problems persisting relationships for " + document);
+            store.persist(new ErrorImpl(getStore().getId(document.toString() + "_error"), document,"Relationship persistence failed."));
         }
         
-/*        Set<String> arcIndices = getStore().getFragmentIndicesFromDocument(document,"Arc");
-        if (arcIndices.size() > 0) {
-            logger.info("Storing relationships for " + arcIndices.size() + " arcs in " + document);
-            long start = System.currentTimeMillis();
-            int count = 0;
-            for (String index: arcIndices) {
-                storeRelationships(getStore().<Arc>getFragment(index));
-                logger.info("MS to persist arc = " + (System.currentTimeMillis() - start));
-                start = System.currentTimeMillis();
-                if (count > 10) break;
-                count++;
-            }
-        }
-*/
         getStore().sync();
 
     }    
