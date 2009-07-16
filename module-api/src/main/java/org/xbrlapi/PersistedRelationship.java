@@ -92,6 +92,12 @@ public interface PersistedRelationship extends NonFragmentXML {
     public String getArcIndex();
     
     /**
+     * @return the URI of the document containing the arc
+     * defining this persisted relationship.
+     */
+    public String getArcURI();
+    
+    /**
      * @return the source element name.
      */
     public String getSourceName();

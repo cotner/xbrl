@@ -72,6 +72,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
         }
 
         setArcIndex(arc.getIndex());
+        setArcURI(arc.getURI());
         setArcName(arc.getLocalname());
         setArcNamespace(arc.getNamespace());
         setArcrole(arc.getArcrole());
@@ -116,6 +117,13 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     public String getArcIndex() {
         return getMetaAttribute("arcIndex");
     }
+    
+    /**
+     * @see org.xbrlapi.PersistedRelationship#getArcURI()
+     */
+    public String getArcURI() {
+        return getMetaAttribute("arcURI");
+    }    
 
     /**
      * @param index the index of the arc defining this relationship.
@@ -123,6 +131,13 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     private void setArcIndex(String index) throws XBRLException {
         this.setMetaAttribute("arcIndex",index);
     }
+    
+    /**
+     * @param uri the URI of the arc defining this relationship.
+     */
+    private void setArcURI(URI uri) throws XBRLException {
+        this.setMetaAttribute("arcURI",uri.toString());
+    }    
     
     /**
      * @see org.xbrlapi.PersistedRelationship#getArcName()
