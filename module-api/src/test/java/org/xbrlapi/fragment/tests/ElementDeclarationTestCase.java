@@ -246,8 +246,6 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
             List<Concept> fragments = store.getXMLResources("Concept");
             assertTrue(fragments.size() > 0);
             for (Concept fragment: fragments) {
-                logger.info("Tuple" + fragment.isTuple());
-                logger.info("Item" + fragment.isItem());
                 assertTrue(fragment.isTuple() || fragment.isItem());
             }
         } catch (XBRLException e) {

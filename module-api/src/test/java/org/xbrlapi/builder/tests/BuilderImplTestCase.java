@@ -59,7 +59,7 @@ public class BuilderImplTestCase extends BaseTestCase {
 		try {
 			Builder b = new BuilderImpl();
 			b.appendElement(Constants.XBRLAPINamespace,"root","xbrlapi:root");
-			assertEquals(Constants.XBRLAPINamespace,(b.getInsertionPoint()).getNamespaceURI());
+			assertEquals(Constants.XBRLAPINamespace.toString(),(b.getInsertionPoint()).getNamespaceURI());
 			assertEquals("root",(b.getInsertionPoint()).getLocalName());
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());

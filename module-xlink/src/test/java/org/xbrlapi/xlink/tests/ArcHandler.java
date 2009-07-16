@@ -72,7 +72,7 @@ public class ArcHandler extends XLinkHandlerDefaultImpl {
 	public void error(String namespaceURI, String lName, String qName,
 			Attributes attrs,String message) throws XLinkException {
 		// Make sure malformed role attributes are detected
-		test.checkEqual("The XLink from attribute must be an NCName.",message);
+		test.checkEqual("The XLink label must be an NCName.",message);
 	}
 	
 }

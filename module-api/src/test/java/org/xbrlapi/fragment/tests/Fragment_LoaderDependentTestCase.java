@@ -94,7 +94,7 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
             List<Schema> schemas = store.<Schema>getXMLResources("Schema");
             assertTrue(schemas.size() > 0);
             for (Fragment fragment: schemas) {
-                assertEquals(Constants.XMLSchemaNamespace,fragment.getNamespace().toString());
+                assertEquals(Constants.XMLSchemaNamespace,fragment.getNamespace());
             }
         } catch (Exception e) {
             fail(e.getMessage());

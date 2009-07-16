@@ -27,7 +27,7 @@ public class ComposeTestCase extends BaseTestCase {
 	/**
 	 * Test the composition of a Store.
 	 */
-	public void testCompose() {
+	public final void testCompose() {
 		try {
 			Document d = store.getCompositeDocument();
 			assertEquals("dts",d.getDocumentElement().getLocalName());			

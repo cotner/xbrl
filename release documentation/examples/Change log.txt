@@ -1,3 +1,6 @@
+16 Jul. 2009
+Added Freemarker to the list of dependencies in the Maven POM file.
+
 8 Jul. 2009
 The examples have been repackaged, debugged, and extended to include
 a number of new data store maintenance utilities.

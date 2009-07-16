@@ -30,17 +30,22 @@ public class DatabaseManagerTestCase extends BaseTestCase {
 	private DBConnectionImpl connection;
 	private Collection collection;
 
-	private String scheme = configuration.getProperty("exist.scheme");
-	private String domain = configuration.getProperty("exist.domain");
-	private String port = configuration.getProperty("exist.port");
-	private String db = configuration.getProperty("exist.database");
-	private String databaseURI = scheme + "://" + domain + ":" + port + "/" + db;
+	private String scheme;
+	private String domain;
+	private String port;
+	private String db;
+	private String databaseURI;
 
 	/*
 	 * @see TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
+	    scheme = configuration.getProperty("exist.scheme");
+	    domain = configuration.getProperty("exist.domain");
+	    port = configuration.getProperty("exist.port");
+	    db = configuration.getProperty("exist.database");
+	    databaseURI = scheme + "://" + domain + ":" + port + "/" + db;
 		
         Database database = new org.exist.xmldb.DatabaseImpl();
         try {

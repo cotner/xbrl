@@ -27,8 +27,8 @@ import org.xml.sax.EntityResolver;
  */
 public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 
-	protected String cache = configuration.getProperty("local.cache");
-    protected File cacheFile = new File(cache);
+	protected String cache = "";
+    protected File cacheFile = null;
     protected Cache cacheImpl = null;
 	protected Store store = null;
 	protected Loader loader = null;
@@ -37,7 +37,9 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-        cacheImpl = new CacheImpl(cacheFile);
+		cache = configuration.getProperty("local.cache");
+		cacheFile = new File(cache);
+		cacheImpl = new CacheImpl(cacheFile);
 		store = createStore();
 		stores.add(store);
 		loader = createLoader(store);

@@ -15,21 +15,28 @@ public class CollectionCreationAndDeletionTestCase extends BaseTestCase {
 	private Collection collection;
 	private CollectionManagementService service;
 	
-	private String scheme = configuration.getProperty("exist.scheme");
-	private String domain = configuration.getProperty("exist.domain");
-	private String port = configuration.getProperty("exist.port");
-	private String db = configuration.getProperty("exist.database");
-	private String username = configuration.getProperty("exist.username");
-	private String password = configuration.getProperty("exist.password");	
-	private String databaseURI = scheme + "://" + domain + ":" + port + "/" + db;
+	private String scheme = null;
+	private String domain = null;
+	private String port = null;
+	private String db = null;
+	private String username = null;
+	private String password = null;	
+	private String databaseURI = null;
 
 	/*
 	 * @see TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-        Database database = new org.exist.xmldb.DatabaseImpl();
+	    scheme = configuration.getProperty("exist.scheme");
+	    domain = configuration.getProperty("exist.domain");
+	    port = configuration.getProperty("exist.port");
+	    db = configuration.getProperty("exist.database");
+	    username = configuration.getProperty("exist.username");
+	    password = configuration.getProperty("exist.password");  
+	    databaseURI = scheme + "://" + domain + ":" + port + "/" + db;		
+        
+	    Database database = new org.exist.xmldb.DatabaseImpl();
         try {
         	DatabaseManager.registerDatabase(database);
             collection = DatabaseManager.getCollection(databaseURI,username, password);

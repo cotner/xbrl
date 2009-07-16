@@ -19,8 +19,8 @@ public class DatabaseDeletionTestCase extends BaseTestCase {
 
 	private String docString = "<a_node><b_node>Some text</b_node></a_node>";
 	//private String docName = "testDocumentName";	
-	private String containerName = configuration.getProperty("bdbxml.container.name");
-	private File environmentHome = new File(configuration.getProperty("bdbxml.store.location"));
+	private String containerName;
+	private File environmentHome;
 	
 	private EnvironmentConfig environmentConfiguration = null;
 	private Environment environment = null;
@@ -32,6 +32,8 @@ public class DatabaseDeletionTestCase extends BaseTestCase {
 		super.setUp();
 		
 		try {
+            containerName = configuration.getProperty("bdbxml.container.name");
+            environmentHome = new File(configuration.getProperty("bdbxml.store.location"));
             EnvironmentConfig environmentConfiguration = new EnvironmentConfig();
             environmentConfiguration.setThreaded(true);
             environmentConfiguration.setAllowCreate(true);         // If the environment does not exist, create it.

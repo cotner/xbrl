@@ -42,7 +42,7 @@ public class AsyncLoaderImplTestCase extends BaseTestCase {
             Thread t1 = new Thread(d1);
             t1.start();
 
-            Thread.sleep(200);
+            Thread.sleep(50);
             loader.requestInterrupt();
 
             while (t1.isAlive()) {

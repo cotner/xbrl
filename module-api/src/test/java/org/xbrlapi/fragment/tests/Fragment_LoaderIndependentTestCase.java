@@ -68,7 +68,7 @@ public class Fragment_LoaderIndependentTestCase extends BaseTestCase {
 			URI ns = Constants.XBRLAPINamespace;
 			MockImpl f = new MockImpl("Mockery");
 			f.appendDataElement(ns, "root", "my:root");
-			assertEquals(ns, f.getNamespace().toString());
+			assertEquals(ns, f.getNamespace());
 		} catch (XBRLException e) {
 			fail(e.getMessage());
 		}

@@ -70,7 +70,7 @@ public class ResourceHandler extends XLinkHandlerDefaultImpl {
 	 */
 	public void error(String namespaceURI, String lName, String qName,
 			Attributes attrs,String message) throws XLinkException {
-		test.checkEqual("The XLink traversal attribute must be an NCName.",message);
+		test.checkEqual("The XLink label must be an NCName.",message);
 	}
 	
 }

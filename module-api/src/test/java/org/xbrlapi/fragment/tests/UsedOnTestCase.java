@@ -38,7 +38,7 @@ public class UsedOnTestCase extends DOMLoadingTestCase {
 	        assertTrue(fragments.size() > 0);
 	        for (UsedOn fragment: fragments) {
 	            if (fragment.getParent().getDataRootElement().getAttribute("id").equals("newExtendedRoleType")) {
-                    assertEquals(Constants.XBRL21LinkNamespace,fragment.getUsedOnNamespace().toString());
+                    assertEquals(Constants.XBRL21LinkNamespace,fragment.getUsedOnNamespace());
                     assertEquals("presentationLink", fragment.getUsedOnLocalname());
                     store.serialize(fragment);
                     assertTrue(fragment.isUsedOn(Constants.XBRL21LinkNamespace, "presentationLink"));

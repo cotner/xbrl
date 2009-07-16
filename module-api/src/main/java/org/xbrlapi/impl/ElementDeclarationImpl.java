@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.ElementDeclaration;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -38,7 +39,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
          List<ElementDeclaration> declarations = getStore().<ElementDeclaration>queryForXMLResources(query);
          for (ElementDeclaration declaration: declarations) {
              if (declaration.getTargetNamespace().equals(sgNamespace)) {
-                 if (declaration.getName().equals("item") && declaration.getTargetNamespace().toString().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+                 if (declaration.getName().equals("item") && declaration.getTargetNamespace().equals(Constants.XBRL21Namespace)) {
                      return true;
                  }
                  try {
@@ -62,7 +63,7 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
           List<ElementDeclaration> declarations = getStore().<ElementDeclaration>queryForXMLResources(query);
           for (ElementDeclaration declaration: declarations) {
               if (declaration.getTargetNamespace().equals(sgNS)) {
-                  if (declaration.getName().equals("tuple") && declaration.getTargetNamespace().toString().equals(org.xbrlapi.utilities.Constants.XBRL21Namespace)) {
+                  if (declaration.getName().equals("tuple") && declaration.getTargetNamespace().equals(Constants.XBRL21Namespace)) {
                       return true;
                   }
                   try {

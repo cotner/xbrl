@@ -42,7 +42,7 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
             t2.start();
 
             while (t1.isAlive() || t2.isAlive()) {
-                Thread.sleep(20000);
+                Thread.sleep(1000);
                 loader.requestInterrupt();
             }
             

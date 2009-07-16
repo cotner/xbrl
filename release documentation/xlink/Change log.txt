@@ -1,7 +1,6 @@
 July 14, 2009
-Strengthened the validation of XLink attributes.
-This ensures that various XLink attributes are not used incorrectly
-on the wrong kinds of XLink elements.
+Refined the treatment of type="none" XLink attributes to ensure that such
+elements were not treated as XLink elements.
 
 August 6, 2008
 Added Attributes to the endElement method.

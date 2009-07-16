@@ -14,11 +14,13 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
     
     protected Matcher matcher = null;
     protected Cache cache = null;
-	protected String cacheLocation = configuration.getProperty("local.cache");
+    File cacheFile = null;
+	protected String cacheLocation = "";
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		File cacheFile = new File(cacheLocation);
+	    cacheLocation = configuration.getProperty("local.cache");
+		cacheFile = new File(cacheLocation);
         cache = new CacheImpl(cacheFile);
 	}
 	
