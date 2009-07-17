@@ -2146,4 +2146,13 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         if (loadingRights.get(document).equals(loader)) loadingRights.remove(document);
     }
 
+    protected void finalize() throws Throwable {
+        try {
+            sync();
+            close();
+        } finally {
+            super.finalize();
+        }
+    }
+
 }
