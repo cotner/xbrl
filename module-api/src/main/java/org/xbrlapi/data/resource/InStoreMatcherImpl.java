@@ -1,5 +1,7 @@
 package org.xbrlapi.data.resource;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -15,18 +17,22 @@ import org.xbrlapi.utilities.XBRLException;
 
 /**
  * The in-store resource matcher implementation, for use with the
- * persistent store implementations.
+ * persistent store implementations.  This matcher MUST use the
+ * store that it is doing the matching for.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
+public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher, Serializable {
 
     /**
      * The store in which the information about matched URIs is
      * to be retained.
      */
     private Store store = null;
-    private Store getStore() {
+    /**
+     * @return the store used by this matcher.
+     */
+    public Store getStore() {
         return store;
     }
     private void setStore(Store store) {
@@ -106,7 +112,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
 
     }    
     
-    private final String matchElement = Constants.XBRLAPIPrefix + ":match";
+    private final static String matchElement = Constants.XBRLAPIPrefix + ":match";
     
     /**
      * @see Matcher#delete(URI)
@@ -136,4 +142,47 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
         return (this.getMatchXMLResource(uri) == null);
     }
 
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        InStoreMatcherImpl other = (InStoreMatcherImpl) obj;
+        if (store == null) {
+            if (other.store != null)
+                return false;
+        } else if (!store.equals(other.store))
+            return false;
+        return true;
+    }
+
+
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(store);
+   }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        store = (Store) in.readObject();
+    }    
 }

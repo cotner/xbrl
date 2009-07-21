@@ -42,13 +42,14 @@ command line operations also contains the XBRLAPI JAR files.</p>
 
 <p>At a minimum you will need:</p>
 <ul>
-<li>xbrlapi-api-YYYYMMDD.jar</li>
-<li>xmlbase-api-YYYYMMDD.jar</li>
-<li>xlink-api-YYYYMMDD.jar</li>
-<li>xpointer-api-YYYYMMDD.jar</li>
+<li>xbrlapi-utilities-VERSION.jar</li>
+<li>xbrlapi-api-VERSION.jar</li>
+<li>xmlbase-api-VERSION.jar</li>
+<li>xlink-api-VERSION.jar</li>
+<li>xpointer-api-VERSION.jar</li>
 </ul>
 
-<p>where YYYYMMDD is the date on which the XBRLAPI JAR files were generated.</p>
+<p>where VERSION is the XBRLAPI release VERSION.</p>
 
 <p>Download the necessary XBRLAPI modules as JAR files from 
 <a href="https://sourceforge.net/project/showfiles.php?group_id=135539">Sourceforge</a>.
@@ -170,10 +171,10 @@ runtime engine.</p>
 This configuration is specified in an XML file.  A useful starting point for such 
 <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/trunk/conf/log4j.xml?view=log">a 
 log4j configuration</a> is available from the online SVN browsing facility at Sourceforge. Download 
-the log4j.xml file (or if you have checked out the entire XBRLAPI project, then just use the log4.xml
+the log4j.xml file and its DTD (or if you have checked out the entire XBRLAPI project, then just use the log4.xml
 file that is in the <code>conf</code> directory of the XBRLAPI project) and store it somewhere 
 convenient, say <code>/configuration/file/path/log4j.xml</code>.  This configuration file
-sends log messages to the output console.</p>
+is set up to send log messages to the console.</p>
 
 <h2>Configure your local cache for XBRL documents</h2>
 
@@ -183,50 +184,11 @@ copy of each of the XML documents that are discovered during the loading process
 Refer to the directory where the local copies are to be cached as: 
 <code>/xbrl/cache/</code></p>
 
-<h2>Test using the in-memory data store.</h2>
-
-<p>You should now be ready to use the XBRLAPI in conjunction with
-various types of supported data stores. To test that this is indeed the
-case, try using the XBRLAPI from the command line.</p>
-
-<p>A simple test of the XBRLAPI using the in-memory data store
-involves loading the <a href="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"> XBRL
-instance schema</a> using XBRLAPI. An appropriate command is:<br/>
-<code>java -jar xbrlapi-api-YYYYMMDD.jar -logger [LOG4J.CONFIG] -class org.xbrlapi.data.dom.Load -cache [CACHE.LOCATION] [URL]+ </code>
-</p>
-
-<p>Alternatively, if you are identifying the JAR files that you require using the -classpath parameter,
-then something more like the following will be appropriate:<br/>
-<code>java -classpath xerces.jar:saxon9.jar:saxon9-dom.jar:saxon9-s9api.jar:xml-apis.jar:junit.jar:log4j-1.2.13.jar:xbrlapi-api-YYYYMMDD.jar:xbrlapi-xpointer-YYYYMMDD.jar:xbrlapi-xmlbase-YYYYMMDD.jar:xbrlapi-xlink-YYYYMMDD.jar:xbrlapi-utilities-YYYYMMDD.jar \
-org.xbrlapi.Run -logger [LOG4J.CONFIG] -class org.xbrlapi.data.dom.Load -cache [CACHE.LOCATION] [URL]+ </code><br/>
-This of course, assumes that the necessary JAR files are all in the current directory.</p>
-
-<p>Note that you will need to replace YYYYMMDD with the year, month and day values in your copy of
-the XBRLAPI JAR file.</p>
-
-<p>Replace [LOG4J.CONFIG] with the path to (and name of) the log4j configuration file.</p>
- 
-<p>Replace [CACHE.LOCATION] with the full path to the directory you want to use for local caching.</p>
-
-<p>Replace [URL]+ with one or more URLs specifying the starting points to use for the XBRL data discovery
-and loading process.</p>
-
-<p>For example, if you are working with xbrlapi-api-YYYYMMDD.jar and the log4j.xml file is in the 
-current directory and the current directory is also to be used as the root of the taxonomy cache, then
-the command to load data using the XBRL instance schema as a starting point would be:</p>
-
-<p><code>java -jar xbrlapi-api-YYYYMMDD.jar -logger log4j.xml -class org.xbrlapi.data.dom.Load -cache . http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd</code></p>
-
-<p>Note the <code>-class</code> parameter which specifies the class to execute.  Instead of simply
-performing a load operation using the org.xbrlapi.data.dom.Load class, you can perform 
-a more complex compose operation (merging all of the discovered documents into a single XML 
-composite document) by using the following command:</p>
-
 <p>
-<code>java -jar xbrlapi-api-YYYYMMDD.jar -logger [LOG4J.CONFIG] -class org.xbrlapi.data.dom.Compose -cache [CACHE.LOCATION] -output [OUTPUT.LOCATION] [URL]+ </code>
+  At this point you have just about enough basicd configuration to run your own programs using 
+  the XBRLAPI from the commandline.  There are a few specific commandline programs with more detailed 
+  documentation in the <a href="/examples">examples</a> on this website.
 </p>
-
-<p>Replace [OUTPUT.LOCATION] with the path to the directory where you want the composite document to be saved.</p>
 
 <h2>Running the Unit tests distributed with XBRLAPI</h2>
 

@@ -14,9 +14,11 @@ package org.xbrlapi.xlink;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
+import java.io.Serializable;
+
 import org.xml.sax.Attributes;
 
-public abstract class CustomLinkRecogniser {
+public abstract class CustomLinkRecogniser implements Serializable {
 
 	/**
 	 * Returns true if the element with the supplied characteristics 
@@ -115,4 +117,28 @@ public abstract class CustomLinkRecogniser {
 		return null;
 	}
 
+	private String thing;
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return 1;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return true;
+    }
+	
 }

@@ -43,6 +43,8 @@ public class SaxonXQueryTestCase extends BaseTestCase {
     private Store store = null;
 
     
+
+
     /**
 	 * Set up the fixtures.
 	 */

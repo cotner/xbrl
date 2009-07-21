@@ -8,8 +8,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.Arc;
-import org.xbrlapi.ArcEnd;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
@@ -18,14 +16,35 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class AnalyserImpl implements Analyser {
 
-    protected static Logger logger = Logger.getLogger(AnalyserImpl.class);
+    protected final static Logger logger = Logger.getLogger(AnalyserImpl.class);
     
     /**
+     * Algorithm involves:
+     * <ol>
+     *  <li>Getting all persisted relationships in the document</li>
+     *  <li>Getting all arc+arcend+arcsource combinations in the document</li>
+     *  <li>Matching each arc to its persisted relationships</li>
+     *  <li>Returning false if any arc does not have persisted relationships</li>
+     * </ol>
      * @see Analyser#hasAllRelationships(URI)
      */
     public boolean hasAllRelationships(URI document) throws XBRLException {
-        
-        Set<String> indices = getStore().getFragmentIndicesFromDocument(document,"Arc");
+        String query = 
+            "for $arc in #roots#[@uri='"+document+"' and */*/@xlink:type='arc'], " +
+            "$start in #roots#[@parentIndex=$arc/@parentIndex and */*[@xlink:type='resource' or @xlink:type='locator']], " +
+            "$end in #roots#[@parentIndex=$arc/@parentIndex and */*[@xlink:type='resource' or @xlink:type='locator']] where " +
+            "$arc/*/*/@xlink:from=$start/*/*/@xlink:label " +
+            "and $arc/*/*/@xlink:to=$end/*/*/@xlink:label " +
+            "return concat($arc/@index,' ',$start/@index,' ',$end/@index)";
+        long tripleCount = getStore().queryCount(query);
+        logger.debug("#Triples =" + tripleCount);
+        query = "for $relationship in #roots# where $relationship/@type='org.xbrlapi.impl.PersistedRelationshipImpl' and $relationship/@arcURI='" + document + "' return $relationship";
+        long relationshipCount = store.queryCount(query);
+        logger.debug("#Relationships =" + relationshipCount);
+        if (tripleCount != relationshipCount) return false;
+        return true;
+
+/*        Set<String> indices = getStore().getFragmentIndicesFromDocument(document,"Arc");
         for (String index: indices) {
             Arc arc = getStore().<Arc>getXMLResource(index);
             List<ArcEnd> sources = arc.getSourceFragments();
@@ -35,7 +54,7 @@ public class AnalyserImpl implements Analyser {
             long count = store.queryCount(query);
             if (count != relationships) return false;
         }
-        return true;
+        return true;*/
     }
     
     /**
@@ -63,7 +82,7 @@ public class AnalyserImpl implements Analyser {
         super();
         setStore(store);
     }
-
+    
     private Store store = null;
     
     /**

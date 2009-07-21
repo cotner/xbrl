@@ -1,6 +1,7 @@
 package org.xbrlapi.xdt;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.List;
@@ -10,7 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.loader.Loader;
-import org.xbrlapi.xdt.ContentHandlerImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xml.sax.ContentHandler;
@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader {
+public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader, Serializable {
     
     /**
      * @see org.xbrlapi.loader.LoaderImpl#LoaderImpl(Store, XLinkProcessor)
@@ -43,7 +43,7 @@ public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader 
 
     
 
-    static Logger logger = Logger.getLogger(LoaderImpl.class);
+    private final static Logger logger = Logger.getLogger(LoaderImpl.class);
     
     /**
      * Parse an XML Document supplied as a URI the next part of the DTS.
@@ -69,5 +69,25 @@ public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader 
         ContentHandler contentHandler = new ContentHandlerImpl(this, uri, xml);
         parse(uri, inputSource, contentHandler);
     }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+    }
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+    }        
+
     
 }

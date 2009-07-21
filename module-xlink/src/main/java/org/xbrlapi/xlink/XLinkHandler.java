@@ -1,5 +1,7 @@
 package org.xbrlapi.xlink;
 
+import java.io.Serializable;
+
 import org.xml.sax.Attributes;
 
 /**
@@ -14,7 +16,7 @@ import org.xml.sax.Attributes;
  * the XLink event has been triggered from.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public interface XLinkHandler {
+public interface XLinkHandler extends Serializable {
 
 	/**
 	 * Handles the start of processing a simple link (and custom links).

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="0" time="2.4" errors="0" skipped="0" tests="2" name="org.xbrlapi.data.bdbxml.examples.load.tests.LoadTestCase">
+  <properties>
+    <property name="java.vendor" value="Sun Microsystems Inc."/>
+    <property name="env.SESSION_MANAGER" value="local/dell:/tmp/.ICE-unix/6213"/>
+    <property name="env.LESSOPEN" value="| /usr/bin/lesspipe %s"/>
+    <property name="localRepository" value="/home/geoff/.m2/repository"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Server Compiler"/>
+    <property name="os.name" value="Linux"/>
+    <property name="xbrlapi.test.configuration" value="../test.configuration.properties"/>
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/resources.jar:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/rt.jar:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/jsse.jar:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/jce.jar:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/charsets.jar:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/classes"/>
+    <property name="env.PWD" value="/home/geoff/Eclipse/xbrlapi.org"/>
+    <property name="env.XDG_SESSION_COOKIE" value="a5500372d8f75182f980d50048dc8607-1247614231.546367-1355790478"/>
+    <property name="sun.desktop" value="gnome"/>
+    <property name="env.LANG" value="en_AU.UTF-8"/>
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="java.runtime.version" value="1.6.0_10-b33"/>
+    <property name="env.DISPLAY" value=":0.0"/>
+    <property name="user.name" value="geoff"/>
+    <property name="env._" value="/usr/bin/mvn"/>
+    <property name="env.USER" value="geoff"/>
+    <property name="env.HISTCONTROL" value="ignoreboth"/>
+    <property name="env.SHELL" value="/bin/bash"/>
+    <property name="env.DESKTOP_SESSION" value="default"/>
+    <property name="env.XDG_DATA_DIRS" value="/usr/local/share/:/usr/share/:/usr/share/gdm/"/>
+    <property name="env.NLSPATH" value="/usr/dt/lib/nls/msg/%L/%N.cat"/>
+    <property name="env.PATH" value="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"/>
+    <property name="user.language" value="en"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/amd64"/>
+    <property name="classworlds.conf" value="/usr/share/maven2/bin/m2.conf"/>
+    <property name="java.version" value="1.6.0_10"/>
+    <property name="user.timezone" value="Australia/Canberra"/>
+    <property name="env.DBUS_SESSION_BUS_ADDRESS" value="unix:abstract=/tmp/dbus-W0h9FEjbQM,guid=f1c0a2ede42285269085c95f4a5d1518"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/endorsed"/>
+    <property name="sun.cpu.isalist" value=""/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="env.SHLVL" value="1"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="env.GNOME_DESKTOP_SESSION_ID" value="this-is-deprecated"/>
+    <property name="java.class.version" value="50.0"/>
+    <property name="env.GDMSESSION" value="default"/>
+    <property name="user.country" value="AU"/>
+    <property name="env.GNOME_KEYRING_PID" value="6203"/>
+    <property name="java.home" value="/usr/lib/jvm/java-6-sun-1.6.0.10/jre"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="env.CATALINA_HOME" value="/home/geoff/Programs/apache-tomcat-6.0.20/"/>
+    <property name="env.LOGNAME" value="geoff"/>
+    <property name="os.version" value="2.6.27-14-generic"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.version" value="11.0-b15"/>
+    <property name="env.JAVA_HOME" value="/usr/lib/jvm/java-6-sun"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="env.TERM" value="xterm"/>
+    <property name="env.WINDOWPATH" value="7"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="env.LIBGL_DRIVERS_PATH" value="/usr/lib/dri:/usr/lib32/dri"/>
+    <property name="env.GDM_LANG" value="en_AU.UTF-8"/>
+    <property name="user.home" value="/home/geoff"/>
+    <property name="env.OLDPWD" value="/home/geoff"/>
+    <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="env.WINDOWID" value="85983291"/>
+    <property name="java.library.path" value="/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/amd64/server:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/amd64:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/../lib/amd64:/usr/local/BerkeleyDBXML-2.4.13/lib:/usr/local/apr/lib:/usr/lib32:/usr/java/packages/lib/amd64:/lib:/usr/lib"/>
+    <property name="java.vendor.url" value="http://java.sun.com/"/>
+    <property name="env.GDM_XSERVER_LOCATION" value="local"/>
+    <property name="java.vm.vendor" value="Sun Microsystems Inc."/>
+    <property name="maven.home" value="/usr/share/maven2"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="java.class.path" value="/usr/share/maven2/boot/classworlds.jar"/>
+    <property name="env.XFILESEARCHPATH" value="/usr/dt/app-defaults/%L/Dt"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="java.vm.specification.version" value="1.0"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="env.GTK_RC_FILES" value="/etc/gtk/gtkrc:/home/geoff/.gtkrc-1.2-gnome2"/>
+    <property name="env.HOME" value="/home/geoff"/>
+    <property name="surefire.test.class.path" value="/home/geoff/Eclipse/xbrlapi.org/module-examples/target/test-classes:/home/geoff/Eclipse/xbrlapi.org/module-examples/target/classes:/home/geoff/Eclipse/xbrlapi.org/module-api/target/xbrlapi-api-5.0.jar:/home/geoff/Eclipse/xbrlapi.org/module-xlink/target/xbrlapi-xlink-5.0.jar:/home/geoff/Eclipse/xbrlapi.org/module-utilities/target/xbrlapi-utilities-5.0.jar:/home/geoff/.m2/repository/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar:/home/geoff/.m2/repository/xerces/xercesImpl/2.9.0/xercesImpl-2.9.0.jar:/home/geoff/.m2/repository/log4j/log4j/1.2.13/log4j-1.2.13.jar:/home/geoff/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/home/geoff/Eclipse/xbrlapi.org/module-xmlbase/target/xbrlapi-xmlbase-5.0.jar:/home/geoff/Eclipse/xbrlapi.org/module-xpointer/target/xbrlapi-xpointer-5.0.jar:/home/geoff/.m2/repository/net/sf/saxon/saxon/9.1/saxon-9.1.jar:/home/geoff/.m2/repository/net/sf/saxon/saxon-dom/9.1/saxon-dom-9.1.jar:/home/geoff/.m2/repository/net/sf/saxon/saxon-s9api/9.1/saxon-s9api-9.1.jar:/home/geoff/Eclipse/xbrlapi.org/module-bdbxml/target/xbrlapi-bdbxml-5.0.jar:/home/geoff/.m2/repository/com/oracle/berkeley/db/2.4.13/db-2.4.13.jar:/home/geoff/.m2/repository/com/oracle/berkeley/dbxml/2.4.13/dbxml-2.4.13.jar:/home/geoff/Eclipse/xbrlapi.org/module-xdt/target/xbrlapi-xdt-5.0.jar:/home/geoff/.m2/repository/org/freemarker/freemarker/2.3.15/freemarker-2.3.15.jar:"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="env.LD_LIBRARY_PATH" value="/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/amd64/server:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/amd64:/usr/lib/jvm/java-6-sun-1.6.0.10/jre/../lib/amd64:/usr/local/BerkeleyDBXML-2.4.13/lib:/usr/local/apr/lib:/usr/lib32"/>
+    <property name="env.LS_COLORS" value="no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.svgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:"/>
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi"/>
+    <property name="env.SSH_AUTH_SOCK" value="/tmp/keyring-FdWjdB/ssh"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.ext.dirs" value="/usr/lib/jvm/java-6-sun-1.6.0.10/jre/lib/ext:/usr/java/packages/lib/ext"/>
+    <property name="user.dir" value="/home/geoff/Eclipse/xbrlapi.org/module-examples"/>
+    <property name="env.XAUTHORITY" value="/home/geoff/.Xauthority"/>
+    <property name="env.GTK_MODULES" value="gail:atk-bridge"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="env.COLORTERM" value="gnome-terminal"/>
+    <property name="basedir" value="/home/geoff/Eclipse/xbrlapi.org/module-examples"/>
+    <property name="env.ORBIT_SOCKETDIR" value="/tmp/orbit-geoff"/>
+    <property name="env.USERNAME" value="geoff"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="env.MESA_NO_ASM" value="1"/>
+    <property name="env.GNOME_KEYRING_SOCKET" value="/tmp/keyring-FdWjdB/socket"/>
+    <property name="env.GPG_AGENT_INFO" value="/tmp/seahorse-zBxB6B/S.gpg-agent:6325:1"/>
+    <property name="java.specification.version" value="1.6"/>
+    <property name="env.LESSCLOSE" value="/usr/bin/lesspipe %s %s"/>
+  </properties>
+  <testcase time="1.778" classname="org.xbrlapi.data.bdbxml.examples.load.tests.LoadTestCase" name="testSuccessfulLoadOfSingleDocument"/>
+  <testcase time="0.288" classname="org.xbrlapi.data.bdbxml.examples.load.tests.LoadTestCase" name="testLoadOfSingleDocumentFailingBecauseDatabaseParameterIsMissing"/>
+</testsuite>

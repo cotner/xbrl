@@ -1,4 +1,7 @@
 package org.xbrlapi.xmlbase;
+
+import java.io.Serializable;
+
 /**
  * This class implements the XML Base
  * required by the XBRL API.
@@ -7,7 +10,7 @@ package org.xbrlapi.xmlbase;
  */
 
 
-public class BaseURIResolverImpl implements BaseURIResolver {
+public class BaseURIResolverImpl implements BaseURIResolver, Serializable {
 	
     /**
      * Constructor does nothing

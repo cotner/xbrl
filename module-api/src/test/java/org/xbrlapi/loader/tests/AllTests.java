@@ -9,7 +9,8 @@ public class AllTests {
 		TestSuite suite = new TestSuite("Test for org.xbrlapi.loader.tests");
 		//$JUnit-BEGIN$
         suite.addTestSuite(AsyncLoaderImplTestCase.class);
-		suite.addTestSuite(LoaderImplTestCase.class);
+        suite.addTestSuite(LoaderImplTestCase.class);
+		suite.addTestSuite(LoaderSerializationTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

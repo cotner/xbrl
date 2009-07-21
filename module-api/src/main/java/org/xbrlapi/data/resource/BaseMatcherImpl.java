@@ -20,7 +20,7 @@ import org.xbrlapi.utilities.XBRLException;
 
 public abstract class BaseMatcherImpl implements Matcher {
 
-    Logger logger = Logger.getLogger(BaseMatcherImpl.class);    
+    private final static Logger logger = Logger.getLogger(BaseMatcherImpl.class);    
     
     /**
      * The cache implementation to be used by the matcher when accessing
@@ -34,7 +34,7 @@ public abstract class BaseMatcherImpl implements Matcher {
         this.cache = cache;
     }
     
-    Signer signer = null;
+    private Signer signer = null;
     protected Signer getSigner() {
         return signer;
     }
@@ -107,4 +107,63 @@ public abstract class BaseMatcherImpl implements Matcher {
         }
     }    
 
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(signer);
+   }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        signer = (Signer) in.readObject();
+    }
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((cache == null) ? 0 : cache.hashCode());
+        result = prime * result + ((signer == null) ? 0 : signer.hashCode());
+        return result;
+    }
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BaseMatcherImpl other = (BaseMatcherImpl) obj;
+        if (cache == null) {
+            if (other.cache != null)
+                return false;
+        } else if (!cache.equals(other.cache))
+            return false;
+        if (signer == null) {
+            if (other.signer != null)
+                return false;
+        } else if (!signer.equals(other.signer))
+            return false;
+        return true;
+    }    
+    
+    
+    
+    
 }

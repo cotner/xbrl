@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -32,7 +33,7 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class CacheImpl implements Cache {
 
-	Logger logger = Logger.getLogger(CacheImpl.class);
+	private static final Logger logger = Logger.getLogger(CacheImpl.class);
 	
     /**
      * Root of the local document cache.
@@ -40,12 +41,11 @@ public class CacheImpl implements Cache {
     private File cacheRoot;
     
     /**
-     * TODO !!! Make the caching uriMap a map from URI to URI rather than string to string.
      * The map of local URIs to use in place of
      * original URIs.  The original URI points to the 
      * local URI in the map that is used.
      */
-    private Map<String,String> uriMap = null;      
+    private Map<URI,URI> uriMap = null;      
 
     /**
      * Constructs a URI translator for usage with a local cache location.
@@ -67,7 +67,7 @@ public class CacheImpl implements Cache {
 	 * @param uriMap The map from original URIs to local URIs.
      * @throws XBRLException if the cacheRoot is null or does not exist
      */
-	public CacheImpl(File cacheRoot, Map<String,String> uriMap) throws XBRLException {
+	public CacheImpl(File cacheRoot, Map<URI, URI> uriMap) throws XBRLException {
 		this(cacheRoot);
 		this.uriMap = uriMap;
 	}	
@@ -123,11 +123,7 @@ public class CacheImpl implements Cache {
 		} else {
 			if (uriMap != null) {
 	        	if (uriMap.containsKey(uri.toString())) {
-	                try {
-                        originalURI = new URI(uriMap.get(uri.toString()));
-	                } catch (URISyntaxException e) {
-	                    throw new XBRLException(uri + " is a malformed URI.", e);
-	                }
+                    originalURI = uriMap.get(uri);
 	        	}
 			}
 		}
@@ -432,6 +428,81 @@ public class CacheImpl implements Cache {
      */
     public File getCacheRoot() {
         return this.cacheRoot;
+    }
+ 
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(cacheRoot);
+        out.writeBoolean(uriMap != null);
+        if (uriMap != null) {
+            out.writeInt(uriMap.keySet().size());
+            for (URI uri: uriMap.keySet()) {
+                out.writeObject(uri);
+                out.writeObject(uriMap.get(uri));
+            }
+        }
+   }    
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        cacheRoot = (File) in.readObject();
+        if (in.readBoolean()) {
+            uriMap = new HashMap<URI,URI>();
+            int mapSize = in.readInt();
+            for (int i=0; i<mapSize; i++) {
+                uriMap.put((URI) in.readObject(),(URI) in.readObject());
+            }
+        } else {
+            uriMap = null;
+        }
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((cacheRoot == null) ? 0 : cacheRoot.hashCode());
+        result = prime * result + ((uriMap == null) ? 0 : uriMap.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CacheImpl other = (CacheImpl) obj;
+        if (cacheRoot == null) {
+            if (other.cacheRoot != null)
+                return false;
+        } else if (!cacheRoot.equals(other.cacheRoot))
+            return false;
+        if (uriMap == null) {
+            if (other.uriMap != null)
+                return false;
+        } else if (!uriMap.equals(other.uriMap))
+            return false;
+        return true;
     }
     
 }

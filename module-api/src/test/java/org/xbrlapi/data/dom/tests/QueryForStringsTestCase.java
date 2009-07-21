@@ -36,6 +36,7 @@ public class QueryForStringsTestCase extends BaseTestCase {
 	            }
 	        }
 		} catch (Exception e) {
+		    e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}

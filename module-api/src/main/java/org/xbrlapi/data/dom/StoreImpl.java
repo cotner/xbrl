@@ -4,6 +4,8 @@ package org.xbrlapi.data.dom;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +30,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xbrlapi.XML;
 import org.xbrlapi.data.BaseStoreImpl;
 import org.xbrlapi.data.Store;
@@ -36,15 +39,15 @@ import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 
-public class StoreImpl extends BaseStoreImpl implements Store {
+public class StoreImpl extends BaseStoreImpl implements Store, Serializable {
 
-	protected static Logger logger = Logger.getLogger(StoreImpl.class);
+	private final static Logger logger = Logger.getLogger(StoreImpl.class);
 	
 	/**
 	 * The map of data fragments.
 	 */
-	private Map<String,Element> fragmentMap = new HashMap<String,Element>();
-	private Map<Element,String> indexMap = new HashMap<Element,String>();
+	transient private Map<String,Element> fragmentMap = new HashMap<String,Element>();
+	transient private Map<Element,String> indexMap = new HashMap<Element,String>();
 	
 	/**
 	 * XML DOM used to build the fragments in the store.
@@ -52,20 +55,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	private Document dom  = null;
 	
 	/**
-	 * XML DOM Element containing all fragments.
-	 */
-	private Element store = null;
-	
-	/**
 	 * Name of the root element in the DOM
 	 */
-	private final String ROOT_NAME = "store";
-	
-	/**
-	 * The next fragmentId.
-	 */
-	String nextId = "1";
-	
+	private static final String ROOT_NAME = "store";
+
 	/**
 	 * Initialise the data store.
 	 * @throws XBRLException if the loader state cannot be initialised
@@ -74,10 +67,57 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	public StoreImpl() throws XBRLException {
 	    super();
 		dom = (new XMLDOMBuilder()).newDocument();
-		store = dom.createElement(ROOT_NAME);
+		Element store = dom.createElement(ROOT_NAME);
 		dom.appendChild(store);
 	}
 
+	/**
+	 * Handles object serialization
+	 * @param out The input object stream used to store the serialization of the object.
+	 * @throws IOException
+	 */
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	    out.defaultWriteObject( );
+	    try {
+	        String xml = serializeToString(dom.getDocumentElement());
+	        out.writeObject(xml);
+	    } catch (XBRLException e) {
+	        throw new IOException("Could not convert the store content to a string representation of the XML.",e);
+	    }
+	}
+	 
+	/**
+	 * Handles object inflation.
+	 * @param in The input object stream used to access the object's serialization.
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+        in.defaultReadObject();
+        try {
+            XMLDOMBuilder builder = new XMLDOMBuilder();
+            dom = builder.newDocument((String) in.readObject());
+
+            NodeList nodes = dom.getDocumentElement().getChildNodes();
+            for (int i=0; i<nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    if (element.hasAttribute("index")) {
+                        fragmentMap.put(element.getAttribute("index"),element);
+                        indexMap.put(element,element.getAttribute("index"));
+                    }
+                }
+            }
+            
+        } catch (XBRLException e) {
+            throw new IOException("The data store could not be read.",e);
+        }
+        
+        
+    }
+	
 	/**
 	 * @see org.xbrlapi.data.Store#close()
 	 */
@@ -121,7 +161,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
 		// TODO Eliminate this importNode call.
         Element element = (Element) dom.importNode(xml.getBuilder().getMetadata(),true);
-        store.appendChild(element);
+        dom.getDocumentElement().appendChild(element);
         fragmentMap.put(index, element);
         indexMap.put(element, index);
         
@@ -185,9 +225,11 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
 
 
-    private Processor processor = null;
-    private XQueryCompiler compiler = null;
-    
+
+    transient private XQueryCompiler compiler;
+
+    transient private Processor processor;
+
     /**
      * Contains the logic common to queries that return fragments and
      * queries that return fragment indices.
@@ -197,8 +239,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     private XdmValue runQuery(String query) throws XBRLException {
 
-        if (compiler == null) {
+        if (processor == null) {
             processor = new Processor(false);
+        }
+        if (compiler == null) {
             compiler = processor.newXQueryCompiler();
             compiler.declareNamespace(Constants.XBRL21LinkPrefix,Constants.XBRL21LinkNamespace.toString());
             compiler.declareNamespace(Constants.XBRL21Prefix,Constants.XBRL21Namespace.toString());
@@ -209,7 +253,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             compiler.declareNamespace(Constants.XMLSchemaPrefix,Constants.XMLSchemaNamespace.toString());
         }
         
-        String roots = "/store/*" + this.getURIFilteringPredicate();
+        String roots = "/" + StoreImpl.ROOT_NAME + "/*" + this.getURIFilteringPredicate();
         query = query.replaceAll("#roots#",roots);
 
         try {
@@ -319,5 +363,75 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		}
 		return getIndex(parent);
 	}
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        NodeList nodes = dom.getDocumentElement().getChildNodes();
+        for (int i=0; i<nodes.getLength(); i++) {
+            Node node = nodes.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                if (element.hasAttribute("index")) {
+                    String index = element.getAttribute("index");
+                    result = prime * result + ((index == null) ? 0 : index.hashCode());
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * The two stores are equal if they have equal
+     * caches and matchers and if they have the same
+     * number of fragments with the same indices.  This
+     * is an incomplete way of assessing equality but it
+     * does get us there for most purposes and dodges the
+     * issue of XML DOM equality assessment.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        StoreImpl other = (StoreImpl) obj;
+        if (dom == null) {
+            if (other.dom != null)
+                return false;
+        } else {
+            NodeList nodes = dom.getDocumentElement().getChildNodes();
+            Set<String> indicesInThisStore = new HashSet<String>();
+            for (int i=0; i<nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    if (element.hasAttribute("index")) {
+                        indicesInThisStore.add(element.getAttribute("index"));
+                    }
+                }
+            }            
+            nodes = dom.getDocumentElement().getChildNodes();
+            Set<String> indicesInOtherStore = new HashSet<String>();
+            for (int i=0; i<nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    if (element.hasAttribute("index")) {
+                        indicesInOtherStore.add(element.getAttribute("index"));
+                    }
+                }
+            }
+            if (! indicesInThisStore.equals(indicesInOtherStore)) return false;
+        }
+        return true;
+    }
 
 }

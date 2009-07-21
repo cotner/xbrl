@@ -1,5 +1,6 @@
 package org.xbrlapi.data.resource;
 
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -10,9 +11,9 @@ import org.apache.log4j.Logger;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class MD5SignerImpl implements Signer {
+public class MD5SignerImpl implements Signer, Serializable {
 
-    Logger logger = Logger.getLogger(MD5SignerImpl.class);    
+    private final static Logger logger = Logger.getLogger(MD5SignerImpl.class);    
 
     public MD5SignerImpl() {
         super();
@@ -59,4 +60,25 @@ public class MD5SignerImpl implements Signer {
         }
     }
 
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return 1;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return true;
+    }    
 }

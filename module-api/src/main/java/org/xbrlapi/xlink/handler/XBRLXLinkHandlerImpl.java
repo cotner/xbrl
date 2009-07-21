@@ -1,5 +1,7 @@
 package org.xbrlapi.xlink.handler;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -24,10 +26,10 @@ import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkException;
+import org.xbrlapi.xlink.XLinkHandler;
 import org.xbrlapi.xlink.XLinkHandlerDefaultImpl;
 import org.xbrlapi.xmlbase.BaseURISAXResolver;
 import org.xbrlapi.xmlbase.XMLBaseException;
-import org.xbrlapi.xpointer.resolver.PointerResolver;
 import org.xml.sax.Attributes;
 
 /**
@@ -35,21 +37,15 @@ import org.xml.sax.Attributes;
  * This class provides a real world example of an XLink handler for XBRL.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
 */
-public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
+public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl implements XLinkHandler, Serializable {
 
-	protected static Logger logger = Logger.getLogger(XBRLXLinkHandlerImpl.class);	
+	private final static Logger logger = Logger.getLogger(XBRLXLinkHandlerImpl.class);	
 	
 	/**
 	 * The XBRL DTS loader that is using this XLink handler
 	 */
 	private Loader loader;
 	
-	/**
-	 * The XPointer Resolver implementation to be used by the
-	 * XLink handler
-	 */
-	private PointerResolver xptrResolver;
-
 	/**
 	 * The base URI resolver used by the XLink handler
 	 */
@@ -59,7 +55,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
      * Data required to track the element scheme XPointer 
      * expressions that can be used to identify XBRL fragments.
      */
-	private ElementState elementState;
+	transient private ElementState elementState;
 	
 	/**
 	 * XBRL XLink handler constructor
@@ -67,7 +63,6 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	public XBRLXLinkHandlerImpl() {
 		super();
 		this.baseURIResolver = null;
-		this.xptrResolver = null;
 		this.loader = null;
 	}
 
@@ -86,15 +81,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
 	public void setBaseURISAXResolver(BaseURISAXResolver resolver) {
 		baseURIResolver = resolver;
 	}
-	
-	/**
-	 * Set the XPointer resolver for the XBRL XLink handler.
-	 * @param resolver the XPointer resolver used by the XLink handler.
-	 */
-	public void setXPointerResolver(PointerResolver resolver) {
-		xptrResolver = resolver;
-	}
-	
+
 	/**
 	 * Handle the XML Base attribute discovery
 	 * @param value the Value of the XML Base attribute
@@ -454,8 +441,61 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl {
         }
         loader.add(fragment,getElementState());
     }
-    
-    
-    
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((baseURIResolver == null) ? 0 : baseURIResolver.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        XBRLXLinkHandlerImpl other = (XBRLXLinkHandlerImpl) obj;
+        if (baseURIResolver == null) {
+            if (other.baseURIResolver != null)
+                return false;
+        } else if (!baseURIResolver.equals(other.baseURIResolver))
+            return false;
+        return true;
+    }
 	
+
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(baseURIResolver);
+        out.writeObject(loader);
+   }    
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        baseURIResolver = (BaseURISAXResolver) in.readObject();
+        loader = (Loader) in.readObject();
+    }
+    
+    
 }

@@ -1,5 +1,6 @@
 package org.xbrlapi.loader;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import org.xml.sax.EntityResolver;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public interface Loader {
+public interface Loader extends Serializable {
 
 	/**
 	 * Get the DTS storage implementation

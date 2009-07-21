@@ -1,3 +1,6 @@
+21 Jul. 2009
+Made main classes serializable.
+
 July 14, 2009
 Refined the treatment of type="none" XLink attributes to ensure that such
 elements were not treated as XLink elements.

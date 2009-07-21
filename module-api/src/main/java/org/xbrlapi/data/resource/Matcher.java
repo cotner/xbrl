@@ -1,5 +1,6 @@
 package org.xbrlapi.data.resource;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public interface Matcher {
+public interface Matcher extends Serializable {
 
     /**
      * Call this method if you need to use a different signature

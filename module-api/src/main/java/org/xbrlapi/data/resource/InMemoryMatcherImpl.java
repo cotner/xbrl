@@ -1,5 +1,7 @@
 package org.xbrlapi.data.resource;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +17,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
+public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher, Serializable {
 
     /**
      * Map from signature strings to lists of URIs with the same signature.
@@ -99,4 +101,74 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
         return getMap().containsKey(getSignature(uri));
     }    
 
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeInt(map.size());
+        for (String key: map.keySet()) {
+            out.writeObject(key);
+            List<URI> uris = map.get(key);
+            out.writeInt(uris.size());
+            for (URI uri: uris) {
+                out.writeObject(uri);
+            }            
+        }
+   }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        map = new HashMap<String,List<URI>>();
+        int size = in.readInt();
+        for (int i=0; i<size; i++) {
+            String key = (String) in.readObject();
+            int listSize = in.readInt();
+            List<URI> uris = new Vector<URI>();
+            for (int j=0; j<listSize; j++) {
+                uris.add((URI) in.readObject());
+            }
+            map.put(key,uris);
+        }    
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((map == null) ? 0 : map.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        InMemoryMatcherImpl other = (InMemoryMatcherImpl) obj;
+        if (map == null) {
+            if (other.map != null)
+                return false;
+        } else if (!map.equals(other.map))
+            return false;
+        return true;
+    }
+    
 }

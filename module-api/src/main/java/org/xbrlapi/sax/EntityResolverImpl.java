@@ -2,6 +2,7 @@ package org.xbrlapi.sax;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -26,9 +27,9 @@ import org.xml.sax.InputSource;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
+public class EntityResolverImpl implements EntityResolver, XMLEntityResolver, Serializable {
 
-	static Logger logger = Logger.getLogger(EntityResolverImpl.class);		
+	private static final Logger logger = Logger.getLogger(EntityResolverImpl.class);		
 	
     /**
      * The local document cache.
@@ -64,7 +65,7 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
 	 * @throws XBRLException if any of the objects in the list of URIs is not a 
 	 * java.net.URI object.
 	 */
-	public EntityResolverImpl(File cacheRoot, Map<String,String> uriMap) throws XBRLException {
+	public EntityResolverImpl(File cacheRoot, Map<URI, URI> uriMap) throws XBRLException {
 		this.cache = new CacheImpl(cacheRoot, uriMap);
 	}
     
@@ -131,5 +132,58 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver {
 			return new XMLInputSource(resource.getPublicId(),resource.getExpandedSystemId(), resource.getBaseSystemId());
     	}
 
-	}    
+	}
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((cache == null) ? 0 : cache.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        EntityResolverImpl other = (EntityResolverImpl) obj;
+        if (cache == null) {
+            if (other.cache != null)
+                return false;
+        } else if (!cache.equals(other.cache))
+            return false;
+        return true;
+    }
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(cache);
+   }    
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        this.cache = (Cache) in.readObject();
+    }
+    
 }

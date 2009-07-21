@@ -1,3 +1,6 @@
+21 Jul. 2009
+Made all classes serializable.
+
 31. Dec. 2008
 Replaced usage of URLs with URIs throughout the API.  This was done
 to get better uniformity of handling of URLs and to take advantage of

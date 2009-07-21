@@ -5,6 +5,7 @@ package org.xbrlapi.xmlbase;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -15,16 +16,14 @@ import org.w3c.dom.Node;
 
 public class BaseURIDOMResolverImpl extends BaseURIResolverImpl implements BaseURIDOMResolver {
 
-    protected static Logger logger = Logger.getLogger(BaseURIDOMResolverImpl.class);
+    private final static Logger logger = Logger.getLogger(BaseURIDOMResolverImpl.class);
     
-	final String XMLNamespace = "http://www.w3.org/XML/1998/namespace";
-	
 	/**
 	 * The absolute URI of the document that this Base URI
 	 * resolver will be used with.  This is set to null for
 	 * documents without a URI.
 	 */
-	private URI documentURI;
+	transient private URI documentURI;
 
     /**
      * Constructor takes the absolute URI of the
@@ -87,7 +86,7 @@ public class BaseURIDOMResolverImpl extends BaseURIResolverImpl implements BaseU
         }
         
         // Examine any XML base attribute on the element itself
-        Attr xmlBaseAttribute = elt.getAttributeNodeNS(XMLNamespace, "base");
+        Attr xmlBaseAttribute = elt.getAttributeNodeNS(BaseURIResolver.XML_NAMESPACE, "base");
         if (xmlBaseAttribute != null) {
             String value = xmlBaseAttribute.getNodeValue();
             logger.debug("XML Base attribute value is " + value);
@@ -117,5 +116,46 @@ public class BaseURIDOMResolverImpl extends BaseURIResolverImpl implements BaseU
     public URI getDocumentURI() {
     	return documentURI;
     }
+    
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return true;
+    }
+        
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }    
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+   }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+    }    
     
 }

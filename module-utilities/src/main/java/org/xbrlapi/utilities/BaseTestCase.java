@@ -1,9 +1,13 @@
 package org.xbrlapi.utilities;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
@@ -144,6 +148,36 @@ abstract public class BaseTestCase extends TestCase {
 		} else {
 			throw new XBRLException("The node is not a document or element node.");
 		}
-    }	
+    }
+    
+    /**
+     * @param object The object to create a deep copy of.
+     * @return the deep copy of the object, obtained via serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    protected Object getDeepCopy(Object object) throws IOException,ClassNotFoundException {
+
+        ByteArrayOutputStream memoryOutputStream = new ByteArrayOutputStream( );
+        ObjectOutputStream serializer = new ObjectOutputStream(memoryOutputStream);
+        serializer.writeObject(object);
+        serializer.flush();
+
+        ByteArrayInputStream memoryInputStream = new ByteArrayInputStream(memoryOutputStream.toByteArray( ));
+        ObjectInputStream deserializer = new ObjectInputStream(memoryInputStream);
+        return deserializer.readObject();
+
+    }    
+    
+    /**
+     * Tests if the object and the copy are equal and have the same hash code.
+     * @param object The object to use.
+     * @param copy The supposed deep copy of the object.
+     * @throws Exception
+     */
+    public final void assessCustomEquality(Object object, Object copy) throws Exception {
+        assertEquals(object,copy);
+        assertEquals(object.hashCode(),copy.hashCode());
+    }
 	
 }

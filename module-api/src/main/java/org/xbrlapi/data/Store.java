@@ -2,6 +2,7 @@ package org.xbrlapi.data;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public interface Store {
+public interface Store extends Serializable {
 
 	/**
 	 * Close the data store.

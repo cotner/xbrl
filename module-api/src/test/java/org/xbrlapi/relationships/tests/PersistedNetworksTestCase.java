@@ -1,16 +1,11 @@
 package org.xbrlapi.relationships.tests;
 
-/**
- * @see org.xbrlapi.impl.Networks
- * @see org.xbrlapi.impl.NetworksImpl
- * @author Geoffrey Shuetrim (geoff@galexy.net)
- */
-
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.xbrlapi.Arc;
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.LabelResource;
@@ -22,16 +17,22 @@ import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.Storer;
 import org.xbrlapi.networks.StorerImpl;
 
+/**
+ * @author Geoffrey Shuetrim (geoff@galexy.net)
+ */
+
 public class PersistedNetworksTestCase extends DOMLoadingTestCase {
 
 	Networks networks = null;
 	LabelResource label = null;
 	Concept concept = null;
+
+	URI uri;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(getURI("test.data.xlink.titles"));
-		networks = store.getNetworks();
+		uri = getURI("test.data.xlink.titles");
+		loader.discover(uri);
 	}
 
 	protected void tearDown() throws Exception {
@@ -46,7 +47,7 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
 	private Storer storer = null;
 	private void storeNetworks() throws Exception {
         storer = new StorerImpl(store);
-        Networks networks = store.getAllNetworks();
+        networks = store.getAllNetworks();
         assertEquals(1,networks.getSize());
         initialSize = store.getSize();
         storer.storeRelationships(networks);
@@ -273,6 +274,29 @@ public class PersistedNetworksTestCase extends DOMLoadingTestCase {
                         assertEquals("label", r.getTargetName());
                         assertTrue(r.isToLabel());
                     }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
+    
+    public void testDocumentHasPersistedRelationships() { 
+        try {
+            Storer storer = new StorerImpl(store);
+            storer.deleteRelationships();
+            Analyser analyser = new AnalyserImpl(store);
+            Set<URI> uris = store.getDocumentURIs();
+            for (URI uri: uris) {
+                if (store.<Arc>getFragmentsFromDocument(uri,"Arc").size() > 0) {
+                    assertFalse(uri.toString(),analyser.hasAllRelationships(uri));
+                }
+            }
+            storer.storeAllRelationships();
+            for (URI uri: uris) {
+                if (store.<Arc>getXMLResources("Arc").size() > 0) {
+                    assertTrue(uri.toString(),analyser.hasAllRelationships(uri));
                 }
             }
         } catch (Exception e) {

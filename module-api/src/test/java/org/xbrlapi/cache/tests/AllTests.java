@@ -9,6 +9,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite("Test for org.xbrlapi.cache.tests");
 		//$JUnit-BEGIN$
 		suite.addTestSuite(CacheImplTestCase.class);
+        suite.addTestSuite(CacheImplSerializationTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

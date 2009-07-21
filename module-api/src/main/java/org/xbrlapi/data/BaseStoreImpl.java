@@ -50,11 +50,13 @@ import org.xbrlapi.XML;
 import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.resource.DefaultMatcherImpl;
+import org.xbrlapi.data.resource.InStoreMatcherImpl;
 import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.impl.FragmentComparator;
 import org.xbrlapi.impl.StubImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.Analyser;
+import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
@@ -76,13 +78,13 @@ import org.xbrlapi.utilities.XMLDOMBuilder;
  */
 public abstract class BaseStoreImpl implements Store, Serializable {
 
-	protected static Logger logger = Logger.getLogger(BaseStoreImpl.class);
+	private final static Logger logger = Logger.getLogger(BaseStoreImpl.class);
 
     /**
      * The DOM document used to construct DOM representations
      * of subtrees of documents in the store.
      */    
-    protected Document storeDOM = null;
+    transient protected Document storeDOM = null;
 
     /**
      * Resource matcher
@@ -379,14 +381,16 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     }
     
 
-    /**
-	  * @see org.xbrlapi.data.Store#deleteRelatedDocuments(URI)
-	  */
-	private static HashMap<URI,Boolean> documentsToDelete = new HashMap<URI,Boolean>(); 
+ 
     public void deleteRelatedDocuments(URI uri) throws XBRLException {
-    	deleteDocument(uri);
-    	List<Fragment> fragments = this.<Fragment>queryForXMLResources("#roots#[@targetDocumentURI='"+ uri + "']");
-    	for (Fragment fragment: fragments) {
+        
+        HashMap<URI,Boolean> documentsToDelete = new HashMap<URI,Boolean>();    	
+        
+        deleteDocument(uri);
+    	
+        List<Fragment> fragments = this.<Fragment>queryForXMLResources("#roots#[@targetDocumentURI='"+ uri + "']");
+    	
+        for (Fragment fragment: fragments) {
             if (! documentsToDelete.containsKey(fragment.getURI())) {
                 documentsToDelete.put(fragment.getURI(),new Boolean(true));
             }
@@ -1677,10 +1681,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         return links;
     }
 
-    /**
-     * Tracks the fragments that have been processed to get minimal networks with a given arcrole
-     */
-    private HashMap<String,Fragment> processedFragments = new HashMap<String,Fragment>();
+
 
 
     /**
@@ -1699,10 +1700,10 @@ public abstract class BaseStoreImpl implements Store, Serializable {
         
         Networks networks = new NetworksImpl(this);
 
-        processedFragments = new HashMap<String,Fragment>();
+        HashMap<String,Fragment> processedFragments = new HashMap<String,Fragment>();
         
         for (Fragment fragment: fragments) {
-            networks = augmentNetworksForFragment(fragment,arcrole,networks);
+            networks = augmentNetworksForFragment(fragment,arcrole,networks,processedFragments);
         }
         return networks;
     }
@@ -1715,7 +1716,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * @return The networks after augmentation.
      * @throws XBRLException
      */
-    private Networks augmentNetworksForFragment(Fragment fragment, URI arcrole, Networks networks) throws XBRLException {
+    private Networks augmentNetworksForFragment(Fragment fragment, URI arcrole, Networks networks, HashMap<String,Fragment> processedFragments) throws XBRLException {
         if (processedFragments.containsKey(fragment.getIndex())) {
             return networks;
         }
@@ -1727,7 +1728,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             logger.debug(fragment.getIndex() + " has " + activeRelationships.size() + " parent fragments.");
             for (Relationship activeRelationship: activeRelationships) {
                 Fragment source = activeRelationship.getSource();
-                networks = augmentNetworksForFragment(source,arcrole,networks);
+                networks = augmentNetworksForFragment(source,arcrole,networks,processedFragments);
             }
         }
         return networks;
@@ -2056,7 +2057,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
     
     
     // The persisted networks analyser
-    private Analyser analyser = null;
+    transient private Analyser analyser = null;
     
     /**
      * @see Store#getAnalyser()
@@ -2119,7 +2120,7 @@ public abstract class BaseStoreImpl implements Store, Serializable {
      * prevent the same document from being simultaneously
      * loaded by several of the loaders.
      */
-    private Map<URI,Loader> loadingRights = new HashMap<URI,Loader>();
+    transient private HashMap<URI,Loader> loadingRights = new HashMap<URI,Loader>();
     
     /**
      * @see Store#requestLoadingRightsFor(Loader, URI)
@@ -2154,5 +2155,130 @@ public abstract class BaseStoreImpl implements Store, Serializable {
             super.finalize();
         }
     }
+
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        try {
+            matcher = (Matcher) in.readObject();
+            
+            if (in.readBoolean()) {
+                analyser = new AnalyserImpl(this);
+            } else {
+                analyser = null;
+            }
+            
+            if (in.readBoolean()) {
+                int urisSize = in.readInt();
+                if (urisSize > 0) {
+                    uris = new Vector<URI>();
+                    for (int i=0; i<urisSize; i++) {
+                        uris.add((URI) in.readObject());
+                    }
+                }
+            } else {
+                uris = null;
+            }
+            
+            int bindings = in.readInt();
+            namespaceBindings = new HashMap<URI,String>();
+            for (int i=0; i<bindings; i++) {
+                namespaceBindings.put((URI) in.readObject(), (String) in.readObject());
+            }
+            
+        } catch (XBRLException e) {
+            throw new IOException("The data store could not be read.",e);
+        }
+        
+        
+        // Reload fragmentMap
+        //fragmentMap = new HashMap<String,Element>();
+        
+        // Reload indexMap
+        //indexMap = new HashMap<Element,String>();
+        
+    }
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject( );
+        out.writeObject(matcher);
+        out.writeBoolean(this.analyser != null);
+        out.writeBoolean(uris != null);
+        if (uris != null) {
+            out.writeInt(uris.size());
+            for (URI uri: uris) {
+                out.writeObject(uri);
+            }
+        }
+        out.writeInt(namespaceBindings.keySet().size());
+        for (URI uri: namespaceBindings.keySet()) {
+            out.writeObject(uri);
+            out.writeObject(namespaceBindings.get(uri));
+        }
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((analyser == null) ? 0 : analyser.hashCode());
+        result = prime * result + ((matcher == null) ? 0 : matcher.hashCode());
+        result = prime
+                * result
+                + ((namespaceBindings == null) ? 0 : namespaceBindings
+                        .hashCode());
+        result = prime * result + ((uris == null) ? 0 : uris.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BaseStoreImpl other = (BaseStoreImpl) obj;
+        if (matcher == null) {
+            if (other.matcher != null)
+                return false;
+        } else if (matcher instanceof InStoreMatcherImpl) {
+            // Avoid using Matcher.equals() test to prevent infinite recursion.
+            if (! (other.matcher instanceof InStoreMatcherImpl)) return false;
+            if (((InStoreMatcherImpl) matcher).getStore() != this) return false;
+            if (((InStoreMatcherImpl) other.matcher).getStore() != other) return false;
+        }
+        if (namespaceBindings == null) {
+            if (other.namespaceBindings != null)
+                return false;
+        } else if (!namespaceBindings.equals(other.namespaceBindings))
+            return false;
+        if (uris == null) {
+            if (other.uris != null)
+                return false;
+        } else if (!uris.equals(other.uris))
+            return false;
+        return true;
+    }
+    
+
 
 }

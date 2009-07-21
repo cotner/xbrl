@@ -1,5 +1,6 @@
 package org.xbrlapi.data.resource;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 import java.util.Vector;
@@ -12,7 +13,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class DefaultMatcherImpl implements Matcher {
+public class DefaultMatcherImpl implements Matcher, Serializable {
 
     public DefaultMatcherImpl() {
         ;
@@ -65,4 +66,26 @@ public class DefaultMatcherImpl implements Matcher {
         return true;
     }
 
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return 1;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return true;
+    }
+    
 }

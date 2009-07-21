@@ -1,6 +1,7 @@
 package org.xbrlapi.cache;
 
 import java.io.File;
+import java.io.Serializable;
 import java.net.URI;
 
 import org.xbrlapi.utilities.XBRLException;
@@ -9,7 +10,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
  */
 
-public interface Cache {
+public interface Cache extends Serializable {
 
     /**
      * Tests if a URI is a URI of a resource in the local cache.

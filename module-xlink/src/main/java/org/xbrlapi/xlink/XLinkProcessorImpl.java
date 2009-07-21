@@ -1,5 +1,7 @@
 package org.xbrlapi.xlink;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -16,15 +18,15 @@ import org.xml.sax.Attributes;
  * @author Henry S. Thompson (ht@w3.org)
  */
 
-public class XLinkProcessorImpl implements XLinkProcessor {
+public class XLinkProcessorImpl implements XLinkProcessor, Serializable {
 
-    protected static Logger logger = Logger.getLogger(XLinkProcessorImpl.class);
+    private final static Logger logger = Logger.getLogger(XLinkProcessorImpl.class);
     
     /**
      * The XLink handler to use for responding to XLink events
      * in the SAX parsing process.
      */
-    XLinkHandler xlinkHandler;
+    private XLinkHandler xlinkHandler;
 
     /**
      * The Custom Link Recogniser, to be used for simple link
@@ -33,7 +35,7 @@ public class XLinkProcessorImpl implements XLinkProcessor {
      * Set to null by default for cases where no non-XLink 
      * syntax needs to be treated as a link.
      */
-    CustomLinkRecogniser customLinkRecogniser = null;
+    private CustomLinkRecogniser customLinkRecogniser;
 
     /**
      * Track the type of XLink element or other element that
@@ -41,14 +43,14 @@ public class XLinkProcessorImpl implements XLinkProcessor {
      * This is important for the implementation of the
      * elementStart functionality. 
      */
-    private Stack<Integer> ancestorTypes = new Stack<Integer>();
+    transient private Stack<Integer> ancestorTypes;
     
     /**
      * Boolean to track whether we are inside an extended
      * link.  Note that it is not possible to have nested
      * extended links so this does not need to be a stack.
      */
-    private boolean insideAnExtendedLink = false;
+    transient private boolean insideAnExtendedLink = false;
 
     /**
      * Hash map to store information about 
@@ -56,7 +58,7 @@ public class XLinkProcessorImpl implements XLinkProcessor {
      * can be expected to occur. (Documentation by Geoff Shuetrim)
      * Property added by Henry S Thompson.
      */
-    static private HashMap<String,Integer> XLINKATTRS = null;
+    transient static private HashMap<String,Integer> XLINKATTRS = null;
     
     /**
      * constructor
@@ -64,7 +66,12 @@ public class XLinkProcessorImpl implements XLinkProcessor {
      */
     public XLinkProcessorImpl(XLinkHandler xlinkHandler) {
         super();
+        initialize(xlinkHandler);
+    }
+
+    private void initialize(XLinkHandler xlinkHandler) {
         this.xlinkHandler = xlinkHandler;
+        ancestorTypes = new Stack<Integer>();
         ancestorTypes.push(NOT_XLINK);
         if ( XLINKATTRS == null ) {
               XLINKATTRS=new HashMap<String,Integer>();
@@ -79,9 +86,9 @@ public class XLinkProcessorImpl implements XLinkProcessor {
               XLINKATTRS.put("from",ARC);
               XLINKATTRS.put("to",ARC);
         }
-
+        
     }
-
+    
     /**
      * constructor
      * @param xlinkHandler The XLink Handler.
@@ -89,10 +96,9 @@ public class XLinkProcessorImpl implements XLinkProcessor {
      */
     public XLinkProcessorImpl(XLinkHandler xlinkHandler, CustomLinkRecogniser recogniser) {
         this(xlinkHandler);
-        setCustomLinkRecogniser(recogniser);        
+        setCustomLinkRecogniser(recogniser);
     }
 
-    
     /**
      * Set the custom link recogniser
      * @param customLinkRecogniser The class that indicates if a custom link
@@ -526,6 +532,69 @@ public class XLinkProcessorImpl implements XLinkProcessor {
      */
     public XLinkHandler getXLinkHandler() {
         return xlinkHandler;
+    }
+
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(xlinkHandler);
+        out.writeObject(this.customLinkRecogniser);
+    }    
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        initialize((XLinkHandler) in.readObject());
+        this.setCustomLinkRecogniser((CustomLinkRecogniser) in.readObject());
+    }
+    
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime
+                * result
+                + ((customLinkRecogniser == null) ? 0 : customLinkRecogniser.hashCode());
+        result = prime * result
+                + ((xlinkHandler == null) ? 0 : xlinkHandler.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        XLinkProcessorImpl other = (XLinkProcessorImpl) obj;
+        if (customLinkRecogniser == null) {
+            if (other.customLinkRecogniser != null)
+                return false;
+        } else if (!customLinkRecogniser.equals(other.customLinkRecogniser))
+            return false;
+        if (xlinkHandler == null) {
+            if (other.xlinkHandler != null)
+                return false;
+        } else if (!xlinkHandler.equals(other.xlinkHandler))
+            return false;
+        return true;
     }
 
 }

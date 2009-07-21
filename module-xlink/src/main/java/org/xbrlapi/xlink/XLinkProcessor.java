@@ -1,5 +1,7 @@
 package org.xbrlapi.xlink;
 
+import java.io.Serializable;
+
 import org.xml.sax.Attributes;
 
 /**
@@ -16,7 +18,7 @@ import org.xml.sax.Attributes;
  */
 
 
-public interface XLinkProcessor {
+public interface XLinkProcessor extends Serializable {
 
 	public final static Integer SIMPLE_LINK = new Integer(1);
 	public final static Integer EXTENDED_LINK = new Integer(2);

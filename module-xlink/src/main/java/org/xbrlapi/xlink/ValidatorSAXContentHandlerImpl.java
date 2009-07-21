@@ -19,7 +19,7 @@ public class ValidatorSAXContentHandlerImpl extends DefaultHandler {
      * Data required to track the element scheme XPointer 
      * expressions that can be used to identify XBRL fragments.
      */
-    private ElementState state = null;
+    transient private ElementState state = null;
     
     /**
      * @param state The element state

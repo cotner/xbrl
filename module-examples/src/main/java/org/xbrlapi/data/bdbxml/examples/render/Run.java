@@ -502,32 +502,19 @@ public class Run {
 
         // Rivet errors in the SEC XBRL data require these URI remappings to
         // prevent discovery process from breaking.
-        HashMap<String, String> map = new HashMap<String, String>();
-        map
-                .put(
-                        "http://www.xbrl.org/2003/linkbase/xbrl-instance-2003-12-31.xsd",
-                        "http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
-        map
-                .put(
-                        "http://www.xbrl.org/2003/instance/xbrl-instance-2003-12-31.xsd",
-                        "http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");
-        map
-                .put(
-                        "http://www.xbrl.org/2003/linkbase/xbrl-linkbase-2003-12-31.xsd",
-                        "http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
-        map
-                .put(
-                        "http://www.xbrl.org/2003/instance/xbrl-linkbase-2003-12-31.xsd",
-                        "http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd");
-        map.put("http://www.xbrl.org/2003/instance/xl-2003-12-31.xsd",
-                "http://www.xbrl.org/2003/xl-2003-12-31.xsd");
-        map.put("http://www.xbrl.org/2003/linkbase/xl-2003-12-31.xsd",
-                "http://www.xbrl.org/2003/xl-2003-12-31.xsd");
-        map.put("http://www.xbrl.org/2003/instance/xlink-2003-12-31.xsd",
-                "http://www.xbrl.org/2003/xlink-2003-12-31.xsd");
-        map.put("http://www.xbrl.org/2003/linkbase/xlink-2003-12-31.xsd",
-                "http://www.xbrl.org/2003/xlink-2003-12-31.xsd");
-
+        HashMap<URI,URI> map = new HashMap<URI,URI>();
+        try {
+            map.put(new URI("http://www.xbrl.org/2003/linkbase/xbrl-instance-2003-12-31.xsd"),new URI("http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"));
+            map.put(new URI("http://www.xbrl.org/2003/instance/xbrl-instance-2003-12-31.xsd"),new URI("http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"));
+            map.put(new URI("http://www.xbrl.org/2003/linkbase/xbrl-linkbase-2003-12-31.xsd"),new URI("http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd"));
+            map.put(new URI("http://www.xbrl.org/2003/instance/xbrl-linkbase-2003-12-31.xsd"),new URI("http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd"));
+            map.put(new URI("http://www.xbrl.org/2003/instance/xl-2003-12-31.xsd"),new URI("http://www.xbrl.org/2003/xl-2003-12-31.xsd"));
+            map.put(new URI("http://www.xbrl.org/2003/linkbase/xl-2003-12-31.xsd"),new URI("http://www.xbrl.org/2003/xl-2003-12-31.xsd"));
+            map.put(new URI("http://www.xbrl.org/2003/instance/xlink-2003-12-31.xsd"),new URI("http://www.xbrl.org/2003/xlink-2003-12-31.xsd"));
+            map.put(new URI("http://www.xbrl.org/2003/linkbase/xlink-2003-12-31.xsd"),new URI("http://www.xbrl.org/2003/xlink-2003-12-31.xsd"));
+        } catch (URISyntaxException e) {
+            throw new XBRLException("URI syntax exception",e);
+        }
         EntityResolver entityResolver = new EntityResolverImpl(cacheFile, map);
 
         Loader myLoader = new LoaderImpl(store, xlinkProcessor);

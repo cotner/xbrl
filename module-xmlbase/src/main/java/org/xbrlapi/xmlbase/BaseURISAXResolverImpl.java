@@ -6,18 +6,20 @@ package org.xbrlapi.xmlbase;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Stack;
 
-public class BaseURISAXResolverImpl extends BaseURIResolverImpl implements BaseURISAXResolver {
+public class BaseURISAXResolverImpl extends BaseURIResolverImpl implements BaseURISAXResolver, Serializable {
 	
 	/**
 	 * The base URI stack as constructed during the SAX
 	 * parsing process
 	 * resolver will be used with.
 	 */
-	private Stack<URI> baseURIs = new Stack<URI>();
+	transient private Stack<URI> baseURIs = new Stack<URI>();
 	
     /**
      * Constructor takes the absolute URI of the
@@ -81,5 +83,47 @@ public class BaseURISAXResolverImpl extends BaseURIResolverImpl implements BaseU
      */
     public void removeBaseURI() throws XMLBaseException {
 		baseURIs.pop();
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return true;
+    }
+        
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }    
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+   }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        baseURIs = new Stack<URI>();
     }
 }

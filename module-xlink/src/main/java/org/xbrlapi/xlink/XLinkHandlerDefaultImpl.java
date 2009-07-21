@@ -5,10 +5,12 @@ package org.xbrlapi.xlink;
  * Extend this class to create your own XLinkHandler.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
+import java.io.Serializable;
+
 import org.xml.sax.Attributes;
 
 
-public class XLinkHandlerDefaultImpl implements XLinkHandler {
+public class XLinkHandlerDefaultImpl implements XLinkHandler, Serializable {
 
 	/**
 	 * Default XLink handler constructor
@@ -158,5 +160,27 @@ public class XLinkHandlerDefaultImpl implements XLinkHandler {
 			Attributes attrs,String message) throws XLinkException {
 		;
 	}
+	
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return 1;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return true;
+    }
 	
 }

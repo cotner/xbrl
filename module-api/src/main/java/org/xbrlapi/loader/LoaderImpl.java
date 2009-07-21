@@ -1,6 +1,7 @@
 package org.xbrlapi.loader;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,8 +33,6 @@ import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkProcessor;
-import org.xbrlapi.xpointer.resolver.PointerResolver;
-import org.xbrlapi.xpointer.resolver.PointerResolverImpl;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
@@ -68,10 +67,10 @@ import org.xml.sax.XMLReader;
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class LoaderImpl implements Loader {
+public class LoaderImpl implements Loader, Serializable {
 
     // Create the logger
-    static Logger logger = Logger.getLogger(LoaderImpl.class);
+    private final static Logger logger = Logger.getLogger(LoaderImpl.class);
 
     /**
      * The data store to be used to hold the DTS.
@@ -81,13 +80,13 @@ public class LoaderImpl implements Loader {
     /**
      * The stack of fragments that are being built
      */
-    private Stack<Fragment> fragments = new Stack<Fragment>();
+    transient private Stack<Fragment> fragments = new Stack<Fragment>();
 
     /**
      * A stack of element states, one per root element
      * of a fragment currently undergoing construction.
      */
-    Stack<ElementState> states = new Stack<ElementState>();
+    transient private Stack<ElementState> states = new Stack<ElementState>();
     
     /**
      * @return the stack of element states for the root
@@ -134,12 +133,12 @@ public class LoaderImpl implements Loader {
      * The absolute URI of the document currently being parsed. Used to record
      * this metadata in each fragment.
      */
-    private URI documentURI = null;
+    transient private URI documentURI = null;
 
     /**
      * The document Id (including the document hash and its counter)
      */
-    private String documentId = null;
+    transient private String documentId = null;
 
 
 
@@ -154,36 +153,33 @@ public class LoaderImpl implements Loader {
      */
     private EntityResolver entityResolver = new EntityResolverImpl();
 
-    /**
-     * The XPointer resolver
-     */
-    private PointerResolver pointerResolver;
+
 
     /**
      * The sorted map of documents that have failed to load.
      * Each URI points to value that is the reason for the failure.
      */
-    private TreeMap<URI, String> failures = new TreeMap<URI, String>();
+    transient private TreeMap<URI, String> failures = new TreeMap<URI, String>();
     
     /**
      * The sorted set of documents that have successfully been loaded.
      */
-    private TreeSet<URI> successes = new TreeSet<URI>();    
+    transient private TreeSet<URI> successes = new TreeSet<URI>();    
     
-    private TreeSet<URI> documentQueue = new TreeSet<URI>();
+    transient private TreeSet<URI> documentQueue = new TreeSet<URI>();
 
     /**
      * The unique fragment ID, that will be one for the first fragment. This is
      * incremented just before as it is retrieved for use with a new fragment
      * created during the loading process.
      */
-    private int fragmentId = 0;
+    transient private int fragmentId = 0;
 
     /**
      * discovering equals false if the loader is not presently doing document
      * discovery and true otherwise.
      */
-    private boolean discovering = false;
+    transient private boolean discovering = false;
 
     private void setDiscovering(boolean value) {
         if (value) logger.debug(Thread.currentThread().getName() + " starting discovery.");
@@ -198,7 +194,11 @@ public class LoaderImpl implements Loader {
         return discovering;
     }
 
-    private boolean interrupt = false;
+    
+    /**
+     * Boolean flag that it set to true by an discovery interrupt request.
+     */
+    transient private boolean interrupt = false;
 
     /**
      * @see Loader#requestInterrupt()
@@ -226,7 +226,7 @@ public class LoaderImpl implements Loader {
      * The XML DOM used by this loader's fragment builders.
      * This is initialised on creation of the loader.
      */
-    private Document dom = null;
+    transient private Document dom = null;
     
     /**
      * @param store The data store to hold the DTS
@@ -236,9 +236,12 @@ public class LoaderImpl implements Loader {
     public LoaderImpl(Store store, XLinkProcessor xlinkProcessor)
             throws XBRLException {
         super();
+        initialize(store,xlinkProcessor);
+    }
+    
+    private void initialize(Store store, XLinkProcessor xlinkProcessor) throws XBRLException {
         setStore(store);
         setXlinkProcessor(xlinkProcessor);
-        this.setPointerResolver(new PointerResolverImpl(getStore()));
         this.dom = (new XMLDOMBuilder()).newDocument();
     }
 
@@ -322,24 +325,9 @@ public class LoaderImpl implements Loader {
         return xlinkProcessor;
     }
 
-    /**
-     * Set the XPointer resolver.
-     * 
-     * @param pointerResolver
-     *            The XPointer resolver implementation.
-     */
-    private void setPointerResolver(PointerResolver pointerResolver) {
-        this.pointerResolver = pointerResolver;
-    }
 
-    /**
-     * Get the XPointer resolver.
-     * 
-     * @return The XPointer resolver used by the loader.
-     */
-    private PointerResolver getPointerResolver() {
-        return pointerResolver;
-    }
+
+
 
 
 
@@ -886,7 +874,90 @@ public class LoaderImpl implements Loader {
         states = new Stack<ElementState>();        
     }
 
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((cache == null) ? 0 : cache.hashCode());
+        result = prime * result
+                + ((entityResolver == null) ? 0 : entityResolver.hashCode());
+        result = prime * result + ((store == null) ? 0 : store.hashCode());
+        result = prime * result + (useSchemaLocationAttributes ? 1231 : 1237);
+        result = prime * result
+                + ((xlinkProcessor == null) ? 0 : xlinkProcessor.hashCode());
+        return result;
+    }
 
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        LoaderImpl other = (LoaderImpl) obj;
+        if (cache == null) {
+            if (other.cache != null)
+                return false;
+        } else if (!cache.equals(other.cache))
+            return false;
+        if (entityResolver == null) {
+            if (other.entityResolver != null)
+                return false;
+        } else if (!entityResolver.equals(other.entityResolver))
+            return false;
+        if (store == null) {
+            if (other.store != null)
+                return false;
+        } else if (!store.equals(other.store))
+            return false;
+        if (useSchemaLocationAttributes != other.useSchemaLocationAttributes)
+            return false;
+        if (xlinkProcessor == null) {
+            if (other.xlinkProcessor != null)
+                return false;
+        } else if (!xlinkProcessor.equals(other.xlinkProcessor))
+            return false;
+        return true;
+    }
 
-
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        try {
+            initialize((Store) in.readObject(),(XLinkProcessor) in.readObject());
+            cache = (Cache) in.readObject();
+            entityResolver = (EntityResolver) in.readObject();
+            useSchemaLocationAttributes = in.readBoolean();
+        } catch (XBRLException e) {
+            throw new IOException("The store or XLink processor could not be initialized.",e);
+        }
+    }
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(store);
+        out.writeObject(xlinkProcessor);
+        out.writeObject(cache);
+        out.writeObject(entityResolver);
+        out.writeBoolean(useSchemaLocationAttributes);    
+    }    
+    
 }

@@ -27,7 +27,6 @@ import org.xbrlapi.xlink.XLinkException;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xbrlapi.xmlbase.BaseURISAXResolver;
 import org.xbrlapi.xmlbase.XMLBaseException;
-import org.xbrlapi.xpointer.resolver.PointerResolver;
 import org.xml.sax.Attributes;
 
 /**
@@ -44,11 +43,7 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 	 */
 	private Loader loader;
 	
-	/**
-	 * The XPointer Resolver implementation to be used by the
-	 * XLink handler
-	 */
-	private PointerResolver xptrResolver;
+
 
 	/**
 	 * The base URI resolver used by the XLink handler
@@ -67,7 +62,6 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 	public XLinkHandlerImpl() {
 		super();
 		this.baseURIResolver = null;
-		this.xptrResolver = null;
 		this.loader = null;
 	}
 
@@ -87,13 +81,7 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 		baseURIResolver = resolver;
 	}
 	
-	/**
-	 * Set the XPointer resolver for the XBRL XLink handler.
-	 * @param resolver the XPointer resolver used by the XLink handler.
-	 */
-	public void setXPointerResolver(PointerResolver resolver) {
-		xptrResolver = resolver;
-	}
+
 	
 	/**
 	 * Handle the XML Base attribute discovery

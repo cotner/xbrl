@@ -8,6 +8,7 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.exist.xmldb.XQueryService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,6 +35,8 @@ import org.xmldb.api.modules.XMLResource;
  */
 public class StoreImpl extends BaseStoreImpl implements Store {
 
+    private final static Logger logger = Logger.getLogger(StoreImpl.class);
+    
 	/**
 	 * The database connection used by the data store.
 	 */

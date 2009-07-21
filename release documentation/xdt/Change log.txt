@@ -1,3 +1,6 @@
+21 Jul. 2009
+Made the loader serializable.
+
 9 Dec. 2008
 Added in new aspects to support the XDT specification and defined
 a new dimensional aspect model.
