@@ -36,25 +36,7 @@ import org.xml.sax.Attributes;
 */
 public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 
-	protected static Logger logger = Logger.getLogger(XLinkHandlerImpl.class);	
-	
-	/**
-	 * The XBRL DTS loader that is using this XLink handler
-	 */
-	private Loader loader;
-	
-
-
-	/**
-	 * The base URI resolver used by the XLink handler
-	 */
-	private BaseURISAXResolver baseURIResolver;
-	
-    /**
-     * Data required to track the element scheme XPointer 
-     * expressions that can be used to identify XBRL fragments.
-     */
-	private ElementState elementState;
+	private final static Logger logger = Logger.getLogger(XLinkHandlerImpl.class);	
 	
 	/**
 	 * XBRL XLink handler constructor
