@@ -9,7 +9,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
@@ -29,17 +28,14 @@ import org.xml.sax.Attributes;
  */
 public class BuilderImpl implements Builder {
 		
-	protected static Logger logger = Logger.getLogger(Loader.class);
+	private final static Logger logger = Logger.getLogger(BuilderImpl.class);
 	
 	/**
 	 * The XML DOM used to build up fragments.
 	 */
 	private Document dom = null;
 	
-	/**
-	 * The data root element.
-	 */
-	private Element data = null;
+
 	
 	/**
 	 * The metadata root element.
@@ -62,7 +58,7 @@ public class BuilderImpl implements Builder {
 	 * @throws XBRLException if the DOM is null.
 	 */
 	public BuilderImpl(Document dom) throws XBRLException {
-	    if (dom == null) throw new XBRLException("The Builder DOM must not be null.");
+	    if (dom == null) throw new XBRLException("The XML DOM must not be null.");
 		this.dom = dom;
 		setupBuilder();
 	}
@@ -111,11 +107,13 @@ public class BuilderImpl implements Builder {
 	}
 
 	/**
-	 * Get the root element of the data structure.
-	 * @return the data XML structure.
+	 * @see Builder#getData()
 	 */
-	public Element getData() {
-		return data;
+	public Element getData() throws XBRLException {
+		NodeList dataElements = getMetadata().getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),Constants.FragmentDataContainerElementName);
+		if (dataElements.getLength() > 1) throw new XBRLException("The XML Resource being built has more than one data fragment.");
+        if (dataElements.getLength() == 0) throw new XBRLException("The XML Resource being built has no data fragments.");
+		return ((Element) dataElements.item(0));
 	}
 	
 	/**
@@ -159,7 +157,6 @@ public class BuilderImpl implements Builder {
 		if (isNewFragment()) {
 			if (child.getNodeType() != Element.ELEMENT_NODE) throw new XBRLException("The first child to be inserted must be an element node");
 			getInsertionPoint().appendChild(child);
-			data = (Element) child;
 			isNewFragment = false;
 		} else {
 			getInsertionPoint().appendChild(child);
