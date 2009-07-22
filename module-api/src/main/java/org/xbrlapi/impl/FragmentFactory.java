@@ -3,6 +3,7 @@ package org.xbrlapi.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.xbrlapi.XML;
 import org.xbrlapi.data.Store;
@@ -16,7 +17,7 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class FragmentFactory<F> {
 
-	// private static Logger logger = Logger.getLogger(Loader.class);
+	private final static Logger logger = Logger.getLogger(FragmentFactory.class);
 	
 	/**
 	 * Get the class for the specified class name.
@@ -65,7 +66,6 @@ public class FragmentFactory<F> {
 		    	XML fragment = (XML) constructor.newInstance();
 	            fragment.setStore(store);
 	            fragment.setResource(root);
-	            //fragment.setIndex(root.getAttribute("index"));
 	            return (F) fragment;
 	            
 	        } catch (InvocationTargetException e) {
