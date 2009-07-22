@@ -44,18 +44,18 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl implements XLi
 	/**
 	 * The XBRL DTS loader that is using this XLink handler
 	 */
-	private Loader loader;
+	protected Loader loader;
 	
 	/**
 	 * The base URI resolver used by the XLink handler
 	 */
-	private BaseURISAXResolver baseURIResolver;
+	protected BaseURISAXResolver baseURIResolver;
 	
     /**
      * Data required to track the element scheme XPointer 
      * expressions that can be used to identify XBRL fragments.
      */
-	transient private ElementState elementState;
+	transient protected ElementState elementState;
 	
 	/**
 	 * XBRL XLink handler constructor

@@ -77,7 +77,7 @@ public class StoreImplTestCase extends BaseTestCase {
 	    fragment.appendDataElement(Constants.XBRLAPINamespace,"info",Constants.XBRLAPIPrefix + ":info");
 	    store.persist(fragment);
 		String index = "1";
-		store.serialize(fragment);
+		//store.serialize(fragment);
 		List<Fragment> fragments = null;
 		try {
 	        String query = "#roots#[@type='org.xbrlapi.impl.MockImpl' and */xbrlapi:info]";

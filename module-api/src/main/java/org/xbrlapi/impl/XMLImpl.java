@@ -1,6 +1,7 @@
 package org.xbrlapi.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,15 +10,17 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.XML;
 import org.xbrlapi.builder.Builder;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
+import org.xbrlapi.utilities.XMLDOMBuilder;
 
 public class XMLImpl implements XML {
 
+    protected final static Logger logger = Logger.getLogger(XMLImpl.class);  
+    
     public XMLImpl() {
         super();
     }
@@ -26,20 +29,11 @@ public class XMLImpl implements XML {
     {
       super.finalize(); 
     }    
-
-    protected static Logger logger = Logger.getLogger(XMLImpl.class);  
-    
-    /**
-     * The unique index value for this fragment, within the scope of the
-     * data store that this fragment is in.  This property is immutable 
-     * and is set during construction of the fragment.
-     */
-    //private String index;
         
     /**
      * The Fragment builder - used when building fragments during DTS discovery.
      */
-    private Builder builder = null;
+    transient private Builder builder;
 
     /**
      * The data store that manages this fragment.
@@ -69,20 +63,67 @@ public class XMLImpl implements XML {
     }
     
     /**
-     * @see org.xbrlapi.XML#hashCode()
+     * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
-        return getIndex().hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((rootElement == null) ? 0 : rootElement.hashCode());
+        result = prime * result + ((store == null) ? 0 : store.hashCode());
+        return result;
     }
     
     /**
-     * @see org.xbrlapi.XML#equals(Object)
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean equals(Object o1) throws ClassCastException {
-        Fragment f1 = (Fragment) o1;
-        if (this.getIndex().equals(f1.getIndex()))
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        return false;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        XMLImpl other = (XMLImpl) obj;
+        if (rootElement == null) {
+            if (other.rootElement != null)
+                return false;
+        } else {
+            String thisIndex = rootElement.getAttribute("index");
+            String otherIndex = other.rootElement.getAttribute("index");
+            if (thisIndex == null) return false;
+            if (!thisIndex.equals(otherIndex)) return false;
+            String thisType = rootElement.getAttribute("type");
+            String otherType= other.rootElement.getAttribute("type");
+            if (thisType == null) return false;
+            if (!thisType.equals(otherType)) return false;
+            if (rootElement.hasAttribute("uri")) {
+                String t = rootElement.getAttribute("uri");
+                String o= other.rootElement.getAttribute("uri");
+                if (t == null) return false;
+                if (!t.equals(o)) return false;
+            }
+            if (rootElement.hasAttribute("parentIndex")) {
+                String t = rootElement.getAttribute("parentIndex");
+                String o= other.rootElement.getAttribute("parentIndex");
+                if (t == null) return false;
+                if (!t.equals(o)) return false;
+            }
+            if (rootElement.hasAttribute("sequenceToParentElement")) {
+                String t = rootElement.getAttribute("sequenceToParentElement");
+                String o= other.rootElement.getAttribute("sequenceToParentElement");
+                if (t == null) return false;
+                if (!t.equals(o)) return false;
+            }
+        }
+        if (store == null) {
+            if (other.store != null)
+                return false;
+        } else if (!store.equals(other.store))
+            return false;
+        return true;
     }
     
     /**
@@ -106,7 +147,7 @@ public class XMLImpl implements XML {
      * @see org.xbrlapi.XML#getDocumentNode()
      */
     public Document getDocumentNode() {
-        if (builder != null) return builder.getData().getOwnerDocument();
+        if (builder != null) return builder.getMetadata().getOwnerDocument();
         return getResource().getOwnerDocument();
     }
 
@@ -343,6 +384,42 @@ public class XMLImpl implements XML {
             store.remove(this.getIndex());
         }
         store.persist(this);
+    }
+ 
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        if (this.getBuilder() != null) throw new IOException("The XML Resource could not be serialized because it is still being built.");
+        out.defaultWriteObject( );
+        try {
+            String xml = store.serializeToString(rootElement);
+            out.writeObject(xml);
+            out.writeObject(store);
+        } catch (XBRLException e) {
+            throw new IOException("Could not convert the store content to a string representation of the XML.",e);
+        }
+    }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+        in.defaultReadObject();
+        try {
+            XMLDOMBuilder builder = new XMLDOMBuilder();
+            Document dom = builder.newDocument((String) in.readObject());
+            rootElement = dom.getDocumentElement();
+            store = (Store) in.readObject();
+        } catch (XBRLException e) {
+            throw new IOException("The XML Resource could not be de-serialized.",e);
+        }
     }
     
 }

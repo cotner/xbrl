@@ -1,5 +1,6 @@
 package org.xbrlapi.aspects;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,11 +24,27 @@ import org.xbrlapi.utilities.XBRLException;
  */
 abstract public class BaseAspect implements Aspect {
 
-    protected static Logger logger = Logger.getLogger(BaseAspect.class);  
+    private final static Logger logger = Logger.getLogger(BaseAspect.class);  
     
-    TreeMap<String,AspectValue> values = new TreeMap<String,AspectValue>();
+    protected TreeMap<String,AspectValue> values;
     
-    private AspectModel model = null;
+    private AspectModel model;
+
+    /**
+     * @param aspectModel The aspect model with this aspect.
+     * @throws XBRLException.
+     */
+    public BaseAspect(AspectModel aspectModel) throws XBRLException {
+        initialize(aspectModel);
+    }
+    
+    protected void initialize(AspectModel model) throws XBRLException {
+        if (model == null) throw new XBRLException("The aspect model cannot be null.");
+        this.model = model;
+        facts = new HashMap<String,Set<Fact>>(); 
+        fragmentMap = new HashMap<String,Fragment>();
+        values = new TreeMap<String,AspectValue>();        
+    }
 
     /**
      * @see org.xbrlapi.aspects.Aspect#getAspectModel()
@@ -36,20 +53,20 @@ abstract public class BaseAspect implements Aspect {
         return model;
     }
 
-    private String dimension = null;
+    private String axis;
     
     /**
-     * @see org.xbrlapi.aspects.Aspect#getDimension()
+     * @see org.xbrlapi.aspects.Aspect#getAxis()
      */
-    public String getDimension() {
-        return dimension;
+    public String getAxis() {
+        return axis;
     }
     
     /**
      * @see org.xbrlapi.aspects.Aspect#isOrphan()
      */
     public boolean isOrphan() {
-        return (this.dimension == null);
+        return (this.getAxis() == null);
     }
 
     /**
@@ -67,13 +84,14 @@ abstract public class BaseAspect implements Aspect {
     }
     
     /**
+     * @throws XBRLException 
      * @see org.xbrlapi.aspects.Aspect#getDescendantCount()
      */
-    public int getDescendantCount() {
+    public int getDescendantCount() throws XBRLException {
         if (this.isOrphan()) return 1;
         List<Aspect> aspects = null;
         try {
-            aspects = this.getAspectModel().getDimensionAspects(this.getDimension());
+            aspects = this.getAspectModel().getDimensionAspects(this.getAxis());
         } catch (XBRLException e) {
             ;// Cannot be thrown
         }
@@ -86,13 +104,14 @@ abstract public class BaseAspect implements Aspect {
     }
     
     /**
+     * @throws XBRLException 
      * @see org.xbrlapi.aspects.Aspect#getAncestorCount()
      */
-    public int getAncestorCount() {
+    public int getAncestorCount() throws XBRLException {
         if (this.isOrphan()) return 1;
         List<Aspect> aspects = null;
         try {
-            aspects = this.getAspectModel().getDimensionAspects(this.getDimension());
+            aspects = this.getAspectModel().getDimensionAspects(this.getAxis());
         } catch (XBRLException e) {
             ;//Cannot be thrown
         }
@@ -172,13 +191,13 @@ abstract public class BaseAspect implements Aspect {
     }
 
     /**
-     * @see org.xbrlapi.aspects.Aspect#setDimension(java.lang.String)
+     * @see org.xbrlapi.aspects.Aspect#setAxis(java.lang.String)
      */
-    public void setDimension(String dimension) {
-        this.dimension = dimension;
+    public void setAxis(String dimension) {
+        this.axis = dimension;
     }
     
-    private AspectValueTransformer transformer = null;
+    transient private AspectValueTransformer transformer;
 
     /**
      * @see Aspect#getTransformer()
@@ -194,7 +213,7 @@ abstract public class BaseAspect implements Aspect {
         this.transformer = transformer;
     }
     
-    private HashMap<String,Set<Fact>> facts = new HashMap<String,Set<Fact>>();
+    private HashMap<String,Set<Fact>> facts;
     
     /**
      * @see Aspect#getFacts(AspectValue)
@@ -226,7 +245,7 @@ abstract public class BaseAspect implements Aspect {
     }
     
 
-    private Map<String,Fragment> fragmentMap = new HashMap<String,Fragment>();
+    private Map<String,Fragment> fragmentMap;
     public Fragment getFragment(Fact fact) throws XBRLException {
         String fragmentKey = getKey(fact);
         if (fragmentMap.containsKey(fragmentKey)) {
@@ -237,7 +256,7 @@ abstract public class BaseAspect implements Aspect {
         return fragment;
     }
 
-    private AspectValue criterion = null;
+    private AspectValue criterion;
     
     /**
      * @see org.xbrlapi.aspects.Aspect#clearSelectionCriterion()
@@ -351,8 +370,139 @@ abstract public class BaseAspect implements Aspect {
         return label;
     }    
 
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+
+        out.writeObject(model);
+        
+        out.writeObject(this.getSelectionCriterion());
+        out.writeObject(this.getAxis());
+        
+        out.writeInt(facts.size());
+        for (String key: facts.keySet()) {
+            Set<Fact> set = facts.get(key);
+            out.writeInt(set.size());
+            for (Fact fact: set) out.writeObject(fact);
+            out.writeObject(key);
+        }
+        
+        out.writeInt(fragmentMap.size());
+        for (String key: fragmentMap.keySet()) {
+            out.writeObject(key);
+            out.writeObject(fragmentMap.get(key));
+        }
+        
+        out.writeInt(values.size());
+        for (String key: values.keySet()) {
+            out.writeObject(key);
+            out.writeObject(values.get(key));
+        }
+   }
     
- 
-    
-    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        try {
+            initialize((AspectModel) in.readObject());
+        } catch (XBRLException e) {
+            throw new IOException("The aspect could not be initialized.",e);
+        }
+        setSelectionCriterion((AspectValue) in.readObject());
+        setAxis((String) in.readObject());
+        
+        int size = in.readInt();
+        for (int i=0; i<size; i++) {
+            Set<Fact> set = new HashSet<Fact>();
+            int count = in.readInt();
+            for (int j=0; j<count; j++) {
+                set.add((Fact) in.readObject());
+            }
+            facts.put((String) in.readObject(), set);
+        }
+        
+        size = in.readInt();
+        for (int i=0; i<size; i++) {
+            fragmentMap.put((String) in.readObject(), (Fragment) in.readObject());
+        }
+        
+        size = in.readInt();
+        for (int i=0; i<size; i++) {
+            values.put((String) in.readObject(), (AspectValue) in.readObject());
+        }
+
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((axis == null) ? 0 : axis.hashCode());
+        result = prime * result
+                + ((criterion == null) ? 0 : criterion.hashCode());
+        result = prime * result + ((facts == null) ? 0 : facts.hashCode());
+        result = prime * result
+                + ((fragmentMap == null) ? 0 : fragmentMap.hashCode());
+        result = prime * result + ((model == null) ? 0 : model.hashCode());
+        result = prime * result + ((values == null) ? 0 : values.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BaseAspect other = (BaseAspect) obj;
+        if (axis == null) {
+            if (other.axis != null)
+                return false;
+        } else if (!axis.equals(other.axis))
+            return false;
+        if (criterion == null) {
+            if (other.criterion != null)
+                return false;
+        } else if (!criterion.equals(other.criterion))
+            return false;
+        if (facts == null) {
+            if (other.facts != null)
+                return false;
+        } else if (!facts.equals(other.facts))
+            return false;
+        if (fragmentMap == null) {
+            if (other.fragmentMap != null)
+                return false;
+        } else if (!fragmentMap.equals(other.fragmentMap))
+            return false;
+        if (model == null) {
+            if (other.model != null)
+                return false;
+        } else if (!model.equals(other.model))
+            return false;
+        if (values == null) {
+            if (other.values != null)
+                return false;
+        } else if (!values.equals(other.values))
+            return false;
+        return true;
+    }    
+
 }

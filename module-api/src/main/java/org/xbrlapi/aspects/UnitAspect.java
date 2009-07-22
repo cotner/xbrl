@@ -1,7 +1,9 @@
 package org.xbrlapi.aspects;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
@@ -15,14 +17,19 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class UnitAspect extends BaseAspect implements Aspect {
 
+    private final static Logger logger = Logger.getLogger(UnitAspect.class);    
+
     /**
      * @param aspectModel The aspect model with this aspect.
      * @throws XBRLException.
      */
     public UnitAspect(AspectModel aspectModel) throws XBRLException {
-        super();
-        setAspectModel(aspectModel);
-        setTransformer(new Transformer());
+        super(aspectModel);
+        initialize();
+    }
+    
+    protected void initialize() {
+        this.setTransformer(new Transformer());
     }
 
     /**
@@ -154,4 +161,24 @@ public class UnitAspect extends BaseAspect implements Aspect {
         if (! item.isNumeric()) throw new XBRLException("The fact must be numeric.");
         return item.getURI() + ((NumericItem) item).getUnitId();
     }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        initialize();
+    }
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+    }    
 }

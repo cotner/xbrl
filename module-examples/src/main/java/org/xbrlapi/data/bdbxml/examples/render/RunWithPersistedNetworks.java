@@ -173,10 +173,10 @@ public class RunWithPersistedNetworks {
             store = createStore(arguments.get("database"), arguments.get("container"));
 
             List<Stub> stubs = store.getStubs();
-            for (Stub stub: stubs) {
+/*            for (Stub stub: stubs) {
                 stub.serialize();
             }
-            
+*/            
             // Set up the data loader (does the parsing and data discovery)
             Loader loader = createLoader(store, arguments.get("cache"));
 

@@ -16,46 +16,6 @@ package org.xbrlapi.data.exist.framework.tests;
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
-The setContentAsDOM method serialises the DOM node to obtain a text
-string.  That serialisation is done with the TextWriter class, which
-seems to be a roll-your-own serialisation class that largely ignores
-namespace declarations in the serialisation process.  This means that
-when the string needs to be parsed as XML, it is not valid XML.
-
-You can get around this easily enough by using the Xerces XML serialiser
-as per the method below.
-
-     * Convert a DOM object to a string.
-     * @param dom The DOM object to convert to a string.
-     * @return The string that is the serialised content of the DOM
-object.
-     * @throws XBRLException if an IO exception occurs.
-    private String DOM2String(Document node) throws XBRLException {
-    try {
-        StringWriter sw = new StringWriter();
-org.apache.xml.serialize.OutputFormat format = new
-org.apache.xml.serialize.OutputFormat("xml", "UTF-8", true);
-org.apache.xml.serialize.XMLSerializer output = new
-org.apache.xml.serialize.XMLSerializer(sw, format);
-output.setNamespaces(true);
-output.serialize(node);
-        sw.flush();
-        String out = sw.toString();
-        sw.close();
-        return out;
-    } catch (IOException e) {
-    ...
-    }
-    
-    }
-
-This seems to handle all of the namespace issues nicely enough (though it is
-not tested passing in any DOM node rather than passing in a
-Document node), leaving open the question: why not use this (or the
-Xalan 2.7 serialiser [the 2.6 Xalan
-serialiser has some namespace issues of its own]) instead of using the
-TextWriter class? 
  */
 
 import org.w3c.dom.Document;

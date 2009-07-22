@@ -2,6 +2,7 @@ package org.xbrlapi;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 
 import org.w3c.dom.Document;
@@ -10,7 +11,7 @@ import org.xbrlapi.builder.Builder;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
-public abstract interface XML extends Comparable<XML> {
+public abstract interface XML extends Comparable<XML>, Serializable {
 
     /**
      * Override the Object hashCode method to provide for equality comparisons

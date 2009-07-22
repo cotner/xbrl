@@ -324,7 +324,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      */
     public String getXPath() throws XBRLException {
 
-    	String value = getMetaAttribute("SequenceToParentElement");
+    	String value = getMetaAttribute("sequenceToParentElement");
     	if (value.equals("")) return ".";
     	
     	String[] sequence = value.split(" ");
@@ -386,7 +386,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
 
     	String result = value.toString();
     	if (! result.equals(""))
-    	setMetaAttribute("SequenceToParentElement",result);
+    	setMetaAttribute("sequenceToParentElement",result);
     	
     }
     
@@ -401,7 +401,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getSequenceToParentElementAsString()
      */
     public String getSequenceToParentElementAsString() throws XBRLException {
-    	String value = this.getMetaAttribute("SequenceToParentElement");
+    	String value = this.getMetaAttribute("sequenceToParentElement");
     	if (value == null) return "";
     	return value;
     }    

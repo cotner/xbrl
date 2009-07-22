@@ -58,7 +58,7 @@ public class MockImpl extends FragmentImpl implements Mock {
 	 * of the fragment.
 	 */
     public void setSequenceToParentElement(String sequence) throws XBRLException {
-    	setMetaAttribute("SequenceToParentElement", sequence);
+    	setMetaAttribute("sequenceToParentElement", sequence);
     }
 
     /**

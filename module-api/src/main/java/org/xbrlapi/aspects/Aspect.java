@@ -1,5 +1,6 @@
 package org.xbrlapi.aspects;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +13,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoff Shuetrim (geoff@galexy.net)
  *
  */
-public interface Aspect {
+public interface Aspect extends Serializable {
 
     /**
      * Aspect identifiers
@@ -26,8 +27,9 @@ public interface Aspect {
     
     /**
      * @return the unique aspect identifier.
+     * @throws XBRLException if the aspect identifier cannot be determined.
      */
-    public String getType();
+    public String getType() throws XBRLException;
 
     /**
      * @return true if the aspect has no aspect values
@@ -56,16 +58,16 @@ public interface Aspect {
     public boolean isMissing();    
     
     /**
-     * @return dimension name or null if the aspect is an orphan
-     * (not assigned to a dimension in the containing aspect model).
+     * @return axis name or null if the aspect is an orphan
+     * (not assigned to an axis in the containing aspect model).
      */
-    public String getDimension();
+    public String getAxis();
     
     /**
-     * @param dimension the name of the dimension or null
+     * @param axis the name of the axis or null
      * if the aspect is to be an orphan.
      */
-    public void setDimension(String dimension);    
+    public void setAxis(String axis);    
 
     /**
      * @return true if the aspect is in a dimension of the 
@@ -120,15 +122,16 @@ public interface Aspect {
      * @return the number of combinations of descendant aspect
      * values (for those descendant aspects in the same dimension
      * of the aspect model).
+     * @throws XBRLException
      */
-    public int getDescendantCount();
+    public int getDescendantCount() throws XBRLException;
     
     /**
      * @return the number of combinations of ancestor aspect
      * values (for those ancestor aspects in the same dimension
      * of the aspect model).
      */
-    public int getAncestorCount();    
+    public int getAncestorCount() throws XBRLException;    
     
     
     /**

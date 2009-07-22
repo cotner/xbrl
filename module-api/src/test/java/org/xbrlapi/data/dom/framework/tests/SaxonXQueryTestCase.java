@@ -95,7 +95,6 @@ public class SaxonXQueryTestCase extends BaseTestCase {
             evaluator.setContextItem(source);
             evaluator.run(destination);
             assertEquals(1,outputDocument.getChildNodes().getLength());
-            store.serialize(outputDocument.getDocumentElement());
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        fail(e.getMessage());

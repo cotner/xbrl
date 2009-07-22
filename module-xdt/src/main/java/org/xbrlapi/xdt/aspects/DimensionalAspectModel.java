@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt.aspects;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -30,7 +31,7 @@ import org.xbrlapi.xdt.values.DimensionValueAccessorImpl;
  */
 public class DimensionalAspectModel extends BaseAspectModel implements AspectModel {
 
-    DimensionValueAccessor accessor = new DimensionValueAccessorImpl();
+    transient DimensionValueAccessor accessor;
     
     /**
      * XDT Aspects are only added as they are required.
@@ -38,6 +39,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
      */
     public DimensionalAspectModel() throws XBRLException {
         super();
+        initialize();
         this.setAspect(new ConceptAspect(this));
         this.setAspect(new EntityIdentifierAspect(this));
         this.setAspect(new SegmentRemainderAspect(this));
@@ -46,6 +48,10 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         this.setAspect(new UnitAspect(this));
         //XDT Aspects are only added as they are required.
         
+    }
+    
+    protected void initialize() {
+        this.accessor = new DimensionValueAccessorImpl();
     }
     
     /**
@@ -96,4 +102,24 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         return "dimensional";
     }
 
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        initialize();
+   }
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+   }    
+    
 }

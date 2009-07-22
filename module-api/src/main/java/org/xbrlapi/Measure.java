@@ -1,9 +1,11 @@
 package org.xbrlapi;
 
+import java.io.Serializable;
+
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public interface Measure {
+public interface Measure extends Serializable {
 
     /**
      * @return the namespace for the measure value.
@@ -14,4 +16,5 @@ public interface Measure {
      * @return the local name for the measure value.
      */
     public String getLocalname();
+    
 }

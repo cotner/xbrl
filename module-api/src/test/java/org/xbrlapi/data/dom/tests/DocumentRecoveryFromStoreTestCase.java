@@ -73,7 +73,7 @@ public class DocumentRecoveryFromStoreTestCase extends BaseTestCase {
 			Element root = store.getDocumentAsDOM(this.getURI(STARTING_POINT));
 			assertNotNull(root);
 			assertEquals(root.getLocalName(),"schema");
-			store.serialize(root);
+			//store.serialize(root);
 		} catch (XBRLException e) {
 			fail("Unexpected " + e.getMessage());
 		}

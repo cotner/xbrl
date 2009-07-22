@@ -4,7 +4,10 @@ The XBRL Dimensions (XDT) implementation.
 
 Release 5.0
 July 31, 2009
-New release to keep version in line with other modules.
+Made the main classes serializable.
+Introduced axes in place of dimensions in aspect models to avoid
+clashes with XDT dimensions.  This causes backward incompatibility of
+the API but eliminates bugs in the dimension aspect implementations.
 
 Release 4.0
 January 7, 2009

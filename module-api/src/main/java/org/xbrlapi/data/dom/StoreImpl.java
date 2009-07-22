@@ -114,8 +114,6 @@ public class StoreImpl extends BaseStoreImpl implements Store, Serializable {
         } catch (XBRLException e) {
             throw new IOException("The data store could not be read.",e);
         }
-        
-        
     }
 	
 	/**

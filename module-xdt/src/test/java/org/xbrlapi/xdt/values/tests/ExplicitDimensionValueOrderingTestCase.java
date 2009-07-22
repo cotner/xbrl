@@ -71,12 +71,12 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             
             assertEquals(6, values.size());
             
-            for (DimensionValue value: values) {
+/*            for (DimensionValue value: values) {
                 store.serialize(value.getItem().getDataRootElement());
                 store.serialize(value.getDimension().getDataRootElement());
                 store.serialize(((Concept) value.getValue()).getDataRootElement());
             }
-            
+*/            
     	} catch (Exception e) {
     		e.printStackTrace();
     		fail(e.getMessage());
@@ -113,11 +113,11 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             
             assertEquals(6, values.size());
             
-            for (DimensionValue value: values) {
-//                store.serialize(value.getItem().getDataRootElement());
-//                store.serialize(value.getDimension().getDataRootElement());
+/*            for (DimensionValue value: values) {
+                store.serialize(value.getItem().getDataRootElement());
+                store.serialize(value.getDimension().getDataRootElement());
                 store.serialize(((Concept) value.getValue()).getDataRootElement());
-            }
+            }*/
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,9 +139,8 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             Set<URI> uris = store.getDocumentURIs();
             for (URI myURI: uris) logger.info(myURI);
 
-            List<Concept> concepts = store.<Concept>getXMLResources("Concept");
-            for (Concept c: concepts) store.serialize(c.getDataRootElement());
-            
+/*            List<Concept> concepts = store.<Concept>getXMLResources("Concept");
+            for (Concept c: concepts) store.serialize(c.getDataRootElement());*/
             
             List<ExplicitDimension> dimensions = store.<ExplicitDimension>getXMLResources("org.xbrlapi.xdt.ExplicitDimensionImpl");
             assertEquals(2,dimensions.size());
@@ -169,9 +168,9 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             
             assertEquals(6, values.size());
             
-            for (DimensionValue value: values) {
+/*            for (DimensionValue value: values) {
                 store.serialize(((Concept) value.getValue()).getDataRootElement());
-            }
+            }*/
             
         } catch (Exception e) {
             e.printStackTrace();

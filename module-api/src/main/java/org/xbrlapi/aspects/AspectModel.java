@@ -1,7 +1,7 @@
 package org.xbrlapi.aspects;
 
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,12 +12,8 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoff Shuetrim (geoff@galexy.net)
  *
  */
-public interface AspectModel {
+public interface AspectModel extends Serializable {
 
-
-
-
-    
     /**
      * @return The unique identifier of the aspect model.
      */
@@ -57,15 +53,15 @@ public interface AspectModel {
      * of child aspects, all of which are aspects associated with the same dimension
      * of the aspect model.  These dimensions are useful for relating aspects
      * to rows and columns of a table, for example.
-     * @return the linked list of aspects for the dimension.
+     * @return the list of aspects for the dimension.
      * @throws XBRLException if the dimension is not defined for the aspect model.
      */
-    public LinkedList<Aspect> getDimensionAspects(String dimension) throws XBRLException;
+    public List<Aspect> getDimensionAspects(String dimension) throws XBRLException;
 
     /**
      * @param aspect The aspect to set in the aspect model, as an orphan.
      */
-    public void setAspect(Aspect aspect);
+    public void setAspect(Aspect aspect) throws XBRLException;
     
     /**
      * @param fact The fact to add to the aspect model
@@ -76,19 +72,19 @@ public interface AspectModel {
     
     /**
      * @param aspectType The type of aspect to arrange in the aspect model.
-     * @param dimension the dimension to put the aspect in, in last 
+     * @param axis the axis to put the aspect in, in last 
      * place in the ordering.
      * @throws XBRLException if the aspect is not in the aspect model.
      */
-    public void arrangeAspect(String aspectType, String dimension) throws XBRLException;
+    public void arrangeAspect(String aspectType, String axis) throws XBRLException;
     
     /**
      * @param aspectType The type of aspect to arrange in the aspect model.
-     * @param dimension the dimension to put the aspect in.
+     * @param axis the axis to put the aspect in.
      * @param parentType The type of parent aspect for the aspect being set.
      * @throws XBRLException if the aspect or parent are not in the aspect model.
      */
-    public void arrangeAspect(String aspectType, String dimension, String parentType) throws XBRLException;
+    public void arrangeAspect(String aspectType, String axis, String parentType) throws XBRLException;
  
 
     
@@ -150,7 +146,7 @@ public interface AspectModel {
      * dimension.  The lists in the list are ordered 
      * by the orderings of the values for each aspect.
      */
-    public List<List<AspectValue>> getAspectValueCombinationsForDimension(String dimension);
+    public List<List<AspectValue>> getAspectValueCombinationsForDimension(String dimension) throws XBRLException;
     
     /**
      * @param dimension The name of the dimension
@@ -163,7 +159,7 @@ public interface AspectModel {
      * by the orderings of the values for each aspect.
      * Any aspect that has just missing aspect values is omitted.
      */
-    public List<List<AspectValue>> getMinimalAspectValueCombinationsForDimension(String dimension);    
+    public List<List<AspectValue>> getMinimalAspectValueCombinationsForDimension(String dimension) throws XBRLException;    
     
     /**
      * @param type The type identifying the aspect to delete.

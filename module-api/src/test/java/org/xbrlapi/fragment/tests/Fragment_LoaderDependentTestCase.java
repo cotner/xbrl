@@ -132,8 +132,8 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
                 List<Fragment> children = fragment.getAllChildren();
                 for (Fragment child: children) {
                     String required = "";
-                    if (child.getMetaAttribute("SequenceToParentElement") != null) {
-                        required = child.getMetaAttribute("SequenceToParentElement");
+                    if (child.getMetaAttribute("sequenceToParentElement") != null) {
+                        required = child.getMetaAttribute("sequenceToParentElement");
                     }
                     assertEquals(required,child.getSequenceToParentElementAsString());
                 }

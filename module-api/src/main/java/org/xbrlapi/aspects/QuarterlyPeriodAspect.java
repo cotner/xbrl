@@ -1,8 +1,10 @@
 package org.xbrlapi.aspects;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -13,6 +15,8 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
+
+    private final static Logger logger = Logger.getLogger(QuarterlyPeriodAspect.class);    
 
     private class PeriodComparator implements Comparator<String> {
         
@@ -41,8 +45,12 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
      * @throws XBRLException.
      */
     public QuarterlyPeriodAspect(AspectModel aspectModel) throws XBRLException {
-        setAspectModel(aspectModel);
-        setTransformer(new Transformer());
+        super(aspectModel);
+        initialize();
+    }
+    
+    protected void initialize() {
+        this.setTransformer(new Transformer());
         values = new TreeMap<String,AspectValue>(new PeriodComparator());
     }
 
@@ -137,5 +145,24 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
     public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
         return ((Context) super.getFragmentFromStore(fact)).getPeriod();
     }    
+
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        initialize();
+    }
     
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+    }    
 }

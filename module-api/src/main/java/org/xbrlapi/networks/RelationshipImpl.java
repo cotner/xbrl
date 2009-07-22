@@ -9,7 +9,6 @@ import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -21,7 +20,7 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class RelationshipImpl implements Relationship {
 
-	protected static Logger logger = Logger.getLogger(Loader.class);
+	protected static Logger logger = Logger.getLogger(RelationshipImpl.class);
 	
 	private Store store = null;
 

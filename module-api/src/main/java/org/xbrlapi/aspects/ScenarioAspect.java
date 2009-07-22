@@ -1,7 +1,9 @@
 package org.xbrlapi.aspects;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
@@ -14,13 +16,19 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class ScenarioAspect extends ContextAspect implements Aspect {
 
+    private final static Logger logger = Logger.getLogger(ScenarioAspect.class);    
+
     /**
      * @param aspectModel The aspect model with this aspect.
      * @throws XBRLException.
      */
     public ScenarioAspect(AspectModel aspectModel) throws XBRLException {
-        setAspectModel(aspectModel);
-        setTransformer(new Transformer());
+        super(aspectModel);
+        initialize();
+    }
+    
+    protected void initialize() {
+        this.setTransformer(new Transformer());
     }
 
     /**
@@ -102,5 +110,25 @@ public class ScenarioAspect extends ContextAspect implements Aspect {
         Scenario scenario = context.getScenario();
         if (scenario == null) return null;
         return scenario;
+    }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        initialize();
+    }
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
     }    
 }

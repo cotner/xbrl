@@ -50,7 +50,7 @@ public class ReferencePartTestCase extends DOMLoadingTestCase {
 			List<ReferenceResource> fragments = store.<ReferenceResource>getXMLResources("ReferenceResource");
 			ReferenceResource fragment = fragments.get(0);			
 			ReferencePart part = fragment.getReferenceParts().get(0);
-			store.serialize(part.getDataRootElement());
+			//store.serialize(part.getDataRootElement());
 			ReferencePartDeclaration declaration = part.getDeclaration();
 			assertEquals(part.getLocalname(),declaration.getName());
 			assertEquals(part.getNamespace(),declaration.getTargetNamespace());

@@ -1,7 +1,5 @@
 package org.xbrlapi.xlink.handler;
 
-import java.io.Serializable;
-
 import org.apache.log4j.Logger;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.xlink.CustomLinkRecogniser;
@@ -14,7 +12,7 @@ import org.xml.sax.Attributes;
  * links used by XBRL.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class XBRLCustomLinkRecogniserImpl extends CustomLinkRecogniser implements Serializable {
+public class XBRLCustomLinkRecogniserImpl extends CustomLinkRecogniser {
 
     private final static Logger logger = Logger.getLogger(XBRLCustomLinkRecogniserImpl.class);
 

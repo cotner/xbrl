@@ -55,7 +55,7 @@ public class LinkTestCase extends DOMLoadingTestCase {
             List<Link> fragments = store.<Link>getXMLResources("ExtendedLink");
             assertTrue(fragments.size() > 0);
             for (Link fragment: fragments) {
-                store.serialize(fragment);
+                //store.serialize(fragment);
                 if (fragment.getLocalname().equals("presentationLink")) {
                     assertEquals("http://mycompany.com/xbrl/roleE/newExtendedRoleType",fragment.getLinkRole().toString());
                 }

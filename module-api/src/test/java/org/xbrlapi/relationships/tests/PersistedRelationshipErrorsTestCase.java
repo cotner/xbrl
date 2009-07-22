@@ -45,9 +45,9 @@ public class PersistedRelationshipErrorsTestCase extends DOMLoadingTestCase {
             
             List<Error> errors = store.<Error>getXMLResources("Error");
             assertTrue(errors.size() > 0);
-            for (Error error: errors) {
+/*            for (Error error: errors) {
                 error.serialize();
-            }
+            }*/
                         
         } catch (Exception e) {
             e.printStackTrace();

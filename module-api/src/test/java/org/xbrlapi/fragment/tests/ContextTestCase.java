@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.xbrlapi.Context;
 import org.xbrlapi.DOMLoadingTestCase;
-import org.xbrlapi.Fragment;
 
 /**
  * Tests the implementation of the org.xbrlapi.Context interface.
@@ -70,12 +69,12 @@ public class ContextTestCase extends DOMLoadingTestCase {
             assertTrue(contexts.size() > 0);
             int scenarios = 0;
             for (Context context: contexts) {
-                store.serialize(context);
-                List<Fragment> children = context.getAllChildren();
+                //store.serialize(context);
+/*                List<Fragment> children = context.getAllChildren();
                 for (Fragment child: children) {
                     store.serialize(child);
                 }
-                if (context.getScenario() != null) {
+*/                if (context.getScenario() != null) {
                     assertEquals("org.xbrlapi.impl.ScenarioImpl", context.getScenario().getType());                    
                     scenarios++;
                 }

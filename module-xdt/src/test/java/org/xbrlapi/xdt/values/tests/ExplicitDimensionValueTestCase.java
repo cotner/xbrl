@@ -2,7 +2,6 @@ package org.xbrlapi.xdt.values.tests;
 
 import java.util.List;
 
-import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
 import org.xbrlapi.xdt.ExplicitDimension;
 import org.xbrlapi.xdt.tests.BaseTestCase;
@@ -85,7 +84,7 @@ public class ExplicitDimensionValueTestCase extends BaseTestCase {
                         foundSomeValues = true;
                         assertTrue(value.isExplicitDimensionValue());
                         assertTrue(value.getValue() != null);
-                        store.serialize((Fragment) value.getValue());
+                        //store.serialize((Fragment) value.getValue());
                     }
                 }
             }

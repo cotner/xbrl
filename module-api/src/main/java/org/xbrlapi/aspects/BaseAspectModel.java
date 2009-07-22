@@ -1,9 +1,9 @@
 package org.xbrlapi.aspects;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,27 +19,28 @@ import org.xbrlapi.utilities.XBRLException;
  */
 abstract public class BaseAspectModel implements AspectModel {
 
-    protected static Logger logger = Logger.getLogger(BaseAspectModel.class);  
+    private final static Logger logger = Logger.getLogger(BaseAspectModel.class);  
 
     /**
      * From aspect type to aspect.
      */
-    private Map<String,Aspect> aspects = new HashMap<String,Aspect>();
+    private Map<String,Aspect> aspects;
     /**
      * From dimension name to list of aspects in dimension.
      */
-    private Map<String,LinkedList<Aspect>> dimensions = new HashMap<String,LinkedList<Aspect>>();
+    private Map<String,List<Aspect>> axes;
     
-    private Set<Fact> facts = new HashSet<Fact>();
+    private Set<Fact> facts;
     
-
-
-
+    public BaseAspectModel() {
+        initialize();
+    }
     
-
-
-    
-    
+    protected void initialize() {
+        aspects = new HashMap<String,Aspect>();
+        axes = new HashMap<String,List<Aspect>>();
+        facts = new HashSet<Fact>();
+    }
     
     /**
      * @see AspectModel#getAspects()
@@ -71,7 +72,7 @@ abstract public class BaseAspectModel implements AspectModel {
     public Collection<Aspect> getOrphanAspects() {
         Collection<Aspect> aspects = this.aspects.values();
         for (Aspect aspect: aspects) {
-            if (aspect.getDimension() != null) aspects.remove(aspect);
+            if (aspect.getAxis() != null) aspects.remove(aspect);
         }
         return aspects;
     }
@@ -79,15 +80,15 @@ abstract public class BaseAspectModel implements AspectModel {
     /**
      * @see AspectModel#getDimensionAspects(String)
      */
-    public LinkedList<Aspect> getDimensionAspects(String dimension) {
-        return dimensions.get(dimension);
+    public List<Aspect> getDimensionAspects(String dimension) {
+        return axes.get(dimension);
     }
 
-
     /**
+     * @throws XBRLException 
      * @see AspectModel#setAspect(Aspect)
      */
-    public void setAspect(Aspect aspect) {
+    public void setAspect(Aspect aspect) throws XBRLException {
         try {
             aspect.setAspectModel(this);
         } catch (XBRLException e) {
@@ -95,8 +96,8 @@ abstract public class BaseAspectModel implements AspectModel {
         }
         if (aspects.containsKey(aspect.getType())) {
             Aspect old = aspects.get(aspect.getType());
-            if (old.getDimension() != null) {
-                List<Aspect> dimensionAspects = dimensions.get(old.getDimension());
+            if (old.getAxis() != null) {
+                List<Aspect> dimensionAspects = axes.get(old.getAxis());
                 LOOP: for (Aspect dimensionAspect: dimensionAspects) {
                     if (dimensionAspect.getType().equals(old.getType())) {
                         dimensionAspects.remove(dimensionAspect);
@@ -106,32 +107,32 @@ abstract public class BaseAspectModel implements AspectModel {
             }
         }
         aspects.put(aspect.getType(),aspect);
-        aspect.setDimension(null);
+        aspect.setAxis(null);
     }
     
     /**
      * @see AspectModel#arrangeAspect(String, String)
      */
-    public void arrangeAspect(String aspectType, String dimension) throws XBRLException {
+    public void arrangeAspect(String aspectType, String axis) throws XBRLException {
 
         if (! aspects.containsKey(aspectType)) throw new XBRLException("The aspect is not part of the aspect model.");
         Aspect aspect = aspects.get(aspectType);
         
         if (! aspect.isOrphan()) {
-           LinkedList<Aspect> dimensionAspects = dimensions.get(aspect.getDimension());
+           List<Aspect> dimensionAspects = axes.get(aspect.getAxis());
            dimensionAspects.remove(aspect);
         }
        
-        LinkedList<Aspect> dimensionAspects;
-        if (dimensions.containsKey(dimension)) {
-            dimensionAspects = this.dimensions.get(dimension);
+        List<Aspect> dimensionAspects;
+        if (axes.containsKey(axis)) {
+            dimensionAspects = this.axes.get(axis);
         } else {
-            dimensionAspects = new LinkedList<Aspect>();
-            dimensions.put(dimension,dimensionAspects);
+            dimensionAspects = new Vector<Aspect>();
+            axes.put(axis,dimensionAspects);
         }
         dimensionAspects.add(aspect);
 
-        aspect.setDimension(dimension);
+        aspect.setAxis(axis);
     }
     
     /**
@@ -140,15 +141,15 @@ abstract public class BaseAspectModel implements AspectModel {
     public void arrangeAspect(String aspectType, String dimension, String parentType) throws XBRLException {
         if (! aspects.containsKey(aspectType)) throw new XBRLException("The aspect is not part of the aspect model.");
         if (! aspects.containsKey(parentType)) throw new XBRLException("The parent aspect is not part of the aspect model.");
-        if (! this.dimensions.containsKey(dimension)) throw new XBRLException("The dimension is not part of the aspect model.");
+        if (! this.axes.containsKey(dimension)) throw new XBRLException("The dimension is not part of the aspect model.");
         
         Aspect aspect = aspects.get(aspectType);
-        if (aspect.getDimension() != null) {
-            List<Aspect> dimensionAspects = dimensions.get(aspect.getDimension());
+        if (aspect.getAxis() != null) {
+            List<Aspect> dimensionAspects = axes.get(aspect.getAxis());
             dimensionAspects.remove(aspect);
         }
         
-        List<Aspect> dimensionAspects = this.dimensions.get(dimension);
+        List<Aspect> dimensionAspects = this.axes.get(dimension);
         FINDPARENT: for (Aspect dimensionAspect: dimensionAspects) {
             if (dimensionAspect.getType().equals(parentType)) {
                 int index = dimensionAspects.indexOf(dimensionAspect)+1;
@@ -157,7 +158,7 @@ abstract public class BaseAspectModel implements AspectModel {
             }
         }
 
-        aspect.setDimension(dimension);
+        aspect.setAxis(dimension);
         
     }
 
@@ -253,9 +254,10 @@ abstract public class BaseAspectModel implements AspectModel {
     }
     
     /**
+     * @throws XBRLException 
      * @see AspectModel#getAspectValueCombinationsForDimension(String)
      */
-    public List<List<AspectValue>> getAspectValueCombinationsForDimension(String dimension) {
+    public List<List<AspectValue>> getAspectValueCombinationsForDimension(String dimension) throws XBRLException {
         
         // Set up the result matrix
         List<Aspect> aspects = getDimensionAspects(dimension);
@@ -287,9 +289,10 @@ abstract public class BaseAspectModel implements AspectModel {
     }
     
     /**
+     * @throws XBRLException 
      * @see AspectModel#getMinimalAspectValueCombinationsForDimension(String)
      */
-    public List<List<AspectValue>> getMinimalAspectValueCombinationsForDimension(String dimension) {
+    public List<List<AspectValue>> getMinimalAspectValueCombinationsForDimension(String dimension) throws XBRLException {
         
         // Set up the result matrix
         List<Aspect> aspects = getDimensionAspects(dimension);
@@ -332,7 +335,7 @@ abstract public class BaseAspectModel implements AspectModel {
         if (! hasAspect(type)) return;
         
         Aspect aspect = this.getAspect(type);
-        List<Aspect> dimensionAspects = this.getDimensionAspects(aspect.getDimension());
+        List<Aspect> dimensionAspects = this.getDimensionAspects(aspect.getAxis());
         dimensionAspects.remove(aspect);
         aspects.remove(aspect.getType());
 
@@ -346,6 +349,103 @@ abstract public class BaseAspectModel implements AspectModel {
             aspect.clearFacts();
         }
         this.facts.clear();
+    }
+ 
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeInt(aspects.size());
+        for (String key: aspects.keySet()) {
+            out.writeObject(key);
+            out.writeObject(aspects.get(key));
+        }
+        out.writeInt(axes.size());
+        for (String key: axes.keySet()) {
+            List<Aspect> aspects = axes.get(key);
+            out.writeInt(aspects.size());
+            for (Aspect aspect: aspects) out.writeObject(aspect);
+            out.writeObject(key);
+        }
+        out.writeInt(facts.size());
+        for (Fact fact: facts) {
+            out.writeObject(fact);
+        }
+   }    
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        initialize();
+        int size = in.readInt();
+        for (int i=0; i<size; i++) {
+            aspects.put((String) in.readObject(), (Aspect) in.readObject());
+        }
+        size = in.readInt();
+        for (int i=0; i<size; i++) {
+            List<Aspect> aspects = new Vector<Aspect>();
+            int count = in.readInt();
+            for (int j=0; j<count; j++) {
+                aspects.add((Aspect) in.readObject());
+            }
+            axes.put((String) in.readObject(), aspects);
+        }
+        size = in.readInt();
+        for (int i=0; i<size; i++) {
+            facts.add((Fact) in.readObject());
+        }
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((aspects == null) ? 0 : aspects.hashCode());
+        result = prime * result + ((axes == null) ? 0 : axes.hashCode());
+        result = prime * result + ((facts == null) ? 0 : facts.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BaseAspectModel other = (BaseAspectModel) obj;
+        if (aspects == null) {
+            if (other.aspects != null)
+                return false;
+        } else if (!aspects.equals(other.aspects))
+            return false;
+        if (axes == null) {
+            if (other.axes != null)
+                return false;
+        } else if (!axes.equals(other.axes))
+            return false;
+        if (facts == null) {
+            if (other.facts != null)
+                return false;
+        } else if (!facts.equals(other.facts))
+            return false;
+        return true;
     }
     
 }

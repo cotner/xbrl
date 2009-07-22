@@ -1,5 +1,7 @@
 package org.xbrlapi.aspects;
 
+import java.io.IOException;
+
 import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -8,9 +10,9 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public abstract class BaseAspectValue implements AspectValue {
 
-    private Aspect aspect = null;
+    private Aspect aspect;
     
-    private Fragment fragment = null;
+    private Fragment fragment;
 
     /**
      * @param aspect The aspect with this value
@@ -66,5 +68,68 @@ public abstract class BaseAspectValue implements AspectValue {
     public AspectValue getParent() throws XBRLException {
         return null;
     }    
+ 
+
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(aspect);
+        out.writeObject(fragment);
+   }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        aspect = (Aspect) in.readObject();
+        fragment = (Fragment) in.readObject();
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((aspect == null) ? 0 : aspect.hashCode());
+        result = prime * result
+                + ((fragment == null) ? 0 : fragment.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BaseAspectValue other = (BaseAspectValue) obj;
+        if (aspect == null) {
+            if (other.aspect != null)
+                return false;
+        } else if (!aspect.equals(other.aspect))
+            return false;
+        if (fragment == null) {
+            if (other.fragment != null)
+                return false;
+        } else if (!fragment.equals(other.fragment))
+            return false;
+        return true;
+    }
+    
     
 }

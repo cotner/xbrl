@@ -1,20 +1,19 @@
 package org.xbrlapi.aspects;
 
+import java.io.Serializable;
+
 import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public interface AspectValue {
+public interface AspectValue extends Serializable {
 
-
-    
     /**
      * @return the fragment expressing this aspect value.
      */
     public Fragment getFragment();
-    
     
     /**
      * @return the aspect that this is a value for.

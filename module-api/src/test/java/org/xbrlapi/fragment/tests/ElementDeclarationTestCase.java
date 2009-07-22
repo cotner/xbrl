@@ -170,7 +170,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 			String query = "#roots#[" + Constants.XBRLAPIPrefix + ":" + "data/*/@fixed='12.4']";
 			List<ElementDeclaration> fragments = store.<ElementDeclaration>queryForXMLResources(query);
 			ElementDeclaration fragment = fragments.get(0);
-			store.serialize(fragment.getMetadataRootElement());
+			//store.serialize(fragment.getMetadataRootElement());
 			assertEquals("12.4", fragment.getFixed());
 		} catch (Exception e) {
 			e.printStackTrace();

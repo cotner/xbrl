@@ -54,7 +54,7 @@ public class FactImpl extends FragmentImpl implements Fact {
 			if (this.getNamespace().equals(concept.getTargetNamespace())) 
 				return concept;
 		}
-		getStore().serialize(this.getMetadataRootElement());
+		logger.error(getStore().serializeToString(this.getMetadataRootElement()));
 		throw new XBRLException("No concept could be found for the fact.");
 	}
 	

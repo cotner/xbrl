@@ -1,14 +1,15 @@
 package org.xbrlapi.xdt.aspects;
 
-import java.net.URI;
+import java.io.IOException;
+import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import java.util.List;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.OpenContextComponent;
@@ -16,35 +17,19 @@ import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.AspectValueTransformer;
-import org.xbrlapi.aspects.BaseAspect;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
 import org.xbrlapi.aspects.MissingAspectValue;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.TypedDimension;
 import org.xbrlapi.xdt.values.DimensionValue;
-import org.xbrlapi.xdt.values.DimensionValueAccessor;
-import org.xbrlapi.xdt.values.DimensionValueAccessorImpl;
 
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class TypedDimensionAspect extends BaseAspect implements Aspect {
+public class TypedDimensionAspect extends DimensionAspect implements Aspect {
 
-    private TypedDimension dimension = null;
-    private String type = null;
-    private DimensionValueAccessor accessor = new DimensionValueAccessorImpl();
-    /**
-     * 
-     * @param dimension The dimension defining this aspect.
-     * @throws XBRLException if the dimension is null.
-     */
-    private void setDimension(TypedDimension dimension) throws XBRLException {
-        if (dimension == null) throw new XBRLException("The dimension must not be null.");
-        this.dimension = dimension;
-        type = dimension.getTargetNamespace() + dimension.getName();
-    }
+    private final static Logger logger = Logger.getLogger(TypedDimensionAspect.class);
     
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -52,16 +37,12 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
      * @throws XBRLException.
      */
     public TypedDimensionAspect(AspectModel aspectModel, TypedDimension dimension) throws XBRLException {
-        setAspectModel(aspectModel);
-        setDimension(dimension);
-        setTransformer(new Transformer());
+        super(aspectModel, dimension);
+        initialize();
     }
-
-    /**
-     * @see Aspect#getType()
-     */
-    public String getType() {
-        return type;
+    
+    protected void initialize() {
+        setTransformer(new Transformer());        
     }
 
     private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
@@ -87,7 +68,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
             }
             
             TypedDimensionAspect aspect = (TypedDimensionAspect) value.getAspect();
-            Element content = aspect.accessor.getTypedDimensionContentFromOpenContextComponent((OpenContextComponent) value.getFragment(),aspect.dimension);
+            Element content = aspect.getAccessor().getTypedDimensionContentFromOpenContextComponent((OpenContextComponent) value.getFragment(),aspect.getDimension());
             NodeList nodes = content.getChildNodes();
             Element child = content;
             GETELEMENT: for (int i=0; i<nodes.getLength(); i++) {
@@ -102,8 +83,6 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
             setMapId(value,id);
             return id;
         }
-        
-        
         
         String dimensionLabel = null;
         
@@ -124,7 +103,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
 
             if (dimensionLabel == null) {
                 TypedDimensionAspect aspect = (TypedDimensionAspect) value.getAspect();
-                Dimension dimension = aspect.dimension;
+                Dimension dimension = aspect.getDimension();
                 Concept concept = dimension;
                 List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
                 if (labels.isEmpty()) dimensionLabel = dimension.getName();
@@ -155,7 +134,7 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
      * @see Aspect#getFragmentFromStore(Fact)
      */
     public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        DimensionValue value = accessor.getValue((Item) fact, dimension);
+        DimensionValue value = getAccessor().getValue((Item) fact, getDimension());
         if (value == null) return null; 
         return value.getOpenContextComponent();
     }
@@ -165,52 +144,27 @@ public class TypedDimensionAspect extends BaseAspect implements Aspect {
      */
     public String getKey(Fact fact) throws XBRLException {
         return fact.getIndex();
-    }    
-    
-    
-    /**
-     * The label role is used in constructing the label for the
-     * concept aspect values.
-     */
-    private URI role = Constants.StandardLabelRole;
-    
-    /**
-     * @return the label resource role.
-     */
-    public URI getLabelRole() {
-        return role;
     }
-    
-    /**
-     * @param role The label resource role to use in
-     * selecting labels for the concept.
-     */
-    public void setLabelRole(URI role) {
-        this.role = role;
-    }    
 
     /**
-     * The language code is used in constructing the label for the
-     * concept aspect values.
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
      */
-    private String language = "en";    
-    
-    /**
-     * @return the language code.
-     */
-    public String getLanguageCode() {
-        return language;
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        initialize();
     }
     
     /**
-     * @param language The ISO language code
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
      */
-    public void setLanguageCode(String language) throws XBRLException {
-        if (language == null) throw new XBRLException("The language must not be null.");
-        this.language = language;
-    }
-    
-    
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+    }    
 }
 
 

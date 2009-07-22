@@ -16,8 +16,9 @@ public interface Builder {
 	/**
 	 * Get the Document object used to build the fragment.
 	 * @return the data XML structure.
+	 * @throws XBRLException if the data has not been built yet.
 	 */
-	public Element getData();
+	public Element getData() throws XBRLException;
 	
 	/**
 	 * Get the metadata DOM document.

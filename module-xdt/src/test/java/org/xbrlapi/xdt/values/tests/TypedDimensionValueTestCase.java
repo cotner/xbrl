@@ -1,7 +1,7 @@
 package org.xbrlapi.xdt.values.tests;
 
-import org.w3c.dom.Element;
 import java.util.List;
+
 import org.xbrlapi.Item;
 import org.xbrlapi.xdt.TypedDimension;
 import org.xbrlapi.xdt.tests.BaseTestCase;
@@ -50,7 +50,7 @@ public class TypedDimensionValueTestCase extends BaseTestCase {
                         foundSomeValues = true;
                         assertTrue(value.isTypedDimensionValue());
                         assertTrue(value.getValue() != null);
-                        store.serialize((Element) value.getValue());
+                        //store.serialize((Element) value.getValue());
                     }
                 }
             }

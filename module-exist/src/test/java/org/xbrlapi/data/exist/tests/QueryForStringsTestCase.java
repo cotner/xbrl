@@ -29,12 +29,12 @@ public class QueryForStringsTestCase extends BaseTestCase {
 	        String query = "#roots#";
 	        Set<String> results = store.queryForIndices(query);
 	        assertTrue(results.size() > 1);
-	        for (String result: results) {
+/*	        for (String result: results) {
 	            logger.info(result);
 	            if (result.length() > 10) {
 	                store.serialize(store.getXMLResource(result));
 	            }
-	        }
+	        }*/
 		} catch (Exception e) {
 		    e.printStackTrace();
 			fail(e.getMessage());

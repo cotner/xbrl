@@ -1,5 +1,7 @@
 package org.xbrlapi.aspects;
 
+import java.io.IOException;
+
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -11,6 +13,15 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public abstract class ContextAspect extends BaseAspect implements Aspect {
 
+    public ContextAspect(AspectModel model) throws XBRLException {
+        super(model);
+        initialize();
+    }
+    
+    protected void initialize() {
+        ;
+    }
+    
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
@@ -30,5 +41,25 @@ public abstract class ContextAspect extends BaseAspect implements Aspect {
     public String getKey(Fact fact) throws XBRLException {
         Context context = (Context) getFragmentFromStore(fact);
         return context.getURI().toString() + context.getId();
+    }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject( );
+        initialize();
+    }
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
     }    
 }
