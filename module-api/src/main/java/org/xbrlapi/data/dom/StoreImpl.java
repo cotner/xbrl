@@ -46,8 +46,8 @@ public class StoreImpl extends BaseStoreImpl implements Store, Serializable {
 	/**
 	 * The map of data fragments.
 	 */
-	transient private Map<String,Element> fragmentMap = new HashMap<String,Element>();
-	transient private Map<Element,String> indexMap = new HashMap<Element,String>();
+	transient private Map<String,Element> fragmentMap;
+	transient private Map<Element,String> indexMap;
 	
 	/**
 	 * XML DOM used to build the fragments in the store.
@@ -66,9 +66,15 @@ public class StoreImpl extends BaseStoreImpl implements Store, Serializable {
 	 */
 	public StoreImpl() throws XBRLException {
 	    super();
+	    initialize();
 		dom = (new XMLDOMBuilder()).newDocument();
 		Element store = dom.createElement(ROOT_NAME);
 		dom.appendChild(store);
+	}
+	
+	private void initialize() {
+	    fragmentMap = new HashMap<String,Element>();
+	    indexMap = new HashMap<Element,String>();
 	}
 
 	/**
@@ -95,6 +101,7 @@ public class StoreImpl extends BaseStoreImpl implements Store, Serializable {
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 
         in.defaultReadObject();
+        initialize();
         try {
             XMLDOMBuilder builder = new XMLDOMBuilder();
             dom = builder.newDocument((String) in.readObject());

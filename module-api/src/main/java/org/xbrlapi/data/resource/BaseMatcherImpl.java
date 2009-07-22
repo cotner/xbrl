@@ -72,7 +72,9 @@ public abstract class BaseMatcherImpl implements Matcher {
             return getSigner().getSignature(getResourceContent(cacheFile));
         }
 
-        throw new XBRLException(uri + " could not be cached.");
+        List<String> content = new Vector<String>();
+        content.add(uri.toString());
+        return getSigner().getSignature(content);
         
     }
 

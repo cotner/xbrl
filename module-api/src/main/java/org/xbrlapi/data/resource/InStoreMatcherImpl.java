@@ -139,7 +139,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher, Seri
      * @see org.xbrlapi.data.resource.Matcher#hasURI(java.net.URI)
      */
     public boolean hasURI(URI uri) throws XBRLException {
-        return (this.getMatchXMLResource(uri) == null);
+        return (this.getMatchXMLResource(uri) != null);
     }
 
 

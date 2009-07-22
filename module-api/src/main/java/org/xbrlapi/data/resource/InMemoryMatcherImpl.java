@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.xbrlapi.cache.Cache;
@@ -24,8 +25,8 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher, Ser
      * The first URI in the list is the URI of the resource in the data
      * store.
      */
-    private HashMap<String,List<URI>> map = new HashMap<String,List<URI>>();
-    private HashMap<String,List<URI>>getMap() {
+    private Map<String,List<URI>> map = new HashMap<String,List<URI>>();
+    private Map<String,List<URI>>getMap() {
         return map;
     }
 
@@ -108,7 +109,8 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher, Ser
      */
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
-        out.writeInt(map.size());
+        out.writeObject(map);
+/*        out.writeInt(map.size());
         for (String key: map.keySet()) {
             out.writeObject(key);
             List<URI> uris = map.get(key);
@@ -117,7 +119,7 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher, Ser
                 out.writeObject(uri);
             }            
         }
-   }
+*/   }
     
     /**
      * Handles object inflation.
@@ -125,9 +127,11 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher, Ser
      * @throws IOException
      * @throws ClassNotFoundException
      */
+    @SuppressWarnings("unchecked")
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
-        map = new HashMap<String,List<URI>>();
+        map = (Map<String,List<URI>>) in.readObject();
+/*        
         int size = in.readInt();
         for (int i=0; i<size; i++) {
             String key = (String) in.readObject();
@@ -137,7 +141,7 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher, Ser
                 uris.add((URI) in.readObject());
             }
             map.put(key,uris);
-        }    
+        }*/    
     }
 
     /**
