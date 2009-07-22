@@ -166,7 +166,7 @@ public class LoaderImpl implements Loader, Serializable {
      */
     transient private TreeSet<URI> successes = new TreeSet<URI>();    
     
-    transient private TreeSet<URI> documentQueue = new TreeSet<URI>();
+    private TreeSet<URI> documentQueue = new TreeSet<URI>();
 
     /**
      * The unique fragment ID, that will be one for the first fragment. This is
@@ -882,12 +882,11 @@ public class LoaderImpl implements Loader, Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((cache == null) ? 0 : cache.hashCode());
-        result = prime * result
-                + ((entityResolver == null) ? 0 : entityResolver.hashCode());
+        result = prime * result + ((entityResolver == null) ? 0 : entityResolver.hashCode());
         result = prime * result + ((store == null) ? 0 : store.hashCode());
+        result = prime * result + ((documentQueue == null) ? 0 : documentQueue.hashCode());
         result = prime * result + (useSchemaLocationAttributes ? 1231 : 1237);
-        result = prime * result
-                + ((xlinkProcessor == null) ? 0 : xlinkProcessor.hashCode());
+        result = prime * result + ((xlinkProcessor == null) ? 0 : xlinkProcessor.hashCode());
         return result;
     }
 
@@ -918,6 +917,11 @@ public class LoaderImpl implements Loader, Serializable {
                 return false;
         } else if (!store.equals(other.store))
             return false;
+        if (documentQueue == null) {
+            if (other.documentQueue != null)
+                return false;
+        } else if (!documentQueue.equals(other.documentQueue))
+            return false;
         if (useSchemaLocationAttributes != other.useSchemaLocationAttributes)
             return false;
         if (xlinkProcessor == null) {
@@ -941,6 +945,11 @@ public class LoaderImpl implements Loader, Serializable {
             cache = (Cache) in.readObject();
             entityResolver = (EntityResolver) in.readObject();
             useSchemaLocationAttributes = in.readBoolean();
+            int size = in.readInt();
+            documentQueue = new TreeSet<URI>();
+            for (int i=0; i<size; i++) {
+                documentQueue.add((URI) in.readObject());
+            }        
         } catch (XBRLException e) {
             throw new IOException("The store or XLink processor could not be initialized.",e);
         }
@@ -952,12 +961,17 @@ public class LoaderImpl implements Loader, Serializable {
      * @throws IOException
      */
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        if (this.isDiscovering()) throw new IOException("The loader could not be serialized because it is still loading data.");
         out.defaultWriteObject();
         out.writeObject(store);
         out.writeObject(xlinkProcessor);
         out.writeObject(cache);
         out.writeObject(entityResolver);
-        out.writeBoolean(useSchemaLocationAttributes);    
+        out.writeBoolean(useSchemaLocationAttributes);
+        out.writeInt(documentQueue.size());
+        for (URI uri: documentQueue) {
+            out.writeObject(uri);
+        }
     }    
     
 }
