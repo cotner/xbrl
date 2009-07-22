@@ -4,17 +4,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.Locator;
@@ -31,7 +28,7 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class FragmentImpl extends XMLImpl implements Fragment {
 	
-	protected static Logger logger = Logger.getLogger(FragmentImpl.class);
+
 	
     /**
      * @see org.xbrlapi.Fragment#getAncestorOrSelf(String)
@@ -295,10 +292,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     
 
 
-    /**
-     * Map of extended links.
-     */
-    private Map<String,ExtendedLink> links = new HashMap<String,ExtendedLink>();
+
     
 
 
