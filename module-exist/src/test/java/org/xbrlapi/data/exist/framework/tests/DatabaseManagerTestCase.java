@@ -18,7 +18,7 @@ package org.xbrlapi.data.exist.framework.tests;
 */
 
 
-import org.xbrlapi.data.exist.DBConnectionImpl;
+import org.xbrlapi.data.exist.DBConnection;
 import org.xbrlapi.utilities.BaseTestCase;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
@@ -27,7 +27,7 @@ import org.xmldb.api.base.XMLDBException;
 
 public class DatabaseManagerTestCase extends BaseTestCase {
 
-	private DBConnectionImpl connection;
+	private DBConnection connection;
 	private Collection collection;
 
 	private String scheme;

@@ -100,9 +100,7 @@ public abstract class BaseAspectValue implements AspectValue {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((aspect == null) ? 0 : aspect.hashCode());
-        result = prime * result
-                + ((fragment == null) ? 0 : fragment.hashCode());
+        result = prime * result + ((fragment == null) ? 0 : fragment.hashCode());
         return result;
     }
 
@@ -118,11 +116,6 @@ public abstract class BaseAspectValue implements AspectValue {
         if (getClass() != obj.getClass())
             return false;
         BaseAspectValue other = (BaseAspectValue) obj;
-        if (aspect == null) {
-            if (other.aspect != null)
-                return false;
-        } else if (!aspect.equals(other.aspect))
-            return false;
         if (fragment == null) {
             if (other.fragment != null)
                 return false;

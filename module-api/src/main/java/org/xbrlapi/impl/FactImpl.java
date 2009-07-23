@@ -31,8 +31,6 @@ public class FactImpl extends FragmentImpl implements Fact {
 		return (Instance) this.getAncestorOrSelf("org.xbrlapi.impl.InstanceImpl");
 	}
 
-
-	
 	/**
 	 * @see org.xbrlapi.Fact#getTuple()
 	 */
@@ -41,8 +39,6 @@ public class FactImpl extends FragmentImpl implements Fact {
 		if (parent.getType().equals("org.xbrlapi.impl.TupleImpl")) return (Tuple) parent;
 		return null;
 	}
-
-
 
 	/**
 	 * @see org.xbrlapi.Fact#getConcept()

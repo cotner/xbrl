@@ -119,7 +119,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
                     else result += "*" + measure.getLocalname();
                 }
             }
-            logger.info("Unit aspect value label is " + result);            
+            logger.debug("Unit aspect value label is " + result);            
             setMapLabel(id,result);
             return result;
         } 
@@ -181,4 +181,27 @@ public class UnitAspect extends BaseAspect implements Aspect {
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
     }    
+    
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+       return true;
+    }
+    
 }

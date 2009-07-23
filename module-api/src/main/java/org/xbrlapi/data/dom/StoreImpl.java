@@ -5,7 +5,6 @@ package org.xbrlapi.data.dom;
  */
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,7 +38,7 @@ import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 
-public class StoreImpl extends BaseStoreImpl implements Store, Serializable {
+public class StoreImpl extends BaseStoreImpl implements Store {
 
 	private final static Logger logger = Logger.getLogger(StoreImpl.class);
 	
@@ -369,7 +368,7 @@ public class StoreImpl extends BaseStoreImpl implements Store, Serializable {
 		return getIndex(parent);
 	}
 
-    /* (non-Javadoc)
+    /**
      * @see java.lang.Object#hashCode()
      */
     @Override

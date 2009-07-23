@@ -2,7 +2,10 @@ package org.xbrlapi.data.bdbxml;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,13 +51,14 @@ import com.sleepycat.dbxml.XmlValue;
 
 public class StoreImpl extends BaseStoreImpl implements Store {
 
-    protected static Logger logger = Logger.getLogger(StoreImpl.class); 
+    private final static Logger logger = Logger.getLogger(StoreImpl.class); 
     
-    private String locationName = null;
-    private String containerName = null;
-	private Environment environment = null;
-	public XmlManager dataManager = null;
-	public XmlContainer dataContainer = null;
+    private String computerIdentity;
+    private String locationName;
+    private String containerName;
+	transient private Environment environment;
+	transient public XmlManager dataManager;
+	transient public XmlContainer dataContainer;
 	
     /**
      * @param location The location of the database (The path to where the database exists)
@@ -63,6 +67,27 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public StoreImpl(String location, String container) throws XBRLException {
         super();
+        initialize(location,container);
+    }
+    
+    private void initialize(String location, String container) throws XBRLException {
+        
+        lastSync = 0;
+        
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            byte[] ipAddr = addr.getAddress();
+            computerIdentity = addr.getHostName();
+            for (byte b: ipAddr) {
+                int i = new Integer(b).intValue();
+                computerIdentity += "." + i;
+            }
+            
+        } catch (UnknownHostException e) {
+            throw new XBRLException("The computer identity could not be obtained.", e);
+        }
+
+        
         if (location != null) this.locationName = location;
         else throw new XBRLException("The Berkeley DB XML database location must be specified.");
         
@@ -79,7 +104,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         initContainer();
         
         //this.logIndexes();
-
+        
     }
 
     /**
@@ -96,7 +121,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             }
             System.out.println(count + " indices found.");
         } catch (XmlException e) {
-            ;//
+            ;
         }        
     }
     
@@ -667,7 +692,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * Ensures that the database container is flushed to disk.
      * @see Store#sync()
      */
-    private long lastSync = 0;
+    transient private long lastSync;
     public synchronized void sync() throws XBRLException {
         if ((System.currentTimeMillis() - lastSync) < 10000) return;
         if (this.dataContainer == null) throw new XBRLException("The database container cannot be synced because it is null.");
@@ -707,5 +732,82 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             if (xmlIndexSpecification != null) xmlIndexSpecification.delete();
         }        
     }
+    
+    /**
+     * Handles object inflation.
+     * @param in The input object stream used to access the object's serialization.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        try {
+            String location = (String) in.readObject();
+            String container = (String) in.readObject();
+            String id = (String) in.readObject();
+            initialize(location, container);
+            if (! this.computerIdentity.equals(id)) {
+                throw new IOException("The data store is being deserialized on the wrong computer.");
+            }
+        } catch (XBRLException e) {
+            throw new IOException("The data store could not be deserialized.",e);
+        }
+    }
+    
+    /**
+     * Handles object serialization
+     * @param out The input object stream used to store the serialization of the object.
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject( );
+        out.writeObject(locationName);
+        out.writeObject(containerName);
+        out.writeObject(computerIdentity);
+        logger.info("Done writing out the data store.");
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((computerIdentity == null) ? 0 : computerIdentity.hashCode());
+        result = prime * result + ((containerName == null) ? 0 : containerName.hashCode());
+        result = prime * result + ((locationName == null) ? 0 : locationName.hashCode());
+        return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        StoreImpl other = (StoreImpl) obj;
+        if (computerIdentity == null) {
+            if (other.computerIdentity != null)
+                return false;
+        } else if (!computerIdentity.equals(other.computerIdentity))
+            return false;
+        if (containerName == null) {
+            if (other.containerName != null)
+                return false;
+        } else if (!containerName.equals(other.containerName))
+            return false;
+        if (locationName == null) {
+            if (other.locationName != null)
+                return false;
+        } else if (!locationName.equals(other.locationName))
+            return false;
+        return true;
+    }    
     
 }

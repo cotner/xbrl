@@ -9,6 +9,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite("Test for org.xbrlapi.aspects.tests");
 		//$JUnit-BEGIN$
 		suite.addTestSuite(NonDimensionalAspectModelTestCase.class);
+        suite.addTestSuite(AspectModelSerializationTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

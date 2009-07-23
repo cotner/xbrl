@@ -1,4 +1,7 @@
-package org.xbrlapi.data.dom.tests;
+package org.xbrlapi.data.bdbxml.tests;
+
+import org.xbrlapi.data.Store;
+import org.xbrlapi.data.bdbxml.BaseTestCase;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
@@ -22,15 +25,13 @@ public class StoreSerializationTestCase extends BaseTestCase {
     public final void testStoreSerialization() {
         try {
             loader.discover(this.getURI(START));
-            Object copy = getDeepCopy(store);
+            Store copy = (Store) getDeepCopy(store);
+            stores.add(copy);
             this.assessCustomEquality(store,copy);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception. " + e.getMessage());
         }
     }	
-	
 
-
-	
 }

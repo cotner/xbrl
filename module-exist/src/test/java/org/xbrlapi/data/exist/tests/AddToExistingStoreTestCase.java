@@ -1,7 +1,6 @@
 package org.xbrlapi.data.exist.tests;
 
 import org.xbrlapi.data.Store;
-import org.xbrlapi.data.exist.DBConnectionImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.XBRLException;
 /**
@@ -32,10 +31,7 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 
 		try {
 			
-			DBConnectionImpl secondConnection = createConnection();
-			connections.add(secondConnection);
-
-			Store secondStore = createStore(secondConnection);
+			Store secondStore = createStore();
 			stores.add(secondStore);
 
 			Loader secondLoader = createLoader(secondStore);

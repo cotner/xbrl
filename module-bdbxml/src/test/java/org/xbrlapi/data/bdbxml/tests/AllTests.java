@@ -17,6 +17,7 @@ public class AllTests {
         suite.addTestSuite(StoreImplConstructorTestCase.class);
 		suite.addTestSuite(StoreImplTestCase.class);
         suite.addTestSuite(StoreMatcherTestCase.class);
+        suite.addTestSuite(StoreSerializationTestCase.class);
 		suite.addTest(org.xbrlapi.data.bdbxml.framework.tests.AllTests.suite());
 		//$JUnit-END$
 		return suite;

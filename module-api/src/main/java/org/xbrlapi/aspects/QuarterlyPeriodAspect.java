@@ -1,8 +1,8 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Comparator;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Context;
@@ -18,7 +18,7 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
 
     private final static Logger logger = Logger.getLogger(QuarterlyPeriodAspect.class);    
 
-    private class PeriodComparator implements Comparator<String> {
+    private class PeriodComparator implements Comparator<String>, Serializable {
         
         public PeriodComparator() {
             super();
@@ -37,7 +37,57 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
         public boolean equals(String left, String right) {
             return left.equals(right);
         }
+
+        /**
+         * Handles object inflation.
+         * @param in The input object stream used to access the object's serialization.
+         * @throws IOException
+         * @throws ClassNotFoundException
+         */
+        private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+            in.defaultReadObject( );
+        }
         
+        /**
+         * Handles object serialization
+         * @param out The input object stream used to store the serialization of the object.
+         * @throws IOException
+         */
+        private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+            out.defaultWriteObject();
+        }        
+        
+        /**
+         * @see java.lang.Object#hashCode()
+         */
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + getOuterType().hashCode();
+            return result;
+        }
+
+        /**
+         * @see java.lang.Object#equals(java.lang.Object)
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            PeriodComparator other = (PeriodComparator) obj;
+            if (!getOuterType().equals(other.getOuterType()))
+                return false;
+            return true;
+        }
+
+        private QuarterlyPeriodAspect getOuterType() {
+            return QuarterlyPeriodAspect.this;
+        }   
     }
     
     /**
@@ -51,7 +101,6 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
     
     protected void initialize() {
         this.setTransformer(new Transformer());
-        values = new TreeMap<String,AspectValue>(new PeriodComparator());
     }
 
     /**
@@ -165,4 +214,27 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
     }    
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+       return true;
+    }
+
 }

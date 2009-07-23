@@ -2,6 +2,7 @@ package org.xbrlapi.aspects;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -9,6 +10,8 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class NonDimensionalAspectModel extends BaseAspectModel implements AspectModel {
 
+    private final static Logger logger = Logger.getLogger(NonDimensionalAspectModel.class);    
+    
     public NonDimensionalAspectModel() throws XBRLException {
         super();
         initialize();
@@ -47,5 +50,27 @@ public class NonDimensionalAspectModel extends BaseAspectModel implements Aspect
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
    }    
+    
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+    
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return true;
+    }
     
 }

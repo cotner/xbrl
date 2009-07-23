@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -76,7 +75,7 @@ import org.xbrlapi.utilities.XMLDOMBuilder;
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public abstract class BaseStoreImpl implements Store, Serializable {
+public abstract class BaseStoreImpl implements Store {
 
 	private final static Logger logger = Logger.getLogger(BaseStoreImpl.class);
 

@@ -106,7 +106,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
             }
             if (! labels.isEmpty()) label = labels.iterator().next().getStringValue();
 
-            logger.info("Entity id aspect value label is " + label);
+            logger.debug("Entity id aspect value label is " + label);
             setMapLabel(id,label);
             return label;
         }
@@ -191,4 +191,27 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
     }    
+    
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+       return true;
+    }
+    
 }

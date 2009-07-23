@@ -5,7 +5,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
-import org.xbrlapi.data.exist.DBConnectionImpl;
+import org.xbrlapi.data.exist.DBConnection;
+import org.xbrlapi.data.exist.StoreImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.XMLDBException;
@@ -16,15 +17,9 @@ import org.xmldb.api.modules.XMLResource;
  */
 public class DBConnectionTestCase extends BaseTestCase {
 
-	private DBConnectionImpl connection;
+	private DBConnection connection;
 	//private DBConnectionImpl failedConnection;
 
-	private String scheme = null;
-	private String domain = null;
-	private String port = null;
-	private String db = null;
-	private String username = null;
-	private String password = null;	
 	private String databaseURI = null;
 
 	/*
@@ -32,14 +27,10 @@ public class DBConnectionTestCase extends BaseTestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		scheme = configuration.getProperty("exist.scheme");
-	    domain = configuration.getProperty("exist.domain");
-	    port = configuration.getProperty("exist.port");
-	    db = configuration.getProperty("exist.database");
-	    username = configuration.getProperty("exist.username");
-	    password = configuration.getProperty("exist.password");  
-	    databaseURI = scheme + "://" + domain + ":" + port + "/" + db;
-		connection = this.createConnection();
+		
+		String scheme = configuration.getProperty("exist.scheme");
+	    databaseURI = scheme + "://" + host + ":" + port + "/" + database;
+        connection = ((StoreImpl) store).getConnection();
 	}
 
 	/*
@@ -47,7 +38,7 @@ public class DBConnectionTestCase extends BaseTestCase {
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		this.cleanup(connection);
+		this.cleanup(store);
 	}
 
 	/**
@@ -70,51 +61,11 @@ public class DBConnectionTestCase extends BaseTestCase {
 		}
 	}
 	
-	/**
-	 * Test the successful creation of a database connection
-	 */
-	public final void testDBConnection() {
-		try {
-			new DBConnectionImpl(domain,port,database, username, password);
-		} catch (XBRLException e) {
-			fail("No XBRLAPI exception was expected on this eXist DB connection test.  " + e.getMessage());
-		}
-	}
 
-	/**
-	 * Test the failed creation of a database connection to a non-existent machine.
-	 */
-/*	public final void testDBConnection_FailsOnBadDomain() throws Exception {
-		try {
-			DBConnectionImpl failedConnection = new DBConnectionImpl("rubbish.xbrlapi.org", port, database, username, password);
-			fail("DB Connection " + failedConnection.getDatabaseURI() + " should not be established.");
-		} catch (XBRLException expected) {
-		}
-	}*/
-	
-	/**
-	 * Test the failed creation of a database connection to a machine on
-	 * an incorrect port
-	 */
-	public final void testDBConnection_FailsOnPortError() throws Exception {
-		try {
-			DBConnectionImpl failedConnection = new DBConnectionImpl(domain, "8780", database, username, password);
-			fail("DB Connection " + failedConnection.getDatabaseURI() + " should not be established.");
-		} catch (XBRLException expected) {			
-		}
-	}
 
-	/**
-	 * Test the failed creation of a database connection to a machine with 
-	 * an incorrect database name
-	 */
-	public final void testDBConnection_FailsOnDatabaseName() throws Exception {
-		try {
-			DBConnectionImpl failedConnection = new DBConnectionImpl(domain, port, "wrongDBName", username, password);
-			fail("DB Connection " + failedConnection.getDatabaseURI() + " should not be established.");
-		} catch (XBRLException expected) {
-		}
-	}
+
+
+
 
 
 	/**

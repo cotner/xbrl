@@ -69,8 +69,7 @@ public class XMLImpl implements XML {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((rootElement == null) ? 0 : rootElement.hashCode());
+        result = prime * result + ((rootElement == null) ? 0 : getIndex().hashCode());
         result = prime * result + ((store == null) ? 0 : store.hashCode());
         return result;
     }
@@ -80,49 +79,29 @@ public class XMLImpl implements XML {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
         if (obj == null)
             return false;
         if (getClass() != obj.getClass())
             return false;
         XMLImpl other = (XMLImpl) obj;
-        if (rootElement == null) {
-            if (other.rootElement != null)
-                return false;
-        } else {
-            String thisIndex = rootElement.getAttribute("index");
-            String otherIndex = other.rootElement.getAttribute("index");
-            if (thisIndex == null) return false;
-            if (!thisIndex.equals(otherIndex)) return false;
-            String thisType = rootElement.getAttribute("type");
-            String otherType= other.rootElement.getAttribute("type");
-            if (thisType == null) return false;
-            if (!thisType.equals(otherType)) return false;
-            if (rootElement.hasAttribute("uri")) {
-                String t = rootElement.getAttribute("uri");
-                String o= other.rootElement.getAttribute("uri");
-                if (t == null) return false;
-                if (!t.equals(o)) return false;
-            }
-            if (rootElement.hasAttribute("parentIndex")) {
-                String t = rootElement.getAttribute("parentIndex");
-                String o= other.rootElement.getAttribute("parentIndex");
-                if (t == null) return false;
-                if (!t.equals(o)) return false;
-            }
-            if (rootElement.hasAttribute("sequenceToParentElement")) {
-                String t = rootElement.getAttribute("sequenceToParentElement");
-                String o= other.rootElement.getAttribute("sequenceToParentElement");
-                if (t == null) return false;
-                if (!t.equals(o)) return false;
-            }
-        }
+
         if (store == null) {
             if (other.store != null)
                 return false;
         } else if (!store.equals(other.store))
             return false;
+
+        if (rootElement == null) {
+            if (other.rootElement != null)
+                return false;
+        } else {
+            String index = this.getIndex();
+            if (index == null) return false;
+            if (!index.equals(other.getIndex())) return false;
+        }
         return true;
     }
     

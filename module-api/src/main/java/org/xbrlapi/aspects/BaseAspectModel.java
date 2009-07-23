@@ -33,14 +33,13 @@ abstract public class BaseAspectModel implements AspectModel {
     private Set<Fact> facts;
     
     public BaseAspectModel() {
-        initialize();
-    }
-    
-    protected void initialize() {
+        super();
         aspects = new HashMap<String,Aspect>();
         axes = new HashMap<String,List<Aspect>>();
         facts = new HashSet<Fact>();
     }
+    
+
     
     /**
      * @see AspectModel#getAspects()
@@ -89,11 +88,7 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#setAspect(Aspect)
      */
     public void setAspect(Aspect aspect) throws XBRLException {
-        try {
-            aspect.setAspectModel(this);
-        } catch (XBRLException e) {
-            ;//Not possible
-        }
+        aspect.setAspectModel(this);
         if (aspects.containsKey(aspect.getType())) {
             Aspect old = aspects.get(aspect.getType());
             if (old.getAxis() != null) {
@@ -359,22 +354,9 @@ abstract public class BaseAspectModel implements AspectModel {
      */
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
-        out.writeInt(aspects.size());
-        for (String key: aspects.keySet()) {
-            out.writeObject(key);
-            out.writeObject(aspects.get(key));
-        }
-        out.writeInt(axes.size());
-        for (String key: axes.keySet()) {
-            List<Aspect> aspects = axes.get(key);
-            out.writeInt(aspects.size());
-            for (Aspect aspect: aspects) out.writeObject(aspect);
-            out.writeObject(key);
-        }
-        out.writeInt(facts.size());
-        for (Fact fact: facts) {
-            out.writeObject(fact);
-        }
+        out.writeObject(aspects);
+        out.writeObject(axes);
+        out.writeObject(facts);
    }    
     
     /**
@@ -383,26 +365,12 @@ abstract public class BaseAspectModel implements AspectModel {
      * @throws IOException
      * @throws ClassNotFoundException
      */
+    @SuppressWarnings("unchecked")
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
-        initialize();
-        int size = in.readInt();
-        for (int i=0; i<size; i++) {
-            aspects.put((String) in.readObject(), (Aspect) in.readObject());
-        }
-        size = in.readInt();
-        for (int i=0; i<size; i++) {
-            List<Aspect> aspects = new Vector<Aspect>();
-            int count = in.readInt();
-            for (int j=0; j<count; j++) {
-                aspects.add((Aspect) in.readObject());
-            }
-            axes.put((String) in.readObject(), aspects);
-        }
-        size = in.readInt();
-        for (int i=0; i<size; i++) {
-            facts.add((Fact) in.readObject());
-        }
+        aspects = (Map<String,Aspect>) in.readObject();
+        axes = (Map<String,List<Aspect>>) in.readObject();
+        facts = (Set<Fact>) in.readObject();
     }
 
     /**
@@ -430,11 +398,14 @@ abstract public class BaseAspectModel implements AspectModel {
         if (getClass() != obj.getClass())
             return false;
         BaseAspectModel other = (BaseAspectModel) obj;
+        
         if (aspects == null) {
-            if (other.aspects != null)
+            if (other.aspects != null) {
                 return false;
-        } else if (!aspects.equals(other.aspects))
+            }
+        } else if (!aspects.equals(other.aspects)) {
             return false;
+        }
         if (axes == null) {
             if (other.axes != null)
                 return false;

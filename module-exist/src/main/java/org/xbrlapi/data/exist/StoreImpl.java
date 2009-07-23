@@ -19,7 +19,9 @@ import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.FragmentFactory;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
+import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
+import org.xmldb.api.base.Database;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
@@ -36,126 +38,400 @@ import org.xmldb.api.modules.XMLResource;
 public class StoreImpl extends BaseStoreImpl implements Store {
 
     private final static Logger logger = Logger.getLogger(StoreImpl.class);
+    protected final static String configurationRoot = "/system/config";        
+    
+    private String computerId, host, port, database, username, password, storeParentPath, dataCollectionName;
     
 	/**
 	 * The database connection used by the data store.
 	 */
-	private DBConnectionImpl connection = null;
+	transient private DBConnection connection;
 	
 	/**
 	 * The collection that holds the data in the data store.
 	 */
-	private Collection collection = null;
+	transient private Collection collection;
 	
 	/**
 	 * The collection manager that operates on the data store collection (for indexing etc.).
 	 */
-	private CollectionManagementService manager = null;
+	transient private CollectionManagementService manager;
 
 	/**
 	 * The XQuery service for the data collection.
 	 */
-    private XQueryService xqueryService = null;
+    transient private XQueryService xqueryService;
     	
+    /**
+     * @return the database connection or null if there is none.
+     */
+    public DBConnection getConnection() {
+        return connection;
+    }
+    
+    private class Connection implements org.xbrlapi.data.exist.DBConnection {
+            
+        // Collection manager path to instantiate
+        private final String SCHEME = "xmldb:exist";
+        
+        // The database instance
+        private Database database = null;
+
+        // The URI for the database connection
+        private String databaseURI = null;
+        
+        // The user name and password for accessing the data store.
+        private String username = null;
+        private String password = null;
+        
+        /**
+         * Constructor registers the database with the XML:DB
+         * database manager.
+         * @param host Host DB server IP address or domain name 
+         * @param port Host DB server port
+         * @param database Database name
+         * @param username Username of the database user
+         * @param password Password of the database user
+         * @throws XBRLException when a connection cannot be established
+         */
+        public Connection(String host, String port, String database, String username, String password) throws XBRLException {
+
+            // Store the username and password
+            this.username = username;
+            this.password = password;
+            
+            try {
+                this.database = new org.exist.xmldb.DatabaseImpl();         
+                DatabaseManager.registerDatabase(this.database);
+            } catch (XMLDBException e) {
+                throw new XBRLException("No connection could be established to the EXIST database.", e);
+            }
+
+            if (! port.equals("")) port = ":" + port;
+            databaseURI = SCHEME + "://" + host + port + "/" + database;
+
+            // Force a failure if the root collection is a dud.
+            Collection rootCollection = this.getRootCollection();
+            try {
+                rootCollection.getChildCollectionCount();
+            } catch (XMLDBException e) {
+                throw new XBRLException("Check the EXIST database URI.  The connection failed.", e);
+            }
+            
+            if (rootCollection == null) {
+                throw new XBRLException("The root collection of the EXIST database connection could be obtained.");
+            }
+            
+        }
+
+        /**
+         * Get the root collection for the database.
+         * @return the root collection for the database.
+         * @throws XBRLException if the root collection cannot be retrieved.
+         */
+        private Collection getRootCollection() throws XBRLException {
+            return this.getCollection("");
+        }
+        
+        /**
+         * Create a collection.
+         * @param collectionName The name of the collection
+         * @param containerCollection The container collection itself
+         * @throws XBRLException
+         */
+        public Collection createCollection(String collectionName, Collection containerCollection) throws XBRLException {
+            try {
+                if (hasCollection(collectionName,containerCollection)) {
+                    throw new XBRLException("The collection " +  collectionName + " already exists in " + containerCollection.getName());
+                }
+                
+                CollectionManagementService service = (CollectionManagementService) containerCollection.getService("CollectionManagementService", "1.0");
+                Collection collection = service.createCollection(collectionName);
+                
+                // Make sure that collection names do not involve characters that require escaping
+                String name = collection.getName();
+                name = name.substring(name.length()-collectionName.length(),name.length());
+                if (! name.equals(collectionName)) {
+                    service.removeCollection(collection.getName());
+                    throw new XBRLException("The collection name " + collectionName + " contains illegal characters.");
+                }
+                
+                return collection;
+                
+            } catch (Exception e) {
+                throw new XBRLException("The collection " + collectionName + " could not be created in " + containerCollection,e);
+            }
+       }
+        
+        /**
+         * Convenience method for creating a root collection.
+         * @param collectionName The name of the collection.
+         * @throws XBRLException
+         */
+        public Collection createRootCollection(String collectionName) throws XBRLException {
+            return createCollection(collectionName, getRootCollection());       
+        }
+
+        /**
+         * Delete a collection.
+         * @param collectionPath The identifier of the collection.
+         * @throws XBRLException if the collection does not exist, has no parent collection or 
+         * if a technical issue arose during the deletion process.
+         */
+        public void deleteCollection(String collectionPath) throws XBRLException {
+
+            try {
+                Collection target = getCollection(collectionPath);
+                if (target == null) {
+                    throw new XBRLException("The collection to be deleted, " + collectionPath + " does not exist.");
+                }
+                String targetName = target.getName();
+
+                Collection parent = target.getParentCollection();
+                if (parent == null) {
+                    throw new XBRLException("The collection to be deleted, " + collectionPath + " has no parent collection.");
+                }
+                CollectionManagementService service = (CollectionManagementService) parent.getService("CollectionManager", "1.0");
+                if (service == null) {
+                    throw new XBRLException("The collection management service of the parent collection could not be instantiated.");
+                }
+                service.removeCollection(targetName);
+            } catch (XMLDBException e) {
+                throw new XBRLException("Collection " + collectionPath + " could not be deleted. ",e);
+            }
+        }    
+        
+        /**
+         * Delete a collection.
+         * @param collectionName The name of the collection.
+         * @param containerCollection The collection containing the collection to be deleted.
+         * @throws XBRLException
+         */
+        public void deleteCollection(String collectionName, Collection containerCollection) throws XBRLException {
+            try {
+                CollectionManagementService service = (CollectionManagementService) containerCollection.getService("CollectionManagementService", "1.0");
+                service.removeCollection(collectionName);
+            } catch (Exception e) {
+                throw new XBRLException("Collection " + collectionName + " could not be deleted.",e);
+            }
+        }    
+        
+        /**
+         * Get a specific collection from the database connection.
+         * @param collectionPath The collection identifier.
+         * @return the specified collection or null if it does not exist.
+         * @throws XBRLException if the XMLDB operations fail.
+         */
+        public Collection getCollection(String collectionPath) throws XBRLException {
+            
+            collectionPath = (collectionPath.equals("")) ? "/" : collectionPath;
+            collectionPath = (collectionPath.charAt(0) != '/') ? "/" + collectionPath : collectionPath;
+            
+            String collectionURI = databaseURI + collectionPath;
+            try {
+                return DatabaseManager.getCollection(collectionURI, username, password);
+            } catch ( Exception e) {
+                throw new XBRLException("Could not get collection " + collectionPath + " from the EXIST database.  Perhaps a username and password would help.", e);
+            }
+        }
+
+        /**
+         * Get a collection given the name of the collection (not its full path) and its container collection.
+         * @param collectionName The name of the collection (eg: for collection /db/shakespeare/plays this would be plays).
+         * @param container The container collection (eg: for collection /db/shakespeare/plays this would be the /db/shakespeare collection).
+         * @return The required collection or null if it is not available.
+         * @throws XBRLException if the required collection cannot be retrieved.
+         */
+        public Collection getCollection(String collectionName, Collection container) throws XBRLException {
+            try {
+                if (container == null) return null;
+                return container.getChildCollection(collectionName);
+            } catch (XMLDBException e) {
+                try {
+                    throw new XBRLException("Could not get collection " + collectionName + " from the container collection, " + container.getName(), e);
+                } catch (XMLDBException xmldbe) {
+                    throw new XBRLException("Failed to get collection, " + collectionName + ", from its container collection.", xmldbe);
+                }
+            }
+        }
+
+        /**
+         * Test if a specific collection exists.
+         * @param collectionPath The name of the collection including its full path.
+         * @return true if the collection exists and false otherwise.
+         * @throws XBRLException if the existence of the collection cannot be ascertained.
+         */
+        public boolean hasCollection(String collectionPath) throws XBRLException {
+            Collection c = this.getCollection(collectionPath);
+            if (c == null) {
+                return false;
+            }
+            return true;
+        }   
+        
+        /**
+         * Test if a specific collection exists.
+         * @param collectionName The name of the collection
+         * @param containerCollection The container collection for the collection being tested for.
+         * @return true if the collection exists and false otherwise.
+         * @throws XBRLException if the existence of the collection cannot be ascertained.
+         */
+        public boolean hasCollection(String collectionName, Collection containerCollection) throws XBRLException {
+            Collection c = null;
+            try {
+                c = this.getCollection(collectionName, containerCollection);
+            } catch (XBRLException e) {
+                return false;
+            }
+            if (c == null) {
+                return false;
+            }
+            return true;
+        }
+        
+        /**
+         * Returns the URI to access the database for this connection.
+         * @return The URI for accessing the database for this connection.
+         */
+        public String getDatabaseURI() {
+            return databaseURI;
+        }
+
+        /** 
+         * @see org.xbrlapi.data.exist.DBConnection#close()
+         */
+        public void close() throws XBRLException {
+        }   
+        
+    }    
+    
+    
 	/**
 	 * Initialise the database connection.
-	 * 
-	 * @param connection The live connection to the Xindice database.
+     * @param host Host DB server IP address or domain name 
+     * @param port Host DB server port
+     * @param database Database name
+     * @param username Username of the database user
+     * @param password Password of the database user
 	 * @param storeParentPath The full path to the container collection, which is the
 	 * collection that will hold the data collection when it are created.
 	 * @param dataCollectionName The name of the data collection.
 	 * @throws XBRLException
 	 */
 	public StoreImpl(
-			DBConnectionImpl connection,
+	        String host, 
+	        String port, 
+	        String database, 
+	        String username, 
+	        String password,     
 			String storeParentPath,
 			String dataCollectionName
 			) throws XBRLException {
 		
 	    super();
-	    
-		storeParentPath = (storeParentPath.charAt(storeParentPath.length()-1) != '/') ? storeParentPath + "/" : storeParentPath;
+	    initialize(host, port, database, username, password, storeParentPath, dataCollectionName);
+	}
+	
+	private void initialize(
+            String host, 
+            String port, 
+            String database, 
+            String username, 
+            String password,     
+            String storeParentPath,
+            String dataCollectionName
+	        ) throws XBRLException {
+	    if (host == null) throw new XBRLException("Host must not be null.");
+        if (port == null) throw new XBRLException("Port must not be null.");
+        if (database == null) throw new XBRLException("Database must not be null.");
+        if (password == null) throw new XBRLException("Password must not be null.");
+        if (storeParentPath == null) throw new XBRLException("Parent path must not be null.");
+        if (dataCollectionName == null) throw new XBRLException("Collection name must not be null.");
+	    this.host = host;
+	    this.port = port;
+	    this.database = database;
+	    this.password = password;
+        this.storeParentPath = (storeParentPath.charAt(storeParentPath.length()-1) != '/') ? storeParentPath + "/" : storeParentPath;
+        this.dataCollectionName = dataCollectionName;
+        this.connection = new Connection(host,port,database, username, password);
+        
 
-		if (connection == null) throw new XBRLException("The Exist database connection is null so no data store can be established.");
-		this.connection = connection;
-		
-		Collection parentCollection = connection.getCollection(storeParentPath);
-		if (parentCollection == null) throw new XBRLException("The collection to contain the data store does not exist.");
-				
-		boolean storeAlreadyExisted = false;
-		if (connection.hasCollection(dataCollectionName,parentCollection)) {
-			storeAlreadyExisted = true;
-			collection = connection.getCollection(dataCollectionName, parentCollection);
-		} else {
-			collection = connection.createCollection(dataCollectionName,parentCollection);
-		}
-		
-		if (collection == null) throw new XBRLException("Collection " + dataCollectionName + " could not be created in collection " + storeParentPath + ".");
+        Collection parentCollection = connection.getCollection(this.storeParentPath);
+        if (parentCollection == null) throw new XBRLException("The collection to contain the data store does not exist.");
+                
+        boolean storeAlreadyExisted = false;
+        if (connection.hasCollection(this.dataCollectionName,parentCollection)) {
+            storeAlreadyExisted = true;
+            collection = connection.getCollection(dataCollectionName, parentCollection);
+        } else {
+            collection = connection.createCollection(dataCollectionName,parentCollection);
+        }
+        
+        if (collection == null) throw new XBRLException("Collection " + dataCollectionName + " could not be created in collection " + storeParentPath + ".");
 
-		try {
-			manager = (CollectionManagementService) collection.getService("CollectionManagementService", "1.0");
-		} catch (XMLDBException e) {
-			throw new XBRLException("The collection manager could not be instantiated.",e);
-		}
-				
-		if (! storeAlreadyExisted) {
-			
-			// Add the collection configuration (indexing information) if the store uses a new collection.
-			Collection configParentCollection = connection.getCollection("system/config");
-			Collection dataConfigCollection = null;
-			try {
-				dataConfigCollection = configParentCollection.getChildCollection(dataCollectionName); 
-			if (dataConfigCollection == null)
-				dataConfigCollection = connection.createCollection(dataCollectionName, configParentCollection);
-			} catch (XMLDBException e) {
-				throw new XBRLException("The data configuration collection could not be instantiated.",e);
-			}
-			
-			String dataXconf = 
-				"<collection xmlns=\"http://exist-db.org/collection-config/1.0\">\n"
-				+ "<index xmlns:xlink=\"" + Constants.XLinkNamespace + "\" >\n"
-				+ "    <fulltext default=\"none\" attributes=\"false\" alphanum=\"false\" />\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:label\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:type\" type=\"xs:string\"/>\n"				
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@type\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@id\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@targetDocumentURI\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@targetPointerValue\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@parentIndex\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@uri\" type=\"xs:string\"/>\n"
-		        + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@absoluteHref\" type=\"xs:string\"/>\n"
+        try {
+            manager = (CollectionManagementService) collection.getService("CollectionManagementService", "1.0");
+        } catch (XMLDBException e) {
+            throw new XBRLException("The collection manager could not be instantiated.",e);
+        }
+                
+        if (! storeAlreadyExisted) {
+            
+            // Add the collection configuration (indexing information) if the store uses a new collection.
+            Collection configParentCollection = connection.getCollection("system/config");
+            Collection dataConfigCollection = null;
+            try {
+                dataConfigCollection = configParentCollection.getChildCollection(dataCollectionName); 
+            if (dataConfigCollection == null)
+                dataConfigCollection = connection.createCollection(dataCollectionName, configParentCollection);
+            } catch (XMLDBException e) {
+                throw new XBRLException("The data configuration collection could not be instantiated.",e);
+            }
+            
+            String dataXconf = 
+                "<collection xmlns=\"http://exist-db.org/collection-config/1.0\">\n"
+                + "<index xmlns:xlink=\"" + Constants.XLinkNamespace + "\" >\n"
+                + "    <fulltext default=\"none\" attributes=\"false\" alphanum=\"false\" />\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:label\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:type\" type=\"xs:string\"/>\n"                
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@type\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@id\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@targetDocumentURI\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@targetPointerValue\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@parentIndex\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@uri\" type=\"xs:string\"/>\n"
+                + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@absoluteHref\" type=\"xs:string\"/>\n"
                 + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@resourceURI\" type=\"xs:string\"/>\n"
                 + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/@value\" type=\"xs:string\"/>\n"
                 + "    <create path=\"/"+ Constants.XBRLAPIPrefix + ":" + "fragment/"+ Constants.XBRLAPIPrefix + ":" + "xptr/@value\" type=\"xs:string\"/>\n"
-		        + "</index>\n"
-		        + "</collection>";
-			
-			try {
-				
-				XMLResource dataXconfResource = (XMLResource) dataConfigCollection.createResource("indexes.xconf", XMLResource.RESOURCE_TYPE);
-				dataXconfResource.setContent(dataXconf);
-				dataConfigCollection.storeResource(dataXconfResource);
-				
-			} catch (XMLDBException e) {
-				throw new XBRLException("The system index configuration resource could not be added.",e);
-			}
+                + "</index>\n"
+                + "</collection>";
+            
+            try {
+                
+                XMLResource dataXconfResource = (XMLResource) dataConfigCollection.createResource("indexes.xconf", XMLResource.RESOURCE_TYPE);
+                dataXconfResource.setContent(dataXconf);
+                dataConfigCollection.storeResource(dataXconfResource);
+                
+            } catch (XMLDBException e) {
+                throw new XBRLException("The system index configuration resource could not be added.",e);
+            }
 
-		}
+        }
 
-		try {
-			xqueryService = (XQueryService) collection.getService("XQueryService","1.0");
-			xqueryService.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace.toString());
-			xqueryService.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace.toString());
-			xqueryService.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace.toString());
-			xqueryService.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace.toString());
-			xqueryService.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace.toString());
-			xqueryService.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace.toString());
-			// TODO add means for users to add their own namespace declarations to the data store xpath services
-			
-		} catch (XMLDBException e) {
-			throw new XBRLException("The XPath services could not be initialised.",e);
-		}		
-		
+        try {
+            xqueryService = (XQueryService) collection.getService("XQueryService","1.0");
+            xqueryService.setNamespace(Constants.XLinkPrefix, Constants.XLinkNamespace.toString());
+            xqueryService.setNamespace(Constants.XMLSchemaPrefix, Constants.XMLSchemaNamespace.toString());
+            xqueryService.setNamespace(Constants.XBRL21Prefix, Constants.XBRL21Namespace.toString());
+            xqueryService.setNamespace(Constants.XBRL21LinkPrefix, Constants.XBRL21LinkNamespace.toString());
+            xqueryService.setNamespace(Constants.XBRLAPIPrefix, Constants.XBRLAPINamespace.toString());
+            xqueryService.setNamespace(Constants.XBRLAPILanguagesPrefix, Constants.XBRLAPILanguagesNamespace.toString());
+            // TODO add means for users to add their own namespace declarations to the data store xpath services
+            
+        } catch (XMLDBException e) {
+            throw new XBRLException("The XPath services could not be initialised.",e);
+        }        
 	}
     
 	/**
@@ -165,6 +441,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	public synchronized void close() throws XBRLException {
 		try {
 			collection.close();
+			connection.close();
 			connection = null;
 		} catch (XMLDBException e) {
 			throw new XBRLException("The Xindice DTS collection could not be closed.",e);
@@ -177,13 +454,17 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	public synchronized void delete() throws XBRLException {
 		try {
 			String collectionName = collection.getName();
-			collection.close();
 			if (connection.hasCollection(collectionName)) {
 				manager.removeCollection(collectionName);
 			} else {
-				logger.debug("The collection is not in the eXist database so it is not deleted.");
+				;
 			}
-			connection = null;
+			
+			// Delete the index specification
+	        if (connection.hasCollection(configurationRoot + storeParentPath + dataCollectionName)){
+	            connection.deleteCollection(configurationRoot + storeParentPath + dataCollectionName);
+	        }
+            collection.close();
 		} catch (XMLDBException e) {
 			throw new XBRLException("The data collection could not be deleted.",e);
 		}

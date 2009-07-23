@@ -49,7 +49,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         //XDT Aspects are only added as they are required.
         
     }
-    
+
     protected void initialize() {
         this.accessor = new DimensionValueAccessorImpl();
     }

@@ -4,8 +4,10 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.cache.CacheImpl;
@@ -51,8 +53,25 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		for (int i=0; i<stores.size(); i++) {
-			cleanup(stores.get(i));
+
+        Set<Store> uniqueStores = new HashSet<Store>();
+        uniqueStores.addAll(stores);
+        logger.info("# unique stores = " + uniqueStores.size());
+        logger.info("# stores = " + stores.size());
+        
+		STORE: for (Store s: stores) {
+	        try {
+	            for (Store us: uniqueStores) {
+	                if (us == s) continue STORE;
+	            }
+                s.close();
+                logger.info("closed a store.");
+	        } catch (Exception e) {
+	            ;
+	        }
+		}
+		for (Store s: uniqueStores) {
+		    s.delete();
 		}
 	}
 	
@@ -116,13 +135,6 @@ public abstract class BaseTestCase extends org.xbrlapi.utilities.BaseTestCase {
 		return myLoader;
 	}
 	
-	/**
-	 * Helper method to clean up and shut down the data store.
-	 * @param store the store for the XBRL data.
-	 * @throws XBRLException if the store cannot be deleted 
-	 */
-	public void cleanup(Store store) throws XBRLException {
-		store.delete();
-	}
+
 
 }
