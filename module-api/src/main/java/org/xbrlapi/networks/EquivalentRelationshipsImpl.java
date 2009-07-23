@@ -1,18 +1,18 @@
 package org.xbrlapi.networks;
 
+import java.io.Serializable;
 import java.util.NoSuchElementException;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
 
 import org.xbrlapi.utilities.XBRLException;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class EquivalentRelationshipsImpl implements EquivalentRelationships {
+public class EquivalentRelationshipsImpl implements EquivalentRelationships, Serializable {
 
-	SortedMap<Integer,Relationship> relationships = new TreeMap<Integer,Relationship>();
+	private SortedMap<Integer,Relationship> relationships = new TreeMap<Integer,Relationship>();
 
     /**
      * @see org.xbrlapi.networks.EquivalentRelationships#size()
@@ -91,6 +91,38 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships {
 		Relationship r = getActiveRelationship();
 		if (r == null) return null;
 		return r.getTargetIndex();
-	}	
+	}
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((relationships == null) ? 0 : relationships.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        EquivalentRelationshipsImpl other = (EquivalentRelationshipsImpl) obj;
+        if (relationships == null) {
+            if (other.relationships != null)
+                return false;
+        } else if (!relationships.equals(other.relationships))
+            return false;
+        return true;
+    }	
 	
 }

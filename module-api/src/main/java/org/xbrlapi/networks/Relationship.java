@@ -164,7 +164,7 @@ public interface Relationship {
 	 * @throws XBRLException
 	 * @see org.xbrlapi.Arc#semanticEquals(Arc)
 	 */
-	public boolean equals(Relationship other) throws XBRLException;
+	//public boolean equals(Relationship other) throws XBRLException;
 	
 	/**
 	 * @return the integer priority of the relationship.

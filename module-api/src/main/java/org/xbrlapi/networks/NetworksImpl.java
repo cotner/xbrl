@@ -1,11 +1,13 @@
 package org.xbrlapi.networks;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.Vector;
@@ -21,9 +23,9 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class NetworksImpl implements Networks {
+public class NetworksImpl implements Networks, Serializable {
 
-	protected static Logger logger = Logger.getLogger(NetworksImpl.class);	
+	private final static Logger logger = Logger.getLogger(NetworksImpl.class);	
 	
 	private HashMap<String,Arc> arcs = new HashMap<String,Arc>();
 	
@@ -86,7 +88,7 @@ public class NetworksImpl implements Networks {
 	public Network getNetwork(URI linkRole, URI arcrole)
 			throws XBRLException {
 		if (networks.containsKey(arcrole)) {
-			HashMap<URI,Network> map = networks.get(arcrole);
+			Map<URI,Network> map = networks.get(arcrole);
 			if (map.containsKey(linkRole))
 				return map.get(linkRole);
 		}
@@ -178,12 +180,11 @@ public class NetworksImpl implements Networks {
 	 */
 	public boolean hasNetwork(URI linkRole, URI arcrole) {
 		if (networks.containsKey(arcrole)) {
-			HashMap<URI,Network> map = networks.get(arcrole);
+			Map<URI,Network> map = networks.get(arcrole);
 			if (map.containsKey(linkRole)) return true;
 		}
 		return false;
 	}
-	
 	
 	/**
 	 * @see Networks#addRelationship(Relationship)
@@ -227,7 +228,6 @@ public class NetworksImpl implements Networks {
 
     }
 	
-	
 	/**
 	 * @see org.xbrlapi.networks.Networks#getSize()
 	 */
@@ -240,7 +240,6 @@ public class NetworksImpl implements Networks {
 		}
 		return size;
 	}
-	
 	
 	/**
 	 * @see org.xbrlapi.networks.Networks#getArcroles()
@@ -260,7 +259,7 @@ public class NetworksImpl implements Networks {
 		List<URI> roles = new Vector<URI>();
 
 		if (networks.containsKey(arcrole)) {
-			HashMap<URI,Network> map = networks.get(arcrole);
+			Map<URI,Network> map = networks.get(arcrole);
 			if (map == null) return roles;
 			for (URI value: map.keySet()) {
 				roles.add(value);
@@ -274,7 +273,7 @@ public class NetworksImpl implements Networks {
      */
     public Iterator<Network> iterator() {
         Set<Network> set = new HashSet<Network>();
-        for (HashMap<URI,Network> map: networks.values()) {
+        for (Map<URI,Network> map: networks.values()) {
             set.addAll(map.values());
         }
         return set.iterator();
@@ -304,5 +303,50 @@ public class NetworksImpl implements Networks {
             network.complete();
         }
     }
+    
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((arcs == null) ? 0 : arcs.hashCode());
+        result = prime * result
+                + ((networks == null) ? 0 : networks.hashCode());
+        result = prime * result + ((store == null) ? 0 : store.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        NetworksImpl other = (NetworksImpl) obj;
+        if (arcs == null) {
+            if (other.arcs != null)
+                return false;
+        } else if (!arcs.equals(other.arcs))
+            return false;
+        if (networks == null) {
+            if (other.networks != null)
+                return false;
+        } else if (!networks.equals(other.networks))
+            return false;
+        if (store == null) {
+            if (other.store != null)
+                return false;
+        } else if (!store.equals(other.store))
+            return false;
+        return true;
+    }
+     
     
 }

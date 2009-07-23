@@ -1,5 +1,6 @@
 package org.xbrlapi.networks;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,9 +23,9 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class NetworkImpl implements Network {
+public class NetworkImpl implements Network, Serializable {
 
-	protected static Logger logger = Logger.getLogger(NetworkImpl.class);	
+	private final static Logger logger = Logger.getLogger(NetworkImpl.class);	
 	
 	/**
 	 * The link role for the network.
@@ -469,6 +470,82 @@ public class NetworkImpl implements Network {
                 this.addRelationship(relationship);
             }
         }
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((arcRole == null) ? 0 : arcRole.hashCode());
+        result = prime * result
+                + ((fragments == null) ? 0 : fragments.hashCode());
+        result = prime * result
+                + ((linkRole == null) ? 0 : linkRole.hashCode());
+        result = prime * result
+                + ((relationships == null) ? 0 : relationships.hashCode());
+        result = prime
+                * result
+                + ((sourceRelationships == null) ? 0 : sourceRelationships
+                        .hashCode());
+        result = prime * result + ((store == null) ? 0 : store.hashCode());
+        result = prime
+                * result
+                + ((targetRelationships == null) ? 0 : targetRelationships
+                        .hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        NetworkImpl other = (NetworkImpl) obj;
+        if (arcRole == null) {
+            if (other.arcRole != null)
+                return false;
+        } else if (!arcRole.equals(other.arcRole))
+            return false;
+        if (fragments == null) {
+            if (other.fragments != null)
+                return false;
+        } else if (!fragments.equals(other.fragments))
+            return false;
+        if (linkRole == null) {
+            if (other.linkRole != null)
+                return false;
+        } else if (!linkRole.equals(other.linkRole))
+            return false;
+        if (relationships == null) {
+            if (other.relationships != null)
+                return false;
+        } else if (!relationships.equals(other.relationships))
+            return false;
+        if (sourceRelationships == null) {
+            if (other.sourceRelationships != null)
+                return false;
+        } else if (!sourceRelationships.equals(other.sourceRelationships))
+            return false;
+        if (store == null) {
+            if (other.store != null)
+                return false;
+        } else if (!store.equals(other.store))
+            return false;
+        if (targetRelationships == null) {
+            if (other.targetRelationships != null)
+                return false;
+        } else if (!targetRelationships.equals(other.targetRelationships))
+            return false;
+        return true;
     }
     
 }

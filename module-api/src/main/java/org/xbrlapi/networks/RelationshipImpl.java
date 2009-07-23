@@ -1,6 +1,7 @@
 package org.xbrlapi.networks;
 
 
+import java.io.Serializable;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
@@ -18,9 +19,9 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class RelationshipImpl implements Relationship {
+public class RelationshipImpl implements Relationship, Serializable {
 
-	protected static Logger logger = Logger.getLogger(RelationshipImpl.class);
+	private final static Logger logger = Logger.getLogger(RelationshipImpl.class);
 	
 	private Store store = null;
 
@@ -274,7 +275,7 @@ public class RelationshipImpl implements Relationship {
 	/**
 	 * @see org.xbrlapi.networks.Relationship#equals(Relationship)
 	 */
-	public boolean equals(Relationship other) throws XBRLException {
+/*	public boolean equals(Relationship other) throws XBRLException {
 
 		Fragment os = other.getSource();
 		Fragment ts = this.getSource();
@@ -287,7 +288,7 @@ public class RelationshipImpl implements Relationship {
 		if (! this.getArc().semanticEquals(other.getArc())) return false;
 
 		return true;
-	}
+	}*/
 	
 	/**
 	 * @see org.xbrlapi.networks.Relationship#getPriority()
@@ -322,6 +323,61 @@ public class RelationshipImpl implements Relationship {
      */
     public boolean isFromRoot() throws XBRLException {
         return getNetwork().isRoot(this.getSourceIndex());
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((arc == null) ? 0 : arc.hashCode());
+        result = prime * result + ((link == null) ? 0 : link.hashCode());
+        result = prime * result + ((source == null) ? 0 : source.hashCode());
+        result = prime * result + ((store == null) ? 0 : store.hashCode());
+        result = prime * result + ((target == null) ? 0 : target.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        RelationshipImpl other = (RelationshipImpl) obj;
+        if (arc == null) {
+            if (other.arc != null)
+                return false;
+        } else if (!arc.equals(other.arc))
+            return false;
+        if (link == null) {
+            if (other.link != null)
+                return false;
+        } else if (!link.equals(other.link))
+            return false;
+        if (source == null) {
+            if (other.source != null)
+                return false;
+        } else if (!source.equals(other.source))
+            return false;
+        if (store == null) {
+            if (other.store != null)
+                return false;
+        } else if (!store.equals(other.store))
+            return false;
+        if (target == null) {
+            if (other.target != null)
+                return false;
+        } else if (!target.equals(other.target))
+            return false;
+        return true;
     }
 	
 
