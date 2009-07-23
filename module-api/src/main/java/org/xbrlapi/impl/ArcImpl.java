@@ -163,7 +163,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
         long start = System.currentTimeMillis();
         String query = "#roots#[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getFrom() + "']";
         List<E> result = this.getStore().<E>queryForXMLResources(query);
-        logger.info("MS to get source fragments = " + (System.currentTimeMillis()-start));
+        logger.debug("MS to get source fragments = " + (System.currentTimeMillis()-start));
         return result;
     }
     
@@ -174,7 +174,7 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
         long start = System.currentTimeMillis();
         String query = "#roots#[@parentIndex='" + this.getParentIndex() + "' and */*/@xlink:label='" + this.getTo() + "']";
         List<E> result = this.getStore().<E>queryForXMLResources(query);
-        logger.info("MS to get target fragments = " + (System.currentTimeMillis()-start));
+        logger.debug("MS to get target fragments = " + (System.currentTimeMillis()-start));
         return result;
     }
     
