@@ -48,30 +48,16 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getImports()
      */
     public List<SimpleLink> getImports() throws XBRLException {
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
-    	List<SimpleLink> links = getStore().<SimpleLink>queryForXMLResources(query);
-    	List<SimpleLink> imports = new Vector<SimpleLink>();
-    	for (SimpleLink link: links) {
-        	if (link.getLocalname().equals("import") && link.getNamespace().equals(Constants.XMLSchemaNamespace)) {
-        		imports.add(link);
-        	}
-    	}
-    	return imports;
+    	String query = "#roots#[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl' and */xsd:import]";
+    	return getStore().<SimpleLink>queryForXMLResources(query);
     }
     
     /**
      * @see org.xbrlapi.Schema#getIncludes()
      */
     public List<SimpleLink> getIncludes() throws XBRLException {
-    	String query = "#roots#[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl']";
-    	List<SimpleLink> links = getStore().<SimpleLink>queryForXMLResources(query);
-    	List<SimpleLink> includes = new Vector<SimpleLink>();
-    	for (SimpleLink link: links) {
-        	if (link.getLocalname().equals("include") && link.getNamespace().equals(Constants.XMLSchemaNamespace)) {
-        		includes.add(link);
-        	}
-    	}
-    	return includes;
+        String query = "#roots#[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl' and */xsd:include]";
+        return getStore().<SimpleLink>queryForXMLResources(query);
     }
     
     /**
