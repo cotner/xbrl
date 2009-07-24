@@ -92,7 +92,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getConceptByName(String)
      */
     public Concept getConceptByName(String name) throws XBRLException {
-    	String query = "/"+ Constants.XBRLAPIPrefix+ ":" + "fragment[@type='org.xbrlapi.impl.ConceptImpl' and @parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@name='" + name + "']";
+    	String query = "#roots#[@type='org.xbrlapi.impl.ConceptImpl' and @parentIndex='" + getIndex() + "' and "+ Constants.XBRLAPIPrefix+ ":" + "data/*/@name='" + name + "']";
     	List<Concept> concepts = getStore().<Concept>queryForXMLResources(query);
     	if (concepts.size() == 0) return null;
     	if (concepts.size() > 1) throw new XBRLException("The concept name is not unique to the schema.");

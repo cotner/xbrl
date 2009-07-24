@@ -1,10 +1,13 @@
 package org.xbrlapi.fragment.tests;
 
+import java.net.URI;
+import java.util.List;
+
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.ExtendedLink;
-import java.util.List;
 import org.xbrlapi.Schema;
+import org.xbrlapi.SimpleLink;
 
 /**
  * Tests the implementation of the org.xbrlapi.Fact interface.
@@ -167,4 +170,24 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+    public void testGetImports() {
+
+        try {
+            URI uri = this.getURI(this.SCHEMA_WITH_EMBEDDED_LINKS);
+            List<Schema> fragments = store.<Schema>getXMLResources("Schema");
+            for (Schema fragment: fragments) {
+                if (fragment.getURI().equals(uri)) {
+                    List<SimpleLink> imports = fragment.getImports();
+                    assertTrue(imports.size() > 0);
+                    for (SimpleLink link: imports) {
+                        assertEquals("import",link.getDataRootElement().getLocalName());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }	
 }
