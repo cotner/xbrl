@@ -1936,7 +1936,10 @@ public abstract class BaseStoreImpl implements Store {
         // If we have a resource, it could be related directly via arcs to relatives.
         if (source.isa("org.xbrlapi.impl.ResourceImpl")) {
             if ((linkRole == null) || ((Resource) source).getExtendedLink().getLinkRole().equals(linkRole)) {
-                List<Arc> arcs = ((ArcEnd) source).getArcsFromWithArcrole(arcrole);
+                
+                List<Arc> arcs = null;
+                if (arcrole == null) arcs = ((ArcEnd) source).getArcsFrom();
+                else  arcs = ((ArcEnd) source).getArcsFromWithArcrole(arcrole);
 
                 for (Arc arc: arcs) {
                     List<ArcEnd> targets = arc.getTargetFragments();
@@ -2000,7 +2003,9 @@ public abstract class BaseStoreImpl implements Store {
         // If we have a resource, it could be related directly via arcs to relatives.
         if (target.isa("org.xbrlapi.impl.ResourceImpl")) {
             if ((linkRole == null) || ((Resource) target).getExtendedLink().getLinkRole().equals(linkRole)) {
-                List<Arc> arcs = ((ArcEnd) target).getArcsToWithArcrole(arcrole);
+                List<Arc> arcs = null;
+                if (arcrole == null) arcs = ((ArcEnd) target).getArcsTo();
+                else  arcs = ((ArcEnd) target).getArcsToWithArcrole(arcrole);
 
                 for (Arc arc: arcs) {
                     List<ArcEnd> targets = arc.getSourceFragments();
@@ -2085,6 +2090,13 @@ public abstract class BaseStoreImpl implements Store {
     public Networks getNetworksFrom(String sourceIndex, URI arcrole) throws XBRLException {
         return getNetworksFrom(sourceIndex,null,arcrole);       
     }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getNetworksFrom(java.lang.String)
+     */
+    public Networks getNetworksFrom(String sourceIndex) throws XBRLException {
+        return getNetworksFrom(sourceIndex,null,null);       
+    }    
 
     /**
      * @see org.xbrlapi.data.Store#getNetworksTo(java.lang.String, java.net.URI)
@@ -2092,6 +2104,14 @@ public abstract class BaseStoreImpl implements Store {
     public Networks getNetworksTo(String targetIndex, URI arcrole) throws XBRLException {
         return getNetworksTo(targetIndex,null,arcrole);
     }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getNetworksTo(java.lang.String)
+     */
+    public Networks getNetworksTo(String targetIndex) throws XBRLException {
+        return getNetworksTo(targetIndex,null,null);
+    }
+    
  
     /**
      * @see Store#getMissingDocumentURIs()

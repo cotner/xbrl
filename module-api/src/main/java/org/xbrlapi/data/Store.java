@@ -913,6 +913,14 @@ public interface Store extends Serializable {
     
     /**
      * @param sourceIndex The source fragment index
+     * @return a set of networks comprising the relationships
+     * from the source fragment.
+     * @throws XBRLException
+     */
+    public Networks getNetworksFrom(String sourceIndex) throws XBRLException;    
+    
+    /**
+     * @param sourceIndex The source fragment index
      * @param linkRole The XLink link role
      * @param arcrole The XLink arcrole
      * @return a set of networks comprising the relationships
@@ -923,10 +931,12 @@ public interface Store extends Serializable {
     
     /**
      * @param targetIndex The target fragment index
-     * @param linkRole The XLink link role
-     * @param arcrole The XLink arcrole
+     * @param linkRole The XLink link role or null if networks for 
+     * all link roles are sought
+     * @param arcrole The XLink arcrole  or null if networks for 
+     * all arcroles are sought
      * @return a set of networks comprising the relationships
-     * to the target fragment with the given link role and arcrole.
+     * to the target fragment meeting the specified criteria.
      * @throws XBRLException
      */
     public Networks getNetworksTo(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
@@ -938,7 +948,15 @@ public interface Store extends Serializable {
      * to the target fragment with the given arcrole.
      * @throws XBRLException
      */
-    public Networks getNetworksTo(String targetIndex, URI arcrole) throws XBRLException;    
+    public Networks getNetworksTo(String targetIndex, URI arcrole) throws XBRLException;
+    
+    /**
+     * @param targetIndex The target fragment index
+     * @return a set of networks comprising the relationships
+     * to the target fragment.
+     * @throws XBRLException
+     */
+    public Networks getNetworksTo(String targetIndex) throws XBRLException;    
     
     
 
