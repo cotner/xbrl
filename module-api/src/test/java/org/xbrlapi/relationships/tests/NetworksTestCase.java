@@ -14,9 +14,9 @@ import java.util.SortedSet;
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
-import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.Constants;
 
 public class NetworksTestCase extends DOMLoadingTestCase {
@@ -106,7 +106,7 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 			Network network = networks.getNetwork(linkroles.get(0),arcroles.get(0));
 			assertEquals(Constants.LabelArcrole,network.getArcrole());
 			assertEquals(Constants.StandardLinkRole,network.getLinkRole());
-			SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(label.getIndex());
+			SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsFrom(label.getIndex());
 			assertEquals(0,relationships.size());
 			relationships = network.getActiveRelationshipsTo(label.getIndex());
 			assertEquals(1,relationships.size());
@@ -129,8 +129,8 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 		    List<URI> arcroles = networks.getArcroles();
 			List<URI> linkroles = networks.getLinkRoles(arcroles.get(0));
 			Network network = networks.getNetwork(linkroles.get(0),arcroles.get(0));
-			SortedSet<Relationship> relationships = network.getActiveRelationshipsTo(label.getIndex());
-			Relationship relationship = relationships.first();
+			SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsTo(label.getIndex());
+			PersistedRelationship relationship = relationships.first();
 			assertEquals(Constants.LabelArcrole,relationship.getArc().getArcrole());
 			
 		} catch (Exception e) {
@@ -178,7 +178,4 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 			fail(e.getMessage());
 		}
 	}
-	
-
-
 }

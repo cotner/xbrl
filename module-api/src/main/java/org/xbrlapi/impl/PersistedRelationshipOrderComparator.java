@@ -17,8 +17,8 @@ public class PersistedRelationshipOrderComparator implements Comparator<Persiste
 	 */
 	public int compare(PersistedRelationship relationship1, PersistedRelationship relationship2) throws ClassCastException {
 
-        if (relationship1.getArcOrder().doubleValue() != relationship2.getArcOrder().doubleValue()) 
-            return relationship1.getArcOrder().compareTo(relationship2.getArcOrder());
+        if (relationship1.getOrder().doubleValue() != relationship2.getOrder().doubleValue()) 
+            return relationship1.getOrder().compareTo(relationship2.getOrder());
 
         if (! relationship1.getSignature().equals(relationship2.getSignature())) 
             return relationship1.getSignature().compareTo(relationship2.getSignature());

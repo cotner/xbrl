@@ -17,7 +17,9 @@ import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Locator;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.impl.PersistedRelationshipImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -118,8 +120,8 @@ public class NetworksImpl implements Networks, Serializable {
 		
     	List<Network> selectedNetworks = this.getNetworks(arcrole);
     	for (Network network: selectedNetworks) {
-    		SortedSet<Relationship> relationships = network.getActiveRelationshipsTo(targetIndex);
-        	for (Relationship relationship: relationships) {
+    		SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsTo(targetIndex);
+        	for (PersistedRelationship relationship: relationships) {
         		fragments.add(relationship.<F>getSource());
         	}
     	}
@@ -133,8 +135,8 @@ public class NetworksImpl implements Networks, Serializable {
 		List<F> fragments = new Vector<F>();
 		if (! hasNetwork(linkRole,arcrole)) return fragments;
     	Network network = this.getNetwork(linkRole,arcrole);
-		SortedSet<Relationship> relationships = network.getActiveRelationshipsTo(targetIndex);
-    	for (Relationship relationship: relationships) {
+		SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsTo(targetIndex);
+    	for (PersistedRelationship relationship: relationships) {
     		fragments.add(relationship.<F>getSource());
     	}
 		return fragments;
@@ -151,9 +153,9 @@ public class NetworksImpl implements Networks, Serializable {
     	logger.debug("There are " + selectedNetworks.size() + " networks with arcrole " + arcrole);
     	for (Network network: selectedNetworks) {
             logger.debug("A network has linkrole " + network.getLinkRole());
-    		SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
+    		SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
             logger.debug("The network contains " + relationships.size() + " relationships from " + sourceIndex);
-        	for (Relationship relationship: relationships) {
+        	for (PersistedRelationship relationship: relationships) {
         		fragments.add(relationship.<F>getTarget());
         	}
     	}
@@ -168,8 +170,8 @@ public class NetworksImpl implements Networks, Serializable {
 		List<F> fragments = new Vector<F>();
 		if (! hasNetwork(linkRole, arcRole)) return fragments;
     	Network network = this.getNetwork(linkRole, arcRole);
-		SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
-    	for (Relationship relationship: relationships) {
+		SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
+    	for (PersistedRelationship relationship: relationships) {
     		fragments.add(relationship.<F>getTarget());
     	}
 		return fragments;
@@ -187,9 +189,9 @@ public class NetworksImpl implements Networks, Serializable {
 	}
 	
 	/**
-	 * @see Networks#addRelationship(Relationship)
+	 * @see Networks#addRelationship(PersistedRelationship)
 	 */
-	public void addRelationship(Relationship relationship) throws XBRLException {
+	public void addRelationship(PersistedRelationship relationship) throws XBRLException {
 		logger.debug("Networks being augmented with relationship: " + relationship.toString());
 		URI arcrole = relationship.getArcrole();
 		URI linkRole = relationship.getLinkRole();
@@ -220,8 +222,7 @@ public class NetworksImpl implements Networks, Serializable {
                 for (Fragment target: targets) {
                     Fragment t = target;
                     if (target.isa("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTarget();
-                    Relationship relationship = new RelationshipImpl(arc,s,t);
-                    this.addRelationship(relationship);
+                    this.addRelationship(new PersistedRelationshipImpl(arc,s,t));
                 }
             }
         }

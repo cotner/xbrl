@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.xbrlapi.Arc;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -55,12 +56,11 @@ public interface Storer {
      * When the relationship is persisted in the data store, any equivalent
      * relationship will be removed from the data store.  Equivalence is 
      * assessed on the basis of the relationship semantic key.
-     * @see org.xbrlapi.networks.Relationship#getSignature()
+     * @see org.xbrlapi.networks.PersistedRelationship#getSignature()
      * @param relationship The relationship that will be be persisted in the data store.
-     * @see org.xbrlapi.PersistedRelationship
      * @throws XBRLException
      */
-    public void storeRelationship(Relationship relationship) throws XBRLException;
+    public void storeRelationship(PersistedRelationship relationship) throws XBRLException;
 
     /**
      * Persist the relationship defined by the given fragments.

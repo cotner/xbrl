@@ -44,17 +44,6 @@ public class AnalyserImpl implements Analyser {
         if (tripleCount != relationshipCount) return false;
         return true;
 
-/*        Set<String> indices = getStore().getFragmentIndicesFromDocument(document,"Arc");
-        for (String index: indices) {
-            Arc arc = getStore().<Arc>getXMLResource(index);
-            List<ArcEnd> sources = arc.getSourceFragments();
-            List<ArcEnd> targets = arc.getTargetFragments();
-            long relationships = sources.size() * targets.size();
-            String query = "#roots#[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcIndex='" + index + "']";
-            long count = store.queryCount(query);
-            if (count != relationships) return false;
-        }
-        return true;*/
     }
     
     /**
@@ -67,12 +56,7 @@ public class AnalyserImpl implements Analyser {
     private List<PersistedRelationship> getRelationships(String query) throws XBRLException {
         List<PersistedRelationship> allRelationships = getStore().<PersistedRelationship>queryForXMLResources(query);
         return allRelationships;
-/*        List<PersistedRelationship> result = new Vector<PersistedRelationship>();
-        for (PersistedRelationship relationship: allRelationships) {
-            
-        }
-        return result;
-*/    }
+    }
     
     /**
      * @param store The data store to use.

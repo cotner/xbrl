@@ -421,7 +421,7 @@ public class RunWithPersistedNetworks {
                     indent + " ", 
                     concept, 
                     (Concept) relationship.getTarget(), 
-                    relationship.getArcOrder(), 
+                    relationship.getOrder(), 
                     linkRole,
                     arcrole,
                     labelRole)

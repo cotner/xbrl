@@ -16,7 +16,7 @@ public class PersistedRelationshipPriorityComparator implements Comparator<Persi
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	public int compare(PersistedRelationship relationship1, PersistedRelationship relationship2) throws ClassCastException {
-            return - relationship1.getArcPriority().compareTo(relationship2.getArcPriority());
+            return - relationship1.getPriority().compareTo(relationship2.getPriority());
             
 	}
 	

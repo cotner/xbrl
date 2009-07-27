@@ -60,13 +60,12 @@ public class StorerImpl implements Storer {
     }
 
     /**
-     * @see org.xbrlapi.networks.Storer#storeRelationship(org.xbrlapi.networks.Relationship)
+     * @see org.xbrlapi.networks.Storer#storeRelationship(PersistedRelationship)
      */
-    public void storeRelationship(Relationship relationship)
+    public void storeRelationship(PersistedRelationship relationship)
             throws XBRLException {
         try {
-            PersistedRelationship persistedRelationship = new PersistedRelationshipImpl(relationship);
-            if (! getStore().hasXMLResource(persistedRelationship.getIndex())) getStore().persist(persistedRelationship);
+            if (! getStore().hasXMLResource(relationship.getIndex())) getStore().persist(relationship);
         } catch (XBRLException e) {
             String arcIndex = relationship.getArcIndex();
             URI document = relationship.getArc().getURI();
@@ -95,7 +94,7 @@ public class StorerImpl implements Storer {
      * @see org.xbrlapi.networks.Storer#storeRelationships(org.xbrlapi.networks.Network)
      */
     public void storeRelationships(Network network) throws XBRLException {
-        for (Relationship relationship: network.getAllActiveRelationships()) {
+        for (PersistedRelationship relationship: network.getAllActiveRelationships()) {
             storeRelationship(relationship);
         }
     }

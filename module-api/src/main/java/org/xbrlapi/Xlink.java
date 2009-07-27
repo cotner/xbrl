@@ -1,5 +1,6 @@
 package org.xbrlapi;
 
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
@@ -49,11 +50,11 @@ public interface Xlink extends Fragment {
     
     /**
      * Get a non-xlink attribute value.
-     * @param namespaceURI The namespace of the attribute to retrieve
+     * @param namespace The namespace of the attribute to retrieve
      * @param localname The local name of the attribute to retrieve
      * @throws XBRLException if the namespace URI is for the XLink namespace.
      */
-    public String getAttribute(String namespaceURI, String localname) throws XBRLException;
+    public String getAttribute(URI namespace, String localname) throws XBRLException;
 
     /**
      * Get a no-namespace attribute value.

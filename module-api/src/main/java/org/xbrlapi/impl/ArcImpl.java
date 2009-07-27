@@ -25,12 +25,13 @@ import org.xbrlapi.utilities.XBRLException;
 public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
 
     /**
-     * @see org.xbrlapi.Arc#getAttribute(String,String)
+     * @see org.xbrlapi.Arc#getAttribute(URI,String)
      */
-    public String getAttribute(String namespace, String name) throws XBRLException {
+    public String getAttribute(URI namespace, String name) throws XBRLException {
         Element root = getDataRootElement();
-        if (! root.hasAttributeNS(namespace,name)) return null;
-        return root.getAttributeNS(namespace,name);
+        String ns = namespace.toString();
+        if (! root.hasAttributeNS(ns,name)) return null;
+        return root.getAttributeNS(ns,name);
     }
     
     /**

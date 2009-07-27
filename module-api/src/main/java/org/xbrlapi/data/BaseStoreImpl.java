@@ -52,6 +52,8 @@ import org.xbrlapi.data.resource.DefaultMatcherImpl;
 import org.xbrlapi.data.resource.InStoreMatcherImpl;
 import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.impl.FragmentComparator;
+import org.xbrlapi.impl.PersistedRelationshipImpl;
+import org.xbrlapi.impl.PersistedRelationshipOrderComparator;
 import org.xbrlapi.impl.StubImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.Analyser;
@@ -59,9 +61,6 @@ import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
-import org.xbrlapi.networks.Relationship;
-import org.xbrlapi.networks.RelationshipImpl;
-import org.xbrlapi.networks.RelationshipOrderComparator;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
@@ -938,8 +937,7 @@ public abstract class BaseStoreImpl implements Store {
                     if (target.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
                         t = ((Locator) target).getTarget();
                     else t = target;
-                    Relationship relationship = new RelationshipImpl(arc,s,t);
-                    networks.addRelationship(relationship);
+                    networks.addRelationship(new PersistedRelationshipImpl(arc,s,t));
                 }
             }
         }
@@ -969,8 +967,7 @@ public abstract class BaseStoreImpl implements Store {
                     if (target.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
                         t = ((Locator) target).getTarget();
                     else t = target;
-                    Relationship relationship = new RelationshipImpl(arc,s,t);
-                    networks.addRelationship(relationship);
+                    networks.addRelationship(new PersistedRelationshipImpl(arc,s,t));
                 }
             }
         }
@@ -1007,8 +1004,7 @@ public abstract class BaseStoreImpl implements Store {
                             if (target.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
                                 t = ((Locator) target).getTarget();
                             else t = target;
-                            Relationship relationship = new RelationshipImpl(arc,s,t);
-                            networks.addRelationship(relationship);
+                            networks.addRelationship(new PersistedRelationshipImpl(arc,s,t));
                         }
                     }
                 }
@@ -1046,8 +1042,7 @@ public abstract class BaseStoreImpl implements Store {
                         if (target.getType().equals("org.xbrlapi.impl.LocatorImpl")) 
                             t = ((Locator) target).getTarget();
                         else t = target;
-                        Relationship relationship = new RelationshipImpl(arc,s,t);
-                        networks.addRelationship(relationship);
+                        networks.addRelationship(new PersistedRelationshipImpl(arc,s,t));
                     }
                 }
             }
@@ -1094,7 +1089,7 @@ public abstract class BaseStoreImpl implements Store {
         
         List<LabelResource> labels = new Vector<LabelResource>();
         for (Network network: labelNetworks) {
-            for (Relationship relationship: network.getAllActiveRelationships()) {
+            for (PersistedRelationship relationship: network.getAllActiveRelationships()) {
                 LabelResource label = (LabelResource) relationship.getTarget();
                 String l = label.getLanguage();
                 URI r = label.getResourceRole();
@@ -1160,7 +1155,7 @@ public abstract class BaseStoreImpl implements Store {
         
         List<ReferenceResource> references = new Vector<ReferenceResource>();
         for (Network network: referenceNetworks) {
-            for (Relationship relationship: network.getAllActiveRelationships()) {
+            for (PersistedRelationship relationship: network.getAllActiveRelationships()) {
                 ReferenceResource reference = (ReferenceResource) relationship.getTarget();
                 String l = reference.getLanguage();
                 URI r = reference.getResourceRole();
@@ -1687,19 +1682,19 @@ public abstract class BaseStoreImpl implements Store {
      * @see Store#getMinimalNetworksWithArcrole(Fragment, URI)
      */
     public Networks getMinimalNetworksWithArcrole(Fragment fragment, URI arcrole) throws XBRLException {
-        List<Fragment> list = new Vector<Fragment>();
-        list.add(fragment);
-        return this.getMinimalNetworksWithArcrole(list,arcrole);
+        Set<Fragment> set = new HashSet<Fragment>();
+        set.add(fragment);
+        return this.getMinimalNetworksWithArcrole(set,arcrole);
     }    
     
     /**
-     * @see Store#getMinimalNetworksWithArcrole(List, URI)
+     * @see Store#getMinimalNetworksWithArcrole(Set, URI)
      */
-    public Networks getMinimalNetworksWithArcrole(List<Fragment> fragments, URI arcrole) throws XBRLException {
+    public Networks getMinimalNetworksWithArcrole(Set<Fragment> fragments, URI arcrole) throws XBRLException {
         
         Networks networks = new NetworksImpl(this);
 
-        HashMap<String,Fragment> processedFragments = new HashMap<String,Fragment>();
+        Set<Fragment> processedFragments = new HashSet<Fragment>();
         
         for (Fragment fragment: fragments) {
             networks = augmentNetworksForFragment(fragment,arcrole,networks,processedFragments);
@@ -1709,23 +1704,24 @@ public abstract class BaseStoreImpl implements Store {
     
     /**
      * This method is recursive.
-     * @param fragment The fragment to use as the target for the relationships to be added to the networks
+     * @param fragment The fragment to use as the target for the relationships to be added to the networks.
      * @param arcrole The arcrole for the networks to augment.
      * @param networks The networks system to augment.
      * @return The networks after augmentation.
      * @throws XBRLException
      */
-    private Networks augmentNetworksForFragment(Fragment fragment, URI arcrole, Networks networks, HashMap<String,Fragment> processedFragments) throws XBRLException {
-        if (processedFragments.containsKey(fragment.getIndex())) {
+    private Networks augmentNetworksForFragment(Fragment fragment, URI arcrole, Networks networks, Set<Fragment> processedFragments) throws XBRLException {
+        if (processedFragments.contains(fragment)) {
             return networks;
         }
-        for (Relationship relationship: this.getActiveRelationshipsTo(fragment.getIndex(),null,arcrole)) {
+        processedFragments.add(fragment);
+        for (PersistedRelationship relationship: this.getActiveRelationshipsTo(fragment.getIndex(),null,arcrole)) {
             networks.addRelationship(relationship);
         }
         for (Network network: networks.getNetworks(arcrole)) {
-            SortedSet<Relationship> activeRelationships = network.getActiveRelationshipsTo(fragment.getIndex());
+            SortedSet<PersistedRelationship> activeRelationships = network.getActiveRelationshipsTo(fragment.getIndex());
             logger.debug(fragment.getIndex() + " has " + activeRelationships.size() + " parent fragments.");
-            for (Relationship activeRelationship: activeRelationships) {
+            for (PersistedRelationship activeRelationship: activeRelationships) {
                 Fragment source = activeRelationship.getSource();
                 networks = augmentNetworksForFragment(source,arcrole,networks,processedFragments);
             }
@@ -1825,8 +1821,8 @@ public abstract class BaseStoreImpl implements Store {
             }
             return new Vector<F>(targets);
         }
-        SortedSet<Relationship> relationships = this.getActiveRelationshipsFrom(sourceIndex,linkRole,arcrole);
-        for (Relationship relationship: relationships) {
+        SortedSet<PersistedRelationship> relationships = this.getActiveRelationshipsFrom(sourceIndex,linkRole,arcrole);
+        for (PersistedRelationship relationship: relationships) {
             targets.add((F) relationship.getTarget());
         }
         return new Vector<F>(targets);
@@ -1851,8 +1847,8 @@ public abstract class BaseStoreImpl implements Store {
             return new Vector<F>(sources);
         }
         
-        SortedSet<Relationship> relationships = this.getActiveRelationshipsTo(targetIndex,linkRole,arcrole);
-        for (Relationship relationship: relationships) {
+        SortedSet<PersistedRelationship> relationships = this.getActiveRelationshipsTo(targetIndex,linkRole,arcrole);
+        for (PersistedRelationship relationship: relationships) {
             sources.add((F) relationship.getSource());
         }
         return new Vector<F>(sources);
@@ -1861,9 +1857,9 @@ public abstract class BaseStoreImpl implements Store {
     /**
      * @see Store#getActiveRelationshipsFrom(String,URI,URI)
      */
-    public SortedSet<Relationship> getActiveRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException {
+    public SortedSet<PersistedRelationship> getActiveRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException {
 
-        SortedSet<Relationship> relationships = new TreeSet<Relationship>(new RelationshipOrderComparator());
+        SortedSet<PersistedRelationship> relationships = new TreeSet<PersistedRelationship>(new PersistedRelationshipOrderComparator());
         Networks networks = this.getNetworksFrom(sourceIndex,linkRole,arcrole);
         for (Network network: networks) {
             relationships.addAll(network.getActiveRelationshipsFrom(sourceIndex));
@@ -1901,9 +1897,9 @@ public abstract class BaseStoreImpl implements Store {
     /**
      * @see Store#getActiveRelationshipsTo(String,URI,URI)
      */
-    public SortedSet<Relationship> getActiveRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException {
+    public SortedSet<PersistedRelationship> getActiveRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException {
 
-        SortedSet<Relationship> relationships = new TreeSet<Relationship>(new RelationshipOrderComparator());
+        SortedSet<PersistedRelationship> relationships = new TreeSet<PersistedRelationship>(new PersistedRelationshipOrderComparator());
         Networks networks = this.getNetworksTo(targetIndex,linkRole,arcrole);
         for (Network network: networks) {
             relationships.addAll(network.getActiveRelationshipsTo(targetIndex));
@@ -1931,7 +1927,7 @@ public abstract class BaseStoreImpl implements Store {
         Fragment source = this.getXMLResource(sourceIndex);
 
         Networks networks = new NetworksImpl(this);
-        Relationship relationship = null;
+        PersistedRelationship relationship = null;
 
         // If we have a resource, it could be related directly via arcs to relatives.
         if (source.isa("org.xbrlapi.impl.ResourceImpl")) {
@@ -1946,9 +1942,9 @@ public abstract class BaseStoreImpl implements Store {
                     for (ArcEnd end: targets) {
                         if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
                             Fragment target = ((Locator) end).getTarget();
-                            relationship = new RelationshipImpl(arc,source,target);
+                            relationship = new PersistedRelationshipImpl(arc,source,target);
                         } else {
-                            relationship = new RelationshipImpl(arc,source,end);
+                            relationship = new PersistedRelationshipImpl(arc,source,end);
                         }               
                         networks.addRelationship(relationship);
                     }
@@ -1979,9 +1975,9 @@ public abstract class BaseStoreImpl implements Store {
                 for (ArcEnd end: targets) {
                     if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
                         Fragment target = ((Locator) end).getTarget();
-                        relationship = new RelationshipImpl(arc,source,target);
+                        relationship = new PersistedRelationshipImpl(arc,source,target);
                     } else {
-                        relationship = new RelationshipImpl(arc,source,end);
+                        relationship = new PersistedRelationshipImpl(arc,source,end);
                     }
                     networks.addRelationship(relationship);
                 }
@@ -1998,7 +1994,7 @@ public abstract class BaseStoreImpl implements Store {
         Fragment target = this.getXMLResource(targetIndex);
 
         Networks networks = new NetworksImpl(this);
-        Relationship relationship = null;
+        PersistedRelationship relationship = null;
 
         // If we have a resource, it could be related directly via arcs to relatives.
         if (target.isa("org.xbrlapi.impl.ResourceImpl")) {
@@ -2012,9 +2008,9 @@ public abstract class BaseStoreImpl implements Store {
                     for (ArcEnd end: targets) {
                         if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
                             Fragment source = ((Locator) end).getTarget();
-                            relationship = new RelationshipImpl(arc,source,target);
+                            relationship = new PersistedRelationshipImpl(arc,source,target);
                         } else {
-                            relationship = new RelationshipImpl(arc,end,target);
+                            relationship = new PersistedRelationshipImpl(arc,end,target);
                         }               
                         networks.addRelationship(relationship);
                     }
@@ -2044,9 +2040,9 @@ public abstract class BaseStoreImpl implements Store {
                 for (ArcEnd end: sources) {
                     if (end.getType().equals("org.xbrlapi.impl.LocatorImpl")) {
                         Fragment source = ((Locator) end).getTarget();
-                        relationship = new RelationshipImpl(arc,source,target);
+                        relationship = new PersistedRelationshipImpl(arc,source,target);
                     } else {
-                        relationship = new RelationshipImpl(arc,end,target);
+                        relationship = new PersistedRelationshipImpl(arc,end,target);
                     }
                     networks.addRelationship(relationship);
                 }

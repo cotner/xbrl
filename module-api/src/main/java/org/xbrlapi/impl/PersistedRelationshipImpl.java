@@ -9,7 +9,6 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.Resource;
 import org.xbrlapi.builder.BuilderImpl;
-import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -28,14 +27,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
         setBuilder(new BuilderImpl());
     }    
     
-    /**
-     * @param relationship The relationship that is to be persisted.
-     * within the scope of the containing data store.
-     * @throws XBRLException
-     */
-    public PersistedRelationshipImpl(Relationship relationship) throws XBRLException {
-        this(relationship.getArc(),relationship.getSource(),relationship.getTarget());
-    }
+
     
     /**
      * @param arc The arc defining the relationship
@@ -80,6 +72,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
         setArcPriority(arc.getPriority());
         setArcUse(arc.getUse());
 
+        setLinkIndex(link.getIndex());
         setLinkName(link.getLocalname());
         setLinkNamespace(link.getNamespace());
         setLinkRole(link.getLinkRole());
@@ -169,23 +162,23 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcOrder()
+     * @see org.xbrlapi.PersistedRelationship#getOrder()
      */
-    public Double getArcOrder() {
+    public Double getOrder() {
         return new Double(getMetaAttribute("arcOrder"));
     }
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcPriority()
+     * @see org.xbrlapi.PersistedRelationship#getPriority()
      */
-    public Integer getArcPriority() {
+    public Integer getPriority() {
         return new Integer(getMetaAttribute("arcPriority"));
     }
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcUse()
+     * @see org.xbrlapi.PersistedRelationship#getUse()
      */
-    public String getArcUse() {
+    public String getUse() {
         String use = getMetaAttribute("arcUse");
         if (use== null) return "optional";
         return "prohibited";
@@ -400,6 +393,14 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }    
 
     /**
+     * @param name The index of the containing extended link element.
+     * @throws XBRLException 
+     */
+    private void setLinkIndex(String index) throws XBRLException {
+        this.setMetaAttribute("linkIndex",index);
+    }
+    
+    /**
      * @param name The local name of the containing extended link element.
      * @throws XBRLException 
      */
@@ -558,44 +559,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
             }
         }
     }
-    
-    /**
-     * Updates the active status for this relationship and the equivalent
-     * active relationship in the data store.
-     * @param store The data store
-     * @throws XBRLException 
-     */
-/*    private void updateActiveStatuses(Store store) throws XBRLException {
 
-        String query = "#roots#[@arcRole='"+ this.getArcrole() + "' and @linkRole='"+ this.getLinkRole() + "'  and @sourceIndex='"+ this.getSourceIndex() + "'  and @targetIndex='"+ this.getTargetIndex() + "'  and @signature='"+ this.getSignature() + "']";
-        List<PersistedRelationship> equivalentRelationships = store.<PersistedRelationship>query(query);
-        for (PersistedRelationship equivalentRelationship: equivalentRelationships) {
-            if (equivalentRelationship.getArcPriority() > this.getArcPriority()) {
-                return;
-            }
-            if (equivalentRelationship.isActive()) {
-                equivalentRelationship.setActiveStatus(false);
-                store.persist(equivalentRelationship);
-            }
-        }
-        if (getArcUse().equals("optional")) this.setActiveStatus(true);
-        
-    }
-*/    
-    /**
-     * Stores in the XML resource a 'active' attribute of
-     * the root element if the relationship not overridden or
-     * prohibited by other relationships that have been persisted
-     * in the data store.
-     * @throws XBRLException 
-     */
-/*    public void setActiveStatus(boolean active) throws XBRLException {
-        if (active) {
-            this.setMetaAttribute("active","");
-        } else {
-            this.removeMetaAttribute("active");
-        }
-    }*/
     /**
      * Stores in the XML resource a 'reference' attribute of
      * the root element if the relationship is to an XBRL 2.1 
@@ -622,13 +586,45 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
         String query = "#roots#[@active and @targetIndex='" + sourceIndex + "' and @arcRole='" + this.getArcrole() + "'  and @linkRole='"+this.getLinkRole()+"']";
         return (getStore().queryCount(query) == 0);
     }
-    
-    /**
-     * @see PersistedRelationship#isActive()
-     */
-/*    public boolean isActive() throws XBRLException {
-        return (this.getMetaAttribute("active") != null);
-    }    */
 
+    /**
+     * @see org.xbrlapi.PersistedRelationship#getArcAttributeValue(URI, java.lang.String)
+     */
+    public String getArcAttributeValue(URI namespace, String name)
+            throws XBRLException {
+        return getArc().getAttribute(namespace, name);
+    }
+
+    /**
+     * @see org.xbrlapi.PersistedRelationship#getArcAttributeValue(java.lang.String)
+     */
+    public String getArcAttributeValue(String name) throws XBRLException {
+        return getArc().getAttribute(name);
+    }
+
+    /**
+     * @see org.xbrlapi.PersistedRelationship#getExtendedLink()
+     */
+    public ExtendedLink getExtendedLink() throws XBRLException {
+        return getStore().<ExtendedLink>getXMLResource(getLinkIndex());
+    }
+
+    /**
+     * @see org.xbrlapi.PersistedRelationship#getLinkIndex()
+     */
+    public String getLinkIndex() throws XBRLException {
+        return this.getMetaAttribute("linkIndex");
+    }
+
+    /**
+     * @see org.xbrlapi.PersistedRelationship#isProhibiting()
+     */
+    public boolean isProhibiting() throws XBRLException {
+        return (this.getUse().equals("prohibited"));
+    }
+    
+    
+
+    
     
 }

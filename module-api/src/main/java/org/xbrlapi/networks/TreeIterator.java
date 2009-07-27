@@ -7,6 +7,7 @@ import java.util.SortedSet;
 import java.util.Vector;
 
 import org.xbrlapi.Fragment;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -26,7 +27,7 @@ public class TreeIterator implements Iterator<Fragment> {
     
     // The state of the iterator
     private Fragment root = null;
-    private List<SortedSet<Relationship>> state = new Vector<SortedSet<Relationship>>();
+    private List<SortedSet<PersistedRelationship>> state = new Vector<SortedSet<PersistedRelationship>>();
 
     private List<Fragment> initialise(Network network) throws XBRLException {
         if (network == null) throw new XBRLException("The network must not be null.");
@@ -79,7 +80,7 @@ public class TreeIterator implements Iterator<Fragment> {
         try {
 
             if (root != null) {
-                SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(root.getIndex());
+                SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsFrom(root.getIndex());
                 if (! relationships.isEmpty()) state.add(relationships);
                 Fragment next = root;
                 root = null;
@@ -91,13 +92,13 @@ public class TreeIterator implements Iterator<Fragment> {
             }
 
             // Update the state
-            SortedSet<Relationship> first = state.get(0);
-            Relationship next = first.first();
+            SortedSet<PersistedRelationship> first = state.get(0);
+            PersistedRelationship next = first.first();
             first.remove(next);
             if (first.isEmpty()) {
                 state.remove(0);
             }
-            SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(next.getTargetIndex());
+            SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsFrom(next.getTargetIndex());
             if (! relationships.isEmpty()) state.add(relationships);
             return next.getTarget();
 

@@ -20,10 +20,6 @@ import org.xbrlapi.xpointer.PointerPart;
 
 public class TypedDimensionImpl extends DimensionImpl implements TypedDimension, SimpleLink {
 
-    // ********************************************************************************
-    // The code in this section implements the Link interface.
-    // ********************************************************************************    
-
     /**
      * @see org.xbrlapi.Link#getLinkRole()
      */
@@ -31,10 +27,6 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
         return null;
     }
     
-    // ********************************************************************************
-    // The code in this section implements the XLink interface.
-    // ********************************************************************************
-
     /**
      * @see org.xbrlapi.Xlink#getXlinkType()
      */
@@ -68,11 +60,11 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
     }
 
     /**
-     * @see org.xbrlapi.Xlink#getAttribute(String, String)
+     * @see org.xbrlapi.Xlink#getAttribute(URI, String)
      */
-    public String getAttribute(String namespaceURI, String localname) throws XBRLException {
-        if (namespaceURI.equals(Constants.XLinkNamespace.toString())) throw new XBRLException("XLink attributes must not be accessed using the getAttribute method on XLink fragments.");
-        return getDataRootElement().getAttributeNS(namespaceURI,localname);
+    public String getAttribute(URI namespace, String localname) throws XBRLException {
+        if (namespace.equals(Constants.XLinkNamespace)) throw new XBRLException("XLink attributes must not be accessed using the getAttribute method on XLink fragments.");
+        return getDataRootElement().getAttributeNS(namespace.toString(),localname);
     }
 
     /**
@@ -136,10 +128,6 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
         return "";
         
     }   
-    
-    // ********************************************************************************
-    // The code from here onward is adapted from the SimpleLink implementation.
-    // ********************************************************************************
     
     /**
      * @see org.xbrlapi.SimpleLink#setTarget(URI)

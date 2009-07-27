@@ -1,3 +1,8 @@
+27 Jul. 2009
+Eliminated the org.xbrlapi.networks.Relationship interface and implementation, 
+replacing it throughout with the very similar but more complete 
+org.xbrlapi.PersistedRelationship interface and implementation.
+
 16 Jul. 2009
 Added arc URI to the information persisted for each relationship. 
 Added in persisted error information capture using the data store

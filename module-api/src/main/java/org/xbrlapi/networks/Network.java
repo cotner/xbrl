@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.xbrlapi.Fragment;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.utilities.XBRLException;
 
 
@@ -127,7 +128,7 @@ public interface Network {
 	 * @param relationship The relationship to add.
 	 * @throws XBRLException
 	 */
-	public void addRelationship(Relationship relationship) throws XBRLException;
+	public void addRelationship(PersistedRelationship relationship) throws XBRLException;
 
 	/**
 	 * @param index The index of the source fragment.
@@ -136,7 +137,7 @@ public interface Network {
 	 * The list is ordered by the order attributes on the relationships from lowest to highest.
 	 * @throws XBRLException
 	 */
-	public SortedSet<Relationship> getActiveRelationshipsFrom(String index) throws XBRLException;
+	public SortedSet<PersistedRelationship> getActiveRelationshipsFrom(String index) throws XBRLException;
 
 	/**
 	 * @param index The index of the target fragment.
@@ -144,20 +145,20 @@ public interface Network {
 	 * relationships in the network and that run to the same target fragment.
 	 * @throws XBRLException
 	 */
-	public SortedSet<Relationship> getActiveRelationshipsTo(String index) throws XBRLException;
+	public SortedSet<PersistedRelationship> getActiveRelationshipsTo(String index) throws XBRLException;
 	
     /**
      * @return the list of all relationships (active and inactive)
      * in the network.
      * @throws XBRLException
      */
-    public List<Relationship> getAllRelationships() throws XBRLException;
+    public List<PersistedRelationship> getAllRelationships() throws XBRLException;
     
     /**
      * @return the list of all active relationships in the network.
      * @throws XBRLException
      */
-    public List<Relationship> getAllActiveRelationships() throws XBRLException;    
+    public List<PersistedRelationship> getAllActiveRelationships() throws XBRLException;    
 	
 
 	/**

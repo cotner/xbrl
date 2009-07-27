@@ -30,7 +30,6 @@ import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.networks.Networks;
-import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -865,11 +864,11 @@ public interface Store extends Serializable {
      * @return The networks containing the relationships.
      * @throws XBRLException
      */
-    public Networks getMinimalNetworksWithArcrole(List<Fragment> fragments, URI arcrole) throws XBRLException;
+    public Networks getMinimalNetworksWithArcrole(Set<Fragment> fragments, URI arcrole) throws XBRLException;
     
     /**
      * Convenience method for a single fragment.
-     * @see Store#getMinimalNetworksWithArcrole(List,URI)
+     * @see Store#getMinimalNetworksWithArcrole(Set,URI)
      */
     public Networks getMinimalNetworksWithArcrole(Fragment fragment, URI arcrole) throws XBRLException;
 
@@ -961,6 +960,7 @@ public interface Store extends Serializable {
     
 
     /**
+     * TODO is this redundant????
      * @param sourceIndex The source fragment index
      * @param linkRole The XLink link role
      * @param arcrole The XLink arcrole
@@ -969,7 +969,7 @@ public interface Store extends Serializable {
      * by the raw XBRL fragments in the data store.
      * @throws XBRLException
      */
-    public SortedSet<Relationship> getActiveRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;
+    public SortedSet<PersistedRelationship> getActiveRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;
     
     /**
      * @param sourceIndex The source fragment index
@@ -995,6 +995,7 @@ public interface Store extends Serializable {
     public boolean hasAllPersistedRelationships(URI document) throws XBRLException;    
     
     /**
+     * TODO is this redundant????
      * @param targetIndex The target fragment index
      * @param linkRole The XLink link role
      * @param arcrole The XLink arcrole
@@ -1004,7 +1005,7 @@ public interface Store extends Serializable {
      * rather than the persisted relationship fragments in the data store.
      * @throws XBRLException
      */
-    public SortedSet<Relationship> getActiveRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException;
+    public SortedSet<PersistedRelationship> getActiveRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException;
     
     /**
      * @param targetIndex The target fragment index

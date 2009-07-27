@@ -19,7 +19,7 @@ public interface Arc extends ExtendedLinkContent {
      * the attribute.
      * @throws XBRLException
      */
-    public String getAttribute(String namespace, String name) throws XBRLException;
+    public String getAttribute(URI namespace, String name) throws XBRLException;
     
     /**
      * @param namespace The namespace of the attribute

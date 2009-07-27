@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.Fragment;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -114,7 +115,7 @@ public interface Networks extends Iterable<Network> {
 	 * @param relationship The relationship to add to the collection of networks.
 	 * @throws XBRLException
 	 */
-	public void addRelationship(Relationship relationship) throws XBRLException;
+	public void addRelationship(PersistedRelationship relationship) throws XBRLException;
 	
 	/**
 	 * Adds all relationships with the given arcrole to the set of networks.

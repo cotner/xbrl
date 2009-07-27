@@ -27,6 +27,7 @@ import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.PersistedRelationship;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Stub;
 import org.xbrlapi.aspects.Aspect;
@@ -44,7 +45,6 @@ import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.NetworkImpl;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
-import org.xbrlapi.networks.Relationship;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -399,9 +399,9 @@ public class Run {
         labels.add(label);
         reportTime(label);
 
-        SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getIndex());
+        SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsFrom(concept.getIndex());
 
-        for (Relationship relationship: relationships) {
+        for (PersistedRelationship relationship: relationships) {
             
             labelRole = Constants.StandardLabelRole;
             if (relationship.getArc().hasAttribute("preferredLabel")) {

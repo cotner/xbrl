@@ -48,18 +48,48 @@ public interface PersistedRelationship extends NonFragmentXML {
     /**
      * @return the XLink arc order for the relationship.
      */
-    public Double getArcOrder();
+    public Double getOrder();
     
     /**
      * @return the arc priority for the relationship.
      */
-    public Integer getArcPriority();
+    public Integer getPriority();
     
     /**
      * @return the arc use for the relationship.
      */
-    public String getArcUse();    
+    public String getUse();
     
+    /**
+     * @return true if the relationship has prohibited use
+     * and false otherwise.  Note that this <em>does not</em> test if this
+     * relationship is prohibited by another relationship with a higher
+     * priority.
+     * @throws XBRLException
+     */
+    public boolean isProhibiting() throws XBRLException;    
+
+    /**
+     * Use this method if the attribute on the arc has its
+     * own namespace.
+     * @param namespace The namespace of the attribute.
+     * @param name The local name of the attribute.
+     * @return The value of the attribute on the arc 
+     * or null if no such attribute exists.
+     * @throws XBRLException
+     */
+    public String getArcAttributeValue(URI namespace, String name) throws XBRLException;
+    
+    /**
+     * Use this method if the attribute on the arc does not have 
+     * its own namespace.
+     * @param name The name of the attribute.
+     * @return The value of the attribute on the arc 
+     * or null if no such attribute exists.
+     * @throws XBRLException
+     */
+    public String getArcAttributeValue(String name) throws XBRLException;   
+        
     /**
      * @return the source element namespace.
      */
@@ -111,6 +141,19 @@ public interface PersistedRelationship extends NonFragmentXML {
      * @return the arc element name.
      */
     public String getArcName();
+
+    /**
+     * @return the index of the containing extended link.
+     * @throws XBRLException
+     */
+    public String getLinkIndex() throws XBRLException;
+
+    /**
+     * @return the extended link that contains the arc defining the
+     * relationship.
+     * @throws XBRLException
+     */
+    public ExtendedLink getExtendedLink() throws XBRLException;
 
     /**
      * @return the link element name.
@@ -171,6 +214,12 @@ public interface PersistedRelationship extends NonFragmentXML {
      * @throws XBRLException
      */
     public boolean isFromRoot() throws XBRLException;
+    
+    /**
+     * @return the string expression of the relationship as a sequence of fragment indices
+     * source:arc:target.
+     */
+    public String toString();    
     
     /**
      * @return true if the relationship is marked as being
