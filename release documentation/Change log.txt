@@ -1,3 +1,7 @@
+28 Jul. 2009
+Moved the DBConnection implementation to be an inner class of the 
+eXist store implementation.  Cleaned up the eXist store deletion method.
+
 27 Jul. 2009
 Eliminated the org.xbrlapi.networks.Relationship interface and implementation, 
 replacing it throughout with the very similar but more complete 
@@ -8,14 +12,27 @@ relationships that are not marked as being prohibited on the arc
 declaring them).  These alter the results relating to network methods
 for data stores that use persisted relationships. 
 
+21 Jul. 2009
+Made most classes serializable.
+Introduced axes in place of dimensions in aspect models to avoid
+clashes with XDT dimensions.  This causes backward incompatibility of
+the API but eliminates bugs in the dimension aspect implementations.
+
 16 Jul. 2009
 Added arc URI to the information persisted for each relationship. 
 Added in persisted error information capture using the data store
 to track problems as they arise during persistence of relationships. 
+Added Freemarker to the list of dependencies in the examples Maven POM file.
 
 14 Jul. 2009
 Simplified the org.xbrlapi.utilities.Constants class
 to use java.net.URI rather than strings for all URI constants.
+Refined the treatment of type="none" XLink attributes to ensure that such
+elements were not treated as XLink elements.
+
+8 Jul. 2009
+The examples have been repackaged, debugged, and extended to include
+a number of new data store maintenance utilities.
 
 30 Jun. 2009
 Finalised a broad range of modifications to the relationship
@@ -123,6 +140,9 @@ being loaded when storing the loader state.  This enables robust
 handling of situations where documents that should be in the DTS are
 have IO problems or have SAX parsing problems.
 
+1 Jan. 2009
+Created the local test data file release.
+
 31. Dec. 2008
 Replaced usage of URLs with URIs throughout the API.  This was done
 to get better uniformity of handling of URLs and to take advantage of
@@ -130,10 +150,14 @@ the better handling of different schemes in the java.net.URI interface compared 
 the java.net.URL interface. This change does cause significant backward compatibility
 issues.  However, it is expected to resolve the ongoing problems that have
 been encountered when working with file-scheme URLs.
+Improved the network processing efficiency of 
+the rendering example.  Incorporated improvements
+to the Freemarker template file from Walter Hamscher.
 
 10 Dec. 2008
 Fixed the NPE bug in the handling of processing instructions that
 come before any markup in an XML document.
+Fixed missing class files in the examples JAR.
 
 9 Dec. 2008
 Added in XDT aspects and dimensional aspect model to the XDT module.
@@ -152,6 +176,7 @@ for a network to be completely constructed in a single call.
 24 Nov. 2008
 Fixed NPE in the method to get denominator measures for 
 an org.xbrlapi.Unit that does not have a denominator.
+Created the first XDT file release.
 
 22. Nov. 2008
 Fixed up the usage of the isNil method to use nil rather 
@@ -169,11 +194,15 @@ ensured that it does not return locators.
 Fixed a bug in the Fragment implementation relating to getting the 
 local name from a QName.  QNames without a prefix were not handled correctly.
 Squeezed more performance out of the method to get the labels for a fragment.
+Some new constants have been defined.
 
 19 Nov. 2008
 Added a new org.xbrlapi.aspects package to handle Aspect model population
 with facts.  Aspect models can be loosely thought of as sparse hypercubes.
 They are very very useful!
+
+14 Nov. 2008
+Created the first examples file release.
 
 19 Aug. 2008
 Enabled the getFragments method to use a fragment class name rather than
@@ -204,12 +233,23 @@ handler for the loader, the loader itself and
 the XBRL XLink handler.  This was done by relying
 instead on tracking the ElementState during SAX
 parsing.
+Added Attributes to the parameters of the XLink processor's endElement method.
+Added the ElementState class to the org.xbrlapi.xlink package
+to provide basic infrastructure for tracking attributes and making
+them available to the endElement method in SAX content handlers that
+are using the XLink processor. 
 
 30 Jul. 2008
 Fixed bug in queries to get network roots.
 Fixed bug in caching on Windows.
 Removed non-functional set methods
 Released version 3.1
+Eliminated several memory leaks in the Oracle Berkeley XML data store.
+
+April 16 2008
+Fixed up eXist unit testing to reflect changes in the
+XBRLAPI itself.
+Added a range of new constants for the XBRL role and arcroles.
 
 10 Apr. 2008
 Added resource matcher facility.
@@ -235,27 +275,27 @@ Added the isNumeric method to the fact implementation.
 16 Oct. 2007
 Modified the fragment factory to call the setFragmentIndex method
 when generating new fragments.
+October 16, 2006
+Streamlined the DTS discovery process to eliminate
+all post processing of XLink materials.
+Enabled eXist data store to also operate in embedded mode,
+significantly enhancing performance.
 
 17 Sep. 2007
 Modified fragment implementations to make all fragments JavaBeans.
 Serialization of fragments, builders, and stores is yet to be implemented.
 
 5 Sep. 2007
-
 Eliminated non-working attempts to insert DTD declarations into data store fragments.
-
 Added a new getDeclaration method for reference part fragments.
-
 Fixed a bug in the removeFragment implementation for the DOM data store whereby the
 removed fragments were not getting taken out of the XML DOM structure, only the maps onto
 that DOM structure.
-
 Added the deleteDocument and deleteRelated document methods to the store interface.  Provided
 implementations of these methods in the BaseStoreImpl class.  Created tests of the methods using 
 the DOM data store.
 
 4 Sep. 2007
-
 Added BDB XML indexing of the arcroleType and roleType URI attributes.
 
 Added ability to recognise generic labels and references as 
@@ -264,7 +304,6 @@ standard labels and references, respectively.
 Added the isProhibited method to arcs.
 
 1 Sep. 2007
-
 Added a method to get linkroles that contain arcs using a specified arcrole.
 
 15 Aug. 2007
@@ -284,25 +323,21 @@ Provided a new getChildFragments method of the data store to enable retrieval of
 child fragments with a given data type.
 
 14 Aug. 2007
-
 Enabled the discovery processes to optionally include analysis of XSI schema 
 location attributes.
 
 Added schema method to enable discovery of extended links contained within the schema.
 
 11 Aug 2007
-
 Added new discoverNext method to the loader implementation to enable intervention 
 in the load process between each document that gets parsed.
 
 Added unit tests of the discoverNext method using in-memory and persistent data stores.
 
 9 August, 2007
-
 Added unit tests to cover discovery of reference part declarations.
 
 8 Aug. 2007
-
 Fixed bug in the SimpleLink#getTargetFragment where href attributes without an XPointer
  would generate a query that did not restrict matching fragments to the document root.
 
@@ -316,6 +351,7 @@ Added unit tests to cover schema imports.
 July 29, 2007
 Added new objects to provide functionality at the level
 of individual relationships and networks of relationships.
+Fixed up NPE bug in the hasFragment method of the eXist data store.
 
 May 21, 2007
 Fixed up omission of class files from the JAR file.
@@ -326,3 +362,50 @@ out the non-DOM data store implementations
 and by splitting out the XLink, XMLBase and
 XPointer packages.
 
+October 02, 2006
+Completed implementation and testing 
+of read-access fragment API.
+
+September 25, 2006
+Fixed up the Exist indexing.
+Added a lot of fragment interface implementation.
+Merged the data and metadata collections.
+Fixed up the Jar file manifest to make the -jar file option
+work from execution at the commandline.
+
+September 14, 2006
+Added in the patch from Henry S Thompson 
+to support XLink 1.1.
+Improved usability from the command line.
+Extended the implementation of the fragment.
+
+August 10, 2006
+Implemented the data store using eXist and
+using an XML-DOM object.  These are alternatives
+to the Xindice data store implementation.
+
+July 29. 2006
+Created the Oracle Berkeley Database XML data store module.
+Created the core utilities module that is required by all other modules.
+
+March 23. 2006
+Created the eXist module by splitting it 
+out from the xbrlapi. This limits XBRLAPI 
+dependencies on eXist to those users choosing
+to use eXist as the data store implementation.
+
+December 11, 2005
+Version 1.0 of the XPointer processor released.
+
+December 9. 2005
+Fixed errors in the previous release.
+Updated the API to handle XPointers.
+Added early support for the eXist database.
+
+July 23. 2005
+Initial cut of the XBRL API source code.
+Operational version of the XML Base resolver.
+
+May 6, 2005
+Initial cut of XLink processor.
+Initial cut of XML Base resolver.

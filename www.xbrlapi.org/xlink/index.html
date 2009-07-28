@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>XBRLAPI.ORG XLink processor</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div id="navcontainer">
+<ul id="navlist">
+<li><a href="/">Home</a></li>
+</ul>
+</div>
+
+<div class="content">
+<h1>
+XLink processor
+</h1>
+
+<p>
+The XLink processor is a lightweight 
+but complete XLink event handling system.
+A SAX event handler with an XBRLAPI XLink 
+Processor will trigger an XLink
+event for any XLink element (start or finish).  
+The XLink processor expects
+an XLink event handler to be provided.  
+That XLink event handler should implement
+the functionality desired of the XLink structure.
+</p>
+
+<p>
+All features of XLink including simple and extended links 
+are handled.
+It is also possible to define your own custom link recogniser
+that will be able to operate within the XLink processor to
+recognise non XLink defined syntax for simple links.
+</p>
+
+<p>
+The XLink processor comes with an XLinkHandler that does XLink syntax 
+validation.
+</p>
+
+<p>
+To use the XLink validator, try running it 
+as follows (making sure that the necessary XBRLAPI jars are on your class path):
+</p>
+
+
+<pre>
+java org.xbrlapi.xlink.Validator [OPTIONS]
+</pre>
+
+<p>
+Where the OPTIONS are either the parameter -f followed by the file name of the file
+to be validated or -u followed by the URI of the file to be validated.
+</p>
+
+<p>
+<a href="http://sourceforge.net/projects/xbrlapi"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=135539&type=11" width="120" height="30" border="0" alt="Get Java XBRL API implementation at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/xbrlapi/" : "http://apps.sourceforge.net/piwik/xbrlapi/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<p><img src="http://apps.sourceforge.net/piwik/xbrlapi/piwik.php?idsite=1" alt="piwik"/></p>
+<!-- End Piwik Tag -->
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<html>
+<head>
+<title>XBRLAPI.ORG XPointer processor</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
+
+<div class="logo_container">
+	<span class="logo">
+		XBRLAPI
+	</span>
+	<span class="logo_subscript">
+		oss
+	</span>
+</div>
+
+<div id="navcontainer">
+<ul id="navlist">
+<li><a href="/">Home</a></li>
+</ul>
+</div>
+
+<div class="content">
+<h1>
+XPointer processor
+</h1>
+
+<p>
+The XPointer processor is based upon a 
+javacc parser generator.  It reads in any
+XPointer expression and parses it into a 
+vector of pointer parts.  Each pointer part
+exposes information about:
+</p>
+
+<ol>
+<li>The XPointer scheme (local name and namespace prefix for the scheme)</li>
+<li>The data for the XPointer part, both in escaped and unescaped format.</li>
+</ol>
+
+<p>
+To fully resolve the XPointer scheme 
+information, it is necessary to analyse the 
+xmlns() pointer parts and use the 
+information that they provide to 
+resolve the qnames for other
+custom scheme-based pointer parts.
+</p>
+
+<p>
+The Grammar file, PointerGrammar.jj, is 
+contained in the source distribution.
+</p>
+
+<p>
+To test the XPointer parser, try running the it 
+as follows (making sure that the necessary XBRLAPI jars are on your class path):
+</p>
+
+<pre>
+java org.xbrlapi.xpointer.parser.PointerGrammar [XPOINTER EXPRESSION]
+</pre>
+
+<p>
+<a href="http://sourceforge.net/projects/xbrlapi"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=135539&type=11" width="120" height="30" border="0" alt="Get Java XBRL API implementation at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/xbrlapi/" : "http://apps.sourceforge.net/piwik/xbrlapi/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<p><img src="http://apps.sourceforge.net/piwik/xbrlapi/piwik.php?idsite=1" alt="piwik"/></p>
+<!-- End Piwik Tag -->
+
+</div>
+
+</body>
+</html>

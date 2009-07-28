@@ -1,2 +1,0 @@
-1 Jan. 2009
-Created the data file release.
