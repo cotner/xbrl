@@ -110,6 +110,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             if (! port.equals("")) port = ":" + port;
             databaseURI = SCHEME + "://" + host + port + "/" + database;
 
+            //logger.info("The database URI is " + databaseURI);
+            
             // Force a failure if the root collection is a dud.
             Collection rootCollection = this.getRootCollection();
             try {
@@ -228,6 +230,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             collectionPath = (collectionPath.charAt(0) != '/') ? "/" + collectionPath : collectionPath;
             
             String collectionURI = databaseURI + collectionPath;
+            logger.debug("Getting collection " + collectionURI);
             try {
                 return DatabaseManager.getCollection(collectionURI, username, password);
             } catch ( Exception e) {
@@ -452,20 +455,24 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @see org.xbrlapi.data.Store#delete()
 	 */
 	public synchronized void delete() throws XBRLException {
-		try {
-			String collectionName = collection.getName();
-			if (connection.hasCollection(collectionName)) {
-				manager.removeCollection(collectionName);
+
+	    try {
+			if (connection.hasCollection(dataCollectionName)) {
+	            connection.deleteCollection(dataCollectionName,collection.getParentCollection());
 			} else {
-				;
+                logger.error("No " + dataCollectionName + " collection to delete.");
 			}
 			
 			// Delete the index specification
 	        if (connection.hasCollection(configurationRoot + storeParentPath + dataCollectionName)){
 	            connection.deleteCollection(configurationRoot + storeParentPath + dataCollectionName);
 	        }
-            collection.close();
-		} catch (XMLDBException e) {
+
+	        connection.close();
+	        connection = null;
+
+	    } catch (XMLDBException e) {
+	        logger.error("Darn!");
 			throw new XBRLException("The data collection could not be deleted.",e);
 		}
 	}	
@@ -518,8 +525,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         }
 
         // Finalise the fragment, ready for use
-        xml.setResource(xml.getBuilder().getMetadata());
-        xml.setStore(this);
+        if (xml.getStore() == null) {
+            if (xml.getBuilder() != null) xml.setResource(xml.getBuilder().getMetadata());
+            xml.setStore(this);
+        }
 
 	}
 	
@@ -767,6 +776,13 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		return ((Element) node).getOwnerDocument();  // May return a null value!
 	}    
  
-    
+    public String toString() {
+        try {
+            if (connection != null) return "eXist XML database at " + this.connection.getDatabaseURI() + this.collection.getName();
+            return "eXist database " + super.toString();
+        } catch (XMLDBException e) {
+            return "eXist database " + super.toString();
+        }
+    }
     
 }

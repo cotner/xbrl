@@ -12,7 +12,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public interface PersistedRelationship extends NonFragmentXML {
+public interface Relationship extends NonFragmentXML {
 
     /**
      * @return the fragment index for the source of the relationship.
@@ -48,12 +48,12 @@ public interface PersistedRelationship extends NonFragmentXML {
     /**
      * @return the XLink arc order for the relationship.
      */
-    public Double getOrder();
+    public Double getArcOrder();
     
     /**
      * @return the arc priority for the relationship.
      */
-    public Integer getPriority();
+    public Integer getArcPriority();
     
     /**
      * @return the arc use for the relationship.

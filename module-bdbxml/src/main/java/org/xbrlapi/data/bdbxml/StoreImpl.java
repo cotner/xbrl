@@ -380,7 +380,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             dataContainer.putDocument(index, content, xmlUpdateContext, null);
 
             if (xml.getStore() == null) {
-                xml.setResource(xml.getBuilder().getMetadata());
+                if (xml.getBuilder() != null) xml.setResource(xml.getBuilder().getMetadata());
                 xml.setStore(this);
 	        }
 	        	        
@@ -809,5 +809,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             return false;
         return true;
     }    
+ 
+    public String toString() {
+        return "Oracle Berkeley XML database at " + this.computerIdentity + " " + this.locationName + " " + this.containerName;
+    }
     
 }

@@ -93,15 +93,11 @@ public class XMLImpl implements XML {
                 return false;
         } else if (!store.equals(other.store))
             return false;
+        
+        String index = this.getIndex();
+        if (index == null) return false;
+        if (!index.equals(other.getIndex())) return false;
 
-        if (rootElement == null) {
-            if (other.rootElement != null)
-                return false;
-        } else {
-            String index = this.getIndex();
-            if (index == null) return false;
-            if (!index.equals(other.getIndex())) return false;
-        }
         return true;
     }
     
@@ -118,15 +114,15 @@ public class XMLImpl implements XML {
      */
     public void setResource(Element rootElement) throws XBRLException {
         if (rootElement == null) throw new XBRLException("The XML resource is null.");
-        builder = null;
         this.rootElement = rootElement;
+        setBuilder(null);
     }    
     
     /**
      * @see org.xbrlapi.XML#getDocumentNode()
      */
     public Document getDocumentNode() {
-        if (builder != null) return builder.getMetadata().getOwnerDocument();
+        if (builder != null) return getBuilder().getMetadata().getOwnerDocument();
         return getResource().getOwnerDocument();
     }
 
@@ -153,6 +149,10 @@ public class XMLImpl implements XML {
      * @see org.xbrlapi.XML#setBuilder(Builder)
      */
     public void setBuilder(Builder builder) {
+        if (builder == null) {
+            this.builder = null;
+            return;
+        }
         builder.setMetaAttribute("type",getType());
         this.builder = builder;
     }
@@ -169,7 +169,7 @@ public class XMLImpl implements XML {
      * @throws XBRLException if this fragment cannot be updated in the data store.
      */
     private void updateStore() throws XBRLException {
-        store.persist(this);
+        getStore().persist(this);
     }
 
     /**
@@ -183,7 +183,7 @@ public class XMLImpl implements XML {
      * @see org.xbrlapi.XML#getMetadataRootElement()
      */
     public Element getMetadataRootElement() {
-        if (builder != null) return builder.getMetadata();
+        if (builder != null) return getBuilder().getMetadata();
         return getResource();
     }
 
@@ -201,8 +201,7 @@ public class XMLImpl implements XML {
     public void setIndex(String index) throws XBRLException {
         if (index == null) throw new XBRLException("The index must not be null.");
         if (index.equals("")) throw new XBRLException("A fragment index must not be an empty string.");
-        if (builder != null) builder.setMetaAttribute("index",index);
-        else setMetaAttribute("index",index);
+        setMetaAttribute("index",index);
     }
  
     /**
@@ -246,7 +245,7 @@ public class XMLImpl implements XML {
      * @see org.xbrlapi.XML#getMetaAttribute(String)
      */
     public String getMetaAttribute(String name) {
-        if (builder != null) {
+        if (getBuilder() != null) {
             String value = getBuilder().getMetaAttribute(name);
             if (value == null) return null;
             if (value.equals("")) return null;
@@ -371,7 +370,10 @@ public class XMLImpl implements XML {
      * @throws IOException
      */
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        if (this.getBuilder() != null) throw new IOException("The XML Resource could not be serialized because it is still being built.");
+        if (this.getBuilder() != null) {
+            logger.error(this.getIndex() + " still has a builder.");
+            throw new IOException("The XML Resource could not be serialized because it is still being built.");
+        }
         out.defaultWriteObject( );
         try {
             String xml = store.serializeToString(rootElement);

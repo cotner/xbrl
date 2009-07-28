@@ -87,16 +87,19 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher, Seri
 
         String signature = this.getSignature(uri);
 
-        if (getStore().hasXMLResource(signature)) {
-            Match match = getStore().<Match>getXMLResource(signature);
+        Store store = getStore();
+        
+        if (store.hasXMLResource(signature)) {
+            Match match = store.<Match>getXMLResource(signature);
             match.addMatchedURI(uri);
-            getStore().persist(match);
+            store.persist(match);
             return match.getMatch();
         } 
         
         Match match = new MatchImpl(signature);
+        match.setStore(store);
         match.addMatchedURI(uri);
-        getStore().persist(match);
+        store.persist(match);
         return uri;
         
     }

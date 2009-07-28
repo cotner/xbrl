@@ -87,11 +87,11 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
 
         String pointerValue = getTargetPointerValue();
     	if (! pointerValue.equals("")) {
-    	    String query = "#roots#[" + Constants.XBRLAPIPrefix+ ":" + "xptr/@value='" + pointerValue + "']";
+    	    String query = "#roots#[" + Constants.XBRLAPIPrefix + ":" + "xptr/@value='" + pointerValue + "']";
             List<Fragment> fragments = getStore().<Fragment>queryForXMLResources(query);
             for (Fragment fragment: fragments) {
                 if (fragment.getURI().equals(uri)) {
-                    logger.info("MS to get located fragment = " + (System.currentTimeMillis() - start));
+                    logger.debug("MS to get located fragment = " + (System.currentTimeMillis() - start));
                     return fragment;
                 }
             }

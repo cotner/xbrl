@@ -151,11 +151,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	public synchronized void persist(XML xml) throws XBRLException {
 		
 	    logger.debug("Storing " + xml.getType() + " " + xml.getIndex());
-	    
-		// If the fragment is already stored we are done.
-		if (xml.getStore() != null) {			
-			return;
-		}
 		
 		// Get the fragment index to delete existing fragments with the same index.
 		String index = xml.getIndex();
@@ -164,15 +159,20 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         }
 
 		// TODO Eliminate this importNode call.
-        Element element = (Element) dom.importNode(xml.getBuilder().getMetadata(),true);
+		Element element = null;
+		if (xml.getBuilder() != null) {
+	        element = (Element) dom.importNode(xml.getBuilder().getMetadata(),true);
+		} else {
+		    element = (Element) dom.importNode(xml.getMetadataRootElement(),true);
+		}
         dom.getDocumentElement().appendChild(element);
         fragmentMap.put(index, element);
         indexMap.put(element, index);
         
         // Finalise the fragment, ready for use
+        if (xml.getStore() == null) xml.setStore(this);
         xml.setResource(element);
-        xml.setStore(this);
-
+        
 	}
 
 	/**

@@ -4,7 +4,7 @@ import java.net.URI;
 
 import org.xbrlapi.utilities.XBRLException;
 
-public interface Stub extends XML {
+public interface Stub extends NonFragmentXML {
 
     /**
      * @return the reason that the stub was stored.

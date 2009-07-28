@@ -1,7 +1,7 @@
 package org.xbrlapi.networks;
 
 
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -19,7 +19,7 @@ public interface EquivalentRelationships {
 	 * @throws XBRLException if the relationship is not equivalent to 
 	 * the relationship with the highest priority in the collection.
 	 */
-	public void addRelationship(PersistedRelationship relationship) throws XBRLException;
+	public void addRelationship(Relationship relationship) throws XBRLException;
 	
 	/**
 	 * @return the active relationship in the collection of 
@@ -28,6 +28,6 @@ public interface EquivalentRelationships {
 	 * collection. If there are no relationships in the collection, return null.
 	 * @throws XBRLException
 	 */
-	public PersistedRelationship getActiveRelationship() throws XBRLException;
+	public Relationship getActiveRelationship() throws XBRLException;
 	
 }

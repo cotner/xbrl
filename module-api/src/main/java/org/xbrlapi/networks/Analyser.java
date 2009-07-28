@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -68,7 +68,7 @@ public interface Analyser {
      * with the given link role.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationships(URI linkRole, Set<URI> arcroles) throws XBRLException;
+    public List<Relationship> getRelationships(URI linkRole, Set<URI> arcroles) throws XBRLException;
     
     /**
      * @param arcroles The list of arcroles used to select the
@@ -78,7 +78,16 @@ public interface Analyser {
      * any one of the specified arcroles.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationships(Set<URI> arcroles) throws XBRLException;
+    public List<Relationship> getRelationships(Set<URI> arcroles) throws XBRLException;
+    
+    /**
+     * @return A list of all relationships in the data store that are
+     * accepted by the analyser's relationship filtration rules.  Note that
+     * this can tend to overwhelm available physical resources when the data
+     * store is of significant size.
+     * @throws XBRLException
+     */
+    public List<Relationship> getAllRelationships() throws XBRLException;
 
     /**
      * @param arcrole The arcrole used to select the
@@ -88,7 +97,7 @@ public interface Analyser {
      * the specified arcrole.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationships(URI arcrole) throws XBRLException;
+    public List<Relationship> getRelationships(URI arcrole) throws XBRLException;
     
 
     
@@ -107,7 +116,7 @@ public interface Analyser {
      * the specified arcrole and that have the specified link role.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationships(URI linkRole, URI arcrole) throws XBRLException;
+    public List<Relationship> getRelationships(URI linkRole, URI arcrole) throws XBRLException;
 
     /**
      * @param sourceIndex The index of the fragment to get relationships from.
@@ -122,7 +131,7 @@ public interface Analyser {
      * attribute value.
      * @throws XBRLException
      */
-    public SortedSet<PersistedRelationship> getRelationshipsFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException;
+    public SortedSet<Relationship> getRelationshipsFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException;
 
     /**
      * @param targetIndex The index of the fragment to get relationships to.
@@ -137,7 +146,7 @@ public interface Analyser {
      * are sorted by the order attributes on the arcs expressing them.
      * @throws XBRLException
      */
-    public SortedSet<PersistedRelationship> getRelationshipsTo(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
+    public SortedSet<Relationship> getRelationshipsTo(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
 
 
     /**
@@ -149,7 +158,7 @@ public interface Analyser {
      * the specified arcrole and that run from the specified source fragment.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationshipsFrom(String sourceIndex, URI arcrole) throws XBRLException;
+    public List<Relationship> getRelationshipsFrom(String sourceIndex, URI arcrole) throws XBRLException;
 
     /**
      * @param targetIndex The index of the fragment to get relationships to.
@@ -160,7 +169,7 @@ public interface Analyser {
      * the specified arcrole and that run to the specified target fragment.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationshipsTo(String targetIndex, URI arcrole) throws XBRLException;
+    public List<Relationship> getRelationshipsTo(String targetIndex, URI arcrole) throws XBRLException;
 
     /**
      * @param sourceIndex The index of the fragment to get relationships from.
@@ -174,7 +183,7 @@ public interface Analyser {
      * and that run from the specified source fragment.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationshipsFrom(String sourceIndex, URI linkRole, Set<URI> arcroles) throws XBRLException;
+    public List<Relationship> getRelationshipsFrom(String sourceIndex, URI linkRole, Set<URI> arcroles) throws XBRLException;
 
     /**
      * @param targetIndex The index of the fragment to get relationships to.
@@ -188,7 +197,7 @@ public interface Analyser {
      * and that run to the specified target fragment.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationshipsTo(String targetIndex, URI linkRole, Set<URI> arcroles) throws XBRLException;
+    public List<Relationship> getRelationshipsTo(String targetIndex, URI linkRole, Set<URI> arcroles) throws XBRLException;
 
 
     /**
@@ -200,7 +209,7 @@ public interface Analyser {
      * any of the specified arcroles and that run from the specified source fragment.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationshipsFrom(String sourceIndex, Set<URI> arcroles) throws XBRLException;
+    public List<Relationship> getRelationshipsFrom(String sourceIndex, Set<URI> arcroles) throws XBRLException;
 
     /**
      * @param targetIndex The index of the fragment to get relationships to.
@@ -211,7 +220,7 @@ public interface Analyser {
      * any of the specified arcroles and that run to the specified target fragment.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationshipsTo(String targetIndex, Set<URI> arcroles) throws XBRLException;
+    public List<Relationship> getRelationshipsTo(String targetIndex, Set<URI> arcroles) throws XBRLException;
 
     /**
      * @param linkRole The link role of the network.
@@ -220,7 +229,7 @@ public interface Analyser {
      * network with the specified link role and arcrole.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRootRelationships(URI linkRole, URI arcrole) throws XBRLException;
+    public List<Relationship> getRootRelationships(URI linkRole, URI arcrole) throws XBRLException;
     
     /**
      * @param <F> The fragment type
@@ -249,7 +258,7 @@ public interface Analyser {
      * fragment identified by the specified index.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getLabelRelationships(String sourceIndex) throws XBRLException;
+    public List<Relationship> getLabelRelationships(String sourceIndex) throws XBRLException;
 
     /**
      * @param sourceIndex The index of the fragment to get the labels for.
@@ -259,7 +268,7 @@ public interface Analyser {
      * The list is empty if no relationships match the specified selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getLabelRelationshipsByLanguage(String sourceIndex, String language) throws XBRLException;
+    public List<Relationship> getLabelRelationshipsByLanguage(String sourceIndex, String language) throws XBRLException;
 
     /**
      * @param sourceIndex The index of the fragment to get the labels for.
@@ -271,7 +280,7 @@ public interface Analyser {
      * The list is empty if no relationships match the specified selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getLabelRelationshipsByLanguages(String sourceIndex, List<String> languages) throws XBRLException;
+    public List<Relationship> getLabelRelationshipsByLanguages(String sourceIndex, List<String> languages) throws XBRLException;
     
     /**
      * @param sourceIndex The index of the fragment to get the labels for.
@@ -279,7 +288,7 @@ public interface Analyser {
      * @return a list of active relationships to labels that match the selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getLabelRelationshipsByRole(String sourceIndex, URI role) throws XBRLException;
+    public List<Relationship> getLabelRelationshipsByRole(String sourceIndex, URI role) throws XBRLException;
     
     /**
      * @param sourceIndex The index of the fragment to get the labels for.
@@ -290,7 +299,7 @@ public interface Analyser {
      * @return a list of active relationships to labels that match the selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getLabelRelationshipsByRoles(String sourceIndex, List<URI> roles) throws XBRLException;    
+    public List<Relationship> getLabelRelationshipsByRoles(String sourceIndex, List<URI> roles) throws XBRLException;    
  
     /**
      * @param sourceIndex The index of the fragment to get the labels for.
@@ -299,7 +308,7 @@ public interface Analyser {
      * @return a list of active relationships to labels that match the selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getLabelRelationshipsByLanguageAndRole(String sourceIndex, String language, URI role) throws XBRLException;
+    public List<Relationship> getLabelRelationshipsByLanguageAndRole(String sourceIndex, String language, URI role) throws XBRLException;
     
     /**
      * @param sourceIndex The index of the fragment to get the labels for.
@@ -315,7 +324,7 @@ public interface Analyser {
      * label language preferences get precedence over label role preferences.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getLabelRelationshipsByRoles(String sourceIndex, List<String> languages, List<URI> roles) throws XBRLException;
+    public List<Relationship> getLabelRelationshipsByRoles(String sourceIndex, List<String> languages, List<URI> roles) throws XBRLException;
 
     /**
      * @param sourceIndex The index of the fragment to get the references for.
@@ -323,7 +332,7 @@ public interface Analyser {
      * fragment identified by the specified index.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getReferenceRelationships(String sourceIndex) throws XBRLException;
+    public List<Relationship> getReferenceRelationships(String sourceIndex) throws XBRLException;
 
     /**
      * @param sourceIndex The index of the fragment to get the references for.
@@ -333,7 +342,7 @@ public interface Analyser {
      * The list is empty if no relationships match the specified selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getReferenceRelationshipsByLanguage(String sourceIndex, String language) throws XBRLException;
+    public List<Relationship> getReferenceRelationshipsByLanguage(String sourceIndex, String language) throws XBRLException;
 
     /**
      * @param sourceIndex The index of the fragment to get the references for.
@@ -345,7 +354,7 @@ public interface Analyser {
      * The list is empty if no relationships match the specified selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getReferenceRelationshipsByLanguages(String sourceIndex, List<String> languages) throws XBRLException;
+    public List<Relationship> getReferenceRelationshipsByLanguages(String sourceIndex, List<String> languages) throws XBRLException;
     
     /**
      * @param sourceIndex The index of the fragment to get the references for.
@@ -353,7 +362,7 @@ public interface Analyser {
      * @return a list of active relationships to references that match the selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getReferenceRelationshipsByRole(String sourceIndex, URI role) throws XBRLException;
+    public List<Relationship> getReferenceRelationshipsByRole(String sourceIndex, URI role) throws XBRLException;
     
     /**
      * @param sourceIndex The index of the fragment to get the references for.
@@ -364,7 +373,7 @@ public interface Analyser {
      * @return a list of active relationships to references that match the selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getReferenceRelationshipsByRoles(String sourceIndex, List<URI> roles) throws XBRLException;    
+    public List<Relationship> getReferenceRelationshipsByRoles(String sourceIndex, List<URI> roles) throws XBRLException;    
  
     /**
      * @param sourceIndex The index of the fragment to get the references for.
@@ -373,7 +382,7 @@ public interface Analyser {
      * @return a list of active relationships to references that match the selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getReferenceRelationshipsByLanguageAndRole(String sourceIndex, String language, URI role) throws XBRLException;
+    public List<Relationship> getReferenceRelationshipsByLanguageAndRole(String sourceIndex, String language, URI role) throws XBRLException;
     
     /**
      * @param sourceIndex The index of the fragment to get the references for.
@@ -388,7 +397,7 @@ public interface Analyser {
      * @return a list of active relationships to references that match the selection criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getReferenceRelationshipsByRoles(String sourceIndex, List<String> languages, List<URI> roles) throws XBRLException;    
+    public List<Relationship> getReferenceRelationshipsByRoles(String sourceIndex, List<String> languages, List<URI> roles) throws XBRLException;    
     
     /**
      * @param sourceIndex The source index to match.
@@ -399,6 +408,6 @@ public interface Analyser {
      * criteria.
      * @throws XBRLException
      */
-    public List<PersistedRelationship> getRelationships(String sourceIndex, String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
+    public List<Relationship> getRelationships(String sourceIndex, String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
 
 }

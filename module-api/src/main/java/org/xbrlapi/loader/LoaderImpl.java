@@ -533,7 +533,7 @@ public class LoaderImpl implements Loader, Serializable {
             }
         }
         
-        if (getStore().isUsingPersistedNetworks()) {
+        if (getStore().isPersistingRelationships()) {
             logger.info("Starting to persist the relationships.");
             Storer storer = new StorerImpl(getStore());
             storer.storeRelationships(newDocuments);

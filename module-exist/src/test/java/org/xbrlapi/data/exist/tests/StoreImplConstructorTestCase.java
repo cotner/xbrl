@@ -30,6 +30,7 @@ public class StoreImplConstructorTestCase extends BaseTestCase {
 
 		try {
 			Store newStore = createStore();
+			assertEquals(store,newStore);
 			stores.add(newStore);
 			assertEquals("Fragment counts do not match.",store.getSize(),newStore.getSize());
 		} catch (XBRLException e) {

@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -13,7 +13,7 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class EquivalentRelationshipsImpl implements EquivalentRelationships, Serializable {
 
-	private SortedMap<Integer,PersistedRelationship> relationships = new TreeMap<Integer,PersistedRelationship>();
+	private SortedMap<Integer,Relationship> relationships = new TreeMap<Integer,Relationship>();
 
     /**
      * @see org.xbrlapi.networks.EquivalentRelationships#size()
@@ -23,12 +23,12 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships, Ser
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.EquivalentRelationships#addRelationship(PersistedRelationship)
+	 * @see org.xbrlapi.networks.EquivalentRelationships#addRelationship(Relationship)
 	 */
-	public void addRelationship(PersistedRelationship relationship) throws XBRLException {
+	public void addRelationship(Relationship relationship) throws XBRLException {
 		
 		if (getActiveRelationship() == null) {
-			relationships.put(relationship.getPriority(),relationship);
+			relationships.put(relationship.getArcPriority(),relationship);
 			return;
 		}
 		
@@ -44,14 +44,14 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships, Ser
 			throw new XBRLException("The new relationship ends at a different fragment.");
 		}
 		
-		relationships.put(relationship.getPriority(),relationship);
+		relationships.put(relationship.getArcPriority(),relationship);
 
 	}
 
 	/**
 	 * @see org.xbrlapi.networks.EquivalentRelationships#getActiveRelationship()
 	 */
-	public PersistedRelationship getActiveRelationship() throws XBRLException {
+	public Relationship getActiveRelationship() throws XBRLException {
 		Integer key = null;
 		try {
 			key = relationships.lastKey();
@@ -67,7 +67,7 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships, Ser
 	 * @throws XBRLException
 	 */
 	private String getSemanticKey() throws XBRLException {
-		PersistedRelationship r = getActiveRelationship();
+		Relationship r = getActiveRelationship();
 		if (r == null) return null;
 		return r.getSignature();
 	}
@@ -78,7 +78,7 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships, Ser
 	 * @throws XBRLException
 	 */
 	private String getSourceIndex() throws XBRLException {
-		PersistedRelationship r = getActiveRelationship();
+		Relationship r = getActiveRelationship();
 		if (r == null) return null;
 		return r.getSourceIndex();
 	}
@@ -89,7 +89,7 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships, Ser
 	 * @throws XBRLException
 	 */
 	private String getTargetIndex() throws XBRLException {
-		PersistedRelationship r = getActiveRelationship();
+		Relationship r = getActiveRelationship();
 		if (r == null) return null;
 		return r.getTargetIndex();
 	}

@@ -20,7 +20,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.Language;
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.ReferenceResource;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Stub;
@@ -447,16 +447,16 @@ public interface Store extends Serializable {
     public Networks getNetworks(URI arcrole) throws XBRLException;
     
     /**
+     * Note that this can massively overload resources if the 
+     * data store is large because much of the information in the 
+     * store will be reflected in -in-memory objects.  Use this method
+     * with care.
      * @return the collection of all networks in the store.
      * @throws XBRLException
      */
     public Networks getNetworks() throws XBRLException;    
 
-    /**
-     * @return the collection of networks in the data store.
-     * @throws XBRLException
-     */
-    public Networks getAllNetworks() throws XBRLException;
+
     
 
     /**
@@ -508,7 +508,7 @@ public interface Store extends Serializable {
      * false otherwise.
      * @see org.xbrlapi.networks.Analyser
      */
-    public boolean isUsingPersistedNetworks();    
+    public boolean isPersistingRelationships();    
 
     /**
      * Utility method to return a list of fragments in a data store
@@ -858,7 +858,11 @@ public interface Store extends Serializable {
     /**
      * Get the networks that, at a minimum, contain the relationships
      * from each of the given fragments working back through ancestor relationships
-     * as far as possible.
+     * as far as possible.  This is useful for building up networks of relationships
+     * where you know the leaf nodes you want and need to get the necessary branches back to the
+     * relevant heirarchy roots but do not want any branches leading to other leaf nodes.
+     * The method only generates networks using active relationships (not overridden or
+     * prohibited relationships).
      * @param fragments The fragments to analyse.
      * @param arcrole The required arcrole.
      * @return The networks containing the relationships.
@@ -902,6 +906,7 @@ public interface Store extends Serializable {
     public Set<URI> getLinkRoles(URI arcrole) throws XBRLException;    
 
     /**
+     * Implemented by {@link Store#getNetworksFrom(String,URI,URI)}.
      * @param sourceIndex The source fragment index
      * @param arcrole The XLink arcrole
      * @return a set of networks comprising the relationships
@@ -911,6 +916,7 @@ public interface Store extends Serializable {
     public Networks getNetworksFrom(String sourceIndex, URI arcrole) throws XBRLException;
     
     /**
+     * Implemented by {@link Store#getNetworksFrom(String,URI,URI)}.
      * @param sourceIndex The source fragment index
      * @return a set of networks comprising the relationships
      * from the source fragment.
@@ -929,6 +935,10 @@ public interface Store extends Serializable {
     public Networks getNetworksFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException;    
     
     /**
+     * If using persisted relationships then the set of relationships used to 
+     * generate the results can be modified by appropriate choice of 
+     * @link org.xbrlapi.networks.Analyser implementation.  Otherwise only active
+     * relationships are used (those that are not prohibited or over-ridden).
      * @param targetIndex The target fragment index
      * @param linkRole The XLink link role or null if networks for 
      * all link roles are sought
@@ -941,6 +951,7 @@ public interface Store extends Serializable {
     public Networks getNetworksTo(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
     
     /**
+     * Implemented by {@link Store#getNetworksTo(String,URI,URI)}.
      * @param targetIndex The target fragment index
      * @param arcrole The XLink arcrole
      * @return a set of networks comprising the relationships
@@ -950,6 +961,7 @@ public interface Store extends Serializable {
     public Networks getNetworksTo(String targetIndex, URI arcrole) throws XBRLException;
     
     /**
+     * Implemented by {@link Store#getNetworksTo(String,URI,URI)}.
      * @param targetIndex The target fragment index
      * @return a set of networks comprising the relationships
      * to the target fragment.
@@ -959,31 +971,23 @@ public interface Store extends Serializable {
     
     
 
-    /**
-     * TODO is this redundant????
-     * @param sourceIndex The source fragment index
-     * @param linkRole The XLink link role
-     * @param arcrole The XLink arcrole
-     * @return a list of active relationships from the 
-     * source fragment with the given link role and arcrole as expressed
-     * by the raw XBRL fragments in the data store.
-     * @throws XBRLException
-     */
-    public SortedSet<PersistedRelationship> getActiveRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;
+
     
     /**
+     * If using persisted relationships then the set of relationships used to 
+     * generate the results can be modified by appropriate choice of 
+     * @link org.xbrlapi.networks.Analyser implementation.  Otherwise only active
+     * relationships are used (those that are not prohibited or over-ridden).
      * @param sourceIndex The source fragment index
      * @param linkRole The XLink link role
      * @param arcrole The XLink arcrole
      * @return a sorted set of active relationships from the 
      * source fragment with the given link role and arcrole that
-     * have been persisted.  Note that if relationships have not
-     * been persisted in the data store they will not be returned
-     * by this method.  The relationships are ordered by the order
+     * have been persisted.  The relationships are ordered by the order
      * attributes on the arcs expressing the relationships.
      * @throws XBRLException
      */
-    public SortedSet<PersistedRelationship> getPersistedActiveRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;
+    public SortedSet<Relationship> getRelationshipsFrom(String sourceIndex,URI linkRole, URI arcrole) throws XBRLException;
     
     /**
      * @param document The document URI.
@@ -992,37 +996,29 @@ public interface Store extends Serializable {
      * specified document and false otherwise.
      * @throws XBRLException
      */
-    public boolean hasAllPersistedRelationships(URI document) throws XBRLException;    
+    public boolean hasAllRelationships(URI document) throws XBRLException;    
     
-    /**
-     * TODO is this redundant????
-     * @param targetIndex The target fragment index
-     * @param linkRole The XLink link role
-     * @param arcrole The XLink arcrole
-     * @return a list of active relationships to the 
-     * target fragment with the given link role and arcrole, as
-     * expressed by the raw XBRL fragments in the data store
-     * rather than the persisted relationship fragments in the data store.
-     * @throws XBRLException
-     */
-    public SortedSet<PersistedRelationship> getActiveRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException;
+
     
     /**
      * @param targetIndex The target fragment index
      * @param linkRole The XLink link role
      * @param arcrole The XLink arcrole
      * @return a sorted set of active relationships to the 
-     * target fragment with the given link role and arcrole.  Note
-     * that only relationships that have been persisted in the data
-     * store will be returned by this method. The relationships are ordered
-     * by the order attribute on the arcs expressing them.
+     * target fragment with the given link role and arcrole.
+     * The relationships are ordered by the order attribute on 
+     * the arcs expressing them.
      * @throws XBRLException
      */
-    public SortedSet<PersistedRelationship> getPersistedActiveRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException;    
+    public SortedSet<Relationship> getRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException;    
 
 
 
     /**
+     * If using persisted relationships then the set of relationships used to 
+     * generate the results can be modified by appropriate choice of 
+     * @link org.xbrlapi.networks.Analyser implementation.  Otherwise only active
+     * relationships are used (those that are not prohibited or over-ridden).
      * @param fragment the index of the fragment that we are getting labels for
      * @param linkRole The required link role or null if not used.
      * @param resourceRole The required resource role or null if not used.
@@ -1033,6 +1029,7 @@ public interface Store extends Serializable {
     public List<LabelResource> getLabels(String fragment, URI linkRole, URI resourceRole, String language) throws XBRLException;
     
     /**
+     * Implemented by {@link Store#getLabels(String,URI,URI,String)}.
      * @param fragment the index of the fragment that we are getting labels for
      * @param resourceRole The required resource role or null if not used.
      * @param language The required language code or null if not used.
@@ -1042,6 +1039,7 @@ public interface Store extends Serializable {
     public List<LabelResource> getLabels(String fragment, URI resourceRole, String language) throws XBRLException;
     
     /**
+     * Implemented by {@link Store#getLabels(String,URI,URI,String)}.
      * @param fragment the index of the fragment that we are getting labels for
      * @param language The required language code or null if not used.
      * @return the set of labels matching the specified criteria.
@@ -1050,6 +1048,7 @@ public interface Store extends Serializable {
     public List<LabelResource> getLabels(String fragment, String language) throws XBRLException;
     
     /**
+     * Implemented by {@link Store#getLabels(String,URI,URI,String)}.
      * @param fragment the index of the fragment that we are getting labels for
      * @return the set of labels matching the specified criteria.
      * @throws XBRLException
@@ -1057,6 +1056,7 @@ public interface Store extends Serializable {
     public List<LabelResource> getLabels(String fragment) throws XBRLException;    
     
     /**
+     * Implemented by {@link Store#getLabels(String,URI,URI,String)}.
      * @param fragment the index of the fragment that we are getting labels for
      * @param resourceRole The required resource role or null if not used.
      * @return the set of labels matching the specified criteria.
@@ -1067,6 +1067,10 @@ public interface Store extends Serializable {
 
     
     /**
+     * If using persisted relationships then the set of relationships used to 
+     * generate the results can be modified by appropriate choice of 
+     * @link org.xbrlapi.networks.Analyser implementation.  Otherwise only active
+     * relationships are used (those that are not prohibited or over-ridden).
      * @param fragment the index of the fragment that we are getting references for
      * @param linkRole The required link role or null if not used.
      * @param resourceRole The required resource role or null if not used.
@@ -1077,6 +1081,7 @@ public interface Store extends Serializable {
     public List<ReferenceResource> getReferences(String fragment, URI linkRole, URI resourceRole, String language) throws XBRLException;
     
     /**
+     * Implemented by {@link Store#getReferences(String,URI,URI,String)}.
      * @param fragment the index of the fragment that we are getting references for
      * @param resourceRole The required resource role or null if not used.
      * @param language The required language code or null if not used.
@@ -1086,6 +1091,7 @@ public interface Store extends Serializable {
     public List<ReferenceResource> getReferences(String fragment, URI resourceRole, String language) throws XBRLException;
     
     /**
+     * Implemented by {@link Store#getReferences(String,URI,URI,String)}.
      * @param fragment the index of the fragment that we are getting references for
      * @param language The required language code or null if not used.
      * @return the set of references matching the specified criteria.
@@ -1094,6 +1100,7 @@ public interface Store extends Serializable {
     public List<ReferenceResource> getReferences(String fragment, String language) throws XBRLException;
     
     /**
+     * Implemented by {@link Store#getReferences(String,URI,URI,String)}.
      * @param fragment the index of the fragment that we are getting references for
      * @return the set of references matching the specified criteria.
      * @throws XBRLException
@@ -1101,6 +1108,7 @@ public interface Store extends Serializable {
     public List<ReferenceResource> getReferences(String fragment) throws XBRLException;    
     
     /**
+     * Implemented by {@link Store#getReferences(String,URI,URI,String)}.
      * @param fragment the index of the fragment that we are getting references for
      * @param resourceRole The required resource role or null if not used.
      * @return the set of references matching the specified criteria.

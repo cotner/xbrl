@@ -42,6 +42,7 @@ public class FragmentComparator implements Comparator<Fragment> {
 
 			// Handle direct equality
 			if (f1.equals(f2)) {
+			    System.out.println("The fragments are equal.");
 				return 0;
 			}
 			

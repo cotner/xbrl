@@ -25,7 +25,7 @@ import org.xbrlapi.utilities.XBRLException;
  * in the data store.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class MatchImpl extends XMLImpl implements Match {
+public class MatchImpl extends NonFragmentXMLImpl implements Match {
 	
 	/**
 	 * No argument constructor.
@@ -44,6 +44,7 @@ public class MatchImpl extends XMLImpl implements Match {
 	public MatchImpl(String id) throws XBRLException {
 		this();
 		this.setIndex(id);
+		this.finalizeBuilder();
 	}
 	
 	/**

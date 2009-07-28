@@ -2,7 +2,7 @@ package org.xbrlapi.data.bdbxml.examples.utilities;
 
 import java.util.Set;
 
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 
 /**
  * Updates all relationships in the store to include the arc URI.
@@ -24,11 +24,11 @@ public class UpdateAllRelationshipsInStore extends BaseUtilityExample {
         if (message.equals("")) {
             try {
                 
-                Set<String> indices = store.queryForStrings("for $r in #roots#[@type='org.xbrlapi.impl.PersistedRelationshipImpl'] return string($r/@index)");
+                Set<String> indices = store.queryForStrings("for $r in #roots#[@type='org.xbrlapi.impl.RelationshipImpl'] return string($r/@index)");
                 long count = indices.size();
                 long gap = 0;
                 for (String index: indices) {
-                    PersistedRelationship r = store.<PersistedRelationship>getXMLResource(index);
+                    Relationship r = store.<Relationship>getXMLResource(index);
                     r.setMetaAttribute("arcURI",r.getArc().getURI().toString());
                     store.persist(r);
                     count--;

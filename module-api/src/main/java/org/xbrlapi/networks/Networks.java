@@ -1,10 +1,11 @@
 package org.xbrlapi.networks;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 
 import org.xbrlapi.Fragment;
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -17,6 +18,12 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public interface Networks extends Iterable<Network> {
 	
+    /**
+     * @return a list of all active relationships in this collection
+     * of networks.
+     * @throws XBRLException
+     */
+    public List<Relationship> getActiveRelationships() throws XBRLException;
     
     /**
      * Complete the networks, finding all active relationships in the data store
@@ -115,7 +122,14 @@ public interface Networks extends Iterable<Network> {
 	 * @param relationship The relationship to add to the collection of networks.
 	 * @throws XBRLException
 	 */
-	public void addRelationship(PersistedRelationship relationship) throws XBRLException;
+	public void addRelationship(Relationship relationship) throws XBRLException;
+	
+	/**
+	 * @param relationships THe list of relationships to add to the networks
+	 * @throws XBRLException
+	 */
+	public void addRelationships(Collection<Relationship> relationships) throws XBRLException;
+
 	
 	/**
 	 * Adds all relationships with the given arcrole to the set of networks.

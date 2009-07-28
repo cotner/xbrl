@@ -15,11 +15,11 @@ import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Locator;
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.ErrorImpl;
-import org.xbrlapi.impl.PersistedRelationshipImpl;
-import org.xbrlapi.impl.PersistedRelationshipPriorityComparator;
+import org.xbrlapi.impl.RelationshipImpl;
+import org.xbrlapi.impl.RelationshipPriorityComparator;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -35,9 +35,6 @@ public class StorerImpl implements Storer {
     public StorerImpl(Store store) throws XBRLException {
         super();
         setStore(store);
-        if (! store.isUsingPersistedNetworks()) {
-            store.setAnalyser(new AnalyserImpl(store));
-        }
     }
 
     /**
@@ -60,12 +57,11 @@ public class StorerImpl implements Storer {
     }
 
     /**
-     * @see org.xbrlapi.networks.Storer#storeRelationship(PersistedRelationship)
+     * @see org.xbrlapi.networks.Storer#storeRelationship(Relationship)
      */
-    public void storeRelationship(PersistedRelationship relationship)
-            throws XBRLException {
+    public void storeRelationship(Relationship relationship) throws XBRLException {
         try {
-            if (! getStore().hasXMLResource(relationship.getIndex())) getStore().persist(relationship);
+            getStore().persist(relationship);
         } catch (XBRLException e) {
             String arcIndex = relationship.getArcIndex();
             URI document = relationship.getArc().getURI();
@@ -79,8 +75,8 @@ public class StorerImpl implements Storer {
      */
     public void storeRelationship(Arc arc, Fragment source, Fragment target) throws XBRLException {
         try {
-            PersistedRelationship persistedRelationship = new PersistedRelationshipImpl(arc, source, target);
-            if (! getStore().hasXMLResource(persistedRelationship.getIndex())) getStore().persist(persistedRelationship);
+            Relationship relationship = new RelationshipImpl(arc, source, target);
+            if (! getStore().hasXMLResource(relationship.getIndex())) getStore().persist(relationship);
         } catch (XBRLException e) {
             String arcIndex = arc.getIndex();
             URI document = arc.getURI();
@@ -94,7 +90,7 @@ public class StorerImpl implements Storer {
      * @see org.xbrlapi.networks.Storer#storeRelationships(org.xbrlapi.networks.Network)
      */
     public void storeRelationships(Network network) throws XBRLException {
-        for (PersistedRelationship relationship: network.getAllActiveRelationships()) {
+        for (Relationship relationship: network.getAllRelationships()) {            
             storeRelationship(relationship);
         }
     }
@@ -120,7 +116,7 @@ public class StorerImpl implements Storer {
      */
     public void deleteRelationships(URI linkRole, URI arcrole) throws XBRLException {
         Store store = getStore();
-        Set<String> indices = store.queryForIndices("#roots#[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcRole='"+arcrole+"' and @linkRole='"+linkRole+"']");
+        Set<String> indices = store.queryForIndices("#roots#[@type='org.xbrlapi.impl.RelationshipImpl' and @arcRole='"+arcrole+"' and @linkRole='"+linkRole+"']");
         for (String index: indices) {
             store.remove(index);
         }
@@ -131,7 +127,7 @@ public class StorerImpl implements Storer {
      */
     public void deleteRelationships(URI document) throws XBRLException {
         Store store = getStore();
-        Set<String> indices = store.queryForIndices("#roots#[@type='org.xbrlapi.impl.PersistedRelationshipImpl' and @arcURI='"+document+"']");
+        Set<String> indices = store.queryForIndices("#roots#[@type='org.xbrlapi.impl.RelationshipImpl' and @arcURI='"+document+"']");
         for (String index: indices) {
             store.remove(index);
         }
@@ -142,7 +138,7 @@ public class StorerImpl implements Storer {
      */
     public void deleteRelationships() throws XBRLException {
         Store store = getStore();
-        Set<String> indices = store.queryForIndices("#roots#[@type='org.xbrlapi.impl.PersistedRelationshipImpl']");
+        Set<String> indices = store.queryForIndices("#roots#[@type='org.xbrlapi.impl.RelationshipImpl']");
         for (String index: indices) {
             store.remove(index);
         }
@@ -312,11 +308,11 @@ public class StorerImpl implements Storer {
             query = "#roots#[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"' and @sourceIndex='"+sourceIndex+"']/@targetIndex";
             Set<String> targetIndices = getStore().queryForStrings(query);
             for (String targetIndex: targetIndices) {
-                Map<String,SortedSet<PersistedRelationship>> map = getEquivalentRelationships(linkRole,arcrole,sourceIndex,targetIndex);
+                Map<String,SortedSet<Relationship>> map = getEquivalentRelationships(linkRole,arcrole,sourceIndex,targetIndex);
                 for (String key: map.keySet()) {
-                    SortedSet<PersistedRelationship> equivalents = map.get(key);
-                    PersistedRelationship active = equivalents.first();
-                    for (PersistedRelationship equivalent: equivalents) {
+                    SortedSet<Relationship> equivalents = map.get(key);
+                    Relationship active = equivalents.first();
+                    for (Relationship equivalent: equivalents) {
                         if (equivalent != active) {
                             // getStore().remove(equivalent);
                             logger.info("removing " + equivalent.getArc().getURI() + " " + equivalent.getIndex());
@@ -344,7 +340,7 @@ public class StorerImpl implements Storer {
             query = "#roots#[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"' and @sourceIndex='"+sourceIndex+"']/@targetIndex";
             Set<String> targetIndices = getStore().queryForStrings(query);
             for (String targetIndex: targetIndices) {
-                Map<String,SortedSet<PersistedRelationship>> map = getEquivalentRelationships(linkRole,arcrole,sourceIndex,targetIndex);
+                Map<String,SortedSet<Relationship>> map = getEquivalentRelationships(linkRole,arcrole,sourceIndex,targetIndex);
                 for (String key: map.keySet()) {
                     map.get(key).first().setMetaAttribute("active","");
                 }
@@ -359,18 +355,18 @@ public class StorerImpl implements Storer {
      * @return a map of sorted sets of equivalent relationships in the network.
      * @throws XBRLException
      */
-    private Map<String,SortedSet<PersistedRelationship>> getEquivalentRelationships(URI linkRole, URI arcrole, String sourceIndex, String targetIndex)
+    private Map<String,SortedSet<Relationship>> getEquivalentRelationships(URI linkRole, URI arcrole, String sourceIndex, String targetIndex)
             throws XBRLException {
         
-        Map<String,SortedSet<PersistedRelationship>> map = new HashMap<String,SortedSet<PersistedRelationship>>();
+        Map<String,SortedSet<Relationship>> map = new HashMap<String,SortedSet<Relationship>>();
         String query = "#roots#[@linkRole='"+linkRole+"' and @arcRole='"+arcrole+"' and @sourceIndex='"+sourceIndex+"' and @targetIndex='"+targetIndex+"']";
-        List<PersistedRelationship> relationships = this.getStore().<PersistedRelationship>queryForXMLResources(query);
-        for (PersistedRelationship relationship: relationships) {
+        List<Relationship> relationships = this.getStore().<Relationship>queryForXMLResources(query);
+        for (Relationship relationship: relationships) {
             String key = relationship.getSourceIndex() + relationship.getTargetIndex() + relationship.getLinkRole() + relationship.getArcrole() + relationship.getSignature();
             if (map.containsKey(key)) {
                 map.get(key).add(relationship);
             } else {
-                SortedSet<PersistedRelationship> set = new TreeSet<PersistedRelationship>(new PersistedRelationshipPriorityComparator());
+                SortedSet<Relationship> set = new TreeSet<Relationship>(new RelationshipPriorityComparator());
                 set.add(relationship);
                 map.put(key,set);
             }

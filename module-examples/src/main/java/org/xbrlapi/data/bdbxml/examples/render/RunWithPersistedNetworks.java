@@ -32,7 +32,7 @@ import org.xbrlapi.Concept;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Stub;
 import org.xbrlapi.aspects.Aspect;
@@ -396,10 +396,10 @@ public class RunWithPersistedNetworks {
         maxLevel = Math.max(indent.length(), maxLevel);
         
         // Get the active presentation relationships from.
-        SortedSet<PersistedRelationship> relationships = store.getPersistedActiveRelationshipsFrom(concept.getIndex(),linkRole,arcrole);
+        SortedSet<Relationship> relationships = store.getRelationshipsFrom(concept.getIndex(),linkRole,arcrole);
 
         Concepts childConcepts = new Concepts();
-        for (PersistedRelationship relationship: relationships) {
+        for (Relationship relationship: relationships) {
             
             Arc arc = relationship.getArc();
             //logger.info(arc.getURI());
@@ -421,7 +421,7 @@ public class RunWithPersistedNetworks {
                     indent + " ", 
                     concept, 
                     (Concept) relationship.getTarget(), 
-                    relationship.getOrder(), 
+                    relationship.getArcOrder(), 
                     linkRole,
                     arcrole,
                     labelRole)

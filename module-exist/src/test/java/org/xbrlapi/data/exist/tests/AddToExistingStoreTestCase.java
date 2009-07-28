@@ -13,6 +13,7 @@ public class AddToExistingStoreTestCase extends BaseTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
+		logger.info(this.getURI(STARTING_POINT));
 		loader.discover(this.getURI(STARTING_POINT));		
 	}
 

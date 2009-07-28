@@ -2,23 +2,23 @@ package org.xbrlapi.impl;
 
 import java.util.Comparator;
 
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 
 /**
  * Facilitates sorting of relationships by arc order.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class PersistedRelationshipOrderComparator implements Comparator<PersistedRelationship> {
+public class RelationshipOrderComparator implements Comparator<Relationship> {
 
 	/**
 	 * Persisted relationships with lower order values come first in the ordering.
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
-	public int compare(PersistedRelationship relationship1, PersistedRelationship relationship2) throws ClassCastException {
+	public int compare(Relationship relationship1, Relationship relationship2) throws ClassCastException {
 
-        if (relationship1.getOrder().doubleValue() != relationship2.getOrder().doubleValue()) 
-            return relationship1.getOrder().compareTo(relationship2.getOrder());
+        if (relationship1.getArcOrder().doubleValue() != relationship2.getArcOrder().doubleValue()) 
+            return relationship1.getArcOrder().compareTo(relationship2.getArcOrder());
 
         if (! relationship1.getSignature().equals(relationship2.getSignature())) 
             return relationship1.getSignature().compareTo(relationship2.getSignature());

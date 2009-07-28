@@ -38,7 +38,6 @@ public class DBConnectionTestCase extends BaseTestCase {
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		this.cleanup(store);
 	}
 
 	/**

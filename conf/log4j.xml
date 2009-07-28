@@ -21,11 +21,6 @@
         <appender-ref ref="null"/>
     </category>
 
-    <category name="org.exist" additivity="false">
-        <priority value="warn"/>
-        <appender-ref ref="null"/>
-    </category>
-
     <category name="httpclient" additivity="false">
         <priority value="info"/>
         <appender-ref ref="null"/>

@@ -58,10 +58,10 @@ public class StoreImplTestCase extends BaseTestCase {
 	
 	public void testQueryData() {
 		try {
-	        String xpathQuery = "/" + Constants.XBRLAPIPrefix + ":" + "fragment";
-	        List<Fragment> fragments = store.<Fragment>queryForXMLResources(xpathQuery);
+	        String xpathQuery = "#roots#";
+	        List<XML> fragments = store.<XML>queryForXMLResources(xpathQuery);
 			assertTrue(fragments.size() > 1);
-	        Fragment fragment = fragments.get(0);
+	        XML fragment = fragments.get(0);
 	        assertEquals("fragment",fragment.getMetadataRootElement().getLocalName());
 		} catch (XBRLException e) {
 			fail(e.getMessage());

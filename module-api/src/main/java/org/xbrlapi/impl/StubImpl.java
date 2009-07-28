@@ -14,7 +14,7 @@ import org.xbrlapi.Stub;
 import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.utilities.XBRLException;
 
-public class StubImpl extends XMLImpl implements Stub {
+public class StubImpl extends NonFragmentXMLImpl implements Stub {
 	
 	/**
 	 * No argument constructor.
@@ -30,9 +30,19 @@ public class StubImpl extends XMLImpl implements Stub {
 	 * within the scope of the containing data store.
 	 * @throws XBRLException
 	 */
-	public StubImpl(String id) throws XBRLException {
+	public StubImpl(String id, URI uri, String reason) throws XBRLException {
 		this();
+        if (id == null) throw new XBRLException("The stub index must not be null.");
 		this.setIndex(id);
+		if (uri == null) throw new XBRLException("The stub URI must not be null.");
+		this.setResourceURI(uri);
+        if (reason == null) throw new XBRLException("The reason must not be null.");		
+        this.setReason(reason);
+        
+        // Up to here all of the properties have been stored in an XML DOM being
+        // put together by the builder.
+        
+		this.finalizeBuilder();
 	}
 
     /**

@@ -27,7 +27,7 @@ import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Stub;
 import org.xbrlapi.aspects.Aspect;
@@ -399,9 +399,9 @@ public class Run {
         labels.add(label);
         reportTime(label);
 
-        SortedSet<PersistedRelationship> relationships = network.getActiveRelationshipsFrom(concept.getIndex());
+        SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(concept.getIndex());
 
-        for (PersistedRelationship relationship: relationships) {
+        for (Relationship relationship: relationships) {
             
             labelRole = Constants.StandardLabelRole;
             if (relationship.getArc().hasAttribute("preferredLabel")) {
@@ -416,7 +416,7 @@ public class Run {
                     indent + " ", 
                     concept, 
                     (Concept) relationship.getTarget(), 
-                    new Float(relationship.getOrder()).floatValue(), 
+                    new Float(relationship.getArcOrder()).floatValue(), 
                     linkRole,
                     labelRole);
         }

@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 import org.xbrlapi.Arc;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.Resource;
 import org.xbrlapi.builder.BuilderImpl;
 import org.xbrlapi.utilities.Constants;
@@ -16,13 +16,13 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements PersistedRelationship {
+public class RelationshipImpl extends NonFragmentXMLImpl implements Relationship {
 
     /**
      * No argument constructor.
      * @throws XBRLException
      */
-    public PersistedRelationshipImpl() throws XBRLException {
+    public RelationshipImpl() throws XBRLException {
         super();
         setBuilder(new BuilderImpl());
     }    
@@ -35,8 +35,10 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
      * @param target The target of the relationship
      * @throws XBRLException
      */
-    public PersistedRelationshipImpl(Arc arc, Fragment source, Fragment target) throws XBRLException {
+    public RelationshipImpl(Arc arc, Fragment source, Fragment target) throws XBRLException {
         this();
+
+        setStore(arc.getStore());
         
         if (arc == null) throw new XBRLException("The arc must not be null");
         if (source == null) throw new XBRLException("The source must not be null");
@@ -81,10 +83,9 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
         setReferenceStatus();
         setSignature(arc);
 
-        arc.getStore().persist(this);
+        this.finalizeBuilder();
         
     }    
-    
     
     /**
      * @param key The relationship to use in generating
@@ -97,7 +98,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArc()
+     * @see org.xbrlapi.Relationship#getArc()
      */
     public Arc getArc() throws XBRLException {
         return (Arc) this.getStore().getXMLResource(getArcIndex());
@@ -105,14 +106,14 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcIndex()
+     * @see org.xbrlapi.Relationship#getArcIndex()
      */
     public String getArcIndex() {
         return getMetaAttribute("arcIndex");
     }
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcURI()
+     * @see org.xbrlapi.Relationship#getArcURI()
      */
     public String getArcURI() {
         return getMetaAttribute("arcURI");
@@ -133,14 +134,14 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }    
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcName()
+     * @see org.xbrlapi.Relationship#getArcName()
      */
     public String getArcName() {
         return getMetaAttribute("arcName");
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcNamespace()
+     * @see org.xbrlapi.Relationship#getArcNamespace()
      */
     public URI getArcNamespace() {
         try {
@@ -151,7 +152,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcrole()
+     * @see org.xbrlapi.Relationship#getArcrole()
      */
     public URI getArcrole() {
         try {
@@ -162,21 +163,21 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getOrder()
+     * @see org.xbrlapi.Relationship#getArcOrder()
      */
-    public Double getOrder() {
+    public Double getArcOrder() {
         return new Double(getMetaAttribute("arcOrder"));
     }
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getPriority()
+     * @see org.xbrlapi.Relationship#getArcPriority()
      */
-    public Integer getPriority() {
+    public Integer getArcPriority() {
         return new Integer(getMetaAttribute("arcPriority"));
     }
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getUse()
+     * @see org.xbrlapi.Relationship#getUse()
      */
     public String getUse() {
         String use = getMetaAttribute("arcUse");
@@ -185,14 +186,14 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }    
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getLinkName()
+     * @see org.xbrlapi.Relationship#getLinkName()
      */
     public String getLinkName() {
         return getMetaAttribute("linkName");
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getLinkNamespace()
+     * @see org.xbrlapi.Relationship#getLinkNamespace()
      */
     public URI getLinkNamespace() {
         try {
@@ -203,7 +204,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getLinkRole()
+     * @see org.xbrlapi.Relationship#getLinkRole()
      */
     public URI getLinkRole() {
         try {
@@ -214,7 +215,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getSource()
+     * @see org.xbrlapi.Relationship#getSource()
      */
     @SuppressWarnings("unchecked")
     public <F extends Fragment> F getSource() throws XBRLException {
@@ -222,21 +223,21 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getSourceIndex()
+     * @see org.xbrlapi.Relationship#getSourceIndex()
      */
     public String getSourceIndex() {
         return getMetaAttribute("sourceIndex");
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getSourceLanguageCode()
+     * @see org.xbrlapi.Relationship#getSourceLanguageCode()
      */
     public String getSourceLanguageCode() {
         return getMetaAttribute("sourceLanguage");
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getSourceRole()
+     * @see org.xbrlapi.Relationship#getSourceRole()
      */
     public URI getSourceRole() {
         try {
@@ -249,21 +250,21 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getSourceType()
+     * @see org.xbrlapi.Relationship#getSourceType()
      */
     public String getSourceType() {
         return getMetaAttribute("sourceType");
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getSourceName()
+     * @see org.xbrlapi.Relationship#getSourceName()
      */
     public String getSourceName() {
         return getMetaAttribute("sourceName");
     }    
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getSourceNamespace()
+     * @see org.xbrlapi.Relationship#getSourceNamespace()
      */
     public URI getSourceNamespace() {
         try {
@@ -274,7 +275,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getTarget()
+     * @see org.xbrlapi.Relationship#getTarget()
      */
     @SuppressWarnings("unchecked")
     public <F extends Fragment> F getTarget() throws XBRLException {
@@ -282,21 +283,21 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getTargetIndex()
+     * @see org.xbrlapi.Relationship#getTargetIndex()
      */
     public String getTargetIndex() {
         return getMetaAttribute("targetIndex");
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getTargetLanguageCode()
+     * @see org.xbrlapi.Relationship#getTargetLanguageCode()
      */
     public String getTargetLanguageCode() {
         return getMetaAttribute("targetLanguage");
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getTargetRole()
+     * @see org.xbrlapi.Relationship#getTargetRole()
      */
     public URI getTargetRole() {
         try {
@@ -311,28 +312,28 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getSignature()
+     * @see org.xbrlapi.Relationship#getSignature()
      */
     public String getSignature() {
         return getMetaAttribute("signature");
     }    
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getTargetType()
+     * @see org.xbrlapi.Relationship#getTargetType()
      */
     public String getTargetType() {
         return getMetaAttribute("targetType");
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getTargetName()
+     * @see org.xbrlapi.Relationship#getTargetName()
      */
     public String getTargetName() {
         return getMetaAttribute("targetName");
     }    
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#getTargetNamespace()
+     * @see org.xbrlapi.Relationship#getTargetNamespace()
      */
     public URI getTargetNamespace() {
         try {
@@ -383,6 +384,10 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
     
     /**
+     * This method sets a metadata attribute called arcUse
+     * to a value of <code>prohibited</code> if the arc is
+     * prohibiting and the attribute is left out of the metadata
+     * otherwise.
      * @param use The arc use
      * @throws XBRLException if the use is null. 
      */
@@ -390,6 +395,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
         if (use == null) throw new XBRLException("The use must not be null."); 
         if (use.equals("prohibited")) 
             this.setMetaAttribute("arcUse","prohibited");
+        else this.removeMetaAttribute("arcUse");
     }    
 
     /**
@@ -525,7 +531,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }        
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#isToLabel()
+     * @see org.xbrlapi.Relationship#isToLabel()
      */
     public boolean isToLabel() {
         if (this.getMetaAttribute("label") != null) return true;
@@ -533,7 +539,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
     
     /**
-     * @see org.xbrlapi.PersistedRelationship#isToReference()
+     * @see org.xbrlapi.Relationship#isToReference()
      */
     public boolean isToReference() {
         if (this.getMetaAttribute("reference") != null) return true;
@@ -579,7 +585,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }    
     
     /**
-     * @see PersistedRelationship#isFromRoot()
+     * @see Relationship#isFromRoot()
      */
     public boolean isFromRoot() throws XBRLException {
         String sourceIndex = this.getSourceIndex();
@@ -588,7 +594,7 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcAttributeValue(URI, java.lang.String)
+     * @see org.xbrlapi.Relationship#getArcAttributeValue(URI, java.lang.String)
      */
     public String getArcAttributeValue(URI namespace, String name)
             throws XBRLException {
@@ -596,28 +602,28 @@ public class PersistedRelationshipImpl extends NonFragmentXMLImpl implements Per
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getArcAttributeValue(java.lang.String)
+     * @see org.xbrlapi.Relationship#getArcAttributeValue(java.lang.String)
      */
     public String getArcAttributeValue(String name) throws XBRLException {
         return getArc().getAttribute(name);
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getExtendedLink()
+     * @see org.xbrlapi.Relationship#getExtendedLink()
      */
     public ExtendedLink getExtendedLink() throws XBRLException {
         return getStore().<ExtendedLink>getXMLResource(getLinkIndex());
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#getLinkIndex()
+     * @see org.xbrlapi.Relationship#getLinkIndex()
      */
     public String getLinkIndex() throws XBRLException {
         return this.getMetaAttribute("linkIndex");
     }
 
     /**
-     * @see org.xbrlapi.PersistedRelationship#isProhibiting()
+     * @see org.xbrlapi.Relationship#isProhibiting()
      */
     public boolean isProhibiting() throws XBRLException {
         return (this.getUse().equals("prohibited"));

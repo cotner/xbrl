@@ -16,10 +16,10 @@ import org.xbrlapi.ArcEnd;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Locator;
-import org.xbrlapi.PersistedRelationship;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.impl.PersistedRelationshipImpl;
-import org.xbrlapi.impl.PersistedRelationshipOrderComparator;
+import org.xbrlapi.impl.RelationshipImpl;
+import org.xbrlapi.impl.RelationshipOrderComparator;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -44,7 +44,7 @@ public class NetworkImpl implements Network, Serializable {
 	 */
 	private Store store = null;
 		
-	private HashMap<String,PersistedRelationship> relationships = new HashMap<String,PersistedRelationship>();
+	private Set<Relationship> relationships = new HashSet<Relationship>();
 	
 	/**
 	 * The map of fragments involved in the relationships in the network.
@@ -182,14 +182,16 @@ public class NetworkImpl implements Network, Serializable {
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Network#addRelationship(PersistedRelationship)
+	 * @see org.xbrlapi.networks.Network#addRelationship(Relationship)
 	 */
-	public void addRelationship(PersistedRelationship relationship) throws XBRLException {
+	public void addRelationship(Relationship relationship) throws XBRLException {
 		
 		// Ensure that the relationship belongs
 		if (! getLinkRole().equals(relationship.getLinkRole())) throw new XBRLException("The network link role does not match that of the relationship.");
 		if (! getArcrole().equals(relationship.getArcrole())) throw new XBRLException("The network arc role does not match that of the relationship.");
 
+		relationships.add(relationship);
+		
         String semanticKey = relationship.getSignature();
         Fragment source = relationship.getSource();
         String sourceIndex = source.getIndex();
@@ -253,6 +255,15 @@ public class NetworkImpl implements Network, Serializable {
 	}
 	
 	/**
+	 * @see Network#addRelationships(List<Relationship>)
+	 */
+	public void addRelationships(List<Relationship> relationships) throws XBRLException {
+    for (Relationship relationship: relationships) {
+        this.addRelationship(relationship);
+    }
+}   	
+	
+	/**
 	 * @return a String that will be identical the 
 	 * same source and the same target.
 	 * @throws XBRLException
@@ -264,11 +275,11 @@ public class NetworkImpl implements Network, Serializable {
 	/**
 	 * @see org.xbrlapi.networks.Network#getActiveRelationshipsFrom(String)
 	 */
-	public SortedSet<PersistedRelationship> getActiveRelationshipsFrom(String index) throws XBRLException {
+	public SortedSet<Relationship> getActiveRelationshipsFrom(String index) throws XBRLException {
 
 	    logger.debug("Getting active relationships from " + index + " for " + this);
 	    
-		SortedSet<PersistedRelationship> activeRelationships = new TreeSet<PersistedRelationship>(new PersistedRelationshipOrderComparator());
+		SortedSet<Relationship> activeRelationships = new TreeSet<Relationship>(new RelationshipOrderComparator());
 
 		if (! sourceRelationships.containsKey(index)) return activeRelationships;
 		
@@ -322,11 +333,11 @@ public class NetworkImpl implements Network, Serializable {
 	/**
 	 * @see org.xbrlapi.networks.Network#getActiveRelationshipsTo(String)
 	 */
-	public SortedSet<PersistedRelationship> getActiveRelationshipsTo(String index) throws XBRLException {
+	public SortedSet<Relationship> getActiveRelationshipsTo(String index) throws XBRLException {
 
         logger.debug("Getting active relationships to " + index + " for " + this);
         
-        SortedSet<PersistedRelationship> activeRelationships = new TreeSet<PersistedRelationship>(new PersistedRelationshipOrderComparator());
+        SortedSet<Relationship> activeRelationships = new TreeSet<Relationship>(new RelationshipOrderComparator());
 
         if (! targetRelationships.containsKey(index)) return activeRelationships;
         
@@ -347,7 +358,7 @@ public class NetworkImpl implements Network, Serializable {
     @SuppressWarnings("unchecked")
     public <F extends Fragment> List<F> getChildren(String index) throws XBRLException {
         List<F> children = new Vector<F>();
-        for (PersistedRelationship relationship: this.getActiveRelationshipsFrom(index)) {
+        for (Relationship relationship: this.getActiveRelationshipsFrom(index)) {
             children.add((F) relationship.getTarget());
         }
         return children;
@@ -360,7 +371,7 @@ public class NetworkImpl implements Network, Serializable {
     @SuppressWarnings("unchecked")
     public <F extends Fragment> List<F> getParents(String index) throws XBRLException {
         List<F> parents = new Vector<F>();
-        for (PersistedRelationship relationship: this.getActiveRelationshipsTo(index)) {
+        for (Relationship relationship: this.getActiveRelationshipsTo(index)) {
             parents.add((F) relationship.getSource());
         }
         return parents;
@@ -397,11 +408,11 @@ public class NetworkImpl implements Network, Serializable {
         
         logger.debug("Completing network with arcrole " + this.getArcrole() + " and link role " + getLinkRole());
 
-        if (this.getStore().isUsingPersistedNetworks()) {
+        if (this.getStore().isPersistingRelationships()) {
             
             Analyser analyser = new AnalyserImpl(getStore());
-            List<PersistedRelationship> persistedRelationships = analyser.getRelationships(this.getLinkRole(), this.getArcrole());
-            for (PersistedRelationship persistedRelationship: persistedRelationships) {
+            List<Relationship> persistedRelationships = analyser.getRelationships(this.getLinkRole(), this.getArcrole());
+            for (Relationship persistedRelationship: persistedRelationships) {
                 this.addRelationship(persistedRelationship);
             }
             
@@ -420,7 +431,7 @@ public class NetworkImpl implements Network, Serializable {
                         for (Fragment target: targets) {
                             Fragment t = target;
                             if (target.isa("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTarget();
-                            PersistedRelationship relationship = new PersistedRelationshipImpl(arc,s,t);
+                            Relationship relationship = new RelationshipImpl(arc,s,t);
                             this.addRelationship(relationship);
                         }
                     }
@@ -442,17 +453,17 @@ public class NetworkImpl implements Network, Serializable {
     /**
      * @see Network#getAllRelationships()
      */
-    public List<PersistedRelationship> getAllRelationships() throws XBRLException {
-        List<PersistedRelationship> relationships = new Vector<PersistedRelationship>();
-        relationships.addAll(this.relationships.values());
+    public List<Relationship> getAllRelationships() throws XBRLException {
+        List<Relationship> relationships = new Vector<Relationship>();
+        relationships.addAll(this.relationships);
         return relationships;
     }
     
     /**
      * @see Network#getAllActiveRelationships()
      */
-    public List<PersistedRelationship> getAllActiveRelationships() throws XBRLException {
-        List<PersistedRelationship> relationships = new Vector<PersistedRelationship>();
+    public List<Relationship> getAllActiveRelationships() throws XBRLException {
+        List<Relationship> relationships = new Vector<Relationship>();
         for (String sourceIndex: this.sourceRelationships.keySet()) {
             relationships.addAll(this.getActiveRelationshipsFrom(sourceIndex));
         }
@@ -464,7 +475,7 @@ public class NetworkImpl implements Network, Serializable {
      */
     public void add(Network network) throws XBRLException {
         if (this == network) return;
-        for (PersistedRelationship relationship: network.getAllRelationships()) {
+        for (Relationship relationship: network.getAllRelationships()) {
             if (! this.contains(relationship.getArcIndex())) {
                 this.addRelationship(relationship);
             }
