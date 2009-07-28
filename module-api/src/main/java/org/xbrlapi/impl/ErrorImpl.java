@@ -56,9 +56,9 @@ public class ErrorImpl extends XMLImpl implements Error {
      * @param explanation The explanation of the problem.
      * @throws XBRLException
      */
-    public ErrorImpl(String id,URI document, String Index, String explanation) throws XBRLException {
+    public ErrorImpl(String id,URI document, String index, String explanation) throws XBRLException {
         this(id,document,explanation);
-        this.setProblemIndex(Index);
+        this.setProblemIndex(index);
     }
     
     /**

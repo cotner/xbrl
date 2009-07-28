@@ -351,7 +351,7 @@ public class NetworksImpl implements Networks, Serializable {
     }
 
     /**
-     * @see Networks#addRelationships(List<Relationship>)
+     * @see Networks#addRelationships(Collection)
      */
     public void addRelationships(Collection<Relationship> relationships) throws XBRLException {
         for (Relationship relationship: relationships) 

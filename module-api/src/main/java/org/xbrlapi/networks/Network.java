@@ -1,6 +1,7 @@
 package org.xbrlapi.networks;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -134,7 +135,7 @@ public interface Network {
      * @param relationship The relationship to add.
      * @throws XBRLException
      */
-    public void addRelationships(List<Relationship> relationship) throws XBRLException;	
+    public void addRelationships(Collection<Relationship> relationship) throws XBRLException;	
 
 	/**
 	 * @param index The index of the source fragment.

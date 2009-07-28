@@ -57,7 +57,7 @@ public interface Storer {
      * When the relationship is persisted in the data store, any equivalent
      * relationship will be removed from the data store.  Equivalence is 
      * assessed on the basis of the relationship semantic key.
-     * @see org.xbrlapi.networks.Relationship#getSignature()
+     * @see org.xbrlapi.Relationship#getSignature()
      * @param relationship The relationship that will be be persisted in the data store.
      * @throws XBRLException
      */

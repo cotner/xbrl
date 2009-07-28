@@ -171,7 +171,7 @@ public interface Arc extends ExtendedLinkContent {
      * the value of the preferredLabel attribute if it
      * is on the arc.  Otherwise returns the standard 
      * label resource role
-     * {@link org.xbrlapi.utilities.Constants#StandardLabelRole()}
+     * {@link org.xbrlapi.utilities.Constants#StandardLabelRole}
      */
     public URI getPreferredLabelRole() throws XBRLException;
 }

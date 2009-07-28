@@ -2,6 +2,7 @@ package org.xbrlapi.networks;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -255,9 +256,9 @@ public class NetworkImpl implements Network, Serializable {
 	}
 	
 	/**
-	 * @see Network#addRelationships(List<Relationship>)
+	 * @see Network#addRelationships(Collection)
 	 */
-	public void addRelationships(List<Relationship> relationships) throws XBRLException {
+	public void addRelationships(Collection<Relationship> relationships) throws XBRLException {
     for (Relationship relationship: relationships) {
         this.addRelationship(relationship);
     }

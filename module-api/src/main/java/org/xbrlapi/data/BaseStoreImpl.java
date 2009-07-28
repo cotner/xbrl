@@ -219,7 +219,7 @@ public abstract class BaseStoreImpl implements Store {
     }
 
     /**
-     * This implementation generates the document ID
+     * This implementation generates the an ID for a document being stored
      * with a prefix that is a random string of characters 
      * including a-z, A-Z and 0-9.
      * If, by chance, the random string has already been 
@@ -227,7 +227,6 @@ public abstract class BaseStoreImpl implements Store {
      * another random string is generated and this repeats until
      * the random string is unique in the data store.
      * @param input The string that may be used to generate the ID.
-     * @see org.xbrlapi.data.Store#getDocumentId(URI)
      */    
     public String getId(String input) throws XBRLException {
         
