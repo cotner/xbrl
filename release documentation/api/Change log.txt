@@ -2,6 +2,11 @@
 Eliminated the org.xbrlapi.networks.Relationship interface and implementation, 
 replacing it throughout with the very similar but more complete 
 org.xbrlapi.PersistedRelationship interface and implementation.
+Created additional org.xbrlapi.networks.Analyser implementations
+to filter relationships in various ways (all relationships or all
+relationships that are not marked as being prohibited on the arc 
+declaring them).  These alter the results relating to network methods
+for data stores that use persisted relationships. 
 
 16 Jul. 2009
 Added arc URI to the information persisted for each relationship. 

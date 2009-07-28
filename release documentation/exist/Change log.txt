@@ -1,3 +1,7 @@
+28 Jul. 2009
+Moved the DBConnection implementation to be an inner class of the 
+eXist store implementation.  Cleaned up the eXist store deletion method.
+
 18 Aug. 2008
 Changed the query methods for the various store implementations to 
 filter query results if the store knows of a list of URLs to use in
