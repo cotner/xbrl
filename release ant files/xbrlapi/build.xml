@@ -1,4 +1,4 @@
-<project name="xlinkapi" default="doc" basedir=".">
+<project name="xbrlapi" default="dist" basedir=".">
 	<description>
   	Build the XBRLAPI Release
   </description>
