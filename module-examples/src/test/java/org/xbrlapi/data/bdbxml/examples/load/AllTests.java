@@ -1,4 +1,4 @@
-package org.xbrlapi.bdbxml.examples.load;
+package org.xbrlapi.data.bdbxml.examples.load;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
