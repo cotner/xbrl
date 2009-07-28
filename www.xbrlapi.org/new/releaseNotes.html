@@ -1,14 +1,32 @@
-Release details:
-This package provides the core functionality 
-of the XBRLAPI.  The XLink, XPointer,
-XMLBase packages also need to be downloaded to 
-use the XBRLAPI. The DOM-based data store 
-is included.  If you want to use a persistent 
-data store then you need to download the JAR 
-for the desired data store also.
+<html>
+<head>
+<title>XBRLAPI.ORG What is new</title>
+<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+</head>
+<body>
 
-Release 5.0
-July 28, 2009
+<div class="logo_container">
+  <span class="logo">
+    XBRLAPI
+  </span>
+  <span class="logo_subscript">
+    oss
+  </span>
+</div>
+
+<div id="navcontainer">
+<ul id="navlist">
+<li><a href="/">Home</a></li>
+<li><a href="index.html">News</a></li>
+<li><a href="releaseNotes.html">Release notes</a></li>
+</ul>
+</div>
+
+<div class="content">
+<h2>Release 5.0</h2>
+<p>July 28, 2009</p>
+<p>
+
 Backward incompatible release of the API involving fundamental
 changes to the query language.  The query language is now
 XQuery 1.0 rather than XPath 2.0.  This change has meant
@@ -22,21 +40,30 @@ A number of significant changes have also been made to
 function signatures in the API, reflecting the fact that
 data stores now contain considerably more information
 than just fragments of XBRL documents.
+</p>
 
-Release 4.0
-January 7, 2009
+<h2>Release 4.0</h2>
+<p>January 7, 2009</p>
+<p>
+
 Backward incompatible release of the API involving changes
 to many method signatures - almost all of which are related
 to the decision to replace java.net.URL with java.net.URI where
 possible.
 Created the first data file release.
+</p>
 
-Release 3.4
-December 10, 2008
+<h2>Release 3.4</h2>
+<p>December 10, 2008</p>
+<p>
+
 Fixed problems in construction of JAR files with the 3.3 release.
+</p>
 
-Release 3.3
-November 24, 2008
+<h2>Release 3.3</h2>
+<p>November 24, 2008</p>
+<p>
+
 Significant number of bug fixes to the API.  New packages and improved
 performance.  There are some minor backward compatibility issues with previous
 releases.
@@ -44,71 +71,112 @@ First release of the examples module.
 Basic new XDT fragment types created. XDT fragment detection implemented.
 Basic dimension value analysis features implemented.  All released as the new
 XDT module.
+</p>
 
+<h2>Release 3.2</h2>
+<p>July 30, 2008</p>
+<p>
 
-Release 3.2
-July 30, 2008
 Point release to upgrade data store performance and
 to incorporate changes to document indexing system
 and changes to the document identification system.
+</p>
 
-Release 3.1
-Feb 28, 2008
+<h2>Release 3.1</h2>
+<p>February 28, 2008</p>
+<p>
+
 Point release to include various bug-fixes. 
+</p>
 
-Release 3.0
-July 29, 2007
+<h2>Release 3.0</h2>
+<p>July 29, 2007</p>
+<p>
+
 Added new network and relationship level functionality.
 Created the bdbxml module to enable the Oracle Berkeley 
 XML database to be used as a persistent data store for
 XBRLAPI.
 Created the utilities module that is 
 required by all other XBRLAPI modules.  
+</p>
 
 
-Release 2.0
-May 21, 2007
+<h2>Release 2.0</h2>
+<p>May 21, 2007</p>
+<p>
+
 Fixed up omission of class files from the JAR file.
+</p>
 
-Release 2.0
-March 23, 2007
+<h2>Release 2.0</h2>
+<p>March 23, 2007</p>
+<p>
+
 Created the api module by splitting out the 
 non-DOM data store implementations.
+</p>
 
-Release 1.0
+<h2>Release 1.0</h2>
+<p>
 First cut of the XBRLAPI.  Included the Xindice and eXist data stores.
 Includes XLink XPointer and XMLBase processing capabilities. 
+</p>
 
+<h2>Release 0.2</h2> 
+<p>September 25, 2006</p>
+<p>
 
-Release 0.2 update
-Date September 25, 2006
 Fixed up the Exist indexing.
 Added a lot of fragment interface implementation.
 Merged the data and metadata collections.
 Fixed up the Jar file manifest to make the -jar file option
 work from execution at the commandline.
+</p>
 
-Release 0.2
-Date September 14, 2006
+<h2>Release 0.2</h2>
+<p> September 14, 2006</p>
+<p>
+
 This version is now ready for testing.
+</p>
 
-Release 0.1 update
-Date August 10, 2006
+<h2>Release 0.1</h2> 
+<p> August 10, 2006</p>
+<p>
 Implemented the data store using the Exist database and implemented
 the data store using an in-memory XML DOM.
+</p>
 
-Release 0.1 update
-Date December 9, 2005
+<h2>Release 0.1</h2> 
+<p> December 9, 2005</p>
+<p>
 Fixed incorrect content for the release documents.
 Captured large number of improvements to the API implementation.
+</p>
 
-Release: 0.1
-Date: May 6, 2005
+<h2>Release: 0.1</h2>
+<p> May 6, 2005</p>
 
-XBRLAPI
+<p>
+<a href="http://sourceforge.net/projects/xbrlapi"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=135539&type=11" width="120" height="30" border="0" alt="Get Java XBRL API implementation at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
 
-The XBRLAPI is an XBRL API and an implementation of that API in Java.
-It is intended to provide a complete set of XBRL manipulation functionality
-using persistent data storage for XBRL information.
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/xbrlapi/" : "http://apps.sourceforge.net/piwik/xbrlapi/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<p><img src="http://apps.sourceforge.net/piwik/xbrlapi/piwik.php?idsite=1" alt="piwik"/></p>
+<!-- End Piwik Tag -->
 
-See the installation instructions that are available at http://www.xbrlapi.org/
+</div>
+
+</body>
+</html>
+
+
