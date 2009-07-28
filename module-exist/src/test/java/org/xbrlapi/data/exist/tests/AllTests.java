@@ -15,7 +15,7 @@ public class AllTests {
 		suite.addTestSuite(StoreImplConstructorTestCase.class);
 		suite.addTestSuite(StoreImplTestCase.class);
 		
-		suite.addTest(org.xbrlapi.data.exist.framework.tests.AllTests.suite());		
+		suite.addTest(org.xbrlapi.data.exist.tests.framework.AllTests.suite());		
 		//$JUnit-END$
 		return suite;
 	}

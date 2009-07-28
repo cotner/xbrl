@@ -12,7 +12,7 @@ public class AllTests {
 		suite.addTest(org.xbrlapi.builder.tests.AllTests.suite());
         suite.addTest(org.xbrlapi.cache.framework.tests.AllTests.suite());
 		suite.addTest(org.xbrlapi.cache.tests.AllTests.suite());
-		suite.addTest(org.xbrlapi.data.dom.framework.tests.AllTests.suite());
+		suite.addTest(org.xbrlapi.data.dom.tests.framework.AllTests.suite());
 		suite.addTest(org.xbrlapi.data.dom.tests.AllTests.suite());
         suite.addTest(org.xbrlapi.data.resource.tests.AllTests.suite());
 		suite.addTest(org.xbrlapi.fragment.tests.AllTests.suite());
