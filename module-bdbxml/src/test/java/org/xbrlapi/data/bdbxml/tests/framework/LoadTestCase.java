@@ -10,11 +10,13 @@ import java.util.Properties;
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.utilities.XBRLException;
 
 import com.sleepycat.db.DatabaseException;
 import com.sleepycat.db.Environment;
 import com.sleepycat.db.EnvironmentConfig;
 import com.sleepycat.dbxml.XmlContainer;
+import com.sleepycat.dbxml.XmlDocument;
 import com.sleepycat.dbxml.XmlDocumentConfig;
 import com.sleepycat.dbxml.XmlException;
 import com.sleepycat.dbxml.XmlInputStream;
@@ -29,10 +31,10 @@ import com.sleepycat.dbxml.XmlUpdateContext;
 public class LoadTestCase extends TestCase {
     protected static Logger logger = Logger.getLogger(LoadTestCase.class);  
     
-    private final int iterations = 1000;
+    private final int iterations = 10;
     private String container = "container";
     private String location = null;
-    private String prefix = "<a_node>";
+    private String prefix = "<a_node xmlns='http://www.xbrlapi.org/' xmlns:p1='http://www.xbrlapi.org/' xmlns:p2='http://www.xbrlapi.org/'>";
     private String suffix = "</a_node>";
     private SimpleStore store = null;
         
@@ -79,6 +81,24 @@ public class LoadTestCase extends TestCase {
             fail("The database insertions failed.");
         }
     }
+    
+    public final void testLoadingDocumentsWithMultiplePrefixDeclarationsForTheOneNamespace() {
+        
+        try {
+
+                String xml = prefix + "Document 1" + suffix;
+                logger.info(xml);
+                store.putDocument(xml);
+                logger.info(store.getDocument("1"));
+                assertTrue(store.getDocument("1").contains("xmlns="));
+                assertTrue(store.getDocument("1").contains("xmlns:p1="));
+                assertTrue(store.getDocument("1").contains("xmlns:p2="));
+                
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("The database insertions failed.");
+        }
+    }    
 
     private class SimpleStore {
 
@@ -163,6 +183,22 @@ public class LoadTestCase extends TestCase {
             System.out.println("Adding document " + index++);
             dataContainer.putDocument(""+ index, xmlInputStream, xmlUpdateContext, documentConfiguration);
         }
+        
+        public synchronized String getDocument(String index) throws XBRLException {
+            XmlDocument xmlDocument = null;
+            try {
+
+                try {
+                    xmlDocument = dataContainer.getDocument(index);
+                    return xmlDocument.getContentAsString();
+                } catch (XmlException e) { // Thrown if the document is not found
+                    throw new XBRLException("The fragment " + index + " could not be retrieved from the store.",e);
+                }
+
+            } finally {
+                if (xmlDocument != null) xmlDocument.delete();
+            }
+        }        
 
     }
 

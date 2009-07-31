@@ -16,5 +16,10 @@ public interface Measure extends Serializable {
      * @return the local name for the measure value.
      */
     public String getLocalname();
+
+    /**
+     * @return the QName prefix for the measure value.
+     */
+    public String getPrefix();
     
 }

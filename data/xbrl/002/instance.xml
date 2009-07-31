@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xbrl
   xmlns="http://www.xbrl.org/2003/instance"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance"
   xmlns:eg="http://xbrlapi.org/test/xbrl/002"
   xmlns:link="http://www.xbrl.org/2003/linkbase"
   xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -66,6 +67,10 @@
     <measure>u7:km</measure>
   </unit>
 
+  <unit id="u8">
+    <measure>xbrli:shares</measure>
+  </unit>
+  
   <eg:root contextRef="c1" unitRef="u7">7</eg:root>
   
 </xbrl>

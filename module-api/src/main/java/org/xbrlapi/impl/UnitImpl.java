@@ -42,7 +42,8 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
         NodeList measures = getNumeratorMeasures();
         List<Measure> result = new Vector<Measure>();
         for (int i=0; i<measures.getLength(); i++) {
-            result.add(new MeasureImpl(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)), this.getLocalnameFromQName(measures.item(i).getTextContent())));
+            String qname =  measures.item(i).getTextContent();
+            result.add(new MeasureImpl(getNamespaceFromQName(qname,measures.item(i)), getPrefixFromQName(qname), getLocalnameFromQName(qname)));
         }
         return result;
     }
@@ -56,7 +57,8 @@ public class UnitImpl extends FactDimensionContainerImpl implements Unit {
         NodeList measures = getDenominatorMeasures();
         if (measures != null) {
             for (int i=0; i<measures.getLength(); i++) {
-                result.add(new MeasureImpl(this.getNamespaceFromQName(measures.item(i).getTextContent(),measures.item(i)),this.getLocalnameFromQName(measures.item(i).getTextContent())));
+                String qname = measures.item(i).getTextContent();
+                result.add(new MeasureImpl(this.getNamespaceFromQName(qname,measures.item(i)),this.getPrefixFromQName(qname),this.getLocalnameFromQName(qname)));
             }
         }
         return result;

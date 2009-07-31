@@ -2,7 +2,9 @@ package org.xbrlapi.builder;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -209,13 +211,33 @@ public class BuilderImpl implements Builder {
 			String qName, 
 			Attributes attrs) throws XBRLException	
 	{
-		Element newElement = createElement(namespaceURI, lName, qName, attrs);
+
+        Element newElement = createElement(namespaceURI, lName, qName, attrs);
 		if (newElement == null) {
 			throw new XBRLException("Could not create element: " + namespaceURI + " " + lName);
 		}
 		appendChild(newElement);
 	}
 
+    private String getPrefixFromQName(String qname) {
+        // Get the required namespace prefix from the QName
+        String prefix = "";
+        int delimiterIndex = qname.indexOf(':');
+        if (delimiterIndex > 0) {
+            prefix = qname.substring(0,delimiterIndex);
+        }
+        return prefix;
+    }
+
+    private String getLocalNameFromQName(String qname) {
+        String localname = qname;
+        int delimiterIndex = qname.indexOf(':');
+        if (delimiterIndex > 0) {
+            localname = qname.substring(delimiterIndex+1,qname.length());
+        }
+        return localname;
+    }    
+    
 	/**
 	 * Create an element node.
 	 * @param namespaceURI The namespace of the element found by the SAX parser.
@@ -228,39 +250,41 @@ public class BuilderImpl implements Builder {
 			String lName,
 			String qName, 
 			Attributes attrs)  {
-		
-		// Keep track of namespaces used by element or its attributes
-		HashMap<String,String> namespaces = new HashMap<String,String>();
-		namespaces.put(namespaceURI.toString(),"");
+
+		// Keep track of namespace prefixes used by the element or its attributes
+		Set<String> prefixes = new HashSet<String>();
+		prefixes.add(getPrefixFromQName(qName));
 
 		Element newElement = getDOM().createElementNS(namespaceURI.toString(), qName);
 				
 		// Handle elements created with a null attrs array (not created from SAX parsing input)
 		if (attrs == null)
 			return newElement;
-		
+	
 		// Insert all attributes with namespaces
-		for (int i = 0; i < attrs.getLength(); i++) {
-			
+		for (int i=0; i<attrs.getLength(); i++) {
 			if (attrs.getURI(i).equals(Constants.XMLNamespace.toString())) {
 				newElement.setAttribute(attrs.getQName(i), attrs.getValue(i));
-				namespaces.put(Constants.XMLNamespace.toString(),"");
+				prefixes.add(Constants.XMLPrefix);
 			} else if (! attrs.getURI(i).equals("")) {
 				newElement.setAttributeNS(attrs.getURI(i), attrs.getQName(i),attrs.getValue(i));
-				namespaces.put(attrs.getURI(i),"");
+				prefixes.add(getPrefixFromQName(attrs.getQName(i)));
 			}
 		}
 		
 		for (int i = 0; i < attrs.getLength(); i++) {
-			
-			if (! attrs.getURI(i).equals(""))
-				;
-			else if (namespaces.containsKey(attrs.getValue(i)))
-				;
-			else if (!(attrs.getQName(i).equals("xmlns") || attrs.getQName(i).startsWith("xmlns:")))
-				newElement.setAttribute(attrs.getQName(i),attrs.getValue(i));
-			else
-				newElement.setAttribute(attrs.getQName(i),attrs.getValue(i));
+            if (! attrs.getURI(i).equals(""))
+                ; 
+            else if (! attrs.getQName(i).startsWith("xmlns")) {
+                newElement.setAttribute(attrs.getQName(i),attrs.getValue(i));
+            } else {
+                String qname = attrs.getQName(i);
+                String declaration = "";
+                if (qname.contains(":")) declaration = qname.substring(6);
+                if (! prefixes.contains(declaration)) {
+                    newElement.setAttribute(attrs.getQName(i),attrs.getValue(i));
+                }
+            }
 		}
 
 		return newElement;

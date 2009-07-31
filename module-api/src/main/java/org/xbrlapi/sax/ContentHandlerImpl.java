@@ -2,7 +2,6 @@ package org.xbrlapi.sax;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.List;
 
 import org.xbrlapi.Fragment;
@@ -82,13 +81,12 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
      * 
      * @see org.xml.sax.ContentHandler#startElement(String, String, String, Attributes)
      */
-    @SuppressWarnings("unchecked")
     public void startElement(
             String namespaceURI, 
             String lName, 
             String qName, 
-            Attributes attrs) throws SAXException {
-
+            Attributes attrs) throws SAXException {    
+        
         Loader loader = getLoader();
         
         // Update the information about the state of the current element (tracks ancestor attributes)
@@ -116,16 +114,6 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             }
         }
 
-        // Update the namespace data structure and insert namespace mappings into metadata.
-        HashMap<String,String> inheritedMap = getNamespaceMaps().peek();
-        HashMap<String,String> myMap = (HashMap<String,String>) inheritedMap.clone();
-        for (int i = 0; i < attrs.getLength(); i++) {
-            if ((attrs.getQName(i).equals("xmlns") || attrs.getQName(i).startsWith("xmlns:"))) {
-                myMap.put(attrs.getValue(i),attrs.getQName(i));
-            }
-        }
-        getNamespaceMaps().push(myMap);
-
         // Identify the fragments
         for (Identifier identifier: getIdentifiers()) {
             try {
@@ -143,14 +131,14 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
 
         if (! loader.isBuildingAFragment()) {
             throw new SAXException("Some element has not been placed in a fragment.");
-        }
+        }      
         
         // Insert the current element into the fragment being built
         try {
             Fragment fragment = getLoader().getFragment();
             if (fragment == null) throw new SAXException("A fragment should be being built.");
             Builder builder = fragment.getBuilder();
-            if (builder == null) throw new SAXException("A fragment being built needs a builder.");
+            if (builder == null) throw new SAXException("A fragment that is being built needs a builder.");
             builder.appendElement(new URI(namespaceURI), lName, qName, attrs);
 
         } catch (URISyntaxException e) {
@@ -210,9 +198,6 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
                 
         // Update the information about the state of the current element
         setElementState(getElementState().getParent());
-        
-        // Revert to Namespace declarations of the parent element.
-        getNamespaceMaps().pop();
 
     }    
     
@@ -332,8 +317,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
      * are null.
      */
 	public ContentHandlerImpl(Loader loader, URI uri) throws XBRLException {
-		super(loader, uri);		
-	    getNamespaceMaps().push(new HashMap<String,String>());
+		super(loader, uri);
 	}
 	
     /**

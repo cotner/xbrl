@@ -9,6 +9,7 @@ import java.net.URI;
  * Additional commandline arguments (optional ones marked with an *)
  * <ul>
  *  <li>-document [The URI of the document]</li>
+ *  <li>-scope [dts | single]</li>
  * </ul> 
  * These are in addition to those commandline arguments documented at
  * @link BaseUtilityExample
@@ -24,7 +25,12 @@ public class LoadSpecificDocument extends BaseUtilityExample {
             try {
                 URI uri = new URI(arguments.get("document")); 
                 if (store.hasDocument(uri)) store.deleteDocument(uri);
-                loader.discover(uri);
+                if (arguments.get("scope").equals("dts"))
+                    loader.discover(uri);
+                else {
+                    loader.stashURI(uri);
+                    loader.discoverNext();
+                }
             } catch (Exception e) {
                 badUsage(e.getMessage());
             }

@@ -11,16 +11,18 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class MeasureImpl implements Measure {
 
-    private URI namespace = null;
-    private String localname = null;
+    private final URI namespace;
+    private final String prefix;
+    private final String localname;
     
-    public MeasureImpl(URI namespace, String localname) throws XBRLException {
+    public MeasureImpl(URI namespace, String prefix, String localname) throws XBRLException {
         super();
         if (namespace == null) throw new XBRLException("The namespace must not be null.");
+        if (prefix == null) throw new XBRLException("The prefix must not be null.");
         if (localname == null) throw new XBRLException("The localname must not be null.");
         this.namespace = namespace;
-        this.localname = localname;
-        
+        this.prefix = prefix;
+        this.localname = localname;        
     }
 
     /**
@@ -30,6 +32,13 @@ public class MeasureImpl implements Measure {
         return localname;
     }
 
+    /**
+     * @see org.xbrlapi.Measure#getPrefix()
+     */
+    public String getPrefix() {
+        return prefix;
+    }
+    
     /**
      * @see org.xbrlapi.Measure#getNamespace()
      */

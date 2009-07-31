@@ -4,7 +4,9 @@ import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.Measure;
 import org.xbrlapi.Unit;
+import org.xbrlapi.utilities.Constants;
 
 /**
  * Tests the fragment interface implementation.
@@ -28,9 +30,6 @@ public class FragmentTestCase extends DOMLoadingTestCase {
 		super(arg0);
 	}
 
-	/**
-	 * Test namespace resolution from QNames.
-	 */
 	public void testNamespaceResolution() {
 
         try {
@@ -46,5 +45,28 @@ public class FragmentTestCase extends DOMLoadingTestCase {
             fail(e.getMessage());
         }
 	}	
-		
+
+    public void testNamespaceResolutionGivenMultiplePrefixesForTheOneNamespace() {
+
+        try {
+            
+            List<Unit> units = store.<Unit>getXMLResources("Unit");
+            assertTrue(units.size() > 0);
+            for (Unit unit: units) {
+                if (unit.getId().equals("u8")) {
+                    List<Measure> measures = unit.getResolvedNumeratorMeasures();
+                    for (Measure measure: measures) {
+                        if (measure.getLocalname().equals("shares")) {
+                            assertEquals(Constants.XBRL21Namespace.toString(),measure.getNamespace());
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }   
+	
+	
 }

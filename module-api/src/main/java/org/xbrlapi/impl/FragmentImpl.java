@@ -493,7 +493,9 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getNamespaceFromQName(String, Node)
      */
     public URI getNamespaceFromQName(String qname, Node node) throws XBRLException {
-                
+        
+        if (this.getPrefixFromQName(qname).equals("xml")) return Constants.XMLNamespace;
+        
         // If we have an attribute - go straight to working with the parent element.
         if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
             Node parent = node.getParentNode();

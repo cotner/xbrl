@@ -1,10 +1,8 @@
 package org.xbrlapi.sax;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.loader.Loader;
@@ -60,19 +58,9 @@ public class BaseContentHandlerImpl extends DefaultHandler implements ContentHan
      */
     private URI uri = null;
     
-    /**
-     * The namespace map stack for tracking namespaces.
-     * Each stack entry is a map from a namespace to 
-     * a namespace prefix.
-     */
-    private Stack<HashMap<String,String>> nsStack = new Stack<HashMap<String,String>>();
+
     
-    /**
-     * @see ContentHandler#getNamespaceMaps()
-     */
-    public Stack<HashMap<String,String>> getNamespaceMaps() {
-        return nsStack;
-    }
+
     
 
 

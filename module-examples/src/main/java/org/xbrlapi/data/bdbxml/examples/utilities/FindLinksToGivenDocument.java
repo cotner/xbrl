@@ -33,7 +33,6 @@ public class FindLinksToGivenDocument extends BaseUtilityExample {
         } else {
             badUsage(message);
         }
-        
         tearDown();
     }
     

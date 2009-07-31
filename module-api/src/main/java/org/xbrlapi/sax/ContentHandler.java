@@ -1,9 +1,7 @@
 package org.xbrlapi.sax;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Stack;
 
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.sax.identifiers.Identifier;
@@ -55,14 +53,6 @@ public interface ContentHandler extends org.xml.sax.ContentHandler {
      * @return the list of fragment identifiers used by the content handler.
      */
     public List<Identifier> getIdentifiers();
-    
-    /**
-     * @return the stack of namespace maps necessary to 
-     * decorate fragments with inherited namespaces.
-     * Each map is from a namespace to a xmlns attribute name
-     * (xmlns or xmlns:xyz).
-     */
-    public Stack<HashMap<String,String>> getNamespaceMaps();
     
     /**
      * Handles SAX parsing exceptions.
