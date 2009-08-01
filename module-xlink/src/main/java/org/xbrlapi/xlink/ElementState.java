@@ -60,7 +60,8 @@ public class ElementState {
 	 * @param attrs The attributes of the element (make sure that these are a clone of the
 	 * originals received by the SAX parser or the state will get really messed up 
 	 * and confusing.  
-     * @see org.xml.sax.helpers.AttributesImpl(Attributes)
+     * Use the org.xml.sax.helpers.AttributesImpl(Attributes) constructor to clone the
+     * originals.
 	 */
     public ElementState(ElementState parent, Attributes attrs) {
         this.parent = parent;
