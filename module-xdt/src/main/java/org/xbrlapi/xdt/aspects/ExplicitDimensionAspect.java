@@ -66,7 +66,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
                 return getMapId(value);
             }
             
-            // TODO rework this to handle default explicit dimensions
+            // TODO still need to be able to handle default explicit dimensions
             if (value.getFragment() == null) {
                 setMapId(value,"");
                 return "";

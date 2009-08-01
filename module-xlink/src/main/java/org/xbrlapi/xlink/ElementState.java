@@ -2,6 +2,9 @@ package org.xbrlapi.xlink;
 
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+import org.xbrlapi.utilities.Constants;
+import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.Attributes;
 
 /**
@@ -22,30 +25,25 @@ import org.xml.sax.Attributes;
  */
 public class ElementState {
 
+    private final static Logger logger = Logger.getLogger(ElementState.class);    
+    
 	/**
 	 * The parent element state if a parent exists and null otherwise
 	 */
-	private ElementState parent = null;
+	private final ElementState parent;
 
 	/**
 	 * The set of attributes on the element.
 	 * These need to be tracked so that they are available
 	 * to the SAX Handler's endElement method.
 	 */
-	private Attributes attributes = null;
+	private final Attributes attributes;
 	
 	/**
 	 * @return the attributes of the element.
 	 */
 	public Attributes getAttributes() {
 	    return attributes;
-	}
-	
-	/**
-	 * @param attributes The attributes of the element.
-	 */
-	public void setAttributes(Attributes attributes) {
-	    this.attributes = attributes;
 	}
 	
 	private long order = 1;
@@ -57,11 +55,12 @@ public class ElementState {
 	 */
 	private String id = null;
 
-
-
 	/**
 	 * @param parent The state of the parent element
-	 * @param attrs The attributes of the element
+	 * @param attrs The attributes of the element (make sure that these are a clone of the
+	 * originals received by the SAX parser or the state will get really messed up 
+	 * and confusing.  
+     * @see org.xml.sax.helpers.AttributesImpl(Attributes)
 	 */
     public ElementState(ElementState parent, Attributes attrs) {
         this.parent = parent;
@@ -69,7 +68,7 @@ public class ElementState {
             parent.addChild();
             this.order = parent.getChildrenSoFar();
         }
-        this.setAttributes(attrs);
+        this.attributes = attrs;
     }
 	
 	public boolean hasParent() {
@@ -129,5 +128,24 @@ public class ElementState {
 		return pointers;
 	}
 	
-
+	/**
+	 * @return the inherited XML lang attribute value based upon the
+	 * current element state or returns null if there is no inherited XML lang 
+	 * attribute value.
+	 * @throws XBRLException
+	 */
+	public String getLanguageCode() throws XBRLException {
+	    Attributes attributes = this.getAttributes();
+	    int index = attributes.getIndex(Constants.XMLNamespace.toString(),"lang");
+	    if (index > -1) {
+	        return attributes.getValue(index);
+	    }
+	    
+        if (getParent() == null) {
+            return null;
+        }
+        
+        return getParent().getLanguageCode();
+	}
+	
 }

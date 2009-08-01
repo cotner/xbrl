@@ -214,7 +214,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl implements XLi
 			}
 			
 			processFragment(fragment,attrs);
-			
+            
 		} catch (XBRLException e) {
 			throw new XLinkException("The resource could not be created.",e);
 		}

@@ -11,6 +11,7 @@ import org.xbrlapi.xlink.XLinkException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ContentHandlerImpl extends DefaultHandler {
@@ -56,7 +57,7 @@ public class ContentHandlerImpl extends DefaultHandler {
 	{
 
         // Update the information about the state of the current element
-        setState(new ElementState(getState(),attrs));
+        setState(new ElementState(getState(),new AttributesImpl( attrs )));
   
     	try {
     		xlinkProcessor.startElement(namespaceURI, lName, qName, attrs);

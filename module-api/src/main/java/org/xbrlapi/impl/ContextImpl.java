@@ -22,8 +22,8 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
      */
     public Entity getEntity() throws XBRLException {
     	List<Entity> fs = this.<Entity>getChildren("org.xbrlapi.impl.EntityImpl");
+        if (fs.size() == 1) return fs.get(0);
     	if (fs.size() == 0) throw new XBRLException("The entity is missing from the context.");
-    	if (fs.size() == 1) return fs.get(0);
     	throw new XBRLException("There is more than one entity in this context.");
     }
     
@@ -51,7 +51,7 @@ public class ContextImpl extends FactDimensionContainerImpl implements Context {
     	List<Scenario> scenarios = this.<Scenario>getChildren("org.xbrlapi.impl.ScenarioImpl");
     	if (scenarios.size() == 0) return null;
     	if (scenarios.size() == 1) return scenarios.get(0);
-    	throw new XBRLException("There is more than one scenario in this context.");
+    	throw new XBRLException("There is more than one scenario in context " + this.getIndex());
     }
 
     /**

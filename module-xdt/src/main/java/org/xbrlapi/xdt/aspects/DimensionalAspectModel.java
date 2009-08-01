@@ -64,11 +64,11 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         if (! fact.isTuple()) { // Add any new aspects.
             Item item = (Item) fact;
             
-            Context context =  item.getContext();
-            Entity entity = context.getEntity();
-            Segment segment = entity.getSegment();
-            if (segment != null) addNewAspects(segment);
-            Scenario scenario = context.getScenario();
+            Context context =  item.getContext(); // Optimised
+            Entity entity = context.getEntity(); // Optimised
+            Segment segment = entity.getSegment(); // Optimised
+            if (segment != null) addNewAspects(segment); 
+            Scenario scenario = context.getScenario(); // Optimised
             if (scenario != null) addNewAspects(scenario);
             super.addFact(fact);
         }
@@ -76,6 +76,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     }
     
     private void addNewAspects(org.xbrlapi.OpenContextComponent occ) throws XBRLException {
+
         Store store = occ.getStore();
         
         List<Element> children = occ.getChildElements();
@@ -87,7 +88,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
                     URI ns = occ.getNamespaceFromQName(qname,child);
                     String localname = occ.getLocalnameFromQName(qname);
                     if (! this.hasAspect(ns + localname)) {
-                        Dimension dimension = (Dimension) store.getConcept(ns,localname);
+                        Dimension dimension = (Dimension) store.getConcept(ns,localname); // Optimised
                         if (dimension.isExplicitDimension())
                             this.setAspect(new ExplicitDimensionAspect(this ,(ExplicitDimension) dimension));
                         else 

@@ -30,6 +30,7 @@ import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
 import org.xbrlapi.ArcroleType;
 import org.xbrlapi.Concept;
+import org.xbrlapi.ElementDeclaration;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -42,7 +43,6 @@ import org.xbrlapi.ReferenceResource;
 import org.xbrlapi.Relationship;
 import org.xbrlapi.Resource;
 import org.xbrlapi.RoleType;
-import org.xbrlapi.SchemaDeclaration;
 import org.xbrlapi.Stub;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.XML;
@@ -1053,6 +1053,7 @@ public abstract class BaseStoreImpl implements Store {
             if (resourceRole != null) query += " and @targetRole='" + resourceRole + "'"; 
             if (language != null) query += " and @targetLanguage='" + language + "'"; 
             query += "]";
+            
             List<Relationship> relationships = this.<Relationship>queryForXMLResources(query);
             List<LabelResource> labels = new Vector<LabelResource>();
             for (Relationship relationship: relationships) {
@@ -1531,8 +1532,11 @@ public abstract class BaseStoreImpl implements Store {
      */
     public Concept getConcept(URI namespace, String name) throws XBRLException {
         
-        List<SchemaDeclaration> candidates = this.<SchemaDeclaration>queryForXMLResources("#roots#[*/xsd:element[@name='" + name + "']]");
-        List<Concept> matches = new Vector<Concept>();
+        String query = "for $concept in #roots#[*/xsd:element/@name='" + name + "'], $schema in #roots#[*/xsd:schema/@targetNamespace='" + namespace + "'] where $concept/@parentIndex=$schema/@index return $concept";
+        List<ElementDeclaration> matches = this.<ElementDeclaration>queryForXMLResources(query);
+        
+        //List<SchemaDeclaration> candidates = this.<SchemaDeclaration>queryForXMLResources("#roots#[*/xsd:element[@name='" + name + "']]");
+/*        List<Concept> matches = new Vector<Concept>();
         for (SchemaDeclaration candidate: candidates) {
             if (candidate.getTargetNamespace().equals(namespace)) {
                 try {
@@ -1542,14 +1546,19 @@ public abstract class BaseStoreImpl implements Store {
                 }
             }
         }
-        
+*/        
         if (matches.size() == 0) 
-            throw new XBRLException("No matching concepts were found for " + namespace + ":" + name + ".");
+            throw new XBRLException("No matching element declarations were found for " + namespace + ":" + name + ".");
         
         if (matches.size() > 1) 
-            throw new XBRLException(new Integer(matches.size()) + "matching concepts were found for " + namespace + ":" + name + ".");
-        
-        return matches.get(0);
+            throw new XBRLException(new Integer(matches.size()) + "matching element declarations were found for " + namespace + ":" + name + ".");
+
+        try {
+            return (Concept) matches.get(0);
+        } catch (ClassCastException e) {
+            throw new XBRLException("Element declaration " + namespace + ":" + name + " in fragment " + matches.get(0).getIndex() + " is not a concept.",e);
+        }
+
     }
 
     /**

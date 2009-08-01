@@ -18,8 +18,6 @@ public interface MixedContentResource extends Resource {
      */
     public NodeList getContent() throws XBRLException;
 	
-
-
     /**
      * Get the value of the xml:lang attribute on the resource.
      * @return the string value of the XML language attribute on 
@@ -28,6 +26,4 @@ public interface MixedContentResource extends Resource {
      */
     public String getLanguage() throws XBRLException;
     
-
-
 }

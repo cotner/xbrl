@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.w3c.dom.Element;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.builder.Builder;
 import org.xbrlapi.loader.Loader;
@@ -25,6 +26,7 @@ import org.xbrlapi.xmlbase.XMLBaseException;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * SAX content handler used to parse a document into an XBRL API data store.
@@ -90,7 +92,7 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
         Loader loader = getLoader();
         
         // Update the information about the state of the current element (tracks ancestor attributes)
-        setElementState(new ElementState(getElementState(),attrs));
+        setElementState(new ElementState(getElementState(),new AttributesImpl( attrs )));
 
         // Stash new URIs in xsi:schemaLocation attributes if desired
         if (loader.useSchemaLocationAttributes()) {
@@ -140,6 +142,23 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
             Builder builder = fragment.getBuilder();
             if (builder == null) throw new SAXException("A fragment that is being built needs a builder.");
             builder.appendElement(new URI(namespaceURI), lName, qName, attrs);
+            
+            // Hardwire XLink resource language code inheritance to
+            // improve query performance based on language selections.
+            if (attrs.getIndex(Constants.XLinkNamespace.toString(),"type") > -1) {
+                try {
+                    Element element = fragment.getDataRootElement();
+                    if (!element.hasAttributeNS(Constants.XMLNamespace.toString(),"lang")) {
+                        String code = getElementState().getLanguageCode();
+                        if (code != null) {
+                                element.setAttribute("xml:lang",code);
+                        }
+                    }
+                } catch (Throwable t) {
+                    logger.info("bugger");
+                }
+            }
+            
 
         } catch (URISyntaxException e) {
             logger.error(namespaceURI + " : " + e.getMessage());
@@ -154,9 +173,8 @@ public class ContentHandlerImpl extends BaseContentHandlerImpl implements Conten
     /**
      * The end of an element triggers processing of an extended link
      * if we have reached the end of an extended link.
-     * Otherwise, we step up to the parent element in the composite document
-     * unless the element that is ending did not ever become the current element
-     * in the composite document.
+     * Otherwise, we step up to the parent element 
+     * unless the element that is ending did not ever become the current element.
      */
     public void endElement(
             String namespaceURI, 

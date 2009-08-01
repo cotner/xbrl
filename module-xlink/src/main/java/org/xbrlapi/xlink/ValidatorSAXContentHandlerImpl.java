@@ -11,6 +11,7 @@ package org.xbrlapi.xlink;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ValidatorSAXContentHandlerImpl extends DefaultHandler {
@@ -55,7 +56,7 @@ public class ValidatorSAXContentHandlerImpl extends DefaultHandler {
     public void startElement( String namespaceURI, String lName, String qName, Attributes attrs) throws SAXException 
 	{
         
-        setState(new ElementState(getState(),attrs));
+        setState(new ElementState(getState(),new AttributesImpl( attrs )));
         
     	try {
     		xlinkProcessor.startElement(namespaceURI, lName, qName, attrs);

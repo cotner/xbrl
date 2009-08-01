@@ -25,6 +25,7 @@ public class AllTests {
 		suite.addTestSuite(ReferenceResourceTestCase.class);
 		suite.addTestSuite(SchemaContentTestCase.class);
 		suite.addTestSuite(LabelResourceTestCase.class);
+        suite.addTestSuite(ResourceLanguageAttributeTestCase.class);
 		suite.addTestSuite(ResourceTestCase.class);
 		suite.addTestSuite(ExtendedLinkContentTestCase.class);
 		suite.addTestSuite(PeriodTestCase.class);

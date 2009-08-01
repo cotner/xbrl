@@ -24,6 +24,19 @@
 
 <div class="content">
 
+<h2>1 Aug. 2009</h2>
+<p>
+Refined the org.xbrlapi.data.Store#getConcept method to use a single XQuery.
+This should improve performance.
+Fixed a bug in the retrieval of the data root element for fragments being built.
+The code used to just return the container element for the data root element for
+such fragments.
+Modified the handling of xml:lang attributes for XLink resources, copying inherited 
+values onto the resource element itself.  This makes for much faster querying and fixes
+a bug in the handling of the xml:lang attributes where previously inherited attributes
+were not being detected.
+</p>
+
 <h2>31 Jul. 2009</h2>
 <p>
 Modified the org.xbrlapi.Measures interface to capture the measure QName prefix

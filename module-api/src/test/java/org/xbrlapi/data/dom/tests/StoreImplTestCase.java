@@ -137,7 +137,10 @@ public class StoreImplTestCase extends BaseTestCase {
             e.printStackTrace();
             fail("Unexpected " + e.getMessage());
         }
-    }	
+    }
+    
+    
+
 
 	public void testHasDocument() {
 		try {

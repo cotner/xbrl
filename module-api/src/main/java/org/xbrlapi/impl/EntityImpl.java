@@ -51,8 +51,9 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
      */
     public Segment getSegment() throws XBRLException {
     	List<Segment> candidates = this.<Segment>getChildren("org.xbrlapi.impl.SegmentImpl");
-    	if (candidates.size()==0) return null;
-    	return candidates.get(0);
+        if (candidates.size()==1) return candidates.get(0);
+        if (candidates.size()==0) return null;
+        throw new XBRLException("Entity identifier " + this.getIndex() + " contains more than one segment.");
     }
     
     /**

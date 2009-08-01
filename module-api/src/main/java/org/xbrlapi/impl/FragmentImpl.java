@@ -96,13 +96,14 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getDataRootElement()
      */
     public Element getDataRootElement() throws XBRLException {
-    	
+        Element dataContainer;
+        
     	if (getBuilder() != null) {
-    		return getBuilder().getData();
+    		dataContainer = getBuilder().getData();
+    	} else {
+    	    dataContainer = (Element) getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),Constants.FragmentDataContainerElementName).item(0);
     	}
 
-    	Element metadata = getMetadataRootElement();
-    	Element dataContainer = (Element) metadata.getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),Constants.FragmentDataContainerElementName).item(0);
     	NodeList children = dataContainer.getChildNodes();
     	for (int i=0; i< children.getLength(); i++) 
     		if (children.item(i).getNodeType() == Node.ELEMENT_NODE) return (Element) children.item(i);

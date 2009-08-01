@@ -15,6 +15,7 @@ public class AllTests {
 		suite.addTestSuite(DocumentDeletionTestCase.class);
         suite.addTestSuite(QueryForStringsTestCase.class);
         suite.addTestSuite(StoreSerializationTestCase.class);
+        suite.addTestSuite(XBRLFunctionTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}
