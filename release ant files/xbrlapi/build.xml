@@ -15,7 +15,7 @@
        </fileset>
     </path>	
 	
-	<target name="dist" depends="doc" description="generate the executable JAR file." >
+	<target name="dist" depends="src" description="generate the executable JAR file." >
 		<tstamp/>
 		<jar  compress="yes" 
     	jarfile="${dist}/xbrlapi-${version}.jar"
@@ -33,7 +33,7 @@
 	    </zip>
 	  </target>
 
-	<target name="doc" depends="src" description="generate the javadoc" >
+	<target name="doc" description="generate the javadoc" >
 		<tstamp/>
     <mkdir dir="${root}/docs/xbrlapi"/>
 		<javadoc

@@ -8,7 +8,7 @@
   <property name="build" location="${root}/bin"/>
   <property name="dist"  location="${root}/dist"/>
 
-  <target name="dist" depends="src" description="generate the JAR" >
+  <target name="dist" description="generate the JAR" >
   	<tstamp/>
     <jar compress="yes" jarfile="${dist}/xbrlapi-${moduleName}-${version}.jar">
         <fileset dir="${build}" includes="**/${moduleName}/**/*.class"/>
@@ -17,7 +17,7 @@
     </jar>
   </target>
 
-  <target name="src" description="generate the source archive" >
+  <target name="src" depends="dist" description="generate the source archive" >
   	<tstamp/>
     <zip destfile="${dist}/xbrlapi-${moduleName}-${version}-source.zip">
 	    <fileset dir="${src}" includes="**/*"/>
