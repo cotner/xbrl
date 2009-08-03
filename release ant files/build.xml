@@ -1,0 +1,170 @@
+<project name="xlinkapi" default="executable" basedir=".">
+
+  <property name="version" value="5.0"/>
+  <property name="root" location=".."/>
+  <property name="data" location="${root}/data"/>
+  <property name="build" location="${root}/bin"/>
+  <property name="dist"  location="${root}/dist"/>
+  <property name="manifest"  location="${root}/module-api/src/main/resources/META-INF"/>
+
+  <path id="classpath">
+    <fileset id="libFiles" dir="${root}/java/lib">
+      <include name="**/**/*.jar"/>
+     </fileset>
+  </path> 
+  
+  <target name="executable" depends="source" description="generate the executable JAR file." >
+    <tstamp/>
+    <jar  compress="yes" 
+      jarfile="${dist}/xbrlapi-${version}.jar"
+      manifest="${manifest}/MANIFEST.MF">
+      <fileset dir="${build}" includes="**/*"/>
+      <fileset dir="${root}" includes="module*/src/*/java/**/*"/>
+    </jar>
+  </target>
+
+   <target name="source" depends="javadoc" description="generate the source zip" >
+      <tstamp/>
+      <zip destfile="${dist}/xbrlapi-${version}-source.zip">
+        <fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
+        <fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
+      </zip>
+    </target>
+
+  <target name="javadoc" depends="module-api" description="generate the javadoc" >
+    <tstamp/>
+    <mkdir dir="${root}/docs/xbrlapi"/>
+    <javadoc
+             destdir="${root}/docs/xbrlapi"
+             classpathRef="classpath"
+             doctitle="&lt;h1&gt;&lt;a href='http://www.xbrlapi.org/'&gt;XBRLAPI project&lt;/a&gt;&lt;/h1&gt;"
+             header="&lt;h3&gt; &lt;a href='http://www.xbrlapi.org/' target='_top' &gt; XBRLAPI &lt;/a&gt; &lt;/h3&gt; &lt;h3&gt;A Java API for &lt;a href='http://www.xbrl.org/' target='_top'&gt;XBRL&lt;/a&gt;&lt;/h3&gt;"
+             footer="&lt;p&gt;&lt;a href='http://sourceforge.net/projects/xbrlapi'&gt;&lt;img src='http://sflogo.sourceforge.net/sflogo.php?group_id=135539&amp;type=11' width='120' height='30' border='0' alt='Get Java XBRL API implementation at SourceForge.net. Fast, secure and Free Open Source software downloads' /&gt;&lt;/a&gt;
+ &lt;/p&gt;&lt;object&gt;&lt;noscript&gt;&lt;p&gt;&lt;img src='http://apps.sourceforge.net/piwik/xbrlapi/piwik.php?idsite=1' alt='piwik'/&gt;&lt;/p>&lt;/noscript&gt;&lt;/object&gt;"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="XBRLAPI Documentation">
+
+      <fileset dir="${root}/" includes="module*/src/main/java/**/*.java" />
+
+      <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+      <link href="http://www.junit.org/junit/javadoc/4.3/" />
+      <link href="http://xerces.apache.org/xerces2-j/javadocs/api/" />
+      <link href="http://xmldb-org.sourceforge.net/xapi/api/" />
+      <link href="http://www.oracle.com/technology/documentation/berkeley-db/xml/java/" />
+      
+    </javadoc>
+    <tstamp/>
+    <zip destfile="${dist}/xbrlapi-${version}-javadoc.zip">
+      <fileset dir="${root}/docs/xbrlapi" includes="**/*"/>
+    </zip>
+    <delete dir="${root}/docs/xbrlapi"/>
+  </target>
+	
+  <target name="module-api" depends="module-bdbxml" description="generate the JAR" >
+    <tstamp/>
+    <jar compress="yes" 
+    	jarfile="${dist}/xbrlapi-api-${version}.jar"
+    	manifest="${manifest}/MANIFEST.MF">
+        <fileset dir="${build}">
+        	<include name="**/*"/>
+          <exclude name="**/xdt/"/>
+          <exclude name="**/examples/"/>
+          <exclude name="**/utilities/"/>
+        	<exclude name="**/exist/"/>
+        	<exclude name="**/xindice/"/>
+          <exclude name="**/bdbxml/"/>
+        	<exclude name="**/xlink/"/>
+        	<exclude name="**/xmlbase/"/>
+          <exclude name="**/xpointer/"/>
+        </fileset>
+        <fileset dir="${root}/module-api/src/main/java" includes="**/*"/>
+        <fileset dir="${root}/module-api/src/test/java" includes="**/*"/>
+    </jar>
+  </target>
+
+  <target name="module-bdbxml" depends="module-data" description="generate the JAR" >
+    <tstamp/>
+  	<jar compress="yes" jarfile="${dist}/xbrlapi-bdbxml-${version}.jar">
+        <fileset dir="${build}" includes="**/bdbxml/**/*.class"/>
+        <fileset dir="${root}/module-bdbxml/src/main/java" includes="**/*"/>
+        <fileset dir="${root}/module-bdbxml/src/test/java" includes="**/*"/>
+    </jar>
+  </target>
+	
+  <target name="module-data" depends="module-examples" description="generate the data zip" >
+    <tstamp/>
+  	<zip destfile="${dist}/xbrlapi-${version}-data.zip">
+      <fileset dir="${data}" includes="**/*.*" />
+    </zip>
+  </target>	
+	
+  <target name="module-examples" depends="module-exist" description="generate the JAR" >
+    <tstamp/>
+  	<jar compress="yes" jarfile="${dist}/xbrlapi-examples-${version}.jar">
+        <fileset dir="${build}" includes="**/examples/**/*.class"/>
+        <fileset dir="${root}/module-examples/src/main/java" includes="**/*"/>
+        <fileset dir="${root}/module-examples/src/test/java" includes="**/*"/>
+    </jar>
+  </target>	
+	
+	
+  <target name="module-exist" depends="module-utilities" description="generate the JAR" >
+    <tstamp/>
+    <property name="moduleName" value="exist"/>
+  	<jar compress="yes" jarfile="${dist}/xbrlapi-exist-${version}.jar">
+        <fileset dir="${build}" includes="**/exist/**/*.class"/>
+        <fileset dir="${root}/module-exist/src/main/java" includes="**/*"/>
+        <fileset dir="${root}/module-exist/src/test/java" includes="**/*"/>
+    </jar>
+  </target>
+	
+  <target name="module-utilities" depends="module-xdt" description="generate the JAR" >
+    <tstamp/>
+    <jar compress="yes" jarfile="${dist}/xbrlapi-utilities-${version}.jar">
+        <fileset dir="${build}" includes="**/utilities/**/*.class"/>
+        <fileset dir="${root}/module-utilities/src/main/java" includes="**/*"/>
+        <fileset dir="${root}/module-utilities/src/test/java" includes="**/*"/>
+    </jar>
+  </target>
+	
+  <target name="module-xdt" depends="module-xlink" description="generate the JAR" >
+    <tstamp/>
+    <jar compress="yes" jarfile="${dist}/xbrlapi-xdt-${version}.jar">
+        <fileset dir="${build}" includes="**/xdt/**/*.class"/>
+        <fileset dir="${root}/module-xdt/src/main/java" includes="**/*"/>
+        <fileset dir="${root}/module-xdt/src/test/java" includes="**/*"/>
+    </jar>
+  </target>	
+
+  <target name="module-xlink" depends="module-xmlbase" description="generate the JAR" >
+    <tstamp/>
+    <jar compress="yes" jarfile="${dist}/xbrlapi-xlink-${version}.jar">
+        <fileset dir="${build}" includes="**/xlink/**/*.class"/>
+        <fileset dir="${root}/module-xlink/src/main/java" includes="**/*"/>
+        <fileset dir="${root}/module-xlink/src/test/java" includes="**/*"/>
+    </jar>
+  </target> 
+
+	<target name="module-xmlbase" depends="module-xpointer" description="generate the JAR" >
+    <tstamp/>
+    <jar compress="yes" jarfile="${dist}/xbrlapi-xmlbase-${version}.jar">
+        <fileset dir="${build}" includes="**/xmlbase/**/*.class"/>
+        <fileset dir="${root}/module-xmlbase/src/main/java" includes="**/*"/>
+        <fileset dir="${root}/module-xmlbase/src/test/java" includes="**/*"/>
+    </jar>
+  </target> 
+
+  <target name="module-xpointer" description="generate the JAR" >
+    <tstamp/>
+    <jar compress="yes" jarfile="${dist}/xbrlapi-xpointer-${version}.jar">
+        <fileset dir="${build}" includes="**/xpointer/**/*.class"/>
+        <fileset dir="${root}/module-xpointer/src/main/java" includes="**/*"/>
+        <fileset dir="${root}/module-xpointer/src/test/java" includes="**/*"/>
+    </jar>
+  </target> 
+
+</project>
+
+
