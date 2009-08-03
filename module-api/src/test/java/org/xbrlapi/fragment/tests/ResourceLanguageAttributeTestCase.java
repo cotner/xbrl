@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.LabelResource;
-import org.xbrlapi.Resource;
 
 /**
  * Tests the implementation of the org.xbrlapi.Resource interface.
@@ -55,19 +54,6 @@ public class ResourceLanguageAttributeTestCase extends DOMLoadingTestCase {
 		}
 	}
 	
-	/**
-	 * Test getting resource title attribute value.
-	 */
-	public void testGetTitleAttribute() {	
-
-		try {
-			List<Resource> fragments = store.<Resource>queryForXMLResources("#roots#[*/*/@xlink:type='resource']");
-			Resource fragment = fragments.get(0);
-			assertEquals("label_CurrentAsset", fragment.getTitleAttribute());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}	
+	
 
 }

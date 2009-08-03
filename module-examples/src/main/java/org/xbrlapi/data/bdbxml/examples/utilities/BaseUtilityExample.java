@@ -31,6 +31,13 @@ import org.xml.sax.EntityResolver;
  */
 public abstract class BaseUtilityExample {
 
+    /**
+     * Responsible for parsing the command line arguments into a hashmap
+     * that maps from the text string that is the argument name (prefixed by a hyphen
+     * that is not part of the string used in the mapping) to the argument value,
+     * represented as a text string.
+     * @param args
+     */
     protected void parseArguments(String[] args) {
         try {
             for (int i=0; i<args.length-1; i=i+2) {
@@ -56,6 +63,7 @@ public abstract class BaseUtilityExample {
     protected String problems = "";
 
     /**
+     * Adds an argument to the argument map.
      * @param name The argument name (including the leading hyphen).
      * @param value The argument value.
      */
@@ -65,6 +73,8 @@ public abstract class BaseUtilityExample {
     
     /**
      * Sets up the database store, the loader and the cache.
+     * Also checks that the base arguments (database, container and cache)
+     * have been supplied. (Overrides should also call this method).
      */
     protected String setUp() {
         String message = "";
@@ -93,6 +103,9 @@ public abstract class BaseUtilityExample {
 
     }
     
+    /**
+     * Closes the data store. Overrides should also call this method.
+     */
     protected void tearDown() {
         try {
             store.close();
@@ -102,7 +115,7 @@ public abstract class BaseUtilityExample {
     }
 
     /**
-     * Report incorrect usage of the utility
+     * Report incorrect usage of the utility.
      * @param message The error message.
      */
     protected void badUsage(String message) {
@@ -114,6 +127,12 @@ public abstract class BaseUtilityExample {
         System.err.println(argumentDocumentation);
     }    
     
+    /**
+     * Provides documentation of the usage of the utility.
+     * Override this to generate the utility documentation, calling
+     * this first to get the initial part of the documentation.
+     * @return
+     */
     protected String addArgumentDocumentation() {
         String explanation = "You MUST use the Oracle Berkeley XML data store with this example.\n";
         explanation += "Arguments (optional ones marked with an *):\n";
@@ -122,15 +141,5 @@ public abstract class BaseUtilityExample {
         explanation += "-cache\t\t\tPath to directory containing the XBRL cache\n";
         return explanation;
     }    
-    
-	
-
-
-	
-
-	
-
-	
-
 
 }

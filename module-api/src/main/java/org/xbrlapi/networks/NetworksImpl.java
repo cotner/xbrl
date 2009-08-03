@@ -113,9 +113,9 @@ public class NetworksImpl implements Networks, Serializable {
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getSourceFragments(String, URI)
+	 * @see org.xbrlapi.networks.Networks#getSources(String, URI)
 	 */
-	public <F extends Fragment> List<F>  getSourceFragments(String targetIndex, URI arcrole) throws XBRLException {
+	public <F extends Fragment> List<F>  getSources(String targetIndex, URI arcrole) throws XBRLException {
 		
 		List<F> fragments = new Vector<F>();
 		
@@ -130,9 +130,9 @@ public class NetworksImpl implements Networks, Serializable {
 	}
 	
 	/**
-	 * @see org.xbrlapi.networks.Networks#getSourceFragments(String, URI, URI)
+	 * @see org.xbrlapi.networks.Networks#getSources(String, URI, URI)
 	 */
-	public <F extends Fragment> List<F>  getSourceFragments(String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
+	public <F extends Fragment> List<F>  getSources(String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
 		List<F> fragments = new Vector<F>();
 		if (! hasNetwork(linkRole,arcrole)) return fragments;
     	Network network = this.getNetwork(linkRole,arcrole);
@@ -166,11 +166,11 @@ public class NetworksImpl implements Networks, Serializable {
 	/**
 	 * @see org.xbrlapi.networks.Networks#getTargets(String, URI, URI)
 	 */
-	public <F extends Fragment> List<F>  getTargets(String sourceIndex, URI arcRole, URI linkRole) throws XBRLException {
+	public <F extends Fragment> List<F>  getTargets(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException {
 		
 		List<F> fragments = new Vector<F>();
-		if (! hasNetwork(linkRole, arcRole)) return fragments;
-    	Network network = this.getNetwork(linkRole, arcRole);
+		if (! hasNetwork(linkRole, arcrole)) return fragments;
+    	Network network = this.getNetwork(linkRole, arcrole);
 		SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
     	for (Relationship relationship: relationships) {
     		fragments.add(relationship.<F>getTarget());
@@ -201,7 +201,7 @@ public class NetworksImpl implements Networks, Serializable {
 			getNetwork(linkRole,arcrole).addRelationship(relationship);
 			return;
 		}
-		logger.debug("A new network is required for relationship with linkrole " + linkRole + " and arcrole " + arcrole);
+		logger.debug("A new network is required for relationship with link role " + linkRole + " and arcrole " + arcrole);
 		Network network = new NetworkImpl(getStore(),linkRole,arcrole);
 		network.addRelationship(relationship);
 		addNetwork(network);

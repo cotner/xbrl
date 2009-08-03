@@ -1901,6 +1901,7 @@ public abstract class BaseStoreImpl implements Store {
         if (this.isPersistingRelationships()) {
             Analyser analyser = new AllAnalyserImpl(this);
             SortedSet<Relationship> relationships = analyser.getRelationshipsFrom(sourceIndex,linkRole,arcrole);
+            logger.debug("# relationships from = " + relationships.size());
             networks.addRelationships(relationships);
             return networks;
         }
@@ -1977,6 +1978,7 @@ public abstract class BaseStoreImpl implements Store {
         if (this.isPersistingRelationships()) {
             Analyser analyser = new AllAnalyserImpl(this);
             SortedSet<Relationship> relationships = analyser.getRelationshipsTo(targetIndex,linkRole,arcrole);
+            logger.debug("# relationships to = " + relationships.size());
             networks.addRelationships(relationships);
             return networks;
         }

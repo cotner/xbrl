@@ -53,11 +53,19 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 
 			List<URI> arcroles = networks.getArcroles();
 			assertEquals(1, arcroles.size());
+            URI arcrole = arcroles.get(0);
 			assertEquals(Constants.LabelArcrole,arcroles.get(0));
 
 			List<URI> linkroles = networks.getLinkRoles(arcroles.get(0));
-			assertEquals(1, linkroles.size());
-			assertEquals(Constants.StandardLinkRole,linkroles.get(0));
+            assertEquals(1, linkroles.size());
+			URI linkRole = linkroles.get(0);
+			assertEquals(Constants.StandardLinkRole,linkRole);
+			
+			Network network = networks.getNetwork(linkRole,arcrole);
+			assertNotNull(network);
+			
+			assertEquals(1,network.getNumberOfActiveRelationships());
+            assertEquals(1,network.getNumberOfRelationships());
 			
 		} catch (Exception e) {
 			fail(e.getMessage());

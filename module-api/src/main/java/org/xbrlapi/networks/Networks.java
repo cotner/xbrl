@@ -48,7 +48,7 @@ public interface Networks extends Iterable<Network> {
 	 * or null if no such network is available.
 	 * @throws XBRLException
 	 */
-	public Network getNetwork(URI arcrole, URI linkRole) throws XBRLException;
+	public Network getNetwork(URI linkRole, URI arcrole) throws XBRLException;
 
 	/**
 	 * @param arcrole The arc role to get the networks for.
@@ -68,7 +68,7 @@ public interface Networks extends Iterable<Network> {
 	 * target fragment.
 	 * @throws XBRLException
 	 */
-	public <F extends Fragment> List<F> getSourceFragments(String targetIndex, URI arcrole) throws XBRLException;
+	public <F extends Fragment> List<F> getSources(String targetIndex, URI arcrole) throws XBRLException;
 	
 	/**
 	 * @param targetIndex The index of the fragment that is the target for the sources
@@ -82,7 +82,7 @@ public interface Networks extends Iterable<Network> {
 	 * target fragment.
 	 * @throws XBRLException
 	 */
-	public <F extends Fragment> List<F>  getSourceFragments(String targetIndex, URI arcrole, URI linkRole) throws XBRLException;
+	public <F extends Fragment> List<F>  getSources(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
 	
 
 	/**
