@@ -131,7 +131,7 @@ public abstract class BaseUtilityExample {
      * Provides documentation of the usage of the utility.
      * Override this to generate the utility documentation, calling
      * this first to get the initial part of the documentation.
-     * @return
+     * @return the documentation of the command line arguments.
      */
     protected String addArgumentDocumentation() {
         String explanation = "You MUST use the Oracle Berkeley XML data store with this example.\n";
