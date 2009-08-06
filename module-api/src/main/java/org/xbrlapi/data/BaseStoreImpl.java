@@ -1357,6 +1357,17 @@ public abstract class BaseStoreImpl implements Store {
     	List<F> roots =  this.<F>queryForXMLResources("#roots#[@uri and @parentIndex='']");
     	return roots;
     }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getRootFragments(String)
+     */
+    public <F extends Fragment> List<F> getRootFragments(String interfaceName) throws XBRLException {
+        String query = "for $root in #roots#[@parentIndex=''] where $root/@type='org.xbrlapi.impl." + interfaceName + "Impl' return $root";
+        if (interfaceName.indexOf(".") > -1) {
+            query = "for $root in #roots#[@parentIndex=''] where $root/@type='" + interfaceName + "' return $root";
+        }
+        return this.<F>queryForXMLResources(query);
+    }    
 
     /**
      * @see org.xbrlapi.data.Store#getLanguage(String, String)
