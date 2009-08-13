@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<link:linkbase 
+               xml:lang="en"
+               xmlns:unit="http://xbrlapi.org/measures" 
+               xmlns:label="http://xbrl.org/2008/label"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:edgar="http://www.sec.gov/Archives/edgar"
+               xmlns:xbrli="http://www.xbrl.org/2003/instance"
+               xmlns:link="http://www.xbrl.org/2003/linkbase"
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               xmlns:generic="http://xbrl.org/2008/generic"
+               xsi:schemaLocation="
+               http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd       
+               http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd 
+               http://xbrl.org/2008/label http://www.xbrl.org/2008/generic-label.xsd       
+               http://xbrlapi.org/measures measures.xsd
+               ">
+   <link:arcroleRef xlink:type="simple" arcroleURI="http://xbrl.org/arcrole/2008/element-label"
+                    xlink:href="http://www.xbrl.org/2008/generic-label.xsd#element-label"/>
+   <link:arcroleRef xlink:type="simple" arcroleURI="http://xbrlapi.org/arcrole/equivalent-measure"
+                    xlink:href="measures.xsd#equivalent-measure"/>
+
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <unit:measure xlink:type="resource" xlink:label="identifier" namespace="http://www.xbrl.org/2003/iso4217" name="USD"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">US dollars</label:label>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/terseLabel">$US</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+   </generic:link>
+
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <unit:measure xlink:type="resource" xlink:label="identifier" namespace="http://www.xbrl.org/2003/instance" name="pure"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">no units</label:label>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/terseLabel">none</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+   </generic:link>
+
+   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+      <unit:measure xlink:type="resource" xlink:label="identifier" namespace="http://www.xbrl.org/2003/instance" name="shares"/>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/label">Number of shares</label:label>
+      <label:label xlink:type="resource" xlink:label="label" xml:lang="en"
+                   xlink:role="http://www.xbrl.org/2003/role/terseLabel">#shares</label:label>
+      <generic:arc xlink:type="arc" xlink:from="identifier" xlink:to="label"
+                   xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"/>
+   </generic:link>
+
+</link:linkbase>

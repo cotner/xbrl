@@ -24,6 +24,33 @@
 
 <div class="content">
 
+<h2>13 Aug. 2009</h2>
+<p>
+Added new transient part of store state to keep track of the set of loaders
+that are currently loading data into the store.  This enables loaders in different
+threads to co-ordinate their relationship persistence activities.
+</p>
+
+<h2>11 Aug. 2009</h2>
+<p>
+Added new method to access a map of language names from a data store.
+Changed the getLanguage method to getEncoding for Language fragments.
+Added a new class to facilitate rapid analysis of language encodings and names.
+</p>
+
+<h2>7 Aug. 2009</h2>
+<p>
+Added new org.xbrlapi.impl.LanguageComparator method that compares Language fragments based on their
+codes and then the language names.
+</p>
+
+<h2>4 Aug. 2009</h2>
+<p>
+Added new method: org.xbrlapi.data.Store#getRootFragments(String).  This provides access to document
+root fragments of a given type.  It is useful for retrieving all schema root elements or all
+XBRL instance root elements.
+</p>
+
 <h2>3 Aug. 2009</h2>
 <p>
 Made the arcrole and linkrole parameter orderings for methods consistent for the networks

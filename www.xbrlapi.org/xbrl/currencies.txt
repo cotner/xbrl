@@ -1,0 +1,173 @@
+<unit:meas<generic:link><unit:measure namespaced="" name="ure"/><label>Leke [namespaced="" name="AED"/>
+<label>Dirhams [United Arab Emirates]</label>
+<unit:measure namespaced="" name="AFN"/>
+<label>Afghanis [Afghanistan]</label>
+ALL   Albania]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="AMD"/><label>Drams [Armenia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="ANG"/><label>Guilders (also called Florins) [Netherlands Antilles]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="AOA"/><label>Kwanza [Angola]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="ARS"/><label>Pesos [Argentina]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="AUD"/><label>Dollars [Australia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="AWG"/><label>Guilders (also called Florins) [Aruba]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="AZN"/><label>New Manats [Azerbaijan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BAM"/><label>Convertible Marka [Bosnia and Herzegovina]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BBD"/><label>Dollars [Barbados]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BDT"/><label>Taka [Bangladesh]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BGN"/><label>Leva [Bulgaria]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BHD"/><label>Dinars [Bahrain]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BIF"/><label>Francs [Burundi]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BMD"/><label>Dollars [Bermuda]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BND"/><label>Dollars [Brunei Darussalam]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BOB"/><label>Bolivianos [Bolivia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BRL"/><label>Brazil Real [Brazil]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BSD"/><label>Dollars [Bahamas]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BTN"/><label>Ngultrum [Bhutan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BWP"/><label>Pulas [Botswana]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BYR"/><label>Rubles [Belarus]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="BZD"/><label>Dollars [Belize]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CAD"/><label>Dollars [Canada]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CDF"/><label>Congolese Francs [Congo/Kinshasa]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CHF"/><label>Francs [Switzerland]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CLP"/><label>Pesos [Chile]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CNY"/><label>Yuan Renminbi [China]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="COP"/><label>Pesos [Colombia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CRC"/><label>Colones [Costa Rica]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CUP"/><label>Pesos [Cuba]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CVE"/><label>Escudos [Cape Verde]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CYP"/><label>Pounds (expires 2008-Jan-31) [Cyprus]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="CZK"/><label>Koruny [Czech Republic]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="DJF"/><label>Francs [Djibouti]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="DKK"/><label>Kroner [Denmark]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="DOP"/><label>Pesos [Dominican Republic]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="DZD"/><label>Algeria Dinars [Algeria]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="EEK"/><label>Krooni [Estonia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="EGP"/><label>Pounds [Egypt]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="ERN"/><label>Nakfa [Eritrea]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="ETB"/><label>Birr [Ethiopia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="EUR"/><label>Euro [Euro Member Countries]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="FJD"/><label>Dollars [Fiji]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="FKP"/><label>Pounds [Falkland Islands (Malvinas)]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="GBP"/><label>Pounds [United Kingdom]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="GEL"/><label>Lari [Georgia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="GGP"/><label>Pounds [Guernsey]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="GHS"/><label>Cedis [Ghana]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="GIP"/><label>Pounds [Gibraltar]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="GMD"/><label>Dalasi [Gambia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="GNF"/><label>Francs [Guinea]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="GTQ"/><label>Quetzales [Guatemala]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="GYD"/><label>Dollars [Guyana]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="HKD"/><label>Dollars [Hong Kong]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="HNL"/><label>Lempiras [Honduras]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="HRK"/><label>Kuna [Croatia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="HTG"/><label>Gourdes [Haiti]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="HUF"/><label>Forint [Hungary]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="IDR"/><label>Rupiahs [Indonesia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="ILS"/><label>New Shekels [Israel]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="IMP"/><label>Pounds [Isle of Man]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="INR"/><label>Rupees [India]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="IQD"/><label>Dinars [Iraq]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="IRR"/><label>Rials [Iran]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="ISK"/><label>Kronur [Iceland]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="JEP"/><label>Pounds [Jersey]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="JMD"/><label>Dollars [Jamaica]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="JOD"/><label>Dinars [Jordan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="JPY"/><label>Yen [Japan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="KES"/><label>Shillings [Kenya]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="KGS"/><label>Soms [Kyrgyzstan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="KHR"/><label>Riels [Cambodia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="KMF"/><label>Francs [Comoros]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="KPW"/><label>Won [Korea (North)]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="KRW"/><label>Won [Korea (South)]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="KWD"/><label>Dinars [Kuwait]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="KYD"/><label>Dollars [Cayman Islands]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="KZT"/><label>Tenge [Kazakhstan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="LAK"/><label>Kips [Laos]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="LBP"/><label>Pounds [Lebanon]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="LKR"/><label>Rupees [Sri Lanka]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="LRD"/><label>Dollars [Liberia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="LSL"/><label>Maloti [Lesotho]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="LTL"/><label>Litai [Lithuania]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="LVL"/><label>Lati [Latvia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="LYD"/><label>Dinars [Libya]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MAD"/><label>Dirhams [Morocco]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MDL"/><label>Lei [Moldova]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MGA"/><label>Ariary [Madagascar]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MKD"/><label>Denars [Macedonia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MMK"/><label>Kyats [Myanmar (Burma)]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MNT"/><label>Tugriks [Mongolia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MOP"/><label>Patacas [Macau]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MRO"/><label>Ouguiyas [Mauritania]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MTL"/><label>Liri (expires 2008-Jan-31) [Malta]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MUR"/><label>Rupees [Mauritius]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MVR"/><label>Rufiyaa [Maldives (Maldive Islands)]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MWK"/><label>Kwachas [Malawi]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MXN"/><label>Pesos [Mexico]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MYR"/><label>Ringgits [Malaysia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="MZN"/><label>Meticais [Mozambique]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="NAD"/><label>Dollars [Namibia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="NGN"/><label>Nairas [Nigeria]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="NIO"/><label>Cordobas [Nicaragua]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="NOK"/><label>Krone [Norway]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="NPR"/><label>Nepal Rupees [Nepal]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="NZD"/><label>Dollars [New Zealand]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="OMR"/><label>Rials [Oman]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="PAB"/><label>Balboa [Panama]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="PEN"/><label>Nuevos Soles [Peru]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="PGK"/><label>Kina [Papua New Guinea]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="PHP"/><label>Pesos [Philippines]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="PKR"/><label>Rupees [Pakistan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="PLN"/><label>Zlotych [Poland]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="PYG"/><label>Guarani [Paraguay]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="QAR"/><label>Rials [Qatar]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="RON"/><label>New Lei [Romania]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="RSD"/><label>Dinars [Serbia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="RUB"/><label>Rubles [Russia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="RWF"/><label>Rwanda Francs [Rwanda]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SAR"/><label>Riyals [Saudi Arabia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SBD"/><label>Dollars [Solomon Islands]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SCR"/><label>Rupees [Seychelles]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SDG"/><label>Pounds [Sudan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SEK"/><label>Kronor [Sweden]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SGD"/><label>Dollars [Singapore]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SHP"/><label>Pounds [Saint Helena]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SLL"/><label>Leones [Sierra Leone]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SOS"/><label>Shillings [Somalia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SPL"/><label>Luigini [Seborga]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SRD"/><label>Dollars [Suriname]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="STD"/><label>Dobras [São Tome and Principe]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SVC"/><label>Colones [El Salvador]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SYP"/><label>Pounds [Syria]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="SZL"/><label>Emalangeni [Swaziland]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="THB"/><label>Baht [Thailand]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="TJS"/><label>Somoni [Tajikistan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="TMM"/><label>Manats [Turkmenistan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="TND"/><label>Dinars [Tunisia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="TOP"/><label>Pa'anga [Tonga]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="TRY"/><label>New Lira [Turkey]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="TTD"/><label>Dollars [Trinidad and Tobago]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="TVD"/><label>Tuvalu Dollars [Tuvalu]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="TWD"/><label>New Dollars [Taiwan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="TZS"/><label>Shillings [Tanzania]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="UAH"/><label>Hryvnia [Ukraine]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="UGX"/><label>Shillings [Uganda]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="USD"/><label>Dollars [United States of America]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="UYU"/><label>Pesos [Uruguay]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="UZS"/><label>Sums [Uzbekistan]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="VEB"/><label>Bolivares (expires 2008-Jun-30) [Venezuela]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="VEF"/><label>Bolivares Fuertes [Venezuela]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="VND"/><label>Dong [Viet Nam]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="VUV"/><label>Vatu [Vanuatu]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="WST"/><label>Tala [Samoa]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="XAF"/><label>Francs [Communauté Financière Africaine BEAC]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="XAG"/><label>Ounces [Silver]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="XAU"/><label>Ounces [Gold]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="XCD"/><label>Francs [East Caribbean Dollars]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="XDR"/><label>Special Drawing Rights (IMF)</label></generic:link>
+<generic:link><unit:measure namespaced="" name="XOF"/><label>Francs [Communauté Financière Africaine, BCEAO]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="XPD"/><label>Palladium Ounces</label></generic:link>
+<generic:link><unit:measure namespaced="" name="XPF"/><label>Comptoirs Français du Pacifique Francs</label></generic:link>
+<generic:link><unit:measure namespaced="" name="XPT"/><label>Platinum Ounces</label></generic:link>
+<generic:link><unit:measure namespaced="" name="YER"/><label>Rials [Yemen]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="ZAR"/><label>Rand [South Africa]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="ZMK"/><label>Kwacha [Zambia]</label></generic:link>
+<generic:link><unit:measure namespaced="" name="ZWD"/><label>Zimbabwe Dollars [Zimbabwe]</label></generic:link>

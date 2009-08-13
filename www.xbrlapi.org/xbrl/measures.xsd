@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+  xmlns="http://www.w3.org/2001/XMLSchema" 
+  targetNamespace="http://xbrlapi.org/measures" 
+  xmlns:unit="http://xbrlapi.org/measures" 
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xl="http://www.xbrl.org/2003/XLink"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:generic="http://xbrl.org/2008/generic"
+  xmlns:label="http://xbrl.org/2008/label"
+  elementFormDefault="qualified">
+
+  <import namespace="http://www.xbrl.org/2003/XLink" schemaLocation="http://www.xbrl.org/2003/xl-2003-12-31.xsd"/>
+  <import namespace="http://www.xbrl.org/2003/instance" schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
+  <import namespace="http://xbrl.org/2008/generic" schemaLocation="http://www.xbrl.org/2008/generic-link.xsd"/>
+  <import namespace="http://xbrl.org/2008/label" schemaLocation="http://www.xbrl.org/2008/generic-label.xsd"/>
+
+  <annotation>
+    <appinfo>
+      <link:arcroleType arcroleURI="http://xbrlapi.org/arcrole/equivalent-measure"
+        id="equivalent-measure"
+        cyclesAllowed="any">
+        <link:definition>The source measure and the target measure
+        both identify the same unit of measurement.</link:definition>
+        <link:usedOn>generic:arc</link:usedOn>
+      </link:arcroleType>
+    </appinfo>
+  </annotation>
+
+  <annotation>
+    <appinfo>
+      <link:linkbase>
+
+        <link:arcroleRef 
+        xlink:type="simple" 
+        arcroleURI="http://xbrl.org/arcrole/2008/element-label" 
+        xlink:href="http://www.xbrl.org/2008/generic-label.xsd#element-label"/>
+        
+        <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+          <link:loc xlink:href="measures.xsd#equivalent-measure" xlink:type="locator" xlink:label="role"/>
+          <label:label xlink:type="resource" xlink:label="label" xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+            equivalent-measure relationship
+          </label:label>
+          <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+            xlink:from="role" xlink:to="label" order="1.0"/>
+        </generic:link>
+
+      </link:linkbase>
+    </appinfo>
+  </annotation>
+
+  <element id="xml-measure"
+  name="measure" 
+  type="unit:resource.type" 
+  substitutionGroup="xl:resource"/>
+  
+  <complexType name="resource.type">
+    <complexContent mixed="true">
+      <extension base="xl:resourceType">
+        <attribute name="namespace" use="required">
+          <simpleType>
+            <restriction base="anyURI">
+              <minLength value="1" />
+            </restriction>
+          </simpleType>
+        </attribute>
+        <attribute name="name" type="NMTOKEN" use="required"/>
+        <anyAttribute namespace="http://www.w3.org/XML/1998/namespace" processContents="lax"/>
+      </extension>
+    </complexContent>
+  </complexType>
+
+</schema>
