@@ -13,7 +13,7 @@ public interface Language extends Fragment {
 	 * expressed in. 
 	 * @throws XBRLException.
 	 */
-	public String getLanguage() throws XBRLException;
+	public String getEncoding() throws XBRLException;
 	
 	/**
 	 * @return the language code that a name is being supplied for. 

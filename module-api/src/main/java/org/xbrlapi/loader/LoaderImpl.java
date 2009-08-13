@@ -459,6 +459,8 @@ public class LoaderImpl implements Loader, Serializable {
      */
     public void discover() throws XBRLException {
         
+        getStore().startLoading(this);
+        
         Set<URI> newDocuments = new TreeSet<URI>();
         
         int discoveryCount = 1;
@@ -532,15 +534,30 @@ public class LoaderImpl implements Loader, Serializable {
                 logger.info("Document discovery exited without completing.");
             }
         }
-        
-        if (getStore().isPersistingRelationships()) {
-            logger.info("Starting to persist the relationships.");
-            Storer storer = new StorerImpl(getStore());
-            storer.storeRelationships(newDocuments);
-            getStore().sync();
-            logger.info("Done with persisting the relationships.");
-        }
 
+        getStore().stopLoading(this);
+        
+        
+        try {
+            if (getStore().isPersistingRelationships() && (newDocuments.size() > 0)) {
+                
+                // Wait till other loaders using the store have finished with their loading activities.
+                if (getStore().isLoading()) {
+                    Thread.sleep(10000);
+                }
+                Storer storer = new StorerImpl(getStore());
+                storer.storeRelationships(newDocuments);
+                getStore().sync();
+            }
+        } catch (InterruptedException e) {
+            logger.error("Failed to persist relationships.");
+            Map<URI,String> map = new HashMap<URI,String>();
+            for (URI document : newDocuments) {
+                map.put(getStore().getMatcher().getMatch(document),"Failed to store relationships.");
+            }
+            getStore().persistLoaderState(map);
+        }
+        
         failures = new TreeMap<URI,String>();
         documentQueue = new TreeSet<URI>();
         

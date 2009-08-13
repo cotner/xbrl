@@ -18,8 +18,7 @@ import org.xbrlapi.grabber.Grabber;
 import org.xbrlapi.grabber.SecGrabberImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.discoverer.Discoverer;
-import org.xbrlapi.networks.Storer;
-import org.xbrlapi.networks.StorerImpl;
+import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.LoaderImpl;
@@ -89,6 +88,9 @@ public class LoadAllSECFilings {
             
             // Set up the data store to load the data
             store = createStore(arguments.get("database"),arguments.get("container"));
+
+            // Ensure that the newly discovered relationships are also stored.
+            store.setAnalyser(new AnalyserImpl(store));
             
             // Get the list of URIs to load from the SEC RSS feed.
             Grabber grabber = new SecGrabberImpl(new URI("http://www.sec.gov/Archives/edgar/xbrlrss.xml"));
@@ -124,9 +126,6 @@ public class LoadAllSECFilings {
                     if (thread.isAlive()) stillGoing = true;
                 }
             }
-
-            Storer storer = new StorerImpl(store);
-            storer.storeAllRelationships();
             
             // Clean up the data store and exit
             cleanup(store);

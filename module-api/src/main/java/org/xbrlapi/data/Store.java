@@ -615,7 +615,16 @@ public interface Store extends Serializable {
      * associated with the specified language code.
      * @throws XBRLException if the language code is null.
      */
-    public List<Language> getLanguages(String code) throws XBRLException;    
+    public List<Language> getLanguages(String code) throws XBRLException;
+    
+    /**
+     * @param code The language code to get a map of language fragments for.  
+     * @return a map of languages. Each fragment in the map is keyed by the 
+     * fragment encoding and it is a fragment supplying a name in 
+     * the encoding for the language identified by the code.
+     * @throws XBRLException
+     */
+    public Map<String,Language> getLanguageMap(String code) throws XBRLException;
     
     /**
      * Sets the matcher for the store to use.  Care should be taken to ensure
@@ -1158,4 +1167,22 @@ public interface Store extends Serializable {
      * @link Store#loadingAboutToStart(URI)
      */
     public void recindLoadingRightsFor(Loader loader, URI document);
+    
+    /**
+     * @param loader The loader that has started to use
+     * this store for data loading.
+     */
+    public void startLoading(Loader loader);
+
+    /**
+     * @param loader The loader that has stopped using
+     * this store for data loading.
+     */
+    public void stopLoading(Loader loader);
+    
+    /**
+     * @return true if the store is currently being 
+     * used by any loader for loading data.
+     */
+    public boolean isLoading();    
 }

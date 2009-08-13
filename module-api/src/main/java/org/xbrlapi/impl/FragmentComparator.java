@@ -35,14 +35,11 @@ public class FragmentComparator implements Comparator<Fragment> {
 	 * 
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
-	public int compare(Fragment o1, Fragment o2) throws ClassCastException {
+	public int compare(Fragment f1, Fragment f2) throws ClassCastException {
 		try {
-			Fragment f1 = o1;
-			Fragment f2 = o2;
 
 			// Handle direct equality
 			if (f1.equals(f2)) {
-			    System.out.println("The fragments are equal.");
 				return 0;
 			}
 			

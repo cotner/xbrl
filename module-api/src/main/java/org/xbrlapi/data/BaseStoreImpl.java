@@ -1375,7 +1375,7 @@ public abstract class BaseStoreImpl implements Store {
     public Language getLanguage(String encoding, String code) throws XBRLException {
         if (encoding == null) throw new XBRLException("The language code must not be null.");
         if (code == null) throw new XBRLException("The language name encoding must not be null.");
-        String query = "#roots#[@type='org.xbrlapi.impl.LanguageImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/lang:language/lang:encoding='" + encoding.toUpperCase() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/lang:language/lang:code='" + code.toUpperCase() + "']";
+        String query = "#roots#[@type='org.xbrlapi.impl.LanguageImpl' and "+ Constants.XBRLAPIPrefix+ ":" + "data/lang:language/lang:encoding='" + encoding + "' and " + Constants.XBRLAPIPrefix + ":" + "data/lang:language/lang:code='" + code + "']";
         List<Language> languages = this.<Language>queryForXMLResources(query);
         if (languages.size() == 0) return null;
         return languages.get(0);
@@ -1388,9 +1388,21 @@ public abstract class BaseStoreImpl implements Store {
      */
     public List<Language> getLanguages(String code) throws XBRLException {
         if (code == null) throw new XBRLException("The language code must not be null.");
-        String query = "#roots#[@type='org.xbrlapi.impl.LanguageImpl' and */lang:language/lang:code='" + code.toUpperCase() + "']";
+        String query = "#roots#[@type='org.xbrlapi.impl.LanguageImpl' and */lang:language/lang:code='" + code + "']";
         return this.<Language>queryForXMLResources(query);
     }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getLanguageMap(String)
+     */
+    public Map<String,Language> getLanguageMap(String code) throws XBRLException {
+        List<Language> languages = this.getLanguages(code);
+        Map<String,Language> result = new HashMap<String,Language>();
+        for (Language language: languages) {
+            result.put(language.getEncoding(),language);
+        }
+        return result;
+    }    
 
 
 
@@ -2131,6 +2143,12 @@ public abstract class BaseStoreImpl implements Store {
     }
 
     /**
+     * Map of flags that are set by loaders whenever they starts up a loading process or end
+     * a loading process.
+     */
+    transient private HashMap<Loader,Boolean> loadingStatus = new HashMap<Loader,Boolean>();
+    
+    /**
      * This property is used to co-ordinate the document
      * loading activities of loaders that are operating in
      * parallel on the one data store.  It is used to 
@@ -2163,6 +2181,10 @@ public abstract class BaseStoreImpl implements Store {
         if (! loadingRights.containsKey(document)) return;
         if (loadingRights.get(document).equals(loader)) loadingRights.remove(document);
     }
+    
+
+    
+    
 
     protected void finalize() throws Throwable {
         try {
@@ -2294,6 +2316,32 @@ public abstract class BaseStoreImpl implements Store {
         } else if (!uris.equals(other.uris))
             return false;
         return true;
+    }
+
+    /**
+     * @see Store#isLoading()
+     */
+    public synchronized boolean isLoading() {
+        for (Boolean value: loadingStatus.values()) {
+            if (value.booleanValue()) return true;
+        }
+        return false;
+    }
+    
+    
+
+    /**
+     * @see Store#startLoading(Loader)
+     */
+    public synchronized void startLoading(Loader loader) {
+        this.loadingStatus.put(loader,new Boolean(true));
+    }
+    
+    /**
+     * @see Store#stopLoading(Loader)
+     */
+    public synchronized void stopLoading(Loader loader) {
+        this.loadingStatus.remove(loader);
     }
     
 

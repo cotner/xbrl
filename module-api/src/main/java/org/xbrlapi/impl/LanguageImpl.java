@@ -13,13 +13,13 @@ import org.xbrlapi.utilities.XBRLException;
 public class LanguageImpl extends FragmentImpl implements Language {
 
 	/**
-	 * @see org.xbrlapi.Language#getLanguage()
+	 * @see org.xbrlapi.Language#getEncoding()
 	 */
-	public String getLanguage() throws XBRLException {
+	public String getEncoding() throws XBRLException {
     	Element root = getDataRootElement();
     	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace.toString(),"encoding");
     	Element encoding = (Element) nodes.item(0);
-    	return encoding.getTextContent().toLowerCase();		
+    	return encoding.getTextContent();		
 	}
 	
 	/**
@@ -29,7 +29,7 @@ public class LanguageImpl extends FragmentImpl implements Language {
     	Element root = getDataRootElement();
     	NodeList nodes = root.getElementsByTagNameNS(Constants.XBRLAPILanguagesNamespace.toString(),"code");
     	Element code = (Element) nodes.item(0);
-    	return code.getTextContent().toLowerCase();		
+    	return code.getTextContent();		
 	}	
 	
 	/**
