@@ -43,7 +43,7 @@ public class LanguageTestCase extends DOMLoadingTestCase {
 	public void testGetLanguageName() {
 
 		try {
-			Language language = store.getLanguage("EN","EN");
+			Language language = store.getLanguage("en","en");
 			assertEquals("English", language.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
