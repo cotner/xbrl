@@ -3,6 +3,7 @@ package org.xbrlapi;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -34,6 +35,18 @@ public interface Concept extends ElementDeclaration {
      * @throws XBRLException
      */
     public List<Fact> getFacts() throws XBRLException;
+    
+    /**
+     * @return the number of facts for this concept
+     * @throws XBRLException
+     */
+    public long getFactCount() throws XBRLException ;
+    
+    /**
+     * @return the set of indices of facts for this concept
+     * @throws XBRLException
+     */
+    public Set<String> getFactIndices() throws XBRLException;    
     
  
 

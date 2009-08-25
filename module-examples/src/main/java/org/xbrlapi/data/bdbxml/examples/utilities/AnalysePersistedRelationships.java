@@ -2,7 +2,7 @@ package org.xbrlapi.data.bdbxml.examples.utilities;
 
 import java.util.Set;
 
-import org.xbrlapi.Fragment;
+import org.xbrlapi.utilities.Constants;
 
 /**
  * Reports the number of persisted relationships in the data store.
@@ -24,15 +24,30 @@ public class AnalysePersistedRelationships extends BaseUtilityExample {
         if (message.equals("")) {
             try {
                 
-                Set<String> indices = store.getFragmentIndices("PersistedRelationship");
-                System.out.println("# of persisted relationships = " + indices.size());
-                String query = "for $root in #roots# where ($root/@arcIndex) return distinct-values(substring-before($root/@arcIndex,'_'))";
+                String query = "for $root in #roots#[@type='org.xbrlapi.impl.RelationshipImpl'] return $root";
+                long count = store.queryCount(query);
+                System.out.println("# of persisted relationships = " + count);
+
+                query = "for $root in #roots#[@type='org.xbrlapi.impl.RelationshipImpl' and @arcRole='"+Constants.LabelArcrole+"'] return string($root/@targetIndex)";
+                Set<String> labelIndices = store.queryForStrings(query);
+                System.out.println("There are " + labelIndices.size() + " label relationships in documents.");
+/*                
+                for (String index: labelIndices) {
+                    LabelResource label = store.<LabelResource>getXMLResource(index);
+                    Set<String> sourceIndices = store.getSourceIndices(index,null,Constants.LabelArcrole);
+                    System.out.println("label " + label.getStringValue() + " applies to " + sourceIndices.size() + " fragments.");
+                    break;
+                }*/
+
+                query = "for $root in #roots#[@type='org.xbrlapi.impl.RelationshipImpl'] return distinct-values(substring-before($root/@arcIndex,'_'))";
                 Set<String> prefixes = store.queryForStrings(query);
-                for (String prefix: prefixes) {
-                    System.out.println(store.<Fragment>getXMLResource(prefix + "_1").getURI() + " has persisted relationships.");
-                }
-                System.out.println("# of persisted relationships = " + indices.size());
-                
+                System.out.println("There are relationships in " + prefixes.size() + " documents.");
+
+                query = "for $root in #roots#[@type='org.xbrlapi.impl.RelationshipImpl' and @arcRole='"+Constants.LabelArcrole+"'] return distinct-values(substring-before($root/@arcIndex,'_'))";
+                prefixes = store.queryForStrings(query);
+                System.out.println("There are label relationships in " + prefixes.size() + " documents.");
+
+
             } catch (Exception e) {
                 badUsage(e.getMessage());
             }

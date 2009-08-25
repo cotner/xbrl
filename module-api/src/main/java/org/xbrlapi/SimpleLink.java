@@ -42,8 +42,20 @@ public interface SimpleLink extends Link {
     /**
      * Get the absolute value of the HREF to the metadata.
      * @return The absolute URI specified by the locator HREF attribute.
+     * This includes the query and fragment parts of the URI (if there are any) and
+     * has NOT been adjusted to reflect any URI matching features.
+     * of the data store.
      * @throws XBRLException.
      */
     public URI getAbsoluteHref() throws XBRLException;    
 
+    /**
+     * @return the document URI for the target fragment.
+     * This omits the query and fragment parts of the URI and
+     * has been adjusted to reflect any URI matching features
+     * of the data store.
+     * @throws XBRLException.
+     */
+    public URI getTargetDocumentURI() throws XBRLException;    
+    
 }

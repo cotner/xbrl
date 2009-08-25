@@ -15,10 +15,18 @@ import org.apache.xerces.xs.XSModel;
 import org.apache.xerces.xs.XSNamespaceItem;
 import org.apache.xerces.xs.XSNamespaceItemList;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.impl.AttributeDeclarationImpl;
+import org.xbrlapi.impl.AttributeGroupDeclarationImpl;
+import org.xbrlapi.impl.ComplexTypeDeclarationImpl;
 import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.impl.ElementDeclarationImpl;
 import org.xbrlapi.impl.ReferencePartDeclarationImpl;
+import org.xbrlapi.impl.SchemaAllCompositorImpl;
+import org.xbrlapi.impl.SchemaChoiceCompositorImpl;
+import org.xbrlapi.impl.SchemaGroupCompositorImpl;
 import org.xbrlapi.impl.SchemaImpl;
+import org.xbrlapi.impl.SchemaSequenceCompositorImpl;
+import org.xbrlapi.impl.SimpleTypeDeclarationImpl;
 import org.xbrlapi.sax.ContentHandler;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -52,8 +60,40 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
         Fragment fragment = null;
 
         if (namespaceURI.equals(Constants.XMLSchemaNamespace.toString())) {
+
+            if (lName.equals("group")) {
+                
+                fragment = new SchemaGroupCompositorImpl();
             
-            if (lName.equals("schema")) {
+            } else if (lName.equals("all")) {
+                    
+                fragment = new SchemaAllCompositorImpl();
+            
+            } else if (lName.equals("choice")) {
+                
+                fragment = new SchemaChoiceCompositorImpl();
+        
+            } else if (lName.equals("sequence")) {
+                
+                fragment = new SchemaSequenceCompositorImpl();
+        
+            } else if (lName.equals("complexType")) {
+                
+                fragment = new ComplexTypeDeclarationImpl();
+            
+            } else if (lName.equals("simpleType")) {
+                
+                fragment = new SimpleTypeDeclarationImpl();
+            
+            } else if (lName.equals("attribute")) {
+                
+                fragment = new AttributeDeclarationImpl();
+
+            } else if (lName.equals("attributeGroup")) {
+                    
+                    fragment = new AttributeGroupDeclarationImpl();
+
+            } else if (lName.equals("schema")) {
                 
                 fragment = new SchemaImpl();
 
@@ -65,16 +105,16 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                 String elementName = attrs.getValue("name");
                 
                 if (getXSModel() == null) {
-                    throw new XBRLException("An XML Schema element was found outside of an XML Schema.");
+                    throw new XBRLException("An XML Schema element declaration was found outside of an XML Schema.");
                 }
 
                 if (getTargetNamespace() == null) {
-                    throw new XBRLException("An XML Schema element was found where the target namespace was not initialised.");
+                    throw new XBRLException("An XML Schema element was found without a target namespace.");
                 }
 
                 // Find the XS model element declaration for the element that has been started - if one can be found
                 XSElementDeclaration declaration = null;
-                
+
                 // Handle anonymous schemas first - these are the tough case
                 if (getTargetNamespace().equals("")) {
                     
@@ -137,7 +177,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                     }
                 }
                 
-                if ((fragment == null) && (elementName != null)) {
+                if ((fragment == null)) {
                     fragment = new ElementDeclarationImpl();
                 }
 
@@ -147,7 +187,6 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                 this.processFragment(fragment,attrs);
             }
         }
-            
     }
     
     /**

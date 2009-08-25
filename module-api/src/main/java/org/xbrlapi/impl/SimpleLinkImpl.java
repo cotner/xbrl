@@ -39,9 +39,6 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
 
 
     /**
-     * Get the absolute value of the HREF to the metadata.
-     * @return The absolute URI specified by the locator HREF attribute.
-     * @throws XBRLException.
      * @see org.xbrlapi.SimpleLink#getAbsoluteHref()
      */
     public URI getAbsoluteHref() throws XBRLException {
@@ -53,12 +50,13 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
     }        
     
     /**
-     * @return the document URI for the target fragment.
-     * @throws XBRLException.
+     * @see org.xbrlapi.SimpleLink#getTargetDocumentURI()
      */
-    private URI getTargetDocumentURI() throws XBRLException {
+    public URI getTargetDocumentURI() throws XBRLException {
     	try {
-    		return new URI(this.getMetadataRootElement().getAttribute("targetDocumentURI"));
+            URI uri = new URI(this.getMetadataRootElement().getAttribute("targetDocumentURI"));
+            URI result = getStore().getMatcher().getMatch(uri);
+            return result;
     	} catch (URISyntaxException e) {
     		throw new XBRLException("Absolute URI in the HREF of the locator is malformed.",e);
     	}

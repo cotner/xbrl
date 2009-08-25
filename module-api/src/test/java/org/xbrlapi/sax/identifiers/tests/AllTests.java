@@ -9,7 +9,8 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"Test for org.xbrlapi.relationships.tests");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(IdentifierTestCase.class);
+		suite.addTestSuite(BasicIdentifierTestCase.class);
+        suite.addTestSuite(SchemaIdentifierTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

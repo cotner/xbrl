@@ -4,7 +4,7 @@ package org.xbrlapi.impl;
 import java.net.URI;
 import java.util.List;
 
-import org.w3c.dom.Element;
+import org.xbrlapi.ComplexTypeDeclaration;
 import org.xbrlapi.ElementDeclaration;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -13,8 +13,18 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class ElementDeclarationImpl extends SchemaDeclarationImpl implements ElementDeclaration {
+public class ElementDeclarationImpl extends SchemaContentDeclarationImpl implements ElementDeclaration {
 
+    /**
+     * @see org.xbrlapi.ElementDeclaration#isAbstract()
+     */
+    public boolean isAbstract() throws XBRLException {
+        if (getDataRootElement().getAttribute("abstract").equals("true")) {
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * @see org.xbrlapi.ElementDeclaration#isNillable()
      */
@@ -74,52 +84,15 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
               }
           }
           throw new XBRLException("The substitution group is invalid.");
-      }     
+      }
+
+      /**
+       * @see org.xbrlapi.ElementDeclaration#hasSubstitutionGroup()
+       */
+      public boolean hasSubstitutionGroup() throws XBRLException {
+          return getDataRootElement().hasAttribute("substitutionGroup");
+      }      
     
-
-
-
-    /**
-     * @see org.xbrlapi.ElementDeclaration#getTypeNamespace()
-     */
-    public URI getTypeNamespace() throws XBRLException {
-    	String type = getTypeQName();
-    	if (type.equals("") || (type == null)) throw new XBRLException("The element declaration does not declare its XML Schema data type via a type attribute.");
-        return getNamespaceFromQName(type, getDataRootElement());
-    }
-    
-    /**
-     * @see org.xbrlapi.ElementDeclaration#getTypeNamespaceAlias()
-     */
-    public String getTypeNamespaceAlias() throws XBRLException {
-    	String type = getTypeQName();
-    	if (type.equals("") || (type == null))
-			throw new XBRLException("The element declaration does not declare its XML Schema data type via a type attribute.");    	
-    	return getPrefixFromQName(type);
-    }
-
-    /**
-     * @see org.xbrlapi.ElementDeclaration#getTypeQName()
-     */
-    public String getTypeQName() throws XBRLException {
-    	if (getDataRootElement().hasAttribute("type")) {
-    		return getDataRootElement().getAttribute("type");
-    	}
-    	return null;
-    }
-
-    /**
-     * @see org.xbrlapi.ElementDeclaration#getTypeLocalname()
-     */  
-    public String getTypeLocalname() throws XBRLException {
-    	String type = getTypeQName();
-    	if (type.equals("") || (type == null))
-			throw new XBRLException("The element declaration does not declare its XML Schema data type via a type attribute.");
-    	return getLocalnameFromQName(type);
-    }
-
-
-
     /**
      * @see org.xbrlapi.ElementDeclaration#getSubstitutionGroupNamespace()
      */
@@ -159,36 +132,88 @@ public class ElementDeclarationImpl extends SchemaDeclarationImpl implements Ele
     	return getLocalnameFromQName(sg);
     }
 
-
-
-
     /**
-     * Get the default attribute value for the element
-     * @return null if there is no default attribute, otherwise return its value.
-     * @throws XBRLException
-     * @see org.xbrlapi.ElementDeclaration#getDefault()
+     * @see ElementDeclaration#hasLocalComplexType()
      */
-    public String getDefault() throws XBRLException {
-    	Element root =getDataRootElement(); 
-    	if (! root.hasAttribute("default")) return null;
-    	return root.getAttribute("default");
+    public boolean hasLocalComplexType() throws XBRLException {
+        return (getStore().queryCount("#roots#[@parentIndex='"+getIndex()+"' and @type='org.xbrlapi.impl.ComplexTypeDeclarationImpl']") == 1);
+    }    
+    
+    /**
+     * @see org.xbrlapi.ElementDeclaration#getLocalComplexType()
+     */
+    public ComplexTypeDeclaration getLocalComplexType() throws XBRLException {
+        List<ComplexTypeDeclaration> ctds = this.getChildren("ComplexTypeDeclaration");
+        if (ctds.size() > 1) throw new XBRLException("The element has too many local complex types.");
+        if (ctds.size() == 0) throw new XBRLException("The element does not have a local complex type.");
+        return ctds.get(0);
+    }    
+
+    
+    /**
+     * @see org.xbrlapi.ElementDeclaration#isFinalForRestriction()
+     */
+    public boolean isFinalForRestriction() throws XBRLException {
+        String value = getDataRootElement().getAttribute("final");
+        if (value.matches("restriction")) return true;
+        return value.equals("#all");
     }
     
-
-
     /**
-     * Get the fixed attribute value for the element
-     * @return null if there is no fixed attribute, otherwise return its value.
-     * @throws XBRLException
-     * @see org.xbrlapi.ElementDeclaration#getFixed()
+     * @see org.xbrlapi.ElementDeclaration#isFinalForRestriction()
      */
-    public String getFixed() throws XBRLException {
-    	Element root =getDataRootElement(); 
-    	if (! root.hasAttribute("fixed")) return null;
-    	return root.getAttribute("fixed");    	
+    public boolean isFinalForExtension() throws XBRLException {
+        String value = getDataRootElement().getAttribute("final");
+        if (value.matches("extension")) return true;
+        return value.equals("#all");
     }
     
+    /**
+     * @see org.xbrlapi.ElementDeclaration#isBlockingSubstitution()
+     */
+    public boolean isBlockingSubstitution() throws XBRLException {
+        String value = getDataRootElement().getAttribute("block");
+        if (value.matches("substitution")) return true;
+        return value.equals("#all");
+    }
+    
+    /**
+     * @see org.xbrlapi.ElementDeclaration#isBlockingRestriction()
+     */
+    public boolean isBlockingRestriction() throws XBRLException {
+        String value = getDataRootElement().getAttribute("block");
+        if (value.matches("restriction")) return true;
+        return value.equals("#all");
+    }
+    
+    /**
+     * @see org.xbrlapi.ElementDeclaration#isBlockingRestriction()
+     */
+    public boolean isBlockingExtension() throws XBRLException {
+        String value = getDataRootElement().getAttribute("block");
+        if (value.matches("extension")) return true;
+        return value.equals("#all");
+    }
 
 
+    
+    /**
+     * @see ElementDeclaration#getMaxOccurs()
+     */
+    public String getMaxOccurs() throws XBRLException {
+        if (this.isGlobal()) throw new XBRLException("The element is global.");
+        if (getDataRootElement().hasAttribute("maxOccurs")) return getDataRootElement().getAttribute("maxOccurs");
+        return "1";
+    }
 
+    /**
+     * @see ElementDeclaration#getMinOccurs()
+     */
+    public String getMinOccurs() throws XBRLException {
+        if (this.isGlobal()) throw new XBRLException("The element is global.");
+        if (getDataRootElement().hasAttribute("minOccurs")) return getDataRootElement().getAttribute("minOccurs");
+        return "1";
+    }
+    
+    
 }

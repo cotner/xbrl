@@ -3,6 +3,7 @@ package org.xbrlapi.networks;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Relationship;
@@ -24,6 +25,22 @@ public interface Networks extends Iterable<Network> {
      * @throws XBRLException
      */
     public List<Relationship> getActiveRelationships() throws XBRLException;
+    
+    /**
+     * @param index The index of the source fragment.
+     * @return the relationships that override or prohibit all other equivalent
+     * relationships in the networks and that run from the same source fragment.
+     * @throws XBRLException
+     */
+    public SortedSet<Relationship> getActiveRelationshipsFrom(String index) throws XBRLException;
+    
+    /**
+     * @param index The index of the target fragment.
+     * @return the relationships that override or prohibit all other equivalent
+     * relationships in the networks and that run to the same target fragment.
+     * @throws XBRLException
+     */
+    public SortedSet<Relationship> getActiveRelationshipsTo(String index) throws XBRLException;    
     
     /**
      * Complete the networks, finding all active relationships in the data store

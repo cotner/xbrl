@@ -23,6 +23,7 @@ import org.xbrlapi.Language;
 import org.xbrlapi.Relationship;
 import org.xbrlapi.ReferenceResource;
 import org.xbrlapi.RoleType;
+import org.xbrlapi.SchemaContent;
 import org.xbrlapi.Stub;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.XML;
@@ -483,7 +484,19 @@ public interface Store extends Serializable {
      * arcrole is null then sources of relationships with any arcrole are returned.
      * @throws XBRLException
      */
-    public <F extends Fragment> List<F> getSources(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;    
+    public <F extends Fragment> List<F> getSources(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
+    
+    /**
+     * @param targetIndex The index of the target fragment.
+     * @param linkRole The XLink link role.
+     * @param arcrole The XLink arcrole. 
+     * @return the set of indices of sources related to the specified target where the
+     * relationship has the given link role and arcrole. If the link role
+     * is null then sources of relationships with any linkrole are returned. If the 
+     * arcrole is null then indices of sources of relationships with any arcrole are returned.
+     * @throws XBRLException
+     */
+    public Set<String> getSourceIndices(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;    
     
     /**
      * @param analyser The persisted network analyser
@@ -1185,4 +1198,13 @@ public interface Store extends Serializable {
      * used by any loader for loading data.
      */
     public boolean isLoading();    
+
+    /**
+     * @param namespace The target namespace of the schema with the desired content.
+     * @param name The name given to the schema component.
+     * @return The Schema content fragment that contains the declaration of the desired
+     * XML Schema component or null if no such fragment is in the data store.
+     * @throws XBRLException
+     */
+    public <F extends SchemaContent> F getSchemaContent(URI namespace, String name) throws XBRLException;
 }

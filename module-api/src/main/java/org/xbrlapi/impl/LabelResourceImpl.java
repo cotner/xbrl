@@ -11,7 +11,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Concept;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -63,15 +62,20 @@ public class LabelResourceImpl extends MixedContentResourceImpl implements Label
      */
     public List<Concept> getConcepts() throws XBRLException	{
 
-        List<Fragment> fragments;
+        Set<String> indices;
         if (this.getNamespace().equals(Constants.GenericLabelNamespace))
-            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.GenericLabelArcrole);
+            indices = getStore().getSourceIndices(getIndex(),null,Constants.GenericLabelArcrole);
         else 
-            fragments = getStore().<Fragment>getSources(getIndex(),null,Constants.LabelArcrole);
+            indices = getStore().getSourceIndices(getIndex(),null,Constants.LabelArcrole);
         
         Set<Concept> concepts = new HashSet<Concept>();
-        for (Fragment fragment: fragments) {
-            if (fragment.isa("org.xbrlapi.impl.ConceptImpl")) concepts.add((Concept) fragment);
+        for (String index: indices) {
+            try {
+                Concept c = getStore().<Concept>getXMLResource(index);
+                concepts.add(c);
+            } catch (Exception e) {
+                ;// Not a concept so ignore it.
+            }
         }
         
         return new Vector<Concept>(concepts);

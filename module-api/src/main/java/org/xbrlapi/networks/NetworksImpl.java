@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -21,6 +22,7 @@ import org.xbrlapi.Locator;
 import org.xbrlapi.Relationship;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.RelationshipImpl;
+import org.xbrlapi.impl.RelationshipOrderComparator;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -368,6 +370,29 @@ public class NetworksImpl implements Networks, Serializable {
         }
         return result;
     }
+
+    /**
+     * @see org.xbrlapi.networks.Networks#getActiveRelationshipsFrom(java.lang.String)
+     */
+    public SortedSet<Relationship> getActiveRelationshipsFrom(String index)
+            throws XBRLException {
+        SortedSet<Relationship> result = new TreeSet<Relationship>(new RelationshipOrderComparator());
+        for (Network network: this) {
+            result.addAll(network.getActiveRelationshipsFrom(index));
+        }
+        return result;
+    }
+
+    /**
+     * @see org.xbrlapi.networks.Networks#getActiveRelationshipsTo(java.lang.String)
+     */
+    public SortedSet<Relationship> getActiveRelationshipsTo(String index)
+            throws XBRLException {
+        SortedSet<Relationship> result = new TreeSet<Relationship>(new RelationshipOrderComparator());
+        for (Network network: this) {
+            result.addAll(network.getActiveRelationshipsTo(index));
+        }
+        return result;
+    }
      
-    
 }

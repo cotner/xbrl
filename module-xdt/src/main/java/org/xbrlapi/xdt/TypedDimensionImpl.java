@@ -160,9 +160,11 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
      * @return the document URI for the target fragment.
      * @throws XBRLException.
      */
-    private URI getTargetDocumentURI() throws XBRLException {
+    public URI getTargetDocumentURI() throws XBRLException {
         try {
-            return new URI(this.getMetadataRootElement().getAttribute("targetDocumentURI"));
+            URI uri = new URI(this.getMetadataRootElement().getAttribute("targetDocumentURI"));
+            URI result = getStore().getMatcher().getMatch(uri);
+            return result;
         } catch (URISyntaxException e) {
             throw new XBRLException("Absolute URI in the HREF of the locator is malformed.",e);
         }

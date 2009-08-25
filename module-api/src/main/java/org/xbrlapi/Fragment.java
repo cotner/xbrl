@@ -330,6 +330,12 @@ public interface Fragment extends XML {
     /**
      * Gets the child fragments with the specified fragment type.
      * @param type The required fragment type of the child.
+     * EG: If a list of
+     *  org.xbrlapi.impl.ReferenceArcImpl fragments is required then
+     *  this parameter would have a value of "ReferenceArc".
+     *  Note that if the parameter contains full stops, then it is used directly
+     *  as the value for the fragment type, enabling fragment extensions to exploit this
+     *  method without placing fragment implementations in the org.xbrlapi package.
      * @return the fragment list of children fragments that match the specified fragment type
      * @throws XBRLException
      */

@@ -6,10 +6,10 @@ import org.xbrlapi.Concept;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 
 /**
- * Test the loader implementation.
+ * Test the basic operation of the SAX identifiers.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class IdentifierTestCase extends BaseTestCase {
+public class BasicIdentifierTestCase extends BaseTestCase {
 	
 	private final String STARTING_POINT = "real.data.sec.usgaap.3";
 	private URI uri = null;
@@ -19,13 +19,10 @@ public class IdentifierTestCase extends BaseTestCase {
 		uri = getURI(this.STARTING_POINT);
 	}
 	
-	public IdentifierTestCase(String arg0) {
+	public BasicIdentifierTestCase(String arg0) {
 		super(arg0);
 	}
 	
-	/**
-	 * Test fragment identification
-	 */
 	public void testFragmentIdentification() {
 		try {
 			loader.stashURI(uri);

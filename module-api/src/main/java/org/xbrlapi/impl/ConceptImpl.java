@@ -2,6 +2,7 @@ package org.xbrlapi.impl;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.w3c.dom.Element;
@@ -62,7 +63,23 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     public List<Fact> getFacts() throws XBRLException {
         getStore().setNamespaceBinding(this.getTargetNamespace(),"xbrlapi_concept");
     	return getStore().<Fact>queryForXMLResources("#roots#[*/xbrlapi_concept:"+ this.getName() + "]");
-    }    
+    }
+    
+    /**
+     * @see org.xbrlapi.Concept.getFactCount()
+     */
+    public long getFactCount() throws XBRLException {
+        getStore().setNamespaceBinding(this.getTargetNamespace(),"xbrlapi_concept");
+        return getStore().queryCount("#roots#[*/xbrlapi_concept:"+ this.getName() + "]");
+    }
+    
+    /**
+     * @see org.xbrlapi.Concept.getFactIndices()
+     */
+    public Set<String> getFactIndices() throws XBRLException {
+        getStore().setNamespaceBinding(this.getTargetNamespace(),"xbrlapi_concept");
+        return getStore().queryForIndices("#roots#[*/xbrlapi_concept:"+ this.getName() + "]");
+    }        
  
 
     

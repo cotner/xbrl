@@ -128,7 +128,7 @@ public interface Analyser {
      * @return A sorted set of all active relationships that involve 
      * the specified arcrole and that have the specified link role
      * and that run from the specified source fragment, ordered by the arc order
-     * attribute value.
+     * attribute value.  The arcrole and link role is ignored if it is null.
      * @throws XBRLException
      */
     public SortedSet<Relationship> getRelationshipsFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException;
@@ -144,6 +144,7 @@ public interface Analyser {
      * the specified arcrole and that have the specified link role
      * and that run to the specified target fragment.  The relationships
      * are sorted by the order attributes on the arcs expressing them.
+     * The arcrole and link role is ignored if it is null.
      * @throws XBRLException
      */
     public SortedSet<Relationship> getRelationshipsTo(String targetIndex, URI linkRole, URI arcrole) throws XBRLException;
@@ -226,7 +227,8 @@ public interface Analyser {
      * @param linkRole The link role of the network.
      * @param arcrole The arcrole of the network.
      * @return the relationships that run from root fragments in the 
-     * network with the specified link role and arcrole.
+     * network with the specified link role and arcrole.  If the arcrole or
+     * link role is null it is ignored.
      * @throws XBRLException
      */
     public List<Relationship> getRootRelationships(URI linkRole, URI arcrole) throws XBRLException;
@@ -245,6 +247,7 @@ public interface Analyser {
      * @param linkRole The link role defining the network
      * @param arcrole The arcrole defining the network
      * @return the set of indices of the root fragments in the network.
+     * If the arcrole or link role is null it is ignored.
      * @throws XBRLException
      */
     public Set<String> getRootIndices(URI linkRole, URI arcrole) throws XBRLException;
@@ -405,7 +408,7 @@ public interface Analyser {
      * @param linkRole The link role to match.
      * @param arcrole The arcrole to match.
      * @return a list of persisted relationships matching the specified
-     * criteria.
+     * criteria.  The arcrole and linkrole are ignored if they are equal to null.
      * @throws XBRLException
      */
     public List<Relationship> getRelationships(String sourceIndex, String targetIndex, URI linkRole, URI arcrole) throws XBRLException;

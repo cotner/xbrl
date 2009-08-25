@@ -201,7 +201,15 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRelationshipsFrom(java.lang.String, java.net.URI, java.net.URI)
      */
     public SortedSet<Relationship> getRelationshipsFrom(String sourceIndex, URI linkRole, URI arcrole) throws XBRLException {
-        String query = "#roots#[@arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @sourceIndex='"+ sourceIndex +"']";
+        String lr = "";
+        String ar = "";
+        if (linkRole != null) {
+            lr = " and @linkRole='"+ linkRole +"'";            
+        }
+        if (arcrole != null) {
+            ar = " and @arcRole='"+ arcrole +"'";            
+        }
+        String query = "#roots#[@sourceIndex='"+ sourceIndex +"'" + ar + lr + "]";
         List<Relationship> list = this.getRelationships(query);
         SortedSet<Relationship> sortedSet = new TreeSet<Relationship>(new RelationshipOrderComparator());
         sortedSet.addAll(list);
@@ -252,7 +260,15 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRelationshipsTo(java.lang.String, java.net.URI, java.net.URI)
      */
     public SortedSet<Relationship> getRelationshipsTo(String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
-        String query = "#roots#[@arcRole='"+ arcrole +"' and @linkRole='"+ linkRole +"' and @targetIndex='"+ targetIndex +"']";
+        String lr = "";
+        String ar = "";
+        if (linkRole != null) {
+            lr = " and @linkRole='"+ linkRole +"'";            
+        }
+        if (arcrole != null) {
+            ar = " and @arcRole='"+ arcrole +"'";            
+        }
+        String query = "#roots#[@targetIndex='"+ targetIndex +"'" + ar + lr + "]";
         List<Relationship> list = this.getRelationships(query);
         SortedSet<Relationship> sortedSet = new TreeSet<Relationship>(new RelationshipOrderComparator());
         sortedSet.addAll(list);
@@ -275,10 +291,18 @@ public class AnalyserImpl implements Analyser {
      * @see org.xbrlapi.networks.Analyser#getRootRelationships(java.net.URI, java.net.URI)
      */
     public List<Relationship> getRootRelationships(URI linkRole, URI arcrole) throws XBRLException {
+        String lr = "";
+        String ar = "";
+        if (linkRole != null) {
+            lr = " and @linkRole='"+ linkRole +"'";            
+        }
+        if (arcrole != null) {
+            ar = " and @arcRole='"+ arcrole +"'";
+        }
         Set<String> rootIndices = this.getRootIndices(linkRole,arcrole);
         List<Relationship> relationships = new Vector<Relationship>();
         for (String index: rootIndices) {
-            String query = "#roots#[@sourceIndex='"+ index + "' and @arcRole='"+ arcrole + "' and @linkRole='"+ linkRole + "']";
+            String query = "#roots#[@sourceIndex='"+ index + "'" + ar + lr + "]";
             relationships.addAll(this.getRelationships(query));
         }
         return relationships;
@@ -300,9 +324,17 @@ public class AnalyserImpl implements Analyser {
      * @see Analyser#getRootIndices(java.net.URI, java.net.URI)
      */
     public Set<String> getRootIndices(URI linkRole, URI arcrole) throws XBRLException {
-        String sourcesQuery = "#roots#[@arcRole='"+ arcrole + "' and @linkRole='"+ linkRole + "']/@sourceIndex";
+        String lr = "";
+        String ar = "";
+        if (linkRole != null) {
+            lr = " and @linkRole='"+ linkRole +"'";            
+        }
+        if (arcrole != null) {
+            ar = " and @arcRole='"+ arcrole +"'";
+        }
+        String sourcesQuery = "for $root in #roots#[@sourceIndex " + ar + lr + "] return string($root/@sourceIndex)";
         Set<String> sourceIndices = this.getStore().queryForStrings(sourcesQuery);
-        String targetsQuery = "#roots#[@arcRole='"+ arcrole + "' and @linkRole='"+ linkRole + "']/@targetIndex";
+        String targetsQuery = "for $root in #roots#[@targetIndex " + ar + lr + "] return string($root/@targetIndex)";
         Set<String> targetIndices = this.getStore().queryForStrings(targetsQuery);
         sourceIndices.removeAll(targetIndices);
         return sourceIndices;
@@ -502,7 +534,15 @@ public class AnalyserImpl implements Analyser {
      * @see Analyser#getRelationships(String, String, URI, URI)
      */
     public List<Relationship> getRelationships(String sourceIndex, String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
-        String query = "#roots#[@arcRole='" + arcrole + "' and @linkRole='"+linkRole+"' and @sourceIndex='"+sourceIndex+"' and @targetIndex='"+targetIndex+"']";
+        String lr = "";
+        String ar = "";
+        if (linkRole != null) {
+            lr = " and @linkRole='"+ linkRole +"'";            
+        }
+        if (arcrole != null) {
+            ar = " and @arcRole='"+ arcrole +"'";            
+        }
+        String query = "#roots#[@sourceIndex='"+sourceIndex+"' and @targetIndex='"+targetIndex+"'" + ar + lr + "]";
         return getStore().<Relationship>queryForXMLResources(query);
     }
     

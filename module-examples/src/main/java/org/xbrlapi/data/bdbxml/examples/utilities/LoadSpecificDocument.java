@@ -52,6 +52,7 @@ public class LoadSpecificDocument extends BaseUtilityExample {
     protected String addArgumentDocumentation() {
         String explanation = super.addArgumentDocumentation();
         explanation += "-document\t\tURI of the document to load.\n";
+        explanation += "-scope\t\tsingle|dts Use DTS to load the full DTS for the document.\n";
         return explanation;
     }    
 

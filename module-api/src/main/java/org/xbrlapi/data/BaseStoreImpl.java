@@ -43,6 +43,8 @@ import org.xbrlapi.ReferenceResource;
 import org.xbrlapi.Relationship;
 import org.xbrlapi.Resource;
 import org.xbrlapi.RoleType;
+import org.xbrlapi.Schema;
+import org.xbrlapi.SchemaContent;
 import org.xbrlapi.Stub;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.XML;
@@ -1857,7 +1859,35 @@ public abstract class BaseStoreImpl implements Store {
         }
         return new Vector<F>(sources);        
 
-    }    
+    }
+    
+    /**
+     * @see Store#getSourceIndices(String, URI, URI)
+     */
+    public Set<String> getSourceIndices(String targetIndex, URI linkRole, URI arcrole) throws XBRLException {
+        if (this.isPersistingRelationships()) {
+            String lr = "";
+            String ar = "";
+            if (linkRole != null) {
+                lr = " and @linkRole='"+ linkRole +"'";            
+            }
+            if (arcrole != null) {
+                ar = " and @arcRole='"+ arcrole +"'";            
+            }
+            String query = "for $root in #roots#[@targetIndex='"+ targetIndex +"'" + ar + lr + "] return string($root/@sourceIndex)";
+            return this.queryForStrings(query);
+        } 
+        
+        Set<String> indices = new HashSet<String>();
+        Networks networks = this.getNetworksTo(targetIndex,linkRole,arcrole);
+        for (Network network: networks) {
+            for (Relationship r: network.getActiveRelationshipsTo(targetIndex)) {
+                indices.add(r.getSourceIndex());                    
+            }
+        }
+        return indices;
+
+    }
     
     /**
      * @see Store#getRelationshipsFrom(String,URI,URI)
@@ -2344,6 +2374,23 @@ public abstract class BaseStoreImpl implements Store {
         this.loadingStatus.remove(loader);
     }
     
-
+    /**
+     * @see Store#getSchemaContent(URI, String)
+     */
+    public <F extends SchemaContent> F getSchemaContent(URI namespace, String name) {
+        String query = "for $root in #roots#[@parentIndex] let $data := $root/xbrlapi:data where ($data/xsd:schema or $data/xsd:element or $data/xsd:attribute or $data/xsd:attributeGroup or xsd:simpleType or xsd:complexType) and $data//@name='" + name + "' return $root";
+        query = "for $root in #roots#[@parentIndex] let $data := $root/xbrlapi:data where $data//@name='" + name + "' return $root";
+        try {
+            List<F> candidates = this.<F>queryForXMLResources(query);
+            for (F candidate: candidates) {
+                Schema schema = candidate.getSchema();
+                if (namespace.equals(schema.getTargetNamespace())) return candidate;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
 
 }
