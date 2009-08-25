@@ -24,11 +24,35 @@
 
 <div class="content">
 
+<h2>25 Aug. 2009</h2>
+<p>
+Started work on fleshing out an enhanced XML Schema fragmentation system to allow deeper analysis of XML
+schema content model declarations.</p>
+
+<h2>21 Aug. 2009</h2>
+<p>
+Fixed a bug in simple link traversal to ensure that matching URIs are
+taken care of behind the scenes.  Previously a simple link to a duplicate
+document would show up as being broken, implying that the DTS has not been
+fully discovered.</p>
+
+<h2>20 Aug. 2009</h2>
+<p>
+Made the org.xbrlapi.SimpleLink#getTargetDocumentURI() method public. 
+
+<h2>18 Aug. 2009</h2>
+<p>
+Added new methods to the org.xbrlapi.networks.Networks interface to enable all relationships
+from or to a given fragment to be obtained for all networks in the set of networks. </p>
+
 <h2>13 Aug. 2009</h2>
 <p>
 Added new transient part of store state to keep track of the set of loaders
 that are currently loading data into the store.  This enables loaders in different
 threads to co-ordinate their relationship persistence activities.
+Added new getSourceIndices method to the Store interface.
+Added methods to facilitate more efficient handling of concept analysis in terms of 
+the facts for that concept.
 </p>
 
 <h2>11 Aug. 2009</h2>

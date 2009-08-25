@@ -297,6 +297,31 @@
         <link:usedOn>generic:arc</link:usedOn>
       </link:roleType>
 
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/referenceLinkbaseRef" id="reference_link_reference">
+        <link:definition>Simple link to an XBRL reference linkbase</link:definition>
+        <link:usedOn>link:linkbaseRef</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/labelLinkbaseRef" id="label_link_reference">
+        <link:definition>Simple link to an XBRL label linkbase</link:definition>
+        <link:usedOn>link:linkbaseRef</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/presentationLinkbaseRef" id="presentation_link_reference">
+        <link:definition>Simple link to an XBRL presentation linkbase</link:definition>
+        <link:usedOn>link:linkbaseRef</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/definitionLinkbaseRef" id="definition_link_reference">
+        <link:definition>Simple link to an XBRL definition linkbase</link:definition>
+        <link:usedOn>link:linkbaseRef</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.xbrl.org/2003/role/calculationLinkbaseRef" id="calculation_link_reference">
+        <link:definition>Simple link to an XBRL calculation linkbase</link:definition>
+        <link:usedOn>link:linkbaseRef</link:usedOn>
+      </link:roleType>
+
     </appinfo>
   </annotation>  
   

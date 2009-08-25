@@ -53,8 +53,8 @@ What is it?
   documents using XBRL API.
 </p>
 <p>
-  The example uses the open source Freemarker template system
-  (http://freemarker.sourceforge.net/) to simplify the documentation of
+  The example uses the open source <a href="http://freemarker.sourceforge.net/">Freemarker template system</a>
+  to simplify the documentation of
   the desired rendering of the information in the XBRL instance
   being processed.
 </p>
@@ -111,7 +111,7 @@ You can browse the <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/tr
 
 <p>
   You can download the required XBRLAPI JARs from 
-  <a href="http://sourceforge.net/project/showfiles.php?group_id=135539">Sourceforge</a>.  
+  <a href="http://sourceforge.net/projects/xbrlapi/files/">Sourceforge</a>.  
   You can get suggestions on necessary installation and configuration steps
   from <a href="/">http://www.xbrlapi.org/</a>. 
 </p>
@@ -125,7 +125,7 @@ You can browse the <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/tr
 </h2>
 
 <h3>
-  Java Virtual Machine Parameters:
+  Java Virtual Machine (JVM) Arguments:
 </h3>
 
 <pre>  
@@ -134,12 +134,22 @@ You can browse the <a href="http://xbrlapi.svn.sourceforge.net/viewvc/xbrlapi/tr
   -classpath=&lt;java class paths&gt;
 </pre>
 
+<p>
+  Setting up the classpath can be nightmare in Java.  If you are using the Sun Java 1.6 binaries, then it is worth taking a
+  look at the <a href="http://java.sun.com/javase/6/docs/technotes/tools/windows/classpath.html">Sun classpath instructions</a>.
+  If those are not giving you joy, then take a look at two blogs 
+  (<a href="http://coding.derkeiler.com/Archive/Java/comp.lang.java.programmer/2008-12/msg00878.html">dirkeiler</a> and 
+  <a href="http://blogs.sun.com/mr/entry/class_path_wildcards_in_mustang">Mark Reinhold’s Blog</a>). These discuss
+  issues with getting the <code>-classpath</code> parameter working with wildcards.
+
+</p>
+
 <h3>
   Program execution involves: 
 </h3>
 
 <pre>
-  java org.xbrlapi.data.bdbxml.examples.render.Run &lt;OPTIONS&gt; &lt;URLS&gt;
+  java &lt;JVM ARGUMENTS&gt; org.xbrlapi.data.bdbxml.examples.render.Run &lt;OPTIONS&gt; &lt;URLS&gt;
 </pre>
 
 <p>
@@ -148,8 +158,8 @@ the mandatory options are:
 </p>
 
 <ul>
-<li>-database [the directory containing the Oracle Berkeley XML database]</li>
-<li>-container [the name of the database container in the Oracle Berkeley XML database]</li>
+<li>-database [the directory that will hold the actual database data (rather than the Oracle Berkeley XML database binaries)]</li>
+<li>-container [the name of the file in the -database directory that will contain the data]</li>
 <li>-cache [the directory containing the document cache]</li>
 <li>-template [the file location of the Freemarker template]*</li>
 <li>-target [the URL of the XBRL instance to be rendered]</li>
@@ -169,10 +179,6 @@ the mandatory options are:
 
 <p>
   XBRLAPI examples are released under the lesser GPL license.
-</p>
-
-<p>
-  Thanks for using XBRLAPI.
 </p>
 
 <p>
