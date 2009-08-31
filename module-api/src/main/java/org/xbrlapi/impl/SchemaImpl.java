@@ -77,7 +77,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getConcepts()
      */
     public List<Concept> getConcepts() throws XBRLException {
-    	return this.<Concept>getChildren("org.xbrlapi.impl.ConceptImpl");
+    	return this.<Concept>getChildren("Concept");
     }
     
     /**
