@@ -149,7 +149,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
             environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
             environmentConfiguration.setInitializeCache(true);
-            environmentConfiguration.setCacheSize(1024 * 1024 * 500);
+            environmentConfiguration.setCacheSize(1024 * 1024 * 1024);
             environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
             environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
             environment = new Environment(new File(locationName), environmentConfiguration);
