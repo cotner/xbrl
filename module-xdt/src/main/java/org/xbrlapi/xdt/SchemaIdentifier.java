@@ -5,10 +5,18 @@ import org.apache.xerces.xs.XSElementDeclaration;
 import org.apache.xerces.xs.XSNamespaceItem;
 import org.apache.xerces.xs.XSNamespaceItemList;
 import org.xbrlapi.Fragment;
+import org.xbrlapi.impl.AttributeDeclarationImpl;
+import org.xbrlapi.impl.AttributeGroupDeclarationImpl;
+import org.xbrlapi.impl.ComplexTypeDeclarationImpl;
 import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.impl.ElementDeclarationImpl;
 import org.xbrlapi.impl.ReferencePartDeclarationImpl;
+import org.xbrlapi.impl.SchemaAllCompositorImpl;
+import org.xbrlapi.impl.SchemaChoiceCompositorImpl;
+import org.xbrlapi.impl.SchemaGroupCompositorImpl;
 import org.xbrlapi.impl.SchemaImpl;
+import org.xbrlapi.impl.SchemaSequenceCompositorImpl;
+import org.xbrlapi.impl.SimpleTypeDeclarationImpl;
 import org.xbrlapi.sax.ContentHandler;
 import org.xbrlapi.sax.identifiers.Identifier;
 import org.xbrlapi.utilities.Constants;
@@ -45,7 +53,40 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
 
         if (namespaceURI.equals(Constants.XMLSchemaNamespace.toString())) {
             
-            if (lName.equals("schema")) {
+
+            if (lName.equals("group")) {
+                
+                fragment = new SchemaGroupCompositorImpl();
+            
+            } else if (lName.equals("all")) {
+                    
+                fragment = new SchemaAllCompositorImpl();
+            
+            } else if (lName.equals("choice")) {
+                
+                fragment = new SchemaChoiceCompositorImpl();
+        
+            } else if (lName.equals("sequence")) {
+                
+                fragment = new SchemaSequenceCompositorImpl();
+        
+            } else if (lName.equals("complexType")) {
+                
+                fragment = new ComplexTypeDeclarationImpl();
+            
+            } else if (lName.equals("simpleType")) {
+                
+                fragment = new SimpleTypeDeclarationImpl();
+            
+            } else if (lName.equals("attribute")) {
+                
+                fragment = new AttributeDeclarationImpl();
+
+            } else if (lName.equals("attributeGroup")) {
+                    
+                    fragment = new AttributeGroupDeclarationImpl();
+
+            } else if (lName.equals("schema")) {
                 
                 fragment = new SchemaImpl();
 
