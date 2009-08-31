@@ -1,13 +1,12 @@
 package org.xbrlapi.impl;
 
 import java.net.URI;
+import java.util.List;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xbrlapi.SchemaContentDeclaration;
 import org.xbrlapi.SchemaDeclaration;
 import org.xbrlapi.TypeDeclaration;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -99,12 +98,13 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
      * @see org.xbrlapi.SchemaContentDeclaration#getTypeDeclaration()
      */  
     public TypeDeclaration getTypeDeclaration() throws XBRLException {
+        if (this.hasLocalType()) return this.getLocalType();
         try {
             TypeDeclaration td = (TypeDeclaration) getStore().getSchemaContent(this.getTypeNamespace(),this.getTypeLocalname());
             if (td == null) throw new XBRLException("The type is not declared in a schema contained in the data store.");
             return td;
-        } catch (ClassCastException e) {
-            throw new XBRLException("The XML Schema type declaration is  of the wrong fragment type.",e);
+        } catch (ClassCastException cce) {
+            throw new XBRLException("The XML Schema type declaration is  of the wrong fragment type.",cce);
         }
     }
     
@@ -149,9 +149,10 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
     /**
      * @see org.xbrlapi.SchemaContentDeclaration#getReferencedSchemaDeclaration()
      */  
-    public SchemaDeclaration getReferencedSchemaDeclaration() throws XBRLException {
+    @SuppressWarnings("unchecked")
+    public <F extends SchemaDeclaration> F getReferencedSchemaDeclaration() throws XBRLException {
         try {
-            SchemaDeclaration sd = (SchemaDeclaration) getStore().getSchemaContent(this.getRefNamespace(),this.getRefLocalname());
+            F sd = (F) getStore().getSchemaContent(this.getRefNamespace(),this.getRefLocalname());
             if (sd == null) throw new XBRLException("The schema declaration is not in a schema contained in the data store.");
             return sd;
         } catch (ClassCastException e) {
@@ -160,25 +161,23 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
     }
     
     /**
-     * @see SchemaContentDeclaration#hasLocalSimpleType()
+     * @see SchemaContentDeclaration#hasLocalType()
      */
-    public boolean hasLocalSimpleType() throws XBRLException {
-        NodeList children = this.getDataRootElement().getElementsByTagNameNS(Constants.XMLSchemaNamespace.toString(),"simpleType");
-        if (children.getLength() > 1) throw new XBRLException("The content declaration has too many type definitions.");
-        return (children.getLength() == 1);
+    public boolean hasLocalType() throws XBRLException {
+        return (this.getChildren("SimpleTypeDeclaration").size()>0 || this.getChildren("ComplexTypeDeclaration").size()>0);
     }
     
     /**
-     * @see org.xbrlapi.SchemaContentDeclaration#getLocalSimpleType()
+     * @see org.xbrlapi.SchemaContentDeclaration#getLocalType()
      */
-    public Element getLocalSimpleType() throws XBRLException {
-        try {
-            NodeList simpleType = getDataRootElement().getElementsByTagNameNS(Constants.XMLSchemaNamespace.toString(),"simpleType");
-            return (Element) simpleType.item(0);
-
-        } catch (Exception e) {
-            throw new XBRLException("The local simple type could not be retrieved for the specified concept.");
-        }
+    public TypeDeclaration getLocalType() throws XBRLException {
+        List<TypeDeclaration> types = this.<TypeDeclaration>getChildren("SimpleTypeDeclaration");
+        if (types.size() == 1) return types.get(0);
+        if (types.size() > 1) throw new XBRLException("There are too many local simple type declarations for this content declaration.");
+        types = this.<TypeDeclaration>getChildren("ComplexTypeDeclaration");
+        if (types.size() == 1) return types.get(0);
+        if (types.size() > 1) throw new XBRLException("There are too many local complex type declarations for this content declaration.");
+        throw new XBRLException("The content declaration has no local type declaration.");
     }    
     
     

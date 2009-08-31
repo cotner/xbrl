@@ -148,7 +148,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getReferencePartDeclarations()
      */
     public List<ReferencePartDeclaration> getReferencePartDeclarations() throws XBRLException {
-    	return this.getChildren("org.xbrlapi.impl.ReferencePartDeclarationImpl");
+    	return this.getChildren("ReferencePartDeclaration");
     }
     
     
