@@ -13,8 +13,8 @@
 
   <link:arcroleRef 
   xlink:type="simple" 
-  arcroleURI="http://xbrl.org/arcrole/element-label" 
-  xlink:href="xbrl-2.1-roles.xsd#element-label"/> 
+  arcroleURI="http://xbrl.org/arcrole/2008/element-label" 
+  xlink:href="http://www.xbrl.org/2008/generic-label.xsd#element-label"/> 
   
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
     <link:loc xlink:href="http://www.xbrl.org/2004/ref-2004-08-10.xsd#ref_Publisher" xlink:type="locator" xlink:label="part"/>
@@ -22,7 +22,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       publisher
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -32,7 +32,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       publication name
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -42,7 +42,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       issue number
     </label:label>
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -52,7 +52,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       article
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -62,7 +62,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       note
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -72,7 +72,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       issue date
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -82,7 +82,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       chapter
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -92,7 +92,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       section
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -102,7 +102,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       subsection
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -112,7 +112,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       paragraph
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -122,7 +122,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       sub-paragraph
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -132,7 +132,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       clause
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -142,7 +142,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       sub-clause
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -152,7 +152,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       appendix
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -162,7 +162,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       example
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -172,7 +172,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       exhibit
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -182,7 +182,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       page
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -192,7 +192,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       footnote
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -202,7 +202,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       sentence
     </label:label>    
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -216,7 +216,7 @@
     xlink:role="http://xbrlapi.org/role/linking-reference-part" xml:lang="en">
       This reference part can be used to hyperlink to the reference materials.
     </label:label>
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
@@ -226,7 +226,7 @@
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       date on which the URI was valid
     </label:label>
-    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/element-label"
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="part" xlink:to="label" order="1.0"/>
   </generic:link>
 
