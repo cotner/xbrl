@@ -15,8 +15,6 @@ public interface ReferencePart extends Fragment {
      * @throws XBRLException
      */
     public String getValue() throws XBRLException;
-    
-
 
     /**
      * Currently implemented by a brute force search of the 
@@ -26,6 +24,6 @@ public interface ReferencePart extends Fragment {
      * is application dependent.
      * @throws XBRLException if no declarations can be found in the data store.
      */
-    public ReferencePartDeclaration getDeclaration() throws XBRLException;    
+    public ReferencePartDeclaration getDeclaration() throws XBRLException; 
     
 }
