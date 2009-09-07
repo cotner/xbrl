@@ -122,6 +122,23 @@ public class ElementDeclarationImpl extends SchemaContentDeclarationImpl impleme
     }
 
     /**
+     * @see org.xbrlapi.ElementDeclaration#getSubstitutionGroupDeclaration()
+     */
+    public ElementDeclaration getSubstitutionGroupDeclaration() throws XBRLException {
+        
+        ElementDeclaration result = null;
+        if (this.hasSubstitutionGroup()) {
+            try {
+                result = (ElementDeclaration) getStore().getSchemaContent(this.getSubstitutionGroupNamespace(),this.getSubstitutionGroupLocalname());
+                if (result == null) throw new XBRLException("The substitution group element declaration is not declared in a schema contained in the data store.");
+            } catch (ClassCastException cce) {
+                throw new XBRLException("The Substitution Group XML Schema element declaration is  of the wrong fragment type.",cce);
+            }
+        }
+        return result;
+    }
+    
+    /**
      * @see org.xbrlapi.ElementDeclaration#getSubstitutionGroupLocalname()
      */  
     public String getSubstitutionGroupLocalname() throws XBRLException {

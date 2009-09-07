@@ -2,7 +2,6 @@ package org.xbrlapi;
 
 import java.net.URI;
 
-import org.w3c.dom.Element;
 import org.xbrlapi.utilities.XBRLException;
 
 
@@ -83,7 +82,7 @@ public interface SchemaContentDeclaration extends SchemaDeclaration {
 
     /**
      * @return The fragment that is the type declaration referred to by the 
-     * schema content declaration.
+     * schema content declaration or null if there is no type declaration.
      * @throws XBRLException if the fragment cannot be found in the data store.
      */
     public TypeDeclaration getTypeDeclaration() throws XBRLException;
@@ -127,20 +126,19 @@ public interface SchemaContentDeclaration extends SchemaDeclaration {
      * schema content declaration.
      * @throws XBRLException if the fragment cannot be found in the data store.
      */
-    public SchemaDeclaration getReferencedSchemaDeclaration() throws XBRLException;
+    public <F extends SchemaDeclaration> F getReferencedSchemaDeclaration() throws XBRLException;
  
     /**
-     * @return true iff the content declaration has its own local simple type declaration.
-     * @throws XBRLException
+     * @return true iff the content declaration has its own local simple or complex type declaration.
+     * @throws XBRLException if the content declaration has more than one local type declaration.
      */
-    public boolean hasLocalSimpleType() throws XBRLException;    
+    public boolean hasLocalType() throws XBRLException;    
     
     /**
-     * @return The root element of the local simple type declaration.
-     * @throws XBRLException if the content declaration does not have its own local
-     * simple type declaration.
+     * @return The local type declaration or null if the content 
+     * declaration does not have its own local type declaration.
      */
-    public Element getLocalSimpleType() throws XBRLException;
+    public TypeDeclaration getLocalType() throws XBRLException;
     
     
 }

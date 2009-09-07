@@ -98,14 +98,17 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
      * @see org.xbrlapi.SchemaContentDeclaration#getTypeDeclaration()
      */  
     public TypeDeclaration getTypeDeclaration() throws XBRLException {
-        if (this.hasLocalType()) return this.getLocalType();
-        try {
-            TypeDeclaration td = (TypeDeclaration) getStore().getSchemaContent(this.getTypeNamespace(),this.getTypeLocalname());
-            if (td == null) throw new XBRLException("The type is not declared in a schema contained in the data store.");
-            return td;
-        } catch (ClassCastException cce) {
-            throw new XBRLException("The XML Schema type declaration is  of the wrong fragment type.",cce);
+        TypeDeclaration result = this.getLocalType();
+        if (result != null) return result;
+        if (this.hasTypeReference()) {
+            try {
+                result = (TypeDeclaration) getStore().getSchemaContent(this.getTypeNamespace(),this.getTypeLocalname());
+                if (result == null) throw new XBRLException("The type " + this.getTypeQName() + " is not declared in a schema contained in the data store.");
+            } catch (ClassCastException cce) {
+                throw new XBRLException("The XML Schema type declaration is  of the wrong fragment type.",cce);
+            }
         }
+        return result;
     }
     
     /**
@@ -160,24 +163,34 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
         }
     }
     
+
+    /**
+     * @return The XQuery that will retrieve the local type fragments for this fragment.
+     */
+    private String localTypeQuery() {
+        return "for $root in #roots#[@parentIndex='"+getIndex()+"'] where $root/@type='org.xbrlapi.impl.SimpleTypeDeclarationImpl' or $root/@type='org.xbrlapi.impl.ComplexTypeDeclarationImpl' return $root";
+    }
+    
     /**
      * @see SchemaContentDeclaration#hasLocalType()
      */
     public boolean hasLocalType() throws XBRLException {
-        return (this.getChildren("SimpleTypeDeclaration").size()>0 || this.getChildren("ComplexTypeDeclaration").size()>0);
+        long localTypes = getStore().queryCount(localTypeQuery());
+        if (localTypes > 1) throw new XBRLException("The Schema content declaration has too many local types.");
+        return (localTypes == 1);
     }
+    
+
     
     /**
      * @see org.xbrlapi.SchemaContentDeclaration#getLocalType()
      */
     public TypeDeclaration getLocalType() throws XBRLException {
-        List<TypeDeclaration> types = this.<TypeDeclaration>getChildren("SimpleTypeDeclaration");
+        
+        List<TypeDeclaration> types = getStore().<TypeDeclaration>queryForXMLResources(localTypeQuery());
         if (types.size() == 1) return types.get(0);
-        if (types.size() > 1) throw new XBRLException("There are too many local simple type declarations for this content declaration.");
-        types = this.<TypeDeclaration>getChildren("ComplexTypeDeclaration");
-        if (types.size() == 1) return types.get(0);
-        if (types.size() > 1) throw new XBRLException("There are too many local complex type declarations for this content declaration.");
-        throw new XBRLException("The content declaration has no local type declaration.");
+        if (types.size() > 1) throw new XBRLException("There are too many local type declarations for this content declaration.");
+        return null;
     }    
     
     

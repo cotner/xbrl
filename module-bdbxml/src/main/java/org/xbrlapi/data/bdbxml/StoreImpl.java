@@ -230,6 +230,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             xmlIndexSpecification.addIndex(Constants.XBRL21LinkNamespace.toString(),"label","node-element-substring-string");
             xmlIndexSpecification.addIndex(Constants.GenericLabelNamespace.toString(),"label","node-element-substring-string");
             xmlIndexSpecification.addIndex("","name","node-attribute-substring-string");
+            xmlIndexSpecification.addIndex("","name","node-attribute-equality-string");
             
             xmlIndexSpecification.addIndex("","signature", "node-attribute-equality-string");
 
@@ -309,7 +310,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         } catch (XmlException e) {
             throw new XBRLException("The indexes could not be configured.", e);
         } finally {
-            //if (xmlUpdateContext != null) xmlUpdateContext.delete();
             if (xmlIndexSpecification != null) xmlIndexSpecification.delete();
         }
         
@@ -589,7 +589,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
         XmlResults xmlResults = null;
         try {
-            xmlResults = runQuery(query);        
+            xmlResults = runQuery(query);
             return xmlResults.size();
         } catch (XmlException e) {
             throw new XBRLException("Failed query: " + query,e);

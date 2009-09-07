@@ -28,8 +28,6 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class FragmentImpl extends XMLImpl implements Fragment {
 	
-
-	
     /**
      * @see org.xbrlapi.Fragment#getAncestorOrSelf(String)
      */
@@ -633,6 +631,40 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     		localname = qname.substring(delimiterIndex+1,qname.length());
     	}
     	return localname;
+    }
+
+    /**
+     * @see Fragment#getXPointerExpression()
+     */
+    public String getXPointerExpression() throws XBRLException {
+        String expression = this.getIDXPointerExpression();
+        if (expression != null) {
+            return "#" + expression;
+        }
+        expression = this.getElementSchemeXPointerExpression();
+        return "#" + "element(" + expression + ")";
+    }
+
+    /**
+     * @see Fragment#getElementSchemeXPointerExpression()
+     */
+    public String getElementSchemeXPointerExpression() throws XBRLException {
+        NodeList nodes = getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),"xptr");
+        if (nodes.getLength() == 0) throw new XBRLException("The fragment is missing its element scheme XPointer expression.");
+        Element xptrElement = (Element) nodes.item(0);
+        if (xptrElement.hasAttribute("value")) return xptrElement.getAttribute("value");
+        throw new XBRLException("An element-scheme XPointer expression is corrupted for this fragment.");        
+    }
+
+    /**
+     * @see Fragment#getIDXPointerExpression()
+     */
+    public String getIDXPointerExpression() throws XBRLException {
+        NodeList nodes = getMetadataRootElement().getElementsByTagNameNS(Constants.XBRLAPINamespace.toString(),"ID");
+        if (nodes.getLength() == 0) return null;
+        Element idElement = (Element) nodes.item(0);
+        if (idElement.hasAttribute("id")) return idElement.getAttribute("id");
+        throw new XBRLException("The shorthand ID for this fragment is missing.");
     }
     
 

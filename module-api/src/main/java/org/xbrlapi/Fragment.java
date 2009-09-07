@@ -135,9 +135,33 @@ public interface Fragment extends XML {
     /**
      * Add an element Scheme XPointer Expression to the metadata.
      * @param expression The XPointer expression
-     * @throws XBRLException.
+     * @throws XBRLException
      */
     public void appendElementSchemeXPointer(String expression) throws XBRLException;
+    
+    /**
+     * @return the ID XPointer expression for this fragment or
+     * the element Scheme XPointer expression if there is no shorthand 
+     * ID-based XPointer expression.  What is returned is the entire string
+     * that is to be appended to the relevant URI to identify the fragment, including
+     * the # symbol and everything that follows it.
+     * 
+     * @throws XBRLException
+     */
+    public String getXPointerExpression() throws XBRLException;
+    
+    /**
+     * @return the element scheme XPointer expression for this fragment.
+     * @throws XBRLException
+     */
+    public String getElementSchemeXPointerExpression() throws XBRLException;
+    
+    /**
+     * @return the shorthand ID XPointer expression for this fragment or null
+     * if there is none.
+     * @throws XBRLException
+     */
+    public String getIDXPointerExpression() throws XBRLException;
     
 
     

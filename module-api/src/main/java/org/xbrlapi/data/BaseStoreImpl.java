@@ -2378,13 +2378,23 @@ public abstract class BaseStoreImpl implements Store {
      * @see Store#getSchemaContent(URI, String)
      */
     public <F extends SchemaContent> F getSchemaContent(URI namespace, String name) {
-        String query = "for $root in #roots#[@parentIndex] let $data := $root/xbrlapi:data where ($data/xsd:schema or $data/xsd:element or $data/xsd:attribute or $data/xsd:attributeGroup or xsd:simpleType or xsd:complexType) and $data//@name='" + name + "' return $root";
-        query = "for $root in #roots#[@parentIndex] let $data := $root/xbrlapi:data where $data//@name='" + name + "' return $root";
         try {
+
+            // Get the uris of the containing schemas.
+            String query = "for $root in #roots#[@parentIndex=''] where $root/xbrlapi:data/xsd:schema/@targetNamespace='" + namespace + "' return string($root/@uri)";
+            Set<String> uris = this.queryForStrings(query);
+            String uriCriteria = "";
+            for (String uri: uris) {
+                uriCriteria += " or @uri='"+uri+"'"; 
+            }
+            uriCriteria = uriCriteria.substring(4);
+            uriCriteria = "(" + uriCriteria + ")";
+            query = "for $root in #roots#["+uriCriteria+"] where $root/xbrlapi:data/*/@name='" + name + "' return $root";
             List<F> candidates = this.<F>queryForXMLResources(query);
+
             for (F candidate: candidates) {
                 Schema schema = candidate.getSchema();
-                if (namespace.equals(schema.getTargetNamespace())) return candidate;
+                if (namespace.equals(schema.getTargetNamespace()) && candidate.getParentIndex().equals(schema.getIndex())) return candidate;
             }
         } catch (Throwable e) {
             e.printStackTrace();

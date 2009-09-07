@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+  xmlns="http://www.w3.org/2001/XMLSchema" 
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink" 
+  xmlns:generic="http://xbrl.org/2008/generic"
+  xmlns:label="http://xbrl.org/2008/label"
+  xmlns:reference="http://xbrl.org/2008/reference"
+  targetNamespace="http://www.galexy.net/genericRoles" 
+  xmlns:tns="http://www.galexy.net/genericRoles" 
+  elementFormDefault="qualified">
+
+  <import namespace="http://www.xbrl.org/2003/instance" schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
+
+  <import namespace="http://xbrl.org/2008/generic" schemaLocation="http://www.xbrl.org/2008/generic-link.xsd"/>
+
+  <annotation>
+  <appinfo>
+
+      <link:linkbaseRef xlink:type="simple" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+      xlink:href="xbrl-generic-roles-labels-en.xml" />
+
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/positiveLabel" id="positive-standard-label">
+        <link:definition>standard label for facts with positive values</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/positiveTerseLabel" id="positive-terse-label">
+        <link:definition>terse label for facts with positive values</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/positiveVerboseLabel" id="positive-verbose-label">
+        <link:definition>verbose label for facts with positive values</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/negativeLabel" id="negative-standard-label">
+        <link:definition>standard label for facts with negative values</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/negativeTerseLabel" id="negative-terse-label">
+        <link:definition>terse label for facts with negative values</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/negativeVerboseLabel" id="negative-verbose-label">
+        <link:definition>verbose label for facts with negative values</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/zeroLabel" id="zero-standard-label">
+        <link:definition>label for facts with zero values</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/zeroTerseLabel" id="zero-terse-label">
+        <link:definition>terse label for zero values</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/zeroVerboseLabel" id="zero-verbose-label">
+        <link:definition>verbose label for zero values</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/totalLabel" id="total-label">
+        <link:definition>total label</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/periodStartLabel" id="period-start-label">
+        <link:definition>period-start label</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/periodEndLabel" id="period-end-label">
+        <link:definition>period-end label</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/definitionGuidance" id="definition-guidance-label">
+        <link:definition>definitional guidance</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/disclosureGuidance" id="disclosure-guidance-label">
+        <link:definition>disclosure guidance</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/presentationGuidance" id="presentation-guidance-label">
+        <link:definition>presentation guidance</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/measurementGuidance" id="measurement-guidance-label">
+        <link:definition>measurement guidance</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/commentaryGuidance" id="commentary-guidance-label">
+        <link:definition>commentary</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/exampleGuidance" id="example-guidance-label">
+        <link:definition>example</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/definitionRef" id="definition-reference">
+        <link:definition>definition</link:definition>
+        <link:usedOn>reference:reference</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/disclosureRef" id="disclosure-reference">
+        <link:definition>disclosure guidance</link:definition>
+        <link:usedOn>reference:reference</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/mandatoryDisclosureRef" id="mandatory-disclosure-reference">
+        <link:definition>mandatory disclosure</link:definition>
+        <link:usedOn>reference:reference</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/recommendedDisclosureRef" id="recommended-disclosure-reference">
+        <link:definition>recommended disclosure</link:definition>
+        <link:usedOn>reference:reference</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/unspecifiedDisclosureRef" id="unspecified-disclosure-reference">
+        <link:definition>unspecified disclosure</link:definition>
+        <link:usedOn>reference:reference</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/presentationRef" id="presentation-reference">
+        <link:definition>presentation guidance</link:definition>
+        <link:usedOn>reference:reference</link:usedOn>
+      </link:roleType>
+
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/commentaryRef" id="commentary-reference">
+        <link:definition>commentary</link:definition>
+        <link:usedOn>reference:reference</link:usedOn>
+      </link:roleType>
+      
+      <link:roleType roleURI="http://www.galexy.net/2008/generic/role/exampleRef" id="example-reference">
+        <link:definition>example</link:definition>
+        <link:usedOn>reference:reference</link:usedOn>
+      </link:roleType>
+
+    </appinfo>
+  </annotation>
+  
+</schema>

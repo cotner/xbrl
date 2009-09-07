@@ -57,9 +57,6 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
 
 
 	/**
-	 * Get the string value of the role Definition.
-	 * @return the string value of the role description or null if none is provided.
-	 * @throws XBRLException.
 	 * @see org.xbrlapi.CustomType#getDefinition()
 	 */
     public String getDefinition() throws XBRLException {

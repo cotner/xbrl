@@ -30,8 +30,7 @@ public interface CustomType extends Fragment {
 
 
 	/**
-	 * Get the string value of the role Definition.
-	 * @return the string value of the role description or null if none is provided.
+     * @return the string value of the role definition element or null if none is provided.
 	 * @throws XBRLException.
 	 */
     public String getDefinition() throws XBRLException;

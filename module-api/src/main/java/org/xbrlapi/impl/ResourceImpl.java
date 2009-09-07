@@ -2,6 +2,7 @@ package org.xbrlapi.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.ExtendedLink;
@@ -41,12 +42,23 @@ public class ResourceImpl extends ArcEndImpl implements Resource {
     }
     
     /**
-     * @see org.xbrlapi.Resource#getLanguage(String)
+     * @see org.xbrlapi.Resource#getLanguageName(String)
      */
-    public String getLanguage(String language) throws XBRLException {
+    public String getLanguageName(String language) throws XBRLException {
         Language l  = getStore().getLanguage(language,this.getLanguage());
         if (l == null) return null;
         return l.getName();
+    }
+    
+    /**
+     * @see Resource#getLanguageName(List)
+     */
+    public String getLanguageName(List<String> languages) throws XBRLException {
+        for (String language: languages) {
+            Language l  = getStore().getLanguage(language,this.getLanguage());
+            if (l != null) return l.getName();
+        }
+        return null;
     }    
 	
     /**
