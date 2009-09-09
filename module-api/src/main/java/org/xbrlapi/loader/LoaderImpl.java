@@ -542,7 +542,8 @@ public class LoaderImpl implements Loader, Serializable {
                 
                 // Wait till other loaders using the store have finished with their loading activities.
                 while (getStore().isLoading()) {
-                    Thread.sleep(1000);
+                    logger.info("Still doing some loading into the store ... ");
+                    Thread.sleep(500);
                 }
                 Storer storer = new StorerImpl(getStore());
                 storer.storeRelationships(newDocuments);

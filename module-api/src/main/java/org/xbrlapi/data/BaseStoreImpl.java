@@ -2174,10 +2174,9 @@ public abstract class BaseStoreImpl implements Store {
     }
 
     /**
-     * Map of flags that are set by loaders whenever they starts up a loading process or end
-     * a loading process.
+     * Set of loaders that are currently loading data into this store.
      */
-    transient private HashMap<Loader,Boolean> loadingStatus = new HashMap<Loader,Boolean>();
+    transient private int loadingStatus = 0;
     
     /**
      * This property is used to co-ordinate the document
@@ -2353,10 +2352,7 @@ public abstract class BaseStoreImpl implements Store {
      * @see Store#isLoading()
      */
     public synchronized boolean isLoading() {
-        for (Boolean value: loadingStatus.values()) {
-            if (value.booleanValue()) return true;
-        }
-        return false;
+        return (loadingStatus > 0);
     }
     
     
@@ -2365,14 +2361,14 @@ public abstract class BaseStoreImpl implements Store {
      * @see Store#startLoading(Loader)
      */
     public synchronized void startLoading(Loader loader) {
-        this.loadingStatus.put(loader,new Boolean(true));
+        loadingStatus++;
     }
     
     /**
      * @see Store#stopLoading(Loader)
      */
     public synchronized void stopLoading(Loader loader) {
-        this.loadingStatus.remove(loader);
+        loadingStatus--;
     }
     
     /**

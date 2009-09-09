@@ -150,6 +150,7 @@ public class StorerImpl implements Storer {
     public void storeRelationships(Collection<URI> documents) throws XBRLException {
         for (URI document: documents) {
             storeRelationships(document);
+            this.getStore().sync();
         }
     }
     
