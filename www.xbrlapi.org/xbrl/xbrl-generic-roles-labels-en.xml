@@ -21,17 +21,17 @@
     <link:loc xlink:href="http://www.xbrl.org/2008/generic-label.xsd#standard-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      standard
+      standard label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
-  </generic:link>      
+  </generic:link>
 
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
     <link:loc xlink:href="http://www.xbrl.org/2008/generic-label.xsd#terse-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-	 terse
+	   terse label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -41,7 +41,7 @@
     <link:loc xlink:href="http://www.xbrl.org/2008/generic-label.xsd#verbose-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      verbose
+      verbose label 
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -51,7 +51,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#positive-standard-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      positive
+      positive label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -61,7 +61,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#positive-terse-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      positive terse
+      positive terse label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -71,7 +71,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#positive-verbose-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      positive verbose
+      positive verbose label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -81,7 +81,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#negative-standard-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      negative
+      negative label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -91,7 +91,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#negative-terse-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      negative terse
+      negative terse label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -101,7 +101,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#negative-verbose-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      negative verbose
+      negative verbose label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -111,7 +111,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#zero-standard-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      zero
+      zero label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -121,7 +121,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#zero-terse-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      zero terse
+      zero terse label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -131,7 +131,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#zero-verbose-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      zero verbose
+      zero verbose label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -141,7 +141,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#total-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      total
+      total label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -151,7 +151,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#period-start-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      period start
+      period-start label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -161,7 +161,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#period-end-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      period end
+      period-end label
     </label:label>    
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -231,7 +231,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#example-guidance-label" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      example guidance
+      guidance example(s) 
     </label:label>
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -241,7 +241,7 @@
     <link:loc xlink:href="http://www.xbrl.org/2008/generic-label.xsd#standard-reference" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      standard
+      standard reference
     </label:label>
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -261,7 +261,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#disclosure-reference" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      disclosure
+      disclosure guidance
     </label:label>
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -301,7 +301,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#presentation-reference" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      presentation
+      presentation guidance
     </label:label>
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>
@@ -321,7 +321,7 @@
     <link:loc xlink:href="xbrl-generic-roles.xsd#example-reference" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
-      example
+      example(s)
     </label:label>
     <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
       xlink:from="role" xlink:to="label" order="1.0"/>

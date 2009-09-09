@@ -20,7 +20,6 @@
       <link:linkbaseRef xlink:type="simple" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
       xlink:href="xbrl-generic-roles-labels-en.xml" />
 
-
       <link:roleType roleURI="http://www.galexy.net/2008/generic/role/positiveLabel" id="positive-standard-label">
         <link:definition>standard label for facts with positive values</link:definition>
         <link:usedOn>label:label</link:usedOn>
