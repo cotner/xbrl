@@ -37,6 +37,14 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 <div class="content">
 
+<h2>9 Sep. 2009</h2>
+<p>Fixed a bug, identified by Karel Arkema, 
+in the org.xbrlapi.data.BaseStoreImpl#getTuplesFromInstances(List) method.
+This now ensures that tuples are correctly identified.</p>
+<p>Fixed a bug in the relationship persistence behaviour of the Loader discover method that
+prevents analysis of relationships where the related fragments have not all been discovered yet.</p>
+<p>Made the Transformer classes within Aspects public so that they can be accessed and customised.</p>
+
 <h2>7 Sep. 2009</h2>
 <p>
 Added methods to the Fragment interface that enable access to the XPointer expressions that could be
