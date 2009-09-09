@@ -45,7 +45,7 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
         setTransformer(new Transformer());        
     }
 
-    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
+    public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         /**
          * @see AspectValueTransformer#validate(AspectValue)
          */
