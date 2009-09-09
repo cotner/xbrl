@@ -66,7 +66,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     }
     
     /**
-     * @see org.xbrlapi.Concept.getFactCount()
+     * @see org.xbrlapi.Concept#getFactCount()
      */
     public long getFactCount() throws XBRLException {
         getStore().setNamespaceBinding(this.getTargetNamespace(),"xbrlapi_concept");
@@ -74,7 +74,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     }
     
     /**
-     * @see org.xbrlapi.Concept.getFactIndices()
+     * @see org.xbrlapi.Concept#getFactIndices()
      */
     public Set<String> getFactIndices() throws XBRLException {
         getStore().setNamespaceBinding(this.getTargetNamespace(),"xbrlapi_concept");

@@ -580,8 +580,8 @@ public interface Store extends Serializable {
     public <F extends Fragment> List<F> getRootFragments() throws XBRLException;
     
     /**
-     * @param string The type of fragment to select by.
-     * @see {@link Store#getXMLResources(String)} for details on how the type
+     * @param type The type of fragment to select by.
+     * {@link Store#getXMLResources(String)} gives details on how the type
      * parameter is to be used.
      * @param <F> The fragment extension class
      * @return the list of root fragments of the documents in the store where the root fragments

@@ -5,6 +5,7 @@ import java.util.List;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Instance;
+import org.xbrlapi.Tuple;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -12,11 +13,11 @@ import org.xbrlapi.utilities.XBRLException;
 */
 
 public class XBRLFunctionTestCase extends BaseTestCase {
-	private final String STARTING_POINT = "test.data.small.instance";
+	private final String STARTING_POINT_1 = "test.data.small.instance";
+	private final String STARTING_POINT_2 = "test.data.tuple.instance";
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		loader.discover(this.getURI(STARTING_POINT));		
 	}
 
 	protected void tearDown() throws Exception {
@@ -29,6 +30,7 @@ public class XBRLFunctionTestCase extends BaseTestCase {
 
     public void testGetConcepts() {
         try {
+            loader.discover(this.getURI(STARTING_POINT_1));     
             List<Instance> instances = store.<Instance>getXMLResources("Instance");
             for (Instance instance: instances) {
                 for (Fact fact: instance.getFacts()) {
@@ -43,5 +45,16 @@ public class XBRLFunctionTestCase extends BaseTestCase {
             fail("Unexpected " + e.getMessage());
         }
     }
+    
+    public void testGetTuples() {
+        try {
+            loader.discover(this.getURI(STARTING_POINT_2));
+            List<Tuple> tuples = store.getTuples();
+            assertTrue(tuples.size() > 0);
+        } catch (XBRLException e) {
+            e.printStackTrace();
+            fail("Unexpected " + e.getMessage());
+        }
+    }    
 
 }

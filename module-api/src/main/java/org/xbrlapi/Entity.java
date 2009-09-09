@@ -43,7 +43,8 @@ public interface Entity extends ContextComponent {
     
     /**
      * @return a list of all the entity resources with the entity scheme and value 
-     * of this entity fragment.
+     * of this entity fragment. The list is empty if there are no entity resources
+     * that match the relevant criteria.
      * @throws XBRLException
      */
     public List<EntityResource> getEntityResources() throws XBRLException;

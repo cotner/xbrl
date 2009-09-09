@@ -16,6 +16,4 @@ public interface SchemaDeclaration extends SchemaContent {
      */
     public String getName() throws XBRLException; 
     
-
-
 }

@@ -57,6 +57,7 @@ import org.xbrlapi.impl.FragmentComparator;
 import org.xbrlapi.impl.RelationshipImpl;
 import org.xbrlapi.impl.RelationshipOrderComparator;
 import org.xbrlapi.impl.StubImpl;
+import org.xbrlapi.impl.TupleImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.AllAnalyserImpl;
 import org.xbrlapi.networks.Analyser;
@@ -1317,7 +1318,7 @@ public abstract class BaseStoreImpl implements Store {
     	List<Fact> facts = getFactsFromInstances(instances);
     	List<Tuple> tuples = new Vector<Tuple>();
     	for (Fact fact: facts) {
-    		if (fact.getType().equals("org.xbrlapi.org.impl.TupleImpl"))
+    		if (fact.getType().equals(TupleImpl.class.getName()))
     			tuples.add((Tuple) fact);
     	}
     	return tuples;

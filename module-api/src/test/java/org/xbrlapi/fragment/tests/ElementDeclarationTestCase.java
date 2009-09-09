@@ -252,9 +252,26 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
             e.printStackTrace();
             fail(e.getMessage());
         }
-		
-		
+
 	}	
 	
+    public void testGetSubstitutionGroupDeclaration() {     
 
+        try {
+            List<Concept> fragments = store.getXMLResources("Concept");
+            assertTrue(fragments.size() > 0);
+            for (Concept fragment: fragments) {
+                ElementDeclaration declaration = fragment.getSubstitutionGroupDeclaration();
+                assertTrue(declaration.getLocalname().equals("element"));
+                assertTrue(declaration.getNamespace().equals(Constants.XMLSchemaNamespace));
+                assertTrue(declaration.getName().equals("item") || declaration.getName().equals("tuple"));
+            }
+        } catch (XBRLException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+    }   
+
+    
 }

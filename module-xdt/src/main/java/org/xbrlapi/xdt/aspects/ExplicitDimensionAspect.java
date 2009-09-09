@@ -94,7 +94,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
             List<LabelResource> labels = f.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
             if (labels.isEmpty()) return id;
             String label = labels.get(0).getStringValue();
-            logger.info("Explicit dimension aspect value label is " + label);
+            logger.debug("Explicit dimension aspect value label is " + label);
             setMapLabel(id,label);
             return label;
         }

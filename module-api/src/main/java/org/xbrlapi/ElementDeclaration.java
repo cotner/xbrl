@@ -2,7 +2,6 @@ package org.xbrlapi;
 
 import java.net.URI;
 
-import org.w3c.dom.Element;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -19,9 +18,6 @@ public interface ElementDeclaration extends SchemaContentDeclaration {
      * @throws XBRLException
      */
     public boolean isAbstract() throws XBRLException;
-    
-
-
     
     /**
      * @return true iff the element is final for extension.
@@ -52,15 +48,7 @@ public interface ElementDeclaration extends SchemaContentDeclaration {
      * @throws XBRLException
      */
     public boolean isBlockingRestriction() throws XBRLException;    
-    
-    
-    /**
-     * Gets the complex content fragment
-     *
-     * @throws XBRLException
-     */
-    public Element getComplexContent() throws XBRLException;    
-    
+
     /**
      * Determine if a concept is nillable
      *
@@ -74,6 +62,13 @@ public interface ElementDeclaration extends SchemaContentDeclaration {
      * @throws XBRLException
      */
     public boolean hasSubstitutionGroup() throws XBRLException;
+    
+    /**
+     * @return The fragment that is the declaration of the substitution group element.
+     * @throws XBRLException if there is no such declaration in the data store or if the
+     * fragment is not an XML Schema element declaration.
+     */
+    public ElementDeclaration getSubstitutionGroupDeclaration() throws XBRLException;
     
     /**
      * Retrieve the substitution group namespace.
@@ -134,8 +129,6 @@ public interface ElementDeclaration extends SchemaContentDeclaration {
       */
      public ComplexTypeDeclaration getLocalComplexType() throws XBRLException;     
 
-
-     
      /**
       * @return the maximum number of times that the element can occur within a complex type definition.
       * @throws XBRLException if the element declaration is global.

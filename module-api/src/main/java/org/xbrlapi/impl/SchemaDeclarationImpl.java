@@ -1,9 +1,6 @@
 package org.xbrlapi.impl;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xbrlapi.SchemaDeclaration;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -36,19 +33,6 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
 
 
     
-    /**
-     * Gets the complex content fragment.
-     * @throws XBRLException
-     * @see org.xbrlapi.SchemaDeclaration#getComplexContent()
-     */
-    public Element getComplexContent() throws XBRLException {
-    	try {
-	    	NodeList complexContent = getDataRootElement().getElementsByTagNameNS(Constants.XMLSchemaNamespace.toString(),"complexContent");
-	    	return (Element) complexContent.item(0);
 
-    	} catch (Exception e) {
-    		throw new XBRLException("The complex content could not be retrieved for the specified concept.");
-    	}
-    }
 
 }

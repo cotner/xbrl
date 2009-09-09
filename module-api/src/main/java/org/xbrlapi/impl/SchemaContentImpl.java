@@ -57,8 +57,8 @@ public class SchemaContentImpl extends FragmentImpl implements SchemaContent {
     }    
 
     /**
-     * @see org.w3c.dom.Element#hasAttributeNS(String, String)
-     * @see org.xbrlapi.SchemaContent#hasOtherAttribute(String,String)
+     * @see SchemaContent#hasOtherAttribute(URI,String)
+     * @see Element#hasAttributeNS(String, String)
      */
     public boolean hasOtherAttribute(URI namespace, String localname) throws XBRLException {
         return getDataRootElement().hasAttributeNS(namespace.toString(), localname);
@@ -81,7 +81,7 @@ public class SchemaContentImpl extends FragmentImpl implements SchemaContent {
     
     /**
      * @see org.w3c.dom.Element#getAttributeNS(String, String)
-     * @see org.xbrlapi.SchemaContent#getOtherAttribute(String,String)
+     * @see SchemaContent#getOtherAttribute(URI,String)
      */
     public String getOtherAttribute(URI namespace, String localname) throws XBRLException {
         if (this.hasOtherAttribute(namespace, localname)) 
@@ -90,7 +90,7 @@ public class SchemaContentImpl extends FragmentImpl implements SchemaContent {
     }
     
     /**
-     *  @see org.xbrlapi.SchemaDeclaration#getSchemaDeclarationId()
+     *  @see org.xbrlapi.SchemaDeclaration#getSchemaId()
      */
     public String getSchemaId() throws XBRLException {
         if (! getDataRootElement().hasAttributeNS(Constants.XMLSchemaNamespace.toString(),"id")) return null;

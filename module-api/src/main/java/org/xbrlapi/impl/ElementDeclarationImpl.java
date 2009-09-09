@@ -164,9 +164,8 @@ public class ElementDeclarationImpl extends SchemaContentDeclarationImpl impleme
         if (ctds.size() > 1) throw new XBRLException("The element has too many local complex types.");
         if (ctds.size() == 0) throw new XBRLException("The element does not have a local complex type.");
         return ctds.get(0);
-    }    
+    }
 
-    
     /**
      * @see org.xbrlapi.ElementDeclaration#isFinalForRestriction()
      */

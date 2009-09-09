@@ -86,7 +86,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
             List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
             if (labels.isEmpty()) return id;
             String label = labels.get(0).getStringValue();
-            logger.info("Concept aspect value label is " + label);
+            logger.debug("Concept aspect value label is " + label);
             setMapLabel(id,label);
             return label;
         }
