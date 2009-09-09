@@ -51,7 +51,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
         return context.getURI().toString() + context.getId();
     }    
 
-    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
+    public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
         public Transformer() {
             super();
@@ -90,8 +90,14 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
                 return getMapLabel(id);
             }
 
+            // The default label to use if no other is available.
             String label = id;
             
+            logger.info("The default label is " + label);
+            logger.info("The language code is " + getLanguageCode());
+            logger.info("The label resource role is " + getLabelRole());
+            
+            // Get all the relevant entity resources.
             Entity entity = ((Entity) value.getFragment());
             List<EntityResource> entityResources = entity.getEntityResources();
             Set<EntityResource> equivalentEntityResources = new HashSet<EntityResource>();
@@ -100,13 +106,64 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
                 equivalentEntityResources.addAll(entityResource.getEquivalents());
             }
             
+            // Try getting labels with the given language and resource role.
             Set<LabelResource> labels = new HashSet<LabelResource>();
             for (EntityResource entityResource: equivalentEntityResources) {
                 labels.addAll(entityResource.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole()));
             }
-            if (! labels.isEmpty()) label = labels.iterator().next().getStringValue();
+            for (LabelResource l: labels) {
+                l.serialize();
+            }
+            
+            if (! labels.isEmpty()) {
+                label = labels.iterator().next().getStringValue();
+            } else {
+                for (EntityResource entityResource: equivalentEntityResources) {
+                    labels.addAll(entityResource.getLabelsWithLanguageAndResourceRole("en",getLabelRole()));
+                }
+            }
+            for (LabelResource l: labels) {
+                l.serialize();
+            }
 
-            logger.debug("Entity id aspect value label is " + label);
+            if (! labels.isEmpty()) {
+                label = labels.iterator().next().getStringValue();
+            } else {
+                for (EntityResource entityResource: equivalentEntityResources) {
+                    labels.addAll(entityResource.getLabelsWithLanguageAndResourceRole("en-US",getLabelRole()));
+                }
+            }
+            for (LabelResource l: labels) {
+                l.serialize();
+            }
+
+            if (! labels.isEmpty()) {
+                label = labels.iterator().next().getStringValue();
+            } else {
+                for (EntityResource entityResource: equivalentEntityResources) {
+                    labels.addAll(entityResource.getLabelsWithResourceRole(getLabelRole()));
+                }
+            }
+            for (LabelResource l: labels) {
+                l.serialize();
+            }
+
+            if (! labels.isEmpty()) {
+                label = labels.iterator().next().getStringValue();
+            } else {
+                for (EntityResource entityResource: equivalentEntityResources) {
+                    labels.addAll(entityResource.getLabels());
+                }
+            }
+            for (LabelResource l: labels) {
+                l.serialize();
+            }
+            
+            if (! labels.isEmpty()) {
+                label = labels.iterator().next().getStringValue();
+            }
+            
+            logger.info("Entity id aspect value label is " + label);
             setMapLabel(id,label);
             return label;
         }
@@ -135,6 +192,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
          * concept aspect values.
          */
         private String language = "en";
+        
         /**
          * @return the language code.
          */

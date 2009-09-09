@@ -46,7 +46,7 @@ public class ScenarioAspect extends ContextAspect implements Aspect {
         return context.getURI().toString() + context.getId();
     }
 
-    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
+    public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         public Transformer() {
             super();
         }

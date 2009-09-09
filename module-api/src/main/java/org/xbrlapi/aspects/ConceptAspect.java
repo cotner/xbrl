@@ -40,7 +40,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
         return Aspect.CONCEPT;
     }
 
-    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
+    public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
         public Transformer() {
             super();

@@ -39,7 +39,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
         return Aspect.UNIT;
     }
 
-    private class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
+    public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         
         public Transformer() {
             super();
