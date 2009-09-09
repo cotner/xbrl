@@ -537,17 +537,15 @@ public class LoaderImpl implements Loader, Serializable {
 
         getStore().stopLoading(this);
         
-        
         try {
             if (getStore().isPersistingRelationships() && (newDocuments.size() > 0)) {
                 
                 // Wait till other loaders using the store have finished with their loading activities.
-                if (getStore().isLoading()) {
-                    Thread.sleep(10000);
+                while (getStore().isLoading()) {
+                    Thread.sleep(1000);
                 }
                 Storer storer = new StorerImpl(getStore());
                 storer.storeRelationships(newDocuments);
-                getStore().sync();
             }
         } catch (InterruptedException e) {
             logger.error("Failed to persist relationships.");
