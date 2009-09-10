@@ -1,6 +1,6 @@
 <project name="xlinkapi" default="executable" basedir=".">
 
-  <property name="version" value="5.0"/>
+  <property name="version" value="5.1"/>
   <property name="root" location=".."/>
   <property name="data" location="${root}/data"/>
   <property name="build" location="${root}/bin"/>
@@ -108,7 +108,6 @@
         <fileset dir="${root}/module-examples/src/test/java" includes="**/*"/>
     </jar>
   </target>	
-	
 	
   <target name="module-exist" depends="module-utilities" description="generate the JAR" >
     <tstamp/>
