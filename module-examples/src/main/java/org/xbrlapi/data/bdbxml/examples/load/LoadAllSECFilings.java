@@ -57,6 +57,8 @@ public class LoadAllSECFilings {
                     if (args[i].equals("-database")) {
                         i++;
                         arguments.put("database", args[i]);
+                    } else if (args[i].equals("-persist")) {
+                        arguments.put("persist", "");
                     } else if (args[i].equals("-container")) {
                         i++;
                         arguments.put("container", args[i]);
@@ -90,7 +92,9 @@ public class LoadAllSECFilings {
             store = createStore(arguments.get("database"),arguments.get("container"));
 
             // Ensure that the newly discovered relationships are also stored.
-            store.setAnalyser(new AnalyserImpl(store));
+            if (arguments.containsKey("persist")) {
+                store.setAnalyser(new AnalyserImpl(store));
+            }
             
             // Get the list of URIs to load from the SEC RSS feed.
             Grabber grabber = new SecGrabberImpl(new URI("http://www.sec.gov/Archives/edgar/xbrlrss.xml"));
@@ -103,7 +107,7 @@ public class LoadAllSECFilings {
             System.out.println("# of URIs per thread = " + gap + " given # URIs = " + resources.size() + " and #threads = " + threadCount);
             List<Thread> threads = new Vector<Thread>();
             for (int counter=0; counter<threadCount; counter++) {
-                Loader loader =createLoader(store,arguments.get("cache")); 
+                Loader loader = createLoader(store,arguments.get("cache")); 
                 if (counter == threadCount-1) {
                     System.out.println("Thread " + (counter+1) + " gets documents " + (counter*gap) + " to " + (resources.size()-1));
                     loader.stashURIs(resources.subList(counter*gap,resources.size()-1));
@@ -152,6 +156,7 @@ public class LoadAllSECFilings {
         System.err.println(" -cache VALUE      directory that is the root of the document cache");
         System.err.println("Optional arguments: ");
         System.err.println(" -threads VALUE    the number of threads to use when loading the data");
+        System.err.println(" -persist          if present relationships are also persisted.  Otherwise they are not.");
 
     }
     
