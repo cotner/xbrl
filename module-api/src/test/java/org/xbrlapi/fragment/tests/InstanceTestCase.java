@@ -116,9 +116,6 @@ public class InstanceTestCase extends DOMLoadingTestCase {
         }
 	}
 	
-	/**
-	 * Test getting facts.
-	 */
 	public void testGetFacts() {
         try {
             List<Instance> instances = store.<Instance>getXMLResources("Instance");
@@ -130,6 +127,19 @@ public class InstanceTestCase extends DOMLoadingTestCase {
             fail(e.getMessage());
         }
 	}
+	
+    public void testGetTuples() {
+        try {
+            List<Instance> instances = store.<Instance>getXMLResources("Instance");
+            assertTrue(instances.size() > 0);
+            for (Instance instance: instances) {
+                assertEquals(2, instance.getTuples().size());
+                assertEquals(0, instance.getItems().size());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }	
 	
 	/**
 	 * Test getting footnote links.

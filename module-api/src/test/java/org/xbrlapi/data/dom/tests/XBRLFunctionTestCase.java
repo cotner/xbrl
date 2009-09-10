@@ -51,6 +51,34 @@ public class XBRLFunctionTestCase extends BaseTestCase {
             loader.discover(this.getURI(STARTING_POINT_2));
             List<Tuple> tuples = store.getTuples();
             assertTrue(tuples.size() > 0);
+
+            List<Instance> instances = store.<Instance>getXMLResources("Instance");
+            assertTrue(instances.size() > 0);
+            for (Instance instance: instances) {
+                List<Fact> facts = instance.getFacts();
+                assertTrue(facts.size() > 0);
+                for (Fact fact: facts) {
+                    fact.serialize();
+                }
+            }
+            
+        } catch (XBRLException e) {
+            e.printStackTrace();
+            fail("Unexpected " + e.getMessage());
+        }
+    }
+    
+    public void testGetFacts() {
+        try {
+            loader.discover(this.getURI(STARTING_POINT_1));
+            loader.discover(this.getURI(STARTING_POINT_2));
+            List<Fact> facts = store.getFacts();
+            assertTrue(facts.size() > 0);
+
+            for (Fact fact: facts) {
+                fact.serialize();
+            }
+            
         } catch (XBRLException e) {
             e.printStackTrace();
             fail("Unexpected " + e.getMessage());
