@@ -5,10 +5,12 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Vector;
 
+import org.xbrlapi.ArcroleType;
 import org.xbrlapi.Concept;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Linkbase;
 import org.xbrlapi.ReferencePartDeclaration;
+import org.xbrlapi.RoleType;
 import org.xbrlapi.Schema;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.utilities.Constants;
@@ -150,23 +152,19 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     public List<ReferencePartDeclaration> getReferencePartDeclarations() throws XBRLException {
     	return this.getChildren("ReferencePartDeclaration");
     }
+
+    /**
+     * @see org.xbrlapi.Schema#getArcroleTypes()
+     */
+    public List<ArcroleType> getArcroleTypes() throws XBRLException {
+        return this.<ArcroleType>getChildren("ArcroleType");
+    }
+
+    /**
+     * @see org.xbrlapi.Schema#getRoleTypes()
+     */
+    public List<RoleType> getRoleTypes() throws XBRLException {
+        return this.<RoleType>getChildren("RoleType");
+    }
     
-    
-
-
-
-
-
-    
-
-
-
-    
-
-
-
-
-    
-
-
 }

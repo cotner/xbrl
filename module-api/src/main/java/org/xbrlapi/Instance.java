@@ -91,6 +91,14 @@ public interface Instance extends Fragment {
     public List<Fact> getFacts() throws XBRLException;
     
     /**
+     * @return the list of tuples that are children of the instance.
+     * Tuples that are within tuples are not included in this list.
+     * The list is empty if the instance does not contain tuples.
+     * @throws XBRLException
+     */
+    public List<Tuple> getTuples() throws XBRLException;    
+    
+    /**
      * @return the list of all items that are children of the instance.
      * Tuples are not included in the list.
      * @throws XBRLException

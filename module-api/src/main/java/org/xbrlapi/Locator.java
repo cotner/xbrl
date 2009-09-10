@@ -27,10 +27,9 @@ public interface Locator extends ArcEnd {
 
     
     /**
-     * Get the single fragment that this locator references.
      * @return the single fragment referenced by the locator or none if none
      * is found.
-     * @throws XBRLException
+     * @throws XBRLException if the locator does not reference exactly one fragment.
      */
     public Fragment getTarget() throws XBRLException;
     

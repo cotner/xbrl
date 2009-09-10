@@ -74,33 +74,29 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
     }
     
     /**
-     * Get the single fragment that this locator references.
-     * @return the single fragment referenced by the locator.
-     * @throws XBRLException if the locator does not reference exactly one fragment.
      * @see org.xbrlapi.Locator#getTarget()
      */
     public Fragment getTarget() throws XBRLException {
 
-        long start = System.currentTimeMillis();
-        
         URI uri = this.getStore().getMatcher().getMatch(getTargetDocumentURI());
+        logger.info("The locator's target URI = " + uri);
 
         String pointerValue = getTargetPointerValue();
-    	if (! pointerValue.equals("")) {
-    	    String query = "#roots#[" + Constants.XBRLAPIPrefix + ":" + "xptr/@value='" + pointerValue + "']";
-            List<Fragment> fragments = getStore().<Fragment>queryForXMLResources(query);
-            for (Fragment fragment: fragments) {
-                if (fragment.getURI().equals(uri)) {
-                    logger.debug("MS to get located fragment = " + (System.currentTimeMillis() - start));
-                    return fragment;
-                }
-            }
-            throw new XBRLException("The simple link does not reference a fragment.");
+        
+        logger.info("The locator's XPointer value = " + pointerValue);
+        
+    	if (pointerValue.equals("")) {
+            Fragment fragment = getStore().getRootFragmentForDocument(uri);
+            if (fragment == null) throw new XBRLException("XBRL XLink locators with no XPointer expression must identify a single document root.");
+            return fragment;
     	}
-    	
-    	Fragment fragment = getStore().getRootFragmentForDocument(uri);
-        if (fragment == null) throw new XBRLException("The simple link does not reference a fragment.");
-        return fragment;
+
+    	String query = "#roots#[@uri='" + uri.toString() + "' and " + Constants.XBRLAPIPrefix + ":" + "xptr/@value='" + pointerValue + "']";
+        List<Fragment> fragments = getStore().<Fragment>queryForXMLResources(query);
+        if (fragments.size() == 1) return fragments.get(0);
+        if (fragments.size() == 0) throw new XBRLException("XBRL XLink locators must identify a single resource.");
+        throw new XBRLException("XBRL XLink locators must not identify multiple resources.");
+
     }
     
     /**

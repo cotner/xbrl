@@ -89,10 +89,6 @@ public interface Schema extends SchemaContent {
      */
     public List<Concept> getConceptsBySubstitutionGroup(URI namespace, String localname) throws XBRLException;
 
- 		
-
-
-
     /**
      * Get a reference part declaration in a schema.
      * Returns null if the reference part does not exist in the schema.
@@ -109,20 +105,16 @@ public interface Schema extends SchemaContent {
      */
     public List<ReferencePartDeclaration> getReferencePartDeclarations() throws XBRLException;    
     
-
+    /**
+     * @return the list of role type definitions in the schema
+     * @throws XBRLException
+     */
+    public List<RoleType> getRoleTypes() throws XBRLException;
     
-
-
-
+    /**
+     * @return the list of arcrole type definitions in the schema
+     * @throws XBRLException
+     */
+    public List<ArcroleType> getArcroleTypes() throws XBRLException;
     
-
-
-
-    
-
-
-
-    
-
-
 }

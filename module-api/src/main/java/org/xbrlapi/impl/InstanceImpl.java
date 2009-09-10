@@ -1,12 +1,14 @@
 package org.xbrlapi.impl;
 
+import java.util.List;
+
 import org.xbrlapi.Context;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
-import java.util.List;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
 import org.xbrlapi.SimpleLink;
+import org.xbrlapi.Tuple;
 import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -127,7 +129,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getFacts()
      */
     public List<Fact> getFacts() throws XBRLException {
-    	return getStore().<Fact>queryForXMLResources("#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl'  or @type='org.xbrlapi.impl.TupleImpl')]");
+    	return getStore().<Fact>queryForXMLResources("#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl' or @type='org.xbrlapi.impl.TupleImpl')]");
     }
     
     /**
@@ -136,11 +138,16 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     public List<Item> getItems() throws XBRLException {
         return getStore().<Item>queryForXMLResources("#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl')]");
     }
-    
-    
 
 
-    
- 
 
+
+
+    /**
+     * @see org.xbrlapi.Instance#getTuples()
+     */
+    public List<Tuple> getTuples() throws XBRLException {
+        return this.<Tuple>getChildren("Tuple");
+    }
+    
 }
