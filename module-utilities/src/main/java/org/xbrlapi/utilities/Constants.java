@@ -98,6 +98,14 @@ public class Constants {
             ExampleReferenceRole = new URI("http://www.xbrl.org/2003/role/exampleRef");
             StandardLinkRole = new URI("http://www.xbrl.org/2003/role/link");
             ISO4217 = new URI("http://www.xbrl.org/2003/iso4217");
+            
+            StandardGenericLabelRole = new URI("http://www.xbrl.org/2008/role/label");
+            TerseGenericLabelRole = new URI("http://www.xbrl.org/2008/role/terseLabel");
+            VerboseGenericLabelRole = new URI("http://www.xbrl.org/2008/role/verboseLabel");
+            DocumentationGenericLabelRole = new URI("http://www.xbrl.org/2008/role/documentation");
+            
+            StandardGenericReferenceRole = new URI("http://www.xbrl.org/2008/role/reference");
+            
         } catch (URISyntaxException e) {
             logger.error("Exception thrown though.");
         }
@@ -121,6 +129,14 @@ public class Constants {
     public static URI XMLSchemaInstanceNamespace;
     public static URI LabelArcrole;
     public static URI GenericLabelArcrole;
+    
+    public static URI StandardGenericLabelRole;
+    
+    public static URI TerseGenericLabelRole;
+    
+    public static URI VerboseGenericLabelRole;
+    
+    public static URI DocumentationGenericLabelRole;    
     public static URI ReferenceArcrole;
     public static URI GenericReferenceArcrole;
     public static URI CalculationArcrole;
@@ -153,6 +169,8 @@ public class Constants {
     public static URI CommentaryGuidanceLabelRole;
     public static URI ExampleGuidanceLabelRole;
     public static URI StandardReferenceRole;
+    
+    public static URI StandardGenericReferenceRole;
     public static URI DefinitionReferenceRole;
     public static URI DisclosureReferenceRole;
     public static URI MandatoryDisclosureReferenceRole;
