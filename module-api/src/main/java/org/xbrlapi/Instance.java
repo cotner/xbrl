@@ -1,6 +1,8 @@
 package org.xbrlapi;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -89,6 +91,43 @@ public interface Instance extends Fragment {
      * @throws XBRLException
      */
     public List<Fact> getFacts() throws XBRLException;
+    
+    /**
+     * @return the number of child facts in the instance.
+     * @throws XBRLException
+     */
+    public long getFactCount() throws XBRLException;
+    
+    /**
+     * @return the value of the earliest start 
+     * date or instance in a context period in the XBRL instance.
+     * Returns null if the XBRL instance does not contain a context that does not
+     * have a value of forever.
+     * @throws XBRLException
+     */
+    public String getEarliestPeriod() throws XBRLException;
+    
+    /**
+     * @return the value of the latest start 
+     * date or instance in a context period in the XBRL instance.
+     * Returns null if the XBRL instance does not contain a context that does not
+     * have a value of forever.
+     * @throws XBRLException
+     */
+    public String getLatestPeriod() throws XBRLException;
+    
+    /**
+     * @return the list of entity resources for entities with facts in the instance.
+     * @throws XBRLException
+     */
+    public List<EntityResource> getEntityResources() throws XBRLException; 
+    
+    /**
+     * @return A map, indexed by entity identifier schemes, of sets of the entity identifiers
+     * for those schemes, as contained in this XBRL instance.
+     * @throws XBRLException
+     */
+    public Map<String, Set<String>> getEntityIdentifiers() throws XBRLException;
     
     /**
      * @return the list of tuples that are children of the instance.

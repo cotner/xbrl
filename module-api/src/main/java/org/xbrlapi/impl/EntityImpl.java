@@ -41,7 +41,7 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     	if (identifiers.getLength() > 1) throw new XBRLException("There are too many entity identifiers in the entity.");
     	Element identifier = (Element) identifiers.item(0);
     	if (! identifier.hasAttribute("scheme")) throw new XBRLException("The entity identifier scheme is not specified.");
-    	return identifier.getTextContent();
+    	return identifier.getTextContent().trim();
     }
     
 
@@ -72,6 +72,7 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
         String query = "#roots#[@type='org.xbrlapi.impl.EntityResourceImpl' and */*/@scheme='"+ this.getIdentifierScheme() +"' and */*/@value='" + value + "']";
         return getStore().<EntityResource>queryForXMLResources(query);
     }
+    
     
     /**
      * @see org.xbrlapi.Entity#getEntityLabels()

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xbrl
   xmlns="http://www.xbrl.org/2003/instance"
-  xmlns:eg="http://xbrlapi.org/test/"
+  xmlns:eg="http://xbrlapi.org/test/001"
   xmlns:link="http://www.xbrl.org/2003/linkbase"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
@@ -9,7 +9,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
     http://www.xbrl.org/2003/instance http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd
-    http://xbrlapi.org/test/ schema.xsd"
+    http://xbrlapi.org/test/001 schema.xsd"
   >
 
   <link:schemaRef xlink:type="simple" xlink:href="schema.xsd" />
