@@ -4,33 +4,44 @@ import java.io.File;
 import java.io.FileFilter;
 import java.net.URI;
 
-import org.xbrlapi.cache.CacheImpl;
-import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * Loads all of the documents in the cache into the underlying data store.
+ * Loads all of the documents, from the specified cache directory, 
+ * into the underlying data store.  This operation is recursive in that all
+ * documents within the specified directory and any descendant directories are
+ * loaded.
  * Additional commandline arguments (optional ones marked with an *)
  * <ul>
- *  <li>There are no additional commandline arguments for this utility.</li>
+ *  <li>-directory [The cache directory to start loading from]</li>
  * </ul> 
  * These are in addition to those commandline arguments documented at
- * @link BaseUtilityExample
+ * @link BaseUtilityExample.
+ * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class LoadAllDocumentsInCache extends BaseUtilityExample {
+public class LoadCacheDocuments extends BaseUtilityExample {
+
+    private File start;
     
-    private Matcher matcher = null;
+    protected String setUp() {
+        String message = super.setUp();
+        if (!arguments.containsKey("directory")) 
+            message += "The starting cache directory is not specified.\n";
+        start = new File(arguments.get("directory"));
+        if (! start.isDirectory()) message += "The starting directory MUST be a directory - not a URL or a file.\n";
+        return message;
+    }
     
-    public LoadAllDocumentsInCache(String[] args) {
+    public LoadCacheDocuments(String[] args) {
         argumentDocumentation = addArgumentDocumentation();
         parseArguments(args);
         String message = setUp();
         if (message.equals("")) {
             try {
                 store.setAnalyser(new AnalyserImpl(store));
-                loadFiles(((CacheImpl) cache).getCacheRoot());
+                loadFiles(start);
             } catch (Exception e) {
                 badUsage(e.getMessage());
             }
@@ -46,8 +57,14 @@ public class LoadAllDocumentsInCache extends BaseUtilityExample {
      */
     public static void main(String[] args) {
         @SuppressWarnings("unused")
-        LoadAllDocumentsInCache utility = new LoadAllDocumentsInCache(args);
+        LoadCacheDocuments utility = new LoadCacheDocuments(args);
     }
+    
+    protected String addArgumentDocumentation() {
+        String explanation = super.addArgumentDocumentation();
+        explanation += "-directory\t\t\tXBRL cache directory to start loading documents from.\n";
+        return explanation;
+    }    
 
     private void loadFiles(File directory) {
         for (File f: this.getChildFiles(directory)) loadFile(f);
