@@ -167,9 +167,8 @@ public class StorerImpl implements Storer {
             Set<String> arcIndices = store.getFragmentIndicesFromDocument(document,"Arc");
     
             if (arcIndices.size() > 0) {
-                logger.info("# arcs = " + arcIndices.size() + " in " + document);
-                long start = System.currentTimeMillis();
-    
+                logger.info("Persisting relationships for " + arcIndices.size() + " arcs in " + document);
+
                 // Get indices of arc ends in the document.
                 Map<String,List<String>> endIndices = new HashMap<String,List<String>>();
                 String query = "for $fragment in #roots#[@uri='" + document + "' and */*[@xlink:type='resource' or @xlink:type='locator']] return concat($fragment/@index,' ',$fragment/@parentIndex,$fragment/*/*/@xlink:label)";
@@ -201,7 +200,6 @@ public class StorerImpl implements Storer {
                 // Iterate arcs, storing relationships defined by each
                 for (String arcIndex: arcIndices) {
                     Arc arc = getStore().<Arc>getXMLResource(arcIndex);
-                    logger.debug("Arc index = " + arcIndex);
                     String parentIndex = arc.getParentIndex();
                     String fromKey = parentIndex + arc.getFrom();
                     String toKey = parentIndex + arc.getTo();
@@ -211,20 +209,14 @@ public class StorerImpl implements Storer {
                                 try {
                                     Fragment source = null;
                                     if (locatorTargets.containsKey(sourceIndex)) {
-                                        logger.debug("Source locator index = " + sourceIndex);
-                                        logger.debug("Source resource index = " + locatorTargets.get(sourceIndex));
                                         source = store.getXMLResource(locatorTargets.get(sourceIndex));
                                     } else {
-                                        logger.debug("Source resource index = " + sourceIndex);
                                         source = store.getXMLResource(sourceIndex);
                                     }
                                     Fragment target = null;
                                     if (locatorTargets.containsKey(targetIndex)) {
-                                        logger.debug("Target locator index = " + targetIndex);
-                                        logger.debug("Target resource index = " + locatorTargets.get(targetIndex));
                                         target = store.getXMLResource(locatorTargets.get(targetIndex));
                                     } else {
-                                        logger.debug("Target resource index = " + targetIndex);
                                         target = store.getXMLResource(targetIndex);
                                     }
                                     this.storeRelationship(arc,source,target);
@@ -236,7 +228,6 @@ public class StorerImpl implements Storer {
                         }
                     }
                 }
-                logger.info("Average ms to persist " + arcIndices.size() + " arcs = " + (System.currentTimeMillis() - start)/arcIndices.size());
             }
         } catch (XBRLException e) {
             logger.error("Had problems persisting relationships for " + document);
@@ -315,11 +306,9 @@ public class StorerImpl implements Storer {
                     Relationship active = equivalents.first();
                     for (Relationship equivalent: equivalents) {
                         if (equivalent != active) {
-                            // getStore().remove(equivalent);
                             logger.info("removing " + equivalent.getArc().getURI() + " " + equivalent.getIndex());
                         }
                     }
-                    //if (active.getArcUse().equals("prohibited") getStore().remove(active);
                 }
             }
         }
@@ -375,5 +364,5 @@ public class StorerImpl implements Storer {
 
         return map;
     }
-    
+
 }

@@ -525,7 +525,7 @@ public class LoaderImpl implements Loader, Serializable {
         setDiscovering(false);
 
         if (documentQueue.size() == 0 && failures.size() == 0) {
-            logger.info("Document discovery completed successfully.");
+            logger.debug("Document discovery completed successfully.");
         } else {
             if (failures.size() > 0) {
                 logger.warn("Some documents failed to load.");
@@ -871,8 +871,10 @@ public class LoaderImpl implements Loader, Serializable {
         for (URI document : failures.keySet()) {
             map.put(document,failures.get(document));
         }
-        logger.info("Storing " + map.size() + " documents that are still to be analysed.");
-        getStore().persistLoaderState(map);
+        if (map.size() > 0)  {
+            logger.warn("Storing details of " + map.size() + " documents that are yet to be loaded.");
+            getStore().persistLoaderState(map);
+        }
     }
     
     private void cleanupFailedLoad(URI uri, String reason, Exception e) {
