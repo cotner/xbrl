@@ -37,87 +37,91 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 <div class="content">
 
+<h2>14 Sep. 2009</h2>
+<p>Modified the cache loading utility example to load a part of a cache
+rather than the whole cache. This provides a nice way of testing before
+publication of a taxonomy by copying it to a place in the taxonomy cache
+and then loading from there rather than from the prospective publication
+location.</p>
+<p>Modified the org.xbrlapi.Instance interface to provide a range of new
+methods that reduce the computational burden involved in summarising the
+information contained in an XBRL business report.</p>
+
 <h2>10 Sep. 2009</h2>
 <p>Added new getTuples method to the org.xbrlapi.Instance interface to 
 enable retrieval of all tuples that are children of the root element of the
 XBRL instance.</p>
 
 <h2>9 Sep. 2009</h2>
-<p>Fixed a bug, identified by Karel Arkema, 
-in the org.xbrlapi.data.BaseStoreImpl#getTuplesFromInstances(List) method.
-This now ensures that tuples are correctly identified.</p>
-<p>Fixed a bug in the relationship persistence behaviour of the Loader discover method that
-prevents analysis of relationships where the related fragments have not all been discovered yet.</p>
-<p>Made the Transformer classes within Aspects public so that they can be accessed and customised.</p>
-<p>Created a new utility example that loads all of the documents in a specified
-taxonomy cache location.</p>
+<p>Fixed a bug, identified by Karel Arkema, in the
+org.xbrlapi.data.BaseStoreImpl#getTuplesFromInstances(List) method. This
+now ensures that tuples are correctly identified.</p>
+<p>Fixed a bug in the relationship persistence behaviour of the
+Loader discover method that prevents analysis of relationships where the
+related fragments have not all been discovered yet.</p>
+<p>Made the Transformer classes within Aspects public so that they
+can be accessed and customised.</p>
+<p>Created a new utility example that loads all of the documents in
+a specified taxonomy cache location.</p>
 
 <h2>7 Sep. 2009</h2>
-<p>
-Added methods to the Fragment interface that enable access to the XPointer expressions that could be
-used to reference the root element of the fragment.</p>
-<p>
-Changed the method signatures for the Resource methods that retrieve the name of the language used
-for an extended link resource.</p>
+
+<p>Added methods to the org.xbrlapi.Fragment interface that enable
+access to the XPointer expressions that could be used to reference the
+root element of the fragment.</p>
+
+<p>Changed the method signatures for the Resource methods that retrieve
+the name of the language used for an extended link resource.</p>
 
 <h2>25 Aug. 2009</h2>
-<p>
-Started work on fleshing out an enhanced XML Schema fragmentation system to allow deeper analysis of XML
-schema content model declarations.</p>
+<p>Started work on fleshing out an enhanced XML Schema fragmentation
+system to allow deeper analysis of XML schema content model
+declarations.</p>
 
 <h2>21 Aug. 2009</h2>
-<p>
-Fixed a bug in simple link traversal to ensure that matching URIs are
-taken care of behind the scenes.  Previously a simple link to a duplicate
-document would show up as being broken, implying that the DTS has not been
-fully discovered.</p>
+<p>Fixed a bug in simple link traversal to ensure that matching URIs are
+taken care of behind the scenes. Previously a simple link to a duplicate
+document would show up as being broken, implying that the DTS has not
+been fully discovered.</p>
 
 <h2>20 Aug. 2009</h2>
-<p>
-Made the org.xbrlapi.SimpleLink#getTargetDocumentURI() method public. 
+<p>Made the org.xbrlapi.SimpleLink#getTargetDocumentURI() method public.
 
 <h2>18 Aug. 2009</h2>
-<p>
-Added new methods to the org.xbrlapi.networks.Networks interface to enable all relationships
-from or to a given fragment to be obtained for all networks in the set of networks. </p>
+<p>Added new methods to the org.xbrlapi.networks.Networks interface to
+enable all relationships from or to a given fragment to be obtained for
+all networks in the set of networks.</p>
 
 <h2>13 Aug. 2009</h2>
-<p>
-Added new transient part of store state to keep track of the set of loaders
-that are currently loading data into the store.  This enables loaders in different
-threads to co-ordinate their relationship persistence activities.
-Added new getSourceIndices method to the Store interface.
-Added methods to facilitate more efficient handling of concept analysis in terms of 
-the facts for that concept.
-</p>
+<p>Added new transient part of store state to keep track of the set of
+loaders that are currently loading data into the store. This enables
+loaders in different threads to co-ordinate their relationship
+persistence activities. Added new getSourceIndices method to the Store
+interface. Added methods to facilitate more efficient handling of
+concept analysis in terms of the facts for that concept.</p>
 
 <h2>11 Aug. 2009</h2>
-<p>
-Added new method to access a map of language names from a data store.
+<p>Added new method to access a map of language names from a data store.
 Changed the getLanguage method to getEncoding for Language fragments.
-Added a new class to facilitate rapid analysis of language encodings and names.
-</p>
+Added a new class to facilitate rapid analysis of language encodings and
+names.</p>
 
 <h2>7 Aug. 2009</h2>
-<p>
-Added new org.xbrlapi.impl.LanguageComparator method that compares Language fragments based on their
-codes and then the language names.
-</p>
+<p>Added new org.xbrlapi.impl.LanguageComparator method that compares
+Language fragments based on their codes and then the language names.</p>
 
 <h2>4 Aug. 2009</h2>
-<p>
-Added new method: org.xbrlapi.data.Store#getRootFragments(String).  This provides access to document
-root fragments of a given type.  It is useful for retrieving all schema root elements or all
-XBRL instance root elements.
-</p>
+<p>Added new method: org.xbrlapi.data.Store#getRootFragments(String).
+This provides access to document root fragments of a given type. It is
+useful for retrieving all schema root elements or all XBRL instance root
+elements.</p>
 
 <h2>3 Aug. 2009</h2>
-<p>
-Made the arcrole and linkrole parameter orderings for methods consistent for the networks
-and the data packages.  Extended network related unit tests to check consistency.  Added a
-new utility example that enables investigation of relationship properties for a specified
-document fragment in the data store. 
-</p>
+<p>Made the arcrole and linkrole parameter orderings for methods
+consistent for the networks and the data packages. Extended network
+related unit tests to check consistency. Added a new utility example
+that enables investigation of relationship properties for a specified
+document fragment in the data store.</p>
 
 <h2>1 Aug. 2009</h2>
 <p>
