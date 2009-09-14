@@ -1,12 +1,15 @@
 package org.xbrlapi.impl;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.Context;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
+import org.xbrlapi.Period;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.Unit;
@@ -66,7 +69,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getContexts()
      */
     public List<Context> getContexts() throws XBRLException {
-    	return this.<Context>getChildren("org.xbrlapi.impl.ContextImpl");
+    	return this.<Context>getChildren(ContextImpl.class.getName());
     }
 
     /**
@@ -125,11 +128,19 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     
 
     
+
+    /**
+     * @return the XQuery used to get all the child facts of the XBRL instance.
+     */
+    private String getFactsQuery() {
+        return "#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl' or @type='org.xbrlapi.impl.TupleImpl')]";    
+    }
+    
     /**
      * @see org.xbrlapi.Instance#getFacts()
      */
     public List<Fact> getFacts() throws XBRLException {
-    	return getStore().<Fact>queryForXMLResources("#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl' or @type='org.xbrlapi.impl.TupleImpl')]");
+    	return getStore().<Fact>queryForXMLResources(getFactsQuery());
     }
     
     /**
@@ -148,6 +159,81 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      */
     public List<Tuple> getTuples() throws XBRLException {
         return this.<Tuple>getChildren("Tuple");
+    }
+
+
+
+
+
+    /**
+     * @see org.xbrlapi.Instance#getEarliestPeriod()
+     */
+    public String getEarliestPeriod() throws XBRLException {
+/*        String result = null;
+        List<Context> contexts = this.getContexts();
+        for (Context context: contexts) {
+            Period period = context.getPeriod();
+            String candidate = null;
+            if (period.isInstantPeriod()) candidate = period.getInstant();
+            else if (period.isFiniteDurationPeriod()) candidate = period.getStart();
+            if (result == null || candidate.compareTo(result) < 0) {
+                result = candidate;
+            }
+        }
+        return result;*/
+        
+        String query = "for $root in #roots#[@uri='" + this.getURI() + "' and @type='" + PeriodImpl.class.getName() + "']/*/*/xbrli:instant return string($root)";
+        Set<String> values = getStore().queryForStrings(query);
+        query = "for $root in #roots#[@uri='" + this.getURI() + "' and @type='" + PeriodImpl.class.getName() + "']/*/*/xbrli:startDate return string($root)";
+        values.addAll(getStore().queryForStrings(query));
+        String result = null;
+        Iterator<String> iterator = values.iterator();
+        while (iterator.hasNext()) {
+            String candidate = iterator.next();
+            if (result == null) result = candidate;
+            else if (result.compareTo(candidate) > 0) result = candidate;
+        }
+        return result;        
+    }
+
+    /**
+     * @see org.xbrlapi.Instance#getFactCount()
+     */
+    public long getFactCount() throws XBRLException {
+        return getStore().queryCount(getFactsQuery());
+    }
+
+    /**
+     * @see org.xbrlapi.Instance#getLatestPeriod()
+     */
+    public String getLatestPeriod() throws XBRLException {
+/*        String result = null;
+        List<Context> contexts = this.getContexts();
+        logger.info("# contexts = " + contexts.size());
+        for (Context context: contexts) {
+            Period period = context.getPeriod();
+            String candidate = null;
+            if (period.isInstantPeriod()) candidate = period.getInstant();
+            else if (period.isFiniteDurationPeriod()) candidate = period.getEnd();
+            if (result == null || candidate.compareTo(result) > 0) {
+                result = candidate;
+            }
+        }
+        return result;*/
+        
+        String query = "for $root in #roots#[@uri='" + this.getURI() + "' and @type='" + PeriodImpl.class.getName() + "']/*/*/xbrli:instant return string($root)";
+        Set<String> values = getStore().queryForStrings(query);
+        query = "for $root in #roots#[@uri='" + this.getURI() + "' and @type='" + PeriodImpl.class.getName() + "']/*/*/xbrli:endDate return string($root)";
+        values.addAll(getStore().queryForStrings(query));
+        String result = null;
+        Iterator<String> iterator = values.iterator();
+        while (iterator.hasNext()) {
+            String candidate = iterator.next();
+            if (result == null) result = candidate;
+            else if (result.compareTo(candidate) < 0) result = candidate;
+        }
+        return result;
+        
     }
     
 }
