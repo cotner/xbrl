@@ -1,6 +1,7 @@
 package org.xbrlapi;
 
 import java.io.Serializable;
+import java.net.URI;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
@@ -10,7 +11,7 @@ public interface Measure extends Serializable {
     /**
      * @return the namespace for the measure value.
      */
-    public String getNamespace();
+    public URI getNamespace();
     
     /**
      * @return the local name for the measure value.

@@ -112,41 +112,41 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
     }
     
     /**
-     * @see org.xbrlapi.SchemaContentDeclaration#hasRef()
+     * @see org.xbrlapi.SchemaContentDeclaration#hasReference()
      */
-    public boolean hasRef() throws XBRLException {
+    public boolean hasReference() throws XBRLException {
         return getDataRootElement().hasAttribute("ref");
     }
 
     /**
-     * @see org.xbrlapi.SchemaContentDeclaration#getRefNamespace()
+     * @see org.xbrlapi.SchemaContentDeclaration#getReferenceNamespace()
      */
-    public URI getRefNamespace() throws XBRLException {
-        return getNamespaceFromQName(getRefQName(), getDataRootElement());
+    public URI getReferenceNamespace() throws XBRLException {
+        return getNamespaceFromQName(getReferenceQName(), getDataRootElement());
     }
     
     /**
-     * @see org.xbrlapi.SchemaContentDeclaration#getRefNamespaceAlias()
+     * @see org.xbrlapi.SchemaContentDeclaration#getReferenceNamespaceAlias()
      */
-    public String getRefNamespaceAlias() throws XBRLException {
-        return getPrefixFromQName(getRefQName());
+    public String getReferenceNamespaceAlias() throws XBRLException {
+        return getPrefixFromQName(getReferenceQName());
     }
 
     /**
      * @see org.xbrlapi.SchemaContentDeclaration#getTypeQName()
      */
-    public String getRefQName() throws XBRLException {
-        if (! hasRef()) throw new XBRLException("The content declaration does not use a reference to another XML Schema declaration.");
+    public String getReferenceQName() throws XBRLException {
+        if (! hasReference()) throw new XBRLException("The content declaration does not use a reference to another XML Schema declaration.");
         String qname = getDataRootElement().getAttribute("ref");
         if (qname.equals("") || (qname == null)) throw new XBRLException("The element declaration does not use a reference to another XML Schema declaration.");
         return qname;
     }
 
     /**
-     * @see org.xbrlapi.SchemaContentDeclaration#getRefLocalname()
+     * @see org.xbrlapi.SchemaContentDeclaration#getReferenceLocalname()
      */  
-    public String getRefLocalname() throws XBRLException {
-        return getLocalnameFromQName(getRefQName());
+    public String getReferenceLocalname() throws XBRLException {
+        return getLocalnameFromQName(getReferenceQName());
     }
 
     /**
@@ -155,7 +155,7 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
     @SuppressWarnings("unchecked")
     public <F extends SchemaDeclaration> F getReferencedSchemaDeclaration() throws XBRLException {
         try {
-            F sd = (F) getStore().getSchemaContent(this.getRefNamespace(),this.getRefLocalname());
+            F sd = (F) getStore().getSchemaContent(this.getReferenceNamespace(),this.getReferenceLocalname());
             if (sd == null) throw new XBRLException("The schema declaration is not in a schema contained in the data store.");
             return sd;
         } catch (ClassCastException e) {

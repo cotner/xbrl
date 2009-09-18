@@ -3,15 +3,17 @@ package org.xbrlapi.fragment.tests;
 import java.net.URI;
 import java.util.List;
 
+import org.xbrlapi.ComplexTypeDeclaration;
 import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.ExtendedLink;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.Schema;
 import org.xbrlapi.SimpleLink;
+import org.xbrlapi.SimpleTypeDeclaration;
+import org.xbrlapi.utilities.Constants;
 
 /**
- * Tests the implementation of the org.xbrlapi.Fact interface.
- * Uses the DOM-based data store to ensure rapid testing.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
@@ -190,4 +192,47 @@ public class SchemaTestCase extends DOMLoadingTestCase {
             fail(e.getMessage());
         }
     }	
+    
+    public void testGetTypes() {
+
+        List<ComplexTypeDeclaration> ctds = null;
+        Schema schema = null;
+        
+        try {
+            schema = store.getSchema(Constants.XBRL21Namespace);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("1: " + e.getMessage());
+        }
+
+        try {
+            ctds = schema.getGlobalComplexTypes();
+            assertTrue(ctds.size() > 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("2: " + e.getMessage());
+        }
+
+        try {
+            ComplexTypeDeclaration monetaryItemType = schema.getGlobalDeclaration("monetaryItemType");
+            assertTrue(ctds.contains(monetaryItemType));
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("3: " + e.getMessage());
+        }
+        
+        try {
+            List<SimpleTypeDeclaration> stds = schema.getGlobalSimpleTypes();
+            assertTrue(stds.size() >0);
+            for (Fragment f: stds) {
+                f.serialize();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("4: " + e.getMessage());
+        }
+    }
+    
+    
+    
 }

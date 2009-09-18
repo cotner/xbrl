@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Vector;
 
 import org.xbrlapi.ArcroleType;
+import org.xbrlapi.ComplexTypeDeclaration;
 import org.xbrlapi.Concept;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Linkbase;
 import org.xbrlapi.ReferencePartDeclaration;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Schema;
+import org.xbrlapi.SchemaDeclaration;
 import org.xbrlapi.SimpleLink;
+import org.xbrlapi.SimpleTypeDeclaration;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -165,6 +168,39 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      */
     public List<RoleType> getRoleTypes() throws XBRLException {
         return this.<RoleType>getChildren("RoleType");
+    }
+
+    /**
+     * @see org.xbrlapi.Schema#getGlobalComplexTypes()
+     */
+    public List<ComplexTypeDeclaration> getGlobalComplexTypes()
+            throws XBRLException {
+        return getStore().<ComplexTypeDeclaration>getChildFragments("ComplexTypeDeclaration",getIndex());
+    }
+
+    /**
+     * @see org.xbrlapi.Schema#getGlobalDeclaration(java.lang.String)
+     */
+    public <D extends SchemaDeclaration> D getGlobalDeclaration(String name)
+            throws XBRLException {
+        if (name == null) throw new XBRLException("The name must not be null.");
+        String query = "for $root in #roots#[@parentIndex='"+getIndex()+"'] where $root/*/*/@name='"+name+"' return $root";
+        try {
+            List<D> results = getStore().<D>queryForXMLResources(query);
+            if (results.size() == 1) return results.get(0);
+            if (results.size() == 0) return null;
+            throw new XBRLException("The schema must not contain more than one global declaration with name " + name);
+        } catch (ClassCastException e) {
+            throw new XBRLException("The declaration is not of the specified data type.",e);
+        }
+    }
+
+    /**
+     * @see org.xbrlapi.Schema#getGlobalSimpleTypes()
+     */
+    public List<SimpleTypeDeclaration> getGlobalSimpleTypes()
+            throws XBRLException {
+        return getStore().<SimpleTypeDeclaration>getChildFragments("SimpleTypeDeclaration",getIndex());
     }
     
 }

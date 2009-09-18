@@ -93,6 +93,20 @@ public interface Instance extends Fragment {
     public List<Fact> getFacts() throws XBRLException;
     
     /**
+     * @return the list of concepts that have values reported for them by child
+     * facts of this XBRL instance.
+     * @throws XBRLException
+     */
+    public List<Concept> getChildConcepts() throws XBRLException;
+    
+    /**
+     * @return the number of concepts that have values reported for them by child
+     * facts of this XBRL instance.
+     * @throws XBRLException
+     */
+    public int getChildConceptCount() throws XBRLException;    
+    
+    /**
      * @return the number of child facts in the instance.
      * @throws XBRLException
      */

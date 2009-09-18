@@ -20,10 +20,12 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.Language;
-import org.xbrlapi.Relationship;
 import org.xbrlapi.ReferenceResource;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.RoleType;
+import org.xbrlapi.Schema;
 import org.xbrlapi.SchemaContent;
+import org.xbrlapi.SchemaDeclaration;
 import org.xbrlapi.Stub;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.XML;
@@ -728,6 +730,15 @@ public interface Store extends Serializable {
      * @throws XBRLException
      */
     public List<Tuple> getTuples() throws XBRLException;
+    
+    /**
+     * @param targetNamespace The target namespace of the schema.
+     * @return the root fragment of the schema or null 
+     * if there are no schemas with the specified target namespace.
+     * @throws XBRLException if there is more than one schema with the
+     * given target namespace or if the target namespace is null.
+     */
+    public Schema getSchema(URI targetNamespace) throws XBRLException;
 
     /**
      * @param uri The URI of the document to get the facts from.
@@ -780,6 +791,15 @@ public interface Store extends Serializable {
      * or if no matching concepts are found in the data store.
      */
     public Concept getConcept(URI namespace, String name) throws XBRLException;
+    
+    /**
+     * @param namespace The target namespace for the schema containing the global declaration.
+     * @param name The local name for the global declaration.
+     * @return the declaration fragment with the specified namespace and name.
+     * @throws XBRLException if more than one matching declaration is found in the data store
+     * or if no matching declarations are found in the data store.
+     */
+    public <D extends SchemaDeclaration> D getGlobalDeclaration(URI namespace, String name) throws XBRLException;    
 
     /**
      * @return a list of arcroleType fragments

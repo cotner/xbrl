@@ -116,5 +116,28 @@ public interface Schema extends SchemaContent {
      * @throws XBRLException
      */
     public List<ArcroleType> getArcroleTypes() throws XBRLException;
+ 
+    /**
+     * @return the list of global complex type declarations in this schema.
+     * @throws XBRLException
+     */
+    public List<ComplexTypeDeclaration> getGlobalComplexTypes() throws XBRLException;
+
+    /**
+     * @return the list of global simple type declarations in this schema.
+     * @throws XBRLException
+     */
+    public List<SimpleTypeDeclaration> getGlobalSimpleTypes() throws XBRLException;
+
+    /**
+     * 
+     * @param <D> The type of the declaration being retrieved.
+     * @param name The name of the declaration being retrieved.
+     * @return the fragment representing the global schema declaration or null
+     * if none exists.
+     * @throws XBRLException if the name is null or if the specified type of the global
+     * declaration is not consistent with the actual type of the declaration.
+     */
+    public <D extends SchemaDeclaration> D getGlobalDeclaration(String name) throws XBRLException;
     
 }

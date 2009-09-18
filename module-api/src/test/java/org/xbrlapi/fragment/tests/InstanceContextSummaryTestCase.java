@@ -1,9 +1,11 @@
 package org.xbrlapi.fragment.tests;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.xbrlapi.Concept;
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Instance;
 
@@ -61,7 +63,21 @@ public class InstanceContextSummaryTestCase extends DOMLoadingTestCase {
             e.printStackTrace();
             fail(e.getMessage());
         }
-    }   
+    }
+    
+    public void testGetConcepts() {
+        try {
+            URI uri = this.getURI("test.data.local.xbrl.instance.period.summary.1");
+            loader.discover(uri);
+            Instance instance = store.<Instance>getRootFragmentForDocument(uri);
+            List<Concept> concepts = instance.getChildConcepts();
+            assertEquals(2,concepts.size());
+            assertEquals(2,instance.getChildConceptCount());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }    
 
     public void testGetEntityIdentifiers() {
         try {

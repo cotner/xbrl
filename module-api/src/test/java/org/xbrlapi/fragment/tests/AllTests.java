@@ -56,6 +56,7 @@ public class AllTests {
         suite.addTestSuite(LocatorTestCase.class);
 		suite.addTestSuite(TupleTestCase.class);
 		suite.addTestSuite(NonNumericItemTestCase.class);
+        suite.addTestSuite(TypeDeclarationTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

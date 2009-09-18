@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import org.xbrlapi.Concept;
 import org.xbrlapi.Context;
 import org.xbrlapi.EntityResource;
 import org.xbrlapi.ExtendedLink;
@@ -215,6 +218,38 @@ public class InstanceImpl extends FragmentImpl implements Instance {
         }
         return result;
 
-    }    
+    }
+
+    /**
+     * @see org.xbrlapi.Instance#getChildConcepts()
+     */
+    public List<Concept> getChildConcepts() throws XBRLException {
+        String query = "for $root in #roots#[@parentIndex='"+getIndex()+"'] let $data:=$root/xbrlapi:data/* where namespace-uri($data)!='"+Constants.XBRL21Namespace+"' and namespace-uri($data)!='"+Constants.XBRL21LinkNamespace+"' return concat(namespace-uri($data),'|||',local-name($data))";
+        Set<String> qnames = getStore().queryForStrings(query);
+        List<Concept> concepts = new Vector<Concept>();
+        for (String value: qnames) {
+            String[] qname = value.split("\\|\\|\\|");
+            String namespace = qname[0];
+            String localname = qname[1];
+            try {
+                concepts.add(getStore().getConcept(new URI(namespace),localname));
+            } catch (URISyntaxException e) {
+                throw new XBRLException("Invalid URI syntax in a fact's namespace.",e);
+            }
+        }
+        
+        return concepts;
+    }
+
+    /**
+     * @see org.xbrlapi.Instance#getChildConceptCount()
+     */
+    public int getChildConceptCount() throws XBRLException {
+        String query = "for $root in #roots#[@parentIndex='"+getIndex()+"'] let $data:=$root/xbrlapi:data/* where namespace-uri($data)!='"+Constants.XBRL21Namespace+"' and namespace-uri($data)!='"+Constants.XBRL21LinkNamespace+"' return concat(namespace-uri($data),'|||',local-name($data))";
+        Set<String> qnames = getStore().queryForStrings(query);
+        return qnames.size();
+    }
+    
+    
     
 }

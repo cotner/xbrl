@@ -1,11 +1,14 @@
 package org.xbrlapi.data.dom.tests;
 
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Instance;
+import org.xbrlapi.Schema;
 import org.xbrlapi.Tuple;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -40,11 +43,20 @@ public class XBRLFunctionTestCase extends BaseTestCase {
                     assertEquals(fact.getNamespace(),concept.getTargetNamespace());
                 }
             }
+            
+            try {
+                store.getConcept(Constants.XBRL21Namespace,"rubbishConceptName");
+                fail("There is no such concept as " + Constants.XBRL21Namespace + ":rubbishConceptName");
+            } catch (Exception e) {
+                ;
+            }
+            
         } catch (XBRLException e) {
             e.printStackTrace();
             fail("Unexpected " + e.getMessage());
         }
     }
+
     
     public void testGetTuples() {
         try {
@@ -67,6 +79,25 @@ public class XBRLFunctionTestCase extends BaseTestCase {
             fail("Unexpected " + e.getMessage());
         }
     }
+    
+    public void testGetSchemaBasedOnTargetNamespace() {
+        Schema schema;
+        try {
+            loader.discover(this.getURI(STARTING_POINT_2));
+            schema = store.getSchema(Constants.XBRL21Namespace);
+            assertTrue(schema.getTargetNamespace().equals(Constants.XBRL21Namespace));
+        } catch (XBRLException e) {
+            e.printStackTrace();
+            fail("Unexpected " + e.getMessage());
+        }
+        try {
+            schema = store.getSchema(new URI("http://rubbish.namespace/"));
+            assertNull(schema);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unexpected " + e.getMessage());
+        }
+    }    
     
     public void testGetFacts() {
         try {

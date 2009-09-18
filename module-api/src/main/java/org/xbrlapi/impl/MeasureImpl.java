@@ -42,8 +42,8 @@ public class MeasureImpl implements Measure {
     /**
      * @see org.xbrlapi.Measure#getNamespace()
      */
-    public String getNamespace() {
-        return namespace.toString();
+    public URI getNamespace() {
+        return namespace;
     }
 
 }

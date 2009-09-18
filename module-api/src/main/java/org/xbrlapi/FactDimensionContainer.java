@@ -22,6 +22,6 @@ public interface FactDimensionContainer extends Fragment {
      * The list is empty if no facts in the instance reference this context.
      * @throws XBRLException
      */
-    public List<Item> getReferencingItems() throws XBRLException;
+    public <I extends Item> List<I> getReferencingItems() throws XBRLException;
 
 }

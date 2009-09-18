@@ -30,7 +30,6 @@ import org.xbrlapi.Arc;
 import org.xbrlapi.ArcEnd;
 import org.xbrlapi.ArcroleType;
 import org.xbrlapi.Concept;
-import org.xbrlapi.ElementDeclaration;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -45,6 +44,7 @@ import org.xbrlapi.Resource;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Schema;
 import org.xbrlapi.SchemaContent;
+import org.xbrlapi.SchemaDeclaration;
 import org.xbrlapi.Stub;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.XML;
@@ -56,6 +56,7 @@ import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.impl.FragmentComparator;
 import org.xbrlapi.impl.RelationshipImpl;
 import org.xbrlapi.impl.RelationshipOrderComparator;
+import org.xbrlapi.impl.SchemaImpl;
 import org.xbrlapi.impl.StubImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.AllAnalyserImpl;
@@ -1547,42 +1548,23 @@ public abstract class BaseStoreImpl implements Store {
     
     
     /**
-     * @param namespace The namespace for the concept.
-     * @param name The local name for the concept.
-     * @return the concept fragment for the specified namespace and name.
-     * @throws XBRLException if more than one matching concept is found in the data store
-     * or if no matching concepts are found in the data store.
+     * @see Store#getConcept(URI, String)
      */
     public Concept getConcept(URI namespace, String name) throws XBRLException {
-        
-        String query = "for $concept in #roots#[*/xsd:element/@name='" + name + "'], $schema in #roots#[*/xsd:schema/@targetNamespace='" + namespace + "'] where $concept/@parentIndex=$schema/@index return $concept";
-        List<ElementDeclaration> matches = this.<ElementDeclaration>queryForXMLResources(query);
-        
-        //List<SchemaDeclaration> candidates = this.<SchemaDeclaration>queryForXMLResources("#roots#[*/xsd:element[@name='" + name + "']]");
-/*        List<Concept> matches = new Vector<Concept>();
-        for (SchemaDeclaration candidate: candidates) {
-            if (candidate.getTargetNamespace().equals(namespace)) {
-                try {
-                    matches.add((Concept) candidate);
-                } catch (Exception e) {
-                    ;// Casting to a concept failed so it is not a concept.
-                }
-            }
-        }
-*/        
-        if (matches.size() == 0) 
-            throw new XBRLException("No matching element declarations were found for " + namespace + ":" + name + ".");
-        
-        if (matches.size() > 1) 
-            throw new XBRLException(new Integer(matches.size()) + "matching element declarations were found for " + namespace + ":" + name + ".");
-
-        try {
-            return (Concept) matches.get(0);
-        } catch (ClassCastException e) {
-            throw new XBRLException("Element declaration " + namespace + ":" + name + " in fragment " + matches.get(0).getIndex() + " is not a concept.",e);
-        }
-
+        return this.<Concept>getGlobalDeclaration(namespace,name);
     }
+    
+    /**
+     * @see Store#getGlobalDeclaration(URI, String)
+     */
+    public <D extends SchemaDeclaration> D getGlobalDeclaration(URI namespace, String name) throws XBRLException {
+        Schema schema = this.getSchema(namespace);
+        D declaration = schema.<D>getGlobalDeclaration(name);
+        if (declaration == null) {
+            throw new XBRLException("No matching global schema declarations were found for " + namespace + ":" + name + ".");
+        }
+        return declaration;
+    }    
 
     /**
      * @return a list of roleType fragments
@@ -2395,6 +2377,22 @@ public abstract class BaseStoreImpl implements Store {
             logger.error(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * @see org.xbrlapi.data.Store#getSchema(java.net.URI)
+     */
+    public Schema getSchema(URI targetNamespace) throws XBRLException {
+        if (targetNamespace == null) throw new XBRLException("The target namespace of the schema must not be null.");
+        String query = "for $root in #roots#[@type='"+SchemaImpl.class.getName()+"'] where $root/*/xsd:schema/@targetNamespace='" + targetNamespace + "' return $root";
+        List<Schema> candidates = this.<Schema>queryForXMLResources(query);
+        if (candidates.size() == 1) return candidates.get(0);
+        if (candidates.size() == 0) return null;
+        String message = "";
+        for (Schema schema: candidates) {
+            message += ": " + schema.getURI();
+        }
+        throw new XBRLException("Schemas with URLs" + message + ", have the target namespace " + targetNamespace);
     }
 
 }

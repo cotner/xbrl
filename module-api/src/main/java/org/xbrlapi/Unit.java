@@ -34,8 +34,6 @@ public interface Unit extends FactDimensionContainer {
      */
     public NodeList getDenominatorMeasures() throws XBRLException;
     
-
-    
     /**
      * Tests if the unit is u-equal to another unit
      * returning true if they are u-equal and false otherwise
