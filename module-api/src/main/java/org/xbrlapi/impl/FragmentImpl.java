@@ -497,6 +497,8 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      */
     public URI getNamespaceFromQName(String qname, Node node) throws XBRLException {
         
+        this.getStore().serialize((Element) node);
+        
         if (this.getPrefixFromQName(qname).equals("xml")) return Constants.XMLNamespace;
         
         // If we have an attribute - go straight to working with the parent element.
@@ -523,6 +525,15 @@ public class FragmentImpl extends XMLImpl implements Fragment {
             
             // Try to exploit a known namespace mapping for the element or one of its attributes
             String prefix = getPrefixFromQName(qname);
+            
+            if ((node.getPrefix() == null) && (prefix.equals(""))) {
+                try {
+                    return new URI(node.getNamespaceURI());
+                } catch (URISyntaxException e) {
+                    throw new XBRLException("The namespace URI " + node.getNamespaceURI() + " has invalid syntax.",e);
+                }
+            }
+
             if ((node.getPrefix() != null) && (node.getPrefix().equals(prefix))) {
                 try {
                     return new URI(node.getNamespaceURI());
@@ -533,6 +544,15 @@ public class FragmentImpl extends XMLImpl implements Fragment {
             NamedNodeMap attrs = node.getAttributes();
             for (int i=0; i<attrs.getLength(); i++) {
                 Node attr = attrs.item(i);
+
+                if ((attr.getPrefix() == null) && (prefix.equals(""))) {
+                    try {
+                        return new URI(attr.getNamespaceURI());
+                    } catch (URISyntaxException e) {
+                        throw new XBRLException("The namespace URI " + attr.getNamespaceURI() + " has invalid syntax.",e);
+                    }
+                }
+                
                 if ((attr.getPrefix() != null) && (attr.getPrefix().equals(prefix))) {
                     try {
                         return new URI(attr.getNamespaceURI());

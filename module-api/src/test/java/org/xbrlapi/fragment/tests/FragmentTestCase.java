@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Measure;
+import org.xbrlapi.Schema;
+import org.xbrlapi.TypeDeclaration;
 import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.Constants;
 
@@ -44,7 +46,22 @@ public class FragmentTestCase extends DOMLoadingTestCase {
             e.printStackTrace();
             fail(e.getMessage());
         }
-	}	
+	}
+	
+    public void testNamespaceResolutionForQNamesWithoutPrefixes() {
+
+        try {
+            Schema schema = store.getSchema(Constants.XBRL21Namespace);
+            TypeDeclaration type = schema.getGlobalDeclaration("monetaryItemType");
+            TypeDeclaration parentType = type.getParentType();
+            store.serialize(parentType.getMetadataRootElement());
+            URI ns = parentType.getNamespaceFromQName("decimal",parentType.getDataRootElement());
+            assertEquals(Constants.XMLSchemaNamespace,ns);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }	
 
     public void testNamespaceResolutionGivenMultiplePrefixesForTheOneNamespace() {
 
@@ -66,7 +83,9 @@ public class FragmentTestCase extends DOMLoadingTestCase {
             e.printStackTrace();
             fail(e.getMessage());
         }
-    }   
+    }
+    
+    
 	
 	
 }
