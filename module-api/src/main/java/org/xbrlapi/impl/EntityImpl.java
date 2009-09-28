@@ -57,6 +57,16 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     }
     
     /**
+     * @see org.xbrlapi.Entity#hasSegment()
+     */
+    public boolean hasSegment() throws XBRLException {
+        long count = getStore().queryCount("for $root in #roots#[@parentIndex='" + this.getIndex() + "' and @type='" + SegmentImpl.class.getName() + "'] return $root");
+        if (count == 1) return true;
+        if (count == 0) return false;
+        throw new XBRLException("Entity " + this.getIndex() + " has more than one child segment.  That is not valid XBRL.");
+    }    
+    
+    /**
      * @see org.xbrlapi.Entity#getEntityResources()
      */
     public List<EntityResource> getEntityResources() throws XBRLException {
