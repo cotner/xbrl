@@ -878,7 +878,7 @@ public class LoaderImpl implements Loader, Serializable {
     }
     
     private void cleanupFailedLoad(URI uri, String reason, Exception e) {
-        logger.error(getDocumentURI() + "encountered loading problem: " + e.getMessage());
+        logger.error(getDocumentURI() + " encountered a loading problem: " + e.getMessage());
         failures.put(uri,reason);
         documentQueue.remove(uri);
         getStore().recindLoadingRightsFor(this,getDocumentURI());
