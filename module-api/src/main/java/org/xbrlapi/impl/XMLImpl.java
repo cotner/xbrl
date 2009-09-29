@@ -210,6 +210,9 @@ public class XMLImpl implements XML {
     public String getType() {
         return this.getClass().getName();
     }
+    
+
+    
 
     /**
      * @see org.xbrlapi.XML#setMetaAttribute(String, String)
