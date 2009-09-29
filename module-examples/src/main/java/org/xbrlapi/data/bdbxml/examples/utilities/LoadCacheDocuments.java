@@ -64,7 +64,7 @@ public class LoadCacheDocuments extends BaseUtilityExample {
         String explanation = super.addArgumentDocumentation();
         explanation += "-directory\t\t\tXBRL cache directory to start loading documents from.\n";
         return explanation;
-    }    
+    }
 
     private void loadFiles(File directory) {
         for (File f: this.getChildFiles(directory)) loadFile(f);
