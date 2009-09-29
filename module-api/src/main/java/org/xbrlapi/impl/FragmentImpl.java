@@ -112,8 +112,6 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	throw new XBRLException("The data element of the fragment could not be found.");
     }
     
-
-    
     /**
      * @see org.xbrlapi.Fragment#isNewFragment()
      */
