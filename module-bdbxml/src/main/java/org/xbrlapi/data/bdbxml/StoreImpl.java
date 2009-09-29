@@ -60,7 +60,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	transient public XmlManager dataManager;
 	transient public XmlContainer dataContainer;
 	
-    /**
+	private int CACHE_SIZE = 1024 * 1024 * 1024;
+	
+	/**
+	 * This uses the default 1 GB cache size.
      * @param location The location of the database (The path to where the database exists)
      * @param container The name of the container to hold the data in the store.
      * @throws XBRLException
@@ -69,6 +72,18 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         super();
         initialize(location,container);
     }
+    
+    /**
+     * @param location The location of the database (The path to where the database exists)
+     * @param container The name of the container to hold the data in the store.
+     * @param cacheSize The number of megabytes to use for the cache size.
+     * @throws XBRLException
+     */
+    public StoreImpl(String location, String container, int cacheSize) throws XBRLException {
+        super();
+        initialize(location,container);
+        this.CACHE_SIZE = cacheSize * 1024*1024;
+    }    
     
     private void initialize(String location, String container) throws XBRLException {
         
@@ -149,7 +164,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             environmentConfiguration.setInitializeLocking(true);   // Turn on the locking subsystem.
             environmentConfiguration.setErrorStream(System.err);   // Capture error information in more detail.
             environmentConfiguration.setInitializeCache(true);
-            environmentConfiguration.setCacheSize(1024 * 1024 * 1024);
+            environmentConfiguration.setCacheSize(this.CACHE_SIZE);
             environmentConfiguration.setInitializeLogging(true);   // Turn off the logging subsystem.
             environmentConfiguration.setTransactional(true);       // Turn on the transactional subsystem.
             environment = new Environment(new File(locationName), environmentConfiguration);
@@ -201,7 +216,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         if (dataManager == null) initManager();
         try {
             XmlContainerConfig config = new XmlContainerConfig();
-            config.setStatisticsEnabled(true);
+            config.setStatisticsEnabled(XmlContainerConfig.On);
             dataContainer = dataManager.createContainer(containerName,config);
             
         } catch (XmlException e) {
@@ -214,7 +229,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         try {
 
             xmlIndexSpecification = dataContainer.getIndexSpecification();
-
+            xmlIndexSpecification.setAutoIndexing(false);
             xmlIndexSpecification.replaceDefaultIndex("node-element-presence");
 
             // TODO Remove these indices - they are redundant given the default index.
@@ -396,14 +411,11 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 */
     public synchronized boolean hasXMLResource(String index) throws XBRLException {
 
-        XmlDocument xmlDocument = null;
 	    try {
-			xmlDocument = dataContainer.getDocument(index);
+	        dataContainer.getDocument(index);
 			return true;
         } catch (XmlException e) {
             return false;
-	    } finally {
-            if (xmlDocument != null) xmlDocument.delete();
         }
 	}
 	
@@ -413,27 +425,15 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @see org.xbrlapi.data.Store#getXMLResource(String)
 	 */
      public synchronized <F extends XML> F getXMLResource(String index) throws XBRLException {
-        XmlDocument xmlDocument = null;
-        Document document = null;
-	    try {
 
-	        try {
-	            xmlDocument = dataContainer.getDocument(index);
-	        } catch (XmlException e) { // Thrown if the document is not found
-	            throw new XBRLException("The fragment " + index + " could not be retrieved from the store.",e);
-	        }
+         try {
+            XmlDocument xmlDocument = dataContainer.getDocument(index);
+            Document document = (new XMLDOMBuilder()).newDocument(xmlDocument.getContentAsInputStream());
+            return FragmentFactory.<F>newFragment(this, document.getDocumentElement());
+        } catch (XmlException e) { // Thrown if the document is not found
+            throw new XBRLException("The fragment " + index + " could not be retrieved from the store.",e);
+        }
 
-	        try {
-	            document = (new XMLDOMBuilder()).newDocument(xmlDocument.getContentAsInputStream());
-	        } catch (XmlException e) {
-	            throw new XBRLException("The fragment content is not available as an input stream.",e);
-	        }
-
-    		return FragmentFactory.<F>newFragment(this, document.getDocumentElement());
-
-	    } finally {
-            if (xmlDocument != null) xmlDocument.delete();
-	    }
 	}
 
 	/**
@@ -467,7 +467,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	public synchronized <F extends XML> List<F> queryForXMLResources(String query) throws XBRLException {
 
         XmlResults xmlResults = null;
-        XmlValue xmlValue = null;
         try {
     
             try {
@@ -475,14 +474,12 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 
     			double startTime = System.currentTimeMillis();
 
-                xmlValue = xmlResults.next();
+    			XmlValue xmlValue = xmlResults.next();
     			List<F> fragments = new Vector<F>();
     			XMLDOMBuilder builder = new XMLDOMBuilder();
     		    while (xmlValue != null) {
                     XmlDocument doc = xmlValue.asDocument();
     		        Document document = builder.newDocument(doc.getContentAsInputStream());
-    		        doc.delete();
-    		        xmlValue.delete();
     		        Element root = document.getDocumentElement();
     				fragments.add((F) FragmentFactory.newFragment(this, root));
     		        xmlValue = xmlResults.next();
@@ -497,7 +494,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     		}
     		
         } finally {
-            if (xmlValue != null) xmlValue.delete();
             if (xmlResults != null) xmlResults.delete();
         }
 	}
@@ -510,24 +506,15 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         query = "for $fragment in " + query + " return string($fragment/@index)";
         
         XmlResults xmlResults = null;
-        XmlValue xmlValue = null;
         try {
     
             try {
                 xmlResults = runQuery(query);
-                xmlValue = xmlResults.next();
+                XmlValue xmlValue = xmlResults.next();
                 Set<String> indices = new HashSet<String>();
-/*                String regex = "<xbrlapi:fragment.*? index=\"(\\w+)\".*?>";
-                Pattern pattern = Pattern.compile(regex,Pattern.DOTALL);
-*/                
+
                 while (xmlValue != null) {
-/*                  Matcher matcher = pattern.matcher(xmlValue.asString());
-                    matcher.matches();
-                    String index = matcher.group(1);
-*/
                     indices.add(xmlValue.asString());
-/*                    indices.put(index,null);
-*/                    xmlValue.delete();
                     xmlValue = xmlResults.next();
                 }
                 return indices;
@@ -539,7 +526,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             }
             
         } finally {
-            if (xmlValue != null) xmlValue.delete();
             if (xmlResults != null) xmlResults.delete();
         }
         
@@ -551,20 +537,18 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     public synchronized Set<String> queryForStrings(String query) throws XBRLException {
                 
         XmlResults xmlResults = null;
-        XmlValue xmlValue = null;
         try {
     
             try {
                 xmlResults = runQuery(query);
                 double startTime = System.currentTimeMillis();
-                xmlValue = xmlResults.next();
+                XmlValue xmlValue = xmlResults.next();
                 Set<String> strings = new TreeSet<String>();
                 while (xmlValue != null) {
                     if (xmlValue.isNode())
                         strings.add(xmlValue.getNodeValue());
                     else if (xmlValue.isString())
                         strings.add(xmlValue.asString());
-                    xmlValue.delete();
                     xmlValue = xmlResults.next();
                 }
                 
@@ -577,7 +561,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             }
             
         } finally {
-            if (xmlValue != null) xmlValue.delete();
             if (xmlResults != null) xmlResults.delete();
         }        
     }
@@ -609,12 +592,11 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
 	private XmlResults runQuery(String myQuery) throws XBRLException {
 	    
-	    XmlQueryContext xmlQueryContext = null;
 	    XmlQueryExpression xmlQueryExpression = null;
 	    try {
 	        String roots = "collection('" + dataContainer.getName() + "')/*" + this.getURIFilteringPredicate();
 	        myQuery = myQuery.replaceAll("#roots#",roots);
-            xmlQueryContext = createQueryContext();
+	        XmlQueryContext xmlQueryContext = createQueryContext();
             xmlQueryExpression = dataManager.prepare(myQuery,xmlQueryContext);
             logger.debug(xmlQueryExpression.getQueryPlan());
             double startTime = System.currentTimeMillis();
@@ -626,7 +608,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 		} catch (XmlException e) {
 			throw new XBRLException("Failed query: " + myQuery,e);
 		} finally {
-            if (xmlQueryContext != null) xmlQueryContext.delete();
             if (xmlQueryExpression != null) xmlQueryExpression.delete();
 		}
     		
@@ -642,11 +623,10 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         // TODO provide a means of adding additional namespaces for querying.
         // TODO provide a means of investigating namespace bindings for the query configuration.
         
-        XmlQueryContext xmlQueryContext = null;
         XmlQueryExpression xmlQueryExpression = null;
         try {
             String query = "collection('" + dataContainer.getName() + "')" + myQuery;
-            xmlQueryContext = createQueryContext();
+            XmlQueryContext xmlQueryContext = createQueryContext();
             xmlQueryContext.setEvaluationType(XmlQueryContext.Lazy);
             xmlQueryExpression = dataManager.prepare(query,xmlQueryContext);
             double startTime = System.currentTimeMillis();
@@ -658,7 +638,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         } catch (XmlException e) {
             throw new XBRLException("Failed query: " + myQuery,e);
         } finally {
-            if (xmlQueryContext != null) xmlQueryContext.delete();
             if (xmlQueryExpression != null) xmlQueryExpression.delete();
         }
             

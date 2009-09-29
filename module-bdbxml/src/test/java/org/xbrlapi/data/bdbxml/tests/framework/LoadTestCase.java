@@ -185,18 +185,11 @@ public class LoadTestCase extends TestCase {
         }
         
         public synchronized String getDocument(String index) throws XBRLException {
-            XmlDocument xmlDocument = null;
             try {
-
-                try {
-                    xmlDocument = dataContainer.getDocument(index);
-                    return xmlDocument.getContentAsString();
-                } catch (XmlException e) { // Thrown if the document is not found
-                    throw new XBRLException("The fragment " + index + " could not be retrieved from the store.",e);
-                }
-
-            } finally {
-                if (xmlDocument != null) xmlDocument.delete();
+                XmlDocument xmlDocument = dataContainer.getDocument(index);
+                return xmlDocument.getContentAsString();
+            } catch (XmlException e) { // Thrown if the document is not found
+                throw new XBRLException("The fragment " + index + " could not be retrieved from the store.",e);
             }
         }        
 

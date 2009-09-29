@@ -81,7 +81,7 @@ public class ExperimentalStore {
         try {
             if (dataManager == null) initManager();
             XmlContainerConfig config = new XmlContainerConfig();
-            config.setStatisticsEnabled(true);
+            config.setStatisticsEnabled(XmlContainerConfig.On);
             dataContainer = dataManager.createContainer(container,config);
             
             XmlUpdateContext xmlUpdateContext = null;

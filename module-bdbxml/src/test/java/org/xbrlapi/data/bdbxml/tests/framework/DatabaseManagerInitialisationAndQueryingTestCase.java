@@ -160,19 +160,17 @@ public class DatabaseManagerInitialisationAndQueryingTestCase extends BaseTestCa
             xmlUpdateContext = myManager.createUpdateContext();
             xmlContainer.putDocument(docName,docString,xmlUpdateContext,null);
 
+            @SuppressWarnings("unused")
             XmlDocument doc = null;
             
             doc = xmlContainer.getDocument(docName);
-            doc.delete();
 
             try {
                 doc = xmlContainer.getDocument("garbage");
             } catch (XmlException e) {
-                //Expected exception
+                ;//Expected exception
             } catch (Exception e) {
                 fail("Unexpected exception.");
-            } finally {
-                doc.delete();
             }
             
         } catch (Exception e) {
