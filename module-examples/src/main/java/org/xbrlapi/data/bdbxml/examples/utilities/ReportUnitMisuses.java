@@ -34,8 +34,6 @@ public class ReportUnitMisuses extends BaseUtilityExample {
             try {
 
                 ComplexTypeDeclaration monetaryItemType = store.<ComplexTypeDeclaration>getGlobalDeclaration(Constants.XBRL21Namespace,"monetaryItemType");
-                monetaryItemType.serialize();
-                System.exit(1);
                 
                 // Get the list of all units in the available instances.
                 List<Unit> units = store.<Unit>getXMLResources("Unit");
@@ -44,8 +42,12 @@ public class ReportUnitMisuses extends BaseUtilityExample {
                     List<NumericItem> items = unit.<NumericItem>getReferencingItems();
                     for (NumericItem item: items) {
                         Concept concept = item.getConcept();
-                        if (concept.getTypeDeclaration().equals(monetaryItemType)) {
-                            testMeasures(concept, item, unit, measures);
+
+                        if (concept.getTypeDeclaration().isDerivedFrom(monetaryItemType)) {
+                            testMonetaryConceptMeasures(concept, item, unit, measures);
+                        }
+                        if (! concept.getTypeDeclaration().isDerivedFrom(monetaryItemType) && unit.getResolvedNumeratorMeasures().get(0).getNamespace().equals(Constants.ISO4217)) {
+                            report("In " + item.getURI() + " " + concept.getName() + " should not use monetary units.");
                         }
                     }
                 }
@@ -60,16 +62,16 @@ public class ReportUnitMisuses extends BaseUtilityExample {
         tearDown();
     }
     
-    private void testMeasures(Concept concept, Item item, Unit unit, List<Measure> measures) throws XBRLException {
+    private void testMonetaryConceptMeasures(Concept concept, Item item, Unit unit, List<Measure> measures) throws XBRLException {
         
         if (measures.size() > 1) {
-            unit.serialize();
-            concept.serialize();
             report("There are too many numerator measures for fact " + item.getIndex() + " " + concept.getLocalname());
         }
         Measure measure = measures.get(0);
         if (! measure.getNamespace().equals(Constants.ISO4217)) report(measure.getNamespace() + " The numerator measure for fact " + item.getIndex() + " is incorrectly in namespace " + measure.getNamespace());
     }
+    
+    
     
     private void report(String message) {
         System.out.println(message);
