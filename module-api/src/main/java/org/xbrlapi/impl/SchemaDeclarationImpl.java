@@ -1,5 +1,6 @@
 package org.xbrlapi.impl;
 
+import org.w3c.dom.Element;
 import org.xbrlapi.SchemaDeclaration;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -16,7 +17,9 @@ public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDe
      * @see org.xbrlapi.SchemaDeclaration#getName()
      */
     public String getName() throws XBRLException {
-    	return getDataRootElement().getAttribute("name");
+        Element element = getDataRootElement();
+        if (element.hasAttribute("name")) return element.getAttribute("name");
+        return null;
     }
     
 

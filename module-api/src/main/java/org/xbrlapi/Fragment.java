@@ -174,7 +174,6 @@ public interface Fragment extends XML {
 
     /**
      * Get the local name of the fragment's root element
-     *
      * @throws XBRLException
      */
     public String getLocalname() throws XBRLException;

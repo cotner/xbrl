@@ -6,6 +6,7 @@ package org.xbrlapi.cache.tests;
 
 import java.io.File;
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
@@ -15,6 +16,8 @@ import org.xbrlapi.utilities.BaseTestCase;
 public class CacheImplTestCase extends BaseTestCase {
 
 	private String cacheRoot;
+	
+	private String XBRL_INSTANCE = "real.data.xbrl.instance.schema";
 
 	
 	protected void setUp() throws Exception {
@@ -33,19 +36,32 @@ public class CacheImplTestCase extends BaseTestCase {
 		super(arg0);
 	}
 
-	/**
-	 * Test operations on a simple URI
-	 */
 	public final void testHTTP_URI() {
 		try {
-			this.examineURI(new URI("http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"));
+			this.examineURI(this.getURI(XBRL_INSTANCE));
 		} catch (Exception e) {
 			fail("Unexpected exception. " + e.getMessage());
 		}
 	}
 	
+	public final void testGetSubtreeOfUris() {
+        try {
+        
+            URI uri = getURI(XBRL_INSTANCE);
+            Cache cache = new CacheImpl(new File(cacheRoot));
+            cache.getCacheURI(uri);
+            File file = cache.getCacheFile(uri);
+            file = file.getParentFile().getParentFile();
+            uri = cache.getOriginalURI(file);
+            List<URI> uris = cache.getAllUris(uri);
+            assertTrue(uris.size() > 0);
+        
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unexpected exception was thrown. " + e.getMessage());
+        }
+	}
 	
-
 	public final void examineURI(URI originalURI) {
 		try {
 
@@ -60,7 +76,7 @@ public class CacheImplTestCase extends BaseTestCase {
 			URI newURI = cache.getOriginalURI(cacheURI);
             logger.info("New Original URI: " + newURI);
 			assertEquals(originalURI, newURI);
-			
+
 		} catch (Exception e) {
 		    e.printStackTrace();
 			fail("Unexpected exception was thrown. " + e.getMessage());

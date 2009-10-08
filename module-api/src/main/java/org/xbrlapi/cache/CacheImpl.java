@@ -3,6 +3,7 @@ package org.xbrlapi.cache;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -407,6 +408,7 @@ public class CacheImpl implements Cache {
 
 		try {
 	        FileWriter out = new FileWriter(cacheFile);
+
 	        out.write(xml);
 	        out.close();		
 		} catch (IOException e) {
@@ -504,5 +506,37 @@ public class CacheImpl implements Cache {
             return false;
         return true;
     }
-    
+
+    /**
+     * @see Cache#getUris(URI)
+     */
+    public List<URI> getAllUris(URI uri) throws XBRLException {
+        
+        // Get the relevant directory in the cache.
+        File file = this.getCacheFile(uri);
+        while (!file.isDirectory() && file.getParentFile() != null) {
+            file = file.getParentFile();
+        }
+
+        List<URI> result = new Vector<URI>();
+        FileFilter fileFilter = new FileFilter() {
+            public boolean accept(File file) {
+                return (!file.isDirectory());
+            }
+        };
+        for (File childFile: file.listFiles(fileFilter)) {
+            result.add(this.getOriginalURI(childFile));
+        }
+
+        FileFilter directoryFilter = new FileFilter() {
+            public boolean accept(File file) {
+                return (file.isDirectory());
+            }
+        };
+        for (File childDirectory: file.listFiles(directoryFilter)) {
+            result.addAll(getAllUris(this.getOriginalURI(childDirectory)));
+        }
+        return result;
+    }
+
 }

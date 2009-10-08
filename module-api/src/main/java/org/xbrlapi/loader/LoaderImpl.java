@@ -672,7 +672,7 @@ public class LoaderImpl implements Loader, Serializable {
     }
 
     /**
-     * Parse an XML Document supplied as a URI the next part of the DTS.
+     * Parse an XML Document supplied as a URI.
      * @param uri The URI of the document to parse.
      * @throws XBRLException IOException ParserConfigurationException SAXException
      */

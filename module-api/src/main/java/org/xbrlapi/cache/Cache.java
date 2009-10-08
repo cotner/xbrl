@@ -3,6 +3,7 @@ package org.xbrlapi.cache;
 import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -82,5 +83,18 @@ public interface Cache extends Serializable {
      * @throws XBRLException if the cache file cannot be determined.
      */
     public abstract void purge(URI uri) throws XBRLException;
+    
+    /**
+     * This method provides a useful means of getting a list of the URIs for
+     * all documents in a branch of the cache.  This can be very helpful when 
+     * trying to reload the cached documents into a data store.
+     * @param uri A URI that corresponds to a directory or file in the cache.
+     * @return the list of original URIs for the files in the specified directory
+     * (or the directory containing the specified file) and the original URIs for 
+     * all of the files in descendant directories of that directory.  
+     * @throws XBRLException
+     */
+    public abstract List<URI> getAllUris(URI uri) throws XBRLException;
+    
 
 }
