@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>XBRLAPI.ORG XML Base processor</title>
+<title>XBRLAPI.ORG Search Results</title>
 <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
 </head>
 <body>
@@ -14,7 +14,23 @@
 	</span>
 </div>
 
-<div id="navcontainer">
+
+<div class="content">
+<h1>
+XBRLAPI search results
+</h1>
+
+<div id="cse-search-results"></div>
+
+<script type="text/javascript">
+  var googleSearchIframeName = "cse-search-results";
+  var googleSearchFormName = "cse-search-box";
+  var googleSearchFrameWidth = 800;
+  var googleSearchDomain = "www.google.com";
+  var googleSearchPath = "/cse";
+</script>
+<script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>
+
 <form action="http://www.xbrlapi.org/search.html" id="cse-search-box">
   <div>
     <input type="hidden" name="cx" value="partner-pub-3957505011939955:jqid48zd81o" />
@@ -26,38 +42,6 @@
 </form>
 
 <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
-<ul id="navlist">
-<li><a href="/">Home</a></li>
-</ul>
-
-<script type="text/javascript"><!--
-google_ad_client = "pub-3957505011939955";
-/* XBRLAPI site */
-google_ad_slot = "4927123290";
-google_ad_width = 160;
-google_ad_height = 600;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-
-</div>
-
-<div class="content">
-<h1>
-XML Base resolver
-</h1>
-
-<p>
-The XML Base resolver is a lightweight 
-but complete XML Base resolution library 
-to be used with a SAX parsing process or
-a XML DOM document.  It ensures that the base URI
-can be determined at any node within an XML document
-taking into account the 
-<a href="http://www.w3.org/TR/xmlbase/">XML Base specification</a>
-</p>
 
 <p>
 <a href="http://sourceforge.net/projects/xbrlapi"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=135539&type=11" width="120" height="30" border="0" alt="Get Java XBRL API implementation at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
@@ -76,6 +60,8 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 <!-- End Piwik Tag -->
 
 </div>
+
+
 
 </body>
 </html>
