@@ -4,7 +4,6 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.loader.Loader;
-import org.xbrlapi.sax.identifiers.XBRLIdentifier;
 import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.SAXException;
 
@@ -31,22 +30,20 @@ public class ContentHandlerImpl extends org.xbrlapi.sax.ContentHandlerImpl {
     }
 
     /**
-     * On starting to parse a document the Base URI resolver is 
-     * set up with the documents absolute URI.  The fragment identifiers
-     * are also instantiated and initialised.
-     *
+     * Use an XBRL Dimensions aware Schema fragment identifier
+     * to pick out the XDT element declarations for hypercubes,
+     * explicit dimensions and typed dimensions.
      * @see org.xml.sax.ContentHandler#startDocument()
      */
     public void startDocument() throws SAXException 
     {
         super.startDocument();
         
-        // Detect XDT fragments first
         try {
             removeIdentifier(1);  // Remove standard schema identifier
-            removeIdentifier(1);  // Remove XBRL 2.1 identifier
+/*            removeIdentifier(1);  // Remove XBRL 2.1 identifier
             addIdentifier(1,new XBRLIdentifier(this));
-            addIdentifier(1,new SchemaIdentifier(this));
+*/            addIdentifier(1,new SchemaIdentifier(this));
         } catch (XBRLException e) {
             throw new SAXException("A fragment identifier could not be instantiated.",e);
         }
