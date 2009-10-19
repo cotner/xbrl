@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema
+  elementFormDefault="qualified"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xbrldt="http://xbrl.org/2005/xbrldt"
+  xmlns:eg="http://xbrlapi.org/test/xbrl/007"
+  targetNamespace="http://xbrlapi.org/test/xbrl/007">
+
+  <import
+    namespace="http://www.xbrl.org/2003/instance"
+    schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd" />
+  <import
+    namespace="http://xbrl.org/2005/xbrldt"
+    schemaLocation="http://www.xbrl.org/2005/xbrldt-2005.xsd" />
+
+  <element id="item" name="item"
+    type="xbrli:decimalItemType"
+    substitutionGroup="xbrli:item"
+    xbrli:periodType="instant"/>
+
+  <element id="tuple" name="tuple"
+    substitutionGroup="xbrli:tuple">
+    <complexType>
+      <sequence>
+        <element ref="eg:item"/>
+      </sequence>
+    </complexType>
+  </element>
+
+</schema>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xbrl
+  xmlns="http://www.xbrl.org/2003/instance"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance"
+  xmlns:eg="http://xbrlapi.org/test/xbrl/007"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+  xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:u1="http://xbrlapi.org/metric/u1"
+  xsi:schemaLocation="
+    http://www.xbrl.org/2003/instance http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd
+    http://xbrlapi.org/test/xbrl/007 schema.xsd"
+  >
+
+  <link:schemaRef xlink:type="simple" xlink:href="schema.xsd" />
+
+  <context id="c1">
+    <entity>
+      <identifier scheme="http://xbrl.org/entity/identification/scheme">
+      AAA001
+      </identifier>
+    </entity>
+    <period>
+      <instant>2007-12-31</instant>
+    </period>
+  </context>
+  
+  <unit id="u1" >
+    <measure>xbrli:pure</measure>
+  </unit>
+
+  <eg:tuple>
+    <eg:item contextRef="c1" unitRef="u1">1</eg:item>
+  </eg:tuple>
+    
+ </xbrl>
