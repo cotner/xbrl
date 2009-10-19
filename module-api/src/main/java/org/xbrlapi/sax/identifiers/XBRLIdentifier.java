@@ -59,8 +59,6 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
             String qName,
             Attributes attrs) throws XBRLException {
 
-        logger.info( lName + " " + this.canBeATuple);
-        
         Fragment xbrlFragment = null;
         if (namespaceURI.equals(Constants.XBRL21Namespace.toString())) {
             if (lName.equals("xbrl")) {
