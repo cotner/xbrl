@@ -50,6 +50,7 @@ public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader,
      * @param uri The URI of the document to parse.
      * @throws XBRLException IOException ParserConfigurationException SAXException
      */
+    @Override
     protected void parse(URI uri) throws XBRLException, ParserConfigurationException, SAXException, IOException {
         InputSource inputSource = null;
         inputSource = this.getEntityResolver().resolveEntity("", uri.toString());
@@ -64,6 +65,7 @@ public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader,
      * @param xml The XML document as a string.
      * @throws XBRLException IOException SAXException ParserConfigurationException
      */
+    @Override
     protected void parse(URI uri, String xml) throws XBRLException, ParserConfigurationException, SAXException, IOException {
         InputSource inputSource = new InputSource(new StringReader(xml));
         ContentHandler contentHandler = new ContentHandlerImpl(this, uri, xml);
