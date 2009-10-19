@@ -15,8 +15,8 @@ import org.xbrlapi.Tuple;
  */
 
 public class TupleTestCase extends DOMLoadingTestCase {
-	private final String STARTING_POINT = "test.data.tuple.instance";
-	
+	private final String STARTING_POINT = "test.data.local.xbrl.instance.tuples.with.units";
+		
 	protected void setUp() throws Exception {
 		super.setUp();
 		loader.discover(this.getURI(STARTING_POINT));		
