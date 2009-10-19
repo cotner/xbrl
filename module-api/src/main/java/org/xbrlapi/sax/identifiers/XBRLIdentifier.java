@@ -173,8 +173,6 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                 this.canBeATuple = true;
             } else if (lName.equals("arcroleRef")) {
                 this.canBeATuple = true;
-            } else if (lName.equals("documentation")) {
-                this.canBeATuple = true;
             } else if (lName.equals("roleRef")) {
                 this.canBeATuple = true;
             }
