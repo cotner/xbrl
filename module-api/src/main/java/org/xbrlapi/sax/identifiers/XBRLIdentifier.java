@@ -22,8 +22,7 @@ import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.Attributes;
 
 /**
- * Identifies Fragments in the XBRL 2.1 namespace.
- * 
+ * Identifies fragments in the XBRL 2.1 namespace.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
@@ -44,7 +43,7 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
     /**
      * Set to true if the element can be a tuple.
      */
-    private boolean canBeATuple = false;    
+    private boolean canBeATuple = false;
     
     /**
      * Finds fragments in the XBRL 2.1 namespace and keeps
@@ -60,6 +59,8 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
             String qName,
             Attributes attrs) throws XBRLException {
 
+        logger.info( lName + " " + this.canBeATuple);
+        
         Fragment xbrlFragment = null;
         if (namespaceURI.equals(Constants.XBRL21Namespace.toString())) {
             if (lName.equals("xbrl")) {
@@ -82,6 +83,7 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                 this.canBeATuple = false;
             }
         }
+
         if (xbrlFragment != null) {
             this.processFragment(xbrlFragment,attrs);
             return;
@@ -107,7 +109,7 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
             }
         }
         
-        if (this.parsingAnXBRLInstance) {
+        if (parsingAnXBRLInstance) {
 
             Fragment factFragment = null;
 
@@ -116,9 +118,10 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
             if (contextRef != null) {
                 String unitRef = attrs.getValue("unitRef");
                 if (unitRef != null) {
-                    // TODO Handle recognition of fraction numeric items - may require reading ahead in SAX - ouch
                     factFragment = new SimpleNumericItemImpl();
                 } else {
+                    // TODO Handle recognition of fraction numeric items - may require post load processing.
+                    // Right now fraction numeric items register as non-numeric items.
                     factFragment = new NonNumericItemImpl();
                 }
             }
@@ -132,9 +135,9 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                 processFragment(factFragment,attrs);
                 return;
             }
-
-        }        
-        
+            
+        }
+                
     }
 
     /**
@@ -157,8 +160,8 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                 this.canBeATuple = false;
             } else if (lName.equals("context")) {
                 this.canBeATuple = true;
-            } else if (lName.equals("true")) {
-                this.canBeATuple = false;
+            } else if (lName.equals("unit")) {
+                this.canBeATuple = true;
             }
 
         } else if (namespaceURI.equals(Constants.XBRL21LinkNamespace.toString())) {
@@ -169,6 +172,8 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
             } else if (lName.equals("linkbaseRef")) {
                 this.canBeATuple = true;
             } else if (lName.equals("arcroleRef")) {
+                this.canBeATuple = true;
+            } else if (lName.equals("documentation")) {
                 this.canBeATuple = true;
             } else if (lName.equals("roleRef")) {
                 this.canBeATuple = true;
