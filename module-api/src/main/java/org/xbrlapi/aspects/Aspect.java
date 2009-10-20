@@ -15,15 +15,14 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public interface Aspect extends Serializable {
 
-    /**
-     * Aspect identifiers
-     */
-    static public final String CONCEPT = "concept";
+
     static public final String PERIOD = "period";
     static public final String ENTITY_IDENTIFIER = "entity";
     static public final String SEGMENT = "segment";
     static public final String SCENARIO = "scenario";
     static public final String UNIT = "unit";
+    static public final String LOCATION = "location";
+    
     
     /**
      * @return the unique aspect identifier.

@@ -17,6 +17,16 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class PeriodAspect extends ContextAspect implements Aspect {
 
+    public final static String TYPE = "period";
+    /**
+     * @see Aspect#getType()
+     */
+    public String getType() {
+        return TYPE;
+    }
+    
+
+    
     private final static Logger logger = Logger.getLogger(PeriodAspect.class);    
     
     private static final ObjectStreamField[] serialPersistentFields = {};
@@ -109,12 +119,7 @@ public class PeriodAspect extends ContextAspect implements Aspect {
         this.setTransformer(new Transformer());
     }
 
-    /**
-     * @see Aspect#getType()
-     */
-    public String getType() {
-        return Aspect.PERIOD;
-    }
+
     
     /**
      * @see Aspect#getKey(Fact)

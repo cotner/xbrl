@@ -15,6 +15,7 @@ import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.BaseAspectModel;
 import org.xbrlapi.aspects.ConceptAspect;
 import org.xbrlapi.aspects.EntityIdentifierAspect;
+import org.xbrlapi.aspects.LocationAspect;
 import org.xbrlapi.aspects.PeriodAspect;
 import org.xbrlapi.aspects.UnitAspect;
 import org.xbrlapi.data.Store;
@@ -40,6 +41,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     public DimensionalAspectModel() throws XBRLException {
         super();
         initialize();
+        this.setAspect(new LocationAspect(this));
         this.setAspect(new ConceptAspect(this));
         this.setAspect(new EntityIdentifierAspect(this));
         this.setAspect(new SegmentRemainderAspect(this));

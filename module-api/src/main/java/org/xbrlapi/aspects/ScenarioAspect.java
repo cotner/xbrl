@@ -16,6 +16,17 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class ScenarioAspect extends ContextAspect implements Aspect {
 
+    public final static String TYPE = "scenario";
+    
+    /**
+     * @see Aspect#getType()
+     */
+    public String getType() {
+        return TYPE;
+    }
+    
+
+    
     private final static Logger logger = Logger.getLogger(ScenarioAspect.class);    
 
     /**
@@ -31,12 +42,7 @@ public class ScenarioAspect extends ContextAspect implements Aspect {
         this.setTransformer(new Transformer());
     }
 
-    /**
-     * @see Aspect#getType()
-     */
-    public String getType() {
-        return Aspect.SCENARIO;
-    }
+
     
     /**
      * @see Aspect#getKey(Fact)

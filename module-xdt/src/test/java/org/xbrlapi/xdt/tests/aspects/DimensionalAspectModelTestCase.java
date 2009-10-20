@@ -43,7 +43,7 @@ public class DimensionalAspectModelTestCase extends BaseTestCase {
 			for (Item fragment: fragments) {
 			    model.addFact(fragment);
 			}
-            assertEquals(9,model.getAspects().size());
+            assertEquals(10,model.getAspects().size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

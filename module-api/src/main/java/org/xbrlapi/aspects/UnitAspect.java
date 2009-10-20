@@ -17,6 +17,15 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class UnitAspect extends BaseAspect implements Aspect {
 
+    public final static String TYPE = "unit";
+    
+    /**
+     * @see Aspect#getType()
+     */
+    public String getType() {
+        return TYPE;
+    }
+
     private final static Logger logger = Logger.getLogger(UnitAspect.class);    
 
     /**
@@ -32,12 +41,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
         this.setTransformer(new Transformer());
     }
 
-    /**
-     * @see Aspect#getType()
-     */
-    public String getType() {
-        return Aspect.UNIT;
-    }
+
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         

@@ -26,6 +26,15 @@ import org.xbrlapi.xdt.XDTConstants;
  */
 public class SegmentRemainderAspect extends ContextAspect implements Aspect {
 
+    public final static String TYPE = "segment remainder";
+    
+    /**
+     * @see Aspect#getType()
+     */
+    public String getType() {
+        return TYPE;
+    }
+
     private final static Logger logger = Logger.getLogger(SegmentRemainderAspect.class);
 
     /**
@@ -41,12 +50,7 @@ public class SegmentRemainderAspect extends ContextAspect implements Aspect {
         this.setTransformer(new Transformer());
     }
 
-    /**
-     * @see Aspect#getType()
-     */
-    public String getType() {
-        return "segmentremainder";
-    }
+
     
     /**
      * @see Aspect#getKey(Fact)

@@ -7,7 +7,12 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
+import org.xbrlapi.aspects.ConceptAspect;
+import org.xbrlapi.aspects.EntityIdentifierAspect;
 import org.xbrlapi.aspects.NonDimensionalAspectModel;
+import org.xbrlapi.aspects.PeriodAspect;
+import org.xbrlapi.aspects.ScenarioAspect;
+import org.xbrlapi.aspects.UnitAspect;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
@@ -36,11 +41,11 @@ public class AspectModelSerializationTestCase extends DOMLoadingTestCase {
 			List<Fact> facts = store.<Fact>getXMLResources("SimpleNumericItem");
 			assertEquals(2,facts.size());
             AspectModel model = new NonDimensionalAspectModel();
-            model.arrangeAspect(Aspect.CONCEPT,"row");
-            model.arrangeAspect(Aspect.ENTITY_IDENTIFIER,"row");
-            model.arrangeAspect(Aspect.PERIOD,"col");
-            model.arrangeAspect(Aspect.UNIT,"col");
-            model.arrangeAspect(Aspect.SCENARIO,"col");
+            model.arrangeAspect(ConceptAspect.TYPE,"row");
+            model.arrangeAspect(EntityIdentifierAspect.TYPE,"row");
+            model.arrangeAspect(PeriodAspect.TYPE,"col");
+            model.arrangeAspect(UnitAspect.TYPE,"col");
+            model.arrangeAspect(ScenarioAspect.TYPE,"col");
             for (Fact fact: facts) {
                 model.addFact(fact);
             }

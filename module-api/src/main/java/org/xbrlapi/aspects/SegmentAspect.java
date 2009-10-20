@@ -17,6 +17,15 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class SegmentAspect extends ContextAspect implements Aspect {
 
+    public final static String TYPE = "segment";
+
+    /**
+     * @see Aspect#getType()
+     */
+    public String getType() {
+        return TYPE;
+    }
+    
     private final static Logger logger = Logger.getLogger(SegmentAspect.class);    
 
     /**
@@ -32,12 +41,7 @@ public class SegmentAspect extends ContextAspect implements Aspect {
         this.setTransformer(new Transformer());
     }
 
-    /**
-     * @see Aspect#getType()
-     */
-    public String getType() {
-        return Aspect.SEGMENT;
-    }
+
     
     /**
      * @see Aspect#getKey(Fact)

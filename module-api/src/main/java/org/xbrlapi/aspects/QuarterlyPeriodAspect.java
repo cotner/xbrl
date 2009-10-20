@@ -16,6 +16,8 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
 
+    public final static String TYPE = "period";
+    
     private final static Logger logger = Logger.getLogger(QuarterlyPeriodAspect.class);    
 
     private class PeriodComparator implements Comparator<String>, Serializable {

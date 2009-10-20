@@ -24,13 +24,15 @@ import org.xbrlapi.utilities.XBRLException;
  */
 abstract public class BaseAspect implements Aspect {
 
+
+    
     private final static Logger logger = Logger.getLogger(BaseAspect.class);  
     
     protected TreeMap<String,AspectValue> values;
     
     /**
-     * The aspect model is non-transient but it is not considered as part of assessing equality
-     * or determining the hashCode for the aspect.
+     * The aspect model is non-transient but it is not considered as 
+     * part of assessing equality or determining the hashCode for the aspect.
      */
     private AspectModel model;
 
@@ -47,8 +49,6 @@ abstract public class BaseAspect implements Aspect {
         values = new TreeMap<String,AspectValue>();        
     }
     
-
-
     /**
      * @see org.xbrlapi.aspects.Aspect#getAspectModel()
      */
@@ -56,6 +56,11 @@ abstract public class BaseAspect implements Aspect {
         return model;
     }
 
+
+    
+    /**
+     * The identifier for the axis that this aspect is on.
+     */
     private String axis;
     
     /**

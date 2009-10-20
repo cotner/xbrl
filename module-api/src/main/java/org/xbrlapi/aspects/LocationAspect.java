@@ -1,23 +1,21 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
-import java.net.URI;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.LabelResource;
-import org.xbrlapi.utilities.Constants;
+import org.xbrlapi.impl.FactImpl;
+import org.xbrlapi.impl.InstanceImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ConceptAspect extends BaseAspect implements Aspect {
+public class LocationAspect extends BaseAspect implements Aspect {
 
-    public static String TYPE = "concept";
+    public final static String TYPE = "location";
     
     /**
      * @see Aspect#getType()
@@ -28,13 +26,13 @@ public class ConceptAspect extends BaseAspect implements Aspect {
     
 
     
-    private final static Logger logger = Logger.getLogger(ConceptAspect.class);
+    private final static Logger logger = Logger.getLogger(LocationAspect.class);
     
     /**
      * @param aspectModel The aspect model with this aspect.
      * @throws XBRLException.
      */
-    public ConceptAspect(AspectModel aspectModel) throws XBRLException {
+    public LocationAspect(AspectModel aspectModel) throws XBRLException {
         super(aspectModel);
         initialize();
     }
@@ -43,7 +41,6 @@ public class ConceptAspect extends BaseAspect implements Aspect {
         this.setTransformer(new Transformer());
     }
     
-
 
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
@@ -57,8 +54,9 @@ public class ConceptAspect extends BaseAspect implements Aspect {
          */
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
-            if (! value.getFragment().isa("org.xbrlapi.impl.ConceptImpl")) {
-                throw new XBRLException("The aspect value must have a concept fragment.");
+            Fragment fragment = value.getFragment();
+            if (! fragment.isa(FactImpl.class.getName()) && ! fragment.isa(InstanceImpl.class.getName())) {
+                throw new XBRLException("Fragments for location aspects must be XBRL facts or XBRL instances.  In this case is it a " + fragment.getClass().getName() + ".");
             }
         }
         
@@ -81,60 +79,17 @@ public class ConceptAspect extends BaseAspect implements Aspect {
          */
         public String getLabel(AspectValue value) throws XBRLException {
             String id = getIdentifier(value);
-            
-            // Check if we have the label already
-            if (hasMapLabel(id)) {
-                return getMapLabel(id);
-            }
-            
-            Concept concept = ((Concept) value.getFragment());
-
-            List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
-            if (labels.isEmpty()) return id;
-            String label = labels.get(0).getStringValue();
-            logger.debug("Concept aspect value label is " + label);
-            setMapLabel(id,label);
-            return label;
+            return id;
         }
         
-        /**
-         * The label role is used in constructing the label for the
-         * concept aspect values.
-         */
-        private URI role = Constants.StandardLabelRole;
-        
-        /**
-         * @return the label resource role.
-         */
-        public URI getLabelRole() {
-            return role;
-        }
-        /**
-         * @param role The label resource role to use in
-         * selecting labels for the concept.
-         */
-        public void setLabelRole(URI role) {
-            this.role = role;
-        }
 
-        /**
-         * The language code is used in constructing the label for the
-         * concept aspect values.
-         */
-        private String language = "en";
-        /**
-         * @return the language code.
-         */
-        public String getLanguageCode() {
-            return language;
-        }
-        /**
-         * @param language The ISO language code
-         */
-        public void setLanguageCode(String language) throws XBRLException {
-            if (language == null) throw new XBRLException("The language must not be null.");
-            this.language = language;
-        }
+        
+
+
+
+
+
+
 
         
     }
@@ -144,21 +99,21 @@ public class ConceptAspect extends BaseAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        return new ConceptAspectValue(this,getFragment(fact));
+        return new LocationAspectValue(this,getFragment(fact));
     }
     
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
     public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        return fact.getConcept();
+        return fact.getParent();
     }
     
     /**
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
-        return fact.getNamespace() + fact.getLocalname();
+        return fact.getParentIndex();
     }
 
     /**

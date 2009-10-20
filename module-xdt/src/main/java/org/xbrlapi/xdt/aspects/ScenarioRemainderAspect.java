@@ -25,6 +25,15 @@ import org.xbrlapi.xdt.XDTConstants;
  */
 public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
 
+    public final static String TYPE = "scenario remainder";
+    
+    /**
+     * @see Aspect#getType()
+     */
+    public String getType() {
+        return TYPE;
+    }
+    
     private final static Logger logger = Logger.getLogger(ScenarioRemainderAspect.class);
 
     /**
@@ -40,12 +49,7 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
         this.setTransformer(new Transformer());
     }
 
-    /**
-     * @see Aspect#getType()
-     */
-    public String getType() {
-        return "scenarioremainder";
-    }
+
     
     /**
      * @see Aspect#getKey(Fact)

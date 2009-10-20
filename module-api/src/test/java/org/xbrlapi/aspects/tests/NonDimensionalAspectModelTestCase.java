@@ -8,7 +8,12 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
+import org.xbrlapi.aspects.ConceptAspect;
+import org.xbrlapi.aspects.EntityIdentifierAspect;
 import org.xbrlapi.aspects.NonDimensionalAspectModel;
+import org.xbrlapi.aspects.PeriodAspect;
+import org.xbrlapi.aspects.ScenarioAspect;
+import org.xbrlapi.aspects.UnitAspect;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
@@ -41,11 +46,16 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 			List<Fact> facts = store.<Fact>getXMLResources("SimpleNumericItem");
 			assertEquals(2,facts.size());
             AspectModel model = new NonDimensionalAspectModel();
-            model.arrangeAspect(Aspect.CONCEPT,"row");
-            model.arrangeAspect(Aspect.ENTITY_IDENTIFIER,"row");
-            model.arrangeAspect(Aspect.PERIOD,"col");
-            model.arrangeAspect(Aspect.UNIT,"col");
-            model.arrangeAspect(Aspect.SCENARIO,"col");
+            
+            for (Aspect a: model.getAspects()) {
+                logger.info(a.getType());
+            }
+            
+            model.arrangeAspect(ConceptAspect.TYPE,"row");
+            model.arrangeAspect(EntityIdentifierAspect.TYPE,"row");
+            model.arrangeAspect(PeriodAspect.TYPE,"col");
+            model.arrangeAspect(UnitAspect.TYPE,"col");
+            model.arrangeAspect(ScenarioAspect.TYPE,"col");
             for (Fact fact: facts) {
                 model.addFact(fact);
             }
@@ -55,12 +65,12 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
                     logger.info(value.getId());
                 }
             }
-            assertEquals(6,model.getAspects().size());
+            assertEquals(7,model.getAspects().size());
             
-            model.setCriterion(model.getAspect(Aspect.CONCEPT).getValues().get(0));
-            model.setCriterion(model.getAspect(Aspect.ENTITY_IDENTIFIER).getValues().get(0));
-            model.setCriterion(model.getAspect(Aspect.PERIOD).getValues().get(0));
-            model.setCriterion(model.getAspect(Aspect.UNIT).getValues().get(0));
+            model.setCriterion(model.getAspect(ConceptAspect.TYPE).getValues().get(0));
+            model.setCriterion(model.getAspect(EntityIdentifierAspect.TYPE).getValues().get(0));
+            model.setCriterion(model.getAspect(PeriodAspect.TYPE).getValues().get(0));
+            model.setCriterion(model.getAspect(UnitAspect.TYPE).getValues().get(0));
             List<List<AspectValue>> rowMatrix = model.getAspectValueCombinationsForDimension("row");
             List<List<AspectValue>> colMatrix = model.getAspectValueCombinationsForDimension("col");
             

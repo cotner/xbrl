@@ -15,6 +15,7 @@ public class NonDimensionalAspectModel extends BaseAspectModel implements Aspect
     public NonDimensionalAspectModel() throws XBRLException {
         super();
         initialize();
+        this.setAspect(new LocationAspect(this));
         this.setAspect(new ConceptAspect(this));
         this.setAspect(new EntityIdentifierAspect(this));
         this.setAspect(new SegmentAspect(this));

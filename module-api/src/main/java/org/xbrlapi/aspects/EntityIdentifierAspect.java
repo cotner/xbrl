@@ -21,6 +21,17 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class EntityIdentifierAspect extends ContextAspect implements Aspect {
 
+    public static String TYPE = "entity";
+    
+    /**
+     * @see Aspect#getType()
+     */
+    public String getType() {
+        return TYPE;
+    }
+    
+
+    
     private final static Logger logger = Logger.getLogger(EntityIdentifierAspect.class);
     
     /**
@@ -36,12 +47,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
         this.setTransformer(new Transformer());
     }
 
-    /**
-     * @see Aspect#getType()
-     */
-    public String getType() {
-        return Aspect.ENTITY_IDENTIFIER;
-    }
+
     
     /**
      * @see Aspect#getKey(Fact)
