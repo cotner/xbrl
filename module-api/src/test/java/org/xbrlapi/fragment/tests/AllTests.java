@@ -46,6 +46,7 @@ public class AllTests {
 		suite.addTestSuite(ItemTestCase.class);
 		suite.addTestSuite(CustomTypeTestCase.class);
 		suite.addTestSuite(SimpleNumericItemTestCase.class);
+        suite.addTestSuite(FractionItemTestCase.class);
 		suite.addTestSuite(ScenarioTestCase.class);
 		suite.addTestSuite(ExtendedLinkTestCase.class);
 		suite.addTestSuite(UnitTestCase.class);

@@ -1,5 +1,6 @@
 package org.xbrlapi.aspects.tests;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.ConceptAspect;
 import org.xbrlapi.aspects.EntityIdentifierAspect;
+import org.xbrlapi.aspects.LocationAspect;
 import org.xbrlapi.aspects.NonDimensionalAspectModel;
 import org.xbrlapi.aspects.PeriodAspect;
 import org.xbrlapi.aspects.ScenarioAspect;
@@ -19,13 +21,14 @@ import org.xbrlapi.aspects.UnitAspect;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
-	private final String STARTING_POINT1 = "test.data.small.instance";
-    private final String STARTING_POINT2 = "test.data.small.instance.2";	
+	private final String FIRST_SMALL_INSTANCE = "test.data.small.instance";
+    private final String SECOND_SMALL_INSTANCE = "test.data.small.instance.2";
+    
+    private final String TUPLE_INSTANCE = "test.data.local.xbrl.instance.tuples.with.units";
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-        loader.discover(this.getURI(STARTING_POINT1));       
-		loader.discover(this.getURI(STARTING_POINT2));		
+
 	}
 
 	protected void tearDown() throws Exception {
@@ -43,6 +46,8 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 	
 	public void testCreatingNonDimensionalAspectModel() {
 		try {
+	        loader.discover(this.getURI(FIRST_SMALL_INSTANCE));       
+	        loader.discover(this.getURI(SECOND_SMALL_INSTANCE));
 			List<Fact> facts = store.<Fact>getXMLResources("SimpleNumericItem");
 			assertEquals(2,facts.size());
             AspectModel model = new NonDimensionalAspectModel();
@@ -56,6 +61,7 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             model.arrangeAspect(PeriodAspect.TYPE,"col");
             model.arrangeAspect(UnitAspect.TYPE,"col");
             model.arrangeAspect(ScenarioAspect.TYPE,"col");
+            model.arrangeAspect(LocationAspect.TYPE,"col");
             for (Fact fact: facts) {
                 model.addFact(fact);
             }
@@ -98,5 +104,30 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-	}	
+	}
+	
+    public void testLocationAspectHandling() {
+        try {
+            URI uri = this.getURI(TUPLE_INSTANCE);
+            loader.discover(uri);       
+            List<Fact> facts = store.getAllFacts(uri);
+            assertEquals(2,facts.size());
+            AspectModel model = new NonDimensionalAspectModel();
+            
+            for (Fact fact: facts) {
+                model.addFact(fact);
+            }
+            
+            for (Aspect aspect: model.getAspects()) {
+                logger.info(aspect.getType());
+                for (AspectValue value: aspect.getValues()) {
+                    logger.info(value.getId());
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }	
 }
