@@ -3,7 +3,6 @@ package org.xbrlapi.aspects;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.impl.FactImpl;
@@ -68,8 +67,7 @@ public class LocationAspect extends BaseAspect implements Aspect {
             if (hasMapId(value)) {
                 return getMapId(value);
             }
-            Concept f = ((Concept) value.getFragment());
-            String id = f.getTargetNamespace() + ": " + f.getName();
+            String id = value.getFragment().getIndex();
             setMapId(value,id);
             return id;
         }
