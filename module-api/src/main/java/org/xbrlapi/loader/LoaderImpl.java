@@ -356,6 +356,15 @@ public class LoaderImpl implements Loader, Serializable {
         if (fragments.isEmpty()) return null;
         return fragments.peek();
     }
+    
+    /**
+     * @see org.xbrlapi.loader.Loader#replaceCurrentFragment(Fragment)
+     */
+    public void replaceCurrentFragment(Fragment replacement) throws XBRLException {
+        if (fragments.isEmpty()) throw new XBRLException("There is no current fragment to replace.");
+        fragments.pop();
+        fragments.push(replacement);
+    }    
     /**
      * @see org.xbrlapi.loader.Loader#isBuildingAFragment()
      */

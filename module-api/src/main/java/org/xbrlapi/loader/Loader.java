@@ -166,6 +166,15 @@ public interface Loader extends Serializable {
 	 */
 	public Fragment getFragment() throws XBRLException;
 	
+    /**
+     * This is particularly useful when you can only fully determine the fragment type
+     * by reading in the complex element content of the data corresponding to the fragment.
+     * A case in point is the fractionItem fragment type.
+     * @param replacement the fragment to replace the current fragment being build with.
+     * @throws XBRLException if there is no current fragment.
+     */
+    public void replaceCurrentFragment(Fragment replacement) throws XBRLException;	
+	
 	/**
 	 * @return true if and only if the loader has one or more fragments
 	 * on the stack of fragments being built.
