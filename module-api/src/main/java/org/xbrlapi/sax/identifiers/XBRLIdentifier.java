@@ -4,6 +4,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.impl.ArcroleTypeImpl;
 import org.xbrlapi.impl.ContextImpl;
 import org.xbrlapi.impl.EntityImpl;
+import org.xbrlapi.impl.FractionItemImpl;
 import org.xbrlapi.impl.InstanceImpl;
 import org.xbrlapi.impl.LinkbaseImpl;
 import org.xbrlapi.impl.NonNumericItemImpl;
@@ -57,8 +58,8 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
             String namespaceURI, 
             String lName, 
             String qName,
-            Attributes attrs) throws XBRLException {
-
+            Attributes attrs) throws XBRLException {      
+        
         Fragment xbrlFragment = null;
         if (namespaceURI.equals(Constants.XBRL21Namespace.toString())) {
             if (lName.equals("xbrl")) {
@@ -108,9 +109,9 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
         }
         
         if (parsingAnXBRLInstance) {
-
+            
             Fragment factFragment = null;
-
+            
             // First handle items
             String contextRef = attrs.getValue("contextRef");
             if (contextRef != null) {
@@ -118,19 +119,26 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                 if (unitRef != null) {
                     factFragment = new SimpleNumericItemImpl();
                 } else {
-                    // TODO Handle recognition of fraction numeric items - may require post load processing.
-                    // Right now fraction numeric items register as non-numeric items.
                     factFragment = new NonNumericItemImpl();
                 }
             }
             
-            // then handle tuples
+            // then handle tuples and fraction items
             if ((factFragment == null) && this.canBeATuple) {
-                factFragment = new TupleImpl();
+                Fragment currentFragment = this.getLoader().getFragment();
+                if (currentFragment.hasMetaAttribute("fact")) {
+                    Fragment fractionItem = new FractionItemImpl();
+                    fractionItem.setBuilder(currentFragment.getBuilder());
+                    fractionItem.setMetaAttribute("type","org.xbrlapi.impl.FractionItemImpl");
+                    getLoader().replaceCurrentFragment(fractionItem);
+                } else {
+                    factFragment = new TupleImpl();
+                }
             }
             
             if (factFragment != null) {
                 processFragment(factFragment,attrs);
+                factFragment.setMetaAttribute("fact","true");
                 return;
             }
             
