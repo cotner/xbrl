@@ -106,7 +106,6 @@ public abstract interface XML extends Comparable<XML>, Serializable {
      */
     public String getIndex();
     
-
     /**
      * Set the fragment index.  Note that no checks are
      * performed to ensure that the fragment index is
@@ -132,6 +131,12 @@ public abstract interface XML extends Comparable<XML>, Serializable {
      */
     public String getMetaAttribute(String name);
 
+    /**
+     * @param name the name of the attribute.
+     * @return true if the XML resource has a metadata attribute with the specfied name.
+     */
+    public boolean hasMetaAttribute(String name);
+    
     /**
      * Removes a metadata attribute
      * @param name The name of the attribute to remove

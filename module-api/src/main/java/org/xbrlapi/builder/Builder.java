@@ -171,9 +171,15 @@ public interface Builder {
 	 * Get a metadata attribute.
 	 * @param name The name of the attribute.
 	 * @return the string value of the metadata attribute or 
-	 * null if it is not specified.
+	 * null if the XML does not have the specified attribute.
 	 **/
 	public String getMetaAttribute(String name);
+	
+    /**
+     * @param name The name of the attribute.
+     * @return true iff the XML has the specified metadata attribute.
+     **/
+    public boolean hasMetaAttribute(String name);	
 	/**
 	 * Remove a metadata attribute.
 	 * @param name The name of the attribute.

@@ -437,18 +437,19 @@ public class BuilderImpl implements Builder {
 	}
 	
 	/**
-	 * Get a metadata attribute.
-	 * @param name The name of the attribute.
-	 * @return the string value of the metadata attribute or 
-	 * null if it is not specified.
+	 * @see Builder#getMetaAttribute()
 	 **/
 	public String getMetaAttribute(String name) {
-		String value = getMetadata().getAttribute(name); 
-		if (value == "") {
-			return null;
-		}
-		return value;
+	    if (! hasMetaAttribute(name)) return null;
+	    return getMetadata().getAttribute(name); 
 	}
+	
+    /**
+     * @see Builder#hasMetaAttribute()
+     **/
+    public boolean hasMetaAttribute(String name) {
+        return getMetadata().hasAttribute(name); 
+    }	
 
 	/**
 	 * Remove a metadata attribute.

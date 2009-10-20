@@ -224,9 +224,6 @@ public class XMLImpl implements XML {
         return this.getClass().getName();
     }
     
-
-    
-
     /**
      * @see org.xbrlapi.XML#setMetaAttribute(String, String)
      */
@@ -262,15 +259,23 @@ public class XMLImpl implements XML {
      */
     public String getMetaAttribute(String name) {
         if (getBuilder() != null) {
-            String value = getBuilder().getMetaAttribute(name);
-            if (value == null) return null;
-            if (value.equals("")) return null;
-            return value;
+            return getBuilder().getMetaAttribute(name);
         }
-        
-        String value = getMetadataRootElement().getAttribute(name);
-        if (value.equals("")) return null;
-        return value;
+
+        Element root = getMetadataRootElement();
+        if (! root.hasAttribute(name)) return null;
+        return root.getAttribute(name);
+    }
+
+    /**
+     * @see org.xbrlapi.XML#getMetaAttribute(String)
+     */
+    public boolean hasMetaAttribute(String name) {
+        Builder builder = getBuilder();
+        if (builder != null) {
+            return builder.hasMetaAttribute(name);
+        }
+        return getMetadataRootElement().hasAttribute(name);
     }
 
     /**
