@@ -911,6 +911,14 @@ public abstract class BaseStoreImpl implements Store {
     }
     
     /**
+     * @see org.xbrlapi.data.Store#getXMLResources(Class)
+     */
+    public <F extends XML> List<F> getXMLResources(Class<?> specifiedClass) throws XBRLException {
+        String query = "for $root in #roots# where $root/@type='" + specifiedClass.getName() + "' return $root";
+        return this.<F>queryForXMLResources(query);
+    }
+    
+    /**
      * @see org.xbrlapi.data.Store#getChildFragments(String, String)
      */
     public <F extends Fragment> List<F> getChildFragments(String interfaceName, String parentIndex) throws XBRLException {
@@ -1328,14 +1336,20 @@ public abstract class BaseStoreImpl implements Store {
 
 
     /**
-     * @param uri The URI of the document to get the facts from.
-     * @return a list of all of the root-level facts in the specified document.
-     * @throws XBRLException
+     * @see Store#getFacts(URI)
      */
     public List<Fact> getFacts(URI uri) throws XBRLException {
     	List<Instance> instances = this.<Instance>getFragmentsFromDocument(uri,"Instance");
     	return this.getFactsFromInstances(instances);
     }
+    
+    /**
+     * @see Store#getAllFacts(URI)
+     */
+    public List<Fact> getAllFacts(URI uri) throws XBRLException {
+        String query = "for $root in #roots#[@uri='"+ uri +"' ] where $root/@fact return $root";
+        return this.<Fact>queryForXMLResources(query);
+    }    
     
 
     

@@ -415,6 +415,15 @@ public interface Store extends Serializable {
     public <F extends XML> List<F> getXMLResources(String interfaceName) throws XBRLException;
     
     /**
+     * Return a list of XML resources in a data store
+     * that have a type corresponding to the specified XML resource interface name.
+     * @param specifiedClass The class of XML resources to retrieve.
+     * @return a list of XML resources with the given fragment type.
+     * @throws XBRLException
+     */
+    public <F extends XML> List<F> getXMLResources(Class<?> specifiedClass) throws XBRLException;    
+    
+    /**
      * @param interfaceName The name of the interface.  EG: If a list of
      *  org.xbrlapi.impl.ReferenceArcImpl fragments is required then
      *  this parameter would have a value of "ReferenceArc".
@@ -746,6 +755,14 @@ public interface Store extends Serializable {
      * @throws XBRLException
      */
     public List<Fact> getFacts(URI uri) throws XBRLException;
+    
+    /**
+     * @param uri The URI of the document to get the facts from.
+     * @return a list of all of the facts (root level and those nested in tuples) 
+     * in the document with the specified URI.
+     * @throws XBRLException
+     */
+    public List<Fact> getAllFacts(URI uri) throws XBRLException;    
     
     /**
      * @param uri The URI of the document to get the items from.
