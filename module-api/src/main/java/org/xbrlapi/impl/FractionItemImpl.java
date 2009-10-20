@@ -1,8 +1,8 @@
 package org.xbrlapi.impl;
 
-import org.w3c.dom.NodeList;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xbrlapi.FractionItem;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -13,35 +13,37 @@ import org.xbrlapi.utilities.XBRLException;
 public class FractionItemImpl extends NumericItemImpl implements FractionItem {
 
 	/**
-	 * Get the fraction numerator.
-	 * @return the string value of the fraction numerator with leading and
-	 * trailing spaces removed.
-	 * @throws XBRLException if the numerator is missing or is not unique.
 	 * @see org.xbrlapi.FractionItem#getNumerator()
 	 */
     public String getNumerator() throws XBRLException {
-    	NodeList candidates = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"numerator");
-    	if (candidates.getLength() == 0) throw new XBRLException("The fraction numerator is missing.");
-    	if (candidates.getLength() > 1) throw new XBRLException("The fraction numerator is not unique.");
-    	return candidates.item(0).getTextContent().trim();
+        Element data = getDataRootElement();
+        Node child = data.getFirstChild();
+        while (child.getNodeType() != Node.ELEMENT_NODE) {
+            child = child.getNextSibling();
+            if (child == null) throw new XBRLException("The fraction numerator is missing.");
+        }
+        return child.getTextContent().trim();
     }
-	
 
-	
+
 	/**
-	 * Get the fraction denominator.
-	 * @return the string value of the fraction denominator with leading and
-	 * trailing spaces removed.
-	 * @throws XBRLException if the denominator is missing or is not unique.
 	 * @see org.xbrlapi.FractionItem#getDenominator()
 	 */
     public String getDenominator() throws XBRLException {
-    	NodeList candidates = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"denominator");
-    	if (candidates.getLength() == 0) throw new XBRLException("The fraction denominator is missing.");
-    	if (candidates.getLength() > 1) throw new XBRLException("The fraction denominator is not unique.");
-    	return candidates.item(0).getTextContent().trim();
+        Element data = getDataRootElement();
+        Node child = data.getFirstChild();
+        while (child.getNodeType() != Node.ELEMENT_NODE) {
+            child = child.getNextSibling();
+            if (child == null) throw new XBRLException("The fraction numerator is missing.");
+        }
+        child = child.getNextSibling();
+        if (child == null) throw new XBRLException("The fraction denominator is missing.");
+        while (child.getNodeType() != Node.ELEMENT_NODE) {
+            child = child.getNextSibling();
+            if (child == null) throw new XBRLException("The fraction denominator is missing.");
+        }
+        return child.getTextContent().trim();
     }
-	
-
-	
+    
+    
 }
