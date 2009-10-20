@@ -119,9 +119,7 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             }
             
             Aspect aspect = model.getAspect(LocationAspect.TYPE);
-            for (AspectValue value: aspect.getValues()) {
-                logger.info(value.getId());
-            }
+            assertEquals(3,aspect.getValues().size());
 
         } catch (Exception e) {
             e.printStackTrace();
