@@ -1,6 +1,6 @@
 <project name="xlinkapi" default="executable" basedir=".">
 
-  <property name="version" value="5.1"/>
+  <property name="version" value="5.2"/>
   <property name="root" location=".."/>
   <property name="data" location="${root}/data"/>
   <property name="build" location="${root}/bin"/>
