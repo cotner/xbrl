@@ -111,18 +111,16 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             URI uri = this.getURI(TUPLE_INSTANCE);
             loader.discover(uri);       
             List<Fact> facts = store.getAllFacts(uri);
-            assertEquals(2,facts.size());
+            assertEquals(8,facts.size());
             AspectModel model = new NonDimensionalAspectModel();
             
             for (Fact fact: facts) {
                 model.addFact(fact);
             }
             
-            for (Aspect aspect: model.getAspects()) {
-                logger.info(aspect.getType());
-                for (AspectValue value: aspect.getValues()) {
-                    logger.info(value.getId());
-                }
+            Aspect aspect = model.getAspect(LocationAspect.TYPE);
+            for (AspectValue value: aspect.getValues()) {
+                logger.info(value.getId());
             }
 
         } catch (Exception e) {
