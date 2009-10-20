@@ -50,17 +50,30 @@ public class XMLImpl implements XML {
      * @see org.xbrlapi.XML#isa(String)
      */
     @SuppressWarnings("unchecked")
-    public boolean isa(String superType) throws XBRLException {
+    public boolean isa(String type) throws XBRLException {
         
-        Class superClass = FragmentFactory.getClass(superType);
+        Class targetClass = FragmentFactory.getClass(type);
         Class candidateClass = this.getClass();
         while (candidateClass != null) {
-            if (candidateClass.equals(superClass)) return true;
+            if (candidateClass.equals(targetClass)) return true;
             candidateClass = candidateClass.getSuperclass();
         }
         
         return false;
     }
+    
+    /**
+     * @see org.xbrlapi.XML#isa(Class)
+     */
+    @SuppressWarnings("unchecked")
+    public boolean isa(Class<?> targetClass) throws XBRLException {
+        Class candidateClass = this.getClass();
+        while (candidateClass != null) {
+            if (candidateClass.equals(targetClass)) return true;
+            candidateClass = candidateClass.getSuperclass();
+        }
+        return false;
+    }    
     
     /**
      * @see java.lang.Object#hashCode()

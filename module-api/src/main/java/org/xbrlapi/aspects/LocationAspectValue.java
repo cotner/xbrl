@@ -13,7 +13,7 @@ public class LocationAspectValue extends BaseAspectValue {
     public LocationAspectValue(Aspect aspect, Fragment fragment)
             throws XBRLException {
         super(aspect, fragment);
-        if (! fragment.isa(FactImpl.class.getName()) && ! fragment.isa(InstanceImpl.class.getName())) {
+        if (! fragment.isa(FactImpl.class) && ! fragment.isa(InstanceImpl.class)) {
             throw new XBRLException("Fragments for location aspects must be XBRL facts or XBRL instances.  In this case is it a " + fragment.getClass().getName() + ".");
         }
     }

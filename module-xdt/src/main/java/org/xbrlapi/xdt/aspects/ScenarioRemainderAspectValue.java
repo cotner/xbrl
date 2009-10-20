@@ -3,6 +3,7 @@ package org.xbrlapi.xdt.aspects;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.BaseAspectValue;
+import org.xbrlapi.impl.ScenarioImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -13,7 +14,7 @@ public class ScenarioRemainderAspectValue extends BaseAspectValue {
     public ScenarioRemainderAspectValue(Aspect aspect, Fragment fragment)
             throws XBRLException {
         super(aspect, fragment);
-        if (! fragment.isa("org.xbrlapi.impl.ScenarioImpl")) {
+        if (! fragment.isa(ScenarioImpl.class)) {
             throw new XBRLException("Fragment does not match the type of the aspect value.");
         }
     }

@@ -10,6 +10,7 @@ import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Period;
+import org.xbrlapi.impl.PeriodImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -139,7 +140,7 @@ public class PeriodAspect extends ContextAspect implements Aspect {
          */
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
-            if (! value.getFragment().isa("org.xbrlapi.impl.PeriodImpl")) {
+            if (! value.getFragment().isa(PeriodImpl.class)) {
                 throw new XBRLException("The aspect value must have a period fragment.");
             }
         }

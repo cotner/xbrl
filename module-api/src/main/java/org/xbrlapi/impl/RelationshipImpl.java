@@ -51,7 +51,7 @@ public class RelationshipImpl extends NonFragmentXMLImpl implements Relationship
         setSourceType(source.getType());
         setSourceName(source.getLocalname());
         setSourceNamespace(source.getNamespace());
-        if (source.isa("org.xbrlapi.impl.ResourceImpl")) {
+        if (source.isa(ResourceImpl.class)) {
             setSourceLanguageCode(((Resource) source).getLanguage());
             setSourceRole(((Resource) source).getResourceRole());
         }
@@ -60,7 +60,7 @@ public class RelationshipImpl extends NonFragmentXMLImpl implements Relationship
         setTargetType(target.getType());
         setTargetName(target.getLocalname());
         setTargetNamespace(target.getNamespace());
-        if (target.isa("org.xbrlapi.impl.ResourceImpl")) {
+        if (target.isa(ResourceImpl.class)) {
             setTargetLanguageCode(((Resource) target).getLanguage());
             setTargetRole(((Resource) target).getResourceRole());
         }

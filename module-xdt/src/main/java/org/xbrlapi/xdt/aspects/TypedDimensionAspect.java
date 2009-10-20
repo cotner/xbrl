@@ -19,6 +19,7 @@ import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
 import org.xbrlapi.aspects.MissingAspectValue;
+import org.xbrlapi.impl.OpenContextComponentImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.TypedDimension;
@@ -51,8 +52,8 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
          */
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
-            if (! value.getFragment().isa("org.xbrlapi.impl.OpenContextComponentImpl")) {
-                throw new XBRLException("The aspect value must have an OCC fragment.");
+            if (! value.getFragment().isa(OpenContextComponentImpl.class)) {
+                throw new XBRLException("The aspect value must have an segment or scenario fragment.");
             }
         }
 

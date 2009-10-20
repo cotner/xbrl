@@ -10,6 +10,7 @@ import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Segment;
+import org.xbrlapi.impl.SegmentImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -58,7 +59,7 @@ public class SegmentAspect extends ContextAspect implements Aspect {
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
             if (value.getFragment() == null) return;
-            if (! value.getFragment().isa("org.xbrlapi.impl.SegmentImpl")) {
+            if (! value.getFragment().isa(SegmentImpl.class)) {
                 throw new XBRLException("The aspect value must have a segment fragment.");
             }
         }

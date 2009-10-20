@@ -104,7 +104,7 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
      */
     public ExtendedLink getExtendedLink() throws XBRLException {
         Fragment parent = this.getParent();
-        if (! parent.isa("org.xbrlapi.impl.ExtendedLinkImpl")) throw new XBRLException("The parent of locator " + this.getIndex() + " is not an extended link.");
+        if (! parent.isa(ExtendedLinkImpl.class)) throw new XBRLException("The parent of locator " + this.getIndex() + " is not an extended link.");
         return (ExtendedLink) parent;
     }    
     

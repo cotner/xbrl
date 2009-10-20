@@ -17,6 +17,7 @@ import org.xbrlapi.aspects.BaseAspectValueTransformer;
 import org.xbrlapi.aspects.MissingAspectValue;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.ExplicitDimension;
+import org.xbrlapi.xdt.ExplicitDimensionImpl;
 import org.xbrlapi.xdt.values.DimensionValue;
 
 /**
@@ -47,7 +48,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
             if (value.getFragment() == null) return;
-            if (! value.getFragment().isa("org.xbrlapi.impl.ConceptImpl")) {
+            if (! value.getFragment().isa(ExplicitDimensionImpl.class)) {
                 throw new XBRLException("The aspect value must have a concept fragment.");
             }
         }

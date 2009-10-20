@@ -17,6 +17,7 @@ import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
 import org.xbrlapi.aspects.ContextAspect;
 import org.xbrlapi.aspects.MissingAspectValue;
+import org.xbrlapi.impl.ScenarioImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.XDTConstants;
 
@@ -67,7 +68,7 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
             if (value.getFragment() == null) return;
-            if (! value.getFragment().isa("org.xbrlapi.impl.ScenarioImpl")) {
+            if (! value.getFragment().isa(ScenarioImpl.class)) {
                 throw new XBRLException("The aspect value must have a scenario fragment.");
             }
         }

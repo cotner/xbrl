@@ -13,6 +13,7 @@ import org.xbrlapi.EntityResource;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.impl.EntityImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -68,7 +69,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
          */
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
-            if (! value.getFragment().isa("org.xbrlapi.impl.EntityImpl")) {
+            if (! value.getFragment().isa(EntityImpl.class)) {
                 throw new XBRLException("The aspect value must have an entity fragment.");
             }
         }

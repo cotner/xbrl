@@ -18,6 +18,7 @@ import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
 import org.xbrlapi.aspects.ContextAspect;
 import org.xbrlapi.aspects.MissingAspectValue;
+import org.xbrlapi.impl.SegmentImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.XDTConstants;
 
@@ -67,7 +68,7 @@ public class SegmentRemainderAspect extends ContextAspect implements Aspect {
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
             if (value.getFragment() == null) return;
-            if (! value.getFragment().isa("org.xbrlapi.impl.SegmentImpl")) {
+            if (! value.getFragment().isa(SegmentImpl.class)) {
                 throw new XBRLException("The aspect value must have a segment fragment.");
             }
         }

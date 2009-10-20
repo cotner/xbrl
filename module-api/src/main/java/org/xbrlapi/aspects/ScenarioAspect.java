@@ -9,6 +9,7 @@ import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Scenario;
+import org.xbrlapi.impl.ScenarioImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -63,7 +64,7 @@ public class ScenarioAspect extends ContextAspect implements Aspect {
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
             if (value.getFragment() == null) return;
-            if (! value.getFragment().isa("org.xbrlapi.impl.ScenarioImpl")) {
+            if (! value.getFragment().isa(ScenarioImpl.class)) {
                 throw new XBRLException("The aspect value must have a scenario fragment.");
             }
         }

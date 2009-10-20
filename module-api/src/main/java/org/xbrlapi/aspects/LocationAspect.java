@@ -55,7 +55,7 @@ public class LocationAspect extends BaseAspect implements Aspect {
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
             Fragment fragment = value.getFragment();
-            if (! fragment.isa(FactImpl.class.getName()) && ! fragment.isa(InstanceImpl.class.getName())) {
+            if (! fragment.isa(FactImpl.class) && ! fragment.isa(InstanceImpl.class)) {
                 throw new XBRLException("Fragments for location aspects must be XBRL facts or XBRL instances.  In this case is it a " + fragment.getClass().getName() + ".");
             }
         }

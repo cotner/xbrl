@@ -10,6 +10,7 @@ import org.xbrlapi.Item;
 import org.xbrlapi.Measure;
 import org.xbrlapi.NumericItem;
 import org.xbrlapi.Unit;
+import org.xbrlapi.impl.UnitImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -56,7 +57,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
             if (value.getFragment() == null) return;
-            if (! value.getFragment().isa("org.xbrlapi.impl.UnitImpl")) {
+            if (! value.getFragment().isa(UnitImpl.class)) {
                 throw new XBRLException("The aspect value must have a unit fragment.");
             }
         }

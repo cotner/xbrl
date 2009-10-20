@@ -56,6 +56,7 @@ import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.impl.FragmentComparator;
 import org.xbrlapi.impl.RelationshipImpl;
 import org.xbrlapi.impl.RelationshipOrderComparator;
+import org.xbrlapi.impl.ResourceImpl;
 import org.xbrlapi.impl.SchemaImpl;
 import org.xbrlapi.impl.StubImpl;
 import org.xbrlapi.loader.Loader;
@@ -1944,7 +1945,7 @@ public abstract class BaseStoreImpl implements Store {
         Relationship relationship = null;
 
         // If we have a resource, it could be related directly via arcs to relatives.
-        if (source.isa("org.xbrlapi.impl.ResourceImpl")) {
+        if (source.isa(ResourceImpl.class)) {
             if ((linkRole == null) || ((Resource) source).getExtendedLink().getLinkRole().equals(linkRole)) {
                 
                 List<Arc> arcs = null;
@@ -2021,7 +2022,7 @@ public abstract class BaseStoreImpl implements Store {
         Relationship relationship = null;
 
         // If we have a resource, it could be related directly via arcs to relatives.
-        if (target.isa("org.xbrlapi.impl.ResourceImpl")) {
+        if (target.isa(ResourceImpl.class)) {
             if ((linkRole == null) || ((Resource) target).getExtendedLink().getLinkRole().equals(linkRole)) {
                 List<Arc> arcs = null;
                 if (arcrole == null) arcs = ((ArcEnd) target).getArcsTo();

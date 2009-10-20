@@ -19,6 +19,7 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.Locator;
 import org.xbrlapi.Relationship;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.impl.LocatorImpl;
 import org.xbrlapi.impl.RelationshipImpl;
 import org.xbrlapi.impl.RelationshipOrderComparator;
 import org.xbrlapi.utilities.XBRLException;
@@ -428,10 +429,10 @@ public class NetworkImpl implements Network, Serializable {
                     List<ArcEnd> targets = arc.getTargetFragments();
                     for (Fragment source: sources) {
                         Fragment s = source;
-                        if (source.isa("org.xbrlapi.impl.LocatorImpl")) s = ((Locator) source).getTarget();
+                        if (source.isa(LocatorImpl.class)) s = ((Locator) source).getTarget();
                         for (Fragment target: targets) {
                             Fragment t = target;
-                            if (target.isa("org.xbrlapi.impl.LocatorImpl")) t = ((Locator) target).getTarget();
+                            if (target.isa(LocatorImpl.class)) t = ((Locator) target).getTarget();
                             Relationship relationship = new RelationshipImpl(arc,s,t);
                             this.addRelationship(relationship);
                         }

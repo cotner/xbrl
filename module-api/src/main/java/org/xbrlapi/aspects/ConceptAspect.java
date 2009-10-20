@@ -9,6 +9,7 @@ import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -57,7 +58,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
          */
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
-            if (! value.getFragment().isa("org.xbrlapi.impl.ConceptImpl")) {
+            if (! value.getFragment().isa(ConceptImpl.class)) {
                 throw new XBRLException("The aspect value must have a concept fragment.");
             }
         }

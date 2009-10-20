@@ -12,7 +12,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-class OpenContextComponentImpl extends ContextComponentImpl implements OpenContextComponent {
+public class OpenContextComponentImpl extends ContextComponentImpl implements OpenContextComponent {
 	
     /**
      * @see org.xbrlapi.OpenContextComponent#getComplexContent()
