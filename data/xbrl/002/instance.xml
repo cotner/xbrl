@@ -71,6 +71,6 @@
     <measure>xbrli:shares</measure>
   </unit>
   
-  <eg:root contextRef="c1" unitRef="u7">7</eg:root>
+  <eg:root contextRef="c1" unitRef="u7" decimals="0">7</eg:root>
   
 </xbrl>

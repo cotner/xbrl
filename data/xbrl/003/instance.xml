@@ -30,6 +30,6 @@
     <measure>u1:km</measure>
   </unit>
 
-  <eg:root contextRef="c1" unitRef="u1">1</eg:root>
+  <eg:root contextRef="c1" unitRef="u1" decimals="0">1</eg:root>
   
 </xbrl>

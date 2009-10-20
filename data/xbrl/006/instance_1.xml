@@ -52,8 +52,8 @@
     <measure>xbrli:pure</measure>
   </unit>
 
-  <eg:instant contextRef="c1" unitRef="u1">1</eg:instant>
-  <eg:duration contextRef="c2" unitRef="u1">2</eg:duration>
-  <eg:duration contextRef="c2" unitRef="u1">3</eg:duration>
+  <eg:instant contextRef="c1" unitRef="u1" decimals="0">1</eg:instant>
+  <eg:duration contextRef="c2" unitRef="u1" decimals="0">2</eg:duration>
+  <eg:duration contextRef="c2" unitRef="u1" decimals="0">3</eg:duration>
   
  </xbrl>
