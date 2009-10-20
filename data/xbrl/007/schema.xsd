@@ -21,11 +21,52 @@
     substitutionGroup="xbrli:item"
     xbrli:periodType="instant"/>
 
+  <element id="fraction" name="fraction"
+    type="xbrli:fractionItemType"
+    substitutionGroup="xbrli:item"
+    xbrli:periodType="instant"/>
+
+  <element id="newFraction" name="newFraction"
+    substitutionGroup="eg:fraction"
+    xbrli:periodType="instant">
+    <complexType>
+      <complexContent>
+        <restriction base="xbrli:fractionItemType">
+          <sequence>
+            <element ref="eg:n"/>
+            <element ref="eg:d"/>
+          </sequence>
+          <attributeGroup ref="xbrli:essentialNumericItemAttrs"/>
+        </restriction>
+      </complexContent>      
+    </complexType>
+  </element>
+  
+  <element id="oddFraction" name="oddFraction"
+    substitutionGroup="eg:fraction"
+    xbrli:periodType="instant">
+    <complexType>
+      <complexContent>
+        <restriction base="xbrli:fractionItemType">
+          <sequence>
+            <element ref="eg:n"/>
+            <element ref="eg:d"/>
+          </sequence>
+          <attributeGroup ref="xbrli:essentialNumericItemAttrs"/>
+        </restriction>
+      </complexContent>      
+    </complexType>
+  </element>  
+    
+<element name="n" type="decimal" substitutionGroup="xbrli:numerator"/>
+<element name="d" type="xbrli:nonZeroDecimal" substitutionGroup="xbrli:denominator"/>
+   
   <element id="tuple" name="tuple"
     substitutionGroup="xbrli:tuple">
     <complexType>
       <sequence>
         <element ref="eg:item"/>
+        <element ref="eg:fraction" minOccurs="0"/>
       </sequence>
     </complexType>
   </element>

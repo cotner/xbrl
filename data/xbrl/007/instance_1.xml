@@ -34,5 +34,15 @@
   <eg:tuple>
     <eg:item contextRef="c1" unitRef="u1">1</eg:item>
   </eg:tuple>
+
+  <eg:tuple>
+    <eg:item contextRef="c1" unitRef="u1">1</eg:item>
+    <eg:fraction contextRef="c1" unitRef="u1"><numerator>1</numerator><denominator>3</denominator></eg:fraction>
+  </eg:tuple>
+
+  <eg:tuple>
+    <eg:item contextRef="c1" unitRef="u1">1</eg:item>
+    <eg:newFraction contextRef="c1" unitRef="u1"><eg:n>1</eg:n><eg:d>3</eg:d></eg:newFraction>
+  </eg:tuple>
     
  </xbrl>
