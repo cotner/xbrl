@@ -10,22 +10,18 @@ public interface FractionItem extends NumericItem {
 	
 	/**
 	 * Get the fraction numerator.
-	 * @return the string value of the fraction numerator with leading and
+	 * @return the decimal value of the fraction numerator with leading and
 	 * trailing spaces removed.
-	 * @throws XBRLException if the numerator is missing or is not unique.
+	 * @throws XBRLException if the numerator is missing.
 	 */
-    public String getNumerator() throws XBRLException;
-	
-
+    public double getNumerator() throws XBRLException;
 	
 	/**
 	 * Get the fraction denominator.
-	 * @return the string value of the fraction denominator with leading and
+	 * @return the decimal value of the fraction denominator with leading and
 	 * trailing spaces removed.
-	 * @throws XBRLException if the denominator is missing or is not unique.
+	 * @throws XBRLException if the denominator is missing.
 	 */
-    public String getDenominator() throws XBRLException;
+    public double getDenominator() throws XBRLException;
 	
-
-
 }

@@ -15,21 +15,21 @@ public class FractionItemImpl extends NumericItemImpl implements FractionItem {
 	/**
 	 * @see org.xbrlapi.FractionItem#getNumerator()
 	 */
-    public String getNumerator() throws XBRLException {
+    public double getNumerator() throws XBRLException {
         Element data = getDataRootElement();
         Node child = data.getFirstChild();
         while (child.getNodeType() != Node.ELEMENT_NODE) {
             child = child.getNextSibling();
             if (child == null) throw new XBRLException("The fraction numerator is missing.");
         }
-        return child.getTextContent().trim();
+        return new Double(child.getTextContent().trim()).doubleValue();
     }
 
 
 	/**
 	 * @see org.xbrlapi.FractionItem#getDenominator()
 	 */
-    public String getDenominator() throws XBRLException {
+    public double getDenominator() throws XBRLException {
         Element data = getDataRootElement();
         Node child = data.getFirstChild();
         while (child.getNodeType() != Node.ELEMENT_NODE) {
@@ -42,7 +42,8 @@ public class FractionItemImpl extends NumericItemImpl implements FractionItem {
             child = child.getNextSibling();
             if (child == null) throw new XBRLException("The fraction denominator is missing.");
         }
-        return child.getTextContent().trim();
+        return new Double(child.getTextContent().trim()).doubleValue();
+
     }
     
     
