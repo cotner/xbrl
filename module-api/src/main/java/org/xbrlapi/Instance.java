@@ -93,6 +93,12 @@ public interface Instance extends Fragment {
     public List<Fact> getFacts() throws XBRLException;
     
     /**
+     * @return all facts (tuples and facts within tuples also) in this instance.
+     * @throws XBRLException
+     */
+    public List<Fact> getAllFacts() throws XBRLException;
+    
+    /**
      * @return the list of concepts that have values reported for them by child
      * facts of this XBRL instance.
      * @throws XBRLException
@@ -107,10 +113,18 @@ public interface Instance extends Fragment {
     public int getChildConceptCount() throws XBRLException;    
     
     /**
-     * @return the number of child facts in the instance.
+     * @return the number of child facts in the instance (excludes 
+     * facts that are contained within tuples).
      * @throws XBRLException
      */
     public long getFactCount() throws XBRLException;
+    
+    /**
+     * @return the number of facts in the instance including tuples and
+     * those facts within tuples.
+     * @throws XBRLException
+     */
+    public long getAllFactCount() throws XBRLException;
     
     /**
      * @return the value of the earliest start 

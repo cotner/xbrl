@@ -100,8 +100,16 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @return the XQuery used to get all the child facts of the XBRL instance.
      */
     private String getFactsQuery() {
-        return "#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl' or @type='org.xbrlapi.impl.TupleImpl')]";    
+        return "#roots#[@parentIndex='" + this.getIndex() + "' and @fact]"; 
     }
+    
+    /**
+     * Assumes that each URI corresponds to a separate XBRL instance.
+     * @return the XQuery used to get all the child facts of the XBRL instance.
+     */
+    private String getAllFactsQuery() throws XBRLException {
+        return "#roots#[@fact and @uri='" + this.getURI() + "']";
+    }    
     
     /**
      * @see org.xbrlapi.Instance#getFacts()
@@ -109,6 +117,13 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     public List<Fact> getFacts() throws XBRLException {
     	return getStore().<Fact>queryForXMLResources(getFactsQuery());
     }
+    
+    /**
+     * @see org.xbrlapi.Instance#getAllFacts()
+     */
+    public List<Fact> getAllFacts() throws XBRLException {
+        return getStore().<Fact>queryForXMLResources(getAllFactsQuery());
+    }    
     
     /**
      * @see org.xbrlapi.Instance#getItems()
@@ -147,6 +162,13 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     public long getFactCount() throws XBRLException {
         return getStore().queryCount(getFactsQuery());
     }
+    
+    /**
+     * @see org.xbrlapi.Instance#getAllFactCount()
+     */
+    public long getAllFactCount() throws XBRLException {
+        return getStore().queryCount(getAllFactsQuery());
+    }    
 
     /**
      * @see org.xbrlapi.Instance#getLatestPeriod()
