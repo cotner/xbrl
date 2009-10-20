@@ -100,10 +100,6 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
             // The default label to use if no other is available.
             String label = id;
             
-            logger.info("The default label is " + label);
-            logger.info("The language code is " + getLanguageCode());
-            logger.info("The label resource role is " + getLabelRole());
-            
             // Get all the relevant entity resources.
             Entity entity = ((Entity) value.getFragment());
             List<EntityResource> entityResources = entity.getEntityResources();
@@ -170,7 +166,6 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
                 label = labels.iterator().next().getStringValue();
             }
             
-            logger.info("Entity id aspect value label is " + label);
             setMapLabel(id,label);
             return label;
         }
