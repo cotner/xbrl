@@ -1,7 +1,8 @@
 package org.xbrlapi.fragment.tests;
 
-import org.xbrlapi.DOMLoadingTestCase;
 import java.util.List;
+
+import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Instance;
 
 /**
@@ -127,6 +128,22 @@ public class InstanceTestCase extends DOMLoadingTestCase {
             fail(e.getMessage());
         }
 	}
+	
+    public void testGetAllFactCount() {
+        try {
+            List<Instance> instances = store.<Instance>getXMLResources("Instance");
+            assertTrue(instances.size() > 0);
+            for (Instance instance: instances) {
+                logger.info(instance.getAllFactCount());
+                logger.info(instance.getFactCount());
+                assertTrue(instance.getAllFactCount() > 0);
+                assertTrue(instance.getAllFactCount() > instance.getFactCount());
+                assertTrue(instance.getAllFacts().size() > 0);
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }	
 	
     public void testGetTuples() {
         try {
