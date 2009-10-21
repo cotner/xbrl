@@ -161,15 +161,12 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#addFact(Fact)
      */
     public void addFact(Fact fact) throws XBRLException {
-        
-        if (! fact.isTuple()) {
-            facts.add(fact);
-            Collection<Aspect> aspects = this.getAspects();
-            for (Aspect aspect: aspects) {
-                logger.debug("Adding value for aspect: " + aspect.getType());
-                aspect.addFact(fact);
-                logger.debug(aspect.getValue(fact).getLabel());
-            }
+        facts.add(fact);
+        Collection<Aspect> aspects = this.getAspects();
+        for (Aspect aspect: aspects) {
+            logger.debug("Adding value for aspect: " + aspect.getType());
+            aspect.addFact(fact);
+            logger.debug(aspect.getValue(fact).getLabel());
         }
     }
  
@@ -250,9 +247,9 @@ abstract public class BaseAspectModel implements AspectModel {
     
     /**
      * @throws XBRLException 
-     * @see AspectModel#getAspectValueCombinationsForDimension(String)
+     * @see AspectModel#getAspectValueCombinationsForAxis(String)
      */
-    public List<List<AspectValue>> getAspectValueCombinationsForDimension(String dimension) throws XBRLException {
+    public List<List<AspectValue>> getAspectValueCombinationsForAxis(String dimension) throws XBRLException {
         
         // Set up the result matrix
         List<Aspect> aspects = getDimensionAspects(dimension);
@@ -285,9 +282,9 @@ abstract public class BaseAspectModel implements AspectModel {
     
     /**
      * @throws XBRLException 
-     * @see AspectModel#getMinimalAspectValueCombinationsForDimension(String)
+     * @see AspectModel#getMinimalAspectValueCombinationsForAxis(String)
      */
-    public List<List<AspectValue>> getMinimalAspectValueCombinationsForDimension(String dimension) throws XBRLException {
+    public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String dimension) throws XBRLException {
         
         // Set up the result matrix
         List<Aspect> aspects = getDimensionAspects(dimension);
