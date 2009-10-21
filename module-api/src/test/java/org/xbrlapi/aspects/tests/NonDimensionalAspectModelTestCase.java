@@ -77,8 +77,8 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             model.setCriterion(model.getAspect(EntityIdentifierAspect.TYPE).getValues().get(0));
             model.setCriterion(model.getAspect(PeriodAspect.TYPE).getValues().get(0));
             model.setCriterion(model.getAspect(UnitAspect.TYPE).getValues().get(0));
-            List<List<AspectValue>> rowMatrix = model.getAspectValueCombinationsForDimension("row");
-            List<List<AspectValue>> colMatrix = model.getAspectValueCombinationsForDimension("col");
+            List<List<AspectValue>> rowMatrix = model.getAspectValueCombinationsForAxis("row");
+            List<List<AspectValue>> colMatrix = model.getAspectValueCombinationsForAxis("col");
             
             for (AspectValue v: colMatrix.get(0)) {
                 if (v==null) logger.info("First combination: " + null + "=" + null);
