@@ -15,7 +15,6 @@ import org.xbrlapi.data.dom.tests.BaseTestCase;
 import org.xbrlapi.utilities.Constants;
 
 /**
- * Test the loader implementation.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 public class SchemaIdentifierTestCase extends BaseTestCase {
