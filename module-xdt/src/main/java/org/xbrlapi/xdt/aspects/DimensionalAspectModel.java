@@ -19,6 +19,7 @@ import org.xbrlapi.aspects.LocationAspect;
 import org.xbrlapi.aspects.PeriodAspect;
 import org.xbrlapi.aspects.UnitAspect;
 import org.xbrlapi.data.Store;
+import org.xbrlapi.impl.ItemImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.ExplicitDimension;
@@ -61,20 +62,23 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
      * inherent in the fact itself.
      * @see AspectModel#addFact(Fact)
      */
+    @Override
     public void addFact(Fact fact) throws XBRLException {
         
-        if (! fact.isTuple()) { // Add any new aspects.
-            Item item = (Item) fact;
-            
-            Context context =  item.getContext(); // Optimised
-            Entity entity = context.getEntity(); // Optimised
-            Segment segment = entity.getSegment(); // Optimised
-            if (segment != null) addNewAspects(segment); 
-            Scenario scenario = context.getScenario(); // Optimised
-            if (scenario != null) addNewAspects(scenario);
-            super.addFact(fact);
-        }
+        if (fact.getLocalname().equals("Auditor")) fact.serialize();
         
+        // Create any new XDT aspects
+        if (fact.isa(ItemImpl.class)) {
+            Item item = (Item) fact;
+            Context context =  item.getContext();
+            Entity entity = context.getEntity();
+            Segment segment = entity.getSegment();
+            if (segment != null) addNewAspects(segment); 
+            Scenario scenario = context.getScenario();
+            if (scenario != null) addNewAspects(scenario);
+        }
+        super.addFact(fact);
+
     }
     
     private void addNewAspects(org.xbrlapi.OpenContextComponent occ) throws XBRLException {

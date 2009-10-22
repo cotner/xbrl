@@ -161,12 +161,12 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#addFact(Fact)
      */
     public void addFact(Fact fact) throws XBRLException {
+        logger.info("Adding fact: " + fact.getLocalname());
         facts.add(fact);
         Collection<Aspect> aspects = this.getAspects();
         for (Aspect aspect: aspects) {
             logger.debug("Adding value for aspect: " + aspect.getType());
             aspect.addFact(fact);
-            logger.debug(aspect.getValue(fact).getLabel());
         }
     }
  

@@ -115,6 +115,7 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
+        if (fact.isTuple()) return null;
         Fragment fragment = getFragment(fact);
         if (fragment == null) {
             return new MissingAspectValue(this);

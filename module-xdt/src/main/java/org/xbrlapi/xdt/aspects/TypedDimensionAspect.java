@@ -144,6 +144,7 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
+        if (fact.isTuple()) return "";
         return fact.getIndex();
     }
 

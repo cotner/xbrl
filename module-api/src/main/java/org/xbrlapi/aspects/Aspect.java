@@ -194,6 +194,8 @@ public interface Aspect extends Serializable {
      * @param fact The fact.
      * @return the unique string identifying the fragment
      * that is part of the aspect value for the given fact.
+     * This should be the empty string if the fact does not
+     * have a value for the aspect.
      * @throws XBRLException
      */
     public String getKey(Fact fact) throws XBRLException;

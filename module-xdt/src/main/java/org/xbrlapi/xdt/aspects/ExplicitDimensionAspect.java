@@ -15,9 +15,9 @@ import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
 import org.xbrlapi.aspects.MissingAspectValue;
+import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.ExplicitDimension;
-import org.xbrlapi.xdt.ExplicitDimensionImpl;
 import org.xbrlapi.xdt.values.DimensionValue;
 
 /**
@@ -48,7 +48,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
         public void validate(AspectValue value) throws XBRLException {
             super.validate(value);
             if (value.getFragment() == null) return;
-            if (! value.getFragment().isa(ExplicitDimensionImpl.class)) {
+            if (! value.getFragment().isa(ConceptImpl.class)) {
                 throw new XBRLException("The aspect value must have a concept fragment.");
             }
         }
@@ -118,6 +118,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
      * @see Aspect#getFragmentFromStore(Fact)
      */
     public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+        if (fact.isTuple()) return null;
         DimensionValue value = getAccessor().getValue((Item) fact, getDimension());
         if (value == null) return null; 
         return (Concept) value.getValue();
@@ -127,6 +128,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
+        if (fact.isTuple()) return "";
         DimensionValue dimensionValue = getAccessor().getValue((Item) fact, getDimension());
         if (dimensionValue == null) return "";
         Concept concept = (Concept) dimensionValue.getValue();

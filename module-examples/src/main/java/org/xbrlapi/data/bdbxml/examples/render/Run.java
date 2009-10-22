@@ -320,7 +320,7 @@ public class Run {
                 }
                 
                 // Get the sorted list of period aspect values
-                List<List<AspectValue>> aspectCombinations = aspectModel.getAspectValueCombinationsForDimension("column");
+                List<List<AspectValue>> aspectCombinations = aspectModel.getAspectValueCombinationsForAxis("column");
                 List<AspectValue> periods = new Vector<AspectValue>();
                 for (int j=0; j<aspectCombinations.size(); j++) {
                     periods.add(aspectCombinations.get(j).get(0));

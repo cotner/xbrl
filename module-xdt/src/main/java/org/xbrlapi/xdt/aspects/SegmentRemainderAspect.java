@@ -57,6 +57,7 @@ public class SegmentRemainderAspect extends ContextAspect implements Aspect {
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
+        if (fact.isTuple()) return "";
         Context context = (Context) super.getFragmentFromStore(fact);
         return context.getURI().toString() + context.getId();
     }        
@@ -114,6 +115,7 @@ public class SegmentRemainderAspect extends ContextAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
+        if (fact.isTuple()) return null;
         Fragment fragment = getFragment(fact);
         if (fragment == null) {
             return new MissingAspectValue(this);

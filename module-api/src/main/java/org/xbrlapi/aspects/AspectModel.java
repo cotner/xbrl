@@ -137,16 +137,16 @@ public interface AspectModel extends Serializable {
     public void clearAllCriteria();
 
     /**
-     * @param dimension The name of the dimension
+     * @param axis The name of the axis
      * @return a list of lists of aspect values where
      * each list in the list is a combination of one 
-     * aspect value for each aspect in the dimension.
+     * aspect value for each aspect in the axis.
      * The aspect values in each combination 
      * are ordered in the same order as the aspects in the
-     * dimension.  The lists in the list are ordered 
+     * axis.  The lists in the list are ordered 
      * by the orderings of the values for each aspect.
      */
-    public List<List<AspectValue>> getAspectValueCombinationsForDimension(String dimension) throws XBRLException;
+    public List<List<AspectValue>> getAspectValueCombinationsForAxis(String axis) throws XBRLException;
     
     /**
      * @param dimension The name of the dimension
@@ -159,7 +159,7 @@ public interface AspectModel extends Serializable {
      * by the orderings of the values for each aspect.
      * Any aspect that has just missing aspect values is omitted.
      */
-    public List<List<AspectValue>> getMinimalAspectValueCombinationsForDimension(String dimension) throws XBRLException;    
+    public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String dimension) throws XBRLException;    
     
     /**
      * @param type The type identifying the aspect to delete.
