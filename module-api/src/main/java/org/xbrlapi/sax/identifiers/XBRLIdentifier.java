@@ -122,11 +122,12 @@ public class XBRLIdentifier extends BaseIdentifier implements Identifier {
                     factFragment = new NonNumericItemImpl();
                 }
             }
-            
+
             // then handle tuples and fraction items
             if ((factFragment == null) && this.canBeATuple) {
                 Fragment currentFragment = this.getLoader().getFragment();
-                if (currentFragment.hasMetaAttribute("fact")) {
+
+                if (currentFragment.hasMetaAttribute("fact") && ! currentFragment.getType().equals(TupleImpl.class.getName())) {
                     Fragment fractionItem = new FractionItemImpl();
                     fractionItem.setBuilder(currentFragment.getBuilder());
                     fractionItem.setMetaAttribute("type","org.xbrlapi.impl.FractionItemImpl");
