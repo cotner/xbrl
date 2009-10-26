@@ -178,6 +178,38 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     public List<LabelResource> getLabelsWithResourceRole(URI role) throws XBRLException {
         return getStore().getLabels(getIndex(),role);
     }
+
+    /**
+     * @see Fragment#getLabels(List, List)
+     */
+    public List<LabelResource> getLabels(List<String> languages, List<URI> resourceRoles) throws XBRLException {
+        if (languages == null && resourceRoles == null) return this.getLabels();
+        
+        List<LabelResource> result = new Vector<LabelResource>();
+        
+        if (resourceRoles == null) {
+            for (String language: languages) {
+                result = this.getLabelsWithLanguage(language);
+                if (! result.isEmpty()) return result;
+            }
+        } else if (languages == null) {
+            for (URI role: resourceRoles) {
+                result = this.getLabelsWithResourceRole(role);
+                if (! result.isEmpty()) return result;
+            }
+        } else {
+            for (String language: languages) {
+                for (URI role: resourceRoles) {
+                    result = this.getLabelsWithLanguageAndResourceRole(language,role);
+                    if (! result.isEmpty()) return result;
+                }   
+            }
+        }
+        
+        return result;
+        
+    }
+    
     
     /**
      * @see org.xbrlapi.Fragment#getReferencesWithResourceRole(String)

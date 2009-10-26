@@ -264,6 +264,20 @@ public interface Fragment extends XML {
     public List<LabelResource> getLabelsWithResourceRole(URI role) throws XBRLException;
     
     /**
+     * @param languages the list of language codes in order of preference from most preferred to least
+     * preferred, ending with a null value if any language is ultimately acceptable.  Set
+     * this list to null if there are no language preferences.
+     * @param resourceRoles the list of language resource roles in order of preference from most preferred 
+     * to least preferred, ending with a null value if any language resource role is ultimately acceptable.  
+     * Set this list to null if there are no resource role preferences.
+     * @return the list of labels that best match the specified search criteria.
+     * Note that a language preference takes precedence over a resource role preference.
+     * @throws XBRLException
+     */
+    public List<LabelResource> getLabels(List<String> languages, List<URI> resourceRoles) throws XBRLException;
+    
+    
+    /**
      * @param role The XLink role value
      * @return the list of references for this fragment with the specified XLink role.
      * @throws XBRLException
