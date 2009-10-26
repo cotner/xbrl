@@ -9,16 +9,17 @@ import org.xbrlapi.utilities.XBRLException;
 public interface NumericItem extends Item {
 
 	/** 
-	 * Get the units for this item
-	 *
-	 * @return the units fragment associated with this item
+	 * @return the units fragment referenced by this numeric item.
 	 * @throws XBRLException
 	 */
-	public Unit getUnits() throws XBRLException;
-	
+	public Unit getUnit() throws XBRLException;
 
+    /** 
+     * @return the ID of the unit referenced by this item.
+     * @throws XBRLException if the unit reference is missing.
+     */
+    public String getUnitId() throws XBRLException;     
 	
-
 	/** 
 	 * Get the decimals attribute for this item.
 	 *
@@ -26,8 +27,6 @@ public interface NumericItem extends Item {
 	 * @throws XBRLException
 	 */
 	public String getDecimals() throws XBRLException;
-	
-	
 
 	/** 
 	 * Get the precision attribute for this item.
@@ -36,9 +35,7 @@ public interface NumericItem extends Item {
 	 * @throws XBRLException
 	 */
 	public String getPrecision() throws XBRLException;
-	
 
-	
 	/** 
 	 * Returns true if the fact has a precision attribute.
 	 * @return true if the fact has a precision attribute and false otherwise.

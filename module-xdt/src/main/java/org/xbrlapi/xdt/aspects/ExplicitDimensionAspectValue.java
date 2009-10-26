@@ -1,6 +1,6 @@
 package org.xbrlapi.xdt.aspects;
 
-import org.xbrlapi.Fragment;
+import org.xbrlapi.Concept;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.BaseAspectValue;
 import org.xbrlapi.utilities.XBRLException;
@@ -11,8 +11,8 @@ import org.xbrlapi.utilities.XBRLException;
 public class ExplicitDimensionAspectValue extends BaseAspectValue {
 
 
-    public ExplicitDimensionAspectValue(Aspect aspect, Fragment value) throws XBRLException {
-        super(aspect,value);
+    public ExplicitDimensionAspectValue(Aspect aspect, Concept concept) throws XBRLException {
+        super(aspect,concept);
     }
     
 

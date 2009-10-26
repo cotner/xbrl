@@ -1,6 +1,6 @@
 package org.xbrlapi.xdt.aspects;
 
-import org.xbrlapi.Fragment;
+import org.xbrlapi.OpenContextComponent;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.BaseAspectValue;
 import org.xbrlapi.utilities.XBRLException;
@@ -10,7 +10,7 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class TypedDimensionAspectValue extends BaseAspectValue {
 
-    public TypedDimensionAspectValue(Aspect aspect, Fragment value) throws XBRLException {
-        super(aspect,value);
+    public TypedDimensionAspectValue(Aspect aspect, OpenContextComponent occ) throws XBRLException {
+        super(aspect,occ);
     }
 }

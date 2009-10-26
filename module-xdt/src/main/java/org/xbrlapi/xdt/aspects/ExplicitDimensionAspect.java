@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.aspects.Aspect;
@@ -14,8 +13,6 @@ import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
-import org.xbrlapi.aspects.MissingAspectValue;
-import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.ExplicitDimension;
 import org.xbrlapi.xdt.values.DimensionValue;
@@ -42,16 +39,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
     }
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
-        /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
-            if (value.getFragment() == null) return;
-            if (! value.getFragment().isa(ConceptImpl.class)) {
-                throw new XBRLException("The aspect value must have a concept fragment.");
-            }
-        }
+
 
         /**
          * For explicit XDT dimensions, the identifier is based
@@ -59,43 +47,42 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
          * dimension value.
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
-        public String getIdentifier(AspectValue value) throws XBRLException {
-            
-            validate(value);
+        public String getIdentifier(ExplicitDimensionAspectValue value) throws XBRLException {
             
             if (hasMapId(value)) {
                 return getMapId(value);
             }
-            
-            // TODO still need to be able to handle default explicit dimensions
-            if (value.getFragment() == null) {
-                setMapId(value,"");
-                return "";
-            }
-            
-            Concept concept = (Concept) value.getFragment();
-            String id = concept.getTargetNamespace() + concept.getName();
+
+            String id = "";
+            Concept concept = value.<Concept>getFragment();
+            if (concept != null) id = concept.getTargetNamespace() + ":" + concept.getName();
+
             setMapId(value,id);
             return id;
+            
         }
         
         /**
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
-        public String getLabel(AspectValue value) throws XBRLException {
+        public String getLabel(ExplicitDimensionAspectValue value) throws XBRLException {
+            
+            Concept concept = value.<Concept>getFragment();
+            if (concept == null) return null;
+
             String id = getIdentifier(value);
             if (hasMapLabel(id)) {
                 return getMapLabel(id);
             }
-            Concept f = ((Concept) value.getFragment());
-            if (f == null) {
-                setMapLabel(id,"");
-                return "";
-            }            
-            List<LabelResource> labels = f.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
-            if (labels.isEmpty()) return id;
-            String label = labels.get(0).getStringValue();
-            logger.debug("Explicit dimension aspect value label is " + label);
+            
+            String label = id;
+            if (concept != null) {
+                List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
+                if (! labels.isEmpty()) {
+                    label = labels.get(0).getStringValue();
+                }
+            }
+            
             setMapLabel(id,label);
             return label;
         }
@@ -107,20 +94,21 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = getFragment(fact);
-        if (fragment == null) {
-            return new MissingAspectValue(this);
-        }
-        return new ExplicitDimensionAspectValue(this,fragment);
+        Concept concept = this.<Concept>getFragment(fact);
+        return new ExplicitDimensionAspectValue(this,concept);
     }
 
     /**
+     * When you are confused by the return type, recall that explicit dimension
+     * values are all requried to be XBRL concepts - wierd but true!
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+    @SuppressWarnings("unchecked")
+    public Concept getFragmentFromStore(Fact fact) throws XBRLException {
         if (fact.isTuple()) return null;
-        DimensionValue value = getAccessor().getValue((Item) fact, getDimension());
-        if (value == null) return null; 
+        ExplicitDimension dimension = this.<ExplicitDimension>getDimension();
+        DimensionValue value = getAccessor().getValue((Item) fact, dimension);
+        if (value == null) return null;
         return (Concept) value.getValue();
     }
     
@@ -132,7 +120,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
         DimensionValue dimensionValue = getAccessor().getValue((Item) fact, getDimension());
         if (dimensionValue == null) return "";
         Concept concept = (Concept) dimensionValue.getValue();
-        return concept.getNamespace() + concept.getLocalname();
+        return concept.getNamespace() + "#" + concept.getLocalname();
     }    
 
     /**

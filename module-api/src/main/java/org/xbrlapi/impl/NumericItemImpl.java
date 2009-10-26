@@ -1,5 +1,6 @@
 package org.xbrlapi.impl;
 
+import org.w3c.dom.Element;
 import org.xbrlapi.NumericItem;
 import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.XBRLException;
@@ -11,18 +12,22 @@ import org.xbrlapi.utilities.XBRLException;
 public class NumericItemImpl extends ItemImpl implements NumericItem {
 
 	/** 
-	 * Get the unit fragment for this item
-	 * @return the unit fragment associated with this item
-	 * @throws XBRLException
-	 * @see org.xbrlapi.NumericItem#getUnits()
+	 * @see org.xbrlapi.NumericItem#getUnit()
 	 */
-	public Unit getUnits() throws XBRLException {
-		String unitRef = getDataRootElement().getAttribute("unitRef");
-		return getInstance().getUnit(unitRef);
+	public Unit getUnit() throws XBRLException {
+		return getInstance().getUnit(getUnitId());
 	}
-	
 
-
+    /** 
+     * @see org.xbrlapi.NumericItem#getUnitId()
+     */
+    public String getUnitId() throws XBRLException {
+        Element root = getDataRootElement();
+        if (root.hasAttribute("unitRef")) {
+            return root.getAttribute("unitRef");
+        }
+        throw new XBRLException("The unit reference is missing on numeric item " + this.getIndex());
+    }
 	/** 
 	 * Get the decimals attribute for this item.
 	 * @return the value of the decimals attribute

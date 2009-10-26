@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
@@ -16,8 +15,6 @@ import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
 import org.xbrlapi.aspects.ContextAspect;
-import org.xbrlapi.aspects.MissingAspectValue;
-import org.xbrlapi.impl.ScenarioImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.XDTConstants;
 
@@ -50,61 +47,43 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
         this.setTransformer(new Transformer());
     }
 
-
-    
-    /**
-     * @see Aspect#getKey(Fact)
-     */
-    public String getKey(Fact fact) throws XBRLException {
-        Context context = (Context) super.getFragmentFromStore(fact);
-        return context.getURI().toString() + context.getId();
-    }    
-
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
-        
-        /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
-            if (value.getFragment() == null) return;
-            if (! value.getFragment().isa(ScenarioImpl.class)) {
-                throw new XBRLException("The aspect value must have a scenario fragment.");
-            }
-        }
 
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
-            validate(value);
+
             if (hasMapId(value)) {
                 return getMapId(value);
             }
-            if (value.getFragment() == null) {
-                setMapId(value,"");
-                return "";
-            }
-            Scenario f = ((Scenario) value.getFragment());
-            List<Element> children = f.getChildElements();
-            List<Element> remainder = new Vector<Element>();
-            CHILDREN: for (Element child: children) {
-                if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
-                    if (child.hasAttribute("dimension")) {
-                        continue CHILDREN;
+
+            String id = "";
+            Scenario scenario = value.<Scenario>getFragment();
+            if (scenario != null) {
+                List<Element> children = scenario.getChildElements();
+                List<Element> remainder = new Vector<Element>();
+                CHILDREN: for (Element child: children) {
+                    if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
+                        if (child.hasAttribute("dimension")) {
+                            continue CHILDREN;
+                        }
                     }
-                }
-                remainder.add(child);
+                    remainder.add(child);
+                }                
+                id = getLabelFromElements(remainder);
             }
-            String id = getLabelFromElements(remainder);
+            
             setMapId(value,id);
             return id;
+
         }
         
         /**
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
         public String getLabel(AspectValue value) throws XBRLException {
+            if (value.getFragment() == null) return null;
             return getIdentifier(value);
         }        
 
@@ -114,23 +93,19 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public AspectValue getValue(Fact fact) throws XBRLException {
-        if (fact.isTuple()) return null;
-        Fragment fragment = getFragment(fact);
-        if (fragment == null) {
-            return new MissingAspectValue(this);
-        }            
-        return new ScenarioRemainderAspectValue(this,fragment);
+    public ScenarioRemainderAspectValue getValue(Fact fact) throws XBRLException {
+        Scenario scenario = this.<Scenario>getFragment(fact);
+        return new ScenarioRemainderAspectValue(this,scenario);
     }        
     
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        Context context = (Context) super.getFragmentFromStore(fact);
-        Scenario scenario = context.getScenario();
-        if (scenario == null) return null;
-        return scenario;
+    @SuppressWarnings("unchecked")
+    public Scenario getFragmentFromStore(Fact fact) throws XBRLException {
+        Context context = getContextFromStore(fact);
+        if (context == null) return null;
+        return context.getScenario();
     }
 
     /**

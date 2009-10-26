@@ -47,16 +47,16 @@ public interface AspectModel extends Serializable {
     public Collection<Aspect> getOrphanAspects();
     
     /**
-     * @param dimension The unique (for the aspect model) identifier for
-     * a dimension of the aspect model.  Aspect models can have zero or more
-     * dimensions, each of which has a root aspect.  Root aspects can have a series
-     * of child aspects, all of which are aspects associated with the same dimension
-     * of the aspect model.  These dimensions are useful for relating aspects
+     * @param axis The unique (for the aspect model) identifier for
+     * an axis of the aspect model.  Aspect models can have zero or more
+     * axes, each of which has a root aspect.  Root aspects can have a series
+     * of child aspects, all of which are aspects associated with the same axis
+     * of the aspect model.  These axes are useful for relating aspects
      * to rows and columns of a table, for example.
-     * @return the list of aspects for the dimension.
-     * @throws XBRLException if the dimension is not defined for the aspect model.
+     * @return the list of aspects for the axis.
+     * @throws XBRLException if the axis is not defined for the aspect model.
      */
-    public List<Aspect> getDimensionAspects(String dimension) throws XBRLException;
+    public List<Aspect> getAxisAspects(String axis) throws XBRLException;
 
     /**
      * @param aspect The aspect to set in the aspect model, as an orphan.
@@ -149,17 +149,17 @@ public interface AspectModel extends Serializable {
     public List<List<AspectValue>> getAspectValueCombinationsForAxis(String axis) throws XBRLException;
     
     /**
-     * @param dimension The name of the dimension
+     * @param axis The name of the dimension
      * @return a list of lists of aspect values where
      * each list in the list is a combination of one 
-     * aspect value for each aspect in the dimension.
+     * aspect value for each aspect in the axis.
      * The aspect values in each combination 
      * are ordered in the same order as the aspects in the
-     * dimension.  The lists in the list are ordered 
+     * axis.  The lists in the list are ordered 
      * by the orderings of the values for each aspect.
      * Any aspect that has just missing aspect values is omitted.
      */
-    public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String dimension) throws XBRLException;    
+    public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String axis) throws XBRLException;    
     
     /**
      * @param type The type identifying the aspect to delete.

@@ -8,9 +8,7 @@ import org.w3c.dom.Element;
 import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.Segment;
-import org.xbrlapi.impl.SegmentImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -44,43 +42,30 @@ public class SegmentAspect extends ContextAspect implements Aspect {
 
 
     
-    /**
-     * @see Aspect#getKey(Fact)
-     */
-    public String getKey(Fact fact) throws XBRLException {
-        Context context = (Context) super.getFragmentFromStore(fact);
-        return context.getURI().toString() + context.getId();
-    }    
+    
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
-        /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
-            if (value.getFragment() == null) return;
-            if (! value.getFragment().isa(SegmentImpl.class)) {
-                throw new XBRLException("The aspect value must have a segment fragment.");
-            }
-        }
+
 
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
-            validate(value);
+            
             if (hasMapId(value)) {
                 return getMapId(value);
             }
-            if (value.getFragment() == null) {
-                setMapId(value,"");
-                return "";
+
+            String id = "";
+            Segment segment = value.<Segment>getFragment();
+            if (segment != null) {
+                List<Element> children = segment.getChildElements();
+                id = getLabelFromElements(children);
             }
-            Segment f = ((Segment) value.getFragment());
-            List<Element> children = f.getChildElements();
-            String id = getLabelFromElements(children);
+            
             setMapId(value,id);
             return id;
+
         }
         
         /**
@@ -96,20 +81,19 @@ public class SegmentAspect extends ContextAspect implements Aspect {
      */
     @SuppressWarnings("unchecked")
     public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = getFragment(fact);
-        if (fragment == null) {
-            return new MissingAspectValue(this);
-        }            
-        return new SegmentAspectValue(this,fragment);
+        Segment segment = this.<Segment>getFragment(fact);
+        return new SegmentAspectValue(this,segment);
     }
 
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        Entity entity = ((Context) super.getFragmentFromStore(fact)).getEntity();
+    @SuppressWarnings("unchecked")
+    public Segment getFragmentFromStore(Fact fact) throws XBRLException {
+        Context context = getContextFromStore(fact);
+        if (context == null) return null;
+        Entity entity = context.getEntity();
         Segment segment = entity.getSegment();
-        if (segment == null) return null;
         return segment;
     }
     

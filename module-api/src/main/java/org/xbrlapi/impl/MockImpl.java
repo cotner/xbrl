@@ -61,11 +61,6 @@ public class MockImpl extends FragmentImpl implements Mock {
     	setMetaAttribute("sequenceToParentElement", sequence);
     }
 
-    /**
-     * Set the preceding siblings information for the mock fragment.
-     */
-    public void setPrecedingSiblings(String precedingSiblings) throws XBRLException {
-    	setMetaAttribute("precedingSiblings", precedingSiblings);
-    }
+
 	
 }

@@ -7,7 +7,6 @@ import java.util.Comparator;
 import org.apache.log4j.Logger;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.Period;
 import org.xbrlapi.impl.PeriodImpl;
 import org.xbrlapi.utilities.XBRLException;
@@ -113,13 +112,7 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
         return Aspect.PERIOD;
     }
     
-    /**
-     * @see Aspect#getKey(Fact)
-     */
-    public String getKey(Fact fact) throws XBRLException {
-        Context context = (Context) super.getFragmentFromStore(fact);
-        return context.getURI().toString() + context.getId();
-    }    
+    
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         public Transformer() {
@@ -130,7 +123,7 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
          * @see AspectValueTransformer#validate(AspectValue)
          */
         public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
+
             if (! value.getFragment().isa(PeriodImpl.class)) {
                 throw new XBRLException("The aspect value must have a period fragment.");
             }
@@ -161,6 +154,7 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
         public String getLabel(AspectValue value) throws XBRLException {
+            if (value.getFragment() == null) return null;
             return getIdentifier(value);
         }        
         
@@ -183,19 +177,19 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public AspectValue getValue(Fact fact) throws XBRLException {
-        try {
-            return new PeriodAspectValue(this,getFragment(fact));
-        } catch (XBRLException e) {
-            return null;
-        }
+    public PeriodAspectValue getValue(Fact fact) throws XBRLException {
+        Period period = this.<Period>getFragment(fact);
+        return new PeriodAspectValue(this,period);
     }
 
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        return ((Context) super.getFragmentFromStore(fact)).getPeriod();
+    @SuppressWarnings("unchecked")
+    public Period getFragmentFromStore(Fact fact) throws XBRLException {
+        Context context = getContextFromStore(fact);
+        if (context == null) return null;
+        return context.getPeriod();
     }    
 
     /**

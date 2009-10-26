@@ -1,6 +1,8 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Vector;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
@@ -44,14 +46,19 @@ public abstract class BaseAspectValue implements AspectValue {
     /**
      * @see AspectValue#getFragment()
      */
-    public Fragment getFragment() {
-        return fragment;
+    @SuppressWarnings("unchecked")
+    public <F extends Fragment> F getFragment() throws XBRLException {
+        try {
+            return (F) fragment;
+        } catch (ClassCastException e) {
+            throw new XBRLException("The fragment is not of the required type.",e);
+        }
     }
 
     /**
-     * @see AspectValue#getId()
+     * @see AspectValue#getIdentifier()
      */
-    public String getId() throws XBRLException {
+    public String getIdentifier() throws XBRLException {
         return getAspect().getTransformer().getIdentifier(this);
     }
     
@@ -67,6 +74,13 @@ public abstract class BaseAspectValue implements AspectValue {
      */
     public AspectValue getParent() throws XBRLException {
         return null;
+    }
+    
+    /**
+     * @see AspectValue#getChildren(AspectValue)
+     */
+    public List<AspectValue> getChildren() throws XBRLException {
+        return new Vector<AspectValue>();
     }    
  
 
@@ -124,5 +138,11 @@ public abstract class BaseAspectValue implements AspectValue {
         return true;
     }
     
+    /**
+     * @see AspectValue#isMissing()
+     */
+    public boolean isMissing() throws XBRLException {
+        return (this.<Fragment>getFragment() == null);
+    }
     
 }

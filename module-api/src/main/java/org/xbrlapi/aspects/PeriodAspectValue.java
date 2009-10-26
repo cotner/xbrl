@@ -1,7 +1,6 @@
 package org.xbrlapi.aspects;
 
-import org.xbrlapi.Fragment;
-import org.xbrlapi.impl.PeriodImpl;
+import org.xbrlapi.Period;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -9,12 +8,9 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class PeriodAspectValue extends BaseAspectValue {
 
-    public PeriodAspectValue(Aspect aspect, Fragment fragment)
+    public PeriodAspectValue(Aspect aspect, Period period)
             throws XBRLException {
-        super(aspect, fragment);
-        if (! fragment.isa(PeriodImpl.class)) {
-            throw new XBRLException("Fragment does not match the type of the aspect value.");
-        }
+        super(aspect, period);
     }
 
 }

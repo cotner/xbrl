@@ -5,12 +5,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
-import org.xbrlapi.Item;
 import org.xbrlapi.Measure;
 import org.xbrlapi.NumericItem;
 import org.xbrlapi.Unit;
-import org.xbrlapi.impl.UnitImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -51,82 +48,49 @@ public class UnitAspect extends BaseAspect implements Aspect {
         }
         
 
-        /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
-            if (value.getFragment() == null) return;
-            if (! value.getFragment().isa(UnitImpl.class)) {
-                throw new XBRLException("The aspect value must have a unit fragment.");
-            }
-        }
+
 
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
-            validate(value);
+
             if (hasMapId(value)) {
                 return getMapId(value);
             }
-            if (value.getFragment() == null) {
-                setMapId(value,"");
-                return "";
-            }
-            Unit f = ((Unit) value.getFragment());
-            String result = "";
-            List<Measure> numerators = f.getResolvedNumeratorMeasures();
-            for (int i=0; i<numerators.size(); i++) {
-                Measure measure = numerators.get(i);
-                if (i == 0) result += measure.getNamespace() + ":" + measure.getLocalname();
-                else result += "*" + measure.getNamespace() + ":" + measure.getLocalname();
-            }
-            if (f.hasDenominator()) {
-                result += "/";
-                List<Measure> denominators = f.getResolvedDenominatorMeasures();
-                for (int i=0; i<denominators.size(); i++) {
-                    Measure measure = denominators.get(i);
-                    if (i == 0) result += measure.getNamespace() + ":" + measure.getLocalname();
-                    else result += "*" + measure.getNamespace() + ":" + measure.getLocalname();
+
+            String id = "";
+
+            Unit unit = value.<Unit>getFragment();
+            if (unit != null) {
+                List<Measure> numerators = unit.getResolvedNumeratorMeasures();
+                for (int i=0; i<numerators.size(); i++) {
+                    Measure measure = numerators.get(i);
+                    if (i == 0) id += measure.getNamespace() + "#" + measure.getLocalname();
+                    else id += " x " + measure.getNamespace() + "#" + measure.getLocalname();
+                }
+                if (unit.hasDenominator()) {
+                    id += " / (";
+                    List<Measure> denominators = unit.getResolvedDenominatorMeasures();
+                    for (int i=0; i<denominators.size(); i++) {
+                        Measure measure = denominators.get(i);
+                        if (i == 0) id += measure.getNamespace() + "#" + measure.getLocalname();
+                        else id += " x " + measure.getNamespace() + "#" + measure.getLocalname();
+                    }
+                    id += ")";
                 }
             }
-            setMapId(value,result);
-            return result;
+                        
+            setMapId(value,id);
+            return id;
         }
         
         /**
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
         public String getLabel(AspectValue value) throws XBRLException {
-            String id = getIdentifier(value);
-            if (hasMapLabel(id)) {
-                return getMapLabel(id);
-            }
-            if (value.getFragment() == null) {
-                setMapLabel("","");
-                return "";
-            }
-            Unit f = ((Unit) value.getFragment());
-            String result = "";
-            List<Measure> numerators = f.getResolvedNumeratorMeasures();
-            for (int i=0; i<numerators.size(); i++) {
-                Measure measure = numerators.get(i);
-                if (i == 0) result += measure.getLocalname();
-                else result += "*" + measure.getLocalname();
-            }
-            if (f.hasDenominator()) {
-                result += "/";
-                List<Measure> denominators = f.getResolvedDenominatorMeasures();
-                for (int i=0; i<denominators.size(); i++) {
-                    Measure measure = denominators.get(i);
-                    if (i == 0) result += measure.getLocalname();
-                    else result += "*" + measure.getLocalname();
-                }
-            }
-            logger.debug("Unit aspect value label is " + result);            
-            setMapLabel(id,result);
-            return result;
+            if (value.getFragment() == null) return null;
+            return getIdentifier(value);
         } 
         
     }    
@@ -135,23 +99,18 @@ public class UnitAspect extends BaseAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public AspectValue getValue(Fact fact) throws XBRLException {
-        try {
-            return new UnitAspectValue(this,getFragment(fact));
-        } catch (XBRLException e) {
-            return new MissingAspectValue(this);
-        }
+    public UnitAspectValue getValue(Fact fact) throws XBRLException {
+            Unit unit = this.<Unit>getFragment(fact);
+            return new UnitAspectValue(this,unit);
     }
     
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        if (fact.isTuple()) {
-            throw new XBRLException("The fact must not be a tuple.");
-        }
-        Item item = (Item) fact;
-        if (! item.isNumeric()) throw new XBRLException("The fact must be numeric.");
+    @SuppressWarnings("unchecked")
+    public Unit getFragmentFromStore(Fact fact) throws XBRLException {
+        if (! fact.isNumeric()) return null;
+        NumericItem item = (NumericItem) fact;
         return item.getUnit();
     }    
     
@@ -159,12 +118,9 @@ public class UnitAspect extends BaseAspect implements Aspect {
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
-        if (fact.isTuple()) {
-            throw new XBRLException("The fact must not be a tuple.");
-        }
-        Item item = (Item) fact;
-        if (! item.isNumeric()) throw new XBRLException("The fact must be numeric.");
-        return item.getURI() + ((NumericItem) item).getUnitId();
+        Unit unit = getFragmentFromStore(fact);
+        if (unit == null) return "";
+        return unit.getURI().toString() + "#" + unit.getId();
     }
     
     /**

@@ -1,12 +1,16 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.impl.FactImpl;
+import org.xbrlapi.LabelResource;
 import org.xbrlapi.impl.InstanceImpl;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -48,26 +52,17 @@ public class LocationAspect extends BaseAspect implements Aspect {
             super();
         }
 
-        /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
-            Fragment fragment = value.getFragment();
-            if (! fragment.isa(FactImpl.class) && ! fragment.isa(InstanceImpl.class)) {
-                throw new XBRLException("Fragments for location aspects must be XBRL facts or XBRL instances.  In this case is it a " + fragment.getClass().getName() + ".");
-            }
-        }
+
         
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
-            validate(value);
             if (hasMapId(value)) {
                 return getMapId(value);
             }
-            String id = value.getFragment().getIndex();
+            Fact fact = value.<Fact>getFragment();
+            String id = fact.getParentIndex() + fact.getIndex();
             setMapId(value,id);
             return id;
         }
@@ -77,10 +72,68 @@ public class LocationAspect extends BaseAspect implements Aspect {
          */
         public String getLabel(AspectValue value) throws XBRLException {
             String id = getIdentifier(value);
-            return id;
+
+            if (hasMapLabel(id)) {
+                return getMapLabel(id);
+            }
+            
+            String label = "";
+                
+            Fragment parent = value.getFragment().getParent();
+            
+            if (parent.isa(InstanceImpl.class)) {
+                setMapLabel(id,label);
+                return label;
+            }
+            
+            Concept concept = (((Fact) parent).getConcept());
+            List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
+            if (labels.isEmpty()) label = id;
+            else label = labels.get(0).getStringValue();
+            setMapLabel(id,label);
+            return label;
+            
         }
         
+        
+        /**
+         * The label role is used in constructing the label for the
+         * concept aspect values.
+         */
+        private URI role = Constants.StandardLabelRole;
+        
+        /**
+         * @return the label resource role.
+         */
+        public URI getLabelRole() {
+            return role;
+        }
+        /**
+         * @param role The label resource role to use in
+         * selecting labels for the concept.
+         */
+        public void setLabelRole(URI role) {
+            this.role = role;
+        }
 
+        /**
+         * The language code is used in constructing the label for the
+         * concept aspect values.
+         */
+        private String language = "en";
+        /**
+         * @return the language code.
+         */
+        public String getLanguageCode() {
+            return language;
+        }
+        /**
+         * @param language The ISO language code
+         */
+        public void setLanguageCode(String language) throws XBRLException {
+            if (language == null) throw new XBRLException("The language must not be null.");
+            this.language = language;
+        }
         
 
 
@@ -96,22 +149,23 @@ public class LocationAspect extends BaseAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public AspectValue getValue(Fact fact) throws XBRLException {
-        return new LocationAspectValue(this,getFragment(fact));
+    public LocationAspectValue getValue(Fact fact) throws XBRLException {
+        return new LocationAspectValue(this,this.<Fact>getFragment(fact));
     }
     
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        return fact.getParent();
+    @SuppressWarnings("unchecked")
+    public Fact getFragmentFromStore(Fact fact) throws XBRLException {
+        return fact;
     }
     
     /**
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
-        return fact.getParentIndex();
+        return fact.getParentIndex() + " " + fact.getIndex();
     }
 
     /**
@@ -155,5 +209,9 @@ public class LocationAspect extends BaseAspect implements Aspect {
             return false;
        return true;
     }
+
+
+    
+
     
 }

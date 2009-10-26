@@ -77,10 +77,10 @@ abstract public class BaseAspectModel implements AspectModel {
     }
 
     /**
-     * @see AspectModel#getDimensionAspects(String)
+     * @see AspectModel#getAxisAspects(String)
      */
-    public List<Aspect> getDimensionAspects(String dimension) {
-        return axes.get(dimension);
+    public List<Aspect> getAxisAspects(String axis) {
+        return axes.get(axis);
     }
 
     /**
@@ -250,7 +250,7 @@ abstract public class BaseAspectModel implements AspectModel {
     public List<List<AspectValue>> getAspectValueCombinationsForAxis(String dimension) throws XBRLException {
         
         // Set up the result matrix
-        List<Aspect> aspects = getDimensionAspects(dimension);
+        List<Aspect> aspects = getAxisAspects(dimension);
         List<List<AspectValue>> result = new Vector<List<AspectValue>>();
         int combinations = aspects.get(0).getValues().size() * aspects.get(0).getDescendantCount();
         for (int i=0; i<combinations; i++) {
@@ -282,10 +282,10 @@ abstract public class BaseAspectModel implements AspectModel {
      * @throws XBRLException 
      * @see AspectModel#getMinimalAspectValueCombinationsForAxis(String)
      */
-    public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String dimension) throws XBRLException {
+    public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String axis) throws XBRLException {
         
         // Set up the result matrix
-        List<Aspect> aspects = getDimensionAspects(dimension);
+        List<Aspect> aspects = getAxisAspects(axis);
         List<List<AspectValue>> result = new Vector<List<AspectValue>>();
         int combinations = aspects.get(0).getValues().size() * aspects.get(0).getDescendantCount();
         for (int i=0; i<combinations; i++) {
@@ -325,7 +325,7 @@ abstract public class BaseAspectModel implements AspectModel {
         if (! hasAspect(type)) return;
         
         Aspect aspect = this.getAspect(type);
-        List<Aspect> dimensionAspects = this.getDimensionAspects(aspect.getAxis());
+        List<Aspect> dimensionAspects = this.getAxisAspects(aspect.getAxis());
         dimensionAspects.remove(aspect);
         aspects.remove(aspect.getType());
 

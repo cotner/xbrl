@@ -3,6 +3,7 @@ package org.xbrlapi.aspects;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -54,16 +55,15 @@ public class BaseAspectValueTransformer implements AspectValueTransformer {
         return labelMap.put(id,label);
     }
 
-    public void validate(AspectValue value) throws XBRLException {
-        ;
-    }    
-    
     public String getIdentifier(AspectValue value) throws XBRLException {
-        return value.getFragment().getIndex();
+        Fragment fragment = value.<Fragment>getFragment();
+        if (fragment == null) return "";
+        return fragment.getIndex();
     }
     
     public String getLabel(AspectValue value) throws XBRLException {
-        return getIdentifier(value);
+        if (value.getFragment() != null) return getIdentifier(value);
+        return null;
     }
     
     public void clearIdentifiers() {

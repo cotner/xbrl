@@ -35,7 +35,7 @@ public class NumericItemTestCase extends DOMLoadingTestCase {
             List<NumericItem> items = store.<NumericItem>getXMLResources("SimpleNumericItem");
             assertTrue(items.size() > 0);
             for (NumericItem item: items) {
-                assertEquals("unit", item.getUnits().getLocalname());
+                assertEquals("unit", item.getUnit().getLocalname());
             }
         } catch (Exception e) {
             fail(e.getMessage());

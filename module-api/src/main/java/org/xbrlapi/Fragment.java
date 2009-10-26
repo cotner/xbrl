@@ -76,8 +76,8 @@ public interface Fragment extends XML {
     public String[] getSequenceToParentElement() throws XBRLException;   
     
     /**
-     * Get the sequence of steps through the parent fragment DOM to the parent element as a string.
-     * @return The sequence through the parent fragment data to the parent element of this fragment.
+     * @return the sequence of steps through the parent fragment DOM to the 
+     * parent element of this fragment.
      * @throws XBRLException
      */
     public String getSequenceToParentElementAsString() throws XBRLException;
@@ -109,13 +109,7 @@ public interface Fragment extends XML {
      */
     public void setSequenceToParentElement(Fragment parent) throws XBRLException;
     
-    /**
-     * Get the number of children that precede this fragment's root element
-     * in document order in the element that contains it (in the parent element).
-     * @return The required number of preceding siblings.
-     * @throws XBRLException
-     */
-    public String getPrecedingSiblings() throws XBRLException;
+
     
 
 

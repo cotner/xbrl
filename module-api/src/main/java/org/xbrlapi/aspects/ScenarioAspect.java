@@ -7,9 +7,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.Scenario;
-import org.xbrlapi.impl.ScenarioImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -45,45 +43,31 @@ public class ScenarioAspect extends ContextAspect implements Aspect {
 
 
     
-    /**
-     * @see Aspect#getKey(Fact)
-     */
-    public String getKey(Fact fact) throws XBRLException {
-        Context context = (Context) super.getFragmentFromStore(fact);
-        return context.getURI().toString() + context.getId();
-    }
+
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         public Transformer() {
             super();
         }
         
-        /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
-            if (value.getFragment() == null) return;
-            if (! value.getFragment().isa(ScenarioImpl.class)) {
-                throw new XBRLException("The aspect value must have a scenario fragment.");
-            }
-        }
+
 
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
-            validate(value);
+
             if (hasMapId(value)) {
                 return getMapId(value);
             }
-            if (value.getFragment() == null) {
-                setMapId(value,"");
-                return "";
+
+            String id = "";
+            Scenario scenario = value.<Scenario>getFragment();
+            if (scenario != null) {
+                List<Element> children = scenario.getChildElements();
+                id = getLabelFromElements(children);
             }
-            Scenario f = (Scenario) value.getFragment();
-            List<Element> children = f.getChildElements();
-            String id = getLabelFromElements(children);
+            
             setMapId(value,id);
             return id;
         }
@@ -92,6 +76,7 @@ public class ScenarioAspect extends ContextAspect implements Aspect {
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
         public String getLabel(AspectValue value) throws XBRLException {
+            if (value.getFragment() == null) return null;
             return getIdentifier(value);
         }        
 
@@ -101,21 +86,19 @@ public class ScenarioAspect extends ContextAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = getFragment(fact);
-        if (fragment == null) {
-            return new MissingAspectValue(this);
-        }
-        return new ScenarioAspectValue(this,fragment);
+    public ScenarioAspectValue getValue(Fact fact) throws XBRLException {
+        Scenario scenario = this.<Scenario>getFragment(fact);
+        return new ScenarioAspectValue(this,scenario);
     }        
     
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        Context context = (Context) super.getFragmentFromStore(fact);
+    @SuppressWarnings("unchecked")
+    public Scenario getFragmentFromStore(Fact fact) throws XBRLException {
+        Context context = getContextFromStore(fact);
+        if (context == null) return null;
         Scenario scenario = context.getScenario();
-        if (scenario == null) return null;
         return scenario;
     }
     

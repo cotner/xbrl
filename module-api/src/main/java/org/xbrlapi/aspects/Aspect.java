@@ -53,8 +53,9 @@ public interface Aspect extends Serializable {
     /**
      * @return true if the aspect has just one aspect value
      * that is the missing aspect value and false otherwise.
+     * @throws XBRLException
      */
-    public boolean isMissing();    
+    public boolean isMissing() throws XBRLException;    
     
     /**
      * @return axis name or null if the aspect is an orphan
@@ -95,14 +96,14 @@ public interface Aspect extends Serializable {
     /**
      * @param id the identifier generated from the value being sought.
      * @return the aspect value that has the given identifier.
-     * @see AspectValue#getId()
+     * @see AspectValue#getIdentifier()
      */
     public AspectValue getValue(String id);
     
     /**
      * @param id the identifier generated from the value being sought.
      * @return true if the aspect model has a value with the given id.
-     * @see AspectValue#getId()
+     * @see AspectValue#getIdentifier()
      */
     public boolean hasValue(String id);
    
@@ -167,8 +168,9 @@ public interface Aspect extends Serializable {
     
     /**
      * @param fact The fact to get the aspect value for
-     * @return the aspect value for the fact or null if the
-     * fact does not have a value for this aspect.
+     * @return the aspect value for the fact or the
+     * MissingAspectValue if the fact does not have a 
+     * value for this aspect.
      * @throws XBRLException
      */
     public <A extends AspectValue> A getValue(Fact fact) throws XBRLException;
@@ -176,22 +178,24 @@ public interface Aspect extends Serializable {
 
     /**
      * @param fact the fact to get the fragment for.
+     * @param F The type of fragment being returned.
      * @return the fragment required to generate an aspect value from the 
-     * fact.
-     * @throws XBRLException if the fragment cannot be obtained.
+     * fact or null if none is available.
+     * @throws XBRLException
      */
-    public Fragment getFragment(Fact fact) throws XBRLException;
+    public <F extends Fragment> F getFragment(Fact fact) throws XBRLException;
     
     /**
-     * @param fact The fact to get the aspect value fragment from
+     * @param fact The fact to get the fragment from.
      * @return the fragment, retrieved from the data store, that is
-     * required to generate an aspect value from the fact.
-     * @throws XBRLException if the fragment cannot be obtained.
+     * required to generate an aspect value for the fact; or null 
+     * if the fragment is not available.
+     * @throws XBRLException
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException;
+    public <F extends Fragment> F getFragmentFromStore(Fact fact) throws XBRLException;
     
     /**
-     * @param fact The fact.
+     * @param fact The fact to get an aspect key for.
      * @return the unique string identifying the fragment
      * that is part of the aspect value for the given fact.
      * This should be the empty string if the fact does not
@@ -245,17 +249,7 @@ public interface Aspect extends Serializable {
      */
     public void clearFacts() throws XBRLException;
     
-    /**
-     * This method supports aspects, such as the concept aspect and
-     * XDT dimension aspects where aspect values have a heirarchical 
-     * organisation, such that an aspect value can be associated with 
-     * an ordered set of children aspect values.
-     * @param parent The parent aspect value.
-     * @return the ordered list of child aspect values. 
-     * The list is empty if none exist.
-     * @throws XBRLException
-     */
-    public List<AspectValue> getChildren(AspectValue parent) throws XBRLException;
+
     
     
 

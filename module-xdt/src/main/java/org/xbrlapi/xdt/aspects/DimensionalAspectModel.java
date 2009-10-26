@@ -65,8 +65,6 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     @Override
     public void addFact(Fact fact) throws XBRLException {
         
-        if (fact.getLocalname().equals("Auditor")) fact.serialize();
-        
         // Create any new XDT aspects
         if (fact.isa(ItemImpl.class)) {
             Item item = (Item) fact;

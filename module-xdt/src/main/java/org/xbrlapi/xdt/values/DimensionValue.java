@@ -26,10 +26,10 @@ public interface DimensionValue {
     /**
      * @see org.w3c.dom.Element
      * @see org.xbrlapi.Concept
-     * @return an XML DOM Element that is the child element
+     * @return an object that is either the XML DOM Element that is the child element
      * of the open context container (segment or scenario) 
-     * that expresses the dimension value for typed dimensions
-     * and that is the concept that is the domain member, 
+     * that expresses the dimension value for typed dimensions; 
+     * and that is the concept fragment that is the domain member, 
      * for explicit dimensions.
      * @throws XBRLException if the value cannot be retrieved.
      */

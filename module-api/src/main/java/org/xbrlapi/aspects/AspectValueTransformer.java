@@ -6,15 +6,7 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public interface AspectValueTransformer {
-
-    /**
-     * @param value The aspect value to check to see if it will work
-     * with this transformer.
-     * @throws XBRLException if the aspect value can be identified as 
-     * being incompatible with this transformer.
-     */
-    public void validate(AspectValue value) throws XBRLException;    
+public interface AspectValueTransformer {    
     
     /**
      * @param value The aspect value to process.
@@ -27,7 +19,9 @@ public interface AspectValueTransformer {
     
     /**
      * @param value The aspect value to process.
-     * @return the human readable version of the aspect value.
+     * @return the human readable version of the aspect value or null if
+     * the aspect value is a missing aspect value (i.e. the aspect value 
+     * fragment is null).
      * @throws XBRLException if the transformation fails.
      */
     public String getLabel(AspectValue value) throws XBRLException;

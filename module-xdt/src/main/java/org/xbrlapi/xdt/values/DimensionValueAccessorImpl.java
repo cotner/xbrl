@@ -53,15 +53,20 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
         Context context = item.getContext();
 
         Scenario scenario = context.getScenario();
-        Element typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(scenario, dimension);
-        if (typedDimensionValue != null) {
-            return new DimensionValueImpl(item, dimension, scenario, typedDimensionValue);
+        Element typedDimensionValue;
+        if (scenario != null) {
+            typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(scenario, dimension);
+            if (typedDimensionValue != null) {
+                return new DimensionValueImpl(item, dimension, scenario, typedDimensionValue);
+            }
         }
         
         Segment segment = context.getEntity().getSegment();
-        typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(segment, dimension);
-        if (typedDimensionValue != null) {
-            return new DimensionValueImpl(item, dimension, segment, typedDimensionValue);
+        if (segment!= null) {
+            typedDimensionValue = this.getTypedDimensionContentFromOpenContextComponent(segment, dimension);
+            if (typedDimensionValue != null) {
+                return new DimensionValueImpl(item, dimension, segment, typedDimensionValue);
+            }
         }
         
         return null;
@@ -72,24 +77,30 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
      */
     public DimensionValue getExplicitDimensionValue(Item item, Dimension dimension) throws XBRLException {
         
+        Concept dimensionValue;
+
         Context context = item.getContext();
 
         Scenario scenario = context.getScenario();
-        Concept dimensionValue = this.getDomainMemberFromOpenContextComponent(scenario, dimension);
-        if (dimensionValue != null) {
-            return new DimensionValueImpl(item, dimension, scenario, dimensionValue);
+        if (scenario != null) {
+            dimensionValue = this.getDomainMemberFromOpenContextComponent(scenario, dimension);
+            if (dimensionValue != null) {
+                return new DimensionValueImpl(item, dimension, scenario, dimensionValue);
+            }
         }
         
         Segment segment = context.getEntity().getSegment();
-        dimensionValue = this.getDomainMemberFromOpenContextComponent(segment, dimension);
-        if (dimensionValue != null) {
-            return new DimensionValueImpl(item, dimension, segment, dimensionValue);
+        if (segment != null) {
+            dimensionValue = this.getDomainMemberFromOpenContextComponent(segment, dimension);
+            if (dimensionValue != null) {
+                return new DimensionValueImpl(item, dimension, segment, dimensionValue);
+            }
         }
         
         try {
-            Concept def = ((ExplicitDimension) dimension).getDefaultDomainMember();
-            if (def != null) {
-                return new DimensionValueImpl(item, dimension, null, def);
+            Concept defaultValue = ((ExplicitDimension) dimension).getDefaultDomainMember();
+            if (defaultValue != null) {
+                return new DimensionValueImpl(item, dimension, null, defaultValue);
             }
         } catch (XBRLException e) {
             return null;

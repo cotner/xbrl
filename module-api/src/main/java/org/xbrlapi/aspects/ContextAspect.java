@@ -2,9 +2,9 @@ package org.xbrlapi.aspects;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -13,6 +13,8 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public abstract class ContextAspect extends BaseAspect implements Aspect {
 
+    private final static Logger logger = Logger.getLogger(ContextAspect.class);
+    
     public ContextAspect(AspectModel model) throws XBRLException {
         super(model);
         initialize();
@@ -23,24 +25,23 @@ public abstract class ContextAspect extends BaseAspect implements Aspect {
     }
     
     /**
+     * @return the context of the fact.
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        try {
-            Item item = (Item) fact;
-            Context context = item.getContext();
-            return context;
-        } catch (ClassCastException e) {
-            throw new XBRLException("The fact must be an item.");
-        }
+    protected Context getContextFromStore(Fact fact) throws XBRLException {
+        if (fact.isTuple()) return null;
+        Item item = (Item) fact;
+        return item.getContext();
     }
     
     /**
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
-        Context context = (Context) getFragmentFromStore(fact);
-        return context.getURI().toString() + context.getId();
+        Context context = getContextFromStore(fact);
+        if (context == null) return "";
+        String key = context.getURI().toString() + "#" + context.getId();
+        return key;
     }
     
     /**

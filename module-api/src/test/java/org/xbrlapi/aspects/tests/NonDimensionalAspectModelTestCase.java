@@ -52,10 +52,6 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 			assertEquals(2,facts.size());
             AspectModel model = new NonDimensionalAspectModel();
             
-            for (Aspect a: model.getAspects()) {
-                logger.info(a.getType());
-            }
-            
             model.arrangeAspect(ConceptAspect.TYPE,"row");
             model.arrangeAspect(EntityIdentifierAspect.TYPE,"row");
             model.arrangeAspect(PeriodAspect.TYPE,"col");
@@ -68,7 +64,7 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             for (Aspect aspect: model.getAspects()) {
                 logger.info(aspect.getType());
                 for (AspectValue value: aspect.getValues()) {
-                    logger.info(value.getId());
+                    logger.info(value.getIdentifier());
                 }
             }
             assertEquals(7,model.getAspects().size());
@@ -81,15 +77,20 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             List<List<AspectValue>> colMatrix = model.getAspectValueCombinationsForAxis("col");
             
             for (AspectValue v: colMatrix.get(0)) {
-                if (v==null) logger.info("First combination: " + null + "=" + null);
-                else logger.info("First combination: " + v.getAspect().getType() + "=" + v.getId());
+                logger.info("First combination: " + v.getAspect().getType() + "=" + v.getIdentifier());
             }
             assertEquals(4,rowMatrix.size());
             assertEquals(2,rowMatrix.get(0).size());
-            assertEquals(2,colMatrix.size());
-            assertEquals(3,colMatrix.get(0).size());
+            assertEquals(4,colMatrix.size());
+            assertEquals(4,colMatrix.get(0).size());
             for (List<AspectValue> rowCombination: rowMatrix) {
+                for (AspectValue rValue: rowCombination) {
+                    logger.info("R: " + rValue.getAspect().getType() + " = " + rValue.getLabel());
+                }
                 for (List<AspectValue> colCombination: colMatrix) {
+                    for (AspectValue cValue: colCombination) {
+                        logger.info("C:" + cValue.getAspect().getType() + " = " + cValue.getLabel());
+                    }
                     model.clearAllCriteria();
                     model.setCriteria(rowCombination);
                     model.setCriteria(colCombination);
@@ -119,7 +120,10 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             }
             
             Aspect aspect = model.getAspect(LocationAspect.TYPE);
-            assertEquals(3,aspect.getValues().size());
+            assertEquals(8,aspect.getValues().size());
+            for (AspectValue value: aspect.getValues()) {
+                logger.info(value.getAspect().getType() + "=" + value.getLabel());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

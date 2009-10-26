@@ -9,7 +9,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.OpenContextComponent;
@@ -18,8 +17,6 @@ import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
-import org.xbrlapi.aspects.MissingAspectValue;
-import org.xbrlapi.impl.OpenContextComponentImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.TypedDimension;
@@ -47,22 +44,12 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
     }
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
-        /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
-            if (! value.getFragment().isa(OpenContextComponentImpl.class)) {
-                throw new XBRLException("The aspect value must have an segment or scenario fragment.");
-            }
-        }
+
 
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
-        public String getIdentifier(AspectValue value) throws XBRLException {
-            
-            validate(value);
+        public String getIdentifier(TypedDimensionAspectValue value) throws XBRLException {
             
             if (hasMapId(value)) {
                 return getMapId(value);
@@ -90,16 +77,14 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
         /**
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
-        public String getLabel(AspectValue value) throws XBRLException {
+        public String getLabel(TypedDimensionAspectValue value) throws XBRLException {
+
+            OpenContextComponent occ = (OpenContextComponent) value.getFragment();
+            if (occ == null) return null;
+
             String id = getIdentifier(value);
             if (hasMapLabel(id)) {
                 return getMapLabel(id);
-            }
-
-            OpenContextComponent f = (OpenContextComponent) value.getFragment();
-            if (f == null) {
-                setMapLabel(id,"");
-                return "";
             }
 
             if (dimensionLabel == null) {
@@ -107,12 +92,11 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
                 Dimension dimension = aspect.getDimension();
                 Concept concept = dimension;
                 List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
-                if (labels.isEmpty()) dimensionLabel = dimension.getName();
+                if (labels.isEmpty()) dimensionLabel = dimension.getTargetNamespace() + "#" + dimension.getName();
                 else dimensionLabel = labels.get(0).getStringValue();
             }
 
-            String label = dimensionLabel + ": " + id;
-            logger.info("Typed dimension aspect value label is " + label);
+            String label = dimensionLabel + " = " + id;
             setMapLabel(id,label);
             return label;
         }
@@ -123,19 +107,19 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public AspectValue getValue(Fact fact) throws XBRLException {
-        Fragment fragment = getFragment(fact);
-        if (fragment == null) {
-            return new MissingAspectValue(this);
-        }
-        return new TypedDimensionAspectValue(this,fragment);
+    public TypedDimensionAspectValue getValue(Fact fact) throws XBRLException {
+        OpenContextComponent occ = this.<OpenContextComponent>getFragment(fact);
+        return new TypedDimensionAspectValue(this,occ);
     }
 
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        DimensionValue value = getAccessor().getValue((Item) fact, getDimension());
+    @SuppressWarnings("unchecked")
+    public OpenContextComponent getFragmentFromStore(Fact fact) throws XBRLException {
+        if (fact.isTuple()) return null;
+        TypedDimension dimension = this.<TypedDimension>getDimension();
+        DimensionValue value = getAccessor().getValue((Item) fact, dimension);
         if (value == null) return null; 
         return value.getOpenContextComponent();
     }
@@ -145,7 +129,10 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
      */
     public String getKey(Fact fact) throws XBRLException {
         if (fact.isTuple()) return "";
-        return fact.getIndex();
+        DimensionValue dimensionValue = getAccessor().getValue((Item) fact, getDimension());
+        if (dimensionValue == null) return "";
+        Element element = (Element) dimensionValue.getValue();
+        return this.getLabelFromElement(element);
     }
 
     /**

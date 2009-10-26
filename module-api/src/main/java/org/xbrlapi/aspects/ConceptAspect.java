@@ -7,13 +7,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.LabelResource;
-import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
+ * All facts have a value for the concept aspect.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class ConceptAspect extends BaseAspect implements Aspect {
@@ -26,8 +25,6 @@ public class ConceptAspect extends BaseAspect implements Aspect {
     public String getType() {
         return TYPE;
     }
-    
-
     
     private final static Logger logger = Logger.getLogger(ConceptAspect.class);
     
@@ -43,9 +40,6 @@ public class ConceptAspect extends BaseAspect implements Aspect {
     protected void initialize() {
         this.setTransformer(new Transformer());
     }
-    
-
-
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
@@ -54,46 +48,34 @@ public class ConceptAspect extends BaseAspect implements Aspect {
         }
 
         /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
-            if (! value.getFragment().isa(ConceptImpl.class)) {
-                throw new XBRLException("The aspect value must have a concept fragment.");
-            }
-        }
-        
-        /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
-            validate(value);
-            if (hasMapId(value)) {
-                return getMapId(value);
+            String id = getMapId(value);
+            if (id == null) {
+                Concept concept = value.<Concept>getFragment();
+                id = concept.getTargetNamespace() + ":" + concept.getName();
+                setMapId(value,id);
             }
-            Concept f = ((Concept) value.getFragment());
-            String id = f.getTargetNamespace() + ": " + f.getName();
-            setMapId(value,id);
             return id;
         }
         
         /**
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
-        public String getLabel(AspectValue value) throws XBRLException {
+        public String getLabel(ConceptAspectValue value) throws XBRLException {
+
             String id = getIdentifier(value);
-            
-            // Check if we have the label already
             if (hasMapLabel(id)) {
                 return getMapLabel(id);
             }
             
-            Concept concept = ((Concept) value.getFragment());
-
+            String label = id;
+            Concept concept = value.<Concept>getFragment();
             List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
-            if (labels.isEmpty()) return id;
-            String label = labels.get(0).getStringValue();
-            logger.debug("Concept aspect value label is " + label);
+            if (! labels.isEmpty()) {
+                label = labels.get(0).getStringValue();
+            }
             setMapLabel(id,label);
             return label;
         }
@@ -137,21 +119,21 @@ public class ConceptAspect extends BaseAspect implements Aspect {
             this.language = language;
         }
 
-        
     }
 
     /**
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public AspectValue getValue(Fact fact) throws XBRLException {
-        return new ConceptAspectValue(this,getFragment(fact));
+    public ConceptAspectValue getValue(Fact fact) throws XBRLException {
+        return new ConceptAspectValue(this,this.<Concept>getFragment(fact));
     }
     
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
+    @SuppressWarnings("unchecked")
+    public Concept getFragmentFromStore(Fact fact) throws XBRLException {
         return fact.getConcept();
     }
     
@@ -159,7 +141,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
-        return fact.getNamespace() + fact.getLocalname();
+        return fact.getNamespace() + "#" + fact.getLocalname();
     }
 
     /**

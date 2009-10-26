@@ -11,9 +11,7 @@ import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.EntityResource;
 import org.xbrlapi.Fact;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.LabelResource;
-import org.xbrlapi.impl.EntityImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -50,13 +48,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
 
 
     
-    /**
-     * @see Aspect#getKey(Fact)
-     */
-    public String getKey(Fact fact) throws XBRLException {
-        Context context = (Context) super.getFragmentFromStore(fact);
-        return context.getURI().toString() + context.getId();
-    }    
+    
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
@@ -64,26 +56,23 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
             super();
         }
 
-        /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-            super.validate(value);
-            if (! value.getFragment().isa(EntityImpl.class)) {
-                throw new XBRLException("The aspect value must have an entity fragment.");
-            }
-        }
+
         
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
-            validate(value);
+
             if (hasMapId(value)) {
                 return getMapId(value);
             }
-            Entity f = ((Entity) value.getFragment());
-            String id = f.getIdentifierScheme() + ": " + f.getIdentifierValue().trim().replaceFirst("^0+","");
+
+            String id = "";
+            Entity entity = value.<Entity>getFragment();
+            if (entity != null) {
+                id = entity.getIdentifierScheme() + ":" + entity.getIdentifierValue().trim().replaceFirst("^0+","");
+            }
+            
             setMapId(value,id);
             return id;
         }
@@ -92,6 +81,9 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
         public String getLabel(AspectValue value) throws XBRLException {
+            Entity entity = ((Entity) value.getFragment());
+            if (entity == null) return null;
+            
             String id = getIdentifier(value);
             if (hasMapLabel(id)) {
                 return getMapLabel(id);
@@ -101,7 +93,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
             String label = id;
             
             // Get all the relevant entity resources.
-            Entity entity = ((Entity) value.getFragment());
+
             List<EntityResource> entityResources = entity.getEntityResources();
             Set<EntityResource> equivalentEntityResources = new HashSet<EntityResource>();
             equivalentEntityResources.addAll(entityResources);
@@ -216,19 +208,20 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getValue(org.xbrlapi.Fact)
      */
     @SuppressWarnings("unchecked")
-    public AspectValue getValue(Fact fact) throws XBRLException {
-        try {
-            return new EntityIdentifierAspectValue(this,getFragment(fact));
-        } catch (XBRLException e) {
-            return null;
-        }
+    public EntityIdentifierAspectValue getValue(Fact fact) throws XBRLException {
+        Entity entity = this.<Entity>getFragment(fact);
+        return new EntityIdentifierAspectValue(this,entity);
     }
     
     /**
      * @see Aspect#getFragmentFromStore(Fact)
      */
-    public Fragment getFragmentFromStore(Fact fact) throws XBRLException {
-        return ((Context) super.getFragmentFromStore(fact)).getEntity();
+    @SuppressWarnings("unchecked")
+    public Entity getFragmentFromStore(Fact fact) throws XBRLException {
+        Context context = getContextFromStore(fact);
+        if (context == null) return null;
+        Entity entity = context.getEntity();
+        return entity;
     }
     
     

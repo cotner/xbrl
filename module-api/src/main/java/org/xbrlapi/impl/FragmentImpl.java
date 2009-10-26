@@ -407,12 +407,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	return value;
     }    
 
-    /**
-     * @see org.xbrlapi.Fragment#getPrecedingSiblings()
-     */
-    public String getPrecedingSiblings() throws XBRLException {
-    	return getMetaAttribute("precedingSiblings");
-    }
+
 
 
 

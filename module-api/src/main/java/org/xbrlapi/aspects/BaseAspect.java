@@ -42,7 +42,7 @@ abstract public class BaseAspect implements Aspect {
      */
     public BaseAspect(AspectModel aspectModel) throws XBRLException {
         super();
-        if (aspectModel == null) throw new XBRLException("The aspect model cannot be null.");
+        if (aspectModel == null) throw new XBRLException("The supplied aspect model is null.");
         this.model = aspectModel;
         facts = new HashMap<String,Set<Fact>>(); 
         fragmentMap = new HashMap<String,Fragment>();
@@ -99,7 +99,7 @@ abstract public class BaseAspect implements Aspect {
         if (this.isOrphan()) return 1;
         List<Aspect> aspects = null;
         try {
-            aspects = this.getAspectModel().getDimensionAspects(this.getAxis());
+            aspects = this.getAspectModel().getAxisAspects(this.getAxis());
         } catch (XBRLException e) {
             ;// Cannot be thrown
         }
@@ -119,7 +119,7 @@ abstract public class BaseAspect implements Aspect {
         if (this.isOrphan()) return 1;
         List<Aspect> aspects = null;
         try {
-            aspects = this.getAspectModel().getDimensionAspects(this.getAxis());
+            aspects = this.getAspectModel().getAxisAspects(this.getAxis());
         } catch (XBRLException e) {
             ;//Cannot be thrown
         }
@@ -179,8 +179,11 @@ abstract public class BaseAspect implements Aspect {
     /**
      * @see org.xbrlapi.aspects.Aspect#isMissing()
      */
-    public boolean isMissing() {
-        return (isSingular() && (getValues().get(0).getFragment() == null));
+    public boolean isMissing() throws XBRLException {
+        if (! isSingular()) return false;
+        AspectValue value = getValues().get(0);
+        if (value.<Fragment>getFragment() == null) return true;
+        return false;
     }
     
     /**
@@ -237,8 +240,11 @@ abstract public class BaseAspect implements Aspect {
      * @see Aspect#addFact(Fact)
      */
     public void addFact(Fact fact) throws XBRLException {
+        
         AspectValue value = getValue(fact);
         if (value == null) return;
+        
+        
         this.addValue(value);
         AspectValueTransformer transformer = this.getTransformer();
         String key = transformer.getIdentifier(value);
@@ -254,14 +260,21 @@ abstract public class BaseAspect implements Aspect {
     
 
     private Map<String,Fragment> fragmentMap;
-    public Fragment getFragment(Fact fact) throws XBRLException {
-        String fragmentKey = getKey(fact);
-        if (fragmentMap.containsKey(fragmentKey)) {
-            return fragmentMap.get(fragmentKey);
+    /**
+     * @see Aspect#getFragment(Fact)
+     */
+    @SuppressWarnings("unchecked")
+    public <F extends Fragment> F getFragment(Fact fact) throws XBRLException {
+        try {
+            String key = getKey(fact);
+            if (fragmentMap.containsKey(key)) return (F) fragmentMap.get(key);
+            F fragment = this.<F>getFragmentFromStore(fact);
+            if (fragment == null) return null;
+            fragmentMap.put(key,fragment);
+            return fragment;
+        } catch (ClassCastException e) {
+            throw new XBRLException("The fragment is not of the specified type.",e);
         }
-        Fragment fragment = getFragmentFromStore(fact);
-        fragmentMap.put(fragmentKey,fragment);
-        return fragment;
     }
 
     private AspectValue criterion;
@@ -284,7 +297,7 @@ abstract public class BaseAspect implements Aspect {
             }
             return result;
         }
-        return this.facts.get(criterion.getId());
+        return this.facts.get(criterion.getIdentifier());
     }
 
     /**
@@ -317,18 +330,12 @@ abstract public class BaseAspect implements Aspect {
         this.getTransformer().clearIdentifiers();
     }
 
-    /**
-     * @see org.xbrlapi.aspects.Aspect#getChildren(AspectValue)
-     */
-    public List<AspectValue> getChildren(AspectValue parent)
-            throws XBRLException {
-        return new Vector<AspectValue>();
-    }    
+    
 
     /**
      * This basic implementation has a unique key for each fact
-     * which is not efficient from a 
-     * memory footprint perspective.
+     * This is not efficient from a memory footprint perspective
+     * and should be overridden where feasible.
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {

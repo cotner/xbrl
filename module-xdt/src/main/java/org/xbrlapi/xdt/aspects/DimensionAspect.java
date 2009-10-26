@@ -49,15 +49,16 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
      * @throws XBRLException if the dimension is null.
      */
     private void setDimension(Dimension dimension) throws XBRLException {
-        if (dimension == null) throw new XBRLException("The dimension must not be null.");
+        if (dimension == null) throw new XBRLException("The dimension is null.");
         this.dimension = dimension;
     }
     
     /**
      * @return the dimension defining this aspect.
      */
-    protected Dimension getDimension() {
-        return dimension;
+    @SuppressWarnings("unchecked")
+    protected <D extends Dimension> D getDimension() {
+        return (D) dimension;
     }
 
     /**

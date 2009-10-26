@@ -65,7 +65,7 @@ public interface Instance extends Fragment {
      * Get a specified unit from the instance based on its id.
      * @param id The id of the unit fragment
      * @return the unit fragment
-     * @throws XBRLException if the unit does not exist
+     * @throws XBRLException if the unit is not in this instance.
      */
     public Unit getUnit(String id) throws XBRLException;
     

@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
@@ -12,8 +13,11 @@ public interface AspectValue extends Serializable {
 
     /**
      * @return the fragment expressing this aspect value.
+     * If this aspect value represents a "missing value" then
+     * the fragment returned is null.
+     * @throws XBRLException if the fragment is not of the given type.
      */
-    public Fragment getFragment();
+    public <F extends Fragment> F getFragment() throws XBRLException;
     
     /**
      * @return the aspect that this is a value for.
@@ -26,7 +30,7 @@ public interface AspectValue extends Serializable {
      * form.
      * @throws XBRLException if the string value cannot be obtained.
      */
-    public String getId() throws XBRLException;
+    public String getIdentifier() throws XBRLException;
     
     /**
      * @return The label for this aspect value.
@@ -35,13 +39,29 @@ public interface AspectValue extends Serializable {
     public String getLabel() throws XBRLException;
     
     /**
-     * This method supports aspects, such as the concept aspect and
-     * XDT dimension aspects where aspect values can have a heirarchical 
+     * This method supports aspects, such as the location aspect 
+     * where values can be given a heirarchical 
+     * organisation, such that an aspect value can be associated with 
+     * an ordered set of children aspect values.
+     * @return the ordered list of child aspect values. 
+     * The list is empty if there are no children aspect values.
+     * @throws XBRLException
+     */
+    public List<AspectValue> getChildren() throws XBRLException;    
+    
+    /**
+     * This method supports aspects, such as the location aspect, 
+     * where aspect values can have a heirarchical 
      * organisation, such that an aspect value can be associated with 
      * an ordered set of children aspect values.
      * @return the parent aspect value or null if none exists.
      * @throws XBRLException
      */
     public AspectValue getParent() throws XBRLException;
+
+    /**
+     * @return True if this aspect value represents a missing value.
+     */
+    public boolean isMissing() throws XBRLException;
 
 }
