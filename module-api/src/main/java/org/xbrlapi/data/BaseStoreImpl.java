@@ -2385,10 +2385,10 @@ public abstract class BaseStoreImpl implements Store {
 
             for (F candidate: candidates) {
                 Schema schema = candidate.getSchema();
-                if (namespace.equals(schema.getTargetNamespace()) && candidate.getParentIndex().equals(schema.getIndex())) return candidate;
+                if (namespace.equals(schema.getTargetNamespace()) && schema.isAncestorOf(candidate)) 
+                    return candidate;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
             logger.error(e.getMessage());
         }
         return null;
