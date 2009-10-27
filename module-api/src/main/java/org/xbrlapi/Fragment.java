@@ -65,6 +65,7 @@ public interface Fragment extends XML {
      * @return true if the fragment is the root of an XML document
      * and false otherwise.
      * @throws XBRLException
+     * @see {@link Fragment#isChild()}
      */
     public boolean isRoot() throws XBRLException;
     
@@ -187,6 +188,21 @@ public interface Fragment extends XML {
      * @throws XBRLException
      */
     public Fragment getParent() throws XBRLException;
+    
+    /**
+     * @return true iff the fragment has a parent fragment and
+     * false otherwise.
+     * @throws XBRLException
+     */
+    public boolean isChild() throws XBRLException;
+    
+    /**
+     * @param descendant The candidate descendant fragment.
+     * @return true if the candidate descendant is actually 
+     * a descendant fragment and false otherwise.
+     * @throws XBRLException
+     */
+    public boolean isAncestorOf(Fragment descendant) throws XBRLException;
     
     /**
      * Gets all child fragments.

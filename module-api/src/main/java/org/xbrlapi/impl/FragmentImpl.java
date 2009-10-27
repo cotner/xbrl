@@ -332,17 +332,33 @@ public class FragmentImpl extends XMLImpl implements Fragment {
 
 
     /**
-     * @see org.xbrlapi.Fragment#getParentIndex()
+     * @see Fragment#getParentIndex()
      */
     public String getParentIndex() throws XBRLException {
     	return getMetaAttribute("parentIndex");
     }
     
     /**
+     * @see Fragment#isChild()
+     */
+    public boolean isChild() throws XBRLException {
+        return (! this.getParentIndex().equals(""));
+    }
+    
+    /**
+     * @see Fragment#isAncestorOf(Fragment)
+     */
+    public boolean isAncestorOf(Fragment descendant) throws XBRLException {
+        if (! descendant.isChild()) return false;
+        if (this.getIndex().equals(descendant.getParentIndex())) return true;
+        return this.isAncestorOf(descendant.getParent());
+    }
+    
+    /**
      * @see org.xbrlapi.Fragment#isRoot()
      */
     public boolean isRoot() throws XBRLException {
-        return (getParentIndex() == null);
+        return (getParentIndex().equals(""));
     }
     
     /**
@@ -522,6 +538,9 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      */
     public URI getNamespaceFromQName(String qname, Node node) throws XBRLException {
         
+        this.serialize();
+        logger.error(qname);
+        
         if (this.getPrefixFromQName(qname).equals("xml")) return Constants.XMLNamespace;
         
         // If we have an attribute - go straight to working with the parent element.
@@ -617,8 +636,8 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getParent()
      */
     public Fragment getParent() throws XBRLException {
+        if (! this.isChild()) return null;
     	String parentIndex = this.getParentIndex();
-    	if (parentIndex == null) return null;
     	return getStore().getXMLResource(parentIndex);
     }
     
