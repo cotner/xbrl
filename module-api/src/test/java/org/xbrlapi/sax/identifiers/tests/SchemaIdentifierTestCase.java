@@ -12,6 +12,7 @@ import org.xbrlapi.Schema;
 import org.xbrlapi.SchemaSequenceCompositor;
 import org.xbrlapi.SimpleTypeDeclaration;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
+import org.xbrlapi.impl.SchemaImpl;
 import org.xbrlapi.utilities.Constants;
 
 /**
@@ -36,7 +37,7 @@ public class SchemaIdentifierTestCase extends BaseTestCase {
 		try {
 	        URI uri = getURI(this.STARTING_POINT);
 			loader.discover(uri);
-			List<Schema> schemas = store.<Schema>getXMLResources("Schema");
+			List<Schema> schemas = store.<Schema>getXMLResources(SchemaImpl.class);
 			assertTrue(schemas.size() > 0);
             List<AttributeDeclaration> attributes = store.<AttributeDeclaration>getXMLResources("AttributeDeclaration");
             assertTrue(attributes.size() > 0);
@@ -59,8 +60,6 @@ public class SchemaIdentifierTestCase extends BaseTestCase {
             assertTrue(element.hasLocalComplexType());
             ComplexTypeDeclaration ctd = element.getLocalComplexType();
             assertNotNull(ctd);
-            ctd.serialize();
-
             
 		} catch (Exception e) {
 		    e.printStackTrace();

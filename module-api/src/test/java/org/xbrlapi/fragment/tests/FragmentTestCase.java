@@ -4,10 +4,12 @@ import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.DOMLoadingTestCase;
+import org.xbrlapi.Fragment;
 import org.xbrlapi.Measure;
 import org.xbrlapi.Schema;
 import org.xbrlapi.TypeDeclaration;
 import org.xbrlapi.Unit;
+import org.xbrlapi.impl.UnitImpl;
 import org.xbrlapi.utilities.Constants;
 
 /**
@@ -35,12 +37,36 @@ public class FragmentTestCase extends DOMLoadingTestCase {
 	public void testNamespaceResolution() {
 
         try {
-            List<Unit> units = store.<Unit>getXMLResources("Unit");
+            List<Unit> units = store.<Unit>getXMLResources(UnitImpl.class);
             assertTrue(units.size() > 0);
             for (Unit unit: units) {
-                URI namespace = unit.getNamespaceFromQName(unit.getId()+":km",unit.getNumeratorMeasures().item(0));
+                logger.info("Starting to get namespace for a new unit.");
+                URI namespace = unit.getNamespaceFromQName(unit.getNumeratorMeasures().item(0).getTextContent().trim(),unit.getNumeratorMeasures().item(0));
                 logger.info(unit.getId() + " " + namespace);
-                assertEquals("http://xbrlapi.org/metric/"+ unit.getId(),namespace.toString());
+                if (! unit.getId().equals("u8"))
+                    assertEquals("http://xbrlapi.org/metric/"+ unit.getId(),namespace.toString());
+                else 
+                    assertEquals(Constants.XBRL21Namespace,namespace);
+                    
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+	}
+	
+	public void testIsRoot() {
+        try {
+            List<Fragment> roots= store.getRootFragments();
+            assertTrue(roots.size() > 0);
+            for (Fragment root: roots) {
+                assertTrue(root.isRoot());
+                assertFalse(root.isChild());
+                List<Fragment> children = root.getAllChildren();
+                for (Fragment child: children) {
+                    assertTrue(child.isChild());
+                    assertFalse(child.isRoot());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,7 +100,7 @@ public class FragmentTestCase extends DOMLoadingTestCase {
                     List<Measure> measures = unit.getResolvedNumeratorMeasures();
                     for (Measure measure: measures) {
                         if (measure.getLocalname().equals("shares")) {
-                            assertEquals(Constants.XBRL21Namespace.toString(),measure.getNamespace());
+                            assertEquals(Constants.XBRL21Namespace,measure.getNamespace());
                         }
                     }
                 }
