@@ -538,9 +538,6 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      */
     public URI getNamespaceFromQName(String qname, Node node) throws XBRLException {
         
-        this.serialize();
-        logger.error(qname);
-        
         if (this.getPrefixFromQName(qname).equals("xml")) return Constants.XMLNamespace;
         
         // If we have an attribute - go straight to working with the parent element.

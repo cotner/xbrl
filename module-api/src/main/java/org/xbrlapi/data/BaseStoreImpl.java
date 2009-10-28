@@ -1450,7 +1450,7 @@ public abstract class BaseStoreImpl implements Store {
     private List<Fact> getFactsFromInstances(List<Instance> instances) throws XBRLException {
         List<Fact> facts = new Vector<Fact>();
         for (Instance instance: instances) {
-            facts.addAll(instance.getFacts());
+            facts.addAll(instance.getChildFacts());
         }
         return facts;
     }

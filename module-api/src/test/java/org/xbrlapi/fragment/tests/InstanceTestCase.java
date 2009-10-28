@@ -122,7 +122,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
             List<Instance> instances = store.<Instance>getXMLResources("Instance");
             assertTrue(instances.size() > 0);
             for (Instance instance: instances) {
-                assertEquals(2, instance.getFacts().size());
+                assertEquals(2, instance.getChildFacts().size());
             }
         } catch (Exception e) {
             fail(e.getMessage());
@@ -134,10 +134,10 @@ public class InstanceTestCase extends DOMLoadingTestCase {
             List<Instance> instances = store.<Instance>getXMLResources("Instance");
             assertTrue(instances.size() > 0);
             for (Instance instance: instances) {
-                logger.info(instance.getAllFactCount());
-                logger.info(instance.getFactCount());
-                assertTrue(instance.getAllFactCount() > 0);
-                assertTrue(instance.getAllFactCount() > instance.getFactCount());
+                logger.info(instance.getAllFactsCount());
+                logger.info(instance.getChildFactsCount());
+                assertTrue(instance.getAllFactsCount() > 0);
+                assertTrue(instance.getAllFactsCount() > instance.getChildFactsCount());
                 assertTrue(instance.getAllFacts().size() > 0);
             }
         } catch (Exception e) {

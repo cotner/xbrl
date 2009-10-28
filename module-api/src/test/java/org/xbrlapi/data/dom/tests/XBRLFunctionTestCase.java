@@ -36,7 +36,7 @@ public class XBRLFunctionTestCase extends BaseTestCase {
             loader.discover(this.getURI(STARTING_POINT_1));     
             List<Instance> instances = store.<Instance>getXMLResources("Instance");
             for (Instance instance: instances) {
-                for (Fact fact: instance.getFacts()) {
+                for (Fact fact: instance.getChildFacts()) {
                     Concept concept = store.getConcept(fact.getNamespace(),fact.getLocalname());
                     logger.info("Testing concept " + concept.getName() + " " + concept.getTargetNamespace());
                     assertEquals(fact.getLocalname(),concept.getDataRootElement().getAttribute("name"));
@@ -67,7 +67,7 @@ public class XBRLFunctionTestCase extends BaseTestCase {
             List<Instance> instances = store.<Instance>getXMLResources("Instance");
             assertTrue(instances.size() > 0);
             for (Instance instance: instances) {
-                List<Fact> facts = instance.getFacts();
+                List<Fact> facts = instance.getChildFacts();
                 assertTrue(facts.size() > 0);
                 for (Fact fact: facts) {
                     fact.serialize();

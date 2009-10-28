@@ -87,11 +87,17 @@ public interface Aspect extends Serializable {
     public AspectModel getAspectModel();
 
     /**
-     * TODO give the user control over the sorting system for a the values
-     * of an aspect.
-     * @return a sorted list of the values for the aspect.
+     * @return a list of the values for the aspect.
      */
-    public <A extends AspectValue> List<A> getValues();
+    public List<AspectValue> getValues();
+    
+    /**
+     * @return a list of the values for the aspect, sorted
+     * on the basis of the aspect value hierarchy such that 
+     * parent values come immediately before their child values.
+     * @throws XBRLException
+     */
+    public List<AspectValue> getValuesByHierarchy() throws XBRLException;
     
     /**
      * @param id the identifier generated from the value being sought.

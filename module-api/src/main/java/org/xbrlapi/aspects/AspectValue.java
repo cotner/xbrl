@@ -58,6 +58,20 @@ public interface AspectValue extends Serializable {
      * @throws XBRLException
      */
     public AspectValue getParent() throws XBRLException;
+    
+    /**
+     * @return true if this aspect value has a parent aspect value
+     * and false otherwise.
+     * @throws XBRLException
+     */
+    public boolean hasParent() throws XBRLException;
+    
+    /**
+     * @return the number of ancestor aspect values that
+     * this aspect value has.
+     * @throws XBRLException
+     */
+    public int getDepth() throws XBRLException;
 
     /**
      * @return True if this aspect value represents a missing value.

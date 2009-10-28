@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -12,6 +13,8 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public abstract class BaseAspectValue implements AspectValue {
 
+    private final static Logger logger = Logger.getLogger(BaseAspectValue.class);  
+    
     private Aspect aspect;
     
     private Fragment fragment;
@@ -74,6 +77,21 @@ public abstract class BaseAspectValue implements AspectValue {
      */
     public AspectValue getParent() throws XBRLException {
         return null;
+    }
+    
+    /**
+     * @see AspectValue#hasParent()
+     */
+    public boolean hasParent() throws XBRLException {
+        return false;
+    }
+    
+    /**
+     * @see AspectValue#getDepth()
+     */
+    public int getDepth() throws XBRLException {
+        if (! hasParent()) return 0;
+        return (this.getParent().getDepth() + 1);
     }
     
     /**

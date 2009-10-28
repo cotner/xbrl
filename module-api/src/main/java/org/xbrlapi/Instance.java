@@ -90,7 +90,7 @@ public interface Instance extends Fragment {
      * @return the list of facts that are children of the instance.
      * @throws XBRLException
      */
-    public List<Fact> getFacts() throws XBRLException;
+    public List<Fact> getChildFacts() throws XBRLException;
     
     /**
      * @return all facts (tuples and facts within tuples also) in this instance.
@@ -99,32 +99,45 @@ public interface Instance extends Fragment {
     public List<Fact> getAllFacts() throws XBRLException;
     
     /**
-     * @return the list of concepts that have values reported for them by child
-     * facts of this XBRL instance.
+     * @return the list of concepts that have facts that are children of 
+     * this XBRL instance (rather than being children of tuples).
      * @throws XBRLException
      */
     public List<Concept> getChildConcepts() throws XBRLException;
     
     /**
-     * @return the number of concepts that have values reported for them by child
-     * facts of this XBRL instance.
+     * @return the list of all concepts that have facts in this 
+     * XBRL instance, including nested within tuples.
      * @throws XBRLException
      */
-    public int getChildConceptCount() throws XBRLException;    
+    public List<Concept> getAllConcepts() throws XBRLException;
+    
+    /**
+     * @return the number of concepts that have facts that are children of
+     * this XBRL instance (rather than being nested within tuples).
+     * @throws XBRLException
+     */
+    public long getChildConceptsCount() throws XBRLException;
+    
+    /**
+     * @return the number of concepts that have facts in this instance.
+     * @throws XBRLException
+     */
+    public long getAllConceptsCount() throws XBRLException;    
     
     /**
      * @return the number of child facts in the instance (excludes 
      * facts that are contained within tuples).
      * @throws XBRLException
      */
-    public long getFactCount() throws XBRLException;
+    public long getChildFactsCount() throws XBRLException;
     
     /**
      * @return the number of facts in the instance including tuples and
      * those facts within tuples.
      * @throws XBRLException
      */
-    public long getAllFactCount() throws XBRLException;
+    public long getAllFactsCount() throws XBRLException;
     
     /**
      * @return the value of the earliest start 

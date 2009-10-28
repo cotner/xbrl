@@ -47,9 +47,6 @@ public class UnitAspect extends BaseAspect implements Aspect {
             super();
         }
         
-
-
-
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
@@ -91,7 +88,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
         public String getLabel(AspectValue value) throws XBRLException {
             if (value.getFragment() == null) return null;
             return getIdentifier(value);
-        } 
+        }
         
     }    
     

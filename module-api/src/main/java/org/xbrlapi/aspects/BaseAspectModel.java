@@ -252,12 +252,13 @@ abstract public class BaseAspectModel implements AspectModel {
         // Set up the result matrix
         List<Aspect> aspects = getAxisAspects(dimension);
         List<List<AspectValue>> result = new Vector<List<AspectValue>>();
-        int combinations = aspects.get(0).getValues().size() * aspects.get(0).getDescendantCount();
+        Aspect firstAspect = aspects.get(0);
+        int combinations = firstAspect.getValues().size() * firstAspect.getDescendantCount();
         for (int i=0; i<combinations; i++) {
             result.add(new Vector<AspectValue>());
         }
         for (Aspect aspect: aspects) {
-            List<AspectValue> values = aspect.getValues();
+            List<AspectValue> values = aspect.getValuesByHierarchy();
             int vCount = values.size();
             int dCount = aspect.getDescendantCount();
             int aCount = aspect.getAncestorCount();
@@ -413,5 +414,9 @@ abstract public class BaseAspectModel implements AspectModel {
             return false;
         return true;
     }
+
+
+
+
     
 }

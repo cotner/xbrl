@@ -34,6 +34,22 @@ public class LocationAspectValue extends BaseAspectValue {
     }
     
     /**
+     * @see AspectValue#hasParent()
+     * @see BaseAspectValue#hasParent()
+     */
+    @Override
+    public boolean hasParent() throws XBRLException {
+        Fact fact = this.<Fact>getFragment();
+        Fragment parent = fact.getParent();
+        if (parent.isa(InstanceImpl.class)) {
+            return false;
+        }
+        return true;
+    }    
+    
+    
+    
+    /**
      * @see AspectValue#getChildren(AspectValue)
      * @see BaseAspectValue#getChildren(AspectValue)
      */

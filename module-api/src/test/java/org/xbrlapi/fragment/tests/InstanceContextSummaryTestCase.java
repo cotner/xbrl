@@ -72,7 +72,7 @@ public class InstanceContextSummaryTestCase extends DOMLoadingTestCase {
             Instance instance = store.<Instance>getRootFragmentForDocument(uri);
             List<Concept> concepts = instance.getChildConcepts();
             assertEquals(2,concepts.size());
-            assertEquals(2,instance.getChildConceptCount());
+            assertEquals(2,instance.getChildConceptsCount());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());

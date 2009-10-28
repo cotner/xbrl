@@ -3,6 +3,7 @@ package org.xbrlapi.aspects;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Concept;
@@ -78,7 +79,7 @@ public class LocationAspect extends BaseAspect implements Aspect {
             }
             
             String label = "";
-                
+
             Fragment parent = value.getFragment().getParent();
             
             if (parent.isa(InstanceImpl.class)) {
@@ -87,8 +88,14 @@ public class LocationAspect extends BaseAspect implements Aspect {
             }
             
             Concept concept = (((Fact) parent).getConcept());
-            List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
-            if (labels.isEmpty()) label = id;
+            List<String> languages = new Vector<String>();
+            languages.add(getLanguageCode());
+            languages.add(null);
+            List<URI> roles = new Vector<URI>();
+            roles.add(getLabelRole());
+            roles.add(null);
+            List<LabelResource> labels = concept.getLabels(languages,roles);
+            if (labels.isEmpty()) label = concept.getName();
             else label = labels.get(0).getStringValue();
             setMapLabel(id,label);
             return label;

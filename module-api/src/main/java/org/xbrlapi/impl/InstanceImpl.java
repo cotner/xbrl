@@ -99,7 +99,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     /**
      * @return the XQuery used to get all the child facts of the XBRL instance.
      */
-    private String getFactsQuery() {
+    private String getChildFactsQuery() {
         return "#roots#[@parentIndex='" + this.getIndex() + "' and @fact]"; 
     }
     
@@ -112,10 +112,10 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     }    
     
     /**
-     * @see org.xbrlapi.Instance#getFacts()
+     * @see org.xbrlapi.Instance#getChildFacts()
      */
-    public List<Fact> getFacts() throws XBRLException {
-    	return getStore().<Fact>queryForXMLResources(getFactsQuery());
+    public List<Fact> getChildFacts() throws XBRLException {
+    	return getStore().<Fact>queryForXMLResources(getChildFactsQuery());
     }
     
     /**
@@ -157,16 +157,16 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     }
 
     /**
-     * @see org.xbrlapi.Instance#getFactCount()
+     * @see org.xbrlapi.Instance#getChildFactsCount()
      */
-    public long getFactCount() throws XBRLException {
-        return getStore().queryCount(getFactsQuery());
+    public long getChildFactsCount() throws XBRLException {
+        return getStore().queryCount(getChildFactsQuery());
     }
     
     /**
-     * @see org.xbrlapi.Instance#getAllFactCount()
+     * @see org.xbrlapi.Instance#getAllFactsCount()
      */
-    public long getAllFactCount() throws XBRLException {
+    public long getAllFactsCount() throws XBRLException {
         return getStore().queryCount(getAllFactsQuery());
     }    
 
@@ -246,7 +246,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getChildConcepts()
      */
     public List<Concept> getChildConcepts() throws XBRLException {
-        String query = "for $root in #roots#[@parentIndex='"+getIndex()+"'] let $data:=$root/xbrlapi:data/* where namespace-uri($data)!='"+Constants.XBRL21Namespace+"' and namespace-uri($data)!='"+Constants.XBRL21LinkNamespace+"' return concat(namespace-uri($data),'|||',local-name($data))";
+        String query = "for $root in #roots#[@fact and @parentIndex='"+getIndex()+"'] let $data:=$root/xbrlapi:data/* return concat(namespace-uri($data),'|||',local-name($data))";
         Set<String> qnames = getStore().queryForStrings(query);
         List<Concept> concepts = new Vector<Concept>();
         for (String value: qnames) {
@@ -262,15 +262,42 @@ public class InstanceImpl extends FragmentImpl implements Instance {
         
         return concepts;
     }
+    
+    public List<Concept> getAllConcepts() throws XBRLException {
+        String query = "for $root in #roots#[@fact and @uri='"+getURI()+"'] let $data:=$root/xbrlapi:data/* return concat(namespace-uri($data),'|||',local-name($data))";
+        Set<String> qnames = getStore().queryForStrings(query);
+        List<Concept> concepts = new Vector<Concept>();
+        for (String value: qnames) {
+            String[] qname = value.split("\\|\\|\\|");
+            String namespace = qname[0];
+            String localname = qname[1];
+            try {
+                concepts.add(getStore().getConcept(new URI(namespace),localname));
+            } catch (URISyntaxException e) {
+                throw new XBRLException("Invalid URI syntax in a fact's namespace.",e);
+            }
+        }
+        
+        return concepts;
+    }    
 
     /**
-     * @see org.xbrlapi.Instance#getChildConceptCount()
+     * @see org.xbrlapi.Instance#getChildConceptsCount()
      */
-    public int getChildConceptCount() throws XBRLException {
-        String query = "for $root in #roots#[@parentIndex='"+getIndex()+"'] let $data:=$root/xbrlapi:data/* where namespace-uri($data)!='"+Constants.XBRL21Namespace+"' and namespace-uri($data)!='"+Constants.XBRL21LinkNamespace+"' return concat(namespace-uri($data),'|||',local-name($data))";
-        Set<String> qnames = getStore().queryForStrings(query);
-        return qnames.size();
+    public long getChildConceptsCount() throws XBRLException {
+        String query = "for $root in #roots#[@parentIndex='"+getIndex()+"'] let $data:=$root/xbrlapi:data/* where namespace-uri($data)!='"+Constants.XBRL21Namespace+"' and namespace-uri($data)!='"+Constants.XBRL21LinkNamespace+"' return concat(namespace-uri($data),local-name($data))";
+        Set<String> result = getStore().queryForStrings(query);
+        return result.size();
     }
+    
+    /**
+     * @see org.xbrlapi.Instance#getAllConceptsCount()
+     */
+    public long getAllConceptsCount() throws XBRLException {
+        String query = "for $root in #roots#[@fact and @uri='" + this.getURI() + "'] let $data:=$root/xbrlapi:data/* return concat(namespace-uri($data),'#',local-name($data))";
+        Set<String> result = getStore().queryForStrings(query);
+        return result.size();    
+    }    
     
     
     

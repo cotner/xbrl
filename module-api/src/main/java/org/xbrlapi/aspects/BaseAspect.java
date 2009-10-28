@@ -24,8 +24,6 @@ import org.xbrlapi.utilities.XBRLException;
  */
 abstract public class BaseAspect implements Aspect {
 
-
-    
     private final static Logger logger = Logger.getLogger(BaseAspect.class);  
     
     protected TreeMap<String,AspectValue> values;
@@ -141,6 +139,31 @@ abstract public class BaseAspect implements Aspect {
     }
     
     /**
+     * @see org.xbrlapi.aspects.Aspect#getValuesByHierarchy()
+     */
+    public List<AspectValue> getValuesByHierarchy() throws XBRLException {
+        List<AspectValue> result = new Vector<AspectValue>();
+        List<AspectValue> roots = new Vector<AspectValue>(); 
+        for (AspectValue value: values.values()) {
+            if (! value.hasParent()) {
+                roots.add(value);
+            }
+        }
+        add(roots,result);
+        return result;
+    }
+    
+    private void add(List<AspectValue> parents, List<AspectValue> result) throws XBRLException {
+        for (AspectValue parent: parents) {
+            result.add(parent);
+            List<AspectValue> children = parent.getChildren();
+            if (children.size() > 0) add(children, result);
+        }
+    }
+    
+
+
+    /**
      * @see org.xbrlapi.aspects.Aspect#getValue(String)
      */
     public AspectValue getValue(String id) {
@@ -242,8 +265,7 @@ abstract public class BaseAspect implements Aspect {
     public void addFact(Fact fact) throws XBRLException {
         
         AspectValue value = getValue(fact);
-        if (value == null) return;
-        
+        if (value.isMissing()) return;
         
         this.addValue(value);
         AspectValueTransformer transformer = this.getTransformer();

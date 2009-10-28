@@ -1,7 +1,9 @@
 package org.xbrlapi.xdt.aspects;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Concept;
@@ -77,7 +79,13 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
             
             String label = id;
             if (concept != null) {
-                List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
+                List<String> languages = new Vector<String>();
+                languages.add(getLanguageCode());
+                languages.add(null);
+                List<URI> roles = new Vector<URI>();
+                roles.add(getLabelRole());
+                roles.add(null);
+                List<LabelResource> labels = concept.getLabels(languages,roles);
                 if (! labels.isEmpty()) {
                     label = labels.get(0).getStringValue();
                 }
