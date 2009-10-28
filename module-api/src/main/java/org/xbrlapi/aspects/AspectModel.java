@@ -86,8 +86,6 @@ public interface AspectModel extends Serializable {
      */
     public void arrangeAspect(String aspectType, String axis, String parentType) throws XBRLException;
  
-
-    
     /**
      * @param values is a collection of AspectValues to be matched.
      * @return the set of all facts in the aspect model that 
@@ -174,6 +172,5 @@ public interface AspectModel extends Serializable {
      * @throws XBRLException
      */
     public void clearFacts() throws XBRLException;
- 
  
 }
