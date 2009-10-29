@@ -101,8 +101,7 @@ public class LocationAspect extends BaseAspect implements Aspect {
             return label;
             
         }
-        
-        
+
         /**
          * The label role is used in constructing the label for the
          * concept aspect values.
