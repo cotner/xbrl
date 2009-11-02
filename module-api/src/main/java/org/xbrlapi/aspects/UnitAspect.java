@@ -8,6 +8,7 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.Measure;
 import org.xbrlapi.NumericItem;
 import org.xbrlapi.Unit;
+import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -61,23 +62,27 @@ public class UnitAspect extends BaseAspect implements Aspect {
             Unit unit = value.<Unit>getFragment();
             if (unit != null) {
                 List<Measure> numerators = unit.getResolvedNumeratorMeasures();
-                for (int i=0; i<numerators.size(); i++) {
-                    Measure measure = numerators.get(i);
-                    if (i == 0) id += measure.getNamespace() + "#" + measure.getLocalname();
-                    else id += " x " + measure.getNamespace() + "#" + measure.getLocalname();
-                }
-                if (unit.hasDenominator()) {
-                    id += " / (";
-                    List<Measure> denominators = unit.getResolvedDenominatorMeasures();
-                    for (int i=0; i<denominators.size(); i++) {
-                        Measure measure = denominators.get(i);
+                if (numerators.size() == 1 && ! unit.hasDenominator() && numerators.get(0).getNamespace().equals(Constants.ISO4217))
+                       id = "Currency: " + numerators.get(0).getLocalname();
+                else {
+                    for (int i=0; i<numerators.size(); i++) {
+                        Measure measure = numerators.get(i);
                         if (i == 0) id += measure.getNamespace() + "#" + measure.getLocalname();
                         else id += " x " + measure.getNamespace() + "#" + measure.getLocalname();
                     }
-                    id += ")";
+                    if (unit.hasDenominator()) {
+                        id += " / (";
+                        List<Measure> denominators = unit.getResolvedDenominatorMeasures();
+                        for (int i=0; i<denominators.size(); i++) {
+                            Measure measure = denominators.get(i);
+                            if (i == 0) id += measure.getNamespace() + "#" + measure.getLocalname();
+                            else id += " x " + measure.getNamespace() + "#" + measure.getLocalname();
+                        }
+                        id += ")";
+                    }
                 }
             }
-                        
+
             setMapId(value,id);
             return id;
         }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.SchemaContentDeclaration;
-import org.xbrlapi.SchemaDeclaration;
 import org.xbrlapi.TypeDeclaration;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -110,59 +109,6 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
         }
         return result;
     }
-    
-    /**
-     * @see org.xbrlapi.SchemaContentDeclaration#hasReference()
-     */
-    public boolean hasReference() throws XBRLException {
-        return getDataRootElement().hasAttribute("ref");
-    }
-
-    /**
-     * @see org.xbrlapi.SchemaContentDeclaration#getReferenceNamespace()
-     */
-    public URI getReferenceNamespace() throws XBRLException {
-        return getNamespaceFromQName(getReferenceQName(), getDataRootElement());
-    }
-    
-    /**
-     * @see org.xbrlapi.SchemaContentDeclaration#getReferenceNamespaceAlias()
-     */
-    public String getReferenceNamespaceAlias() throws XBRLException {
-        return getPrefixFromQName(getReferenceQName());
-    }
-
-    /**
-     * @see org.xbrlapi.SchemaContentDeclaration#getTypeQName()
-     */
-    public String getReferenceQName() throws XBRLException {
-        if (! hasReference()) throw new XBRLException("The content declaration does not use a reference to another XML Schema declaration.");
-        String qname = getDataRootElement().getAttribute("ref");
-        if (qname.equals("") || (qname == null)) throw new XBRLException("The element declaration does not use a reference to another XML Schema declaration.");
-        return qname;
-    }
-
-    /**
-     * @see org.xbrlapi.SchemaContentDeclaration#getReferenceLocalname()
-     */  
-    public String getReferenceLocalname() throws XBRLException {
-        return getLocalnameFromQName(getReferenceQName());
-    }
-
-    /**
-     * @see org.xbrlapi.SchemaContentDeclaration#getReferencedSchemaDeclaration()
-     */  
-    @SuppressWarnings("unchecked")
-    public <F extends SchemaDeclaration> F getReferencedSchemaDeclaration() throws XBRLException {
-        try {
-            F sd = (F) getStore().getSchemaContent(this.getReferenceNamespace(),this.getReferenceLocalname());
-            if (sd == null) throw new XBRLException("The schema declaration is not in a schema contained in the data store.");
-            return sd;
-        } catch (ClassCastException e) {
-            throw new XBRLException("The XML Schema declaration is  of the wrong fragment type.",e);
-        }
-    }
-    
 
     /**
      * @return The XQuery that will retrieve the local type fragments for this fragment.
@@ -180,8 +126,6 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
         return (localTypes == 1);
     }
     
-
-    
     /**
      * @see org.xbrlapi.SchemaContentDeclaration#getLocalType()
      */
@@ -192,8 +136,5 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
         if (types.size() > 1) throw new XBRLException("There are too many local type declarations for this content declaration.");
         return null;
     }    
-    
-    
-        
     
 }

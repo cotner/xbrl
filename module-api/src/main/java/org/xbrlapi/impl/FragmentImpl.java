@@ -52,6 +52,15 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
+     * @see org.xbrlapi.Fragment#getChildren(Class)
+     */
+    public <F extends Fragment> List<F> getChildren(Class<?> requiredClass) throws XBRLException {
+        String query = "#roots#[@parentIndex='" + getIndex() + "' and @type='" + requiredClass.getName() + "']";        
+        List<F> fragments = getStore().<F>queryForXMLResources(query);
+        return fragments;
+    }    
+    
+    /**
      * @see org.xbrlapi.Fragment#getChildrenIndices(String)
      */
     public Set<String> getChildrenIndices(String type) throws XBRLException {

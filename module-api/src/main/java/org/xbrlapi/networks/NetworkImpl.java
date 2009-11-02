@@ -76,6 +76,8 @@ public class NetworkImpl implements Network, Serializable {
 	public NetworkImpl(Store store, URI linkRole, URI arcrole) throws XBRLException {
 		super();
 		if (store == null) throw new XBRLException("The store must not be null.");
+        if (linkRole == null) throw new XBRLException("The link role must not be null.");
+        if (arcrole == null) throw new XBRLException("The arcrole must not be null.");
 		setStore(store);
 		setLinkRole(linkRole);
 		setArcrole(arcrole);
@@ -168,9 +170,9 @@ public class NetworkImpl implements Network, Serializable {
 	}
 	
 	/**
-	 * @return the data store for the network.
+	 * @see Network#getStore()
 	 */
-	private Store getStore() {
+	public Store getStore() {
 		return store;
 	}
 	

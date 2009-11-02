@@ -10,8 +10,6 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class AttributeDeclarationImpl extends SchemaContentDeclarationImpl implements AttributeDeclaration {
 
-
-
     /**
      * @see org.xbrlapi.AttributeDeclaration#getUse()
      */

@@ -508,7 +508,7 @@ public class CacheImpl implements Cache {
     }
 
     /**
-     * @see Cache#getUris(URI)
+     * @see Cache#getAllUris(URI)
      */
     public List<URI> getAllUris(URI uri) throws XBRLException {
         

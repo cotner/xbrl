@@ -54,8 +54,6 @@ abstract public class BaseAspect implements Aspect {
         return model;
     }
 
-
-    
     /**
      * The identifier for the axis that this aspect is on.
      */

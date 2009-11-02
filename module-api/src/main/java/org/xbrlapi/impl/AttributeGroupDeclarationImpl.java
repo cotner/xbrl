@@ -18,8 +18,6 @@ public class AttributeGroupDeclarationImpl extends SchemaDeclarationImpl impleme
     public List<SchemaDeclaration> getMembers() throws XBRLException {
         String query = "for $root in #roots#[@parentIndex='" + getIndex() + "' and (@type='org.xbrlapi.impl.AttributeImpl' or @type='org.xbrlapi.impl.AttributeGroupImpl')] order by $root/@index return $root";
         return getStore().<SchemaDeclaration>queryForXMLResources(query);
-    }	
+    }
 
-    
-    
 }

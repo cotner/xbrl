@@ -437,7 +437,7 @@ public class BuilderImpl implements Builder {
 	}
 	
 	/**
-	 * @see Builder#getMetaAttribute()
+	 * @see Builder#getMetaAttribute(String)
 	 **/
 	public String getMetaAttribute(String name) {
 	    if (! hasMetaAttribute(name)) return null;
@@ -445,7 +445,7 @@ public class BuilderImpl implements Builder {
 	}
 	
     /**
-     * @see Builder#hasMetaAttribute()
+     * @see Builder#hasMetaAttribute(String)
      **/
     public boolean hasMetaAttribute(String name) {
         return getMetadata().hasAttribute(name); 

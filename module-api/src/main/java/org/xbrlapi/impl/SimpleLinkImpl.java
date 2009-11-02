@@ -75,8 +75,12 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
      * @throws XBRLException
      * @see org.xbrlapi.SimpleLink#getArcrole()
      */
-    public String getArcrole() throws XBRLException {
-    	return getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"arcrole");
+    public URI getArcrole() throws XBRLException {
+    	try {
+    	    return new URI(getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"arcrole"));
+    	} catch (URISyntaxException e) {
+    	    throw new XBRLException(getDataRootElement().getAttributeNS(Constants.XLinkNamespace.toString(),"arcrole") + " is an invalid URI.",e);
+    	}
     }
     
     /**

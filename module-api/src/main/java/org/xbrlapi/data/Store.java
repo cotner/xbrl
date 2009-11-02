@@ -32,6 +32,7 @@ import org.xbrlapi.XML;
 import org.xbrlapi.data.resource.Matcher;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.Analyser;
+import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -664,15 +665,22 @@ public interface Store extends Serializable {
     public Matcher getMatcher();
     
     /**
-     * Override this method in a data store implementation if the data store 
-     * implementation supports XQuery (rather than XPath).
-     * 
      * @param uri The URI of the referenced document.
      * @return a list of the URIs of the documents directly referencing
      * the specified document as targets of their XLinks (custom or otherwise).
      * @throws XBRLException if the list of referencing documents cannot be populated.
      */
     public List<URI> getReferencingDocuments(URI uri) throws XBRLException;
+
+    /**
+     * @param uri The URI of the referenced document.
+     * @return a list of the fragments directly referencing
+     * the specified document as targets of their XLinks (custom or otherwise).
+     * The list is empty if there are no fragments with the specified URI as
+     * the target URI of their link.
+     * @throws XBRLException.
+     */
+    public List<Fragment> getReferencingFragments(URI uri) throws XBRLException;    
     
     /**
      * Override this method in a data store implementation if the data store 
@@ -945,6 +953,36 @@ public interface Store extends Serializable {
      * @see Store#getMinimalNetworksWithArcrole(Set,URI)
      */
     public Networks getMinimalNetworksWithArcrole(Fragment fragment, URI arcrole) throws XBRLException;
+    
+    /**
+     * @param fragments The set of target node fragments in the network.
+     * @param linkRole The network link role value.
+     * @param arcrole The network arcrole value.
+     * @return the network built out from relevant roots to the supplied fragments.
+     * Branches (and trees) with no nodes in them that correspond to the supplied 
+     * fragments are not included in the returned network.
+     * @throws XBRLException
+     */
+    public Network getMinimalNetwork(Set<Fragment> fragments, URI linkRole, URI arcrole) throws XBRLException;
+    
+    /**
+     * This method is recursive.
+     * @param fragment The fragment to use as the target for the relationships to be added to the networks.
+     * @param network The network that is to be augmented.
+     * @throws XBRLException
+     */
+    public void augmentNetworkForFragment(Fragment fragment, Network network) throws XBRLException;
+
+    /**
+     * This method is recursive.
+     * @param fragment The fragment to use as the target for the relationships to be added to the networks.
+     * @param arcrole The arcrole for the networks to augment.
+     * @param networks The networks to augment.
+     * @throws XBRLException
+     */
+    public void augmentNetworksForFragment(Fragment fragment, URI arcrole, Networks networks) throws XBRLException;
+    
+    
 
     /**
      * @return a list of arc roles that are used in extended links in the data store.

@@ -40,10 +40,6 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 		super(arg0);
 	}
 
-	
-	
-
-	
 	public void testCreatingNonDimensionalAspectModel() {
 		try {
 	        loader.discover(this.getURI(FIRST_SMALL_INSTANCE));       
@@ -60,7 +56,9 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             model.arrangeAspect(LocationAspect.TYPE,"col");
             for (Fact fact: facts) {
                 model.addFact(fact);
+                assertTrue(model.getAspectValues(fact).size() == model.getAspects().size());
             }
+            
             for (Aspect aspect: model.getAspects()) {
                 logger.info(aspect.getType());
                 for (AspectValue value: aspect.getValues()) {
@@ -82,7 +80,7 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             assertEquals(4,rowMatrix.size());
             assertEquals(2,rowMatrix.get(0).size());
             assertEquals(4,colMatrix.size());
-            assertEquals(4,colMatrix.get(0).size());
+            assertEquals(3,colMatrix.get(0).size());
             for (List<AspectValue> rowCombination: rowMatrix) {
                 for (AspectValue rValue: rowCombination) {
                     logger.info("R: " + rValue.getAspect().getType() + " = " + rValue.getLabel());

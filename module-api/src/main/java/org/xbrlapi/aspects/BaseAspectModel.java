@@ -167,6 +167,17 @@ abstract public class BaseAspectModel implements AspectModel {
             aspect.addFact(fact);
         }
     }
+    
+    /**
+     * @see AspectModel#getAspectValues(Fact)
+     */
+    public List<AspectValue> getAspectValues(Fact fact) throws XBRLException {
+        List<AspectValue> result = new Vector<AspectValue>();
+        for (Aspect aspect: this.getAspects()) {
+            result.add(aspect.getValue(fact));
+        }
+        return result;
+    }
  
 
     public Set<Fact> getFacts(Collection<AspectValue> values) throws XBRLException {

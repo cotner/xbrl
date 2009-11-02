@@ -8,6 +8,7 @@ import java.util.SortedSet;
 
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Relationship;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
 
@@ -25,6 +26,11 @@ import org.xbrlapi.utilities.XBRLException;
 
 public interface Network {
 	
+    /**
+     * @return The data store that contains the network information.
+     */
+    public Store getStore();
+    
 	/**
 	 * @return the arc role.
 	 */

@@ -30,7 +30,7 @@ public interface SimpleLink extends Link {
      *
      * @throws XBRLException
      */
-    public String getArcrole() throws XBRLException;
+    public URI getArcrole() throws XBRLException;
     
     /**
      * @return the single fragment referenced by the simple link 

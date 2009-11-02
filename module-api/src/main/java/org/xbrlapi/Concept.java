@@ -28,7 +28,11 @@ public interface Concept extends ElementDeclaration {
      */
     public String getBalance() throws XBRLException;
     
-
+    /**
+     * @return true if the concept is numeric.
+     * @throws XBRLException
+     */
+    public boolean isNumeric() throws XBRLException;
 
     /**
      * @return the list of facts in the data store giving values for this concept

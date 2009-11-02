@@ -1,8 +1,10 @@
 package org.xbrlapi.fragment.tests;
 
-import org.xbrlapi.DOMLoadingTestCase;
 import java.util.List;
+
+import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.SimpleLink;
+import org.xbrlapi.utilities.Constants;
 
 /**
  * Tests the implementation of the org.xbrlapi.SimpleLink interface.
@@ -86,7 +88,7 @@ public class SimpleLinkTestCase extends DOMLoadingTestCase {
             assertTrue(links.size() > 0);
             for (SimpleLink link: links) {
                 if (link.getLocalname().equals("roleTypeRef")) {
-                    assertEquals("http://www.w3.org/1999/xlink/properties/linkbase",link.getArcrole());
+                    assertEquals(Constants.LinkbaseReferenceArcrole,link.getArcrole());
                 }
             }
         } catch (Exception e) {

@@ -64,6 +64,7 @@ import org.xbrlapi.networks.AllAnalyserImpl;
 import org.xbrlapi.networks.Analyser;
 import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.NetworkImpl;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
 import org.xbrlapi.utilities.Constants;
@@ -409,22 +410,29 @@ public abstract class BaseStoreImpl implements Store {
      * @see org.xbrlapi.data.Store#getReferencingDocuments(URI)
      */
     public List<URI> getReferencingDocuments(URI uri) throws XBRLException {
-        String query = "#roots#[@targetDocumentURI='"+ uri + "']";
-        List<Fragment> fragments = this.<Fragment>queryForXMLResources(query);
+        String query = "for $root in #roots#[@targetDocumentURI='"+ uri + "'] return string($root/@uri)";
+        Set<String> strings = queryForStrings(query);
 
         List<URI> uris = new Vector<URI>();
-        HashMap<URI,String> map = new HashMap<URI,String>(); 
-
-        for (Fragment fragment: fragments) {
-            URI doc = fragment.getURI();
-            if (!map.containsKey(doc)) {
-                map.put(doc,"");
-                uris.add(doc);
+        for (String string: strings) {
+            try {
+                uris.add(new URI(string));
+            } catch (URISyntaxException e) {
+                throw new XBRLException(string + " is an invalid URI.",e);
             }
         }
-        
+
         return uris;
     }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getReferencingFragments(URI)
+     */
+    public List<Fragment> getReferencingFragments(URI uri) throws XBRLException {
+        String query = "for $root in #roots#[@targetDocumentURI='"+ uri + "'] return $root";
+        List<Fragment> fragments = this.<Fragment>queryForXMLResources(query);
+        return fragments;
+    }    
     
     /**
      * @see org.xbrlapi.data.Store#getReferencedDocuments(URI)
@@ -1697,51 +1705,72 @@ public abstract class BaseStoreImpl implements Store {
      * @see Store#getMinimalNetworksWithArcrole(Set, URI)
      */
     public synchronized Networks getMinimalNetworksWithArcrole(Set<Fragment> fragments, URI arcrole) throws XBRLException {
-        
-        Analyser backup = getAnalyser();
-        if (backup!= null) setAnalyser(new AnalyserImpl(this));
 
         try {
             Networks networks = new NetworksImpl(this);
-    
-            Set<Fragment> processedFragments = new HashSet<Fragment>();
-            
             for (Fragment fragment: fragments) {
-                networks = augmentNetworksForFragment(fragment,arcrole,networks,processedFragments);
+                augmentNetworksForFragment(fragment,arcrole,networks);
             }
             return networks;
-        } catch (Throwable t) {        
-            if (backup != null) this.setAnalyser(backup);
+        } catch (Throwable t) {
             throw new XBRLException("There was a problem getting minimal networks with arcrole " + arcrole,t);
         }
     }
     
     /**
-     * This method is recursive.
-     * @param fragment The fragment to use as the target for the relationships to be added to the networks.
-     * @param arcrole The arcrole for the networks to augment.
-     * @param networks The networks system to augment.
-     * @return The networks after augmentation.
-     * @throws XBRLException
+     * @see Store#augmentNetworksForFragment(Fragment, URI, Networks)
      */
-    private synchronized Networks augmentNetworksForFragment(Fragment fragment, URI arcrole, Networks networks, Set<Fragment> processedFragments) throws XBRLException {
-        if (processedFragments.contains(fragment)) {
-            return networks;
+    public synchronized void augmentNetworksForFragment(Fragment fragment, URI arcrole, Networks networks) throws XBRLException {
+        for (Network network: networks.getNetworks(arcrole)) {
+            if (network.hasActiveRelationshipsTo(fragment.getIndex())) return;
         }
-        processedFragments.add(fragment);
         
         for (Relationship relationship: this.getRelationshipsTo(fragment.getIndex(),null,arcrole)) {
             networks.addRelationship(relationship);
         }
+        
         for (Network network: networks.getNetworks(arcrole)) {
             SortedSet<Relationship> activeRelationships = network.getActiveRelationshipsTo(fragment.getIndex());
             logger.debug(fragment.getIndex() + " has " + activeRelationships.size() + " parent fragments.");
             for (Relationship activeRelationship: activeRelationships) {
                 Fragment source = activeRelationship.getSource();
-                networks = augmentNetworksForFragment(source,arcrole,networks,processedFragments);
+                augmentNetworksForFragment(source,arcrole,networks);
             }
         }
-        return networks;
+    }
+    
+    /**
+     * @see Store#augmentNetworkForFragment(Fragment, Network)
+     */
+    public synchronized void augmentNetworkForFragment(Fragment fragment, Network network) throws XBRLException {
+
+        if (network.hasActiveRelationshipsTo(fragment.getIndex())) return;
+                
+        for (Relationship relationship: this.getRelationshipsTo(fragment.getIndex(),network.getLinkRole(),network.getArcrole())) {
+            network.addRelationship(relationship);
+        }
+        SortedSet<Relationship> activeRelationships = network.getActiveRelationshipsTo(fragment.getIndex());
+        logger.debug(fragment.getIndex() + " has " + activeRelationships.size() + " parent fragments.");
+        for (Relationship activeRelationship: activeRelationships) {
+            Fragment source = activeRelationship.getSource();
+            augmentNetworkForFragment(source,network);
+        }
+    }
+    
+    /**
+     * @see Store#getMinimalNetwork(Set, URI, URI)
+     */
+    public Network getMinimalNetwork(Set<Fragment> fragments, URI linkRole, URI arcrole) throws XBRLException {
+
+        try {
+            Network network = new NetworkImpl(this, linkRole, arcrole);
+            for (Fragment fragment: fragments) {
+                augmentNetworkForFragment(fragment,network);
+            }
+            return network;
+        } catch (Throwable t) {
+            throw new XBRLException("There was a problem getting minimal networks with arcrole " + arcrole,t);
+        }    
     }
 
     /**

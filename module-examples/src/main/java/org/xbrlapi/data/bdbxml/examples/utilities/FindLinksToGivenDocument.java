@@ -3,6 +3,8 @@ package org.xbrlapi.data.bdbxml.examples.utilities;
 import java.net.URI;
 import java.util.List;
 
+import org.xbrlapi.Fragment;
+
 /**
  * Lists all documents that enable XBRL discovery of the document
  * with the specified URI.
@@ -23,10 +25,31 @@ public class FindLinksToGivenDocument extends BaseUtilityExample {
         if (message.equals("")) {
             try {
                 URI uri = new URI(arguments.get("document"));
+                                
                 List<URI> referencingDocuments = store.getReferencingDocuments(uri);
                 for (URI ref: referencingDocuments) {
                     System.out.println(ref + " references " + uri);
-                }        
+                }    
+                
+                List<Fragment> fragments = store.getReferencingFragments(uri);
+                for (Fragment fragment: fragments) {
+                    fragment.serialize();
+                }
+                
+/*                List<Stub> stubs = store.getStubs();
+                for (Stub stub: stubs) {
+                    uri = stub.getResourceURI();
+                    System.out.println("-------------------------");
+                    System.out.println("Missing resource: " + uri);
+                    fragments = store.getReferencingFragments(uri);
+                    System.out.println("Fragments linking to the missing resource.");
+                    for (Fragment fragment: fragments) {
+                        fragment.serialize();
+                    }
+                    System.out.println("");
+                }*/
+                
+                
             } catch (Exception e) {
                 badUsage(e.getMessage());
             }
@@ -42,8 +65,6 @@ public class FindLinksToGivenDocument extends BaseUtilityExample {
         return explanation;
     }    
 
-
-    
     /**
      * @param args The array of commandline arguments.
      */

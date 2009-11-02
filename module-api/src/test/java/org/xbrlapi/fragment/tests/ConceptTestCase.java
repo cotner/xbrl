@@ -69,7 +69,23 @@ public class ConceptTestCase extends DOMLoadingTestCase {
         } catch (Exception e) {
             fail(e.getMessage());
         }
-    }	
+    }
+    
+    public void testNumericItemTypeDetection() {   
+
+        try {
+            loader.discover(this.getURI(FOOTNOTELINKS));   
+            loader.discover(this.getURI(PRESENTATIONLINKS));               
+            List<Concept> concepts = store.<Concept>getXMLResources("Concept");
+            assertTrue(concepts.size() > 0);
+            for (Concept concept: concepts) {
+                logger.info(concept.getTypeLocalname() + " - " + concept.isNumeric());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
 	
 	public void testGetBalance() {	
 

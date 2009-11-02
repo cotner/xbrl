@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Period;
-import org.xbrlapi.impl.PeriodImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -118,22 +117,12 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
         public Transformer() {
             super();
         }
-
-        /**
-         * @see AspectValueTransformer#validate(AspectValue)
-         */
-        public void validate(AspectValue value) throws XBRLException {
-
-            if (! value.getFragment().isa(PeriodImpl.class)) {
-                throw new XBRLException("The aspect value must have a period fragment.");
-            }
-        }
         
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
-            validate(value);
+
             if (hasMapId(value)) {
                 return getMapId(value);
             }

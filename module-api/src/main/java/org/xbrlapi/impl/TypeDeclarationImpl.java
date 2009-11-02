@@ -1,9 +1,11 @@
 package org.xbrlapi.impl;
 
 import java.net.URI;
+import java.util.List;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xbrlapi.AttributeGroupDeclaration;
 import org.xbrlapi.TypeDeclaration;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -136,5 +138,29 @@ public class TypeDeclarationImpl extends SchemaDeclarationImpl implements TypeDe
             return namespace;
         }
         throw new XBRLException("This type is not derived from another.");
+    }
+
+    /**
+     * @see TypeDeclaration#isNumericItemType()
+     */
+    public boolean isNumericItemType() throws XBRLException {
+        
+        TypeDeclaration parentType = this.getParentType();
+        if (parentType != null) 
+            if (parentType.isa(ComplexTypeDeclarationImpl.class))
+                return parentType.isNumericItemType();
+        
+        URI namespace = this.getTargetNamespace();
+        if (namespace == null) return false;
+        if (namespace.equals(Constants.XBRL21Namespace)) {
+            List<AttributeGroupDeclaration> agds = this.<AttributeGroupDeclaration>getChildren(AttributeGroupDeclarationImpl.class);
+            for (AttributeGroupDeclaration agd: agds) {
+                if (agd.hasReference()) {
+                    if (agd.getReferenceLocalname().equals("numericItemAttrs")) return true;
+                    if (agd.getReferenceLocalname().equals("essentialNumericItemAttrs")) return true;
+                }
+            }
+        }
+        return false;        
     }
 }

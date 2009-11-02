@@ -77,7 +77,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
                 return getMapLabel(id);
             }
             
-            String label = id;
+            String label = concept.getTargetNamespace() + "#" + concept.getLocalname();
             if (concept != null) {
                 List<String> languages = new Vector<String>();
                 languages.add(getLanguageCode());

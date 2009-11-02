@@ -50,8 +50,8 @@ public class LocationAspectValue extends BaseAspectValue {
     
     
     /**
-     * @see AspectValue#getChildren(AspectValue)
-     * @see BaseAspectValue#getChildren(AspectValue)
+     * @see AspectValue#getChildren()
+     * @see BaseAspectValue#getChildren()
      */
     @Override
     public List<AspectValue> getChildren() throws XBRLException {

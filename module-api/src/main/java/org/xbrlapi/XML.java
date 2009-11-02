@@ -31,7 +31,7 @@ public abstract interface XML extends Comparable<XML>, Serializable {
      * @param superType The specified fragment type to test against.
      * @return true if the fragment is an extension of the specified fragment type.
      * @throws XBRLException
-     * @see isa(Class)
+     * @see XML#isa(Class)
      */
     public boolean isa(String superType) throws XBRLException;
     

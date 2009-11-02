@@ -184,7 +184,6 @@ public interface Aspect extends Serializable {
 
     /**
      * @param fact the fact to get the fragment for.
-     * @param F The type of fragment being returned.
      * @return the fragment required to generate an aspect value from the 
      * fact or null if none is available.
      * @throws XBRLException

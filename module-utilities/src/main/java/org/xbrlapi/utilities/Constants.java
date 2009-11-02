@@ -105,7 +105,7 @@ public class Constants {
             DocumentationGenericLabelRole = new URI("http://www.xbrl.org/2008/role/documentation");
             
             StandardGenericReferenceRole = new URI("http://www.xbrl.org/2008/role/reference");
-            
+            LinkbaseReferenceArcrole = new URI("http://www.w3.org/1999/xlink/properties/linkbase");
         } catch (URISyntaxException e) {
             logger.error("Exception thrown though.");
         }
@@ -182,4 +182,6 @@ public class Constants {
     public static URI ExampleReferenceRole;
     public static URI StandardLinkRole;
     public static URI ISO4217;
+    
+    public static URI LinkbaseReferenceArcrole;
 }

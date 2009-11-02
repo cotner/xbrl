@@ -54,14 +54,13 @@ public interface TypeDeclaration extends SchemaDeclaration {
      */
     public boolean isDerivedFrom(TypeDeclaration candidate) throws XBRLException;
     
-
-    
     /**
      * @return the type that this type extends or restricts or null if the type that
      * is extended or restricted is a type defined in the XML Schema specifications.
      * @throws XBRLException
      */
     public TypeDeclaration getParentType() throws XBRLException;
+
     
     /**
      * @return the namespace of the type that this type declaration extends or restricts.
@@ -75,4 +74,10 @@ public interface TypeDeclaration extends SchemaDeclaration {
      */
     public String getParentTypeLocalname() throws XBRLException;        
 
+    /**
+     * @return true if the type is derived from or is an XBRL numeric item type.
+     * @throws XBRLException
+     */
+    public boolean isNumericItemType() throws XBRLException; 
+    
 }

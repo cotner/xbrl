@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Schema;
+import org.xbrlapi.TypeDeclaration;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -81,8 +82,6 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
         return getStore().queryForIndices("#roots#[*/xbrlapi_concept:"+ this.getName() + "]");
     }        
  
-
-    
     /**
      * @see org.xbrlapi.Concept#getPresentationNetworkLinkroles()
      */
@@ -94,5 +93,11 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
         return roles;
     }
 
-    
+    /**
+     * @see Concept#isNumeric()
+     */
+    public boolean isNumeric() throws XBRLException {
+        TypeDeclaration typeDeclaration = this.getTypeDeclaration();
+        return typeDeclaration.isNumericItemType();
+    }
 }

@@ -95,7 +95,7 @@ public abstract class BaseAspectValue implements AspectValue {
     }
     
     /**
-     * @see AspectValue#getChildren(AspectValue)
+     * @see AspectValue#getChildren()
      */
     public List<AspectValue> getChildren() throws XBRLException {
         return new Vector<AspectValue>();
