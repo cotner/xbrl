@@ -15,9 +15,10 @@ import org.xbrlapi.utilities.XBRLException;
 public interface Concept extends ElementDeclaration {
 
     /**
-     * Get the concept's periodType, one of instant or duration
-     * @return the period attribute value.
-     * @throws XBRLException if the periodType is missing.
+     * @return the period attribute value (one of instant or duration) for concepts 
+     * in the XBRL item substitution group and null for tuple concepts.
+     * @throws XBRLException if the periodType is missing for concepts in 
+     * the XBRL item substitution group.
      */
     public String getPeriodType() throws XBRLException;
     

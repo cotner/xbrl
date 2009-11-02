@@ -21,16 +21,14 @@ import org.xbrlapi.utilities.XBRLException;
 public class ConceptImpl extends ElementDeclarationImpl implements Concept {
 
     /**
-     * Get the concept's periodType, one of instant or duration
-     * @return the period attribute value.
-     * @throws XBRLException if the periodType is missing.
      * @see org.xbrlapi.Concept#getPeriodType()
      */
     public String getPeriodType() throws XBRLException {
     	Element root = getDataRootElement();
     	if (root.hasAttributeNS(Constants.XBRL21Namespace.toString(),"periodType"))
     		return root.getAttributeNS(Constants.XBRL21Namespace.toString(),"periodType");
-    	throw new XBRLException("The period attribute is mandatory on XBRL concepts.");
+    	if (! this.isTuple()) throw new XBRLException("The period attribute is mandatory on XBRL concepts in the item substitution group.");
+    	return null;
     }
     
 
