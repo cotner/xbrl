@@ -69,25 +69,37 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
          */
         public String getLabel(AspectValue value) throws XBRLException {
             
-            Concept concept = value.<Concept>getFragment();
-            if (concept == null) return null;
+            Concept member = value.<Concept>getFragment();
+            if (member == null) return null;
 
             String id = getIdentifier(value);
             if (hasMapLabel(id)) {
                 return getMapLabel(id);
             }
-            
-            String label = concept.getTargetNamespace() + "#" + concept.getLocalname();
+
             List<String> languages = new Vector<String>();
             languages.add(getLanguageCode());
             languages.add(null);
             List<URI> roles = new Vector<URI>();
             roles.add(getLabelRole());
             roles.add(null);
-            List<LabelResource> labels = concept.getLabels(languages,roles);
+            
+            ExplicitDimension dimension = ((DimensionAspect) value.getAspect()).getDimension();
+
+            String dimensionLabel = dimension.getTargetNamespace() + "#" + dimension.getName();
+            String memberLabel = member.getTargetNamespace() + "#" + member.getName();
+            
+            List<LabelResource> labels = dimension.getLabels(languages,roles);
             if (! labels.isEmpty()) {
-                label = labels.get(0).getStringValue();
+                dimensionLabel = labels.get(0).getStringValue();
             }
+            
+            labels = member.getLabels(languages,roles);
+            if (! labels.isEmpty()) {
+                memberLabel = labels.get(0).getStringValue();
+            }
+            
+            String label = dimensionLabel + "=" + memberLabel;
             
             setMapLabel(id,label);
             return label;

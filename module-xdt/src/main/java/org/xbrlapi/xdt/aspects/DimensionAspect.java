@@ -57,14 +57,14 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
      * @return the dimension defining this aspect.
      */
     @SuppressWarnings("unchecked")
-    protected <D extends Dimension> D getDimension() {
+    public <D extends Dimension> D getDimension() {
         return (D) dimension;
     }
 
     /**
      * @return the aspect value accessor.
      */
-    protected DimensionValueAccessor getAccessor() {
+    public DimensionValueAccessor getAccessor() {
         return accessor;
     }
     
