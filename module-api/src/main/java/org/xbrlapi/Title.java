@@ -15,8 +15,6 @@ public interface Title extends Xlink {
      */
     public String getValue() throws XBRLException;
     
-
-
     /**
      * Get the documentation language code.
      *

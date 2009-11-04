@@ -300,20 +300,24 @@ abstract public class BaseAspectModel implements AspectModel {
         List<Aspect> aspects = getAxisAspects(axis);
         List<List<AspectValue>> result = new Vector<List<AspectValue>>();
         int combinations = aspects.get(0).getValues().size() * aspects.get(0).getDescendantCount();
+        logger.debug("# combinations of aspect values = " + combinations);
         for (int i=0; i<combinations; i++) {
             result.add(new Vector<AspectValue>());
         }
         ASPECT: for (Aspect aspect: aspects) {
-            //if (aspect.isSingular() && aspect.getValues().get(0).getClass().equals("org.xbrlapi.aspects.MissingAspectValue")) {
-            if (aspect.isSingular() && (aspect.getValues().get(0).getFragment() == null)) {
+            if (aspect.isSingular() && (aspect.getValues().get(0).isMissing())) {
                 logger.debug("Aspect " + aspect.getType() + " has just a single missing value.");
+                continue ASPECT;
+            }
+            if (aspect.isEmpty()) {
+                logger.debug("Aspect " + aspect.getType() + " is empty.");
                 continue ASPECT;
             }
             List<AspectValue> values = aspect.getValues();
             int vCount = values.size();
             int dCount = aspect.getDescendantCount();
             int aCount = aspect.getAncestorCount();
-            logger.debug(aspect.getType());
+            logger.debug(aspect.getType() + " has " + vCount + " values.");
             logger.debug("#ancestors   = " + aCount);
             logger.debug("#descendants = " + dCount);
             logger.debug("#values      = " + vCount);

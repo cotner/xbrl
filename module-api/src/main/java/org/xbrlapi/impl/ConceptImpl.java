@@ -31,8 +31,6 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     	return null;
     }
     
-
-
     /**
      * Get the concept's balance, one of debit or credit
      * @return the balance attribute value or null if none is specified.
@@ -95,6 +93,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
      * @see Concept#isNumeric()
      */
     public boolean isNumeric() throws XBRLException {
+        if (this.isTuple()) return false;
         TypeDeclaration typeDeclaration = this.getTypeDeclaration();
         return typeDeclaration.isNumericItemType();
     }

@@ -34,10 +34,8 @@ import org.xml.sax.Attributes;
 
 /**
  * Identifies XML Schema fragments.
- * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-
 public class SchemaIdentifier extends BaseIdentifier implements Identifier {
 
     /**
@@ -96,7 +94,6 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
             } else if (lName.equals("schema")) {
                 
                 fragment = new SchemaImpl();
-
                 setXSModel(constructXSModel());
                 setTargetNamespace(attrs.getValue("targetNamespace"));
                 
@@ -108,7 +105,8 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                     throw new XBRLException("An XML Schema element declaration was found outside of an XML Schema.");
                 }
 
-                if (getTargetNamespace() == null) {
+                String targetNamespace = getTargetNamespace(); 
+                if (targetNamespace == null) {
                     throw new XBRLException("An XML Schema element was found without a target namespace.");
                 }
 
@@ -116,7 +114,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                 XSElementDeclaration declaration = null;
 
                 // Handle anonymous schemas first - these are the tough case
-                if (getTargetNamespace().equals("")) {
+                if (targetNamespace.equals("")) {
                     
                     // Get the list of namespaces declared in the model
                     XSNamespaceItemList nsItemList = getXSModel().getNamespaceItems();
@@ -143,9 +141,8 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
                             }
                         }
                     }
-                    
-                    // TODO Handle anonymous schemas without throwing an exception.
-                    if (declaration == null) throw new XBRLException("An anonymous XML Schema was found that could not be handled.");
+
+                    if (declaration == null) throw new XBRLException("An element declaration was found that could not be handled.");
                     
                 // Handle the easy case where the schema specifies its target namespace
                 } else if (elementName != null) {

@@ -21,16 +21,12 @@ public interface Fact extends Fragment {
 	 */
 	public Instance getInstance() throws XBRLException;
 
-	
-	
 	/**
 	 * Get the tuple that this fact is a part of
 	 * @return the xbrl tuple fragment or null if this 
 	 * @throws XBRLException
 	 */
 	public Tuple getTuple() throws XBRLException;
-
-
 
 	/**
 	 * Get the concept that defines the syntax for this fact.
