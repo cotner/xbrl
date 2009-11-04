@@ -49,7 +49,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
          * dimension value.
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
-        public String getIdentifier(ExplicitDimensionAspectValue value) throws XBRLException {
+        public String getIdentifier(AspectValue value) throws XBRLException {
             
             if (hasMapId(value)) {
                 return getMapId(value);
@@ -67,7 +67,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
         /**
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
-        public String getLabel(ExplicitDimensionAspectValue value) throws XBRLException {
+        public String getLabel(AspectValue value) throws XBRLException {
             
             Concept concept = value.<Concept>getFragment();
             if (concept == null) return null;
@@ -78,17 +78,15 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
             }
             
             String label = concept.getTargetNamespace() + "#" + concept.getLocalname();
-            if (concept != null) {
-                List<String> languages = new Vector<String>();
-                languages.add(getLanguageCode());
-                languages.add(null);
-                List<URI> roles = new Vector<URI>();
-                roles.add(getLabelRole());
-                roles.add(null);
-                List<LabelResource> labels = concept.getLabels(languages,roles);
-                if (! labels.isEmpty()) {
-                    label = labels.get(0).getStringValue();
-                }
+            List<String> languages = new Vector<String>();
+            languages.add(getLanguageCode());
+            languages.add(null);
+            List<URI> roles = new Vector<URI>();
+            roles.add(getLabelRole());
+            roles.add(null);
+            List<LabelResource> labels = concept.getLabels(languages,roles);
+            if (! labels.isEmpty()) {
+                label = labels.get(0).getStringValue();
             }
             
             setMapLabel(id,label);

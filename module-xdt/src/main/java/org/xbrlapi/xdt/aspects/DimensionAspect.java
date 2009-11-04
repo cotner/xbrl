@@ -73,7 +73,7 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
      * @throws XBRLException if the dimension does not have a namespace and local name.
      */
     public String getType() throws XBRLException {
-        return getDimension().getTargetNamespace() + ":" + getDimension().getName();
+        return getDimension().getTargetNamespace() + "#" + getDimension().getName();
     }
  
     /**

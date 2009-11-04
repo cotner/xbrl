@@ -3,6 +3,7 @@ package org.xbrlapi.xdt.aspects;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.Context;
@@ -11,6 +12,7 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.Item;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.Segment;
+import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.BaseAspectModel;
 import org.xbrlapi.aspects.ConceptAspect;
@@ -125,6 +127,37 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
      */
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
-   }    
+   }
+    
+    public List<DimensionAspect> getDimensionAspects() {
+        List<DimensionAspect> result = new Vector<DimensionAspect>();
+        for (Aspect aspect: this.getAspects()) {
+           String name = aspect.getClass().getName();
+           if (name.equals("org.xbrlapi.xdt.aspects.ExplicitDimensionAspect") || name.equals("org.xbrlapi.xdt.aspects.TypedDimensionAspect")) 
+               result.add((DimensionAspect) aspect);
+       }
+       return result;
+    }
+
+    public List<ExplicitDimensionAspect> getExplicitDimensionAspects() {
+        List<ExplicitDimensionAspect> result = new Vector<ExplicitDimensionAspect>();
+        for (Aspect aspect: this.getAspects()) {
+            String name = aspect.getClass().getName();
+            if (name.equals("org.xbrlapi.xdt.aspects.ExplicitDimensionAspect")) 
+                result.add((ExplicitDimensionAspect) aspect);
+        }
+        return result;
+    }
+    
+    public List<TypedDimensionAspect> getTypedDimensionAspects() {
+        List<TypedDimensionAspect> result = new Vector<TypedDimensionAspect>();
+        for (Aspect aspect: this.getAspects()) {
+            String name = aspect.getClass().getName();
+            if (name.equals("org.xbrlapi.xdt.aspects.TypedDimensionAspect")) 
+                result.add((TypedDimensionAspect) aspect);
+        }
+        return result;
+    }
+        
     
 }

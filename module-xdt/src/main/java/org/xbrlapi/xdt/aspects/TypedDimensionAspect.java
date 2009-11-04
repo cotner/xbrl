@@ -49,7 +49,7 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
-        public String getIdentifier(TypedDimensionAspectValue value) throws XBRLException {
+        public String getIdentifier(AspectValue value) throws XBRLException {
             
             if (hasMapId(value)) {
                 return getMapId(value);
@@ -77,7 +77,7 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
         /**
          * @see AspectValueTransformer#getLabel(AspectValue)
          */
-        public String getLabel(TypedDimensionAspectValue value) throws XBRLException {
+        public String getLabel(AspectValue value) throws XBRLException {
 
             OpenContextComponent occ = (OpenContextComponent) value.getFragment();
             if (occ == null) return null;
