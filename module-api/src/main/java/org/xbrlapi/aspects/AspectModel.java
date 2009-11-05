@@ -70,6 +70,12 @@ public interface AspectModel extends Serializable {
     public void addFact(Fact fact) throws XBRLException;
     
     /**
+     * @param facts The collection of facts to add to the aspect model
+     * @throws XBRLException if the facts cannot be added to the aspect model.
+     */
+    public void addFacts(Collection<Fact> facts) throws XBRLException;    
+    
+    /**
      * @param fact The fact to get the aspect values for.
      * @return a list of the aspect values (one for each aspect in the 
      * aspect model) for the supplied fact.  The list is empty if the

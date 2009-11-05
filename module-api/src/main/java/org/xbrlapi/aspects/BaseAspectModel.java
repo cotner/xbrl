@@ -169,6 +169,15 @@ abstract public class BaseAspectModel implements AspectModel {
     }
     
     /**
+     * @see AspectModel#addFacts(Collection<Fact>)
+     */
+    public void addFacts(Collection<Fact> facts) throws XBRLException {
+        for (Fact fact: facts) {
+            this.addFact(fact);
+        }
+    }
+    
+    /**
      * @see AspectModel#getAspectValues(Fact)
      */
     public List<AspectValue> getAspectValues(Fact fact) throws XBRLException {
