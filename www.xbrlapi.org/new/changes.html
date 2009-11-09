@@ -59,6 +59,25 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 <div class="content">
 
+<h2>9 Nov. 2009</h2>
+<p>
+Improved the handling of the dimension aspect labelling to exploit XBRL labels for such dimensions.
+</p>
+
+
+<h2>5 Nov. 2009</h2>
+<p>
+Added aspect label method so that labels can be provided that identify aspects.
+</p>
+<p>
+Changed the getMatches method of the org.xbrlapi.aspects.Aspect interface to throw
+an exception if the aspect does not have an aspect value as the matching criterion.
+</p>
+<p>
+Fixed a bug in the DimensionalAspectModel that prevented facts from having their dimensional
+aspect values recorded properly as new dimensional aspect values were discovered.
+</p>
+
 <h2>3 Nov. 2009</h2>
 <p>
 Made the org.xbrlapi.Concept#getPeriodType method return null for tuple concepts instead of
