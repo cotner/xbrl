@@ -1008,7 +1008,7 @@ public abstract class BaseStoreImpl implements Store {
             }
         }
         
-        logger.info("network size = " + networks.getSize());
+        logger.debug("network size = " + networks.getSize());
     	return networks;    	
     }
     

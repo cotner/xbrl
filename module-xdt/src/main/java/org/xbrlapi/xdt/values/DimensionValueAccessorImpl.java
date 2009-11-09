@@ -42,8 +42,6 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
         }
         throw new XBRLException("The dimension QName does not identify a typed or explicit dimension.");
     }
-    
-
 
     /**
      * @see DimensionValueAccessor#getTypedDimensionValue(Item, Dimension)

@@ -42,7 +42,6 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
-
         /**
          * For explicit XDT dimensions, the identifier is based
          * on the QName of the dimension member representing the
@@ -58,7 +57,6 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
             String id = "";
             Concept concept = value.<Concept>getFragment();
             if (concept != null) id = concept.getTargetNamespace() + ":" + concept.getName();
-
             setMapId(value,id);
             return id;
             
@@ -84,22 +82,14 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
             roles.add(getLabelRole());
             roles.add(null);
             
-            ExplicitDimension dimension = ((DimensionAspect) value.getAspect()).getDimension();
-
-            String dimensionLabel = dimension.getTargetNamespace() + "#" + dimension.getName();
             String memberLabel = member.getTargetNamespace() + "#" + member.getName();
             
-            List<LabelResource> labels = dimension.getLabels(languages,roles);
-            if (! labels.isEmpty()) {
-                dimensionLabel = labels.get(0).getStringValue();
-            }
-            
-            labels = member.getLabels(languages,roles);
+            List<LabelResource> labels = member.getLabels(languages,roles);
             if (! labels.isEmpty()) {
                 memberLabel = labels.get(0).getStringValue();
             }
             
-            String label = dimensionLabel + "=" + memberLabel;
+            String label = memberLabel;
             
             setMapLabel(id,label);
             return label;
@@ -126,7 +116,9 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
         if (fact.isTuple()) return null;
         ExplicitDimension dimension = this.<ExplicitDimension>getDimension();
         DimensionValue value = getAccessor().getValue((Item) fact, dimension);
-        if (value == null) return null;
+        if (value == null) {
+            return null;
+        }
         return (Concept) value.getValue();
     }
     
@@ -138,7 +130,7 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
         DimensionValue dimensionValue = getAccessor().getValue((Item) fact, getDimension());
         if (dimensionValue == null) return "";
         Concept concept = (Concept) dimensionValue.getValue();
-        return concept.getNamespace() + "#" + concept.getLocalname();
+        return concept.getTargetNamespace() + "#" + concept.getName();
     }    
 
     /**
@@ -182,6 +174,8 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
             return false;
        return true;
     }
+
+
 
 }
 

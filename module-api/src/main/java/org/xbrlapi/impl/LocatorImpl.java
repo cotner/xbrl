@@ -79,11 +79,11 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
     public Fragment getTarget() throws XBRLException {
 
         URI uri = this.getStore().getMatcher().getMatch(getTargetDocumentURI());
-        logger.info("The locator's target URI = " + uri);
+        logger.debug("The locator's target URI = " + uri);
 
         String pointerValue = getTargetPointerValue();
         
-        logger.info("The locator's XPointer value = " + pointerValue);
+        logger.debug("The locator's XPointer value = " + pointerValue);
         
     	if (pointerValue.equals("")) {
             Fragment fragment = getStore().getRootFragmentForDocument(uri);

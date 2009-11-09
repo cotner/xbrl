@@ -10,6 +10,7 @@ import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Item;
+import org.xbrlapi.Relationship;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.Segment;
 import org.xbrlapi.aspects.Aspect;
@@ -21,7 +22,8 @@ import org.xbrlapi.aspects.LocationAspect;
 import org.xbrlapi.aspects.PeriodAspect;
 import org.xbrlapi.aspects.UnitAspect;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.impl.ItemImpl;
+import org.xbrlapi.networks.Network;
+import org.xbrlapi.networks.Networks;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.ExplicitDimension;
@@ -38,12 +40,19 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     transient DimensionValueAccessor accessor;
     
     /**
-     * XDT Aspects are only added as they are required.
-     * @throws XBRLException
+     * The XBRL data store.
      */
-    public DimensionalAspectModel() throws XBRLException {
+    private Store store;
+    
+    /**
+     * XDT Aspects are only added as they are required.
+     * @throws XBRLException if the store is null.
+     */
+    public DimensionalAspectModel(Store store) throws XBRLException {
         super();
         initialize();
+        if (store == null) throw new XBRLException("The store is null.");
+        this.store = store;
         this.setAspect(new LocationAspect(this));
         this.setAspect(new ConceptAspect(this));
         this.setAspect(new EntityIdentifierAspect(this));
@@ -51,7 +60,20 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         this.setAspect(new PeriodAspect(this));
         this.setAspect(new ScenarioRemainderAspect(this));
         this.setAspect(new UnitAspect(this));
-        //XDT Aspects are only added as they are required.
+        
+        // Set up default explicit dimension aspects.
+        Networks networks = store.getNetworks(XDTConstants.defaultDimensionArcrole());
+        for (Network network: networks) {
+            List<Relationship> relationships = network.getAllRelationships();
+            for (Relationship relationship: relationships) {
+                ExplicitDimension dimension = (ExplicitDimension) relationship.getSource();
+                if (! hasAspect(dimension.getTargetNamespace() + "#" + dimension.getName())) {
+                    this.setAspect(new ExplicitDimensionAspect(this,dimension));
+                }
+            }
+        }
+        
+        //XDT Aspects without defaults are only added as they are required.
         
     }
 
@@ -68,12 +90,12 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     public void addFact(Fact fact) throws XBRLException {
         
         // Create any new XDT aspects
-        if (fact.isa(ItemImpl.class)) {
+        if (! fact.isTuple()) {
             Item item = (Item) fact;
             Context context =  item.getContext();
             Entity entity = context.getEntity();
             Segment segment = entity.getSegment();
-            if (segment != null) addNewAspects(segment); 
+            if (segment != null) addNewAspects(segment);
             Scenario scenario = context.getScenario();
             if (scenario != null) addNewAspects(scenario);
         }
@@ -81,20 +103,28 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
 
     }
     
+    
+    /**
+     * This method needs to be improved to eliminate the potential for dimension aspect type values
+     * to differ between how they are constructed in this method and how they are constructed
+     * by dimensional aspects themselves.
+     * @param occ The segment or scenario fragment to examine for new dimensional aspects.
+     * @throws XBRLException
+     */
     private void addNewAspects(org.xbrlapi.OpenContextComponent occ) throws XBRLException {
 
         Store store = occ.getStore();
-        
+
         List<Element> children = occ.getChildElements();
-        
+
         for (Element child: children) {
             if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
                 if (child.hasAttribute("dimension")) {
                     String qname = child.getAttribute("dimension");
-                    URI ns = occ.getNamespaceFromQName(qname,child);
-                    String localname = occ.getLocalnameFromQName(qname);
-                    if (! this.hasAspect(ns + localname)) {
-                        Dimension dimension = (Dimension) store.getConcept(ns,localname); // Optimised
+                    URI dimensionNamespace = occ.getNamespaceFromQName(qname,child);
+                    String dimensionLocalname = occ.getLocalnameFromQName(qname);
+                    if (! this.hasAspect(dimensionNamespace + "#" + dimensionLocalname)) {
+                        Dimension dimension = (Dimension) store.getConcept(dimensionNamespace,dimensionLocalname); 
                         if (dimension.isExplicitDimension())
                             this.setAspect(new ExplicitDimensionAspect(this ,(ExplicitDimension) dimension));
                         else 
@@ -159,5 +189,37 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         return result;
     }
         
+ 
+    /**
+     * @see BaseAspectModel#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((store == null) ? 0 : store.hashCode());
+        return result;
+    }
     
+    /**
+     * @see BaseAspectModel#equals(Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        boolean superResult = super.equals(obj);
+        if (superResult == false) return false;
+        
+        if (getClass() != obj.getClass())
+            return false;
+        DimensionalAspectModel other = (DimensionalAspectModel) obj;
+        
+        if (store == null) {
+            if (other.store != null) {
+                return false;
+            }
+        } else if (!store.equals(other.store)) {
+            return false;
+        }
+        return true;
+    }    
 }

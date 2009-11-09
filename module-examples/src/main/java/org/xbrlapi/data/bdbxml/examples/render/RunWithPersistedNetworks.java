@@ -35,9 +35,9 @@ import org.xbrlapi.LabelResource;
 import org.xbrlapi.Relationship;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Stub;
-import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
+import org.xbrlapi.aspects.PeriodAspect;
 import org.xbrlapi.aspects.QuarterlyPeriodAspect;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
@@ -297,9 +297,9 @@ public class RunWithPersistedNetworks {
                 logger.info("Setting up: " + title);
 
                 // Configure the aspect model (useful for sorting facts by their aspects)
-                aspectModel = new DimensionalAspectModel();
+                aspectModel = new DimensionalAspectModel(store);
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
-                aspectModel.arrangeAspect(Aspect.PERIOD,"column");
+                aspectModel.arrangeAspect(PeriodAspect.TYPE,"column");
                 
                 Set<Concept> roots = store.<Concept>getNetworkRoots(linkRole,arcrole);
                 logger.info(roots.size() + " root concepts in " + linkRole);

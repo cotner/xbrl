@@ -2,8 +2,11 @@ package org.xbrlapi.xdt.aspects;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.LabelResource;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.BaseAspect;
@@ -181,6 +184,30 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
         return true;
     }
 
+    /**
+     * Where possible the 
+     * dimension label is generated from the XBRL labelling
+     * of the Dimension concept.
+     * @see org.xbrlapi.aspects.Aspect#getLabel()
+     * @see org.xbrlapi.aspects.BaseAspect#getLabel()
+     */
+    @Override
+    public String getLabel() throws XBRLException {
+
+        List<String> languages = new Vector<String>();
+        languages.add(getLanguageCode());
+        languages.add(null);
+        List<URI> roles = new Vector<URI>();
+        roles.add(getLabelRole());
+        roles.add(null);
+        Dimension dimension = this.getDimension();
+        List<LabelResource> labels = dimension.getLabels(languages,roles);
+        if (! labels.isEmpty()) {
+            return labels.get(0).getStringValue();
+        }
+
+        return super.getLabel();
+    }
    
 }
 

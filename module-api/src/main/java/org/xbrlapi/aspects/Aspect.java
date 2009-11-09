@@ -15,14 +15,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public interface Aspect extends Serializable {
 
-
-    static public final String PERIOD = "period";
-    static public final String ENTITY_IDENTIFIER = "entity";
-    static public final String SEGMENT = "segment";
-    static public final String SCENARIO = "scenario";
-    static public final String UNIT = "unit";
-    static public final String LOCATION = "location";
-    
+    /**
+     * @return the label identifying the aspect.
+     * @throws XBRLException
+     */
+    public String getLabel() throws XBRLException;
     
     /**
      * @return the unique aspect identifier.
@@ -31,7 +28,7 @@ public interface Aspect extends Serializable {
     public String getType() throws XBRLException;
 
     /**
-     * @return true if the aspect has no aspect values
+     * @return true if the aspect has no aspect values (not even missing ones)
      * and false otherwise.
      */
     public boolean isEmpty();
@@ -217,10 +214,16 @@ public interface Aspect extends Serializable {
     public Set<Fact> getFacts(AspectValue value) throws XBRLException;
     
     /**
-     * @return the set of facts matching the selection criterion
-     * set for this aspect or all facts if the selection criterion
-     * is cleared (null).
+     * @return the set of all facts that have non-missing values for this aspect.
      * @throws XBRLException
+     */
+    public Set<Fact> getAllFacts() throws XBRLException;
+    
+    /**
+     * @return the set of facts matching the selection criterion
+     * set for this aspect
+     * @throws XBRLException if the selection criterion
+     * is not set for the aspect.
      */
     public Set<Fact> getMatchingFacts() throws XBRLException;
     

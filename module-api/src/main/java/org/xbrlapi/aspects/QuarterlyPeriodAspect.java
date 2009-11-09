@@ -108,7 +108,7 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
      * @see Aspect#getType()
      */
     public String getType() {
-        return Aspect.PERIOD;
+        return PeriodAspect.TYPE;
     }
     
     

@@ -55,7 +55,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
             String id = getMapId(value);
             if (id == null) {
                 Concept concept = value.<Concept>getFragment();
-                id = concept.getTargetNamespace() + ":" + concept.getName();
+                id = concept.getTargetNamespace() + "#" + concept.getName();
                 setMapId(value,id);
             }
             return id;

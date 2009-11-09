@@ -35,6 +35,13 @@ abstract public class BaseAspect implements Aspect {
     private AspectModel model;
 
     /**
+     * @see Aspect#getLabel()
+     */
+    public String getLabel() throws XBRLException {
+        return this.getType();
+    }
+    
+    /**
      * @param aspectModel The aspect model with this aspect.
      * @throws XBRLException.
      */
@@ -256,6 +263,17 @@ abstract public class BaseAspect implements Aspect {
         if (! facts.containsKey(key)) return new HashSet<Fact>();
         return facts.get(key);
     }
+    
+    /**
+     * @see Aspect#getAllFacts()
+     */
+    public Set<Fact> getAllFacts() throws XBRLException {
+        Set<Fact> result = new HashSet<Fact>();
+        for (AspectValue value: this.getValues()) {
+            result.addAll(this.getFacts(value));
+        }
+        return result;
+    }
 
     /**
      * @see Aspect#addFact(Fact)
@@ -310,13 +328,8 @@ abstract public class BaseAspect implements Aspect {
      * @see org.xbrlapi.aspects.Aspect#getMatchingFacts()
      */
     public Set<Fact> getMatchingFacts() throws XBRLException {
-        if (getSelectionCriterion() == null) {
-            Set<Fact> result = new HashSet<Fact>();
-            for (AspectValue value: values.values()) {
-                result.addAll(facts.get(value));
-            }
-            return result;
-        }
+        if (! this.hasSelectionCriterion()) throw new XBRLException("Aspect " + this.getType() + " has no selection criterion specified.");
+        logger.error(this.getType() + " matched to " + criterion.getLabel());
         return this.facts.get(criterion.getIdentifier());
     }
 

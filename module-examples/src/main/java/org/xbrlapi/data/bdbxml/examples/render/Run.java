@@ -30,10 +30,10 @@ import org.xbrlapi.LabelResource;
 import org.xbrlapi.Relationship;
 import org.xbrlapi.RoleType;
 import org.xbrlapi.Stub;
-import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
 import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.NonDimensionalAspectModel;
+import org.xbrlapi.aspects.PeriodAspect;
 import org.xbrlapi.aspects.QuarterlyPeriodAspect;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.Store;
@@ -298,7 +298,7 @@ public class Run {
                 // Configure the aspect model (useful for sorting facts by their aspects)
                 aspectModel = new NonDimensionalAspectModel();
                 aspectModel.setAspect(new QuarterlyPeriodAspect(aspectModel));
-                aspectModel.arrangeAspect(Aspect.PERIOD,"column");
+                aspectModel.arrangeAspect(PeriodAspect.TYPE,"column");
 
                 network = new NetworkImpl(store,linkrole,Constants.PresentationArcrole);
                 networks.addNetwork(network);
