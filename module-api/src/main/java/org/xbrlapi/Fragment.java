@@ -281,11 +281,9 @@ public interface Fragment extends XML {
     
     /**
      * @param languages the list of language codes in order of preference from most preferred to least
-     * preferred, ending with a null value if any language is ultimately acceptable.  Set
-     * this list to null if there are no language preferences.
+     * preferred, eventually allowing any language if no explicit preference match.
      * @param resourceRoles the list of language resource roles in order of preference from most preferred 
-     * to least preferred, ending with a null value if any language resource role is ultimately acceptable.  
-     * Set this list to null if there are no resource role preferences.
+     * to least preferred, eventually allowing any resource role.
      * @return the list of labels that best match the specified search criteria.
      * Note that a language preference takes precedence over a resource role preference.
      * @throws XBRLException

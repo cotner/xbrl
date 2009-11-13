@@ -192,30 +192,19 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see Fragment#getLabels(List, List)
      */
     public List<LabelResource> getLabels(List<String> languages, List<URI> resourceRoles) throws XBRLException {
-        if (languages == null && resourceRoles == null) return this.getLabels();
+        if (languages == null || resourceRoles == null) throw new XBRLException("The language list and resource role list must not be null");
         
-        List<LabelResource> result = new Vector<LabelResource>();
+        languages.add(null);
+        resourceRoles.add(null);
         
-        if (resourceRoles == null) {
-            for (String language: languages) {
-                result = this.getLabelsWithLanguage(language);
-                if (! result.isEmpty()) return result;
-            }
-        } else if (languages == null) {
+        for (String language: languages) {
             for (URI role: resourceRoles) {
-                result = this.getLabelsWithResourceRole(role);
+                List<LabelResource> result = this.getLabelsWithLanguageAndResourceRole(language,role);
                 if (! result.isEmpty()) return result;
-            }
-        } else {
-            for (String language: languages) {
-                for (URI role: resourceRoles) {
-                    result = this.getLabelsWithLanguageAndResourceRole(language,role);
-                    if (! result.isEmpty()) return result;
-                }   
-            }
+            }   
         }
         
-        return result;
+        return new Vector<LabelResource>();
         
     }
     
