@@ -1,15 +1,12 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.LabelResource;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -39,13 +36,13 @@ public class ConceptAspect extends BaseAspect implements Aspect {
     }
     
     protected void initialize() {
-        this.setTransformer(new Transformer());
+        this.setTransformer(new Transformer(this));
     }
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
-        public Transformer() {
-            super();
+        public Transformer(Aspect aspect) {
+            super(aspect);
         }
 
         /**
@@ -72,13 +69,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
             String label = id;
             Concept concept = value.<Concept>getFragment();
             if (concept == null) return id;
-            List<String> languages = new Vector<String>();
-            languages.add(getLanguageCode());
-            languages.add(null);
-            List<URI> roles = new Vector<URI>();
-            roles.add(getLabelRole());
-            roles.add(null);
-            List<LabelResource> labels = concept.getLabels(languages,roles);
+            List<LabelResource> labels = concept.getLabels(getLanguageCodes(),getLabelRoles(), getLinkRoles());
             if (! labels.isEmpty()) {
                 label = labels.get(0).getStringValue();
             } else {
@@ -86,45 +77,6 @@ public class ConceptAspect extends BaseAspect implements Aspect {
             }
             setMapLabel(id,label);
             return label;
-        }
-        
-        /**
-         * The label role is used in constructing the label for the
-         * concept aspect values.
-         */
-        private URI role = Constants.StandardLabelRole;
-        
-        /**
-         * @return the label resource role.
-         */
-        public URI getLabelRole() {
-            return role;
-        }
-        /**
-         * @param role The label resource role to use in
-         * selecting labels for the concept.
-         */
-        public void setLabelRole(URI role) {
-            this.role = role;
-        }
-
-        /**
-         * The language code is used in constructing the label for the
-         * concept aspect values.
-         */
-        private String language = "en";
-        /**
-         * @return the language code.
-         */
-        public String getLanguageCode() {
-            return language;
-        }
-        /**
-         * @param language The ISO language code
-         */
-        public void setLanguageCode(String language) throws XBRLException {
-            if (language == null) throw new XBRLException("The language must not be null.");
-            this.language = language;
         }
 
     }

@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -46,6 +47,12 @@ public interface Aspect extends Serializable {
      * and false otherwise.
      */
     public boolean isSingular();
+    
+    /**
+     * @return true if the aspect has a non-missing aspect value
+     * for each fact in the aspect model and false otherwise.
+     */
+    public boolean isComplete();    
     
     /**
      * @return true if the aspect has just one aspect value
@@ -112,7 +119,8 @@ public interface Aspect extends Serializable {
    
     
     /**
-     * @return the number of values for this aspect.
+     * @return the number of different values for this aspect (including the missing value if the
+     * aspect has missing values for some of the facts in the aspect model).
      */
     public int size();
     
@@ -123,15 +131,23 @@ public interface Aspect extends Serializable {
     
     /**
      * @return the number of combinations of descendant aspect
-     * values (for those descendant aspects in the same dimension
-     * of the aspect model).
+     * values (for those descendant aspects in the same axis
+     * of the aspect model).  Returns 1 unless there is a descendant aspect
+     * with more than one value.  
+     * 
+     * Note that the missing value counts as a descendant aspect
+     * value if the descendant aspect is not complete.
+     * 
+     * Note that aspects are ordered for an axis
+     * with the first aspect in the ordering having the rest as descendants.
+     * 
      * @throws XBRLException
      */
     public int getDescendantCount() throws XBRLException;
     
     /**
      * @return the number of combinations of ancestor aspect
-     * values (for those ancestor aspects in the same dimension
+     * values (for those ancestor aspects in the same axis
      * of the aspect model).
      */
     public int getAncestorCount() throws XBRLException;    
@@ -168,6 +184,14 @@ public interface Aspect extends Serializable {
      * @throws XBRLException.
      */
     public void addFact(Fact fact) throws XBRLException;
+    
+    /**
+     * Convenience method to call addFact for all facts in the collection.
+     * @param <F> The kind of fact.
+     * @param facts The collection of facts.
+     * @throws XBRLException
+     */
+    public <F extends Fact> void addFacts(Collection<F> facts) throws XBRLException;    
     
     /**
      * @param fact The fact to get the aspect value for

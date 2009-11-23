@@ -1,5 +1,8 @@
 package org.xbrlapi.aspects;
 
+import java.net.URI;
+import java.util.List;
+
 import org.xbrlapi.utilities.XBRLException;
 
 
@@ -7,6 +10,11 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public interface AspectValueTransformer {    
+    
+    /**
+     * @return the aspect that uses this transformer
+     */
+    public Aspect getAspect();    
     
     /**
      * @param value The aspect value to process.
@@ -32,5 +40,55 @@ public interface AspectValueTransformer {
      * map from identifiers to labels intact though.
      */
     public void clearIdentifiers();
+    /**
+     * @return the list of extended link roles, from most preferred to
+     * least preferred.
+     */
+    public List<URI> getLinkRoles();
+    
+    /**
+     * @param roles The extended link roles to use in
+     * selecting labels.
+     */
+    public void setLinkRoles(List<URI> roles);
+    
+    /**
+     * @return the list of label resource roles, from most preferred to
+     * least preferred.
+     */
+    public List<URI> getLabelRoles();
+    
+    /**
+     * @param roles The label resource roles to use in
+     * selecting labels from most preferred to least preferred.
+     */
+    public void setLabelRoles(List<URI> roles);
+
+    /**
+     * @return the list of language codes from 
+     * most preferred to least preferred.
+     */
+    public List<String> getLanguageCodes();
+    
+    /**
+     * @param languages The list of ISO language codes to 
+     * use in retrieving labels for aspects and their values.
+     */
+    public void setLanguageCodes(List<String> languages);
+    
+    /**
+     * @param language The language code to make the most preferred language code.
+     */
+    public void addPreferredLanguageCode(String language);
+    
+    /**
+     * @param labelRole The label role to make the most preferred label role.
+     */
+    public void addPreferredLabelRole(URI labelRole);    
+    
+    /**
+     * @param linkRole The link role to make the most preferred link role.
+     */
+    public void addPreferredLinkRole(URI linkRole);    
     
 }

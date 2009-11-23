@@ -14,8 +14,10 @@ import org.xbrlapi.Context;
 import org.xbrlapi.EntityResource;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fact;
+import org.xbrlapi.FootnoteResource;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Item;
+import org.xbrlapi.Resource;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.Unit;
@@ -95,6 +97,22 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     public List<ExtendedLink> getFootnoteLinks() throws XBRLException {
     	return this.<ExtendedLink>getChildren("org.xbrlapi.impl.ExtendedLinkImpl");
     }
+    
+    /**
+     * @see org.xbrlapi.Instance#getFootnotes()
+     */
+    public List<FootnoteResource> getFootnotes() throws XBRLException {
+        List<FootnoteResource> result = new Vector<FootnoteResource>();
+        for (ExtendedLink footnoteLink: this.getFootnoteLinks()) {
+            List<Resource> resources = footnoteLink.getResources();
+            try {
+                for (Resource resource: resources) result.add((FootnoteResource) resource);
+            } catch (ClassCastException e) {
+                ; // Ignore resources that are not footnotes.
+            }
+        }
+        return result;
+    }    
 
     /**
      * @return the XQuery used to get all the child facts of the XBRL instance.

@@ -1,6 +1,9 @@
 package org.xbrlapi;
 
 import java.util.List;
+import java.util.Set;
+
+import javax.xml.namespace.QName;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -10,13 +13,7 @@ import org.xbrlapi.utilities.XBRLException;
 
 public interface Linkbase extends Fragment {
 
-    /**
-     * Adds an arcroleRef to a linkbase.
-     *
-     * @param arcroleRef The arcroleRef to be added to the linkbase.
-     * @throws XBRLException
-     */
-    public void addArcroleRef(SimpleLink arcroleRef) throws XBRLException;
+
     
     /**
      * Remove a arcroleRef from a linkbase.
@@ -43,13 +40,7 @@ public interface Linkbase extends Fragment {
      */
     public List<SimpleLink> getArcroleRefs() throws XBRLException;
 
-    /**
-     * Adds an roleRef to a linkbase.
-     *
-     * @param roleRef The roleRef to be added to the linkbase.
-     * @throws XBRLException
-     */
-    public void addRoleRef(SimpleLink roleRef) throws XBRLException;
+
     
     /**
      * Remove a roleRef from a linkbase.
@@ -76,13 +67,7 @@ public interface Linkbase extends Fragment {
      */
     public List<SimpleLink> getRoleRefs() throws XBRLException;
 
-    /**
-     * Adds an extended link to a linkbase.
-     *
-     * @param link The extended link to add
-     * @throws XBRLException
-     */
-    public void addExtendedLink(SimpleLink link) throws XBRLException;
+
     
     /**
      * Remove a roleRef from a linkbase.
@@ -96,9 +81,17 @@ public interface Linkbase extends Fragment {
     /**
      * Gets the list of extended links in a linkbase
      * @return the list of extended links in the linkbase or null if there are none.
+     * The extended links are ordered by their namespace and then local name.
      * @throws XBRLException
      */
     public List<ExtendedLink> getExtendedLinks() throws XBRLException;
+    
+    /**
+     * @qname the qname of the element that is one of the required extended links.
+     * @return the list of extended links in the linkbase that match the specified criteria.
+     * @throws XBRLException
+     */
+    public List<ExtendedLink> getExtendedLinks(QName qname) throws XBRLException;    
 
     /**
      * Get the list of documentation fragments that are children of the linkbase.
@@ -114,11 +107,13 @@ public interface Linkbase extends Fragment {
      */
     public void removeDocumentation(Fragment documentation) throws XBRLException;
 
+    
+    
     /**
-     * Add a link documentation fragment to the end of the linkbase.
-     * @param documentation documentation to be added to the end of linkbase.
+     * @return the set of different extended link QNames for the extended 
+     * links contained in this linkbase.
      * @throws XBRLException
      */
-    public void addDocumentation(Fragment documentation) throws XBRLException;    
+    Set<QName> getExtendedLinkQNames() throws XBRLException;
     
 }

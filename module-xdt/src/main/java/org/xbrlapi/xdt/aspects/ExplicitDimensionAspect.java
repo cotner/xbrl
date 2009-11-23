@@ -1,9 +1,7 @@
 package org.xbrlapi.xdt.aspects;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Concept;
@@ -37,11 +35,15 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
     }
     
     protected void initialize() {
-        setTransformer(new Transformer());        
+        setTransformer(new Transformer(this));        
     }
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
+        public Transformer(Aspect aspect) {
+            super(aspect);
+        }
+        
         /**
          * For explicit XDT dimensions, the identifier is based
          * on the QName of the dimension member representing the
@@ -75,16 +77,9 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
                 return getMapLabel(id);
             }
 
-            List<String> languages = new Vector<String>();
-            languages.add(getLanguageCode());
-            languages.add(null);
-            List<URI> roles = new Vector<URI>();
-            roles.add(getLabelRole());
-            roles.add(null);
-            
             String memberLabel = member.getTargetNamespace() + "#" + member.getName();
             
-            List<LabelResource> labels = member.getLabels(languages,roles);
+            List<LabelResource> labels = member.getLabels(getLanguageCodes(),getLabelRoles(),getLinkRoles());
             if (! labels.isEmpty()) {
                 memberLabel = labels.get(0).getStringValue();
             }

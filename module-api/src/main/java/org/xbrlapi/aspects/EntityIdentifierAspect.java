@@ -1,10 +1,10 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Context;
@@ -12,7 +12,6 @@ import org.xbrlapi.Entity;
 import org.xbrlapi.EntityResource;
 import org.xbrlapi.Fact;
 import org.xbrlapi.LabelResource;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -43,7 +42,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
     }
     
     protected void initialize() {
-        this.setTransformer(new Transformer());
+        this.setTransformer(new Transformer(this));
     }
 
 
@@ -52,11 +51,9 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
-        public Transformer() {
-            super();
+        public Transformer(Aspect aspect) {
+            super(aspect);
         }
-
-
         
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
@@ -70,7 +67,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
             String id = "";
             Entity entity = value.<Entity>getFragment();
             if (entity != null) {
-                id = entity.getIdentifierScheme() + ":" + entity.getIdentifierValue().trim().replaceFirst("^0+","");
+                id = entity.getIdentifierScheme() + "#" + entity.getIdentifierValue().trim().replaceFirst("^0+","");
             }
             
             setMapId(value,id);
@@ -91,116 +88,37 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
 
             // The default label to use if no other is available.
             String label = id;
+            List<LabelResource> labels = new Vector<LabelResource>();
             
-            // Get all the relevant entity resources.
-
+            // Get all the direct entity resources.
             List<EntityResource> entityResources = entity.getEntityResources();
-            Set<EntityResource> equivalentEntityResources = new HashSet<EntityResource>();
-            equivalentEntityResources.addAll(entityResources);
             for (EntityResource entityResource: entityResources) {
-                equivalentEntityResources.addAll(entityResource.getEquivalents());
-            }
-            
-            // Try getting labels with the given language and resource role.
-            Set<LabelResource> labels = new HashSet<LabelResource>();
-            for (EntityResource entityResource: equivalentEntityResources) {
-                labels.addAll(entityResource.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole()));
-            }
-            for (LabelResource l: labels) {
-                l.serialize();
-            }
-            
-            if (! labels.isEmpty()) {
-                label = labels.iterator().next().getStringValue();
-            } else {
-                for (EntityResource entityResource: equivalentEntityResources) {
-                    labels.addAll(entityResource.getLabelsWithLanguageAndResourceRole("en",getLabelRole()));
+                labels = entityResource.getLabels(getLanguageCodes(),getLabelRoles(), getLinkRoles());
+                if (! labels.isEmpty()) {
+                    label = labels.get(0).getStringValue();
+                    break;
                 }
             }
-            for (LabelResource l: labels) {
-                l.serialize();
+            
+            // Try for a label on an equivalent entity resource.
+            if (labels.isEmpty()) {
+                Set<EntityResource> equivalentEntityResources = new HashSet<EntityResource>();
+                for (EntityResource entityResource: entityResources) {
+                    equivalentEntityResources.addAll(entityResource.getEquivalents());
+                }
+                equivalentEntityResources.removeAll(entityResources);
+                for (EntityResource entityResource: equivalentEntityResources) {
+                    labels = entityResource.getLabels(getLanguageCodes(),getLabelRoles(), getLinkRoles());
+                    if (! labels.isEmpty()) {
+                        label = labels.get(0).getStringValue();
+                        break;
+                    }
+                }
             }
 
-            if (! labels.isEmpty()) {
-                label = labels.iterator().next().getStringValue();
-            } else {
-                for (EntityResource entityResource: equivalentEntityResources) {
-                    labels.addAll(entityResource.getLabelsWithLanguageAndResourceRole("en-US",getLabelRole()));
-                }
-            }
-            for (LabelResource l: labels) {
-                l.serialize();
-            }
-
-            if (! labels.isEmpty()) {
-                label = labels.iterator().next().getStringValue();
-            } else {
-                for (EntityResource entityResource: equivalentEntityResources) {
-                    labels.addAll(entityResource.getLabelsWithResourceRole(getLabelRole()));
-                }
-            }
-            for (LabelResource l: labels) {
-                l.serialize();
-            }
-
-            if (! labels.isEmpty()) {
-                label = labels.iterator().next().getStringValue();
-            } else {
-                for (EntityResource entityResource: equivalentEntityResources) {
-                    labels.addAll(entityResource.getLabels());
-                }
-            }
-            for (LabelResource l: labels) {
-                l.serialize();
-            }
-            
-            if (! labels.isEmpty()) {
-                label = labels.iterator().next().getStringValue();
-            }
-            
             setMapLabel(id,label);
             return label;
         }
-        
-        /**
-         * The label role is used in constructing the label for the
-         * concept aspect values.
-         */
-        private URI role = Constants.StandardLabelRole;
-        /**
-         * @return the label resource role.
-         */
-        public URI getLabelRole() {
-            return role;
-        }
-        /**
-         * @param role The label resource role to use in
-         * selecting labels for the concept.
-         */
-        public void setLabelRole(URI role) {
-            this.role = role;
-        }
-
-        /**
-         * The language code is used in constructing the label for the
-         * concept aspect values.
-         */
-        private String language = "en";
-        
-        /**
-         * @return the language code.
-         */
-        public String getLanguageCode() {
-            return language;
-        }
-        /**
-         * @param language The ISO language code
-         */
-        public void setLanguageCode(String language) throws XBRLException {
-            if (language == null) throw new XBRLException("The language must not be null.");
-            this.language = language;
-        }    
-    
     
     }
     

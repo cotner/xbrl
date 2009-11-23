@@ -1,8 +1,14 @@
 package org.xbrlapi.impl;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+
+import javax.xml.namespace.QName;
+
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
-import java.util.List;
 import org.xbrlapi.Linkbase;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.XlinkDocumentation;
@@ -15,15 +21,7 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
 
-    /**
-     * Adds an arcroleRef to a linkbase.
-     * @param arcroleRef The arcroleRef to be added to the linkbase.
-     * @throws XBRLException
-     * @see org.xbrlapi.Linkbase#addArcroleRef(SimpleLink)
-     */
-    public void addArcroleRef(SimpleLink arcroleRef) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
     /**
      * Remove a arcroleRef from a linkbase.
@@ -67,15 +65,7 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     	return links;
     }
 
-    /**
-     * Adds an roleRef to a linkbase.
-     * @param roleRef The roleRef to be added to the linkbase.
-     * @throws XBRLException
-     * @see org.xbrlapi.Linkbase#addRoleRef(SimpleLink)
-     */
-    public void addRoleRef(SimpleLink roleRef) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
+
     
     /**
      * Remove a roleRef from a linkbase.
@@ -119,15 +109,7 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     	return links;
     }
 
-    /**
-     * Adds an extended link to a linkbase.
-     * @param link The extended link to add
-     * @throws XBRLException
-     * @see org.xbrlapi.Linkbase#addExtendedLink(SimpleLink)
-     */
-    public void addExtendedLink(SimpleLink link) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");  	
-    }
+
     
     /**
      * Remove a roleRef from a linkbase.
@@ -141,17 +123,30 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     }
 
     /**
-     * Gets the list of extended links in a linkbase
-     * @return the list of extended links in the linkbase or null if there are none.
-     * @throws XBRLException
      * @see org.xbrlapi.Linkbase#getExtendedLinks()
      */
     public List<ExtendedLink> getExtendedLinks() throws XBRLException {
-    	String xpath = "#roots#[@parentIndex='" + getIndex() + "' and " + Constants.XBRLAPIPrefix + ":" + "data/*/@xlink:type='extended']";
+    	String xpath = "for $root in #roots#[@parentIndex='" + getIndex() + "' and xbrlapi:data/*/@xlink:type='extended'] let $data = $root/xbrlapi:data/* order by namespace-uri($data), local-name($data), $data/@xlink:role return $root";
     	List<ExtendedLink> fragments = getStore().<ExtendedLink>queryForXMLResources(xpath);
     	if (fragments.size() == 0) return null;
     	return fragments;
     }
+    
+    /**
+     * @see org.xbrlapi.Linkbase#getExtendedLinks(QName)
+     */
+    public List<ExtendedLink> getExtendedLinks(QName qname) throws XBRLException {
+        List<ExtendedLink> fragments = getExtendedLinks();
+        List<ExtendedLink> result = new Vector<ExtendedLink>();
+        for (ExtendedLink link: fragments) {
+            if (link.getNamespace().toString().equals(qname.getNamespaceURI()))
+                if (link.getLocalname().equals(qname.getLocalPart())) {
+                    result.add(link);
+                }
+        }
+            
+        return result;
+    }    
 
     /**
      * Get the list of documentation fragments that are children of the linkbase.
@@ -173,14 +168,18 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     	throw new XBRLException("Data update methods are not yet implemented.");
     }
     
+
+
     /**
-     * Add a link documentation fragment to the end of the linkbase.
-     * @param documentation documentation to be added to the end of linkbase.
-     * @throws XBRLException
-     * @see org.xbrlapi.Linkbase#addDocumentation(Fragment)
+     * @see Linkbase#getExtendedLinkQNames()
      */
-    public void addDocumentation(Fragment documentation) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }    
+    public Set<QName> getExtendedLinkQNames() throws XBRLException {
+        Set<QName> result = new HashSet<QName>();
+        for (ExtendedLink link: this.getExtendedLinks()) {
+            QName qname = new QName(link.getNamespace().toString(), link.getLocalname());
+            result.add(qname);
+        }
+        return result;
+    }
     
 }

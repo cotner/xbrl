@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -35,6 +36,12 @@ abstract public class BaseAspect implements Aspect {
     private AspectModel model;
 
     /**
+     * Indicates whether the aspect is complete or not.  This is set to false
+     * as soon as a missing value is added for the aspect.
+     */
+    private boolean complete = true;
+    
+    /**
      * @see Aspect#getLabel()
      */
     public String getLabel() throws XBRLException {
@@ -53,6 +60,7 @@ abstract public class BaseAspect implements Aspect {
         fragmentMap = new HashMap<String,Fragment>();
         values = new TreeMap<String,AspectValue>();        
     }
+
     
     /**
      * @see org.xbrlapi.aspects.Aspect#getAspectModel()
@@ -101,11 +109,7 @@ abstract public class BaseAspect implements Aspect {
     public int getDescendantCount() throws XBRLException {
         if (this.isOrphan()) return 1;
         List<Aspect> aspects = null;
-        try {
-            aspects = this.getAspectModel().getAxisAspects(this.getAxis());
-        } catch (XBRLException e) {
-            ;// Cannot be thrown
-        }
+        aspects = this.getAspectModel().getAxisAspects(this.getAxis());
         int count = 0;
         for (Aspect aspect: aspects) {
             if (aspect.getType().equals(this.getType())) count = 1;
@@ -205,6 +209,14 @@ abstract public class BaseAspect implements Aspect {
     }
     
     /**
+     * @see org.xbrlapi.aspects.Aspect#isComplete()
+     */
+    public boolean isComplete() {
+        return complete;
+    }
+
+    
+    /**
      * @see org.xbrlapi.aspects.Aspect#isMissing()
      */
     public boolean isMissing() throws XBRLException {
@@ -281,11 +293,12 @@ abstract public class BaseAspect implements Aspect {
     public void addFact(Fact fact) throws XBRLException {
         
         AspectValue value = getValue(fact);
-        if (value.isMissing()) return;
+        if (value.isMissing() && isComplete()) complete = false;
         
         this.addValue(value);
         AspectValueTransformer transformer = this.getTransformer();
         String key = transformer.getIdentifier(value);
+
         if (facts.containsKey(key)) {
             Set<Fact> set = facts.get(key);
             if (! set.contains(fact)) set.add(fact);
@@ -294,7 +307,17 @@ abstract public class BaseAspect implements Aspect {
             set.add(fact);
             facts.put(key,set);
         }
+
     }
+    
+    /**
+     * @see Aspect#addFacts(Collection<Fact>)
+     */
+    public <F extends Fact> void addFacts(Collection<F> facts) throws XBRLException {
+        for (F fact: facts) {
+            this.addFact(fact);
+        }
+    }    
     
 
     private Map<String,Fragment> fragmentMap;
@@ -329,7 +352,7 @@ abstract public class BaseAspect implements Aspect {
      */
     public Set<Fact> getMatchingFacts() throws XBRLException {
         if (! this.hasSelectionCriterion()) throw new XBRLException("Aspect " + this.getType() + " has no selection criterion specified.");
-        logger.error(this.getType() + " matched to " + criterion.getLabel());
+        logger.debug(this.getType() + " matched to " + criterion.getLabel());
         return this.facts.get(criterion.getIdentifier());
     }
 
@@ -384,6 +407,7 @@ abstract public class BaseAspect implements Aspect {
      */
     protected String getLabelFromElements(List<Element> children) {
         String label = "";
+        if (children.size() == 0) return "none";
         for (int i=0; i<children.size(); i++) {
             if (i>0) {
                 label += " ";

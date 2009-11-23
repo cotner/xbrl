@@ -101,7 +101,6 @@ public interface Arc extends ExtendedLinkContent {
      */
     public <E extends ArcEnd> List<E> getTargetFragments() throws XBRLException;
     
-
     /**
      * Gets a list of the attributes that define the semantics of an arc.
      * These are important as part of checking whether two arcs are 

@@ -37,7 +37,7 @@ public class SegmentAspect extends ContextAspect implements Aspect {
     }
     
     protected void initialize() {
-        this.setTransformer(new Transformer());
+        this.setTransformer(new Transformer(this));
     }
 
 
@@ -46,7 +46,10 @@ public class SegmentAspect extends ContextAspect implements Aspect {
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
-
+        public Transformer(Aspect aspect) {
+            super(aspect);
+        }
+        
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */

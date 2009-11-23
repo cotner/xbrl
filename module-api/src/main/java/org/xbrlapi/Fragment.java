@@ -282,13 +282,28 @@ public interface Fragment extends XML {
     /**
      * @param languages the list of language codes in order of preference from most preferred to least
      * preferred, eventually allowing any language if no explicit preference match.
-     * @param resourceRoles the list of language resource roles in order of preference from most preferred 
+     * @param labelRoles the list of label resource roles in order of preference from most preferred 
      * to least preferred, eventually allowing any resource role.
      * @return the list of labels that best match the specified search criteria.
-     * Note that a language preference takes precedence over a resource role preference.
+     * Note that a label role preference which 
+     * takes precedence over a language preference.
      * @throws XBRLException
      */
-    public List<LabelResource> getLabels(List<String> languages, List<URI> resourceRoles) throws XBRLException;
+    public List<LabelResource> getLabels(List<String> languages, List<URI> labelRoles) throws XBRLException;
+    
+    /**
+     * @param languages the list of language codes in order of preference from most preferred to least
+     * preferred, eventually allowing any language if no explicit preference match.
+     * @param labelRoles the list of label resource roles in order of preference from most preferred 
+     * to least preferred, eventually allowing any resource role.
+     * @param linkRoles the list of extended link roles in order of preference from most preferred 
+     * to least preferred, eventually allowing any link role.
+     * @return the list of labels that best match the specified search criteria.
+     * Note that a link role preference takes precedence over a label role preference which 
+     * takes precedence over a language preference.
+     * @throws XBRLException
+     */
+    public List<LabelResource> getLabels(List<String> languages, List<URI> labelRoles, List<URI> linkRoles) throws XBRLException;    
     
     
     /**

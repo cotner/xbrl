@@ -192,21 +192,49 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see Fragment#getLabels(List, List)
      */
     public List<LabelResource> getLabels(List<String> languages, List<URI> resourceRoles) throws XBRLException {
-        if (languages == null || resourceRoles == null) throw new XBRLException("The language list and resource role list must not be null");
-        
-        languages.add(null);
-        resourceRoles.add(null);
-        
-        for (String language: languages) {
-            for (URI role: resourceRoles) {
-                List<LabelResource> result = this.getLabelsWithLanguageAndResourceRole(language,role);
-                if (! result.isEmpty()) return result;
-            }   
+
+            if (languages == null || resourceRoles == null) {
+                throw new XBRLException("Null parameters are not allowed.");
+            }
+
+            List<LabelResource> result;
+            for (String language: languages) {
+                for (URI role: resourceRoles) {
+                    result = this.getLabelsWithLanguageAndResourceRole(language,role);
+                    if (! result.isEmpty()) return result;
+                }
+            }
+            result = this.getLabels();
+            if (! result.isEmpty()) return result;
+            return new Vector<LabelResource>();
+
+    }
+    
+    /**
+     * @see Fragment#getLabels(List, List, List)
+     */
+    public List<LabelResource> getLabels(List<String> languages, List<URI> labelRoles, List<URI> linkRoles) throws XBRLException {
+
+        if (languages == null || labelRoles == null || linkRoles == null) {
+            throw new XBRLException("Null parameters are not allowed.");
         }
+
+        List<LabelResource> result;
+        for (URI linkRole: linkRoles) {
+            for (URI labelRole: labelRoles) {
+                for (String language: languages) {
+                    result = this.getLabelsWithLanguageAndResourceRoleAndLinkRole(language,labelRole, linkRole);
+                    if (! result.isEmpty()) return result;
+                }
+            }
+        }
+
+        result = this.getLabels();
+        if (! result.isEmpty()) return result;
         
         return new Vector<LabelResource>();
-        
-    }
+
+    }    
     
     
     /**

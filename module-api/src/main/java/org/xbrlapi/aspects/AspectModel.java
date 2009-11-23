@@ -15,6 +15,11 @@ import org.xbrlapi.utilities.XBRLException;
 public interface AspectModel extends Serializable {
 
     /**
+     * @return the number of facts in the aspect model.
+     */
+    public int getFactCount();
+    
+    /**
      * @return The unique identifier of the aspect model.
      */
     public String getType();
@@ -63,17 +68,20 @@ public interface AspectModel extends Serializable {
      */
     public void setAspect(Aspect aspect) throws XBRLException;
     
+
+    
+    /**
+     * @param facts The collection of facts to add to the aspect model
+     * @throws XBRLException if the facts cannot be added to the aspect model.
+     */
+    public <F extends Fact> void addFacts(Collection<F> facts) throws XBRLException;
+    
     /**
      * @param fact The fact to add to the aspect model
      * @throws XBRLException if the fact cannot be added to the aspect model.
      */
     public void addFact(Fact fact) throws XBRLException;
     
-    /**
-     * @param facts The collection of facts to add to the aspect model
-     * @throws XBRLException if the facts cannot be added to the aspect model.
-     */
-    public <F extends Fact> void addFacts(Collection<F> facts) throws XBRLException;    
     
     /**
      * @param fact The fact to get the aspect values for.
@@ -149,9 +157,9 @@ public interface AspectModel extends Serializable {
     public void clearAllCriteria();
 
     /**
-     * @param axis The name of the axis
-     * @return a list of lists of aspect values where
-     * each list in the list is a combination of one 
+     * @param axis The name of the axis.
+     * @return a list of combinations of aspect values where
+     * each combination is a list of one 
      * aspect value for each aspect in the axis.
      * The aspect values in each combination 
      * are ordered in the same order as the aspects in the
@@ -161,17 +169,32 @@ public interface AspectModel extends Serializable {
     public List<List<AspectValue>> getAspectValueCombinationsForAxis(String axis) throws XBRLException;
     
     /**
-     * @param axis The name of the dimension
-     * @return a list of lists of aspect values where
-     * each list in the list is a combination of one 
+     * @param axis The name of the axis to get aspect value combinations for.
+     * @return a list of combinations of aspect values where
+     * each combination is a combination of one 
      * aspect value for each aspect in the axis.
      * The aspect values in each combination 
      * are ordered in the same order as the aspects in the
      * axis.  The lists in the list are ordered 
      * by the orderings of the values for each aspect.
-     * Any aspect that has just missing aspect values is omitted.
+     * The results are minimal in that any aspect that has just 
+     * missing aspect values is omitted.
+     * The list is empty if there are no aspects in the axis.
      */
-    public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String axis) throws XBRLException;    
+    public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String axis) throws XBRLException;
+    
+    /**
+     * @param combinations The aspect value combinations for a given axis of the aspect model.
+     * @param aspectType The aspect type to do the analysis for.
+     * @return a list of integers, each of which represents the number of equal values for the specified 
+     * aspect in a row, in the set of combinations.
+     * Thus, if there are 5 combinations and the first aspect has equal values for the first two and then different
+     * equal values for the last three, the list returned would be [2 3].
+     * This utility method makes it more straightforward to set up table headings when presenting analyses of 
+     * aspect models.
+     * @throws XBRLException
+     */
+    public List<Integer> analyseAspectCombinationMatches(List<List<AspectValue>> combinations,String aspectType) throws XBRLException;
     
     /**
      * @param type The type identifying the aspect to delete.
@@ -186,5 +209,6 @@ public interface AspectModel extends Serializable {
      * @throws XBRLException
      */
     public void clearFacts() throws XBRLException;
- 
+
+
 }

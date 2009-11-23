@@ -1,8 +1,12 @@
 package org.xbrlapi.fragment.tests;
 
+import java.util.List;
+import java.util.Set;
+
+import javax.xml.namespace.QName;
+
 import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fragment;
-import java.util.List;
 import org.xbrlapi.Linkbase;
 import org.xbrlapi.SimpleLink;
 
@@ -78,9 +82,6 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 		}
 	}
 	
-	/**
-	 * Test getting extended links from the linkbase.
-	 */
 	public void testGetExtendedLinks() {	
 
 		try {
@@ -99,7 +100,26 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 		    e.printStackTrace();
 			fail(e.getMessage());
 		}
-	}	
+	}
+	
+    public void testGetExtendedLinkQNames() {    
+
+        QName qname2 = new QName("http:/asdf/", "name");
+        QName qname1 = new QName("http:/asdf/", "name");
+        assertEquals(qname1,qname2);
+        
+        try {
+            List<Linkbase> linkbases = store.<Linkbase>getXMLResources("Linkbase");
+            for (Linkbase linkbase: linkbases) {
+                Set<QName> qnames = linkbase.getExtendedLinkQNames();
+                assertTrue(qnames.size() > 0);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }	
 	
 	/**
 	 * Test getting documentation fragments from the linkbase.

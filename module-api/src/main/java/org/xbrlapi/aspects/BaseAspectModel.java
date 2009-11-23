@@ -37,8 +37,13 @@ abstract public class BaseAspectModel implements AspectModel {
         aspects = new HashMap<String,Aspect>();
         axes = new HashMap<String,List<Aspect>>();
         facts = new HashSet<Fact>();
+        
     }
 
+    public int getFactCount() {
+        return facts.size();
+    }
+    
     /**
      * @see AspectModel#getAspects()
      */
@@ -156,7 +161,8 @@ abstract public class BaseAspectModel implements AspectModel {
     }
 
     /**
-     * @see AspectModel#addFact(Fact)
+     * @param fact The fact to add to the aspect model
+     * @throws XBRLException if the fact cannot be added to the aspect model.
      */
     public void addFact(Fact fact) throws XBRLException {
         facts.add(fact);
@@ -189,8 +195,6 @@ abstract public class BaseAspectModel implements AspectModel {
 
     public Set<Fact> getFacts(Collection<AspectValue> values) throws XBRLException {
 
-        System.out.println("# of criteria = " + values.size());
-        
         if (values == null) throw new XBRLException("The list of aspect values must not be null.");
         
         if (values.isEmpty()) return getAllFacts();
@@ -217,12 +221,12 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#getMatchingFacts()
      */
     public Set<Fact> getMatchingFacts() throws XBRLException {
-        logger.error("Getting a new set of matching facts: ");
+        logger.debug("Getting a new set of matching facts: ");
         Set<Fact> matches = new HashSet<Fact>();
         boolean gotSomeMatches = false;
         for (Aspect aspect: getAspects()) {
             if (aspect.hasSelectionCriterion()) {
-                logger.error("Filtering based on " + aspect.getType());
+                logger.debug("Filtering based on " + aspect.getType());
                 if (! gotSomeMatches) {
                     matches.addAll(aspect.getMatchingFacts());
                     gotSomeMatches = true;
@@ -231,7 +235,7 @@ abstract public class BaseAspectModel implements AspectModel {
                     matches.retainAll(candidates);
                 }
             }
-            logger.info("# matching facts = " + matches.size());
+            logger.debug("# matching facts = " + matches.size());
         }
         return matches;
     }
@@ -263,7 +267,6 @@ abstract public class BaseAspectModel implements AspectModel {
     }
     
     /**
-     * @throws XBRLException 
      * @see AspectModel#getAspectValueCombinationsForAxis(String)
      */
     public List<List<AspectValue>> getAspectValueCombinationsForAxis(String dimension) throws XBRLException {
@@ -277,23 +280,20 @@ abstract public class BaseAspectModel implements AspectModel {
             result.add(new Vector<AspectValue>());
         }
         for (Aspect aspect: aspects) {
+            
             List<AspectValue> values = aspect.getValuesByHierarchy();
-            int vCount = values.size();
+            int vCount = aspect.size();
             int dCount = aspect.getDescendantCount();
             int aCount = aspect.getAncestorCount();
-            logger.debug(aspect.getType());
-            logger.debug("#ancestors   = " + aCount);
-            logger.debug("#descendants = " + dCount);
-            logger.debug("#values      = " + vCount);
             for (int a_i=0; a_i<aCount; a_i++) {
                 for (int d_i=0; d_i<dCount; d_i++) {
                     for (int v_i=0; v_i<vCount; v_i++) {
                         int index = dCount*vCount*a_i + dCount*v_i + d_i;
-                        logger.debug("value " + v_i + " goes at index " + index);
                         result.get(index).add(values.get(v_i));
                     }
                 }
-            }
+            }            
+            
         }
         return result;
     }
@@ -302,43 +302,102 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#getMinimalAspectValueCombinationsForAxis(String)
      */
     public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String axis) throws XBRLException {
-        
+
         // Set up the result matrix
-        List<Aspect> aspects = getAxisAspects(axis);
         List<List<AspectValue>> result = new Vector<List<AspectValue>>();
-        int combinations = aspects.get(0).getValues().size() * aspects.get(0).getDescendantCount();
+
+        List<Aspect> aspects = getAxisAspects(axis);
+        if (aspects.size() == 0) return result;
+        
+        Aspect firstAspect = aspects.get(0);
+        int combinations = firstAspect.getValues().size() * firstAspect.getDescendantCount();
+            
         logger.debug("# combinations of aspect values = " + combinations);
         for (int i=0; i<combinations; i++) {
             result.add(new Vector<AspectValue>());
         }
         ASPECT: for (Aspect aspect: aspects) {
-            if (aspect.isSingular() && (aspect.getValues().get(0).isMissing())) {
-                logger.debug("Aspect " + aspect.getType() + " has just a single missing value.");
-                continue ASPECT;
-            }
             if (aspect.isEmpty()) {
-                logger.debug("Aspect " + aspect.getType() + " is empty.");
+                logger.debug("Aspect " + aspect.getType() + " has missing values for all facts in the aspect model.");
                 continue ASPECT;
             }
-            List<AspectValue> values = aspect.getValues();
-            int vCount = values.size();
+            List<AspectValue> values = aspect.getValuesByHierarchy();
+            int vCount = aspect.size();
             int dCount = aspect.getDescendantCount();
             int aCount = aspect.getAncestorCount();
-/*            logger.debug(aspect.getType() + " has " + vCount + " values.");
-            logger.debug("#ancestors   = " + aCount);
-            logger.debug("#descendants = " + dCount);
-            logger.debug("#values      = " + vCount);
-*/            for (int a_i=0; a_i<aCount; a_i++) {
+            for (int a_i=0; a_i<aCount; a_i++) {
                 for (int d_i=0; d_i<dCount; d_i++) {
                     for (int v_i=0; v_i<vCount; v_i++) {
                         int index = dCount*vCount*a_i + dCount*v_i + d_i;
-                        // logger.debug("value " + v_i + " goes at index " + index);
                         result.get(index).add(values.get(v_i));
                     }
                 }
             }
         }
-        return result;        
+        
+        List<List<AspectValue>> finalResult = new Vector<List<AspectValue>>();
+        this.clearAllCriteria();
+        for (List<AspectValue> combination: result) {
+            this.setCriteria(combination);
+            if (this.getMatchingFacts().size() > 0) {
+                finalResult.add(combination);
+            }
+        }
+        
+        return finalResult;
+    }
+    
+    /**
+     * @see AspectModel#analyseAspectCombinationMatches(List, String)
+     */
+    public List<Integer> analyseAspectCombinationMatches(List<List<AspectValue>> combinations,String aspectType) throws XBRLException {
+        
+        int i = 0;
+        while (! combinations.get(0).get(i).getAspect().getType().equals(aspectType)) {
+            i++;
+        }
+
+        // Initialise the result using the higher ranked aspects for the axis
+        if (i > 0) {
+            List<Integer> result = new Vector<Integer>();
+            List<Integer> baseResult = analyseAspectCombinationMatches(combinations,combinations.get(0).get(i-1).getAspect().getType());
+            int startIndex = 0;
+            for (Integer integer: baseResult) {
+                int endIndex = startIndex + integer.intValue();
+                AspectValue current = combinations.get(startIndex).get(i);
+                int matches = 1;
+                for (int j=startIndex+1; j<endIndex; j++) {
+                    AspectValue previous = current;
+                    current = combinations.get(j).get(i);
+                    if (current.getIdentifier().equals(previous.getIdentifier())) {
+                        matches++;
+                    } else {
+                        result.add(new Integer(matches));
+                        matches = 1;
+                    }
+                }
+                result.add(new Integer(matches));
+                startIndex = endIndex;
+            }
+            return result;
+        }
+        
+        AspectValue current = combinations.get(0).get(i);
+        List<Integer> result = new Vector<Integer>();
+        int matches = 1;
+        for (int j=1; j<combinations.size(); j++) {
+            AspectValue previous = current;
+            current = combinations.get(j).get(i);
+            if (current.getIdentifier().equals(previous.getIdentifier())) {
+                matches++;
+            } else {
+                result.add(new Integer(matches));
+                matches = 1;
+            }
+        }
+        result.add(new Integer(matches));
+        return result;
+
     }
  
     /**
@@ -424,21 +483,20 @@ abstract public class BaseAspectModel implements AspectModel {
         } else if (!aspects.equals(other.aspects)) {
             return false;
         }
+
         if (axes == null) {
             if (other.axes != null)
                 return false;
         } else if (!axes.equals(other.axes))
             return false;
+
         if (facts == null) {
             if (other.facts != null)
                 return false;
         } else if (!facts.equals(other.facts))
             return false;
+    
         return true;
     }
 
-
-
-
-    
 }

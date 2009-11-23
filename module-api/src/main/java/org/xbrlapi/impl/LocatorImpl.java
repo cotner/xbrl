@@ -2,11 +2,11 @@ package org.xbrlapi.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
-import java.util.List;
 import org.xbrlapi.Locator;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -14,7 +14,6 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-
 public class LocatorImpl extends ArcEndImpl implements Locator {
 	
 	/**
@@ -106,6 +105,6 @@ public class LocatorImpl extends ArcEndImpl implements Locator {
         Fragment parent = this.getParent();
         if (! parent.isa(ExtendedLinkImpl.class)) throw new XBRLException("The parent of locator " + this.getIndex() + " is not an extended link.");
         return (ExtendedLink) parent;
-    }    
+    }
     
 }

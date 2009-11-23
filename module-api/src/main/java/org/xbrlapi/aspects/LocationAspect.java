@@ -1,9 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Concept;
@@ -11,7 +9,6 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.impl.InstanceImpl;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -42,18 +39,16 @@ public class LocationAspect extends BaseAspect implements Aspect {
     }
     
     protected void initialize() {
-        this.setTransformer(new Transformer());
+        this.setTransformer(new Transformer(this));
     }
     
 
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
-        public Transformer() {
-            super();
+        public Transformer(Aspect aspect) {
+            super(aspect);
         }
-
-
         
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
@@ -63,7 +58,7 @@ public class LocationAspect extends BaseAspect implements Aspect {
                 return getMapId(value);
             }
             Fact fact = value.<Fact>getFragment();
-            String id = fact.getParentIndex() + fact.getIndex();
+            String id = fact.getIndex();
             setMapId(value,id);
             return id;
         }
@@ -83,72 +78,25 @@ public class LocationAspect extends BaseAspect implements Aspect {
             Fragment parent = value.getFragment().getParent();
             
             if (parent.isa(InstanceImpl.class)) {
+                String filename = parent.getURI().toString();
+                int index = filename.lastIndexOf('/')+1;
+                if (index < filename.length()) {
+                    filename = filename.substring(filename.lastIndexOf('/')+1);
+                }
+                label = filename;
                 setMapLabel(id,label);
                 return label;
             }
             
             Concept concept = (((Fact) parent).getConcept());
-            List<String> languages = new Vector<String>();
-            languages.add(getLanguageCode());
-            languages.add(null);
-            List<URI> roles = new Vector<URI>();
-            roles.add(getLabelRole());
-            roles.add(null);
-            List<LabelResource> labels = concept.getLabels(languages,roles);
+            List<LabelResource> labels = concept.getLabels(getLanguageCodes(),getLabelRoles(),getLinkRoles());
             if (labels.isEmpty()) label = concept.getName();
             else label = labels.get(0).getStringValue();
             setMapLabel(id,label);
             return label;
-            
+
         }
 
-        /**
-         * The label role is used in constructing the label for the
-         * concept aspect values.
-         */
-        private URI role = Constants.StandardLabelRole;
-        
-        /**
-         * @return the label resource role.
-         */
-        public URI getLabelRole() {
-            return role;
-        }
-        /**
-         * @param role The label resource role to use in
-         * selecting labels for the concept.
-         */
-        public void setLabelRole(URI role) {
-            this.role = role;
-        }
-
-        /**
-         * The language code is used in constructing the label for the
-         * concept aspect values.
-         */
-        private String language = "en";
-        /**
-         * @return the language code.
-         */
-        public String getLanguageCode() {
-            return language;
-        }
-        /**
-         * @param language The ISO language code
-         */
-        public void setLanguageCode(String language) throws XBRLException {
-            if (language == null) throw new XBRLException("The language must not be null.");
-            this.language = language;
-        }
-        
-
-
-
-
-
-
-
-        
     }
 
     /**
@@ -171,7 +119,7 @@ public class LocationAspect extends BaseAspect implements Aspect {
      * @see Aspect#getKey(Fact)
      */
     public String getKey(Fact fact) throws XBRLException {
-        return fact.getParentIndex() + " " + fact.getIndex();
+        return fact.getIndex();
     }
 
     /**

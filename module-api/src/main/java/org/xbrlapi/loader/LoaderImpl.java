@@ -508,11 +508,11 @@ public class LoaderImpl implements Loader, Serializable {
                     newDocuments.add(uri);
                     getStore().sync();
                 } catch (XBRLException e) {
-                    this.cleanupFailedLoad(uri,"XBRL Problem: " + e.getMessage(),e);
+                    this.cleanupFailedLoad(uri,"XBRL-API related problems occurred: " + e.getMessage(),e);
                 } catch (SAXException e) {
-                    this.cleanupFailedLoad(uri,"SAX Problem: " + e.getMessage(),e);
+                    this.cleanupFailedLoad(uri,"The document could not be parsed.",e);
                 } catch (IOException e) {
-                    this.cleanupFailedLoad(uri,"IO Problem: " + e.getMessage(),e);
+                    this.cleanupFailedLoad(uri,"The document could not be accessed.",e);
                 } catch (ParserConfigurationException e) {
                     getStore().recindLoadingRightsFor(this,uri);
                     throw new XBRLException("The parser could not be correctly configured.",e);

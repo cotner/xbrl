@@ -24,8 +24,6 @@ public interface Locator extends ArcEnd {
      */
     public String getHref() throws XBRLException;
     
-
-    
     /**
      * @return the single fragment referenced by the locator or none if none
      * is found.
@@ -50,5 +48,10 @@ public interface Locator extends ArcEnd {
      * @return the string value of the XPointer element scheme expression from the xlink:href attribute.
      * @throws XBRLException.
      */
-    public String getTargetPointerValue() throws XBRLException;    
+    public String getTargetPointerValue() throws XBRLException;
+    
+
+
+
+
 }

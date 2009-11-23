@@ -37,15 +37,15 @@ public class UnitAspect extends BaseAspect implements Aspect {
     }
     
     protected void initialize() {
-        this.setTransformer(new Transformer());
+        this.setTransformer(new Transformer(this));
     }
 
 
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
         
-        public Transformer() {
-            super();
+        public Transformer(Aspect aspect) {
+            super(aspect);
         }
         
         /**

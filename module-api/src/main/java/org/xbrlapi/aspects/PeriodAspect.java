@@ -24,8 +24,6 @@ public class PeriodAspect extends ContextAspect implements Aspect {
         return TYPE;
     }
     
-
-    
     private final static Logger logger = Logger.getLogger(PeriodAspect.class);    
     
     private static final ObjectStreamField[] serialPersistentFields = {};
@@ -115,14 +113,15 @@ public class PeriodAspect extends ContextAspect implements Aspect {
     }
     
     protected void initialize() {
-        this.setTransformer(new Transformer());
+        this.setTransformer(new Transformer(this));
     }
 
     
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
-        public Transformer() {
-            super();
+
+        public Transformer(Aspect aspect) {
+            super(aspect);
         }
 
         /**

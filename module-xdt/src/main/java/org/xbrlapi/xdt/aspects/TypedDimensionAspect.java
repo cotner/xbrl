@@ -1,16 +1,13 @@
 package org.xbrlapi.xdt.aspects;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Item;
-import org.xbrlapi.LabelResource;
 import org.xbrlapi.OpenContextComponent;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
@@ -18,7 +15,6 @@ import org.xbrlapi.aspects.AspectValue;
 import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspectValueTransformer;
 import org.xbrlapi.utilities.XBRLException;
-import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.TypedDimension;
 import org.xbrlapi.xdt.values.DimensionValue;
 
@@ -40,12 +36,15 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
     }
     
     protected void initialize() {
-        setTransformer(new Transformer());        
+        setTransformer(new Transformer(this));        
     }
 
     public class Transformer extends BaseAspectValueTransformer implements AspectValueTransformer {
 
-
+        public Transformer(Aspect aspect) {
+            super(aspect);
+        }
+        
         /**
          * @see AspectValueTransformer#getIdentifier(AspectValue)
          */
@@ -79,26 +78,8 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
          */
         public String getLabel(AspectValue value) throws XBRLException {
 
-            OpenContextComponent occ = (OpenContextComponent) value.getFragment();
-            if (occ == null) return null;
+            return this.getIdentifier(value);
 
-            String id = getIdentifier(value);
-            if (hasMapLabel(id)) {
-                return getMapLabel(id);
-            }
-
-            if (dimensionLabel == null) {
-                TypedDimensionAspect aspect = (TypedDimensionAspect) value.getAspect();
-                Dimension dimension = aspect.getDimension();
-                Concept concept = dimension;
-                List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRole(getLanguageCode(),getLabelRole());
-                if (labels.isEmpty()) dimensionLabel = dimension.getTargetNamespace() + "#" + dimension.getName();
-                else dimensionLabel = labels.get(0).getStringValue();
-            }
-
-            String label = dimensionLabel + " = " + id;
-            setMapLabel(id,label);
-            return label;
         }
 
     }    

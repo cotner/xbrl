@@ -1,16 +1,14 @@
 package org.xbrlapi.xdt.aspects;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.LabelResource;
 import org.xbrlapi.aspects.Aspect;
 import org.xbrlapi.aspects.AspectModel;
+import org.xbrlapi.aspects.AspectValueTransformer;
 import org.xbrlapi.aspects.BaseAspect;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.values.DimensionValueAccessor;
@@ -26,10 +24,6 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
 
     private Dimension dimension = null;
 
-    private URI role = Constants.StandardLabelRole;
-    
-    private String language = "en";    
-    
     transient private DimensionValueAccessor accessor;
 
     /**
@@ -80,37 +74,6 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
     }
  
     /**
-     * @return the label resource role.
-     */
-    public URI getLabelRole() {
-        return role;
-    }
-    
-    /**
-     * @param role The label resource role to use in
-     * selecting labels for the concept.
-     */
-    public void setLabelRole(URI role) {
-        this.role = role;
-    }    
-
-    /**
-     * @return the language code.
-     */
-    public String getLanguageCode() {
-        return language;
-    }
-    
-    /**
-     * @param language The ISO language code
-     */
-    public void setLanguageCode(String language) throws XBRLException {
-        if (language == null) throw new XBRLException("The language must not be null.");
-        this.language = language;
-    }
-        
-    
-    /**
      * Handles object inflation.
      * @param in The input object stream used to access the object's serialization.
      * @throws IOException
@@ -120,8 +83,6 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
         in.defaultReadObject( );
         try {
             initialize((Dimension) in.readObject());
-            language = (String) in.readObject();
-            role = (URI) in.readObject();
         } catch (XBRLException e) {
             throw new IOException("The dimension could not be initialized.",e);
         }
@@ -135,8 +96,6 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         out.writeObject(getDimension());
-        out.writeObject(getLanguageCode());
-        out.writeObject(getLabelRole());
     }
 
     /**
@@ -148,9 +107,6 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
         int result = super.hashCode();
         result = prime * result
                 + ((dimension == null) ? 0 : dimension.hashCode());
-        result = prime * result
-                + ((language == null) ? 0 : language.hashCode());
-        result = prime * result + ((role == null) ? 0 : role.hashCode());
         return result;
     }
 
@@ -171,16 +127,6 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
                 return false;
         } else if (!dimension.equals(other.dimension))
             return false;
-        if (language == null) {
-            if (other.language != null)
-                return false;
-        } else if (!language.equals(other.language))
-            return false;
-        if (role == null) {
-            if (other.role != null)
-                return false;
-        } else if (!role.equals(other.role))
-            return false;
         return true;
     }
 
@@ -194,14 +140,9 @@ public abstract class DimensionAspect extends BaseAspect implements Aspect {
     @Override
     public String getLabel() throws XBRLException {
 
-        List<String> languages = new Vector<String>();
-        languages.add(getLanguageCode());
-        languages.add(null);
-        List<URI> roles = new Vector<URI>();
-        roles.add(getLabelRole());
-        roles.add(null);
         Dimension dimension = this.getDimension();
-        List<LabelResource> labels = dimension.getLabels(languages,roles);
+        AspectValueTransformer transformer = this.getTransformer();
+        List<LabelResource> labels = dimension.getLabels(transformer.getLanguageCodes(),transformer.getLabelRoles(),transformer.getLinkRoles());
         if (! labels.isEmpty()) {
             return labels.get(0).getStringValue();
         }

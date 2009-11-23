@@ -2,7 +2,10 @@ package org.xbrlapi.xdt.aspects;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.w3c.dom.Element;
@@ -84,9 +87,8 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     /**
      * Adds in the ability to detect new dimensional aspects
      * inherent in the fact itself.
-     * @see AspectModel#addFact(Fact)
+     * @see BaseAspectModel#addFact(Fact)
      */
-    @Override
     public void addFact(Fact fact) throws XBRLException {
         
         // Create any new XDT aspects
@@ -102,6 +104,27 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         super.addFact(fact);
 
     }
+    
+    /**
+     * @see AspectModel#addFacts(Collection<Fact>)
+     */
+    public <F extends Fact> void addFacts(Collection<F> facts) throws XBRLException {
+        super.addFacts(facts);
+        Set<Fact> allFacts = this.getAllFacts();
+        
+        for (ExplicitDimensionAspect aspect: this.getExplicitDimensionAspects()) {
+            Set<Fact> missingFacts = new HashSet<Fact>();
+            missingFacts.addAll(allFacts);
+            missingFacts.removeAll(aspect.getAllFacts());
+            aspect.addFacts(missingFacts);
+        }
+        for (TypedDimensionAspect aspect: this.getTypedDimensionAspects()) {
+            Set<Fact> missingFacts = new HashSet<Fact>();
+            missingFacts.addAll(allFacts);
+            missingFacts.removeAll(aspect.getAllFacts());
+            aspect.addFacts(missingFacts);
+        }
+    }    
     
     
     /**
