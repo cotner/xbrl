@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2007 XBRL International. All Rights Reserved. -->
 <link:linkbase
   xmlns:link="http://www.xbrl.org/2003/linkbase"
   xmlns:generic="http://xbrl.org/2008/generic"
@@ -527,5 +526,64 @@
       xlink:from="role" xlink:to="label" order="1.0"/>
   </generic:link>
 
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#hypercube-dimension" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      hypercube has dimension
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#dimension-domain" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      dimension has domain
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#domain-member" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      domain has value
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#all" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      concept can be reported using dimensions from hypercube
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#notAll" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      concept XDT dimension usage is restricted by dimensions of hypercube
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
+
+  <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
+    <link:loc xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#notAll" xlink:type="locator" xlink:label="role"/>
+    <label:label xlink:type="resource" xlink:label="label" 
+    xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
+      dimension has default value
+    </label:label>
+    <generic:arc xlink:type="arc" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label"
+      xlink:from="role" xlink:to="label" order="1.0"/>
+  </generic:link>
 
 </link:linkbase>

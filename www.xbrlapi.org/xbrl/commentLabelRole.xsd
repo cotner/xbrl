@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+  xmlns="http://www.w3.org/2001/XMLSchema" 
+  targetNamespace="http://xbrlapi.org/role/label/comment" 
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:label="http://xbrl.org/2008/label"
+  elementFormDefault="qualified">
+
+  <import namespace="http://www.xbrl.org/2003/instance" schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
+  <import namespace="http://xbrl.org/2008/label" schemaLocation="http://www.xbrl.org/2008/generic-label.xsd"/>
+
+  <annotation>
+    <appinfo>
+      <link:arcroleType roleURI="http://xbrlapi.org/role/label/comment"
+        id="comment">
+        <link:definition>The label contains comment on the associated XML fragment.</link:definition>
+        <link:usedOn>label:label</link:usedOn>
+      </link:arcroleType>
+    </appinfo>
+  </annotation>
+
+  <annotation>
+    <appinfo>
+      <link:linkbaseRef xlink:type="simple" 
+      xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+      xlink:href="commentLabelRole-labels-en.xml" />
+    </appinfo>
+  </annotation>
+
+</schema>
