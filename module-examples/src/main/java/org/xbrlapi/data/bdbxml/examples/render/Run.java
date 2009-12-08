@@ -251,7 +251,7 @@ public class Run {
             model.put("units", instance.getUnits());
             reportTime("Adding report resources to the data model");
             
-            List<Item> items = instance.getItems();
+            List<Item> items = instance.getChildItems();
             for (Item item: items) {
                 String key= item.getNamespace() + item.getLocalname();
                 if (itemMap.containsKey(key)) {

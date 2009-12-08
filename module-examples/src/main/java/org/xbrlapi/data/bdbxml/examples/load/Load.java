@@ -136,7 +136,7 @@ public class Load {
     }
     
     private static void reportInstance(Instance instance) throws XBRLException {
-        List<Item> items = instance.getItems();
+        List<Item> items = instance.getChildItems();
         System.out.println("Top level items in the instance.");
         for (Item item: items) {
             System.out.println(item.getLocalname() + " " + item.getContextId());
