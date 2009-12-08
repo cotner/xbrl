@@ -151,7 +151,7 @@ public class InstanceTestCase extends DOMLoadingTestCase {
             assertTrue(instances.size() > 0);
             for (Instance instance: instances) {
                 assertEquals(2, instance.getTuples().size());
-                assertEquals(0, instance.getItems().size());
+                assertEquals(0, instance.getChildItems().size());
             }
         } catch (Exception e) {
             fail(e.getMessage());
