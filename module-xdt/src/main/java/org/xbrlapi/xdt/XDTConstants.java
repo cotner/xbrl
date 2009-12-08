@@ -10,49 +10,41 @@ import java.net.URISyntaxException;
  */
 public class XDTConstants {
 
-    public final static String XBRLDTNamespace = "http://xbrl.org/2005/xbrldt";
     public final static String XBRLDTPrefix = "xbrldt";
 
-    public final static String XBRLDINamespace = "http://xbrl.org/2006/xbrldi";
     public final static String XBRLDIPrefix = "xbrldi";
     
     public final static String hypercube = "hypercubeItem";
     
     public final static String dimension = "dimensionItem";
 
-    public final static String defaultDimensionArcrole= "http://xbrl.org/int/dim/arcrole/dimension-default";
-    public final static URI defaultDimensionArcrole() {
+    public static URI XBRLDTNamespace;
+    public static URI XBRLDINamespace;
+    
+    public static URI HypercubeDimensionArcrole;
+    public static URI DimensionDomainArcrole;
+    public static URI DomainMemberArcrole;
+    public static URI AllArcrole;    
+    public static URI NotAllArcrole;    
+    public static URI DefaultDimensionArcrole;
+
+    static {
+        
         try {
-            return new URI(defaultDimensionArcrole);
-        } catch (URISyntaxException e) { // Cannot be thrown.
-            return null;
+            XBRLDTNamespace = new URI("http://xbrl.org/2005/xbrldt");
+            XBRLDINamespace = new URI("http://xbrl.org/2006/xbrldi");
+            HypercubeDimensionArcrole = new URI("http://xbrl.org/int/dim/arcrole/hypercube-dimension");
+            DimensionDomainArcrole = new URI("http://xbrl.org/int/dim/arcrole/dimension-domain");
+            DomainMemberArcrole = new URI("http://xbrl.org/int/dim/arcrole/domain-member");
+            AllArcrole = new URI("http://xbrl.org/int/dim/arcrole/all");
+            NotAllArcrole = new URI("http://xbrl.org/int/dim/arcrole/notAll");
+            DefaultDimensionArcrole = new URI("http://xbrl.org/int/dim/arcrole/dimension-default");
+            
+        } catch (URISyntaxException e) {
+            ;// Not possible
         }
+        
     }
     
-    public final static URI domainMemberArcrole() {
-        try {
-            return new URI(domainMemberArcrole);
-        } catch (URISyntaxException e) { // Cannot be thrown.
-            return null;
-        }
-    }  
-    
-    public final static URI XBRLDINamespace() {
-        try {
-            return new URI(XBRLDINamespace);
-        } catch (URISyntaxException e) { // Cannot be thrown.
-            return null;
-        }
-    }        
-    
-    public final static URI XBRLDTNamespace() {
-        try {
-            return new URI(XBRLDTNamespace);
-        } catch (URISyntaxException e) { // Cannot be thrown.
-            return null;
-        }
-    }            
-    
-    public final static String domainMemberArcrole= "http://xbrl.org/int/dim/arcrole/domain-member";
     
 }

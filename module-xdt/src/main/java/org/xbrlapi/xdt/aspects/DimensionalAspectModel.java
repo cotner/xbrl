@@ -65,7 +65,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         this.setAspect(new UnitAspect(this));
         
         // Set up default explicit dimension aspects.
-        Networks networks = store.getNetworks(XDTConstants.defaultDimensionArcrole());
+        Networks networks = store.getNetworks(XDTConstants.DefaultDimensionArcrole);
         for (Network network: networks) {
             List<Relationship> relationships = network.getAllRelationships();
             for (Relationship relationship: relationships) {

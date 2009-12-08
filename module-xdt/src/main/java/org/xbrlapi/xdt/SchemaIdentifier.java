@@ -154,11 +154,11 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
                                 fragment = new HypercubeImpl();
                                 break;
                             } else if (sgDeclaration.getName().equals(XDTConstants.dimension)) {
-                                if (attrs.getValue(XDTConstants.XBRLDTNamespace,"typedDomainRef") == null) {
+                                if (attrs.getValue(XDTConstants.XBRLDTNamespace.toString(),"typedDomainRef") == null) {
                                     fragment = new ExplicitDimensionImpl();
                                 } else {
                                     fragment = new TypedDimensionImpl();
-                                    logger.info(attrs.getValue(XDTConstants.XBRLDTNamespace,"typedDomainRef"));
+                                    logger.info(attrs.getValue(XDTConstants.XBRLDTNamespace.toString(),"typedDomainRef"));
                                 }
                                 break;
                             }

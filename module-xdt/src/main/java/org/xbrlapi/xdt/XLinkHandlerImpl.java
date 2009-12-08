@@ -301,7 +301,7 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 		
 		try {
 		    SimpleLink fragment = null;
-		    if (attrs.getValue(XDTConstants.XBRLDTNamespace,"typedDomainRef") != null) {
+		    if (attrs.getValue(XDTConstants.XBRLDTNamespace.toString(),"typedDomainRef") != null) {
                 fragment = new TypedDimensionImpl();
 		    } else {
 	            fragment = new SimpleLinkImpl();

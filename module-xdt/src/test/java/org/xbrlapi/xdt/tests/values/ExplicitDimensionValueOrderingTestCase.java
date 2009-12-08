@@ -147,9 +147,9 @@ public class ExplicitDimensionValueOrderingTestCase extends BaseTestCase {
             List<Item> items = store.getItems();
             assertEquals(3,items.size());
 
-            Networks networks = store.getNetworks(Constants.StandardLinkRole,XDTConstants.domainMemberArcrole());
+            Networks networks = store.getNetworks(Constants.StandardLinkRole,XDTConstants.DomainMemberArcrole);
             assertEquals(1,networks.getSize());
-            Network network = networks.getNetwork(Constants.StandardLinkRole,XDTConstants.domainMemberArcrole());
+            Network network = networks.getNetwork(Constants.StandardLinkRole,XDTConstants.DomainMemberArcrole);
             assertNotNull(network);
             Concept root = store.getConcept(new URI("http://xbrlapi.org/test/xdt/001"),"dom1");
 

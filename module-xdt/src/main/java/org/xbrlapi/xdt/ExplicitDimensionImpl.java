@@ -15,7 +15,7 @@ public class ExplicitDimensionImpl extends DimensionImpl implements ExplicitDime
      * @see org.xbrlapi.xdt.ExplicitDimension#getDefaultDomainMember()
      */
     public Concept getDefaultDomainMember() throws XBRLException {
-        List<Concept> defaults = getStore().<Concept>getTargets(this.getIndex(),null,XDTConstants.defaultDimensionArcrole());
+        List<Concept> defaults = getStore().<Concept>getTargets(this.getIndex(),null,XDTConstants.DefaultDimensionArcrole);
         if (defaults.size() == 0) throw new XBRLException("There are no defaults for explicit dimension " + this.getTargetNamespace() + ":" + this.getName());
         if (defaults.size() > 1) throw new XBRLException("There are multiple defaults for explicit dimension " + this.getTargetNamespace() + ":" + this.getName());
         return defaults.get(0);
@@ -25,7 +25,7 @@ public class ExplicitDimensionImpl extends DimensionImpl implements ExplicitDime
      * @see org.xbrlapi.xdt.ExplicitDimension#hasDefaultDomainMember()
      */
     public boolean hasDefaultDomainMember() throws XBRLException {
-        List<Concept> defaults = getStore().<Concept>getTargets(this.getIndex(),null,XDTConstants.defaultDimensionArcrole());
+        List<Concept> defaults = getStore().<Concept>getTargets(this.getIndex(),null,XDTConstants.DefaultDimensionArcrole);
         return (defaults.size() == 1);
     }
     

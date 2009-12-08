@@ -142,7 +142,7 @@ public class TypedDimensionImpl extends DimensionImpl implements TypedDimension,
      * @see org.xbrlapi.SimpleLink#getHref()
      */
     public String getHref() throws XBRLException {
-        return getDataRootElement().getAttributeNS(XDTConstants.XBRLDTNamespace,"typedDomainRef");
+        return getDataRootElement().getAttributeNS(XDTConstants.XBRLDTNamespace.toString(),"typedDomainRef");
     }
 
     /**

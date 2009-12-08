@@ -24,7 +24,7 @@ import org.xbrlapi.xdt.XDTConstants;
  */
 public class SegmentRemainderAspect extends ContextAspect implements Aspect {
 
-    public final static String TYPE = "segment remainder";
+    public final static String TYPE = "non-dimensional segment content";
     
     /**
      * @see Aspect#getType()
@@ -71,7 +71,7 @@ public class SegmentRemainderAspect extends ContextAspect implements Aspect {
                 List<Element> children = segment.getChildElements();
                 List<Element> remainder = new Vector<Element>();
                 CHILDREN: for (Element child: children) {
-                    if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
+                    if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace.toString())) {
                         if (child.hasAttribute("dimension")) {
                             continue CHILDREN;
                         }

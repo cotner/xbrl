@@ -23,7 +23,7 @@ import org.xbrlapi.xdt.XDTConstants;
  */
 public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
 
-    public final static String TYPE = "scenario remainder";
+    public final static String TYPE = "non-dimensional scenario content";
     
     /**
      * @see Aspect#getType()
@@ -68,7 +68,7 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
                 List<Element> children = scenario.getChildElements();
                 List<Element> remainder = new Vector<Element>();
                 CHILDREN: for (Element child: children) {
-                    if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
+                    if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace.toString())) {
                         if (child.hasAttribute("dimension")) {
                             continue CHILDREN;
                         }

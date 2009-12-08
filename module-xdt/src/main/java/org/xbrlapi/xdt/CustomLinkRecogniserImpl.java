@@ -29,7 +29,7 @@ public class CustomLinkRecogniserImpl extends XBRLCustomLinkRecogniserImpl {
 			if (lName.equals("import") || lName.equals("include")) {
 				return true;
 		    }
-		    if (lName.equals("import") && (attrs.getValue(XDTConstants.XBRLDTNamespace,"typedDomainRef") != null)) {
+		    if (lName.equals("import") && (attrs.getValue(XDTConstants.XBRLDTNamespace.toString(),"typedDomainRef") != null)) {
 		        return true;
 		    }
 	    }
