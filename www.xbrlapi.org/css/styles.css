@@ -16,6 +16,11 @@ span.logo {
 	font-weight:bold;
 }
 
+a.title,a:hover.title,a:visited.title {
+  color:silver;
+  text-decoration: none;
+}
+
 span.logo_subscript {
 	color:silver;
 	font-size:2em;
