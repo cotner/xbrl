@@ -59,9 +59,34 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 <div class="content">
 
-<h2>10 Nov. 2009</h2>
+<h2>7 Dec. 2009</h2>
 <p>
-Made aspects record facts with missing aspect values rather than ignoring them.
+Added a new history tracking system for loaders so that it is possible to reload
+the documents in a data store while preserving the document identifiers used in the
+initial loading process.
+</p>
+
+<h2>27 Nov. 2009</h2>
+<p>
+Fixed a bug in the linkbase fragment implementation that prevented retrieval of the
+child extended links in the linkbase.
+</p>
+
+<h2>25 Nov. 2009</h2>
+<p>
+Aligned constant URI syntax in XDT module with the URI syntax for constants
+in the utilities module.
+</p>
+
+<h2>24 Nov. 2009</h2>
+<p>
+Fixed a problem with determining if a location aspect value has a parent location
+aspect value when the location aspect value is for a fact that is contained within
+a tuple.
+</p>
+<p>
+Changed getAxisAspects method on the AspectModel interface to always return a list.
+The list is empty if the axis has no aspects in the aspect model.
 </p>
 
 <h2>23 Nov. 2009</h2>
@@ -70,6 +95,12 @@ Changed label retrieval methods for aspects to make them uniform across
 all aspect implementations.
 Added new linkbase methods to analyse the extended links contained in them.
 </p>
+
+<h2>10 Nov. 2009</h2>
+<p>
+Made aspects record facts with missing aspect values rather than ignoring them.
+</p>
+
 
 <h2>9 Nov. 2009</h2>
 <p>
