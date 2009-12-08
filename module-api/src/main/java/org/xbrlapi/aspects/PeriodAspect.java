@@ -138,7 +138,7 @@ public class PeriodAspect extends ContextAspect implements Aspect {
             Period period = value.<Period>getFragment();
             if (period != null) {
                 if (period.isFiniteDurationPeriod()) {
-                    id += dateTime(period.getStart()) + " to " + dateTime(period.getEnd());
+                    id += dateTime(period.getStart()) + " - " + dateTime(period.getEnd());
                 } else if (period.isInstantPeriod()) {
                     id += dateTime(period.getInstant());
                 } else {
@@ -158,17 +158,41 @@ public class PeriodAspect extends ContextAspect implements Aspect {
             return getIdentifier(value);
         }        
         
+
+        /**
+         * 
+         * @param value
+         * @return formatted date-time value
+         */
         private String dateTime(String value) {
             int tIndex = value.indexOf('T');
             if (tIndex == -1) {
-                return value;
+                return date(value);
             }
             String[] dateTime = value.split("T");
             String dateValue = dateTime[0];
             String timeValue = dateTime[1];
-            return dateValue + ":" + timeValue;
+            return date(dateValue) + ":" + time(timeValue);
             
         }
+        
+        /**
+         * @param dateValue The original date value
+         * @return the formatted date value
+         */
+        private String date(String dateValue) {
+            String[] parts = dateValue.split("-");
+            return parts[2] + "/" + parts[1] + "/" + parts[0];
+        }
+        
+        /**
+         * @param timeValue The original date value
+         * @return the formatted date value
+         */
+        private String time(String timeValue) {
+            return timeValue;
+        }
+        
     }    
 
     /**

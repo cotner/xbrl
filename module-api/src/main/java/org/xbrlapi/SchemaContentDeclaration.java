@@ -87,6 +87,7 @@ public interface SchemaContentDeclaration extends SchemaDeclaration {
      */
     public TypeDeclaration getTypeDeclaration() throws XBRLException;
     
+    
     /**
      * @return true iff the content declaration has its own local simple or complex type declaration.
      * @throws XBRLException if the content declaration has more than one local type declaration.

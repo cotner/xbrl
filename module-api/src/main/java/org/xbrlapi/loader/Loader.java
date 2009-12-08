@@ -276,5 +276,42 @@ public interface Loader extends Serializable {
      * @throws XBRLException
      */
     public void storeDocumentsToAnalyse() throws XBRLException;
+ 
+    /**
+     * @param history The history recording system
+     * to use for all new documents being loaded.
+     */
+    public void setHistory(History history);
+
+    /**
+     * @return the history recording system being used
+     * to record the documents being loaded.
+     */
+    public History getHistory();
+    
+    /**
+     * @return true if the loader is using a history recording system
+     * to record the URIs being loaded and their 
+     * document identifiers.
+     */
+    public boolean hasHistory();    
+ 
+    /**
+     * Performs discovery on this specific XML resource, assigning it the
+     * supplied fragment.
+     * This method is, in general, only to be used when reloading a 
+     * set of documents from a known set of URIs, and when you want
+     * to associate a given set of identifiers with those resources.
+     * This is useful when doing data reloads into a store in situations
+     * where you want to preserve the 1:1 mapping between URIs and 
+     * identifiers that was used in a previously populated data store.
+     * @param uri The URI of the XML resource to rediscover.
+     * @param identifier The identifier to assign to the URI: this forms
+     * the prefix of all fragment identifiers for the fragments formed from the
+     * XML resource.
+     * @throws XBRLException
+     * @see org.xbrlapi.loader.History
+     */
+    public void rediscover(URI uri, String identifier) throws XBRLException;
     
 }

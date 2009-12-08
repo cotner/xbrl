@@ -58,8 +58,10 @@ public interface AspectModel extends Serializable {
      * of child aspects, all of which are aspects associated with the same axis
      * of the aspect model.  These axes are useful for relating aspects
      * to rows and columns of a table, for example.
-     * @return the list of aspects for the axis.
-     * @throws XBRLException if the axis is not defined for the aspect model.
+     * @return the list of aspects for the axis.  The list is empty if there
+     * are no aspects assigned to the chosen axis or the aspect model does not have
+     * the specified axis.
+     * @throws XBRLException
      */
     public List<Aspect> getAxisAspects(String axis) throws XBRLException;
 

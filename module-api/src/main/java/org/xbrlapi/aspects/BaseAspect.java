@@ -352,8 +352,13 @@ abstract public class BaseAspect implements Aspect {
      */
     public Set<Fact> getMatchingFacts() throws XBRLException {
         if (! this.hasSelectionCriterion()) throw new XBRLException("Aspect " + this.getType() + " has no selection criterion specified.");
-        logger.debug(this.getType() + " matched to " + criterion.getLabel());
-        return this.facts.get(criterion.getIdentifier());
+        logger.debug("Aspect " + this.getType() + " is being matched to " + criterion.getLabel());
+        logger.debug("Criterion identifier = " + criterion.getIdentifier());
+        Set<Fact> result = this.facts.get(criterion.getIdentifier());
+        if (result == null) {
+            result = new HashSet<Fact>();
+        }
+        return result;
     }
 
     /**

@@ -144,9 +144,9 @@ public class InstanceImpl extends FragmentImpl implements Instance {
     }    
     
     /**
-     * @see org.xbrlapi.Instance#getItems()
+     * @see org.xbrlapi.Instance#getChildItems()
      */
-    public List<Item> getItems() throws XBRLException {
+    public List<Item> getChildItems() throws XBRLException {
         return getStore().<Item>queryForXMLResources("#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl')]");
     }
 
@@ -315,8 +315,18 @@ public class InstanceImpl extends FragmentImpl implements Instance {
         String query = "for $root in #roots#[@fact and @uri='" + this.getURI() + "'] let $data:=$root/xbrlapi:data/* return concat(namespace-uri($data),'#',local-name($data))";
         Set<String> result = getStore().queryForStrings(query);
         return result.size();    
-    }    
-    
-    
-    
+    }
+
+    /**
+     * @see Instance#getAllItems()
+     */
+    public List<Item> getAllItems() throws XBRLException {
+        List<Fact> facts = this.getAllFacts();
+        List<Item> result = new Vector<Item>();
+        for (Fact fact: facts) {
+            if (! fact.isTuple()) result.add((Item) fact);
+        }
+        return result;
+    }
+
 }

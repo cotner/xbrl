@@ -245,7 +245,7 @@ public interface Aspect extends Serializable {
     
     /**
      * @return the set of facts matching the selection criterion
-     * set for this aspect
+     * set for this aspect.
      * @throws XBRLException if the selection criterion
      * is not set for the aspect.
      */

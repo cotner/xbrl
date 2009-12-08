@@ -61,7 +61,7 @@ public interface AspectValue extends Serializable {
     
     /**
      * @return true if this aspect value has a parent aspect value
-     * and false otherwise.
+     * in the aspect model and false otherwise.
      * @throws XBRLException
      */
     public boolean hasParent() throws XBRLException;

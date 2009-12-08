@@ -311,7 +311,7 @@ public interface Store extends Serializable {
 	 * Returns the root element of the subtree starting with the
 	 * fragment with the specified index.  All subtrees for a given store
 	 * instance are produced from the one XML DOM and so can be appended
-	 * to eachother as required.
+	 * to each other as required.
 	 * @param f The fragment at the root of the subtree.
 	 * @return The root element of the subtree headed by the fragment
 	 * with the specified index.

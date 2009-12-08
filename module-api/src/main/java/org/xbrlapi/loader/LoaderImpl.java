@@ -69,7 +69,6 @@ import org.xml.sax.XMLReader;
  */
 public class LoaderImpl implements Loader, Serializable {
 
-    // Create the logger
     private final static Logger logger = Logger.getLogger(LoaderImpl.class);
 
     /**
@@ -77,6 +76,35 @@ public class LoaderImpl implements Loader, Serializable {
      */
     private Store store;
 
+    /**
+     * The cache to use when discovering XML materials specified as a String
+     * rather than just via a URI that resolves to the required XML.
+     */
+    private Cache cache = null;
+
+    /**
+     * The Xlink processor
+     */
+    private XLinkProcessor xlinkProcessor;
+
+    /**
+     * The entity resolver to use for resolution of entities (URIs etc) during
+     * the loading/discovery process.  Defaults to one without a caching system.
+     */
+    private EntityResolver entityResolver = new EntityResolverImpl();
+
+    /**
+     * The queue of documents remaining to load.
+     */
+    private TreeSet<URI> documentQueue = new TreeSet<URI>();
+
+    /**
+     * The document history recording system used to track the
+     * documents being loaded, their URIs and their document
+     * identifiers.
+     */
+    private History history = null;
+    
     /**
      * The stack of fragments that are being built
      */
@@ -87,21 +115,110 @@ public class LoaderImpl implements Loader, Serializable {
      * of a fragment currently undergoing construction.
      */
     transient private Stack<ElementState> states = new Stack<ElementState>();
-    
-    /**
-     * @return the stack of element states for the root
-     * elements of the fragments currently being built.
-     */
-    private Stack<ElementState> getStates() {
-        return this.states;
-    }    
-    
-    /**
-     * The cache to use when discovering XML materials specified as a String
-     * rather than just via a URI that resolves to the required XML.
-     */
-    private Cache cache = null;
 
+    /**
+     * The absolute URI of the document currently being parsed. Used to record
+     * this metadata in each fragment.
+     */
+    transient private URI documentURI = null;
+
+    /**
+     * The document Id (including the document hash and its counter)
+     */
+    transient private String documentId = null;
+
+    /**
+     * The sorted map of documents that have failed to load.
+     * Each URI points to value that is the reason for the failure.
+     */
+    transient private TreeMap<URI, String> failures = new TreeMap<URI, String>();
+    
+    /**
+     * The sorted set of documents that have successfully been loaded.
+     */
+    transient private TreeSet<URI> successes = new TreeSet<URI>();    
+    
+    /**
+     * The unique fragment ID, that will be one for the first fragment. This is
+     * incremented just before as it is retrieved for use with a new fragment
+     * created during the loading process.
+     */
+    transient private int fragmentId = 0;
+
+    /**
+     * The flag, discovering, equals false if the loader is not currently doing document
+     * discovery and equals true otherwise.
+     */
+    transient private boolean discovering = false;
+
+    /**
+     * Boolean flag that it set to true by an discovery interrupt request.
+     */
+    transient private boolean interrupt = false;
+
+    /**
+     * The XML DOM used by this loader's fragment builders.
+     * This is initialised on creation of the loader.
+     */
+    transient private Document dom = null;
+    
+    /**
+     * @param store The data store to hold the DTS
+     * @param xlinkProcessor The XLink processor to use for link resolution
+     * @throws XBRLException if the loader cannot be instantiated.
+     */
+    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor)
+            throws XBRLException {
+        super();
+        initialize(store,xlinkProcessor);
+    }
+    
+    /**
+     * @param store The data store to hold the DTS
+     * @param xlinkProcessor The XLink processor to use for link resolution
+     * @param uris The array of URIs for loading.
+     * @throws XBRLException if the loader cannot be instantiated.
+     */
+    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor, List<URI> uris)
+            throws XBRLException {
+        this(store, xlinkProcessor);
+        setStartingURIs(uris);
+    }
+
+    /**
+     * Initializes the loader, putting in place the XML DOM object used to build all fragments.
+     * @param store The data store being loaded with data.
+     * @param xlinkProcessor The XLink processor being used to identify XLink fragments.
+     * @throws XBRLException
+     */
+    private void initialize(Store store, XLinkProcessor xlinkProcessor) throws XBRLException {
+        setStore(store);
+        setXlinkProcessor(xlinkProcessor);
+        this.dom = (new XMLDOMBuilder()).newDocument();
+    }
+
+    /**
+     * @see Loader#requestInterrupt()
+     */
+    public void requestInterrupt() {
+        interrupt = true;
+    }
+    
+    /**
+     * @return true if an interrupt to the loading process 
+     * has been requested and false otherwise.
+     */
+    private boolean interruptRequested() {
+        return interrupt;
+    }
+
+    /**
+     * @see org.xbrlapi.loader.Loader#cancelInterrupt()
+     */
+    public void cancelInterrupt() {
+        interrupt = false;
+    }
+    
     /**
      * @see org.xbrlapi.loader.Loader#setCache(Cache)
      */
@@ -128,59 +245,7 @@ public class LoaderImpl implements Loader, Serializable {
         }
         return this.dom;
     }
-
-    /**
-     * The absolute URI of the document currently being parsed. Used to record
-     * this metadata in each fragment.
-     */
-    transient private URI documentURI = null;
-
-    /**
-     * The document Id (including the document hash and its counter)
-     */
-    transient private String documentId = null;
-
-
-
-    /**
-     * The Xlink processor
-     */
-    private XLinkProcessor xlinkProcessor;
-
-    /**
-     * The entity resolver to use for resolution of entities (URIs etc) during
-     * the loading/discovery process.  Defaults to one without a caching system.
-     */
-    private EntityResolver entityResolver = new EntityResolverImpl();
-
-
-
-    /**
-     * The sorted map of documents that have failed to load.
-     * Each URI points to value that is the reason for the failure.
-     */
-    transient private TreeMap<URI, String> failures = new TreeMap<URI, String>();
     
-    /**
-     * The sorted set of documents that have successfully been loaded.
-     */
-    transient private TreeSet<URI> successes = new TreeSet<URI>();    
-    
-    private TreeSet<URI> documentQueue = new TreeSet<URI>();
-
-    /**
-     * The unique fragment ID, that will be one for the first fragment. This is
-     * incremented just before as it is retrieved for use with a new fragment
-     * created during the loading process.
-     */
-    transient private int fragmentId = 0;
-
-    /**
-     * discovering equals false if the loader is not presently doing document
-     * discovery and true otherwise.
-     */
-    transient private boolean discovering = false;
-
     private void setDiscovering(boolean value) {
         if (value) logger.debug(Thread.currentThread().getName() + " starting discovery.");
         else logger.debug(Thread.currentThread().getName() + " stopping discovery.");
@@ -193,71 +258,6 @@ public class LoaderImpl implements Loader, Serializable {
     public boolean isDiscovering() {
         return discovering;
     }
-
-    
-    /**
-     * Boolean flag that it set to true by an discovery interrupt request.
-     */
-    transient private boolean interrupt = false;
-
-    /**
-     * @see Loader#requestInterrupt()
-     */
-    public void requestInterrupt() {
-        interrupt = true;
-    }
-    
-    /**
-     * @return true if an interrupt to the loading process 
-     * has been requested and false otherwise.
-     */
-    private boolean interruptRequested() {
-        return interrupt;
-    }
-
-    /**
-     * @see org.xbrlapi.loader.Loader#cancelInterrupt()
-     */
-    public void cancelInterrupt() {
-        interrupt = false;
-    }
-    
-    /**
-     * The XML DOM used by this loader's fragment builders.
-     * This is initialised on creation of the loader.
-     */
-    transient private Document dom = null;
-    
-    /**
-     * @param store The data store to hold the DTS
-     * @param xlinkProcessor The XLink processor to use for link resolution
-     * @throws XBRLException if the loader cannot be instantiated.
-     */
-    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor)
-            throws XBRLException {
-        super();
-        initialize(store,xlinkProcessor);
-    }
-    
-    private void initialize(Store store, XLinkProcessor xlinkProcessor) throws XBRLException {
-        setStore(store);
-        setXlinkProcessor(xlinkProcessor);
-        this.dom = (new XMLDOMBuilder()).newDocument();
-    }
-
-    /**
-     * @param store The data store to hold the DTS
-     * @param xlinkProcessor The XLink processor to use for link resolution
-     * @param uris The array of URIs for loading.
-     * @throws XBRLException if the loader cannot be instantiated.
-     */
-    public LoaderImpl(Store store, XLinkProcessor xlinkProcessor, List<URI> uris)
-            throws XBRLException {
-        this(store, xlinkProcessor);
-        setStartingURIs(uris);
-    }
-
-
 
     /**
      * Set the data store to be used by the loader.
@@ -288,7 +288,25 @@ public class LoaderImpl implements Loader, Serializable {
     private void setDocumentURI(URI uri) throws XBRLException {
         documentURI = uri;
         documentId = getStore().getId(uri.toString());
+        
+        getHistory().addRecord(uri,documentId);
+
     }
+    
+    /**
+     * Set the URI of the document now being parsed and set the
+     * document ID for the document being parsed by using the store
+     * to generate the ID from the URI.  The document ID is used as
+     * part of the fragment naming scheme in the data store.
+     * @param uri The URI of the document now being parsed.
+     * @param identifier The identifier to use for the document.
+     */
+    private void setDocumentURI(URI uri, String identifier) {
+        documentURI = uri;
+        documentId = identifier;
+        getHistory().addRecord(uri,documentId);
+
+    }    
     
     /**
      * @return the document ID for the document being analysed or
@@ -348,6 +366,14 @@ public class LoaderImpl implements Loader, Serializable {
             this.removeFragment();
         }
     }
+    
+    /**
+     * @return the stack of element states for the root
+     * elements of the fragments currently being built.
+     */
+    private Stack<ElementState> getStates() {
+        return this.states;
+    }        
 
     /**
      * @see org.xbrlapi.loader.Loader#getFragment()
@@ -603,7 +629,7 @@ public class LoaderImpl implements Loader, Serializable {
                 parse(uri);
                 markDocumentAsExplored(uri);
                 getStore().sync();
-                logger.info(this.fragmentId + " fragments in " + uri);
+                logger.info((this.fragmentId-1) + " fragments in " + uri);
             } catch (XBRLException e) {
                 this.cleanupFailedLoad(uri,"XBRL Problem: " + e.getMessage(),e);
             } catch (SAXException e) {
@@ -621,6 +647,66 @@ public class LoaderImpl implements Loader, Serializable {
         setDiscovering(false);
 
     }
+    
+    /**
+     * @see org.xbrlapi.loader.Loader#rediscover()
+     */
+    public void rediscover(URI uri, String identifier) throws XBRLException {
+
+        Store store = this.getStore();
+        
+        if (isDiscovering()) {
+            logger.warn("Already discovering data with this loader so loader will not discover next document as requested.");
+            return;
+        }
+        setDiscovering(true);
+
+        boolean documentClaimedByThisLoader = store.requestLoadingRightsFor(this,uri);
+        while ((store.hasDocument(uri) || !documentClaimedByThisLoader) && (uri != null)) {
+            if (documentClaimedByThisLoader) {
+                store.recindLoadingRightsFor(this,uri);
+                logger.error(uri + " is already stored.");
+            } else {
+                this.markDocumentAsExplored(uri);
+                logger.error(uri + " is being loaded by another loader.");
+            }
+            setDiscovering(false);
+            return;
+        }
+        
+        if (store.queryCount("#roots#[@index='" + identifier + "_1']") > 0) {
+            logger.error("Identifier, " + identifier + ", is already being used in the data store.");
+            setDiscovering(false);
+            return;
+        }
+
+        if (uri != null) {
+            logger.debug("Now rediscovering " + uri + " with identifier " + identifier);
+            setDocumentURI(uri, identifier);
+            this.setNextFragmentId("1");
+            try {
+                parse(uri);
+                markDocumentAsExplored(uri);
+                getStore().sync();
+                logger.info((this.fragmentId-1) + " fragments in " + uri);
+            } catch (XBRLException e) {
+                this.cleanupFailedLoad(uri,"XBRL Problem: " + e.getMessage(),e);
+            } catch (SAXException e) {
+                this.cleanupFailedLoad(uri,"SAX Problem: " + e.getMessage(),e);
+            } catch (IOException e) {
+                this.cleanupFailedLoad(uri,"IO Problem: " + e.getMessage(),e);
+            } catch (ParserConfigurationException e) {
+                throw new XBRLException("The parser could not be correctly configured.",e);
+            } finally {
+                setDiscovering(false);
+            }
+        }
+
+        logger.info("Finished discovery of " + uri);
+        
+        setDiscovering(false);
+
+    }    
 
     /**
      * Perform a discovery starting with an XML document that is represented as
@@ -1000,5 +1086,26 @@ public class LoaderImpl implements Loader, Serializable {
             out.writeObject(uri);
         }
     }    
+ 
+    /**
+     * @see Loader#setHistory(History)
+     */
+    public void setHistory(History history) {
+        this.history = history;
+    }
+
+    /**
+     * @see Loader#getHistory()
+     */
+    public History getHistory() {
+        return history;
+    }
+    
+    /**
+     * @see Loader#hasHistory()
+     */
+    public boolean hasHistory() {
+        return (history != null);
+    }
     
 }

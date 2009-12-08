@@ -13,7 +13,7 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public abstract class BaseAspectValue implements AspectValue {
 
-    private final static Logger logger = Logger.getLogger(BaseAspectValue.class);  
+    protected final static Logger logger = Logger.getLogger(BaseAspectValue.class);  
     
     private Aspect aspect;
     

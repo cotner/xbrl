@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.util.List;
+import java.util.Set;
 
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
@@ -40,11 +41,13 @@ public class LocationAspectValue extends BaseAspectValue {
     @Override
     public boolean hasParent() throws XBRLException {
         Fact fact = this.<Fact>getFragment();
-        Fragment parent = fact.getParent();
-        if (parent.isa(InstanceImpl.class)) {
-            return false;
-        }
-        return true;
+        if (fact.getParent().isa(InstanceImpl.class)) return false;
+        
+        Aspect aspect = this.getAspect();
+        Set<Fact> facts = aspect.getAllFacts();
+        if (facts.contains(this.getFragment().getParent())) return true;
+        
+        return false;
     }    
     
     

@@ -180,10 +180,17 @@ public interface Instance extends Fragment {
     
     /**
      * @return the list of all items that are children of the instance.
-     * Tuples are not included in the list.
+     * Tuples (and the items that they contain are not included in the list).
      * @throws XBRLException
      */
-    public List<Item> getItems() throws XBRLException;    
+    public List<Item> getChildItems() throws XBRLException;
+    
+    /**
+     * @return the list of all items in the instance including those in
+     * tuples.
+     * @throws XBRLException
+     */
+    public List<Item> getAllItems() throws XBRLException;    
 
     
     

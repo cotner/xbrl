@@ -64,6 +64,8 @@ public class UnitAspect extends BaseAspect implements Aspect {
                 List<Measure> numerators = unit.getResolvedNumeratorMeasures();
                 if (numerators.size() == 1 && ! unit.hasDenominator() && numerators.get(0).getNamespace().equals(Constants.ISO4217))
                        id = "Currency: " + numerators.get(0).getLocalname();
+                else if (numerators.size() == 1 && ! unit.hasDenominator() && numerators.get(0).getNamespace().equals(Constants.XBRL21Namespace) && numerators.get(0).getLocalname().equals("pure") )
+                    id = "Pure number";
                 else {
                     for (int i=0; i<numerators.size(); i++) {
                         Measure measure = numerators.get(i);

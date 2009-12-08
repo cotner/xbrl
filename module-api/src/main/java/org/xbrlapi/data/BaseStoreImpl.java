@@ -201,7 +201,7 @@ public abstract class BaseStoreImpl implements Store {
     }
 
     /**
-     * @see org.xbrlapi.data.Store#persistStub(URI,String)
+     * @see Store#persistStub(URI,String)
      */
     public void persistStub(URI uri, String reason) throws XBRLException {
 

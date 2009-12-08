@@ -83,7 +83,8 @@ abstract public class BaseAspectModel implements AspectModel {
      * @see AspectModel#getAxisAspects(String)
      */
     public List<Aspect> getAxisAspects(String axis) {
-        return axes.get(axis);
+        if (axes.containsKey(axis)) return axes.get(axis);
+        return new Vector<Aspect>();
     }
 
     /**
@@ -303,7 +304,6 @@ abstract public class BaseAspectModel implements AspectModel {
      */
     public List<List<AspectValue>> getMinimalAspectValueCombinationsForAxis(String axis) throws XBRLException {
 
-        // Set up the result matrix
         List<List<AspectValue>> result = new Vector<List<AspectValue>>();
 
         List<Aspect> aspects = getAxisAspects(axis);
@@ -311,24 +311,28 @@ abstract public class BaseAspectModel implements AspectModel {
         
         Aspect firstAspect = aspects.get(0);
         int combinations = firstAspect.getValues().size() * firstAspect.getDescendantCount();
-            
-        logger.debug("# combinations of aspect values = " + combinations);
+
+        logger.debug("#combinations = " + combinations);
+        
         for (int i=0; i<combinations; i++) {
             result.add(new Vector<AspectValue>());
         }
-        ASPECT: for (Aspect aspect: aspects) {
-            if (aspect.isEmpty()) {
-                logger.debug("Aspect " + aspect.getType() + " has missing values for all facts in the aspect model.");
-                continue ASPECT;
-            }
+        
+        for (Aspect aspect: aspects) {
             List<AspectValue> values = aspect.getValuesByHierarchy();
             int vCount = aspect.size();
             int dCount = aspect.getDescendantCount();
             int aCount = aspect.getAncestorCount();
+            logger.debug("vcount= " + vCount);
+            logger.debug("acount= " + aCount);
+            logger.debug("dcount= " + dCount);
             for (int a_i=0; a_i<aCount; a_i++) {
                 for (int d_i=0; d_i<dCount; d_i++) {
                     for (int v_i=0; v_i<vCount; v_i++) {
                         int index = dCount*vCount*a_i + dCount*v_i + d_i;
+                        logger.debug("index= " + index);
+                        values.get(v_i);
+                        result.get(index);
                         result.get(index).add(values.get(v_i));
                     }
                 }

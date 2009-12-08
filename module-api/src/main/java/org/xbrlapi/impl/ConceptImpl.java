@@ -32,9 +32,6 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     }
     
     /**
-     * Get the concept's balance, one of debit or credit
-     * @return the balance attribute value or null if none is specified.
-     * @throws XBRLException
      * @see org.xbrlapi.Concept#getBalance()
      */
     public String getBalance() throws XBRLException {
