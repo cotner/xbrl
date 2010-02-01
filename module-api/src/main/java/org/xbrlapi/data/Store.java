@@ -1116,6 +1116,8 @@ public interface Store extends Serializable {
      * target fragment with the given link role and arcrole.
      * The relationships are ordered by the order attribute on 
      * the arcs expressing them.
+     * The linkRole and the arcrole are ignored as selection criteria
+     * if they are null.
      * @throws XBRLException
      */
     public SortedSet<Relationship> getRelationshipsTo(String targetIndex,URI linkRole, URI arcrole) throws XBRLException;    
