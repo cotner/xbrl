@@ -12,7 +12,6 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.Linkbase;
 import org.xbrlapi.SimpleLink;
 import org.xbrlapi.XlinkDocumentation;
-import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -57,12 +56,8 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
      * @see org.xbrlapi.Linkbase#getArcroleRefs()
      */
     public List<SimpleLink> getArcroleRefs() throws XBRLException {
-    	List<SimpleLink> links = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
-    	for (SimpleLink link: links) {
-            if (! (link.getNamespace().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("arcroleRef")))
-                links.remove(link);
-    	}
-    	return links;
+        String query = "for $root in #roots#[@type='" + SimpleLinkImpl.class.getName() + "' and @parentIndex='" + this.getIndex() + "'] where $root/xbrlapi:data/link:arcroleRef return $root";
+        return this.getStore().<SimpleLink>queryForXMLResources(query);
     }
 
 
@@ -101,12 +96,10 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
      * @see org.xbrlapi.Linkbase#getRoleRefs()
      */
     public List<SimpleLink> getRoleRefs() throws XBRLException {
-    	List<SimpleLink> links = this.<SimpleLink>getChildren("org.xbrlapi.impl.SimpleLinkImpl");
-    	for (SimpleLink link: links) {
-    		if (! (link.getNamespace().equals(Constants.XBRL21LinkNamespace) && link.getLocalname().equals("roleRef")))
-    			links.remove(link);
-    	}
-    	return links;
+
+        String query = "for $root in #roots#[@type='" + SimpleLinkImpl.class.getName() + "' and @parentIndex='" + this.getIndex() + "'] where $root/xbrlapi:data/link:roleRef return $root";
+        return this.getStore().<SimpleLink>queryForXMLResources(query);
+
     }
 
 
