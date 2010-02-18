@@ -12,7 +12,7 @@ public class HistoryImpl implements History {
      * @see History#addRecord(URI, String)
      */
     public void addRecord(URI uri, String identifier) {
-        logger.info(uri + " has identifier: " + identifier);
+        logger.debug(uri + " has identifier: " + identifier);
     }
 
 }

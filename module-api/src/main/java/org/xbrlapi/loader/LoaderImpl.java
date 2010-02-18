@@ -101,9 +101,9 @@ public class LoaderImpl implements Loader, Serializable {
     /**
      * The document history recording system used to track the
      * documents being loaded, their URIs and their document
-     * identifiers.
+     * identifiers.  This defaults to a simple one that does basic logging.
      */
-    private History history = null;
+    private History history = new HistoryImpl();
     
     /**
      * The stack of fragments that are being built
@@ -288,7 +288,6 @@ public class LoaderImpl implements Loader, Serializable {
     private void setDocumentURI(URI uri) throws XBRLException {
         documentURI = uri;
         documentId = getStore().getId(uri.toString());
-        
         getHistory().addRecord(uri,documentId);
 
     }
@@ -305,7 +304,6 @@ public class LoaderImpl implements Loader, Serializable {
         documentURI = uri;
         documentId = identifier;
         getHistory().addRecord(uri,documentId);
-
     }    
     
     /**
