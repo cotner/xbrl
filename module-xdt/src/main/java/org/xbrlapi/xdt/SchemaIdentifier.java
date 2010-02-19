@@ -149,7 +149,10 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
                 if (declaration != null) {
                     XSElementDeclaration sgDeclaration = declaration.getSubstitutionGroupAffiliation();
                     while (sgDeclaration != null) {
-                        if (sgDeclaration.getNamespace().equals(XDTConstants.XBRLDTNamespace)) {
+                        
+                        logger.info("The element's namespace is " + sgDeclaration.getNamespace());
+                        
+                        if (sgDeclaration.getNamespace().equals(XDTConstants.XBRLDTNamespace.toString())) {
                             if (sgDeclaration.getName().equals(XDTConstants.hypercube)) {
                                 fragment = new HypercubeImpl();
                                 break;
