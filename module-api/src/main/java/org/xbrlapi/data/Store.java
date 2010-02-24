@@ -573,7 +573,14 @@ public interface Store extends Serializable {
      * @return a list of fragment indices with the given fragment type and in the given document.
      * @throws XBRLException
      */
-    public Set<String> getFragmentIndicesFromDocument(URI uri, String interfaceName) throws XBRLException;  
+    public Set<String> getFragmentIndicesFromDocument(URI uri, String interfaceName) throws XBRLException;
+    
+    /**
+     * @param uri The URI of the document to get the fragments from.
+     * @return a list of indices for fragments in the given document.
+     * @throws XBRLException
+     */
+    public Set<String> getFragmentIndicesFromDocument(URI uri) throws XBRLException;    
 
     /**
      * @param <F> The fragment extension class

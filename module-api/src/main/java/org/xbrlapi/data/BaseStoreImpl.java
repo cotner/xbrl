@@ -1291,6 +1291,17 @@ public abstract class BaseStoreImpl implements Store {
     }
     
     /**
+     * @see Store#getFragmentIndicesFromDocument(URI)
+     */
+    public Set<String> getFragmentIndicesFromDocument(URI uri) throws XBRLException {
+        URI matchURI = getMatcher().getMatch(uri);
+        String query = "#roots#[@uri='"+ matchURI + "']";
+        Set<String> result = this.queryForIndices(query);
+        return result;
+        
+    }
+    
+    /**
      * @see Store#getFragmentIndices(String)
      */
     public Set<String> getFragmentIndices(String interfaceName) throws XBRLException {
