@@ -7,6 +7,7 @@ import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
+import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
@@ -70,6 +71,19 @@ public class ConceptTestCase extends DOMLoadingTestCase {
             fail(e.getMessage());
         }
     }
+    
+    public void testGetFactCount() {   
+
+        try {
+            loader.discover(this.getURI(FOOTNOTELINKS));        
+            List<Concept> concepts = store.<Concept>getXMLResources(ConceptImpl.class);
+            for (Concept concept: concepts) {
+                assertEquals(concept.getFactCount(),concept.getFacts().size());
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }    
     
     public void testNumericItemTypeDetection() {   
 
