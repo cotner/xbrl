@@ -83,7 +83,10 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
 	public void testGetArcroleTypes() throws Exception {
 		try {
 			List<ArcroleType> arcroleTypes = store.getArcroleTypes();
-			assertEquals(15, arcroleTypes.size());
+            for (ArcroleType at: arcroleTypes) {
+                logger.debug(at.getCustomURI());
+            }
+			assertEquals(21, arcroleTypes.size());
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

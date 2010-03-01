@@ -8,6 +8,7 @@ import java.util.Set;
 import org.xbrlapi.data.dom.tests.BaseTestCase;
 import org.xbrlapi.loader.History;
 import org.xbrlapi.loader.HistoryImpl;
+import org.xbrlapi.loader.Loader;
 
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
@@ -28,7 +29,7 @@ public class HistoryImplTestCase extends BaseTestCase {
 		try {
 		    loader.setHistory(new HistoryImpl());
 		    loader.discover(this.getURI(STARTING_POINT));
-		    assertEquals(100,store.getSize());
+		    assertEquals(382,store.getSize());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -37,25 +38,24 @@ public class HistoryImplTestCase extends BaseTestCase {
 	
     public void testHistoryImpl_ReloadUsingSameIdentifiers() throws Exception {
         try {
-            MapHistory history = new MapHistory();
+            History history = new MapHistory();
             loader.setHistory(history);
             loader.discover(this.getURI(STARTING_POINT));
             int size = store.getDocumentURIs().size();
-            Set<URI> uris = history.getURIs();
+            assertEquals(6, size);
+            history = loader.getHistory();
+            Set<URI> uris = loader.getHistory().getURIs();
+            assertEquals(6, uris.size());
             for (URI uri: uris) {
                 store.deleteDocument(uri);
             }
             assertEquals(0,store.getDocumentURIs().size());
-            MapHistory newHistory = new MapHistory();
-            loader.setHistory(newHistory);
+            Loader newLoader = createLoader(store);
+            newLoader.setHistory(history);
             for (URI uri: uris) {
-                logger.warn(uri + " = " + history.getIdentifier(uri));
-                loader.rediscover(uri,history.getIdentifier(uri));
-            }            
-            assertEquals(size,store.getDocumentURIs().size());
-            for (URI uri: newHistory.getURIs()) {
-                assertEquals(newHistory.getIdentifier(uri),history.getIdentifier(uri));
+                newLoader.discover(uri);
             }
+            assertEquals(size,store.getDocumentURIs().size());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());

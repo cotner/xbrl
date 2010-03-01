@@ -101,7 +101,19 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 			fail(e.getMessage());
 		}
 	}
-	
+
+    public void testGetConceptCount() {
+        try {
+            List<Schema> fragments = store.<Schema>getXMLResources("Schema");
+            for (Schema schema: fragments) {
+                assertEquals(schema.getConceptCount(),schema.getConcepts().size());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
+    
 	public void testGetReferencePartDeclarations() {
 		try {
 			List<Schema> fragments = store.<Schema>getXMLResources("Schema");

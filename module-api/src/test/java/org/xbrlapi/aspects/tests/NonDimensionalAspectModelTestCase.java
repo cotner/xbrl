@@ -40,13 +40,15 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
 		super(arg0);
 	}
 
-	public void testCreatingNonDimensionalAspectModel() {
+	public void testNonDimensionalAspectModel() {
 		try {
 	        loader.discover(this.getURI(FIRST_SMALL_INSTANCE));       
 	        loader.discover(this.getURI(SECOND_SMALL_INSTANCE));
 			List<Fact> facts = store.<Fact>getXMLResources("SimpleNumericItem");
 			assertEquals(2,facts.size());
             AspectModel model = new NonDimensionalAspectModel();
+
+            assertEquals(7,model.getAspects().size());
             
             model.arrangeAspect(ConceptAspect.TYPE,"row");
             model.arrangeAspect(EntityIdentifierAspect.TYPE,"row");
@@ -54,18 +56,19 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             model.arrangeAspect(UnitAspect.TYPE,"col");
             model.arrangeAspect(ScenarioAspect.TYPE,"col");
             model.arrangeAspect(LocationAspect.TYPE,"col");
-            for (Fact fact: facts) {
-                model.addFact(fact);
-                assertTrue(model.getAspectValues(fact).size() == model.getAspects().size());
-            }
+
+            assertEquals(2,model.getAxisAspects("row").size());
+            assertEquals(4,model.getAxisAspects("col").size());
             
+            model.addFacts(facts);
+            assertEquals(7,model.getAspects().size());
+            assertEquals(facts.size(),model.getFactCount());
+                        
             for (Aspect aspect: model.getAspects()) {
-                logger.info(aspect.getType());
                 for (AspectValue value: aspect.getValues()) {
-                    logger.info(value.getIdentifier());
+                    logger.info(aspect.getType() + " has value " + value.getIdentifier());
                 }
             }
-            assertEquals(7,model.getAspects().size());
             
             model.setCriterion(model.getAspect(ConceptAspect.TYPE).getValues().get(0));
             model.setCriterion(model.getAspect(EntityIdentifierAspect.TYPE).getValues().get(0));
@@ -80,21 +83,22 @@ public class NonDimensionalAspectModelTestCase extends DOMLoadingTestCase {
             assertEquals(4,rowMatrix.size());
             assertEquals(2,rowMatrix.get(0).size());
             assertEquals(4,colMatrix.size());
-            assertEquals(3,colMatrix.get(0).size());
+            assertEquals(4,colMatrix.get(0).size());
+
             for (List<AspectValue> rowCombination: rowMatrix) {
                 for (AspectValue rValue: rowCombination) {
-                    logger.info("R: " + rValue.getAspect().getType() + " = " + rValue.getLabel());
+                    logger.debug("R: " + rValue.getAspect().getType() + " = " + rValue.getLabel());
                 }
                 for (List<AspectValue> colCombination: colMatrix) {
                     for (AspectValue cValue: colCombination) {
-                        logger.info("C:" + cValue.getAspect().getType() + " = " + cValue.getLabel());
+                        logger.debug("C:" + cValue.getAspect().getType() + " = " + cValue.getLabel());
                     }
                     model.clearAllCriteria();
                     model.setCriteria(rowCombination);
                     model.setCriteria(colCombination);
                     Set<Fact> matchingFacts = model.getMatchingFacts();
                     for (Fact matchingFact: matchingFacts) {
-                        logger.info(matchingFact.getIndex());
+                        logger.debug(matchingFact.getIndex());
                     }
                 }
             }

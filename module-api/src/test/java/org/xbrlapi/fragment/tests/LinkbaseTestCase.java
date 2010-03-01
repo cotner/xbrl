@@ -38,7 +38,7 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test getting arcrole references from the linkbase.
 	 */
-	public void testGetArcroleRef() {	
+	public void testGetArcroleRefs() {	
 		try {
             List<SimpleLink> links = store.<SimpleLink>getXMLResources("SimpleLink");
             for (SimpleLink link: links) {
@@ -61,7 +61,7 @@ public class LinkbaseTestCase extends DOMLoadingTestCase {
 	/**
 	 * Test getting role references from the linkbase.
 	 */
-	public void testGetRoleRef() {	
+	public void testGetRoleRefs() {	
 
 		try {
             List<SimpleLink> links = store.<SimpleLink>getXMLResources("SimpleLink");
