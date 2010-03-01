@@ -86,6 +86,14 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     }
     
     /**
+     * @see org.xbrlapi.Schema#getConceptCount()
+     */
+    public long getConceptCount() throws XBRLException {
+        String query = "for $root in #roots#[@parentIndex='" + this.getIndex() + "' and @type='"+ ConceptImpl.class.getName() +"'] return $root";
+        return this.getStore().queryCount(query);
+    }    
+    
+    /**
      * @see org.xbrlapi.Schema#getOtherElementDeclarations()
      */
     public List<Concept> getOtherElementDeclarations() throws XBRLException {

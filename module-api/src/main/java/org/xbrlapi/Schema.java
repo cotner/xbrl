@@ -51,6 +51,16 @@ public interface Schema extends SchemaContent {
      * @throws XBRLException.
      */
     public List<Concept> getConcepts() throws XBRLException;
+    
+    /**
+     * Get the number of concepts defined in the schema.
+     * @return the number of XBRL concepts defined in the 
+     * schema.  Note that concepts that are overloaded with 
+     * and XBRL Dimensions interpretation are excluded from this
+     * count if the XBRL Dimensions loader is being used.
+     * @throws XBRLException.
+     */
+    public long getConceptCount() throws XBRLException;
 
     
     
