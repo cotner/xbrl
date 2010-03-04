@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
@@ -40,6 +41,8 @@ import org.xbrlapi.xdt.values.DimensionValueAccessorImpl;
  */
 public class DimensionalAspectModel extends BaseAspectModel implements AspectModel {
 
+    transient private final static Logger logger = Logger.getLogger(DimensionalAspectModel.class);
+    
     transient DimensionValueAccessor accessor;
     
     /**
@@ -109,7 +112,9 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
      * @see AspectModel#addFacts(Collection<Fact>)
      */
     public <F extends Fact> void addFacts(Collection<F> facts) throws XBRLException {
-        super.addFacts(facts);
+        
+        for (Fact fact: facts) this.addFact(fact);
+        
         Set<Fact> allFacts = this.getAllFacts();
         
         for (ExplicitDimensionAspect aspect: this.getExplicitDimensionAspects()) {
@@ -125,8 +130,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
             aspect.addFacts(missingFacts);
         }
     }    
-    
-    
+
     /**
      * This method needs to be improved to eliminate the potential for dimension aspect type values
      * to differ between how they are constructed in this method and how they are constructed
@@ -141,13 +145,13 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
         List<Element> children = occ.getChildElements();
 
         for (Element child: children) {
-            if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
+            if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace.toString())) {
                 if (child.hasAttribute("dimension")) {
                     String qname = child.getAttribute("dimension");
                     URI dimensionNamespace = occ.getNamespaceFromQName(qname,child);
                     String dimensionLocalname = occ.getLocalnameFromQName(qname);
                     if (! this.hasAspect(dimensionNamespace + "#" + dimensionLocalname)) {
-                        Dimension dimension = (Dimension) store.getConcept(dimensionNamespace,dimensionLocalname); 
+                        Dimension dimension = store.<Dimension>getGlobalDeclaration(dimensionNamespace,dimensionLocalname);
                         if (dimension.isExplicitDimension())
                             this.setAspect(new ExplicitDimensionAspect(this ,(ExplicitDimension) dimension));
                         else 
@@ -185,8 +189,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     public List<DimensionAspect> getDimensionAspects() {
         List<DimensionAspect> result = new Vector<DimensionAspect>();
         for (Aspect aspect: this.getAspects()) {
-           String name = aspect.getClass().getName();
-           if (name.equals("org.xbrlapi.xdt.aspects.ExplicitDimensionAspect") || name.equals("org.xbrlapi.xdt.aspects.TypedDimensionAspect")) 
+           if (aspect.getClass().equals(ExplicitDimensionAspect.class) || aspect.getClass().equals(TypedDimensionAspect.class)) 
                result.add((DimensionAspect) aspect);
        }
        return result;
@@ -195,8 +198,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     public List<ExplicitDimensionAspect> getExplicitDimensionAspects() {
         List<ExplicitDimensionAspect> result = new Vector<ExplicitDimensionAspect>();
         for (Aspect aspect: this.getAspects()) {
-            String name = aspect.getClass().getName();
-            if (name.equals("org.xbrlapi.xdt.aspects.ExplicitDimensionAspect")) 
+            if (aspect.getClass().equals(ExplicitDimensionAspect.class))
                 result.add((ExplicitDimensionAspect) aspect);
         }
         return result;
@@ -205,8 +207,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
     public List<TypedDimensionAspect> getTypedDimensionAspects() {
         List<TypedDimensionAspect> result = new Vector<TypedDimensionAspect>();
         for (Aspect aspect: this.getAspects()) {
-            String name = aspect.getClass().getName();
-            if (name.equals("org.xbrlapi.xdt.aspects.TypedDimensionAspect")) 
+            if (aspect.getClass().equals(TypedDimensionAspect.class))
                 result.add((TypedDimensionAspect) aspect);
         }
         return result;

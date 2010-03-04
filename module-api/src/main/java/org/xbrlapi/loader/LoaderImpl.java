@@ -287,24 +287,16 @@ public class LoaderImpl implements Loader, Serializable {
      */
     private void setDocumentURI(URI uri) throws XBRLException {
         documentURI = uri;
-        documentId = getStore().getId(uri.toString());
-        getHistory().addRecord(uri,documentId);
-
+        String identifier = this.getHistory().getIdentifier(uri);
+        if (identifier == null) {
+            documentId = getStore().getId(uri.toString());
+            getHistory().addRecord(uri,documentId);
+        } else {
+            documentId = identifier;
+        }
     }
     
-    /**
-     * Set the URI of the document now being parsed and set the
-     * document ID for the document being parsed by using the store
-     * to generate the ID from the URI.  The document ID is used as
-     * part of the fragment naming scheme in the data store.
-     * @param uri The URI of the document now being parsed.
-     * @param identifier The identifier to use for the document.
-     */
-    private void setDocumentURI(URI uri, String identifier) {
-        documentURI = uri;
-        documentId = identifier;
-        getHistory().addRecord(uri,documentId);
-    }    
+    
     
     /**
      * @return the document ID for the document being analysed or
@@ -491,7 +483,6 @@ public class LoaderImpl implements Loader, Serializable {
      * @see org.xbrlapi.loader.Loader#discover()
      */
     public void discover() throws XBRLException {
-        
         getStore().startLoading(this);
         
         Set<URI> newDocuments = new TreeSet<URI>();
@@ -508,7 +499,7 @@ public class LoaderImpl implements Loader, Serializable {
             logger.info(uri + " stashed for discovery.");
             this.stashURI(uri);
         }
-        
+
         URI uri = getNextDocumentToExplore();
         DOCUMENTS: while (uri != null) {
             boolean documentClaimedByThisLoader = store.requestLoadingRightsFor(this,uri);
@@ -646,65 +637,7 @@ public class LoaderImpl implements Loader, Serializable {
 
     }
     
-    /**
-     * @see org.xbrlapi.loader.Loader#rediscover()
-     */
-    public void rediscover(URI uri, String identifier) throws XBRLException {
-
-        Store store = this.getStore();
-        
-        if (isDiscovering()) {
-            logger.warn("Already discovering data with this loader so loader will not discover next document as requested.");
-            return;
-        }
-        setDiscovering(true);
-
-        boolean documentClaimedByThisLoader = store.requestLoadingRightsFor(this,uri);
-        while ((store.hasDocument(uri) || !documentClaimedByThisLoader) && (uri != null)) {
-            if (documentClaimedByThisLoader) {
-                store.recindLoadingRightsFor(this,uri);
-                logger.error(uri + " is already stored.");
-            } else {
-                this.markDocumentAsExplored(uri);
-                logger.error(uri + " is being loaded by another loader.");
-            }
-            setDiscovering(false);
-            return;
-        }
-        
-        if (store.queryCount("#roots#[@index='" + identifier + "_1']") > 0) {
-            logger.error("Identifier, " + identifier + ", is already being used in the data store.");
-            setDiscovering(false);
-            return;
-        }
-
-        if (uri != null) {
-            logger.debug("Now rediscovering " + uri + " with identifier " + identifier);
-            setDocumentURI(uri, identifier);
-            this.setNextFragmentId("1");
-            try {
-                parse(uri);
-                markDocumentAsExplored(uri);
-                getStore().sync();
-                logger.info((this.fragmentId-1) + " fragments in " + uri);
-            } catch (XBRLException e) {
-                this.cleanupFailedLoad(uri,"XBRL Problem: " + e.getMessage(),e);
-            } catch (SAXException e) {
-                this.cleanupFailedLoad(uri,"SAX Problem: " + e.getMessage(),e);
-            } catch (IOException e) {
-                this.cleanupFailedLoad(uri,"IO Problem: " + e.getMessage(),e);
-            } catch (ParserConfigurationException e) {
-                throw new XBRLException("The parser could not be correctly configured.",e);
-            } finally {
-                setDiscovering(false);
-            }
-        }
-
-        logger.info("Finished discovery of " + uri);
-        
-        setDiscovering(false);
-
-    }    
+    
 
     /**
      * Perform a discovery starting with an XML document that is represented as
@@ -864,18 +797,8 @@ public class LoaderImpl implements Loader, Serializable {
 
         // Stash the URI if it has not already been stashed
         if (!successes.contains(dereferencedURI)) {
-
             // Queue up the original URI - ignoring issues of whether it matches another document.
             documentQueue.add(dereferencedURI);
-            
-/*            // Only stash if the document does not already have a match.
-            URI matchURI = getStore().getMatcher().getMatch(dereferencedURI);
-            if (matchURI.equals(dereferencedURI)) {
-                documentQueue.add(dereferencedURI);
-            } else {
-                logger.debug("No need to stash " + dereferencedURI + " because it has match " + matchURI);
-            }
-*/
         }
 
     }
@@ -1088,8 +1011,9 @@ public class LoaderImpl implements Loader, Serializable {
     /**
      * @see Loader#setHistory(History)
      */
-    public void setHistory(History history) {
-        this.history = history;
+    public void setHistory(History newHistory) {
+        if (newHistory == null) this.history = new HistoryImpl();
+        this.history = newHistory;
     }
 
     /**

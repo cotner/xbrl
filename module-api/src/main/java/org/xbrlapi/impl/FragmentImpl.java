@@ -653,6 +653,63 @@ public class FragmentImpl extends XMLImpl implements Fragment {
         throw new XBRLException("An element or attribute node is expected.");
 
     }
+
+    /**
+     * Algorithm is as follows:
+     * <ol>
+     *  <li>If the node is an attribute, redo with the parent node.</li>
+     *  <li>If the node is a XBRLAPI metadata element redo with right node in parent fragment.</li>
+     *  <li>If the node is an element in the fragment data:</li>
+     *   <ol>
+     *    <li>Try to find the XML lang attribute and use its value.</li>
+     *    <li>If that fails, redo the search using the parent node.</li>
+     *   </ol>
+     * </ol>
+     * 
+     * @see org.xbrlapi.Fragment#getLanguage(Node)
+     */
+    public String getLanguage(Node node) throws XBRLException {
+        
+        // If we have an attribute - go straight to working with the parent element.
+        if (node.getNodeType() != Node.ELEMENT_NODE) {
+            Node parentNode = node.getParentNode();
+            if (parentNode == null) return null;
+            return getLanguage(parentNode);
+        }
+        
+        Element element = (Element) node;
+
+        // Go to parent fragment if we are looking at the container element for the fragment data.
+        String elementNamespace = element.getNamespaceURI();
+        if (elementNamespace != null) {
+            if (elementNamespace.equals(Constants.XBRLAPINamespace.toString())) {
+                if (this.isRoot()) return null;
+                Fragment parent = getParent();
+                if (parent == null) throw new XBRLException("A parent fragment is missing from the data store preventing language code identification.");
+                Element parentElement = getParentElement(parent.getDataRootElement());
+                return parent.getLanguage(parentElement);
+            }
+        }
+        
+        // Check for a language code on the current element
+        if (element.hasAttribute("xml:lang")) {
+            return element.getAttribute("xml:lang");
+        }
+        
+        // Check for a language code on the parent element
+        return getLanguage(element.getParentNode());
+        
+
+    }
+    
+    /**
+     * @see org.xbrlapi.Fragment#getLanguage()
+     * @see org.xbrlapi.Fragment#getLanguage(Node)
+     */
+    public String getLanguage() throws XBRLException {
+        return this.getLanguage(this.getDataRootElement());
+    }
+    
     
 
     /**

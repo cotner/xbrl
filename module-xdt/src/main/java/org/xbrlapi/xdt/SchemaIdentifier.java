@@ -150,7 +150,7 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
                     XSElementDeclaration sgDeclaration = declaration.getSubstitutionGroupAffiliation();
                     while (sgDeclaration != null) {
                         
-                        logger.info("The element's namespace is " + sgDeclaration.getNamespace());
+                        logger.debug("The element's namespace is " + sgDeclaration.getNamespace());
                         
                         if (sgDeclaration.getNamespace().equals(XDTConstants.XBRLDTNamespace.toString())) {
                             if (sgDeclaration.getName().equals(XDTConstants.hypercube)) {
@@ -161,7 +161,7 @@ public class SchemaIdentifier extends org.xbrlapi.sax.identifiers.SchemaIdentifi
                                     fragment = new ExplicitDimensionImpl();
                                 } else {
                                     fragment = new TypedDimensionImpl();
-                                    logger.info(attrs.getValue(XDTConstants.XBRLDTNamespace.toString(),"typedDomainRef"));
+                                    logger.debug(attrs.getValue(XDTConstants.XBRLDTNamespace.toString(),"typedDomainRef"));
                                 }
                                 break;
                             }

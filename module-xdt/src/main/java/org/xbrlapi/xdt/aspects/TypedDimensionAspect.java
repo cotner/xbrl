@@ -50,10 +50,15 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
          */
         public String getIdentifier(AspectValue value) throws XBRLException {
             
+            if (value.isMissing()) {
+                setMapId(value,"");
+                return "";
+            }
+            
             if (hasMapId(value)) {
                 return getMapId(value);
             }
-            
+
             TypedDimensionAspect aspect = (TypedDimensionAspect) value.getAspect();
             Element content = aspect.getAccessor().getTypedDimensionContentFromOpenContextComponent((OpenContextComponent) value.getFragment(),aspect.getDimension());
             NodeList nodes = content.getChildNodes();

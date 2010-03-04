@@ -26,6 +26,13 @@ public interface Schema extends SchemaContent {
     public List<SimpleLink> getImports() throws XBRLException;
     
     /**
+     * @return the list of schemas that import this schema.
+     * @throws XBRLException
+     */
+    public List<Schema> getImporters() throws XBRLException;
+    
+    
+    /**
      * @return a list of SimpleLink fragments, one per XML Schema 
      * include used by this schema.
      * @throws XBRLException

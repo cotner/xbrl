@@ -1,6 +1,5 @@
 package org.xbrlapi.impl;
 
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.MixedContentResource;
 import org.xbrlapi.utilities.XBRLException;
@@ -22,22 +21,4 @@ public class MixedContentResourceImpl extends ResourceImpl implements MixedConte
     public NodeList getContent() throws XBRLException {
     	return getDataRootElement().getChildNodes();
     }
-    
-
-
-    /**
-     * Get the value of the xml:lang attribute on the resource.
-     * @return the string value of the XML language attribute on 
-     * the label resource or null if no such attribute is provided.
-     * @throws XBRLException
-     * @see org.xbrlapi.MixedContentResource#getLanguage()
-     */
-    public String getLanguage() throws XBRLException {
-    	Element root = getDataRootElement();
-    	if (! root.hasAttribute("xml:lang")) return null;
-    	return root.getAttribute("xml:lang");
-    }
-    
-
-    
 }

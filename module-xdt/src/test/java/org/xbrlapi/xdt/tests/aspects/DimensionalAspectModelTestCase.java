@@ -47,8 +47,9 @@ public class DimensionalAspectModelTestCase extends BaseTestCase {
             List<ExplicitDimensionAspect> aspects = model.getExplicitDimensionAspects();
             assertEquals(2, aspects.size());
             for (Aspect aspect: aspects) {
-                assertEquals(3, aspect.getValues().size());
+                assertEquals(4, aspect.getValues().size());
                 for (AspectValue value: aspect.getValues()) {
+                    logger.error(aspect.getLabel() + " = " + value.getLabel());
                     assertEquals(1, aspect.getFacts(value).size());
                 }
             }

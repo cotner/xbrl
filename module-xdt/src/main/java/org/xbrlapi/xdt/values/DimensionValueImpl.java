@@ -1,5 +1,6 @@
 package org.xbrlapi.xdt.values;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.xbrlapi.Concept;
 import org.xbrlapi.Item;
@@ -9,6 +10,8 @@ import org.xbrlapi.xdt.Dimension;
 
 public class DimensionValueImpl implements DimensionValue {
 
+    protected static Logger logger = Logger.getLogger(DimensionValueImpl.class);
+    
     /**
      * The item with the value for the dimension.
      */

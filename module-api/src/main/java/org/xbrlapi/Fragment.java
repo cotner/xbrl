@@ -400,22 +400,39 @@ public interface Fragment extends XML {
      * @throws XBRLException
      */
     public <F extends Fragment> List<F> getChildren(String type) throws XBRLException;
-    
+
     /**
      * Gets the child fragments with the specified fragment type.
-     * @param requiredClass The required fragment class of the child fragments.
-     * @return the fragment list of children fragments that match the specified fragment type
+     * 
+     * @param requiredClass
+     *            The required fragment class of the child fragments.
+     * @return the fragment list of children fragments that match the specified
+     *         fragment type
      * @throws XBRLException
      */
     public <F extends Fragment> List<F> getChildren(Class<?> requiredClass) throws XBRLException;
 
     /**
-     * @param type The fragment type
+     * @param type
+     *            The fragment type
      * @return The list of all fragments of the given fragment type.
      * @throws XBRLException
      */
     public Set<String> getChildrenIndices(String type) throws XBRLException;
     
-    
+    /**
+     * @param node The XML node to get the XML language fragment for.
+     * @return the value of the xml:lang attribute applying to the given node
+     * or null if no such attribute is applicable.
+     * @throws XBRLException
+     */
+    public String getLanguage(Node node) throws XBRLException;
+
+    /**
+    * @return the value of the xml:lang attribute applying to the fragment root
+    *         element or null if no such attribute is applicable.
+    * @throws XBRLException
+    */
+    public String getLanguage() throws XBRLException;    
     
 }

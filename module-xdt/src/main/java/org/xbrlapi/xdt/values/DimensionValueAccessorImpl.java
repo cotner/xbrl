@@ -15,6 +15,8 @@ import org.xbrlapi.Segment;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.ExplicitDimension;
+import org.xbrlapi.xdt.ExplicitDimensionImpl;
+import org.xbrlapi.xdt.TypedDimensionImpl;
 import org.xbrlapi.xdt.XDTConstants;
 
 /**
@@ -35,9 +37,9 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
      * @see DimensionValueAccessor#getValue(org.xbrlapi.Item, org.xbrlapi.xdt.Dimension)
      */
     public DimensionValue getValue(Item item, Dimension dimension) throws XBRLException {
-        if (dimension.getType().equals("org.xbrlapi.xdt.TypedDimensionImpl")) {
+        if (dimension.getClass().equals(TypedDimensionImpl.class)) {
             return getTypedDimensionValue(item, dimension);
-        } else if (dimension.getType().equals("org.xbrlapi.xdt.ExplicitDimensionImpl")) {
+        } else if (dimension.getClass().equals(ExplicitDimensionImpl.class)) {
             return getExplicitDimensionValue(item, dimension);
         }
         throw new XBRLException("The dimension QName does not identify a typed or explicit dimension.");
@@ -119,7 +121,7 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
                 Node child = children.item(i);
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
                     Element childElement = (Element) child;
-                    if (childElement.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
+                    if (childElement.getNamespaceURI().equals(XDTConstants.XBRLDINamespace.toString())) {
                         String dimensionName = childElement.getAttribute("dimension");
                         if (! dimensionName.equals("")) {
                             URI dimensionNamespace = occ.getNamespaceFromQName(dimensionName,child);
@@ -150,7 +152,7 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
                 Node child = children.item(i);
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
                     Element childElement = (Element) child;
-                    if (childElement.getNamespaceURI().equals(XDTConstants.XBRLDINamespace)) {
+                    if (childElement.getNamespaceURI().equals(XDTConstants.XBRLDINamespace.toString())) {
                         String dimensionName = childElement.getAttribute("dimension");
                         if (! dimensionName.equals("")) {
                             URI dimensionNamespace = occ.getNamespaceFromQName(dimensionName,child);

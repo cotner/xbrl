@@ -109,13 +109,13 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         if (container != null)  this.containerName = container;
         else throw new XBRLException("The Berkeley DB XML database container must be specified.");
         
-        try {
+/*        try {
             XmlManager.setLogLevel(XmlManager.LEVEL_ALL, false);
             XmlManager.setLogCategory(XmlManager.CATEGORY_ALL, false);     
         } catch (XmlException e) {
             throw new XBRLException("The BDB XML log levels could not be initialised.", e);
         }
-        
+*/        
         initContainer();
         
         //this.logIndexes();

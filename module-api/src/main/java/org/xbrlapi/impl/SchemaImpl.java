@@ -56,6 +56,23 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
     	String query = "#roots#[@parentIndex='" + this.getIndex() + "' and @type='org.xbrlapi.impl.SimpleLinkImpl' and */xsd:import]";
     	return getStore().<SimpleLink>queryForXMLResources(query);
     }
+
+    /**
+     * @see org.xbrlapi.Schema#getImporters()
+     */
+    public List<Schema> getImporters() throws XBRLException {
+        String query = "for $root in #roots#[@type='"+SimpleLinkImpl.class.getName()+"'] where $root/xbrlapi:data/xsd:import/@namespace='" + getSchema().getTargetNamespace() + "' order by $root/xbrlapi:data/xsd:import/@namespace ascending return $root";
+        List<Schema> result = new Vector<Schema>();
+        List<SimpleLink> links = this.getStore().queryForXMLResources(query);
+        for (SimpleLink link: links) {
+            try {
+                result.add((Schema) link.getTarget());
+            } catch (ClassCastException e) {
+                throw new XBRLException("The schema import points illegally to a non-schema fragment.", e);
+            }
+        }
+        return result;
+    }    
     
     /**
      * @see org.xbrlapi.Schema#getIncludes()
