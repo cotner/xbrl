@@ -3,8 +3,7 @@ package org.xbrlapi.data.exist.tests;
 import java.net.URI;
 import java.util.Set;
 /**
- * Tests of performance with larger data sets.
- * TODO Create a load test for other persistent data store implementations.
+ * Tests performance with larger data sets.
  * @author Geoffrey Shuetrim (geoff@galexy.net) 
  */
 public abstract class LoadPerformanceTestCase extends BaseTestCase {

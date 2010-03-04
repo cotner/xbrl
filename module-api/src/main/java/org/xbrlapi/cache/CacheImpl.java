@@ -85,7 +85,6 @@ public class CacheImpl implements Cache {
     	}
 
     	try {
-    	    // TODO Make this test work for windows paths.
     	    logger.debug("The canonical path to the cache root is: " + cacheRoot.getCanonicalPath());
             logger.debug("The path component of the URI being tested is: " + uri.getPath());
 

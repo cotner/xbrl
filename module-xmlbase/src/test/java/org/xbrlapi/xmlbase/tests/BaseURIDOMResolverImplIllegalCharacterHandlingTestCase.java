@@ -12,7 +12,7 @@ import org.xbrlapi.xmlbase.XMLBaseException;
 
 /**
  * Tests of illegal URI characters using the DOM based XML Base resolver
- * TODO confirm that xml base is adequately testing illegal URI characters
+ * TODO check that xml base is adequately testing illegal URI characters
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 public class BaseURIDOMResolverImplIllegalCharacterHandlingTestCase extends BaseTestCase {

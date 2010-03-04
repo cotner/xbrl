@@ -36,7 +36,6 @@ public class Fragment_LoaderDependentTestCase extends BaseTestCase {
 	/**
 	 * Test throwing of an exception when an attempt is
 	 * made to change the data store that the fragment is stored in.
-	 * TODO Decide if the Fragment setStore method should be protected rather than public.
 	 */
 	public void testExceptionExpectedChangingTheFragmentStore() {
 		try {

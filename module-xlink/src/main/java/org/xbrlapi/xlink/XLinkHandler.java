@@ -48,7 +48,6 @@ public interface XLinkHandler extends Serializable {
 	/**
 	 * Handles straight pass through of SAX event for 
 	 * the end of simple link elements.
-	 * TODO Is endSimpleLink always the same as endAllXLinkElements?
 	 * @param namespaceURI
 	 * @param sName
 	 * @param qName
@@ -234,7 +233,6 @@ public interface XLinkHandler extends Serializable {
 	/**
 	 * Handles straight pass through of SAX event for 
 	 * the end of simple link elements.
-	 * TODO Is endSimpleLink is always the same as endAllXLinkElements?
 	 * @param namespaceURI
 	 * @param sName
 	 * @param qName

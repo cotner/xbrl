@@ -90,7 +90,6 @@ public class SchemaTestCase extends DOMLoadingTestCase {
 	}
 	
 	public void testGetReferencePartDeclarationByName() {
-		// TODO !!! Create an example with reference part declarations in the conformance suite
 		try {
 			List<Schema> fragments = store.<Schema>getXMLResources("Schema");
 			Schema schema = fragments.get(0);

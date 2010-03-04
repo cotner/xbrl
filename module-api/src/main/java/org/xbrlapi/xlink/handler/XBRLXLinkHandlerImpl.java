@@ -170,9 +170,7 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl implements XLi
 	}
 	
 	/**
-	 * TODO Avoid using classes to differentiate XLink resources.
-	 * Create the resource and add it to the map of arc anchors ready to be processed
-	 * once the end of the containing extended link has been found.
+	 * @see XLinkHandler#startResource(String, String, String, Attributes, String, String, String)
 	 */
 	public void startResource(
 			String namespaceURI, 

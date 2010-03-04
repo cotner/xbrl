@@ -7,7 +7,6 @@ import org.xbrlapi.UsedOn;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * TODO Eliminate the usedOn fragment
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 

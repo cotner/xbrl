@@ -460,7 +460,6 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	}
 
 	/**
-     * TODO Make sure that queries finding a node within a fragment return the fragment itself.
 	 * @see org.xbrlapi.data.Store#queryForXMLResources(String)
 	 */
     @SuppressWarnings(value = "unchecked")

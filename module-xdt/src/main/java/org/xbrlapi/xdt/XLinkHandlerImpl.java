@@ -24,6 +24,7 @@ import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkException;
+import org.xbrlapi.xlink.XLinkHandler;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
 import org.xbrlapi.xmlbase.BaseURISAXResolver;
 import org.xbrlapi.xmlbase.XMLBaseException;
@@ -152,11 +153,11 @@ public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 		;
 	}
 	
-	/**
-	 * TODO Avoid using classes to differentiate XLink resources.
-	 * Create the resource and add it to the map of arc anchors ready to be processed
-	 * once the end of the containing extended link has been found.
-	 */
+    /**
+     * Create the resource and add it to the map of arc anchors ready to be processed
+     * once the end of the containing extended link has been found.
+     * @see XLinkHandler#startResource(String, String, String, Attributes, String, String, String)
+     */
 	public void startResource(
 			String namespaceURI, 
 			String lName, 

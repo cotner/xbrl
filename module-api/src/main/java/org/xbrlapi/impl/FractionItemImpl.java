@@ -6,7 +6,6 @@ import org.xbrlapi.FractionItem;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * TODO Create fraction item examples in the conformance suite to test fraction items.
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
@@ -24,7 +23,6 @@ public class FractionItemImpl extends NumericItemImpl implements FractionItem {
         }
         return new Double(child.getTextContent().trim()).doubleValue();
     }
-
 
 	/**
 	 * @see org.xbrlapi.FractionItem#getDenominator()
@@ -45,6 +43,5 @@ public class FractionItemImpl extends NumericItemImpl implements FractionItem {
         return new Double(child.getTextContent().trim()).doubleValue();
 
     }
-    
-    
+
 }

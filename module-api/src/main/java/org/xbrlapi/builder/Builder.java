@@ -89,7 +89,6 @@ public interface Builder {
 	/**
 	 * Update the insertion point for new content when reaching 
 	 * the end of an element.
-	 * TODO try to make endElement this a private method.
 	 * @param namespaceURI The namespace URI of the element that is ending.
 	 * @param lName The local name of the element that is ending.
 	 * @param qName The QName of the element that is ending.

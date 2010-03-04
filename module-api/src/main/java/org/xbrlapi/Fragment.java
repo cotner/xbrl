@@ -26,7 +26,6 @@ public interface Fragment extends XML {
      * Tests if a fragment is new in the sense that it does not have a root data element.
      * This is only used by the SAX content builder to keep track of where the fragment
      * construction process is at.
-     * TODO Decide if this can be eliminated by better decoupling the SAX content handler from the fragment implementation.
      * @return true if the fragment is new.
      * @throws XBRLException
      */

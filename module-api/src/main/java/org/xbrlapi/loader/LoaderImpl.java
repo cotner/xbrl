@@ -326,8 +326,7 @@ public class LoaderImpl implements Loader, Serializable {
     }
 
     /**
-     * Get the Xlink processor used by the loader. TODO Should the getter for
-     * the loader Xlink Processor be public?
+     * @see Loader#getXlinkProcessor()
      */
     public XLinkProcessor getXlinkProcessor() {
         return xlinkProcessor;

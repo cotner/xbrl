@@ -177,7 +177,6 @@ public class DimensionValueAccessorImpl implements DimensionValueAccessor {
         if (firstValue == null) return false;
         DimensionValue secondValue = this.getValue(second,dimension);
         if (secondValue == null) return false;
-        // TODO verify this comparison.
         return firstValue.equals(secondValue);
     }
 

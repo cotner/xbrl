@@ -105,17 +105,7 @@ public class DatabaseManagerTestCase extends BaseTestCase {
         }
 	}	
 	
-	/**
-	 * Test instantiation of a collection manager service
-	 */
-	public final void testInstantiationOfACollectionManagerService() {
-        try {
-        	// TODO Determine why Exist does not provide a CollectionManager service for collections.
-            //CollectionManager service = (CollectionManager) collection.getService("CollectionManager", "1.0");
-        } catch (Exception e) {
-        	fail(e.getMessage());
-        }
-	}
+
 
 	/**
 	 * Test instantiation of a collection management service

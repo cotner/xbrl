@@ -33,9 +33,9 @@ public class TupleImpl extends FactImpl implements Tuple {
 	 * @see org.xbrlapi.Tuple#getChildFacts(URI, String)
 	 */
 	public List<Fact> getChildFacts(URI namespace, String name) throws XBRLException {
-	    // TODO Improve query efficiency.
-		String query = "#roots#[@parentIndex='" + this.getIndex() + "' and namespace-uri("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+namespace+"' and local-name("+ Constants.XBRLAPIPrefix+ ":" + "data/*)='"+name+"']";
-		return getStore().queryForXMLResources(query);
+	    this.getStore().setNamespaceBinding(namespace,"xbrlapi_concept");
+	    String query = "for $root in #roots#[@parentIndex='" + this.getIndex() + "'] where $root/xbrlapi:data/xbrlapi_concept:" + name + " return $root";
+	    return getStore().queryForXMLResources(query);
 	}
 	
 	/**

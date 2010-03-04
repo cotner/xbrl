@@ -59,8 +59,10 @@ public class TupleTestCase extends DOMLoadingTestCase {
             assertTrue(tuples.size() > 0);
             for (Tuple tuple: tuples) {
                 List<Fact> children = tuple.getChildFacts();
+                store.serialize(tuple);
                 assertTrue(children.size() > 0);
                 for (Fact child: children) {
+                    store.serialize(child);
                     URI namespace = child.getNamespace();
                     String localname = child.getLocalname();
                     assertTrue(tuple.getChildFacts(namespace,localname).size() > 0);
