@@ -42,20 +42,24 @@ public class PointerGrammar implements PointerGrammarConstants {
       }
     }
     jj_consume_token(0);
-         {if (true) return pointerParts;}
-    throw new Error("Missing return statement in function");
+         {//if (true) 
+             return pointerParts;}
+    // GCS throw new Error("Missing return statement in function");
   }
 
   final public PointerPart ShortHand() throws ParseException {
         Token t;
         PointerPart p;
-    t = jj_consume_token(NCName);
-                p = new PointerPartImpl();
-                p.setSchemeLocalName("element");
-                p.setEscapedSchemeData(t.image);
-                p.setUnescapedSchemeData(t.image);
-                {if (true) return p;}
-    throw new Error("Missing return statement in function");
+        t = jj_consume_token(NCName);
+        p = new PointerPartImpl();
+        p.setSchemeLocalName("element");
+        p.setEscapedSchemeData(t.image);
+        p.setUnescapedSchemeData(t.image);
+        {
+            //if (true)
+                return p;
+        }
+        // GCS throw new Error("Missing return statement in function");
   }
 
   final public java.util.Vector SchemeBased() throws ParseException {
@@ -89,8 +93,9 @@ public class PointerGrammar implements PointerGrammarConstants {
       p = PointerScheme();
                  pointerParts.add(p);
     }
-         {if (true) return pointerParts;}
-    throw new Error("Missing return statement in function");
+         {//if (true) 
+             return pointerParts;}
+    // GCS throw new Error("Missing return statement in function");
   }
 
   final public PointerPart PointerScheme() throws ParseException {
@@ -102,8 +107,9 @@ public class PointerGrammar implements PointerGrammarConstants {
                 p.setEscapedSchemeData(data[0]);
                 p.setUnescapedSchemeData(data[1]);
     jj_consume_token(RightBracket);
-         {if (true) return p;}
-    throw new Error("Missing return statement in function");
+         {//if (true) 
+             return p;}
+    // GCS throw new Error("Missing return statement in function");
   }
 
   final public void SchemeName(PointerPart p) throws ParseException {
@@ -146,8 +152,9 @@ public class PointerGrammar implements PointerGrammarConstants {
                 String[] data = new String[2];
                 data[0] = escapedData.toString();
                 data[1] = unescapedData.toString();
-                {if (true) return data;}
-    throw new Error("Missing return statement in function");
+                {//if (true) 
+                    return data;}
+    // GCS throw new Error("Missing return statement in function");
   }
 
   final public String[] EscapedData() throws ParseException {
@@ -185,8 +192,9 @@ public class PointerGrammar implements PointerGrammarConstants {
                 String[] data = new String[2];
                 data[0] = escapedData.toString();
                 data[1] = unescapedData.toString();
-                {if (true) return data;}
-    throw new Error("Missing return statement in function");
+                {//if (true) 
+                    return data;}
+    // GCS throw new Error("Missing return statement in function");
   }
 
   final private boolean jj_2_1(int xla) {
