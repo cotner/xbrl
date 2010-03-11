@@ -53,9 +53,6 @@ public interface Concept extends ElementDeclaration {
      */
     public Set<String> getFactIndices() throws XBRLException;    
     
- 
-
- 
     /**
      * @return the list of extended link roles for the 
      * presentation networks involving this concept as a 
@@ -63,5 +60,7 @@ public interface Concept extends ElementDeclaration {
      * @throws XBRLException
      */
     public List<URI> getPresentationNetworkLinkroles() throws XBRLException;
+
+
     
  }
