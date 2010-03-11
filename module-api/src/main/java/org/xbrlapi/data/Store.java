@@ -558,9 +558,21 @@ public interface Store extends Serializable {
      *  Note that this method does not yet recognise fragment subtypes so 
      *  a request for an ElementDeclaration would not return all concepts as well as
      *  other XML Schema element declarations.
-     * @return a list of fragment indices with the given fragment type and in the given document.
+     * @return a list of fragment indices with the given fragment type.
      * @throws XBRLException
-     */    public Set<String> getFragmentIndices(String interfaceName) throws XBRLException;
+     */    
+    public Set<String> getFragmentIndices(String interfaceName) throws XBRLException;
+    
+    /**
+     * @param interfaceName The name of the interface.  EG: If a list of
+     *  Concept fragments is required then this parameter would have a value of "Concept".
+     *  Note that this method does not yet recognise fragment subtypes so 
+     *  a request for an ElementDeclaration would not return all concepts as well as
+     *  other XML Schema element declarations.
+     * @return a list of root fragment indices with the given fragment type.
+     * @throws XBRLException
+     */    
+    public Set<String> getRootFragmentIndices(String interfaceName) throws XBRLException;    
     
     /**
      * @param uri The URI of the document to get the fragments from.
@@ -742,6 +754,22 @@ public interface Store extends Serializable {
      * @throws XBRLException
      */
     public List<Fact> getFacts() throws XBRLException;
+    
+    /**
+     * @return a set of the indices of all root-level facts (those facts
+     * that are children of the root element of an XBRL instance).  Returns an empty set
+     * if no such facts are found in the data store.
+     * @throws XBRLException
+     */
+    public Set<String> getFactIndices() throws XBRLException;
+    
+    /**
+     * @return a set of the indices of all facts (including those facts
+     * that are children of tuples).  Returns an empty set
+     * if no such facts are found in the data store.
+     * @throws XBRLException
+     */
+    public Set<String> getAllFactIndices() throws XBRLException;        
     
     /**
      * @return a list of all of the items in the data store.

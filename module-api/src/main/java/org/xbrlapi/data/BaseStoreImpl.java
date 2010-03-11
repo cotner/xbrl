@@ -53,12 +53,16 @@ import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.data.resource.DefaultMatcherImpl;
 import org.xbrlapi.data.resource.InStoreMatcherImpl;
 import org.xbrlapi.data.resource.Matcher;
+import org.xbrlapi.impl.FractionItemImpl;
 import org.xbrlapi.impl.FragmentComparator;
+import org.xbrlapi.impl.NonNumericItemImpl;
 import org.xbrlapi.impl.RelationshipImpl;
 import org.xbrlapi.impl.RelationshipOrderComparator;
 import org.xbrlapi.impl.ResourceImpl;
 import org.xbrlapi.impl.SchemaImpl;
+import org.xbrlapi.impl.SimpleNumericItemImpl;
 import org.xbrlapi.impl.StubImpl;
+import org.xbrlapi.impl.TupleImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.AllAnalyserImpl;
 import org.xbrlapi.networks.Analyser;
@@ -82,7 +86,7 @@ import org.xbrlapi.utilities.XMLDOMBuilder;
  */
 public abstract class BaseStoreImpl implements Store {
 
-	private final static Logger logger = Logger.getLogger(BaseStoreImpl.class);
+    private final static Logger logger = Logger.getLogger(BaseStoreImpl.class);
 
     /**
      * The DOM document used to construct DOM representations
@@ -2450,4 +2454,82 @@ public abstract class BaseStoreImpl implements Store {
         throw new XBRLException("Schemas with URLs" + message + ", have the target namespace " + targetNamespace);
     }
 
+    /**
+     * @param fragmentClass The full name of the class of fragment being handled
+     * @return a map from fragment index to parent fragment index for all fragments with the given class name (type).
+     * @throws XBRLException
+     */
+    @SuppressWarnings("unchecked")
+    private Map<String,String> getIndexMap(Class fragmentClass) throws XBRLException {
+        String query = "for $root in #roots#[@type='" + fragmentClass.getName() + "'] return concat($root/@index,'#',$root/@parentIndex)";
+        Set<String> pairs = this.queryForStrings(query);
+        Map<String,String> map = new HashMap<String,String>();
+        for (String pair: pairs) {
+            String[] indices = pair.split("#");
+            map.put(indices[0],indices[1]);
+        }
+        return map;
+    }
+    
+    /**
+     * @see Store#getFactIndices()
+     */
+    public Set<String> getFactIndices() throws XBRLException {
+        
+        // Build a map from fact indices to their parent fragment indices
+        Map<String,String> factMap = getIndexMap(SimpleNumericItemImpl.class);
+        factMap.putAll(getIndexMap(FractionItemImpl.class));
+        factMap.putAll(getIndexMap(NonNumericItemImpl.class));
+        Map<String,String> tupleMap = getIndexMap(TupleImpl.class);
+        factMap.putAll(tupleMap);
+        factMap.putAll(getIndexMap(FractionItemImpl.class));
+        
+        // Choose only fact indices where their parent indices are not tuple indices
+        Set<String> result = new HashSet<String>();
+        Set<String> factIndices = factMap.keySet();
+        Set<String> tupleIndices = tupleMap.keySet();
+        for (String index: factIndices) {
+            if (! tupleIndices.contains(factMap.get(index))) {
+                result.add(index);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @param fragmentClass The full name of the class of fragment being handled
+     * @return a map from fragment index to parent fragment index for all fragments with the given class name (type).
+     * @throws XBRLException
+     */
+    @SuppressWarnings("unchecked")
+    private Set<String> getIndexSet(Class fragmentClass) throws XBRLException {
+        String query = "for $root in #roots#[@type='" + fragmentClass.getName() + "'] return $root";
+        Set<String> indices = this.queryForIndices(query);
+        return indices;
+    }
+    
+    /**
+     * @see Store#getAllFactIndices()
+     */
+    public Set<String> getAllFactIndices() throws XBRLException {
+        Set<String> indices = getIndexSet(SimpleNumericItemImpl.class);
+        indices.addAll(getIndexSet(FractionItemImpl.class));
+        indices.addAll(getIndexSet(NonNumericItemImpl.class));
+        indices.addAll(getIndexSet(TupleImpl.class));
+        indices.addAll(getIndexSet(FractionItemImpl.class));
+        return indices;
+    }
+
+    /**
+     * @see Store#getRootFragmentIndices(String)
+     */
+    public Set<String> getRootFragmentIndices(String interfaceName)
+            throws XBRLException {
+        String query = "for $root in #roots#[@parentIndex=''] where $root/@type='org.xbrlapi.impl." + interfaceName + "Impl' return $root";
+        if (interfaceName.indexOf(".") > -1) {
+            query = "for $root in #roots#[@parentIndex=''] where $root/@type='" + interfaceName + "' return $root";
+        }
+        return this.queryForIndices(query);
+    }    
+    
 }
