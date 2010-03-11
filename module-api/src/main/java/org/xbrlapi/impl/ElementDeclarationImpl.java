@@ -66,24 +66,9 @@ public class ElementDeclarationImpl extends SchemaContentDeclarationImpl impleme
       * @see org.xbrlapi.ElementDeclaration#isTuple()
       */
       public boolean isTuple() throws XBRLException {
-          String sgName = this.getSubstitutionGroupLocalname();
-          if (sgName == null) return false;
-          URI sgNS = this.getSubstitutionGroupNamespace();
-          String query = "#roots#[*/xsd:element/@name='" + sgName + "']";
-          List<ElementDeclaration> declarations = getStore().<ElementDeclaration>queryForXMLResources(query);
-          for (ElementDeclaration declaration: declarations) {
-              if (declaration.getTargetNamespace().equals(sgNS)) {
-                  if (declaration.getName().equals("tuple") && declaration.getTargetNamespace().equals(Constants.XBRL21Namespace)) {
-                      return true;
-                  }
-                  try {
-                      return declaration.isTuple();
-                  } catch (XBRLException e) {
-                      return false;
-                  }
-              }
-          }
-          throw new XBRLException("The substitution group is invalid.");
+          if (this.getName().equals("tuple") && this.getTargetNamespace().equals(Constants.XBRL21Namespace)) return true;
+          if (! this.hasSubstitutionGroup()) return false;
+          return this.getSubstitutionGroupDeclaration().isTuple();
       }
 
       /**
