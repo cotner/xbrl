@@ -90,7 +90,7 @@ public class LocationAspect extends BaseAspect implements Aspect {
             
             Concept concept = ((Fact) parent).getConcept();
             List<LabelResource> labels = concept.getLabels(getLanguageCodes(),getLabelRoles(),getLinkRoles());
-            if (labels.isEmpty()) label = concept.getTargetNamespace() + "#" + concept.getName();
+            if (labels.isEmpty()) label = concept.getName();
             else label = labels.get(0).getStringValue();
             setMapLabel(id,label);
             return label;
