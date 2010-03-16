@@ -47,6 +47,7 @@ public class RelationshipImpl extends NonFragmentXMLImpl implements Relationship
 
         setIndex(arc.getIndex() + source.getIndex() + target.getIndex());
 
+        setSourceURI(source.getURI());
         setSourceIndex(source.getIndex());
         setSourceType(source.getType());
         setSourceName(source.getLocalname());
@@ -56,6 +57,7 @@ public class RelationshipImpl extends NonFragmentXMLImpl implements Relationship
             setSourceRole(((Resource) source).getResourceRole());
         }
 
+        setTargetURI(target.getURI());
         setTargetIndex(target.getIndex());
         setTargetType(target.getType());
         setTargetName(target.getLocalname());
@@ -115,9 +117,41 @@ public class RelationshipImpl extends NonFragmentXMLImpl implements Relationship
     /**
      * @see org.xbrlapi.Relationship#getArcURI()
      */
-    public String getArcURI() {
-        return getMetaAttribute("arcURI");
-    }    
+    public URI getArcURI() throws XBRLException {
+        try {
+            if (this.hasMetaAttribute("arcURI")) 
+                return new URI(getMetaAttribute("arcURI"));
+            throw new XBRLException("The arc URI is not defined for this relationship.The relationship has not be initialised properly.");
+        } catch (URISyntaxException e) {
+            throw new XBRLException("The arc URI is malformed.", e);
+        }
+    }
+    
+    /**
+     * @see org.xbrlapi.Relationship#getSourceURI()
+     */
+    public URI getSourceURI() throws XBRLException {
+        try {
+            if (this.hasMetaAttribute("sourceURI")) 
+                return new URI(getMetaAttribute("sourceURI"));
+            throw new XBRLException("The source URI is not defined for this relationship.The relationship has not be initialised properly.");
+        } catch (URISyntaxException e) {
+            throw new XBRLException("The source URI is malformed.", e);
+        }
+    }
+    
+    /**
+     * @see org.xbrlapi.Relationship#getTargetURI()
+     */
+    public URI getTargetURI() throws XBRLException {
+        try {
+            if (this.hasMetaAttribute("targetURI")) 
+                return new URI(getMetaAttribute("targetURI"));
+            throw new XBRLException("The target URI is not defined for this relationship.The relationship has not be initialised properly.");
+        } catch (URISyntaxException e) {
+            throw new XBRLException("The target URI is malformed.", e);
+        }
+    }
 
     /**
      * @param index the index of the arc defining this relationship.
@@ -130,8 +164,25 @@ public class RelationshipImpl extends NonFragmentXMLImpl implements Relationship
      * @param uri the URI of the arc defining this relationship.
      */
     private void setArcURI(URI uri) throws XBRLException {
+        if (uri == null) throw new XBRLException("The arc URI must not be null.");
         this.setMetaAttribute("arcURI",uri.toString());
-    }    
+    }
+    
+    /**
+     * @param uri the URI of the relationship source.
+     */
+    private void setSourceURI(URI uri) throws XBRLException {
+        if (uri == null) throw new XBRLException("The source URI must not be null.");
+        this.setMetaAttribute("sourceURI",uri.toString());
+    }
+    
+    /**
+     * @param uri the URI of the relationship target.
+     */
+    private void setTargetURI(URI uri) throws XBRLException {
+        if (uri == null) throw new XBRLException("The target URI must not be null.");
+        this.setMetaAttribute("targetURI",uri.toString());
+    }
     
     /**
      * @see org.xbrlapi.Relationship#getArcName()

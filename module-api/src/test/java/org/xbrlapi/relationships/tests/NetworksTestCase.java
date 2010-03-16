@@ -140,6 +140,9 @@ public class NetworksTestCase extends DOMLoadingTestCase {
 			SortedSet<Relationship> relationships = network.getActiveRelationshipsTo(label.getIndex());
 			Relationship relationship = relationships.first();
 			assertEquals(Constants.LabelArcrole,relationship.getArc().getArcrole());
+			assertEquals(relationship.getArc().getURI(),relationship.getArcURI());
+            assertEquals(relationship.getSource().getURI(),relationship.getSourceURI());
+            assertEquals(relationship.getTarget().getURI(),relationship.getTargetURI());
 			
 		} catch (Exception e) {
 			e.printStackTrace();

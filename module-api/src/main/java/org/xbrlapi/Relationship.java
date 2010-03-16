@@ -31,6 +31,20 @@ public interface Relationship extends NonFragmentXML {
     public <F extends Fragment> F getSource() throws XBRLException;
     
     /**
+     * @return the URI of the document containing the source of the relationship.
+     * @throws XBRLException if the URI is malformed or if the relationship has
+     * not been initialised with the source URI.
+     */
+    public URI getSourceURI() throws XBRLException;
+    
+    /**
+     * @return the URI of the document containing the target of the relationship.
+     * @throws XBRLException if the URI is malformed or if the relationship has
+     * not been initialised with the target URI.
+     */
+    public URI getTargetURI() throws XBRLException;
+    
+    /**
      * @return the target fragment of the relationship.
      */
     public <F extends Fragment> F getTarget() throws XBRLException;
@@ -124,8 +138,9 @@ public interface Relationship extends NonFragmentXML {
     /**
      * @return the URI of the document containing the arc
      * defining this persisted relationship.
+     * @throws XBRLException if the URI is malformed
      */
-    public String getArcURI();
+    public URI getArcURI() throws XBRLException;
     
     /**
      * @return the source element name.
