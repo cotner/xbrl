@@ -1317,7 +1317,7 @@ public abstract class BaseStoreImpl implements Store {
         query += "/@index";
         Set<String> result = this.queryForStrings(query);
         Double seconds = new Double(System.currentTimeMillis() - start) / new Double(1000);
-        logger.info("Seconds required = " + seconds);
+        logger.debug("Seconds required = " + seconds);
         return result;
     }    
     
