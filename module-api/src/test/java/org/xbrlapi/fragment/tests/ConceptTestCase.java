@@ -77,9 +77,16 @@ public class ConceptTestCase extends DOMLoadingTestCase {
         try {
             loader.discover(this.getURI(FOOTNOTELINKS));        
             List<Concept> concepts = store.<Concept>getXMLResources(ConceptImpl.class);
+            assertTrue(concepts.size() > 0);
+            boolean foundFacts = false;
             for (Concept concept: concepts) {
+                if (concept.getFactCount() > 0) {
+                    foundFacts = true;
+                }
                 assertEquals(concept.getFactCount(),concept.getFacts().size());
+                logger.info(concept.getFactCount());
             }
+            assertTrue("no concepts found to have facts.", foundFacts);
         } catch (Exception e) {
             fail(e.getMessage());
         }

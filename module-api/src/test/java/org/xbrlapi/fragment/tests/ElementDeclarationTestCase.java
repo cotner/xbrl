@@ -240,7 +240,7 @@ public class ElementDeclarationTestCase extends DOMLoadingTestCase {
 		}
 	}
 		
-    public void testDerterminationOfBeingATuple() {     
+    public void testDeterminationOfBeingATuple() {     
 
         try {
             List<Concept> fragments = store.getXMLResources("Concept");
