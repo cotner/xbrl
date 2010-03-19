@@ -80,7 +80,7 @@ public interface Linkbase extends Fragment {
 
     /**
      * Gets the list of extended links in a linkbase
-     * @return the list of extended links in the linkbase or null if there are none.
+     * @return the list of extended links in the linkbase.
      * The extended links are ordered by their namespace and then local name.
      * @throws XBRLException
      */
