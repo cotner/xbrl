@@ -13,16 +13,6 @@ import org.xbrlapi.utilities.XBRLException;
 
 public interface Linkbase extends Fragment {
 
-
-    
-    /**
-     * Remove a arcroleRef from a linkbase.
-     *
-     * @param arcroleRef The arcroleRef to be removed.
-     * @throws XBRLException if the arcroleRef is not contained in the linkbase
-     */
-    public void removeArcroleRef(SimpleLink arcroleRef) throws XBRLException;
-
     /**
      * Retrieve an arcroleRef from a linkbase.
      *
@@ -40,16 +30,6 @@ public interface Linkbase extends Fragment {
      */
     public List<SimpleLink> getArcroleRefs() throws XBRLException;
 
-
-    
-    /**
-     * Remove a roleRef from a linkbase.
-     *
-     * @param roleRef The roleRef to be removed.
-     * @throws XBRLException if the roleRef is not contained in the linkbase.
-     */
-    public void removeRoleRef(SimpleLink roleRef) throws XBRLException;
-
     /**
      * Retrieve an roleRef from a linkbase.
      *
@@ -66,17 +46,6 @@ public interface Linkbase extends Fragment {
      * @throws XBRLException
      */
     public List<SimpleLink> getRoleRefs() throws XBRLException;
-
-
-    
-    /**
-     * Remove a roleRef from a linkbase.
-     *
-     * @param link The extended link to remove
-     * @throws XBRLException if the extended link  is not contained 
-	 * in the linkbase.
-     */
-    public void removeExtendedLink(SimpleLink link) throws XBRLException;
 
     /**
      * Gets the list of extended links in a linkbase

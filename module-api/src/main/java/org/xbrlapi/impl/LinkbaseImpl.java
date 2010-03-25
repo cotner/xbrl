@@ -20,18 +20,6 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
 
-
-    
-    /**
-     * Remove a arcroleRef from a linkbase.
-     * @param arcroleRef The arcroleRef to be removed.
-     * @throws XBRLException if the arcroleRef is not contained in the linkbase
-     * @see org.xbrlapi.Linkbase#removeArcroleRef(SimpleLink)
-     */
-    public void removeArcroleRef(SimpleLink arcroleRef) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
-
     /**
      * Retrieve an arcroleRef from a linkbase.
      * @param uri The arcroleRef URI
@@ -58,18 +46,6 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     public List<SimpleLink> getArcroleRefs() throws XBRLException {
         String query = "for $root in #roots#[@type='" + SimpleLinkImpl.class.getName() + "' and @parentIndex='" + this.getIndex() + "'] where $root/xbrlapi:data/link:arcroleRef return $root";
         return this.getStore().<SimpleLink>queryForXMLResources(query);
-    }
-
-
-    
-    /**
-     * Remove a roleRef from a linkbase.
-     * @param roleRef The roleRef to be removed.
-     * @throws XBRLException if the roleRef is not contained in the linkbase.
-     * @see org.xbrlapi.Linkbase#removeRoleRef(SimpleLink)
-     */
-    public void removeRoleRef(SimpleLink roleRef) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
     }
 
     /**
@@ -103,17 +79,6 @@ public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
     }
 
 
-    
-    /**
-     * Remove a roleRef from a linkbase.
-     * @param link The extended link to remove
-     * @throws XBRLException if the extended link  is not contained 
-	 * in the linkbase.
-     * @see org.xbrlapi.Linkbase#removeExtendedLink(SimpleLink)
-     */
-    public void removeExtendedLink(SimpleLink link) throws XBRLException {
-    	throw new XBRLException("Data update methods are not yet implemented.");
-    }
 
     /**
      * @see org.xbrlapi.Linkbase#getExtendedLinks()
