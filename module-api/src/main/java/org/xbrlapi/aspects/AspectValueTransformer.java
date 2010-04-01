@@ -7,6 +7,14 @@ import org.xbrlapi.utilities.XBRLException;
 
 
 /**
+ * <h2>Aspect Value Transformer Details</h2>
+ * 
+ * <p>
+ * Each aspect uses its own transformer to produce aspect value
+ * identifiers (the unique identifier identifying a given semantic aspect value) and 
+ * to produce aspect value labels from aspects.
+ * </p>
+ * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public interface AspectValueTransformer {    

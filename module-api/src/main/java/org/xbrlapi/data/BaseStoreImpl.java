@@ -2459,8 +2459,7 @@ public abstract class BaseStoreImpl implements Store {
      * @return a map from fragment index to parent fragment index for all fragments with the given class name (type).
      * @throws XBRLException
      */
-    @SuppressWarnings("unchecked")
-    private Map<String,String> getIndexMap(Class fragmentClass) throws XBRLException {
+    private Map<String,String> getIndexMap(Class<?> fragmentClass) throws XBRLException {
         String query = "for $root in #roots#[@type='" + fragmentClass.getName() + "'] return concat($root/@index,'#',$root/@parentIndex)";
         Set<String> pairs = this.queryForStrings(query);
         Map<String,String> map = new HashMap<String,String>();
@@ -2501,8 +2500,7 @@ public abstract class BaseStoreImpl implements Store {
      * @return a map from fragment index to parent fragment index for all fragments with the given class name (type).
      * @throws XBRLException
      */
-    @SuppressWarnings("unchecked")
-    private Set<String> getIndexSet(Class fragmentClass) throws XBRLException {
+    private Set<String> getIndexSet(Class<?> fragmentClass) throws XBRLException {
         String query = "for $root in #roots#[@type='" + fragmentClass.getName() + "'] return $root";
         Set<String> indices = this.queryForIndices(query);
         return indices;

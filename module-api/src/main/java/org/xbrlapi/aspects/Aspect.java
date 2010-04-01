@@ -11,8 +11,30 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
+ * <h2>
+ * Aspect details. 
+ * </h2>
+ * 
+ * <p>
+ * Aspects have the following characteristics:
+ * </p>
+ * 
+ * <ul>
+ *   <li>Each aspect has a unique identifier, known as its type.</li>
+ *   <li>Not all aspects have a value for all facts but some do.</li>
+ *   <li>Aspects can be used in isolation but can also be combined with other aspects to form an aspect model</li>
+ *   <li>Aspects can have multiple human-readable labels, one per language.</li>
+ *   <li>Aspects define a mapping from a fact to an aspect value.</li>
+ *   <li></li>
+ *   <li></li>
+ *   <li></li>
+ * </ul>
+ * 
+ * Tough questions are:
+ * <ul>
+ *   <li></li>
+ * </ul>
  * @author Geoff Shuetrim (geoff@galexy.net)
- *
  */
 public interface Aspect extends Serializable {
 
@@ -62,6 +84,7 @@ public interface Aspect extends Serializable {
     public boolean isMissing() throws XBRLException;    
     
     /**
+     * TODO refactor so that we do not require all aspects to be in an aspect model
      * @return axis name or null if the aspect is an orphan
      * (not assigned to an axis in the containing aspect model).
      */
@@ -86,6 +109,7 @@ public interface Aspect extends Serializable {
     public void setAspectModel(AspectModel aspectModel) throws XBRLException;    
     
     /**
+     * TODO refactor so that we do not require all aspects to have an aspect model
      * @return the aspect model with this aspect.
      */
     public AspectModel getAspectModel();
@@ -146,6 +170,7 @@ public interface Aspect extends Serializable {
     public int getDescendantCount() throws XBRLException;
     
     /**
+     * TODO consider refactoring
      * @return the number of combinations of ancestor aspect
      * values (for those ancestor aspects in the same axis
      * of the aspect model).
@@ -269,6 +294,7 @@ public interface Aspect extends Serializable {
     public void setSelectionCriterion(AspectValue criterion);
     
     /**
+     * TODO Consider refactoring
      * Sets the selection criterion to null.
      */
     public void clearSelectionCriterion();

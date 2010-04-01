@@ -7,6 +7,32 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
+ * <h2>
+ * Aspect value details. 
+ * </h2>
+ * 
+ * <p>
+ * Aspect values are required to have the following characteristics:
+ * </p>
+ * 
+ * <ul>
+ * <li>Each aspect value is associated with a specific aspect that has its own unique 
+ * aspect type.</li>
+ * <li>Semantically equivalent aspect values can be identified as such based upon the value
+ * of a single property of the aspect value: its identifier.</li>
+ * <li>Aspect values can have a heirarchical ordering.  
+ * Thus, an aspect value can have a single
+ * parent aspect value and multiple child aspect values.  
+ * Also, sibling aspect values can have a strict ordering.</li>
+ * <li>Aspect values have human readable labels.  These can be in multiple languages.</li>
+ * </ul>
+ * 
+ * Tough questions are:
+ * <ul>
+ *   <li>Do we need to store the fragment that expresses the aspect value?</li>
+ *   <li>Do we need to record the aspect label in all possible languages?</li>
+ *   <li>Do we need to record the aspect or just the aspect type?</li>
+ * </ul>
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public interface AspectValue extends Serializable {
@@ -26,14 +52,14 @@ public interface AspectValue extends Serializable {
 
     /**
      * @return the string value of this aspect, generally, a string
-     * that uniquely indicates the value of the aspect in a human readable
-     * form.
+     * that uniquely indicates the value of the aspect, though not necessarily
+     * in a human readable form.
      * @throws XBRLException if the string value cannot be obtained.
      */
     public String getIdentifier() throws XBRLException;
     
     /**
-     * @return The label for this aspect value.
+     * @return The human-readable label for this aspect value.
      * @throws XBRLException
      */
     public String getLabel() throws XBRLException;

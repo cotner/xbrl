@@ -10,7 +10,18 @@ import org.xbrlapi.LabelResource;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * All facts have a value for the concept aspect.
+ * <h2>Concept aspect details</h2>
+ * 
+ * <p>
+ * All facts have a value for the concept aspect.  The concept aspect reflects 
+ * the element that is used to express fact values.  Ideally, this would also be
+ * able to reflect substitution group and/or XLink relationships between concepts.
+ * Perhaps such complexities are best left to more sophisticated variants of the 
+ * concept aspect.  What you want is to be able to filter facts based upon the 
+ * concepts at the top of a heirarchy and to get all facts that have a concept aspect
+ * value that is within the aspect value subtree specified by that higher-level concept.
+ * </p>
+ * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class ConceptAspect extends BaseAspect implements Aspect {

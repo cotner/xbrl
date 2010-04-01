@@ -65,9 +65,8 @@ public class XMLImpl implements XML {
     /**
      * @see org.xbrlapi.XML#isa(Class)
      */
-    @SuppressWarnings("unchecked")
     public boolean isa(Class<?> targetClass) throws XBRLException {
-        Class candidateClass = this.getClass();
+        Class<?> candidateClass = this.getClass();
         while (candidateClass != null) {
             if (candidateClass.equals(targetClass)) return true;
             candidateClass = candidateClass.getSuperclass();
