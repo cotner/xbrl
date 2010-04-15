@@ -20,6 +20,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class UnitImpl extends FactDimensionContainerImpl implements Unit {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 3483030594929689605L;
+
+    /**
      * @see org.xbrlapi.FactDimensionContainer#getReferencingItems()
      */
     public List<Item> getReferencingItems() throws XBRLException {

@@ -13,7 +13,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class EquivalentRelationshipsImpl implements EquivalentRelationships, Serializable {
 
-	private SortedMap<Integer,Relationship> relationships = new TreeMap<Integer,Relationship>();
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 5470514499342023524L;
+    private SortedMap<Integer,Relationship> relationships = new TreeMap<Integer,Relationship>();
 
     /**
      * @see org.xbrlapi.networks.EquivalentRelationships#size()

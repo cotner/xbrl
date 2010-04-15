@@ -21,6 +21,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class EntityImpl extends ContextComponentImpl implements Entity {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -2026972763772352159L;
+
+    /**
      * @see org.xbrlapi.Entity#getIdentifierScheme()
      */
     public String getIdentifierScheme() throws XBRLException {

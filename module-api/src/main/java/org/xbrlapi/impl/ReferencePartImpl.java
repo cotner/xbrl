@@ -14,6 +14,13 @@ import org.xbrlapi.utilities.XBRLException;
 public class ReferencePartImpl extends FragmentImpl implements ReferencePart {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 2432919060384094098L;
+
+
+
+    /**
      * Get the value of the reference part. 
      * @return The value of the reference part with spaces trimmed from
      * the front and end.

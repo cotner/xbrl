@@ -16,6 +16,15 @@ import org.xbrlapi.utilities.XBRLException;
 public class ElementDeclarationImpl extends SchemaContentDeclarationImpl implements ElementDeclaration {
 
     /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -4686068793132435426L;
+
+    /**
      * @see org.xbrlapi.ElementDeclaration#isAbstract()
      */
     public boolean isAbstract() throws XBRLException {

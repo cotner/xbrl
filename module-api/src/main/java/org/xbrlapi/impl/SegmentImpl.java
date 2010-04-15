@@ -11,6 +11,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class SegmentImpl extends OpenContextComponentImpl implements Segment {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 2635173824228869410L;
+
+    /**
      * Gets the containing entity
      *
      * @return the entity that contains this segment

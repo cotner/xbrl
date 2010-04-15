@@ -11,6 +11,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class NonFragmentXMLImpl extends XMLImpl implements NonFragmentXML {
 	
     /**
+     * 
+     */
+    private static final long serialVersionUID = -30309765269122246L;
+
+    /**
      * Used to eliminate the builder once the XML resource has been constructed.
      * Call this method at the end of constructors for XML resources that 
      * extend this class.

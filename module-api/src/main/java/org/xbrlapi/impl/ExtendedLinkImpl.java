@@ -23,6 +23,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class ExtendedLinkImpl extends LinkImpl implements ExtendedLink {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -5810751426509975700L;
+
+    /**
      * @see org.xbrlapi.ExtendedLink#getLocators()
      */
     public List<Locator> getLocators() throws XBRLException {

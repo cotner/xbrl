@@ -13,6 +13,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class SchemaDeclarationImpl extends SchemaContentImpl implements SchemaDeclaration {
 	
     /**
+     * 
+     */
+    private static final long serialVersionUID = 3358079880954000640L;
+
+    /**
      * Get the name of structure being declared.
      * @return the name of the structure being declared.
      * @throws XBRLException

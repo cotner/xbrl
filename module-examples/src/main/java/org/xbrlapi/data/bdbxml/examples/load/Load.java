@@ -33,7 +33,7 @@ import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
-import org.xml.sax.EntityResolver;
+import org.xbrlapi.sax.EntityResolver;
 
 /**
  *  This example loads a set of documents, including one or more XBRL instances,

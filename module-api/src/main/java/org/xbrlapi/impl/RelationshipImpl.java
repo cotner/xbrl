@@ -19,6 +19,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class RelationshipImpl extends NonFragmentXMLImpl implements Relationship {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -8152142828118166919L;
+
+    /**
      * No argument constructor.
      * @throws XBRLException
      */

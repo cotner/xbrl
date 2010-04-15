@@ -19,6 +19,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class ResourceImpl extends ArcEndImpl implements Resource {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = -7256786150687986598L;
+
+    /**
 	 * @see org.xbrlapi.Resource#getResourceRole()
 	 */
 	public URI getResourceRole() throws XBRLException {

@@ -11,6 +11,15 @@ import org.xbrlapi.utilities.XBRLException;
 public class ContextComponentImpl extends FragmentImpl implements ContextComponent {
 
     /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -4641121755978081684L;
+
+    /**
      * Determine the context that contains this component
      * @throws XBRLException
      * @see org.xbrlapi.ContextComponent#getContext()

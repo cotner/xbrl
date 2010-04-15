@@ -17,6 +17,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class ErrorImpl extends XMLImpl implements Error {
 	
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 2965459874023212117L;
+
+    /**
 	 * No argument constructor.
 	 * @throws XBRLException
 	 */

@@ -16,6 +16,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implements SchemaContentDeclaration {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 5486099839583917186L;
+
+    /**
      * @see SchemaContentDeclaration#isGlobal()
      */
     public boolean isGlobal() throws XBRLException {

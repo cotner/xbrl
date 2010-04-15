@@ -30,7 +30,7 @@ import org.xml.sax.Attributes;
  */
 public class BuilderImpl implements Builder {
 		
-	private final static Logger logger = Logger.getLogger(BuilderImpl.class);
+	private static final Logger logger = Logger.getLogger(BuilderImpl.class);
 	
 	/**
 	 * The XML DOM used to build up fragments.

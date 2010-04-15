@@ -26,6 +26,11 @@ import org.xml.sax.SAXException;
 public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader, Serializable {
     
     /**
+     * 
+     */
+    private static final long serialVersionUID = -3038834547504590432L;
+
+    /**
      * @see org.xbrlapi.loader.LoaderImpl#LoaderImpl(Store, XLinkProcessor)
      */
     public LoaderImpl(Store store, XLinkProcessor xlinkProcessor) throws XBRLException {
@@ -43,7 +48,7 @@ public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader,
 
     
 
-    private final static Logger logger = Logger.getLogger(LoaderImpl.class);
+    private static final Logger logger = Logger.getLogger(LoaderImpl.class);
     
     /**
      * Parse an XML Document supplied as a URI the next part of the DTS.
@@ -72,15 +77,7 @@ public class LoaderImpl extends org.xbrlapi.loader.LoaderImpl implements Loader,
         parse(uri, inputSource, contentHandler);
     }
     
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-    }
+
     
     /**
      * Handles object serialization

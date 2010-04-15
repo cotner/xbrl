@@ -37,7 +37,11 @@ import org.xml.sax.Attributes;
 */
 public class XLinkHandlerImpl extends XBRLXLinkHandlerImpl {
 
-	private final static Logger logger = Logger.getLogger(XLinkHandlerImpl.class);	
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -4285395768000453609L;
+    private static final Logger logger = Logger.getLogger(XLinkHandlerImpl.class);	
 	
 	/**
 	 * XBRL XLink handler constructor

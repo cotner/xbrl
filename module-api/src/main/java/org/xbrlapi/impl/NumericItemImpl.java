@@ -11,7 +11,12 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class NumericItemImpl extends ItemImpl implements NumericItem {
 
-	/** 
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -2601049145050399109L;
+
+    /** 
 	 * @see org.xbrlapi.NumericItem#getUnit()
 	 */
 	public Unit getUnit() throws XBRLException {

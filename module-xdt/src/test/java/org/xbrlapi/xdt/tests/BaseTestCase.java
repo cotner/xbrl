@@ -12,7 +12,7 @@ import org.xbrlapi.xdt.CustomLinkRecogniserImpl;
 import org.xbrlapi.xdt.XLinkHandlerImpl;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
-import org.xml.sax.EntityResolver;
+import org.xbrlapi.sax.EntityResolver;
 
 /**
  * Provides a base test case for all XDT tests.

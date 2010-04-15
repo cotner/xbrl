@@ -2,6 +2,7 @@ package org.xbrlapi.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +19,11 @@ import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.utilities.XMLDOMBuilder;
 
 public class XMLImpl implements XML {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8783657613634421905L;
 
     protected final static Logger logger = Logger.getLogger(XMLImpl.class);  
     
@@ -385,9 +391,9 @@ public class XMLImpl implements XML {
     }
  
     /**
-     * Handles object serialization
+     * Handles serialization for XML resources that have been fully built.
      * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
+     * @throws IOException if the object is still being built.
      */
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         if (this.getBuilder() != null) {
@@ -398,7 +404,6 @@ public class XMLImpl implements XML {
         try {
             String xml = store.serializeToString(rootElement);
             out.writeObject(xml);
-            out.writeObject(store);
         } catch (XBRLException e) {
             throw new IOException("Could not convert the store content to a string representation of the XML.",e);
         }
@@ -410,14 +415,13 @@ public class XMLImpl implements XML {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 
         in.defaultReadObject();
         try {
             XMLDOMBuilder builder = new XMLDOMBuilder();
             Document dom = builder.newDocument((String) in.readObject());
             rootElement = dom.getDocumentElement();
-            store = (Store) in.readObject();
         } catch (XBRLException e) {
             throw new IOException("The XML Resource could not be de-serialized.",e);
         }

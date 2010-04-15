@@ -1,6 +1,7 @@
 package org.xbrlapi.xdt.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.Vector;
 
@@ -23,6 +24,10 @@ import org.xbrlapi.xdt.XDTConstants;
  */
 public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7169374791043593002L;
     public final static String TYPE = "non-dimensional scenario content";
     
     /**
@@ -32,7 +37,7 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
         return TYPE;
     }
     
-    private final static Logger logger = Logger.getLogger(ScenarioRemainderAspect.class);
+    private static final Logger logger = Logger.getLogger(ScenarioRemainderAspect.class);
 
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -118,7 +123,7 @@ public class ScenarioRemainderAspect extends ContextAspect implements Aspect {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         initialize();
     }

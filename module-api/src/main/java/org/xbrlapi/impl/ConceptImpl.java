@@ -21,6 +21,15 @@ import org.xbrlapi.utilities.XBRLException;
 public class ConceptImpl extends ElementDeclarationImpl implements Concept {
 
     /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -1067935705927988286L;
+
+    /**
      * @see org.xbrlapi.Concept#getPeriodType()
      */
     public String getPeriodType() throws XBRLException {

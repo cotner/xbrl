@@ -1,7 +1,5 @@
 package org.xbrlapi.data.resource;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -22,13 +20,19 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher, Serializable {
+public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2815835104865947253L;
 
     /**
      * The store in which the information about matched URIs is
      * to be retained.
      */
     private Store store = null;
+    
     /**
      * @return the store used by this matcher.
      */
@@ -168,24 +172,7 @@ public class InStoreMatcherImpl extends BaseMatcherImpl implements Matcher, Seri
 
 
     
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(store);
-   }
+
     
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-        store = (Store) in.readObject();
-    }    
+    
 }

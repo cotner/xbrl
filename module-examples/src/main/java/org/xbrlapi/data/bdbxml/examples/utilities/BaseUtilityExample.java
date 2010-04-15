@@ -17,7 +17,7 @@ import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
-import org.xml.sax.EntityResolver;
+import org.xbrlapi.sax.EntityResolver;
 
 /**
  * Provides a base class that all of the concrete utility examples extend.

@@ -14,7 +14,11 @@ import org.xml.sax.Attributes;
  */
 public class XBRLCustomLinkRecogniserImpl extends CustomLinkRecogniser {
 
-    private final static Logger logger = Logger.getLogger(XBRLCustomLinkRecogniserImpl.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5149996620311673778L;
+    private static final Logger logger = Logger.getLogger(XBRLCustomLinkRecogniserImpl.class);
 
 	/**
 	 * Constructor for the XBRL custom link recogniser

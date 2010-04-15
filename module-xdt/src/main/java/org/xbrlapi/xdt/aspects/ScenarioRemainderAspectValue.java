@@ -10,6 +10,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class ScenarioRemainderAspectValue extends BaseAspectValue {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 6779028672114038190L;
+
     public ScenarioRemainderAspectValue(Aspect aspect, OpenContextComponent occ) throws XBRLException {
         super(aspect, occ);
     }

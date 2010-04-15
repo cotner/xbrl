@@ -28,6 +28,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class MatchImpl extends NonFragmentXMLImpl implements Match {
 	
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 3738588761407998990L;
+
+    /**
 	 * No argument constructor.
 	 * @throws XBRLException
 	 */

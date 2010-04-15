@@ -16,6 +16,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
 	
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 2102431228976024539L;
+
+    /**
 	 * @see org.xbrlapi.SimpleLink#setTarget(URI)
 	 */
 	public void setTarget(URI uri) throws XBRLException {

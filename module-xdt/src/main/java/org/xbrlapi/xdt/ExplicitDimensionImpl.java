@@ -12,6 +12,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class ExplicitDimensionImpl extends DimensionImpl implements ExplicitDimension {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -1286219707900264040L;
+
+    /**
      * @see org.xbrlapi.xdt.ExplicitDimension#getDefaultDomainMember()
      */
     public Concept getDefaultDomainMember() throws XBRLException {

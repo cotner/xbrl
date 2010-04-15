@@ -8,4 +8,9 @@ import org.xbrlapi.RoleType;
 
 public class RoleTypeImpl extends CustomTypeImpl implements RoleType {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2596352804658433028L;
+
 }

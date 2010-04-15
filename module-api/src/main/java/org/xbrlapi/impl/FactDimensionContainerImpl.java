@@ -14,6 +14,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class FactDimensionContainerImpl extends FragmentImpl implements FactDimensionContainer {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -6970469751478915472L;
+
+    /**
      * Get the id attribute value of the container
      * @return the value of the id attribute for the unit or context.
      * @throws XBRLException if the id attribute is missing.

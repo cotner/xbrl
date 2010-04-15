@@ -3,6 +3,7 @@ package org.xbrlapi.data.bdbxml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
@@ -51,7 +52,12 @@ import com.sleepycat.dbxml.XmlValue;
 
 public class StoreImpl extends BaseStoreImpl implements Store {
 
-    private final static Logger logger = Logger.getLogger(StoreImpl.class); 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 6332799888939599527L;
+
+    private static final Logger logger = Logger.getLogger(StoreImpl.class); 
     
     private String computerIdentity;
     private String locationName;
@@ -85,23 +91,34 @@ public class StoreImpl extends BaseStoreImpl implements Store {
         this.CACHE_SIZE = cacheSize * 1024*1024;
     }    
     
-    private void initialize(String location, String container) throws XBRLException {
-        
-        lastSync = 0;
+
+    /**
+     * @return The unique identifier for the computer running this data store.
+     * @throws XBRLException
+     */
+    private String getComputerName() throws XBRLException {
+        String computerName;
         
         try {
             InetAddress addr = InetAddress.getLocalHost();
             byte[] ipAddr = addr.getAddress();
-            computerIdentity = addr.getHostName();
+            computerName = addr.getHostName();
             for (byte b: ipAddr) {
                 int i = new Integer(b).intValue();
-                computerIdentity += "." + i;
+                computerName += "." + i;
             }
             
         } catch (UnknownHostException e) {
             throw new XBRLException("The computer identity could not be obtained.", e);
         }
-
+        return computerName;
+    }
+    
+    private void initialize(String location, String container) throws XBRLException {
+        
+        lastSync = 0;
+        
+        computerIdentity = this.getComputerName();
         
         if (location != null) this.locationName = location;
         else throw new XBRLException("The Berkeley DB XML database location must be specified.");
@@ -717,33 +734,19 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         try {
-            String location = (String) in.readObject();
-            String container = (String) in.readObject();
-            String id = (String) in.readObject();
-            initialize(location, container);
-            if (! this.computerIdentity.equals(id)) {
+            if (! this.computerIdentity.equals(this.getComputerName())) {
                 throw new IOException("The data store is being deserialized on the wrong computer.");
             }
+            initialize(locationName, containerName);
         } catch (XBRLException e) {
             throw new IOException("The data store could not be deserialized.",e);
         }
     }
     
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject( );
-        out.writeObject(locationName);
-        out.writeObject(containerName);
-        out.writeObject(computerIdentity);
-        logger.info("Done writing out the data store.");
-    }
+
 
     /**
      * @see java.lang.Object#hashCode()

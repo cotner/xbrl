@@ -20,7 +20,16 @@ import org.xml.sax.Attributes;
 
 public abstract class CustomLinkRecogniser implements Serializable {
 
-	/**
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = 5541842174210812036L;
+
+    /**
 	 * Returns true if the element with the supplied characteristics 
 	 * is a custom simple link.
 	 * Importantly his method can be called from 

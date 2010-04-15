@@ -12,6 +12,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class FractionItemImpl extends NumericItemImpl implements FractionItem {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = -6689670696924267352L;
+
+    /**
 	 * @see org.xbrlapi.FractionItem#getNumerator()
 	 */
     public double getNumerator() throws XBRLException {

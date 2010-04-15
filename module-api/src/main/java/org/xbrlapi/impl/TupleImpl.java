@@ -15,6 +15,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class TupleImpl extends FactImpl implements Tuple {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 8236154180347375942L;
+
+    /**
 	 * Get the list of child facts
 	 * @return list of child fact fragments for the tuple
 	 * @throws XBRLException

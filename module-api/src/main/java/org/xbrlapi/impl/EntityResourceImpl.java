@@ -18,6 +18,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class EntityResourceImpl extends MixedContentResourceImpl implements EntityResource {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 5964964039469483783L;
+
+    /**
      * @see org.xbrlapi.EntityResource#getIdentifierScheme()
      */
     public String getIdentifierScheme() throws XBRLException {

@@ -21,6 +21,13 @@ import org.xbrlapi.utilities.XBRLException;
 public class LinkbaseImpl extends FragmentImpl implements Linkbase  {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -5344292511314590729L;
+
+
+
+    /**
      * Retrieve an arcroleRef from a linkbase.
      * @param uri The arcroleRef URI
 	 * @return the required arcroleRef 

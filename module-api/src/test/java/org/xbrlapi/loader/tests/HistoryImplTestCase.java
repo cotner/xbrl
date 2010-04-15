@@ -64,7 +64,11 @@ public class HistoryImplTestCase extends BaseTestCase {
 	
 	private class MapHistory extends HistoryImpl implements History {
 	
-	    private Map<URI, String> map = new HashMap<URI, String>();
+	    /**
+         * 
+         */
+        private static final long serialVersionUID = 2536817003874223302L;
+        private Map<URI, String> map = new HashMap<URI, String>();
 	    
 	    /**
 	     * @see History#addRecord(URI, String)

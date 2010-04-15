@@ -5,6 +5,7 @@ package org.xbrlapi.data.dom;
  */
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,7 +41,12 @@ import org.xbrlapi.utilities.XMLDOMBuilder;
 
 public class StoreImpl extends BaseStoreImpl implements Store {
 
-	private final static Logger logger = Logger.getLogger(StoreImpl.class);
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 4176301844348514277L;
+
+    private static final Logger logger = Logger.getLogger(StoreImpl.class);
 	
 	/**
 	 * The map of data fragments.
@@ -51,7 +57,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	/**
 	 * XML DOM used to build the fragments in the store.
 	 */
-	private Document dom  = null;
+	transient private Document dom  = null;
 	
 	/**
 	 * Name of the root element in the DOM
@@ -97,7 +103,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 
         in.defaultReadObject();
         initialize();
@@ -118,7 +124,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
             }
             
         } catch (XBRLException e) {
-            throw new IOException("The data store could not be read.",e);
+            throw new IOException("The XML serialization of the data store has probably been corrupted.",e);
         }
     }
 	

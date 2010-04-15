@@ -22,6 +22,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class SchemaContentImpl extends FragmentImpl implements SchemaContent {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1132807733882600038L;
+
+    /**
      * @see org.xbrlapi.SchemaContent#getSchema()
      */
     public Schema getSchema() throws XBRLException {

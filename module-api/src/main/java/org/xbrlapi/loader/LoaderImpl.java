@@ -1,7 +1,7 @@
 package org.xbrlapi.loader;
 
 import java.io.IOException;
-import java.io.Serializable;
+import java.io.ObjectInputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -27,6 +27,7 @@ import org.xbrlapi.data.Store;
 import org.xbrlapi.networks.Storer;
 import org.xbrlapi.networks.StorerImpl;
 import org.xbrlapi.sax.ContentHandlerImpl;
+import org.xbrlapi.sax.EntityResolver;
 import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -34,7 +35,6 @@ import org.xbrlapi.utilities.XMLDOMBuilder;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xml.sax.ContentHandler;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -67,9 +67,14 @@ import org.xml.sax.XMLReader;
  * 
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public class LoaderImpl implements Loader, Serializable {
+public class LoaderImpl implements Loader {
 
-    private final static Logger logger = Logger.getLogger(LoaderImpl.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 7881567033446473173L;
+
+    private static final Logger logger = Logger.getLogger(LoaderImpl.class);
 
     /**
      * The data store to be used to hold the DTS.
@@ -170,7 +175,9 @@ public class LoaderImpl implements Loader, Serializable {
     public LoaderImpl(Store store, XLinkProcessor xlinkProcessor)
             throws XBRLException {
         super();
-        initialize(store,xlinkProcessor);
+        setStore(store);
+        setXlinkProcessor(xlinkProcessor);
+        this.dom = (new XMLDOMBuilder()).newDocument();
     }
     
     /**
@@ -185,17 +192,7 @@ public class LoaderImpl implements Loader, Serializable {
         setStartingURIs(uris);
     }
 
-    /**
-     * Initializes the loader, putting in place the XML DOM object used to build all fragments.
-     * @param store The data store being loaded with data.
-     * @param xlinkProcessor The XLink processor being used to identify XLink fragments.
-     * @throws XBRLException
-     */
-    private void initialize(Store store, XLinkProcessor xlinkProcessor) throws XBRLException {
-        setStore(store);
-        setXlinkProcessor(xlinkProcessor);
-        this.dom = (new XMLDOMBuilder()).newDocument();
-    }
+
 
     /**
      * @see Loader#requestInterrupt()
@@ -904,7 +901,7 @@ public class LoaderImpl implements Loader, Serializable {
             logger.error("Failed to clean up the document from the data store. " + exception.getMessage());
         }
         fragments = new Stack<Fragment>();
-        states = new Stack<ElementState>();        
+        states = new Stack<ElementState>();
     }
 
     /**
@@ -971,40 +968,23 @@ public class LoaderImpl implements Loader, Serializable {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         try {
-            initialize((Store) in.readObject(),(XLinkProcessor) in.readObject());
-            cache = (Cache) in.readObject();
-            entityResolver = (EntityResolver) in.readObject();
-            useSchemaLocationAttributes = in.readBoolean();
-            int size = in.readInt();
-            documentQueue = new TreeSet<URI>();
-            for (int i=0; i<size; i++) {
-                documentQueue.add((URI) in.readObject());
-            }        
+            this.dom = (new XMLDOMBuilder()).newDocument();
         } catch (XBRLException e) {
-            throw new IOException("The store or XLink processor could not be initialized.",e);
+            throw new IOException("The XML resource builder could not be instantiated.",e);
         }
     }
     
     /**
      * Handles object serialization
      * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
+     * @throws IOException if the loader is still doing discovery.
      */
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         if (this.isDiscovering()) throw new IOException("The loader could not be serialized because it is still loading data.");
         out.defaultWriteObject();
-        out.writeObject(store);
-        out.writeObject(xlinkProcessor);
-        out.writeObject(cache);
-        out.writeObject(entityResolver);
-        out.writeBoolean(useSchemaLocationAttributes);
-        out.writeInt(documentQueue.size());
-        for (URI uri: documentQueue) {
-            out.writeObject(uri);
-        }
     }    
  
     /**

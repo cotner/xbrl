@@ -15,6 +15,13 @@ import org.xbrlapi.utilities.XBRLException;
 public class OpenContextComponentImpl extends ContextComponentImpl implements OpenContextComponent {
 	
     /**
+     * 
+     */
+    private static final long serialVersionUID = -4911717815217702354L;
+
+
+
+    /**
      * @see org.xbrlapi.OpenContextComponent#getComplexContent()
      */
     public NodeList getComplexContent() throws XBRLException {

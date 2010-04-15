@@ -1,5 +1,6 @@
 package org.xbrlapi.networks;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,7 @@ import org.xbrlapi.utilities.XBRLException;
  * network information based upon the original data.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public interface Analyser {
+public interface Analyser extends Serializable {
     
     /**
      * @param document The document URI.

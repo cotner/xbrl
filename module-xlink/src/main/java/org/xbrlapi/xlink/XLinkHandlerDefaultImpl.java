@@ -13,6 +13,11 @@ import org.xml.sax.Attributes;
 public class XLinkHandlerDefaultImpl implements XLinkHandler, Serializable {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = -6060131708671079013L;
+
+    /**
 	 * Default XLink handler constructor
 	 */
 	public XLinkHandlerDefaultImpl() {

@@ -7,5 +7,10 @@ import org.xbrlapi.FootnoteResource;
  */
 
 public class FootnoteResourceImpl extends MixedContentResourceImpl implements FootnoteResource {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -8875808422865876140L;
 	
 }

@@ -26,6 +26,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class SchemaImpl extends SchemaContentImpl implements Schema {
 		
     /**
+     * 
+     */
+    private static final long serialVersionUID = -7823792162479874585L;
+
+    /**
      * @see org.xbrlapi.Schema#getTargetNamespace()
      */
     public URI getTargetNamespace() throws XBRLException {

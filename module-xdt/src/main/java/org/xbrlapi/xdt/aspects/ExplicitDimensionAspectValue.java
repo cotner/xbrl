@@ -11,6 +11,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class ExplicitDimensionAspectValue extends BaseAspectValue {
 
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4728294932391518174L;
+
     public ExplicitDimensionAspectValue(Aspect aspect, Concept concept) throws XBRLException {
         super(aspect,concept);
     }

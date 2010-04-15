@@ -1,6 +1,7 @@
 package org.xbrlapi.xdt.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
@@ -23,7 +24,11 @@ import org.xbrlapi.xdt.values.DimensionValue;
  */
 public class TypedDimensionAspect extends DimensionAspect implements Aspect {
 
-    private final static Logger logger = Logger.getLogger(TypedDimensionAspect.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 279544715598540722L;
+    private static final Logger logger = Logger.getLogger(TypedDimensionAspect.class);
     
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -127,7 +132,7 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         initialize();
     }

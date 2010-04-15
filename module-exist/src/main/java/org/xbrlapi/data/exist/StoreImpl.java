@@ -37,7 +37,11 @@ import org.xmldb.api.modules.XMLResource;
  */
 public class StoreImpl extends BaseStoreImpl implements Store {
 
-    private final static Logger logger = Logger.getLogger(StoreImpl.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3164980656484788937L;
+    private static final Logger logger = Logger.getLogger(StoreImpl.class);
     protected final static String configurationRoot = "/system/config";        
     
     private String computerId, host, port, database, username, password, storeParentPath, dataCollectionName;

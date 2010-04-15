@@ -14,6 +14,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class ReferenceResourceImpl extends MixedContentResourceImpl implements ReferenceResource {
 	
     /**
+     * 
+     */
+    private static final long serialVersionUID = 2397300422957891874L;
+
+    /**
      * Get a list of reference part fragments.
      * @return the list of reference part fragments that are children of the reference.
      * @throws XBRLException

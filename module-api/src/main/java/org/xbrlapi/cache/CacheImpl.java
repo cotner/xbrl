@@ -34,7 +34,16 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class CacheImpl implements Cache {
 
-	private static final Logger logger = Logger.getLogger(CacheImpl.class);
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -4518163581910550322L;
+
+    private static final Logger logger = Logger.getLogger(CacheImpl.class);
 	
     /**
      * Root of the local document cache.
@@ -46,7 +55,7 @@ public class CacheImpl implements Cache {
      * original URIs.  The original URI points to the 
      * local URI in the map that is used.
      */
-    private Map<URI,URI> uriMap = null;      
+    private HashMap<URI,URI> uriMap = new HashMap<URI, URI>();      
 
     /**
      * Constructs a URI translator for usage with a local cache location.
@@ -65,11 +74,12 @@ public class CacheImpl implements Cache {
     /**
      * Constructs a URI translator for usage with a local cache location.
      * @param cacheRoot
-	 * @param uriMap The map from original URIs to local URIs.
+	 * @param uriMap The hash map from original URIs to local URIs.
      * @throws XBRLException if the cacheRoot is null or does not exist
      */
-	public CacheImpl(File cacheRoot, Map<URI, URI> uriMap) throws XBRLException {
+	public CacheImpl(File cacheRoot, HashMap<URI, URI> uriMap) throws XBRLException {
 		this(cacheRoot);
+		if (uriMap == null) throw new XBRLException("The URI map must not be null.");
 		this.uriMap = uriMap;
 	}	
 	
@@ -121,11 +131,9 @@ public class CacheImpl implements Cache {
     	if (isCacheURI(uri)) {
     		originalURI = getOriginalURI(uri);
 		} else {
-			if (uriMap != null) {
-	        	if (uriMap.containsKey(uri.toString())) {
-                    originalURI = uriMap.get(uri);
-	        	}
-			}
+        	if (uriMap.containsKey(uri.toString())) {
+                originalURI = uriMap.get(uri);
+        	}
 		}
     	
     	// Second determine the cache file from the original URI
@@ -432,81 +440,6 @@ public class CacheImpl implements Cache {
     }
  
     /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(cacheRoot);
-        out.writeBoolean(uriMap != null);
-        if (uriMap != null) {
-            out.writeInt(uriMap.keySet().size());
-            for (URI uri: uriMap.keySet()) {
-                out.writeObject(uri);
-                out.writeObject(uriMap.get(uri));
-            }
-        }
-   }    
-    
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-        cacheRoot = (File) in.readObject();
-        if (in.readBoolean()) {
-            uriMap = new HashMap<URI,URI>();
-            int mapSize = in.readInt();
-            for (int i=0; i<mapSize; i++) {
-                uriMap.put((URI) in.readObject(),(URI) in.readObject());
-            }
-        } else {
-            uriMap = null;
-        }
-    }
-
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((cacheRoot == null) ? 0 : cacheRoot.hashCode());
-        result = prime * result + ((uriMap == null) ? 0 : uriMap.hashCode());
-        return result;
-    }
-
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        CacheImpl other = (CacheImpl) obj;
-        if (cacheRoot == null) {
-            if (other.cacheRoot != null)
-                return false;
-        } else if (!cacheRoot.equals(other.cacheRoot))
-            return false;
-        if (uriMap == null) {
-            if (other.uriMap != null)
-                return false;
-        } else if (!uriMap.equals(other.uriMap))
-            return false;
-        return true;
-    }
-
-    /**
      * @see Cache#getAllUris(URI)
      */
     public List<URI> getAllUris(URI uri) throws XBRLException {
@@ -536,6 +469,44 @@ public class CacheImpl implements Cache {
             result.addAll(getAllUris(this.getOriginalURI(childDirectory)));
         }
         return result;
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((cacheRoot == null) ? 0 : cacheRoot.hashCode());
+        result = prime * result + ((uriMap == null) ? 0 : ((Map<URI,URI>) uriMap).hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CacheImpl other = (CacheImpl) obj;
+        if (cacheRoot == null) {
+            if (other.cacheRoot != null)
+                return false;
+        } else if (!cacheRoot.equals(other.cacheRoot))
+            return false;
+        if (uriMap == null) {
+            if (other.uriMap != null)
+                return false;
+        } else if (!((Map<URI,URI>) uriMap).equals((other.uriMap)))
+            return false;
+        return true;
     }
 
 }

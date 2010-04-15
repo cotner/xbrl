@@ -10,7 +10,11 @@ import java.lang.Exception;
 
 public class XLinkException extends Exception 
 {
-	private Throwable cause;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 6594154185788570002L;
+    private Throwable cause;
 	
     public XLinkException() {
     	super();

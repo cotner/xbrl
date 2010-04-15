@@ -17,6 +17,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class LocatorImpl extends ArcEndImpl implements Locator {
 	
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 2954795492246579940L;
+
+    /**
 	 * @see org.xbrlapi.Locator#setTarget(URI)
 	 */
 	public void setTarget(URI uri) throws XBRLException {

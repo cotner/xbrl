@@ -1,7 +1,7 @@
 package org.xbrlapi.data.resource;
 
 import java.io.IOException;
-import java.io.Serializable;
+import java.io.ObjectInputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +18,12 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher, Serializable {
+public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1224199711979462774L;
     /**
      * Map from signature strings to lists of URIs with the same signature.
      * The first URI in the list is the URI of the resource in the data
@@ -128,7 +132,7 @@ public class InMemoryMatcherImpl extends BaseMatcherImpl implements Matcher, Ser
      * @throws ClassNotFoundException
      */
     @SuppressWarnings("unchecked")
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         map = (Map<String,List<URI>>) in.readObject();
 /*        

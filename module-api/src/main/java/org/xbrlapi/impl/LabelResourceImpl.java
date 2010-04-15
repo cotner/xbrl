@@ -23,6 +23,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class LabelResourceImpl extends MixedContentResourceImpl implements LabelResource {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 6478578009264842169L;
+
+    /**
 	 * @see org.xbrlapi.LabelResource#getStringValue()
 	 */
 	public String getStringValue() throws XBRLException {

@@ -29,6 +29,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class FragmentImpl extends XMLImpl implements Fragment {
 	
     /**
+     * 
+     */
+    private static final long serialVersionUID = 935011241451397867L;
+
+    /**
      * @see org.xbrlapi.Fragment#getAncestorOrSelf(String)
      */
     public Fragment getAncestorOrSelf(String type) throws XBRLException {

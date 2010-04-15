@@ -11,6 +11,10 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class MeasureImpl implements Measure {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 6274850976265020790L;
     private final URI namespace;
     private final String prefix;
     private final String localname;

@@ -12,6 +12,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class HypercubeImpl extends XDTConceptImpl implements Hypercube {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -3395259164875316193L;
+
+    /**
      * @see org.xbrlapi.xdt.Hypercube#getDimensions()
      */
     public List<Dimension> getDimensions() throws XBRLException {

@@ -24,6 +24,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class AnalyserImpl implements Analyser {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3842008045278037807L;
+    
     protected final static Logger logger = Logger.getLogger(AnalyserImpl.class);
     
     /**

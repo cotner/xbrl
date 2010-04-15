@@ -17,6 +17,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class FactImpl extends FragmentImpl implements Fact {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 5557580425035320023L;
+
+    /**
      * Return true if the fact is a tuple and false otherwise
      */
     public boolean isTuple() throws XBRLException {

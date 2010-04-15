@@ -13,7 +13,16 @@ import org.xml.sax.Attributes;
  */
 public class CustomLinkRecogniserImpl extends XBRLCustomLinkRecogniserImpl {
 
-	/**
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = 6126089270751428220L;
+
+    /**
 	 * Constructor for the XBRL custom link recogniser
 	 */
 	public CustomLinkRecogniserImpl() {

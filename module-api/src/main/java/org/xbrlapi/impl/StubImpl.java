@@ -17,6 +17,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class StubImpl extends NonFragmentXMLImpl implements Stub {
 	
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 4672320267418877015L;
+
+    /**
 	 * No argument constructor.
 	 * @throws XBRLException
 	 */

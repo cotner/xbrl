@@ -12,6 +12,13 @@ import org.xbrlapi.utilities.XBRLException;
 public class TitleImpl extends XlinkImpl implements Title {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 3219710333476685455L;
+
+
+
+    /**
      * Get the documentation text, with the leading and trailing spaces trimmed off.
      * @return the documentation text, with the leading and trailing spaces trimmed off.
      * @throws XBRLException

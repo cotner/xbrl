@@ -11,6 +11,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class PeriodImpl extends ContextComponentImpl implements Period {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = -6599852248292348434L;
+
+    /**
 	 * @see org.xbrlapi.Period#isFiniteDurationPeriod()
 	 */
 	public boolean isFiniteDurationPeriod() throws XBRLException {

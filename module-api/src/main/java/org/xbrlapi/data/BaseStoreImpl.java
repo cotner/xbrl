@@ -66,7 +66,6 @@ import org.xbrlapi.impl.TupleImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.networks.AllAnalyserImpl;
 import org.xbrlapi.networks.Analyser;
-import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.NetworkImpl;
 import org.xbrlapi.networks.Networks;
@@ -86,7 +85,16 @@ import org.xbrlapi.utilities.XMLDOMBuilder;
  */
 public abstract class BaseStoreImpl implements Store {
 
-    private final static Logger logger = Logger.getLogger(BaseStoreImpl.class);
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -2550114388845337854L;
+
+    private static final Logger logger = Logger.getLogger(BaseStoreImpl.class);
 
     /**
      * The DOM document used to construct DOM representations
@@ -130,13 +138,14 @@ public abstract class BaseStoreImpl implements Store {
      * List of URIs to use when filtering query results to only get matches
      * to a specific set of documents.
      */
-    private List<URI> uris = null;
+    private List<URI> uris = new Vector<URI>();
 
     /**
      * @see org.xbrlapi.data.Store#setFilteringURIs(List)
      */
     public synchronized void setFilteringURIs(List<URI> uris) {
-        this.uris = uris;
+        if (uris == null) this.uris = new Vector<URI>();
+        else this.uris = uris;
     }
     
     /**
@@ -150,15 +159,14 @@ public abstract class BaseStoreImpl implements Store {
      * @see org.xbrlapi.data.Store#clearFilteringURIs()
      */
     public void clearFilteringURIs() {
-        this.uris = null;
+        this.uris = new Vector<URI>();
     }
 
     /**
      * @see org.xbrlapi.data.Store#isFilteringByURIs()
      */
     public synchronized boolean isFilteringByURIs() {
-        if (this.uris == null) return false;
-        return true;
+        return (! this.uris.isEmpty());
     }
     
     /**
@@ -2263,76 +2271,9 @@ public abstract class BaseStoreImpl implements Store {
         }
     }
 
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-        try {
-            matcher = (Matcher) in.readObject();
-            
-            if (in.readBoolean()) {
-                analyser = new AnalyserImpl(this);
-            } else {
-                analyser = null;
-            }
-            
-            if (in.readBoolean()) {
-                int urisSize = in.readInt();
-                if (urisSize > 0) {
-                    uris = new Vector<URI>();
-                    for (int i=0; i<urisSize; i++) {
-                        uris.add((URI) in.readObject());
-                    }
-                }
-            } else {
-                uris = null;
-            }
-            
-            int bindings = in.readInt();
-            namespaceBindings = new HashMap<URI,String>();
-            for (int i=0; i<bindings; i++) {
-                namespaceBindings.put((URI) in.readObject(), (String) in.readObject());
-            }
-            
-        } catch (XBRLException e) {
-            throw new IOException("The data store could not be read.",e);
-        }
-        
-        
-        // Reload fragmentMap
-        //fragmentMap = new HashMap<String,Element>();
-        
-        // Reload indexMap
-        //indexMap = new HashMap<Element,String>();
-        
-    }
+
     
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject( );
-        out.writeObject(matcher);
-        out.writeBoolean(this.analyser != null);
-        out.writeBoolean(uris != null);
-        if (uris != null) {
-            out.writeInt(uris.size());
-            for (URI uri: uris) {
-                out.writeObject(uri);
-            }
-        }
-        out.writeInt(namespaceBindings.keySet().size());
-        for (URI uri: namespaceBindings.keySet()) {
-            out.writeObject(uri);
-            out.writeObject(namespaceBindings.get(uri));
-        }
-    }
+
 
     /**
      * @see java.lang.Object#hashCode()

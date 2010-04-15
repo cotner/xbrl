@@ -1,6 +1,7 @@
 package org.xbrlapi.xlink;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,7 +21,12 @@ import org.xml.sax.Attributes;
 
 public class XLinkProcessorImpl implements XLinkProcessor, Serializable {
 
-    private final static Logger logger = Logger.getLogger(XLinkProcessorImpl.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5455130402128320301L;
+
+    private static final Logger logger = Logger.getLogger(XLinkProcessorImpl.class);
     
     /**
      * The XLink handler to use for responding to XLink events
@@ -534,16 +540,7 @@ public class XLinkProcessorImpl implements XLinkProcessor, Serializable {
         return xlinkHandler;
     }
 
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(xlinkHandler);
-        out.writeObject(this.customLinkRecogniser);
-    }    
+    
     
     /**
      * Handles object inflation.
@@ -551,10 +548,9 @@ public class XLinkProcessorImpl implements XLinkProcessor, Serializable {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
-        initialize((XLinkHandler) in.readObject());
-        this.setCustomLinkRecogniser((CustomLinkRecogniser) in.readObject());
+        initialize(this.getXLinkHandler());
     }
     
     /**

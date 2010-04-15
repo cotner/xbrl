@@ -10,6 +10,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class XlinkDocumentationImpl extends FragmentImpl implements XlinkDocumentation {
 	
 	/**
+     * 
+     */
+    private static final long serialVersionUID = -8362102502686134852L;
+
+    /**
 	 * TODO Provide a set value method for Xlink documentation fragments.
 	 * Get the value of the documentation fragment.
 	 * @return the text content of the documentation with leading and trailing spaces trimmed.

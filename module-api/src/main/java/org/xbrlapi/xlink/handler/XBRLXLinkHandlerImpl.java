@@ -1,6 +1,5 @@
 package org.xbrlapi.xlink.handler;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,7 +38,12 @@ import org.xml.sax.Attributes;
 */
 public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl implements XLinkHandler, Serializable {
 
-	private final static Logger logger = Logger.getLogger(XBRLXLinkHandlerImpl.class);	
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -2936024797284955596L;
+
+    private static final Logger logger = Logger.getLogger(XBRLXLinkHandlerImpl.class);	
 	
 	/**
 	 * The XBRL DTS loader that is using this XLink handler
@@ -472,28 +476,9 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl implements XLi
     }
 	
 
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(baseURIResolver);
-        out.writeObject(loader);
-   }    
     
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-        baseURIResolver = (BaseURISAXResolver) in.readObject();
-        loader = (Loader) in.readObject();
-    }
+    
+
     
     
 }

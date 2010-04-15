@@ -11,6 +11,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class ExtendedLinkContentImpl extends XlinkImpl implements ExtendedLinkContent {
     
     /**
+     * 
+     */
+    private static final long serialVersionUID = 5152171927354071767L;
+
+    /**
      * @see org.xbrlapi.ExtendedLinkContent#getExtendedLink()
      */
     public ExtendedLink getExtendedLink() throws XBRLException {

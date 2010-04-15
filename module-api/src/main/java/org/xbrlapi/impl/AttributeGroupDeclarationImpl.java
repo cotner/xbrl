@@ -13,6 +13,15 @@ import org.xbrlapi.utilities.XBRLException;
 public class AttributeGroupDeclarationImpl extends SchemaDeclarationImpl implements AttributeGroupDeclaration {
 
     /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -7206086803716730160L;
+
+    /**
      * @see org.xbrlapi.AttributeGroupDeclaration#getMembers()
      */
     public List<SchemaDeclaration> getMembers() throws XBRLException {

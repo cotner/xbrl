@@ -8,4 +8,9 @@ import org.xbrlapi.SchemaChoiceCompositor;
 
 public class SchemaChoiceCompositorImpl extends SchemaCompositorImpl implements SchemaChoiceCompositor {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1652892957698636841L;
+
 }

@@ -10,6 +10,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class TypedDimensionAspectValue extends BaseAspectValue {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6203040308810854332L;
+
     public TypedDimensionAspectValue(Aspect aspect, OpenContextComponent occ) throws XBRLException {
         super(aspect,occ);
     }

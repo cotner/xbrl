@@ -19,6 +19,15 @@ import org.xbrlapi.utilities.XBRLException;
 public class CustomTypeImpl extends FragmentImpl implements CustomType {
 
     /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -3481150284083534384L;
+
+    /**
      * Get the id of the customType.
      * @return the id of the custom type or null if none is provided
      * @throws XBRLException
@@ -31,8 +40,6 @@ public class CustomTypeImpl extends FragmentImpl implements CustomType {
     	return null;
     }
     
-
-
     /**
      * Get the custom URI being defined.
      * @return the custom URI being defined.

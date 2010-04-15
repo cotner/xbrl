@@ -1,6 +1,5 @@
 package org.xbrlapi.loader;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,7 +8,12 @@ import org.apache.log4j.Logger;
 
 public class HistoryImpl implements History {
 
-    private final static Logger logger = Logger.getLogger(HistoryImpl.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4599201126216530103L;
+    
+    private static final Logger logger = Logger.getLogger(HistoryImpl.class);
     
     /**
      * @see History#addRecord(URI, String)
@@ -51,22 +55,7 @@ public class HistoryImpl implements History {
         return super.hashCode();       
     }
 
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-    }    
     
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-    }    
+    
+    
 }

@@ -20,7 +20,16 @@ import org.xbrlapi.utilities.XBRLException;
 
 public abstract class BaseMatcherImpl implements Matcher {
 
-    private final static Logger logger = Logger.getLogger(BaseMatcherImpl.class);    
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -3402075120037095009L;
+
+    private static final Logger logger = Logger.getLogger(BaseMatcherImpl.class);    
     
     /**
      * The cache implementation to be used by the matcher when accessing
@@ -109,26 +118,9 @@ public abstract class BaseMatcherImpl implements Matcher {
         }
     }    
 
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(signer);
-   }
+
     
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-        signer = (Signer) in.readObject();
-    }
+
     /**
      * @see java.lang.Object#hashCode()
      */

@@ -13,6 +13,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class LanguageImpl extends FragmentImpl implements Language {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 1549365928850844441L;
+
+    /**
 	 * @see org.xbrlapi.Language#getEncoding()
 	 */
 	public String getEncoding() throws XBRLException {

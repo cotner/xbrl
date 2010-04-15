@@ -15,6 +15,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class SchemaCompositorImpl extends SchemaContentImpl implements SchemaCompositor {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 985343575694203047L;
+
+    /**
      * @see org.xbrlapi.SchemaCompositor#getMembers()
      */
     public List<ElementDeclaration> getMembers() throws XBRLException {

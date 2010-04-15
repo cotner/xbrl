@@ -31,6 +31,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class InstanceImpl extends FragmentImpl implements Instance {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -3931256042051791132L;
+
+    /**
      * @see org.xbrlapi.Instance#getSchemaRefs()
      */
     public List<SimpleLink> getSchemaRefs() throws XBRLException {

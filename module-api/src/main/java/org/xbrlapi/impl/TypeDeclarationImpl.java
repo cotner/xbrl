@@ -17,6 +17,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class TypeDeclarationImpl extends SchemaDeclarationImpl implements TypeDeclaration {	
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1297992906402945120L;
+
+    /**
      * @see org.xbrlapi.TypeDeclaration#getFinal()
      */
     public String getFinal() throws XBRLException {

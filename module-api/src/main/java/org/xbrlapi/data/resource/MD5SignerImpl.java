@@ -1,6 +1,5 @@
 package org.xbrlapi.data.resource;
 
-import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -11,9 +10,14 @@ import org.apache.log4j.Logger;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class MD5SignerImpl implements Signer, Serializable {
+public class MD5SignerImpl implements Signer {
 
-    private final static Logger logger = Logger.getLogger(MD5SignerImpl.class);    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4391859287548042192L;
+
+    private static final Logger logger = Logger.getLogger(MD5SignerImpl.class);    
 
     public MD5SignerImpl() {
         super();

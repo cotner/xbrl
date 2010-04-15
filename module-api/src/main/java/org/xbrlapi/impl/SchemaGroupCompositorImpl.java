@@ -8,4 +8,9 @@ import org.xbrlapi.SchemaGroupCompositor;
 
 public class SchemaGroupCompositorImpl extends SchemaCompositorImpl implements SchemaGroupCompositor {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -8785959698754119764L;
+
 }

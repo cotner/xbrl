@@ -21,6 +21,11 @@ import org.xbrlapi.xpointer.PointerPart;
 public class TypedDimensionImpl extends DimensionImpl implements TypedDimension, SimpleLink {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 5438651870246061004L;
+
+    /**
      * @see org.xbrlapi.Link#getLinkRole()
      */
     public URI getLinkRole() throws XBRLException {

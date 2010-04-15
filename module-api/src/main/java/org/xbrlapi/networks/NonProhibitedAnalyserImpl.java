@@ -18,6 +18,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class NonProhibitedAnalyserImpl extends AnalyserImpl implements Analyser {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4136715748794742559L;
+    
     protected final static Logger logger = Logger.getLogger(NonProhibitedAnalyserImpl.class);
     
     /**

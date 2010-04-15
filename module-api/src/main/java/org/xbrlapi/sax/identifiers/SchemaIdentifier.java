@@ -266,7 +266,7 @@ public class SchemaIdentifier extends BaseIdentifier implements Identifier {
             preparser.setFeature("http://apache.org/xml/features/validation/schema", true);
             preparser.setFeature("http://apache.org/xml/features/validation/schema-full-checking", true);
 
-            XMLEntityResolver entityResolver = (XMLEntityResolver) this.getLoader().getEntityResolver();
+            XMLEntityResolver entityResolver = this.getLoader().getEntityResolver();
             preparser.setEntityResolver(entityResolver);
 
             // TODO make sure that this XML Resource Identifier is being initialised correctly.

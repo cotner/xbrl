@@ -2,20 +2,17 @@ package org.xbrlapi.sax;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.apache.xerces.xni.XMLResourceIdentifier;
 import org.apache.xerces.xni.XNIException;
-import org.apache.xerces.xni.parser.XMLEntityResolver;
 import org.apache.xerces.xni.parser.XMLInputSource;
 import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
 import org.xbrlapi.utilities.XBRLException;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
 
@@ -27,9 +24,14 @@ import org.xml.sax.InputSource;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-public class EntityResolverImpl implements EntityResolver, XMLEntityResolver, Serializable {
+public class EntityResolverImpl implements EntityResolver {
 
-	private static final Logger logger = Logger.getLogger(EntityResolverImpl.class);		
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -4898895229134572933L;
+
+    private static final Logger logger = Logger.getLogger(EntityResolverImpl.class);		
 	
     /**
      * The local document cache.
@@ -65,7 +67,7 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver, Se
 	 * @throws XBRLException if any of the objects in the list of URIs is not a 
 	 * java.net.URI object.
 	 */
-	public EntityResolverImpl(File cacheRoot, Map<URI, URI> uriMap) throws XBRLException {
+	public EntityResolverImpl(File cacheRoot, HashMap<URI, URI> uriMap) throws XBRLException {
 		this.cache = new CacheImpl(cacheRoot, uriMap);
 	}
     
@@ -165,25 +167,8 @@ public class EntityResolverImpl implements EntityResolver, XMLEntityResolver, Se
         return true;
     }
     
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(cache);
-   }    
     
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-        this.cache = (Cache) in.readObject();
-    }
+    
+
     
 }

@@ -25,7 +25,7 @@ import org.xml.sax.Attributes;
  */
 public class ElementState {
 
-    private final static Logger logger = Logger.getLogger(ElementState.class);    
+    private static final Logger logger = Logger.getLogger(ElementState.class);    
     
 	/**
 	 * The parent element state if a parent exists and null otherwise

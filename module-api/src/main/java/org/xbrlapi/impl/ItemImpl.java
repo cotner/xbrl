@@ -11,7 +11,12 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class ItemImpl extends FactImpl implements Item {
 
-	/** 
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 5737055509180629932L;
+
+    /** 
 	 * @see org.xbrlapi.Item#getContext()
 	 */
 	public Context getContext() throws XBRLException {

@@ -713,12 +713,13 @@ public interface Store extends Serializable {
     
     /**
      * @param uris The list of URIs to restrict query results to coming from.
+     * The list of URIs is set to the empty list if this parameter is null.
      */
     public void setFilteringURIs(List<URI> uris);
 
     /**
-     * @return the list of URIs to filter query results using or
-     * null if no such list of URIs is being used by the data store.
+     * @return the list of URIs to filter query results.  Empty list
+     * if no URIs are being used to filter query results.
      */
     public List<URI> getFilteringURIs();
     

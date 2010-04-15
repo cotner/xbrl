@@ -13,6 +13,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class UsedOnImpl extends FragmentImpl implements UsedOn {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 2691745089747004020L;
+
+    /**
      * @see org.xbrlapi.UsedOn#getUsedOnNamespace()
      */
     public URI getUsedOnNamespace() throws XBRLException {

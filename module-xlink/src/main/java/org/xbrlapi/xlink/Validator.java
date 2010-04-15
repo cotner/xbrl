@@ -23,6 +23,11 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class Validator extends XLinkHandlerDefaultImpl {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 3959551538061351755L;
+
+    /**
 	 * The input source to be XLink validated
 	 */
 	private InputSource is;

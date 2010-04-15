@@ -14,6 +14,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class MockImpl extends FragmentImpl implements Mock {
 	
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 31223298171306717L;
+
+    /**
 	 * No argument constructor.
 	 * @throws XBRLException
 	 */

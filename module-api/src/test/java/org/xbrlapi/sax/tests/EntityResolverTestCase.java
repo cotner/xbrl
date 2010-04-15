@@ -14,7 +14,7 @@ import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.BaseTestCase;
 import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.Attributes;
-import org.xml.sax.EntityResolver;
+import org.xbrlapi.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;

@@ -1,6 +1,7 @@
 package org.xbrlapi.xdt.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashSet;
@@ -41,7 +42,16 @@ import org.xbrlapi.xdt.values.DimensionValueAccessorImpl;
  */
 public class DimensionalAspectModel extends BaseAspectModel implements AspectModel {
 
-    transient private final static Logger logger = Logger.getLogger(DimensionalAspectModel.class);
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = 462180786946469106L;
+
+    private static final Logger logger = Logger.getLogger(DimensionalAspectModel.class);
     
     transient DimensionValueAccessor accessor;
     
@@ -172,7 +182,7 @@ public class DimensionalAspectModel extends BaseAspectModel implements AspectMod
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         initialize();
    }

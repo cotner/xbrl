@@ -12,7 +12,12 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class SimpleNumericItemImpl extends NumericItemImpl implements SimpleNumericItem {
 	
-	/** 
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 5023073637732952730L;
+
+    /** 
 	 * Get the value of the fact as a string.
 	 * @return the value of fact as a string.
 	 * @throws XBRLException

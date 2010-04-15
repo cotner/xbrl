@@ -15,6 +15,11 @@ import org.xbrlapi.utilities.XBRLException;
 public class LinkImpl extends XlinkImpl implements Link {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 6703189602306256819L;
+
+    /**
      * @see org.xbrlapi.Link#getLinkRole()
      */
     public URI getLinkRole() throws XBRLException {

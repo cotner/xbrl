@@ -9,7 +9,12 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class NonNumericItemImpl extends ItemImpl implements NonNumericItem {
 
-	/** 
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -679088686747723914L;
+
+    /** 
 	 * Get the value of the fact.
 	 * @return the value of fact with leading and trailing spaces deleted or null 
 	 * if the fact is nill.

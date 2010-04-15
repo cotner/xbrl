@@ -17,7 +17,7 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class FragmentFactory<F> {
 
-	private final static Logger logger = Logger.getLogger(FragmentFactory.class);
+	private static final Logger logger = Logger.getLogger(FragmentFactory.class);
 	
 	/**
 	 * Get the class for the specified class name.

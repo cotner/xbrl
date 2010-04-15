@@ -21,6 +21,11 @@ import org.xbrlapi.xpointer.PointerPart;
 class XlinkImpl extends FragmentImpl implements Xlink {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 711390844077916793L;
+
+    /**
      * Get the xlink type (The xxlink:type attribute value).
      * @return the value of the xlink:type attribute.
      * @throws XBRLException

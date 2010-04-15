@@ -32,7 +32,12 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class NetworksImpl implements Networks, Serializable {
 
-	private final static Logger logger = Logger.getLogger(NetworksImpl.class);	
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -2248000947521760765L;
+
+    private static final Logger logger = Logger.getLogger(NetworksImpl.class);	
 	
 	private HashMap<String,Arc> arcs = new HashMap<String,Arc>();
 	

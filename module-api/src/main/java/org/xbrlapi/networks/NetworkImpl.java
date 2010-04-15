@@ -29,7 +29,12 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class NetworkImpl implements Network, Serializable {
 
-	private final static Logger logger = Logger.getLogger(NetworkImpl.class);	
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 7587744792648107666L;
+
+    private static final Logger logger = Logger.getLogger(NetworkImpl.class);	
 	
 	/**
 	 * The link role for the network.
