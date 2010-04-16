@@ -11,7 +11,11 @@ import java.lang.Exception;
 public class XMLBaseException extends Exception 
 {
 	
-	private Throwable cause;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -6062388656987869506L;
+    private Throwable cause;
 	
     public XMLBaseException() {
     	super();

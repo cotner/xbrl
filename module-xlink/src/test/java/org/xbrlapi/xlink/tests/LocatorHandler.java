@@ -12,7 +12,11 @@ import org.xml.sax.Attributes;
 
 public class LocatorHandler extends XLinkHandlerDefaultImpl {
 
-	LocatorTestCase test;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -4391828566465369024L;
+    LocatorTestCase test;
 	
 	/**
 	 * Constructor

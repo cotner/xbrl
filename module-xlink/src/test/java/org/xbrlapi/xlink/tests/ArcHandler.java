@@ -12,7 +12,15 @@ import org.xml.sax.Attributes;
 
 public class ArcHandler extends XLinkHandlerDefaultImpl {
 
-	ArcTestCase test;
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -6344245275761559721L;
+    ArcTestCase test;
 	
 	/**
 	 * Constructor

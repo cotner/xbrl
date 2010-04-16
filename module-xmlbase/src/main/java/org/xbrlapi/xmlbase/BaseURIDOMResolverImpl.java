@@ -5,7 +5,6 @@ package org.xbrlapi.xmlbase;
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -16,7 +15,16 @@ import org.w3c.dom.Node;
 
 public class BaseURIDOMResolverImpl extends BaseURIResolverImpl implements BaseURIDOMResolver {
 
-    private final static Logger logger = Logger.getLogger(BaseURIDOMResolverImpl.class);
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = 8478951714108359135L;
+
+    private static final Logger logger = Logger.getLogger(BaseURIDOMResolverImpl.class);
     
 	/**
 	 * The absolute URI of the document that this Base URI
@@ -139,23 +147,8 @@ public class BaseURIDOMResolverImpl extends BaseURIResolverImpl implements BaseU
         return super.hashCode();
     }    
     
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-   }
+
     
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-    }    
+    
     
 }

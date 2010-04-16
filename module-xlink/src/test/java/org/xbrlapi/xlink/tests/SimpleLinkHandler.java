@@ -12,7 +12,11 @@ import org.xml.sax.Attributes;
 
 public class SimpleLinkHandler extends XLinkHandlerDefaultImpl {
 
-	SimpleLinkTestCase test;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -3879631975506311204L;
+    SimpleLinkTestCase test;
 	
 	/**
 	 * Constructor

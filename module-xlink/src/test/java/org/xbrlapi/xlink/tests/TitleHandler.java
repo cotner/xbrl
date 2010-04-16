@@ -13,7 +13,11 @@ import org.xml.sax.Attributes;
 
 public class TitleHandler extends XLinkHandlerDefaultImpl {
 
-	TitleTestCase test;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1739572682277206224L;
+    TitleTestCase test;
 	
 	/**
 	 * Constructor

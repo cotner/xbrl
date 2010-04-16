@@ -10,7 +10,11 @@ import java.io.PrintWriter;
 public class XBRLException extends Exception 
 {
 	
-	private Throwable cause;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 9071731735229812074L;
+    private Throwable cause;
 	
     public XBRLException() {
     	super();

@@ -12,7 +12,11 @@ import org.xml.sax.Attributes;
 
 public class ResourceHandler extends XLinkHandlerDefaultImpl {
 
-	ResourceTestCase test;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -949369711610082374L;
+    ResourceTestCase test;
 	
 	/**
 	 * Constructor
