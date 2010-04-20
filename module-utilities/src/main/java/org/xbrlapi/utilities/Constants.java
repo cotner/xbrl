@@ -1,7 +1,6 @@
 package org.xbrlapi.utilities;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 
@@ -34,154 +33,75 @@ public class Constants {
     public final static String FragmentDataContainerElementName = "data";
 
     protected static Logger logger = Logger.getLogger(Constants.class);
-    
-    static {
-        
-        try {
-            XMLNamespace = new URI("http://www.w3.org/XML/1998/namespace");
-            XMLNSNamespace = new URI("http://www.w3.org/2000/xmlns/");
-            XLinkNamespace = new URI("http://www.w3.org/1999/xlink");
-            XBRL21Namespace = new URI("http://www.xbrl.org/2003/instance");
-            XBRL21LinkNamespace = new URI("http://www.xbrl.org/2003/linkbase");
-            GenericLinkNamespace = new URI("http://xbrl.org/2008/generic");
-            GenericLabelNamespace = new URI("http://xbrl.org/2008/label");
-            GenericReferenceNamespace = new URI("http://xbrl.org/2008/reference");
-            XBRLAPINamespace = new URI("http://xbrlapi.org/");
-            CompNamespace = new URI("http://xbrlapi.org/composite");
-            XBRLAPIEntitiesNamespace = new URI("http://xbrlapi.org/entities");
-            XBRLAPIEquivalentEntitiesArcrole = new URI("http://xbrlapi.org/arcrole/equivalent-entity");
-            XBRLAPILanguagesNamespace = new URI("http://xbrlapi.org/rfc1766/languages");    
-            XMLSchemaNamespace = new URI("http://www.w3.org/2001/XMLSchema");
-            XMLSchemaInstanceNamespace = new URI("http://www.w3.org/2001/XMLSchema-instance");
-            LabelArcrole = new URI("http://www.xbrl.org/2003/arcrole/concept-label");
-            GenericLabelArcrole = new URI("http://xbrl.org/arcrole/2008/element-label");
-            ReferenceArcrole = new URI("http://www.xbrl.org/2003/arcrole/concept-reference");
-            GenericReferenceArcrole = new URI("http://xbrl.org/arcrole/2008/element-reference");
-            CalculationArcrole = new URI("http://www.xbrl.org/2003/arcrole/summation-item");
-            PresentationArcrole = new URI("http://www.xbrl.org/2003/arcrole/parent-child");
-            GeneralSpecialArcrole = new URI("http://www.xbrl.org/2003/arcrole/general-special");
-            EssenceAliasArcrole = new URI("http://www.xbrl.org/2003/arcrole/essence-alias");
-            SimilarTuplesArcrole = new URI("http://www.xbrl.org/2003/arcrole/similar-tuples");
-            RequiresElementArcrole = new URI("http://www.xbrl.org/2003/arcrole/requires-element");
-            FactFootnoteArcrole = new URI("http://www.xbrl.org/2003/arcrole/fact-footnote");
-            StandardLabelRole = new URI("http://www.xbrl.org/2003/role/label");
-            TerseLabelRole = new URI("http://www.xbrl.org/2003/role/terseLabel");
-            VerboseLabelRole = new URI("http://www.xbrl.org/2003/role/verboseLabel");
-            PositiveLabelRole = new URI("http://www.xbrl.org/2003/role/positiveLabel");
-            PositiveTerseLabelRole = new URI("http://www.xbrl.org/2003/role/positiveTerseLabel");
-            PositiveVerboseLabelRole = new URI("http://www.xbrl.org/2003/role/positiveVerboseLabel");
-            NegativeLabelRole = new URI("http://www.xbrl.org/2003/role/negativeLabel");
-            NegativeTerseLabelRole = new URI("http://www.xbrl.org/2003/role/negativeTerseLabel");
-            NegativeVerboseLabelRole = new URI("http://www.xbrl.org/2003/role/negativeVerboseLabel");
-            ZeroLabelRole = new URI("http://www.xbrl.org/2003/role/zeroLabel");
-            ZeroTerseLabelRole = new URI("http://www.xbrl.org/2003/role/zeroTerseLabel");
-            ZeroVerboseLabelRole = new URI("http://www.xbrl.org/2003/role/zeroVerboseLabel");
-            TotalLabelRole = new URI("http://www.xbrl.org/2003/role/totalLabel");
-            PeriodStartLabelRole = new URI("http://www.xbrl.org/2003/role/periodStartLabel");
-            PeriodEndLabelRole = new URI("http://www.xbrl.org/2003/role/periodEndLabel");
-            DocumentationLabelRole = new URI("http://www.xbrl.org/2003/role/documentationLabel");
-            DefinitionGuidanceLabelRole = new URI("http://www.xbrl.org/2003/role/definitionGuidanceLabel");
-            DisclosureGuidanceLabelRole = new URI("http://www.xbrl.org/2003/role/disclosureGuidanceLabel");
-            PresentationGuidanceLabelRole = new URI("http://www.xbrl.org/2003/role/presentationGuidanceLabel");
-            MeasurementGuidanceLabelRole = new URI("http://www.xbrl.org/2003/role/measurementGuidanceLabel");
-            CommentaryGuidanceLabelRole = new URI("http://www.xbrl.org/2003/role/commentaryGuidanceLabel");
-            ExampleGuidanceLabelRole = new URI("http://www.xbrl.org/2003/role/exampleGuidanceLabel");
-            StandardReferenceRole = new URI("http://www.xbrl.org/2003/role/reference");
-            DefinitionReferenceRole = new URI("http://www.xbrl.org/2003/role/definitionRef");
-            DisclosureReferenceRole = new URI("http://www.xbrl.org/2003/role/disclosureRef");
-            MandatoryDisclosureReferenceRole = new URI("http://www.xbrl.org/2003/role/mandatoryDisclosureRef");
-            RecommendedDisclosureReferenceRole = new URI("http://www.xbrl.org/2003/role/recommendedDisclosureRef");
-            UnspecifiedDisclosureReferenceRole = new URI("http://www.xbrl.org/2003/role/unspecifiedDisclosureGuidanceLabel");
-            PresentationReferenceRole = new URI("http://www.xbrl.org/2003/role/presentationRef");
-            MeasurementReferenceRole = new URI("http://www.xbrl.org/2003/role/measurementRef");
-            CommentaryReferenceRole = new URI("http://www.xbrl.org/2003/role/commentaryRef");
-            ExampleReferenceRole = new URI("http://www.xbrl.org/2003/role/exampleRef");
-            StandardLinkRole = new URI("http://www.xbrl.org/2003/role/link");
-            ISO4217 = new URI("http://www.xbrl.org/2003/iso4217");
-            
-            StandardGenericLabelRole = new URI("http://www.xbrl.org/2008/role/label");
-            TerseGenericLabelRole = new URI("http://www.xbrl.org/2008/role/terseLabel");
-            VerboseGenericLabelRole = new URI("http://www.xbrl.org/2008/role/verboseLabel");
-            DocumentationGenericLabelRole = new URI("http://www.xbrl.org/2008/role/documentation");
-            
-            StandardGenericReferenceRole = new URI("http://www.xbrl.org/2008/role/reference");
-            LinkbaseReferenceArcrole = new URI("http://www.w3.org/1999/xlink/properties/linkbase");
-        } catch (URISyntaxException e) {
-            logger.error("Exception thrown though.");
-        }
-        
-    }
 
-    public static URI XMLNamespace;
-    public static URI XMLNSNamespace;
-    public static URI XLinkNamespace;
-    public static URI XBRL21Namespace;
-    public static URI XBRL21LinkNamespace;
-    public static URI GenericLinkNamespace;
-    public static URI GenericLabelNamespace;
-    public static URI GenericReferenceNamespace;
-    public static URI XBRLAPINamespace;
-    public static URI CompNamespace;
-    public static URI XBRLAPIEntitiesNamespace;
-    public static URI XBRLAPIEquivalentEntitiesArcrole;
-    public static URI XBRLAPILanguagesNamespace;    
-    public static URI XMLSchemaNamespace;
-    public static URI XMLSchemaInstanceNamespace;
-    public static URI LabelArcrole;
-    public static URI GenericLabelArcrole;
+    public final static URI XMLNamespace = URI.create("http://www.w3.org/XML/1998/namespace");
+    public final static URI XMLNSNamespace = URI.create("http://www.w3.org/2000/xmlns/");
+    public final static URI XLinkNamespace = URI.create("http://www.w3.org/1999/xlink");
+    public final static URI XBRL21Namespace = URI.create("http://www.xbrl.org/2003/instance");
+    public final static URI XBRL21LinkNamespace = URI.create("http://www.xbrl.org/2003/linkbase");
+    public final static URI GenericLinkNamespace = URI.create("http://xbrl.org/2008/generic");
+    public final static URI GenericLabelNamespace = URI.create("http://xbrl.org/2008/label");
+    public final static URI GenericReferenceNamespace = URI.create("http://xbrl.org/2008/reference");
+    public final static URI XBRLAPINamespace = URI.create("http://xbrlapi.org/");
+    public final static URI CompNamespace = URI.create("http://xbrlapi.org/composite");
+    public final static URI XBRLAPIEntitiesNamespace = URI.create("http://xbrlapi.org/entities");
+    public final static URI XBRLAPIEquivalentEntitiesArcrole = URI.create("http://xbrlapi.org/arcrole/equivalent-entity");
+    public final static URI XBRLAPILanguagesNamespace = URI.create("http://xbrlapi.org/rfc1766/languages");    
+    public final static URI XMLSchemaNamespace = URI.create("http://www.w3.org/2001/XMLSchema");
+    public final static URI XMLSchemaInstanceNamespace = URI.create("http://www.w3.org/2001/XMLSchema-instance");
+    public final static URI LabelArcrole = URI.create("http://www.xbrl.org/2003/arcrole/concept-label");
+    public final static URI GenericLabelArcrole = URI.create("http://xbrl.org/arcrole/2008/element-label");
+    public final static URI ReferenceArcrole = URI.create("http://www.xbrl.org/2003/arcrole/concept-reference");
+    public final static URI GenericReferenceArcrole = URI.create("http://xbrl.org/arcrole/2008/element-reference");
+    public final static URI CalculationArcrole = URI.create("http://www.xbrl.org/2003/arcrole/summation-item");
+    public final static URI PresentationArcrole = URI.create("http://www.xbrl.org/2003/arcrole/parent-child");
+    public final static URI GeneralSpecialArcrole = URI.create("http://www.xbrl.org/2003/arcrole/general-special");
+    public final static URI EssenceAliasArcrole = URI.create("http://www.xbrl.org/2003/arcrole/essence-alias");
+    public final static URI SimilarTuplesArcrole = URI.create("http://www.xbrl.org/2003/arcrole/similar-tuples");
+    public final static URI RequiresElementArcrole = URI.create("http://www.xbrl.org/2003/arcrole/requires-element");
+    public final static URI FactFootnoteArcrole = URI.create("http://www.xbrl.org/2003/arcrole/fact-footnote");
+    public final static URI StandardLabelRole = URI.create("http://www.xbrl.org/2003/role/label");
+    public final static URI TerseLabelRole = URI.create("http://www.xbrl.org/2003/role/terseLabel");
+    public final static URI VerboseLabelRole = URI.create("http://www.xbrl.org/2003/role/verboseLabel");
+    public final static URI PositiveLabelRole = URI.create("http://www.xbrl.org/2003/role/positiveLabel");
+    public final static URI PositiveTerseLabelRole = URI.create("http://www.xbrl.org/2003/role/positiveTerseLabel");
+    public final static URI PositiveVerboseLabelRole = URI.create("http://www.xbrl.org/2003/role/positiveVerboseLabel");
+    public final static URI NegativeLabelRole = URI.create("http://www.xbrl.org/2003/role/negativeLabel");
+    public final static URI NegativeTerseLabelRole = URI.create("http://www.xbrl.org/2003/role/negativeTerseLabel");
+    public final static URI NegativeVerboseLabelRole = URI.create("http://www.xbrl.org/2003/role/negativeVerboseLabel");
+    public final static URI ZeroLabelRole = URI.create("http://www.xbrl.org/2003/role/zeroLabel");
+    public final static URI ZeroTerseLabelRole = URI.create("http://www.xbrl.org/2003/role/zeroTerseLabel");
+    public final static URI ZeroVerboseLabelRole = URI.create("http://www.xbrl.org/2003/role/zeroVerboseLabel");
+    public final static URI TotalLabelRole = URI.create("http://www.xbrl.org/2003/role/totalLabel");
+    public final static URI PeriodStartLabelRole = URI.create("http://www.xbrl.org/2003/role/periodStartLabel");
+    public final static URI PeriodEndLabelRole = URI.create("http://www.xbrl.org/2003/role/periodEndLabel");
+    public final static URI DocumentationLabelRole = URI.create("http://www.xbrl.org/2003/role/documentationLabel");
+    public final static URI DefinitionGuidanceLabelRole = URI.create("http://www.xbrl.org/2003/role/definitionGuidanceLabel");
+    public final static URI DisclosureGuidanceLabelRole = URI.create("http://www.xbrl.org/2003/role/disclosureGuidanceLabel");
+    public final static URI PresentationGuidanceLabelRole = URI.create("http://www.xbrl.org/2003/role/presentationGuidanceLabel");
+    public final static URI MeasurementGuidanceLabelRole = URI.create("http://www.xbrl.org/2003/role/measurementGuidanceLabel");
+    public final static URI CommentaryGuidanceLabelRole = URI.create("http://www.xbrl.org/2003/role/commentaryGuidanceLabel");
+    public final static URI ExampleGuidanceLabelRole = URI.create("http://www.xbrl.org/2003/role/exampleGuidanceLabel");
+    public final static URI StandardReferenceRole = URI.create("http://www.xbrl.org/2003/role/reference");
+    public final static URI DefinitionReferenceRole = URI.create("http://www.xbrl.org/2003/role/definitionRef");
+    public final static URI DisclosureReferenceRole = URI.create("http://www.xbrl.org/2003/role/disclosureRef");
+    public final static URI MandatoryDisclosureReferenceRole = URI.create("http://www.xbrl.org/2003/role/mandatoryDisclosureRef");
+    public final static URI RecommendedDisclosureReferenceRole = URI.create("http://www.xbrl.org/2003/role/recommendedDisclosureRef");
+    public final static URI UnspecifiedDisclosureReferenceRole = URI.create("http://www.xbrl.org/2003/role/unspecifiedDisclosureGuidanceLabel");
+    public final static URI PresentationReferenceRole = URI.create("http://www.xbrl.org/2003/role/presentationRef");
+    public final static URI MeasurementReferenceRole = URI.create("http://www.xbrl.org/2003/role/measurementRef");
+    public final static URI CommentaryReferenceRole = URI.create("http://www.xbrl.org/2003/role/commentaryRef");
+    public final static URI ExampleReferenceRole = URI.create("http://www.xbrl.org/2003/role/exampleRef");
+    public final static URI StandardLinkRole = URI.create("http://www.xbrl.org/2003/role/link");
+    public final static URI ISO4217 = URI.create("http://www.xbrl.org/2003/iso4217");
     
-    public static URI StandardGenericLabelRole;
+    public final static URI StandardGenericLabelRole = URI.create("http://www.xbrl.org/2008/role/label");
+    public final static URI TerseGenericLabelRole = URI.create("http://www.xbrl.org/2008/role/terseLabel");
+    public final static URI VerboseGenericLabelRole = URI.create("http://www.xbrl.org/2008/role/verboseLabel");
+    public final static URI DocumentationGenericLabelRole = URI.create("http://www.xbrl.org/2008/role/documentation");
     
-    public static URI TerseGenericLabelRole;
-    
-    public static URI VerboseGenericLabelRole;
-    
-    public static URI DocumentationGenericLabelRole;    
-    public static URI ReferenceArcrole;
-    public static URI GenericReferenceArcrole;
-    public static URI CalculationArcrole;
-    public static URI PresentationArcrole;
-    public static URI GeneralSpecialArcrole;
-    public static URI EssenceAliasArcrole;
-    public static URI SimilarTuplesArcrole;
-    public static URI RequiresElementArcrole;
-    public static URI FactFootnoteArcrole;
-    public static URI StandardLabelRole;
-    public static URI TerseLabelRole;
-    public static URI VerboseLabelRole;
-    public static URI PositiveLabelRole;
-    public static URI PositiveTerseLabelRole;
-    public static URI PositiveVerboseLabelRole;
-    public static URI NegativeLabelRole;
-    public static URI NegativeTerseLabelRole;
-    public static URI NegativeVerboseLabelRole;
-    public static URI ZeroLabelRole;
-    public static URI ZeroTerseLabelRole;
-    public static URI ZeroVerboseLabelRole;
-    public static URI TotalLabelRole;
-    public static URI PeriodStartLabelRole;
-    public static URI PeriodEndLabelRole;
-    public static URI DocumentationLabelRole;
-    public static URI DefinitionGuidanceLabelRole;
-    public static URI DisclosureGuidanceLabelRole;
-    public static URI PresentationGuidanceLabelRole;
-    public static URI MeasurementGuidanceLabelRole;
-    public static URI CommentaryGuidanceLabelRole;
-    public static URI ExampleGuidanceLabelRole;
-    public static URI StandardReferenceRole;
-    
-    public static URI StandardGenericReferenceRole;
-    public static URI DefinitionReferenceRole;
-    public static URI DisclosureReferenceRole;
-    public static URI MandatoryDisclosureReferenceRole;
-    public static URI RecommendedDisclosureReferenceRole;
-    public static URI UnspecifiedDisclosureReferenceRole;
-    public static URI PresentationReferenceRole;
-    public static URI MeasurementReferenceRole;
-    public static URI CommentaryReferenceRole;
-    public static URI ExampleReferenceRole;
-    public static URI StandardLinkRole;
-    public static URI ISO4217;
-    
-    public static URI LinkbaseReferenceArcrole;
+    public final static URI StandardGenericReferenceRole = URI.create("http://www.xbrl.org/2008/role/reference");
+    public final static URI LinkbaseReferenceArcrole = URI.create("http://www.w3.org/1999/xlink/properties/linkbase");
+
+
 }
