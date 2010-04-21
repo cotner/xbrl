@@ -1389,6 +1389,14 @@ public abstract class BaseStoreImpl implements Store {
     public List<Fact> getAllFacts(URI uri) throws XBRLException {
         String query = "for $root in #roots#[@uri='"+ uri +"' ] where $root/@fact return $root";
         return this.<Fact>queryForXMLResources(query);
+    }
+    
+    /**
+     * @see Store#getAllFacts()
+     */
+    public List<Fact> getAllFacts() throws XBRLException {
+        String query = "for $root in #roots# where $root/@fact return $root";
+        return this.<Fact>queryForXMLResources(query);
     }    
     
 

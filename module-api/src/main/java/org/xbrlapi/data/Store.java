@@ -760,6 +760,7 @@ public interface Store extends Serializable {
      * that are children of the root element of an XBRL instance).  Returns an empty list 
      * if no facts are found.
      * @throws XBRLException
+     * @see {@link Store#getAllFacts()}
      */
     public List<Fact> getFacts() throws XBRLException;
     
@@ -813,7 +814,14 @@ public interface Store extends Serializable {
      * in the document with the specified URI.
      * @throws XBRLException
      */
-    public List<Fact> getAllFacts(URI uri) throws XBRLException;    
+    public List<Fact> getAllFacts(URI uri) throws XBRLException;
+    
+    /**
+     * @return a list of all of the facts (root level and those nested in tuples) 
+     * in the data store.
+     * @throws XBRLException
+     */
+    public List<Fact> getAllFacts() throws XBRLException;
     
     /**
      * @param uri The URI of the document to get the items from.
