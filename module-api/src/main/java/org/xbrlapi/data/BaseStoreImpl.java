@@ -86,6 +86,15 @@ import org.xbrlapi.utilities.XMLDOMBuilder;
 public abstract class BaseStoreImpl implements Store {
 
     /**
+     * @see Store#getNumberOfXMLResources(Class)
+     */
+    public long getNumberOfXMLResources(Class<?> specifiedClass)
+            throws XBRLException {
+        String query = "for $root in #roots# where $root/@type='" + specifiedClass.getName() + "' return $root";
+        return this.queryCount(query);
+    }
+
+    /**
      * The serial version UID.
      * @see 
      * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678

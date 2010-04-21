@@ -422,7 +422,14 @@ public interface Store extends Serializable {
      * @return a list of XML resources with the given fragment type.
      * @throws XBRLException
      */
-    public <F extends XML> List<F> getXMLResources(Class<?> specifiedClass) throws XBRLException;    
+    public <F extends XML> List<F> getXMLResources(Class<?> specifiedClass) throws XBRLException;
+    
+    /**
+     * @param specifiedClass The class of XML resource to count.
+     * @return The number of XML resources of the given class type in the data store.
+     * @throws XBRLException
+     */
+    public long getNumberOfXMLResources(Class<?> specifiedClass) throws XBRLException;
     
     /**
      * @param interfaceName The name of the interface.  EG: If a list of
