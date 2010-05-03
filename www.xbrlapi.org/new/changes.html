@@ -59,154 +59,134 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 <div class="content">
 
+<h2>3 May. 2010</h2>
+<p>Made the org.xbrlapi.Measure Comparable so that unit numerator and
+denominator measures could have a natural ordering.</p>
+
+
+<h2>21 Apr. 2010</h2>
+<p>Added new method to the Store interface to count XML resources
+with a given type.</p>
+<p>Added a getAllFacts method to the data store to allow retrieval
+of all facts (root level and those that are children of tuples).</p>
+
+<h2>15 Apr. 2010</h2>
+<p>
+Simplified the handling of serialization.
+</p>
+
 <h2>15 Mar. 2010</h2>
-<p>
-Added source fragment URI and target fragment URI data to relationship XML 
-resources.
-</p>
-<p>
-Modified the Linkbase#getExtendedLinks method to return the empty list
-rather than null if the linkbase contains no extended links.
-</p>
+<p>Added source fragment URI and target fragment URI data to
+relationship XML resources.</p>
+<p>Modified the Linkbase#getExtendedLinks method to return the empty
+list rather than null if the linkbase contains no extended links.</p>
 
 <h2>11 Mar. 2010</h2>
-<p>
-Added new convenience methods to get sets of fragment indices from
-the data store.
-</p>
+<p>Added new convenience methods to get sets of fragment indices
+from the data store.</p>
 
 <h2>2 Mar. 2010</h2>
-<p>
-Added a getConceptCount method to the org.xbrlapi.Schema interface.
-</p>
-<p>
-Added the getImporters method to the .xbrlapi.Schema interface.
-</p>
+<p>Added a getConceptCount method to the org.xbrlapi.Schema
+interface.</p>
+<p>Added the getImporters method to the .xbrlapi.Schema interface.</p>
 
 <h2>25 Feb. 2010</h2>
-<p>
-The org.xbrlapi.Fragment#getLanguage() method now works for any node in a fragment and 
-it handles language code inheritance through the XML heirarchy.
-</p>
+<p>The org.xbrlapi.Fragment#getLanguage() method now works for any
+node in a fragment and it handles language code inheritance through the
+XML heirarchy.</p>
 
 <h2>7 Dec. 2009</h2>
-<p>
-Added a new history tracking system for loaders so that it is possible to reload
-the documents in a data store while preserving the document identifiers used in the
-initial loading process.
-</p>
+<p>Added a new history tracking system for loaders so that it is
+possible to reload the documents in a data store while preserving the
+document identifiers used in the initial loading process.</p>
 
 <h2>27 Nov. 2009</h2>
-<p>
-Fixed a bug in the linkbase fragment implementation that prevented retrieval of the
-child extended links in the linkbase.
-</p>
+<p>Fixed a bug in the linkbase fragment implementation that
+prevented retrieval of the child extended links in the linkbase.</p>
 
 <h2>25 Nov. 2009</h2>
-<p>
-Aligned constant URI syntax in XDT module with the URI syntax for constants
-in the utilities module.
-</p>
+<p>Aligned constant URI syntax in XDT module with the URI syntax for
+constants in the utilities module.</p>
 
 <h2>24 Nov. 2009</h2>
-<p>
-Fixed a problem with determining if a location aspect value has a parent location
-aspect value when the location aspect value is for a fact that is contained within
-a tuple.
-</p>
-<p>
-Changed getAxisAspects method on the AspectModel interface to always return a list.
-The list is empty if the axis has no aspects in the aspect model.
-</p>
+<p>Fixed a problem with determining if a location aspect value has a
+parent location aspect value when the location aspect value is for a
+fact that is contained within a tuple.</p>
+<p>Changed getAxisAspects method on the AspectModel interface to
+always return a list. The list is empty if the axis has no aspects in
+the aspect model.</p>
 
 <h2>23 Nov. 2009</h2>
-<p>
-Changed label retrieval methods for aspects to make them uniform across
-all aspect implementations.
-Added new linkbase methods to analyse the extended links contained in them.
-</p>
+<p>Changed label retrieval methods for aspects to make them uniform
+across all aspect implementations. Added new linkbase methods to analyse
+the extended links contained in them.</p>
 
 <h2>10 Nov. 2009</h2>
-<p>
-Made aspects record facts with missing aspect values rather than ignoring them.
-</p>
+<p>Made aspects record facts with missing aspect values rather than
+ignoring them.</p>
 
 
 <h2>9 Nov. 2009</h2>
-<p>
-Improved the handling of the dimension aspect labelling to exploit XBRL labels for such dimensions.
-</p>
+<p>Improved the handling of the dimension aspect labelling to
+exploit XBRL labels for such dimensions.</p>
 
 <h2>5 Nov. 2009</h2>
-<p>
-Added aspect label method so that labels can be provided that identify aspects.
-</p>
-<p>
-Changed the getMatches method of the org.xbrlapi.aspects.Aspect interface to throw
-an exception if the aspect does not have an aspect value as the matching criterion.
-</p>
-<p>
-Fixed a bug in the DimensionalAspectModel that prevented facts from having their dimensional
-aspect values recorded properly as new dimensional aspect values were discovered.
-</p>
+<p>Added aspect label method so that labels can be provided that
+identify aspects.</p>
+<p>Changed the getMatches method of the org.xbrlapi.aspects.Aspect
+interface to throw an exception if the aspect does not have an aspect
+value as the matching criterion.</p>
+<p>Fixed a bug in the DimensionalAspectModel that prevented facts
+from having their dimensional aspect values recorded properly as new
+dimensional aspect values were discovered.</p>
 
 <h2>3 Nov. 2009</h2>
-<p>
-Made the org.xbrlapi.Concept#getPeriodType method return null for tuple concepts instead of
-throwing an exception.
-</p>
-<p>Prevented the org.xbrlapi.Concept#isNumeric from tripping up on Tuple concepts.</p>
+<p>Made the org.xbrlapi.Concept#getPeriodType method return null for
+tuple concepts instead of throwing an exception.</p>
+<p>Prevented the org.xbrlapi.Concept#isNumeric from tripping up on
+Tuple concepts.</p>
 
 <h2>30 Oct. 2009</h2>
-<p>Added means of getting fragments linking to a specified URI to the store interface.</p>
+<p>Added means of getting fragments linking to a specified URI to
+the store interface.</p>
 
 <h2>29 Oct. 2009</h2>
 <p>Added the ability to test if concepts and type declarations are
 XBRL numeric item data types.</p>
-<p>Added a method to the aspect model interface to enable retrieval of
-all aspect values (one per aspect in the model) for a given fact.</p>
+<p>Added a method to the aspect model interface to enable retrieval
+of all aspect values (one per aspect in the model) for a given fact.</p>
 
 <h2>27 Oct. 2009</h2>
-<p>
-Added convenience methods to the org.xbrlapi.Fragment interface
+<p>Added convenience methods to the org.xbrlapi.Fragment interface
 to support better analysis of fragment hierarchies within XML documents
-as opposed to XLink relationship networks.
-</p>
-<p>Added new methods to the org.xbrlapi.aspects.AspectValue interface to
-support more sophisticated handling of hierarchies of values for a given
-aspect.</p>
+as opposed to XLink relationship networks.</p>
+<p>Added new methods to the org.xbrlapi.aspects.AspectValue
+interface to support more sophisticated handling of hierarchies of
+values for a given aspect.</p>
 
 <h2>26 Oct. 2009</h2>
-<p>
-Standardised handling of missing aspect values.  This became a big
+<p>Standardised handling of missing aspect values. This became a big
 deal once tuples were allowed within aspect models and the location
-aspect was introduced.  Added a new getLabels method for fragments to 
-make it easier to have graceful fall back if first preferences for 
-languages and label role are not able to be fulfilled.
-</p>
+aspect was introduced. Added a new getLabels method for fragments to
+make it easier to have graceful fall back if first preferences for
+languages and label role are not able to be fulfilled.</p>
 
 <h2>22 Oct. 2009</h2>
-<p>
-Tuples are now treated as facts in aspect models.
-</p>
-<p>
-Fixed a glitch in the tuple/fractionItem identification logic to prevent tuples within tuples from
-causing their parent tuples to be identified as fraction items.
-</p>
+<p>Tuples are now treated as facts in aspect models.</p>
+<p>Fixed a glitch in the tuple/fractionItem identification logic to
+prevent tuples within tuples from causing their parent tuples to be
+identified as fraction items.</p>
 
 <h2>21 Oct. 2009</h2>
-<p>
-Changed method names for the org.xbrlapi.aspects.AspectModel interface to replace the word dimension
-with the more consistently used word Axis. 
-</p>
+<p>Changed method names for the org.xbrlapi.aspects.AspectModel
+interface to replace the word dimension with the more consistently used
+word Axis.</p>
 
 <h2>20 Oct. 2009</h2>
-<p>
-Sorted out tuple identification and fraction item identification so that it works
-always.  Also made fraction item methods robust to all kinds of perverse fraction items
-that restrict the fraction item type and rename the numerator and denominator elements
-in fraction items.
-</p>
+<p>Sorted out tuple identification and fraction item identification
+so that it works always. Also made fraction item methods robust to all
+kinds of perverse fraction items that restrict the fraction item type
+and rename the numerator and denominator elements in fraction items.</p>
 <p>Enhanced location aspect handling in aspect models and simplified
 aspect value validation logic by adding a new version of the
 org.xbrlapi.XML#isa() method to take a class as an argument rather than
@@ -219,14 +199,14 @@ a class name.</p>
 <p>Added method to the org.xbrlapi.cache.Cache interface to allow
 retrieval of a list of the URIs contained in a the cache directory
 corresponding to a given URI or in any of that directory's descendant
-directories.  This can be a quick way to reload data into a data store.
+directories. This can be a quick way to reload data into a data store.
 It is also useful if you want to unzip a set of taxonomy files directly
 into the cache, effectively faking their publication on the internet,
 and then loading the files that you have added directly to the cache.</p>
 
 <h2>25 Sep. 2009</h2>
-<p>Created a new Oracle Berkeley XML Database store constructor that gives
-users control over the cache size of the database.</p>
+<p>Created a new Oracle Berkeley XML Database store constructor that
+gives users control over the cache size of the database.</p>
 
 <h2>18 Sep. 2009</h2>
 <p>Made the getReferencingItems method of the
@@ -237,27 +217,27 @@ specify if the items are numeric (helpful for units for example).</p>
 retrieval of all global complex and simple type declarations and to
 support retrieval of any named global declaration.</p>
 
-<p>Added new methods to the org.xbrlapi.TypeDeclaration interface
-to support finality analysis and to support analysis of type derivation
+<p>Added new methods to the org.xbrlapi.TypeDeclaration interface to
+support finality analysis and to support analysis of type derivation
 paths.</p>
 
 <p>Fixed a bug in handling of QNames with no namespace prefixes when
 looking up QName namespaces via the org.xbrlapi.Fragment interface.</p>
 
 <h2>14 Sep. 2009</h2>
-<p>Modified the cache loading utility example to load a part of a cache
-rather than the whole cache. This provides a nice way of testing before
-publication of a taxonomy by copying it to a place in the taxonomy cache
-and then loading from there rather than from the prospective publication
-location.</p>
-<p>Modified the org.xbrlapi.Instance interface to provide a range of new
-methods that reduce the computational burden involved in summarising the
-information contained in an XBRL business report.</p>
+<p>Modified the cache loading utility example to load a part of a
+cache rather than the whole cache. This provides a nice way of testing
+before publication of a taxonomy by copying it to a place in the
+taxonomy cache and then loading from there rather than from the
+prospective publication location.</p>
+<p>Modified the org.xbrlapi.Instance interface to provide a range of
+new methods that reduce the computational burden involved in summarising
+the information contained in an XBRL business report.</p>
 
 <h2>10 Sep. 2009</h2>
-<p>Added new getTuples method to the org.xbrlapi.Instance interface to 
-enable retrieval of all tuples that are children of the root element of the
-XBRL instance.</p>
+<p>Added new getTuples method to the org.xbrlapi.Instance interface
+to enable retrieval of all tuples that are children of the root element
+of the XBRL instance.</p>
 
 <h2>9 Sep. 2009</h2>
 <p>Fixed a bug, identified by Karel Arkema, in the
@@ -277,8 +257,8 @@ a specified taxonomy cache location.</p>
 access to the XPointer expressions that could be used to reference the
 root element of the fragment.</p>
 
-<p>Changed the method signatures for the Resource methods that retrieve
-the name of the language used for an extended link resource.</p>
+<p>Changed the method signatures for the Resource methods that
+retrieve the name of the language used for an extended link resource.</p>
 
 <h2>25 Aug. 2009</h2>
 <p>Started work on fleshing out an enhanced XML Schema fragmentation
@@ -286,42 +266,44 @@ system to allow deeper analysis of XML schema content model
 declarations.</p>
 
 <h2>21 Aug. 2009</h2>
-<p>Fixed a bug in simple link traversal to ensure that matching URIs are
-taken care of behind the scenes. Previously a simple link to a duplicate
-document would show up as being broken, implying that the DTS has not
-been fully discovered.</p>
+<p>Fixed a bug in simple link traversal to ensure that matching URIs
+are taken care of behind the scenes. Previously a simple link to a
+duplicate document would show up as being broken, implying that the DTS
+has not been fully discovered.</p>
 
 <h2>20 Aug. 2009</h2>
-<p>Made the org.xbrlapi.SimpleLink#getTargetDocumentURI() method public.</p>
+<p>Made the org.xbrlapi.SimpleLink#getTargetDocumentURI() method
+public.</p>
 
 <h2>18 Aug. 2009</h2>
-<p>Added new methods to the org.xbrlapi.networks.Networks interface to
-enable all relationships from or to a given fragment to be obtained for
-all networks in the set of networks.</p>
+<p>Added new methods to the org.xbrlapi.networks.Networks interface
+to enable all relationships from or to a given fragment to be obtained
+for all networks in the set of networks.</p>
 
 <h2>13 Aug. 2009</h2>
-<p>Added new transient part of store state to keep track of the set of
-loaders that are currently loading data into the store. This enables
+<p>Added new transient part of store state to keep track of the set
+of loaders that are currently loading data into the store. This enables
 loaders in different threads to co-ordinate their relationship
 persistence activities. Added new getSourceIndices method to the Store
 interface. Added methods to facilitate more efficient handling of
 concept analysis in terms of the facts for that concept.</p>
 
 <h2>11 Aug. 2009</h2>
-<p>Added new method to access a map of language names from a data store.
-Changed the getLanguage method to getEncoding for Language fragments.
-Added a new class to facilitate rapid analysis of language encodings and
-names.</p>
+<p>Added new method to access a map of language names from a data
+store. Changed the getLanguage method to getEncoding for Language
+fragments. Added a new class to facilitate rapid analysis of language
+encodings and names.</p>
 
 <h2>7 Aug. 2009</h2>
-<p>Added new org.xbrlapi.impl.LanguageComparator method that compares
-Language fragments based on their codes and then the language names.</p>
+<p>Added new org.xbrlapi.impl.LanguageComparator method that
+compares Language fragments based on their codes and then the language
+names.</p>
 
 <h2>4 Aug. 2009</h2>
-<p>Added new method: org.xbrlapi.data.Store#getRootFragments(String).
-This provides access to document root fragments of a given type. It is
-useful for retrieving all schema root elements or all XBRL instance root
-elements.</p>
+<p>Added new method:
+org.xbrlapi.data.Store#getRootFragments(String). This provides access to
+document root fragments of a given type. It is useful for retrieving all
+schema root elements or all XBRL instance root elements.</p>
 
 <h2>3 Aug. 2009</h2>
 <p>Made the arcrole and linkrole parameter orderings for methods
@@ -331,570 +313,420 @@ that enables investigation of relationship properties for a specified
 document fragment in the data store.</p>
 
 <h2>1 Aug. 2009</h2>
-<p>
-Refined the org.xbrlapi.data.Store#getConcept method to use a single XQuery.
-This should improve performance.
-Fixed a bug in the retrieval of the data root element for fragments being built.
-The code used to just return the container element for the data root element for
-such fragments.
-Modified the handling of xml:lang attributes for XLink resources, copying inherited 
-values onto the resource element itself.  This makes for much faster querying and fixes
-a bug in the handling of the xml:lang attributes where previously inherited attributes
-were not being detected.
-</p>
+<p>Refined the org.xbrlapi.data.Store#getConcept method to use a
+single XQuery. This should improve performance. Fixed a bug in the
+retrieval of the data root element for fragments being built. The code
+used to just return the container element for the data root element for
+such fragments. Modified the handling of xml:lang attributes for XLink
+resources, copying inherited values onto the resource element itself.
+This makes for much faster querying and fixes a bug in the handling of
+the xml:lang attributes where previously inherited attributes were not
+being detected.</p>
 
 <h2>31 Jul. 2009</h2>
-<p>
-Modified the org.xbrlapi.Measures interface to capture the measure QName prefix
-as a measure property.  This changes the implementation constructor.  Added an
-additional example utility showing how to analyse units of measurement in an XBRL instance.
-Added new unit test for Oracle Berkeley XML database handling of multiple namespace prefix
-declarations for the one namespace.  Fixed a problem in capturing namespace prefix declarations
-when the prefix is not used for an attribute or element and where the namespace being given 
-the prefix is being used for an attribute or element.
-</p>
+<p>Modified the org.xbrlapi.Measures interface to capture the
+measure QName prefix as a measure property. This changes the
+implementation constructor. Added an additional example utility showing
+how to analyse units of measurement in an XBRL instance. Added new unit
+test for Oracle Berkeley XML database handling of multiple namespace
+prefix declarations for the one namespace. Fixed a problem in capturing
+namespace prefix declarations when the prefix is not used for an
+attribute or element and where the namespace being given the prefix is
+being used for an attribute or element.</p>
 
 <h2>28 Jul. 2009</h2>
-<p>
-Moved the DBConnection implementation to be an inner class of the 
-eXist store implementation.  Cleaned up the eXist store deletion method.
+<p>Moved the DBConnection implementation to be an inner class of the
+eXist store implementation. Cleaned up the eXist store deletion method.
 </p>
 
 <h2>27 Jul. 2009</h2>
-<p>
-Eliminated the org.xbrlapi.networks.Relationship interface and implementation, 
-replacing it throughout with the very similar but more complete 
-org.xbrlapi.PersistedRelationship interface and implementation.
-Created additional org.xbrlapi.networks.Analyser implementations
-to filter relationships in various ways (all relationships or all
-relationships that are not marked as being prohibited on the arc 
-declaring them).  These alter the results relating to network methods
-for data stores that use persisted relationships. 
-</p>
+<p>Eliminated the org.xbrlapi.networks.Relationship interface and
+implementation, replacing it throughout with the very similar but more
+complete org.xbrlapi.PersistedRelationship interface and implementation.
+Created additional org.xbrlapi.networks.Analyser implementations to
+filter relationships in various ways (all relationships or all
+relationships that are not marked as being prohibited on the arc
+declaring them). These alter the results relating to network methods for
+data stores that use persisted relationships.</p>
 
 <h2>21 Jul. 2009</h2>
-<p>
-Made most classes serializable.
-Introduced axes in place of dimensions in aspect models to avoid
-clashes with XDT dimensions.  This causes backward incompatibility of
-the API but eliminates bugs in the dimension aspect implementations.
-</p>
+<p>Made most classes serializable. Introduced axes in place of
+dimensions in aspect models to avoid clashes with XDT dimensions. This
+causes backward incompatibility of the API but eliminates bugs in the
+dimension aspect implementations.</p>
 
 <h2>16 Jul. 2009</h2>
-<p>
-Added arc URI to the information persisted for each relationship. 
-Added in persisted error information capture using the data store
-to track problems as they arise during persistence of relationships. 
-Added Freemarker to the list of dependencies in the examples Maven POM file.
-</p>
+<p>Added arc URI to the information persisted for each relationship.
+Added in persisted error information capture using the data store to
+track problems as they arise during persistence of relationships. Added
+Freemarker to the list of dependencies in the examples Maven POM file.</p>
 
 <h2>14 Jul. 2009</h2>
-<p>
-Simplified the org.xbrlapi.utilities.Constants class
-to use java.net.URI rather than strings for all URI constants.
-Refined the treatment of type="none" XLink attributes to ensure that such
-elements were not treated as XLink elements.
-</p>
+<p>Simplified the org.xbrlapi.utilities.Constants class to use
+java.net.URI rather than strings for all URI constants. Refined the
+treatment of type="none" XLink attributes to ensure that such elements
+were not treated as XLink elements.</p>
 
 <h2>8 Jul. 2009</h2>
-<p>
-The examples have been repackaged, debugged, and extended to include
-a number of new data store maintenance utilities.
-</p>
+<p>The examples have been repackaged, debugged, and extended to
+include a number of new data store maintenance utilities.</p>
 
 <h2>30 Jun. 2009</h2>
-<p>
-Finalised a broad range of modifications to the relationship
-persistence code; document matching performance improvements; 0
-and the XPath 2.0 to XQuery 1.0 query language change.
-</p>
+<p>Finalised a broad range of modifications to the relationship
+persistence code; document matching performance improvements; 0 and the
+XPath 2.0 to XQuery 1.0 query language change.</p>
 
 <h2>18 Mar. 2009</h2>
-<p>
-Enabled the loader to augment persisted relationships upon
-successful completion of a document discovery process if the
-resulting data store contains a complete DTS (so that all
-relationship networks can be analysed without running into 
-missing fragments). Finalised the persisted relationship rendering example.
-</p>
+<p>Enabled the loader to augment persisted relationships upon
+successful completion of a document discovery process if the resulting
+data store contains a complete DTS (so that all relationship networks
+can be analysed without running into missing fragments). Finalised the
+persisted relationship rendering example.</p>
 
 <h2>11 Mar. 2009</h2>
-<p>
-Changed the methods retrieving active relationships from 
-a network for a given source or target fragment to return
-a sorted set of relationships, sorted by order rather than
-a standard list of relationships.
-Eliminated the FragmentList interface and implementation.  This
-is now done with standard Java collections.
-</p>
+<p>Changed the methods retrieving active relationships from a
+network for a given source or target fragment to return a sorted set of
+relationships, sorted by order rather than a standard list of
+relationships. Eliminated the FragmentList interface and implementation.
+This is now done with standard Java collections.</p>
 
 <h2>10 Mar. 2009</h2>
-<p>
-Changed the getOrder method of the Arc fragment interface
-to return a Double rather than a String.
-</p>
+<p>Changed the getOrder method of the Arc fragment interface to
+return a Double rather than a String.</p>
 
 <h2>26 Feb. 2009</h2>
-<p>
-Eliminated the XBRLStore interface and 
-implementation, merging the functionality back into the base
-store interface and implementation.  This is a precursor to
-refactoring all network analysis code into the data store implementations
-and out of the fragment implementations so that data store specific
-optimisations are easier to exploit.
-Added a new method for Networks to allow two Network collections to 
-be merged.
-Added more methods to get references for fragments.
-Removed remaining fragment data modification methods.
-Eliminated network analysis methods from the fragment interface,
-pushing responsibility for such operations to the store so that the
-store can optimise network analysis in various ways.
-</p>
+<p>Eliminated the XBRLStore interface and implementation, merging
+the functionality back into the base store interface and implementation.
+This is a precursor to refactoring all network analysis code into the
+data store implementations and out of the fragment implementations so
+that data store specific optimisations are easier to exploit. Added a
+new method for Networks to allow two Network collections to be merged.
+Added more methods to get references for fragments. Removed remaining
+fragment data modification methods. Eliminated network analysis methods
+from the fragment interface, pushing responsibility for such operations
+to the store so that the store can optimise network analysis in various
+ways.</p>
 
 <h2>24 Feb. 2009</h2>
-<p>
-Completed a first cut of a network analyser that enables
-interaction and analysis of persisted networks of relationships.
-A lot of methods are available to facilitate easy interaction
-with labels and references.
-</p>
+<p>Completed a first cut of a network analyser that enables
+interaction and analysis of persisted networks of relationships. A lot
+of methods are available to facilitate easy interaction with labels and
+references.</p>
 
 <h2>20 Feb. 2009</h2>
-<p>
-Modified Store to provide a wider range of query options and
-to make query processing more efficient.
-Added a new store query method that returns the number of results
-generated rather than the actual results.
-Adjusted string and indices queries to work with sets rather than lists
-for efficiency purposes.
-Adjusted the getArcroles and getLinkroles methods of the XBRLStore
-to work with sets rather than lists for efficiency purposes.
-</p>
+<p>Modified Store to provide a wider range of query options and to
+make query processing more efficient. Added a new store query method
+that returns the number of results generated rather than the actual
+results. Adjusted string and indices queries to work with sets rather
+than lists for efficiency purposes. Adjusted the getArcroles and
+getLinkroles methods of the XBRLStore to work with sets rather than
+lists for efficiency purposes.</p>
 
 <h2>19 Feb. 2009</h2>
-<p>
-Changed the store method names in the org.xbrlapi.data.Store
-interface.
-Continued modifying method signatures to use URI instead of String
-whereever p<a class="title" href="http://en.wikipedia.org/wiki/Free_and_open_source_software">Free Open-Source Software</a>ible.
-Completed a first cut of the Storer interface and implementation
-for persisting active network relationships in the data store.  This
-should facilitate more efficient network analysis in some circumstances
-by enabling the cost of network analysis to be handled in a once off
-operation prior to the interactive analysis of the data.
-</p>
+<p>Changed the store method names in the org.xbrlapi.data.Store
+interface. Continued modifying method signatures to use URI instead of
+String whereever p<a class="title"
+		href="http://en.wikipedia.org/wiki/Free_and_open_source_software">Free
+Open-Source Software</a>ible. Completed a first cut of the Storer interface
+and implementation for persisting active network relationships in the
+data store. This should facilitate more efficient network analysis in
+some circumstances by enabling the cost of network analysis to be
+handled in a once off operation prior to the interactive analysis of the
+data.</p>
 
 <h2>18 Feb. 2009</h2>
-<p>
-Additional changes to method signatures to pass URIs where p<a class="title" href="http://en.wikipedia.org/wiki/Free_and_open_source_software">Free Open-Source Software</a>ible
-instead of strings.  Corrected bugs in the UsedOn fragment subclass
-to ensure that inherited methods are not overridden in manners that
-contradict their intent.
-</p>
+<p>Additional changes to method signatures to pass URIs where p<a
+		class="title"
+		href="http://en.wikipedia.org/wiki/Free_and_open_source_software">Free
+Open-Source Software</a>ible instead of strings. Corrected bugs in the
+UsedOn fragment subclass to ensure that inherited methods are not
+overridden in manners that contradict their intent.</p>
 
 <h2>17 Feb. 2009</h2>
-<p>
-Refactored fragment interfaces to distinguish document fragments from 
-other kinds of XML resources in the data store. This is needed to 
-retain clarity now that a broader range of information about relationships
-is stored directly in the data store.
-</p>
+<p>Refactored fragment interfaces to distinguish document fragments
+from other kinds of XML resources in the data store. This is needed to
+retain clarity now that a broader range of information about
+relationships is stored directly in the data store.</p>
 
 <h2>12 Feb. 2009</h2>
-<p>
-Made the loader process able to handle all kinds of exceptions during the
-parsing process without causing the document discovery process to be derailed
-or the document cache or data store to be corrupted.
-Improved the efficiency of the document queue for data loading to improve
-the performance when loading very large numbers of documents.
-</p>
+<p>Made the loader process able to handle all kinds of exceptions
+during the parsing process without causing the document discovery
+process to be derailed or the document cache or data store to be
+corrupted. Improved the efficiency of the document queue for data
+loading to improve the performance when loading very large numbers of
+documents.</p>
 
 <h2>11 Feb. 2009</h2>
-<p>
-Added new queryForString and queryForStrings methods to 
-the org.xbrlapi.data.Store interface and all implementations 
-thereof.
-Modified the in-store URI matching to ensure that a signature 
-only needs to be computed once for each document in the data store.
-</p>
+<p>Added new queryForString and queryForStrings methods to the
+org.xbrlapi.data.Store interface and all implementations thereof.
+Modified the in-store URI matching to ensure that a signature only needs
+to be computed once for each document in the data store.</p>
 
 <h2>28 Jan. 2009</h2>
-<p>
-Modified additional function signatures to work with 
-URI arguments rather than string representations of URI arguments.
-Added loader focussed unit testing for loading of duplicate resources.
-</p>
+<p>Modified additional function signatures to work with URI
+arguments rather than string representations of URI arguments. Added
+loader focussed unit testing for loading of duplicate resources.</p>
 
 <h2>26 Jan. 2009</h2>
-<p>
-Changed the loader's document queue to be a map from URIs to load 
-status rather than from String representations of URIs to load 
-status to enable better analysis of URI equality.
-Modified the data store to keep track of reasons for documents not 
-being loaded when storing the loader state.  This enables robust
-handling of situations where documents that should be in the DTS are
-have IO problems or have SAX parsing problems.
+<p>Changed the loader's document queue to be a map from URIs to load
+status rather than from String representations of URIs to load status to
+enable better analysis of URI equality. Modified the data store to keep
+track of reasons for documents not being loaded when storing the loader
+state. This enables robust handling of situations where documents that
+should be in the DTS are have IO problems or have SAX parsing problems.
 </p>
 
 <h2>1 Jan. 2009</h2>
-<p>
-Created the local test data file release.
-</p>
+<p>Created the local test data file release.</p>
 
 <h2>31. Dec. 2008</h2>
-<p>
-Replaced usage of URLs with URIs throughout the API.  This was done
-to get better uniformity of handling of URLs and to take advantage of
-the better handling of different schemes in the java.net.URI interface compared to 
-the java.net.URL interface. This change does cause significant backward compatibility
-issues.  However, it is expected to resolve the ongoing problems that have
-been encountered when working with file-scheme URLs.
-Improved the network processing efficiency of 
-the rendering example.  Incorporated improvements
-to the Freemarker template file from Walter Hamscher.
-</p>
+<p>Replaced usage of URLs with URIs throughout the API. This was
+done to get better uniformity of handling of URLs and to take advantage
+of the better handling of different schemes in the java.net.URI
+interface compared to the java.net.URL interface. This change does cause
+significant backward compatibility issues. However, it is expected to
+resolve the ongoing problems that have been encountered when working
+with file-scheme URLs. Improved the network processing efficiency of the
+rendering example. Incorporated improvements to the Freemarker template
+file from Walter Hamscher.</p>
 
 <h2>10 Dec. 2008</h2>
-<p>
-Fixed the NPE bug in the handling of processing instructions that
-come before any markup in an XML document.
-Fixed missing class files in the examples JAR.
-</p>
+<p>Fixed the NPE bug in the handling of processing instructions that
+come before any markup in an XML document. Fixed missing class files in
+the examples JAR.</p>
 
 <h2>9 Dec. 2008</h2>
-<p>
-Added in XDT aspects and dimensional aspect model to the XDT module.
-</p>
+<p>Added in XDT aspects and dimensional aspect model to the XDT
+module.</p>
 
 <h2>5 Dec. 2008</h2>
-<p>
-Changed the getAttribute methods of the Arc fragment interface to 
-return null if the arc does not have the specified attribute rather
-than throwing an exception.
-</p>
+<p>Changed the getAttribute methods of the Arc fragment interface to
+return null if the arc does not have the specified attribute rather than
+throwing an exception.</p>
 
 <h2>4 Dec. 2008</h2>
-<p>
-Added new methods to better handle analysis of presentation networks
-and to provide a more complete range of network construction methods.
-Added the new org.xbrlapi.networks.Network#complete method to allow
-for a network to be completely constructed in a single call.
-</p>
+<p>Added new methods to better handle analysis of presentation
+networks and to provide a more complete range of network construction
+methods. Added the new org.xbrlapi.networks.Network#complete method to
+allow for a network to be completely constructed in a single call.</p>
 
 <h2>24 Nov. 2008</h2>
-<p>
-Fixed NPE in the method to get denominator measures for 
-an org.xbrlapi.Unit that does not have a denominator.
-Created the first XDT file release.
-</p>
+<p>Fixed NPE in the method to get denominator measures for an
+org.xbrlapi.Unit that does not have a denominator. Created the first XDT
+file release.</p>
 
 <h2>22. Nov. 2008</h2>
-<p>
-Fixed up the usage of the isNil method to use nil rather 
-than nill and to be for facts rather than just items.
-Added a measure interface and implementation to handle measures
-in unit fragments.  This makes it easier to access resolved measure
-QNames in numerators and denominators.  This also causes backward 
-incompatibility issues for some methods of the org.xbrlapi.Unit interface.
-</p>
+<p>Fixed up the usage of the isNil method to use nil rather than
+nill and to be for facts rather than just items. Added a measure
+interface and implementation to handle measures in unit fragments. This
+makes it easier to access resolved measure QNames in numerators and
+denominators. This also causes backward incompatibility issues for some
+methods of the org.xbrlapi.Unit interface.</p>
 
 <h2>21 Nov. 2008</h2>
-<p>
-Made the getNetworkRoots method of the XBRLStore a generic method and 
-ensured that it does not return locators.
-</p>
+<p>Made the getNetworkRoots method of the XBRLStore a generic method
+and ensured that it does not return locators.</p>
 
 <h2>20 Nov. 2008</h2>
-<p>
-Fixed a bug in the Fragment implementation relating to getting the 
-local name from a QName.  QNames without a prefix were not handled correctly.
-Squeezed more performance out of the method to get the labels for a fragment.
-Some new constants have been defined.
-</p>
+<p>Fixed a bug in the Fragment implementation relating to getting
+the local name from a QName. QNames without a prefix were not handled
+correctly. Squeezed more performance out of the method to get the labels
+for a fragment. Some new constants have been defined.</p>
 
 <h2>19 Nov. 2008</h2>
-<p>
-Added a new org.xbrlapi.aspects package to handle Aspect model population
-with facts.  Aspect models can be loosely thought of as sparse hypercubes.
-They are very very useful!
-</p>
+<p>Added a new org.xbrlapi.aspects package to handle Aspect model
+population with facts. Aspect models can be loosely thought of as sparse
+hypercubes. They are very very useful!</p>
 
 <h2>14 Nov. 2008</h2>
-<p>
-Created the first examples file release.
-</p>
+<p>Created the first examples file release.</p>
 
 <h2>19 Aug. 2008</h2>
-<p>
-Enabled the getFragments method to use a fragment class name rather than
-just part of the fragment interface name.  This makes the method more able
-to work for fragment classes that are implemented in packages outside
-those in the core XBRLAPI fragment implementation package.
-</p>
+<p>Enabled the getFragments method to use a fragment class name
+rather than just part of the fragment interface name. This makes the
+method more able to work for fragment classes that are implemented in
+packages outside those in the core XBRLAPI fragment implementation
+package.</p>
 
 <h2>18 Aug. 2008</h2>
-<p>
-Added methods to the base store implementation to enable a store
-to limit query results to those fragments in the documents with 
-a specified set of URLs.
-Changed the query methods for the various store implementations to 
-filter query results if the store knows of a list of URLs to use in
-filtering query results.
-Implemented new store methods to determine the documents that directly
-reference and that are directly referenced by a given document based
-on link analysis.
-</p>
+<p>Added methods to the base store implementation to enable a store
+to limit query results to those fragments in the documents with a
+specified set of URLs. Changed the query methods for the various store
+implementations to filter query results if the store knows of a list of
+URLs to use in filtering query results. Implemented new store methods to
+determine the documents that directly reference and that are directly
+referenced by a given document based on link analysis.</p>
 
 <h2>7 Aug. 2008</h2>
-<p>
-Changed the org.xbrlapiSAXHandlers package name
-to org.xbrlapi.sax.  This is not a backward compatible 
-change and code using the XBRLAPI may need to be adjusted.
-</p>
+<p>Changed the org.xbrlapiSAXHandlers package name to
+org.xbrlapi.sax. This is not a backward compatible change and code using
+the XBRLAPI may need to be adjusted.</p>
 
 <h2>6 Aug. 2008</h2>
-<p>
-Removed the element depth from the set of 
-state information tracked by the SAX content
-handler for the loader, the loader itself and
-the XBRL XLink handler.  This was done by relying
-instead on tracking the ElementState during SAX
-parsing.
-Added Attributes to the parameters of the XLink processor's endElement method.
-Added the ElementState class to the org.xbrlapi.xlink package
-to provide basic infrastructure for tracking attributes and making
-them available to the endElement method in SAX content handlers that
-are using the XLink processor. 
-</p>
+<p>Removed the element depth from the set of state information
+tracked by the SAX content handler for the loader, the loader itself and
+the XBRL XLink handler. This was done by relying instead on tracking the
+ElementState during SAX parsing. Added Attributes to the parameters of
+the XLink processor's endElement method. Added the ElementState class to
+the org.xbrlapi.xlink package to provide basic infrastructure for
+tracking attributes and making them available to the endElement method
+in SAX content handlers that are using the XLink processor.</p>
 
 <h2>30 Jul. 2008</h2>
-<p>
-Fixed bug in queries to get network roots.
-Fixed bug in caching on Windows.
-Removed non-functional set methods
-Released version 3.1
-Eliminated several memory leaks in the Oracle Berkeley XML data store.
-</p>
+<p>Fixed bug in queries to get network roots. Fixed bug in caching
+on Windows. Removed non-functional set methods Released version 3.1
+Eliminated several memory leaks in the Oracle Berkeley XML data store.</p>
 
 <h2>April 16 2008</h2>
-<p>
-Fixed up eXist unit testing to reflect changes in the
-XBRLAPI itself.
-Added a range of new constants for the XBRL role and arcroles.
-</p>
+<p>Fixed up eXist unit testing to reflect changes in the XBRLAPI
+itself. Added a range of new constants for the XBRL role and arcroles.</p>
 
 <h2>10 Apr. 2008</h2>
-<p>
-Added resource matcher facility.
-</p>
+<p>Added resource matcher facility.</p>
 
 <h2>12 Mar. 2008</h2>
-<p>
-Changed the fragment index generation system.  This makes it 
-easier to work acr<a class="title" href="http://en.wikipedia.org/wiki/Free_and_open_source_software">Free Open-Source Software</a> several data stores.
-</p>
+<p>Changed the fragment index generation system. This makes it
+easier to work acr<a class="title"
+		href="http://en.wikipedia.org/wiki/Free_and_open_source_software">Free
+Open-Source Software</a> several data stores.</p>
 
 <h2>25 Feb. 2008</h2>
-<p>
-Discovery of documents provided as a string now works correctly.
-QName lookups for fragments is faster and always works.
-Network construction works for networks of various types of labels.
-</p>
+<p>Discovery of documents provided as a string now works correctly.
+QName lookups for fragments is faster and always works. Network
+construction works for networks of various types of labels.</p>
 
 <h2>25. Oct. 2007</h2>
-<p>
-Fixed up a bug in Arc instantiation that was preventing
-them from being stored in the database.  The bug was
-introduced during the redesign of the fragment constructors.
-</p>
+<p>Fixed up a bug in Arc instantiation that was preventing them from
+being stored in the database. The bug was introduced during the redesign
+of the fragment constructors.</p>
 
 <h2>24 Oct. 2007</h2>
-<p>
-Added the getFacts method to the concept implementation.
-Added the isNumeric method to the fact implementation.
-</p>
+<p>Added the getFacts method to the concept implementation. Added
+the isNumeric method to the fact implementation.</p>
 
 <h2>16 Oct. 2007</h2>
-<p>
-Modified the fragment factory to call the setFragmentIndex method
-when generating new fragments.
-October 16, 2006
-Streamlined the DTS discovery process to eliminate
-all post processing of XLink materials.
-Enabled eXist data store to also operate in embedded mode,
-significantly enhancing performance.
-</p>
+<p>Modified the fragment factory to call the setFragmentIndex method
+when generating new fragments. October 16, 2006 Streamlined the DTS
+discovery process to eliminate all post processing of XLink materials.
+Enabled eXist data store to also operate in embedded mode, significantly
+enhancing performance.</p>
 
 <h2>17 Sep. 2007</h2>
-<p>
-Modified fragment implementations to make all fragments JavaBeans.
-Serialization of fragments, builders, and stores is yet to be implemented.
-</p>
+<p>Modified fragment implementations to make all fragments
+JavaBeans. Serialization of fragments, builders, and stores is yet to be
+implemented.</p>
 
 <h2>5 Sep. 2007</h2>
-<p>
-Eliminated non-working attempts to insert DTD declarations into data store fragments.
-Added a new getDeclaration method for reference part fragments.
-Fixed a bug in the removeFragment implementation for the DOM data store whereby the
-removed fragments were not getting taken out of the XML DOM structure, only the maps onto
-that DOM structure.
-Added the deleteDocument and deleteRelated document methods to the store interface.  Provided
-implementations of these methods in the BaseStoreImpl class.  Created tests of the methods using 
-the DOM data store.
-</p>
+<p>Eliminated non-working attempts to insert DTD declarations into
+data store fragments. Added a new getDeclaration method for reference
+part fragments. Fixed a bug in the removeFragment implementation for the
+DOM data store whereby the removed fragments were not getting taken out
+of the XML DOM structure, only the maps onto that DOM structure. Added
+the deleteDocument and deleteRelated document methods to the store
+interface. Provided implementations of these methods in the
+BaseStoreImpl class. Created tests of the methods using the DOM data
+store.</p>
 
 <h2>4 Sep. 2007</h2>
-<p>
-Added BDB XML indexing of the arcroleType and roleType URI attributes.
-
-Added ability to recognise generic labels and references as 
-standard labels and references, respectively.
-
-Added the isProhibited method to arcs.
-</p>
+<p>Added BDB XML indexing of the arcroleType and roleType URI
+attributes. Added ability to recognise generic labels and references as
+standard labels and references, respectively. Added the isProhibited
+method to arcs.</p>
 
 <h2>1 Sep. 2007</h2>
-<p>
-Added a method to get linkroles that contain arcs using a specified arcrole.
-</p>
+<p>Added a method to get linkroles that contain arcs using a
+specified arcrole.</p>
 
 <h2>15 Aug. 2007</h2>
-<p>
-Added getSimpleLinks method to the fragment interface to get the child simple links of any fragment.
-
-Checked unit tests against the latest cut of the XBRL 2.1 conformance suite.
-
-Enabled caching for documents provided to a loader as a string rather than a URL.
-This fixed a bug in the XML Schema grammar construction for schemas provided as a
-string to the loader.
-
-Fixed a database deletion problem in the Xindice tests that arose because of 
-multiple simultaneous stores using the same database.
-
-Provided a new getChildFragments method of the data store to enable retrieval of all
-child fragments with a given data type.
-</p>
+<p>Added getSimpleLinks method to the fragment interface to get the
+child simple links of any fragment. Checked unit tests against the
+latest cut of the XBRL 2.1 conformance suite. Enabled caching for
+documents provided to a loader as a string rather than a URL. This fixed
+a bug in the XML Schema grammar construction for schemas provided as a
+string to the loader. Fixed a database deletion problem in the Xindice
+tests that arose because of multiple simultaneous stores using the same
+database. Provided a new getChildFragments method of the data store to
+enable retrieval of all child fragments with a given data type.</p>
 
 <h2>14 Aug. 2007</h2>
-<p>
-Enabled the discovery processes to optionally include analysis of XSI schema 
-location attributes.
-
-Added schema method to enable discovery of extended links contained within the schema.
-</p>
+<p>Enabled the discovery processes to optionally include analysis of
+XSI schema location attributes. Added schema method to enable discovery
+of extended links contained within the schema.</p>
 
 <h2>11 Aug 2007</h2>
-<p>
-Added new discoverNext method to the loader implementation to enable intervention 
-in the load process between each document that gets parsed.
-
-Added unit tests of the discoverNext method using in-memory and persistent data stores.
-</p>
+<p>Added new discoverNext method to the loader implementation to
+enable intervention in the load process between each document that gets
+parsed. Added unit tests of the discoverNext method using in-memory and
+persistent data stores.</p>
 
 <h2>9 August, 2007</h2>
-<p>
-Added unit tests to cover discovery of reference part declarations.
-</p>
+<p>Added unit tests to cover discovery of reference part
+declarations.</p>
 
 <h2>8 Aug. 2007</h2>
-<p>
-Fixed bug in the SimpleLink#getTargetFragment where href attributes without an XPointer
- would generate a query that did not restrict matching fragments to the document root.
-
-Extended the set of nodes in a data store that are indexed for equality matching for the 
-BDB XML database implementation.
-
-Added getImports and getIncludes methods to the Schema fragment API.
-
-Added unit tests to cover schema imports.
-</p>
+<p>Fixed bug in the SimpleLink#getTargetFragment where href
+attributes without an XPointer would generate a query that did not
+restrict matching fragments to the document root. Extended the set of
+nodes in a data store that are indexed for equality matching for the BDB
+XML database implementation. Added getImports and getIncludes methods to
+the Schema fragment API. Added unit tests to cover schema imports.</p>
 
 <h2>July 29, 2007</h2>
-<p>
-Added new objects to provide functionality at the level
-of individual relationships and networks of relationships.
-Fixed up NPE bug in the hasFragment method of the eXist data store.
-</p>
+<p>Added new objects to provide functionality at the level of
+individual relationships and networks of relationships. Fixed up NPE bug
+in the hasFragment method of the eXist data store.</p>
 
 <h2>May 21, 2007</h2>
-<p>
-Fixed up omission of class files from the JAR file.
-</p>
+<p>Fixed up omission of class files from the JAR file.</p>
 
 <h2>March 23, 2007</h2>
-<p>
-Created the api module by splitting 
-out the non-DOM data store implementations
-and by splitting out the XLink, XMLBase and
-XPointer packages.
-</p>
+<p>Created the api module by splitting out the non-DOM data store
+implementations and by splitting out the XLink, XMLBase and XPointer
+packages.</p>
 
 <h2>October 02, 2006</h2>
-<p>
-Completed implementation and testing 
-of read-access fragment API.
+<p>Completed implementation and testing of read-access fragment API.
 </p>
 
 <h2>September 25, 2006</h2>
-<p>
-Fixed up the Exist indexing.
-Added a lot of fragment interface implementation.
-Merged the data and metadata collections.
-Fixed up the Jar file manifest to make the -jar file option
-work from execution at the commandline.
-</p>
+<p>Fixed up the Exist indexing. Added a lot of fragment interface
+implementation. Merged the data and metadata collections. Fixed up the
+Jar file manifest to make the -jar file option work from execution at
+the commandline.</p>
 
 <h2>September 14, 2006</h2>
-<p>
-Added in the patch from Henry S Thompson 
-to support XLink 1.1.
-Improved usability from the command line.
-Extended the implementation of the fragment.
-</p>
+<p>Added in the patch from Henry S Thompson to support XLink 1.1.
+Improved usability from the command line. Extended the implementation of
+the fragment.</p>
 
 <h2>August 10, 2006</h2>
-<p>
-Implemented the data store using eXist and
-using an XML-DOM object.  These are alternatives
-to the Xindice data store implementation.
+<p>Implemented the data store using eXist and using an XML-DOM
+object. These are alternatives to the Xindice data store implementation.
 </p>
 
 <h2>July 29. 2006</h2>
-<p>
-Created the Oracle Berkeley Database XML data store module.
+<p>Created the Oracle Berkeley Database XML data store module.
 Created the core utilities module that is required by all other modules.
 </p>
 
 <h2>March 23. 2006</h2>
-<p>
-Created the eXist module by splitting it 
-out from the xbrlapi. This limits XBRLAPI 
-dependencies on eXist to those users choosing
-to use eXist as the data store implementation.
-</p>
+<p>Created the eXist module by splitting it out from the xbrlapi.
+This limits XBRLAPI dependencies on eXist to those users choosing to use
+eXist as the data store implementation.</p>
 
 <h2>December 11, 2005</h2>
-<p>
-Version 1.0 of the XPointer processor released.
-</p>
+<p>Version 1.0 of the XPointer processor released.</p>
 
 <h2>December 9. 2005</h2>
-<p>
-Fixed errors in the previous release.
-Updated the API to handle XPointers.
-Added early support for the eXist database.
-</p>
+<p>Fixed errors in the previous release. Updated the API to handle
+XPointers. Added early support for the eXist database.</p>
 
 <h2>July 23. 2005</h2>
-<p>
-Initial cut of the XBRL API source code.
-Operational version of the XML Base resolver.
-</p>
+<p>Initial cut of the XBRL API source code. Operational version of
+the XML Base resolver.</p>
 
 <h2>May 6, 2005</h2>
-<p>
-Initial cut of XLink processor.
-Initial cut of XML Base resolver.
+<p>Initial cut of XLink processor. Initial cut of XML Base resolver.
 </p>
 
 <p>

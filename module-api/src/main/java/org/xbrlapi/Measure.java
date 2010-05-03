@@ -6,7 +6,7 @@ import java.net.URI;
 /**
  * @author Geoffrey Shuetrim (geoff@galexy.net)
  */
-public interface Measure extends Serializable {
+public interface Measure extends Serializable, Comparable<Measure> {
 
     /**
      * @return the namespace for the measure value.

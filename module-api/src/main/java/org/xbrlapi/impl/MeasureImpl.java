@@ -14,9 +14,10 @@ public class MeasureImpl implements Measure {
     /**
      * 
      */
-    private static final long serialVersionUID = 6274850976265020790L;
+    private static final long serialVersionUID = -3990813740480933241L;
+    
     private final URI namespace;
-    private final String prefix;
+    transient private final String prefix;
     private final String localname;
     
     public MeasureImpl(URI namespace, String prefix, String localname) throws XBRLException {
@@ -50,4 +51,24 @@ public class MeasureImpl implements Measure {
         return namespace;
     }
 
+    /**
+     * @see Comparable#compareTo(Object)
+     */
+    public int compareTo(Measure other) {
+
+        if (other == null)
+            throw new NullPointerException();
+
+        if (this == other)
+            return 0;
+
+        if (getClass() != other.getClass())
+            return 1;
+
+        int result = namespace.compareTo(other.getNamespace());
+        if (result != 0) return result;
+        result = localname.compareTo(other.getLocalname());
+        return result;
+    }
+    
 }
