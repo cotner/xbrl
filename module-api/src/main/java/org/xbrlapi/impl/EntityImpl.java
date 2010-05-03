@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -28,13 +30,17 @@ public class EntityImpl extends ContextComponentImpl implements Entity {
     /**
      * @see org.xbrlapi.Entity#getIdentifierScheme()
      */
-    public String getIdentifierScheme() throws XBRLException {
+    public URI getIdentifierScheme() throws XBRLException {
     	NodeList identifiers = getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"identifier");
     	if (identifiers.getLength() == 0) throw new XBRLException("An entity identifier is missing from the entity.");
     	if (identifiers.getLength() > 1) throw new XBRLException("There are too many entity identifiers in the entity.");
     	Element identifier = (Element) identifiers.item(0);
     	if (! identifier.hasAttribute("scheme")) throw new XBRLException("The entity identifier scheme is not specified.");
-    	return identifier.getAttribute("scheme");
+    	try {
+    	    return new URI(identifier.getAttribute("scheme"));
+    	} catch (URISyntaxException e) {
+    	    throw new XBRLException("There is a syntax problem for entity identification scheme " + identifier.getAttribute("scheme"),e);
+    	}
     }
 
     /**
