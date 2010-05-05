@@ -1,5 +1,9 @@
 package org.xbrlapi.impl;
 
+import java.util.Calendar;
+
+import javax.xml.bind.DatatypeConverter;
+
 import org.xbrlapi.Period;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -10,7 +14,7 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class PeriodImpl extends ContextComponentImpl implements Period {
 
-	/**
+    /**
      * 
      */
     private static final long serialVersionUID = -6599852248292348434L;
@@ -62,4 +66,40 @@ public class PeriodImpl extends ContextComponentImpl implements Period {
 		if (! isFiniteDurationPeriod()) throw new XBRLException("The period is not a finite duration.");
 		return this.getDataRootElement().getElementsByTagNameNS(Constants.XBRL21Namespace.toString(),"endDate").item(0).getTextContent().trim();
 	}
+	
+
+    /**
+     * @see Period#getEndCalendar()
+     */
+    public Calendar getEndCalendar() throws XBRLException {
+        if (! isFiniteDurationPeriod()) throw new XBRLException("The period is not a finite duration.");
+        String instant = getEnd();
+        Calendar calendar = DatatypeConverter.parseDateTime(instant);
+        if (instant.length() == 10) {
+            calendar.set(Calendar.AM_PM,1);
+        }
+        return calendar;
+    }
+
+    /**
+     * @see Period#getInstantCalendar()
+     */
+    public Calendar getInstantCalendar() throws XBRLException {
+        if (! isInstantPeriod()) throw new XBRLException("The period is not an instant.");
+        String instant = getInstant();
+        Calendar calendar = DatatypeConverter.parseDateTime(instant);
+        if (instant.length() == 10) {
+            calendar.set(Calendar.AM_PM,1);
+        }
+        return calendar;
+    }
+
+    /**
+     * @see Period#getStartCalendar()
+     */
+    public Calendar getStartCalendar() throws XBRLException {
+        if (! isFiniteDurationPeriod()) throw new XBRLException("The period is not a finite duration.");
+        return DatatypeConverter.parseDateTime(getStart());
+    }
+	
 }
