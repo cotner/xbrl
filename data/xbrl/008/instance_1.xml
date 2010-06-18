@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xbrl
+  xmlns="http://www.xbrl.org/2003/instance"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance"
+  xmlns:eg="http://xbrlapi.org/test/xbrl/008"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:u1="http://xbrlapi.org/metric/u1"
+  xsi:schemaLocation="
+    http://www.xbrl.org/2003/instance http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd
+    http://xbrlapi.org/test/xbrl/007 schema.xsd"
+  >
+
+  <link:schemaRef xlink:type="simple" xlink:href="schema.xsd" />
+
+  <context id="date-only">
+    <entity>
+      <identifier scheme="http://xbrl.org/entity/identification/scheme">AAA001</identifier>
+    </entity>
+    <period>
+      <instant>2007-12-31</instant>
+      <!-- 
+        Add P1D then augment with T00:00:00
+        This converts the date to dateTime 2008-01-01T00:00:00
+        Note that no timezone is specified.
+       -->
+    </period>
+  </context>
+  <eg:instant contextRef="date-only">date only value</eg:instant>
+
+  <context id="date-and-time">
+    <entity>
+      <identifier scheme="http://xbrl.org/entity/identification/scheme">AAA001</identifier>
+    </entity>
+    <period>
+      <instant>2007-12-31T11:35:01</instant>
+      <!-- 
+        Note that no timezone is specified.
+       -->
+    </period>
+  </context>
+  <eg:instant contextRef="date-and-time">date and time value</eg:instant>
+
+  <context id="date-and-fractional-time">
+    <entity>
+      <identifier scheme="http://xbrl.org/entity/identification/scheme">AAA001</identifier>
+    </entity>
+    <period>
+      <instant>2007-12-31T11:35:01.0035</instant>
+      <!-- 
+        Note that no timezone is specified.
+       -->
+    </period>
+  </context>
+  <eg:instant contextRef="date-and-fractional-time">date and fractional time value</eg:instant>
+
+
+  <context id="utc-date-and-time">
+    <entity>
+      <identifier scheme="http://xbrl.org/entity/identification/scheme">AAA001</identifier>
+    </entity>
+    <period>
+      <instant>2007-12-31T11:35:01Z</instant>
+      <!-- 
+        Note that this is measured as a UTC dateTime.
+       -->
+    </period>
+  </context>
+  <eg:instant contextRef="utc-date-and-time">date and time UTC value</eg:instant>
+
+  <context id="utc-offset-date-and-time">
+    <entity>
+      <identifier scheme="http://xbrl.org/entity/identification/scheme">AAA001</identifier>
+    </entity>
+    <period>
+      <instant>2007-12-31T11:00:00+04:00</instant>
+      <!-- 
+           This is saying 11:00 in Oman 24 hour time. 
+           In December, 2007, Oman is 4 hours ahead of UTC so 
+           this is the same as 07:00 UTC 24 hour time: 
+           2007-12-31T07:00:00Z 
+           The raw offset, in milliseconds, from UTC is 14400000. 4* 60*60 * 1000.
+      -->
+    </period>
+  </context>
+  <eg:instant contextRef="utc-offset-date-and-time">date and time UTC + offset value</eg:instant>
+
+  <context id="inferred-end">
+    <entity>
+      <identifier scheme="http://xbrl.org/entity/identification/scheme">AAA001</identifier>
+    </entity>
+    <period>
+      <instant>2007-12-31</instant>
+    </period>
+  </context>
+  <eg:instant contextRef="inferred-end">end of 31 December 2007</eg:instant>
+
+  <context id="inferred-start-and-end">
+    <entity>
+      <identifier scheme="http://xbrl.org/entity/identification/scheme">AAA001</identifier>
+    </entity>
+    <period>
+      <startDate>2007-01-01</startDate>
+      <endDate>2007-12-31</endDate>
+    </period>
+  </context>
+  <eg:duration contextRef="inferred-start-and-end">start of 01 January 2007 and end of 31 December 2007</eg:duration>
+
+ </xbrl>
