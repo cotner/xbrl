@@ -160,7 +160,7 @@ public class StoreImplXBRLTestCase extends BaseTestCase {
         
         Set<URI> allURIs = store.getDocumentURIs();
         logger.info("# URIs in store = " + allURIs.size());
-        List<URI> uris = store.getMinimumDocumentSet(uri1);
+        Set<URI> uris = store.getMinimumDocumentSet(uri1);
         assertTrue(uris.size() > 1);
 
         assertTrue(allURIs.size() > uris.size());
