@@ -58,13 +58,9 @@ public class SimpleLinkImpl extends LinkImpl implements SimpleLink {
      * @see org.xbrlapi.SimpleLink#getTargetDocumentURI()
      */
     public URI getTargetDocumentURI() throws XBRLException {
-    	try {
-            URI uri = new URI(this.getMetadataRootElement().getAttribute("targetDocumentURI"));
-            URI result = getStore().getMatcher().getMatch(uri);
-            return result;
-    	} catch (URISyntaxException e) {
-    		throw new XBRLException("Absolute URI in the HREF of the locator is malformed.",e);
-    	}
+        URI uri = URI.create(this.getMetadataRootElement().getAttribute("targetDocumentURI"));
+        URI result = getStore().getMatcher().getMatch(uri);
+        return result;
     }
     
     /**

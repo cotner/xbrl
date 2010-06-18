@@ -7,12 +7,26 @@ import org.xbrlapi.utilities.XBRLException;
 
 
 /**
- * <h2>Aspect Value Transformer Details</h2>
+ * <h2>Aspect Value Transformer Explanation</h2>
  * 
  * <p>
- * Each aspect uses its own transformer to produce aspect value
- * identifiers (the unique identifier identifying a given semantic aspect value) and 
- * to produce aspect value labels from aspects.
+ * Each aspect uses its own transformer.
+ * Transformers are responsible for:
+ * </p>
+ * 
+ * <ul>
+ *  <li>Getting aspect value identifiers from aspect values</li>
+ *  <li>Getting aspect value labels from aspect values</li>
+ * </ul>
+ *  
+ * <p>
+ *  Right now, aspect value transformers are also responsible for tracking
+ *  the role URIs and the language code details necessary for deciding which 
+ *  label to return.  This should be information that could be passed
+ *  in as parameters when obtaining labels for aspect values.  Some transformers
+ *  would ignore the information passed in (where it is not relevant to the aspect
+ *  value and some would make use of the information passed in).  That way, an aspect
+ *  and its values are not locale-specific and role-choice specific.
  * </p>
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
@@ -25,6 +39,7 @@ public interface AspectValueTransformer {
     public Aspect getAspect();    
     
     /**
+     * TODO This method should become a method of the aspect value interface.
      * @param value The aspect value to process.
      * @return the string value of this aspect value to a string
      * that uniquely identifies the semantic value of the aspect (

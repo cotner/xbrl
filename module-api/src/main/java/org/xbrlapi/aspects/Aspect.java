@@ -20,20 +20,20 @@ import org.xbrlapi.utilities.XBRLException;
  * </p>
  * 
  * <ul>
- *   <li>Each aspect has a unique identifier, known as its type.</li>
- *   <li>Not all aspects have a value for all facts but some do.</li>
- *   <li>Aspects can be used in isolation but can also be combined with other aspects to form an aspect model</li>
+ *   <li>Each aspect has a unique identifier, known as its type.  
+ *   This is expressed by an absolute URI.</li>
+ *   <li>Where an aspect does not have a value for a fact, the aspect value for that aspect/fact combination
+ *   is identified as a "missing" aspect value.</li>
+ *   <li>Aspects can be associated with a set of values for that aspect.  <em>It is not clear
+ *   whether an aspect should also be responsible for keeping track of mappings from facts to the 
+ *   values those facts have for that aspect.</em></li>
+ *   <li>Aspects can be used in isolation but can also be combined with other 
+ *   aspects to form an aspect model.</li>
  *   <li>Aspects can have multiple human-readable labels, one per language.</li>
- *   <li>Aspects define a mapping from a fact to an aspect value.</li>
- *   <li></li>
- *   <li></li>
- *   <li></li>
+ *   <li>Aspects define a mapping from a fact to an aspect value.  Thus, given a fact, the aspect
+ *   can produce its aspect value (sometimes that is the missing aspect value).</li>
  * </ul>
  * 
- * Tough questions are:
- * <ul>
- *   <li></li>
- * </ul>
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public interface Aspect extends Serializable {
@@ -45,6 +45,7 @@ public interface Aspect extends Serializable {
     public String getLabel() throws XBRLException;
     
     /**
+     * TODO Refactor to make this the aspect identifier
      * @return the unique aspect identifier.
      * @throws XBRLException if the aspect identifier cannot be determined.
      */
@@ -97,7 +98,7 @@ public interface Aspect extends Serializable {
     public void setAxis(String axis);    
 
     /**
-     * @return true if the aspect is in a dimension of the 
+     * @return true if the aspect is in an axis of the 
      * containing aspect model and false otherwise.
      */
     public boolean isOrphan();
@@ -109,7 +110,7 @@ public interface Aspect extends Serializable {
     public void setAspectModel(AspectModel aspectModel) throws XBRLException;    
     
     /**
-     * TODO refactor so that we do not require all aspects to have an aspect model
+     * TODO refactor so that aspects can be stand-alone objects, independent of aspect models.
      * @return the aspect model with this aspect.
      */
     public AspectModel getAspectModel();
@@ -122,12 +123,14 @@ public interface Aspect extends Serializable {
     /**
      * @return a list of the values for the aspect, sorted
      * on the basis of the aspect value hierarchy such that 
-     * parent values come immediately before their child values.
+     * parent values come immediately before their child values and so
+     * that child values are sorted by their strict ordering if there is one.
      * @throws XBRLException
      */
     public List<AspectValue> getValuesByHierarchy() throws XBRLException;
     
     /**
+     * TODO Delete this method.
      * @param id the identifier generated from the value being sought.
      * @return the aspect value that has the given identifier.
      * @see AspectValue#getIdentifier()
@@ -135,6 +138,7 @@ public interface Aspect extends Serializable {
     public AspectValue getValue(String id);
     
     /**
+     * TODO Delete this method.
      * @param id the identifier generated from the value being sought.
      * @return true if the aspect model has a value with the given id.
      * @see AspectValue#getIdentifier()
@@ -170,7 +174,7 @@ public interface Aspect extends Serializable {
     public int getDescendantCount() throws XBRLException;
     
     /**
-     * TODO consider refactoring
+     * TODO consider refactoring to be aspect model functionality.
      * @return the number of combinations of ancestor aspect
      * values (for those ancestor aspects in the same axis
      * of the aspect model).
@@ -249,7 +253,7 @@ public interface Aspect extends Serializable {
      * @param fact The fact to get an aspect key for.
      * @return the unique string identifying the fragment
      * that is part of the aspect value for the given fact.
-     * This should be the empty string if the fact does not
+     * This must be the empty string if the fact does not
      * have a value for the aspect.
      * @throws XBRLException
      */
@@ -294,7 +298,7 @@ public interface Aspect extends Serializable {
     public void setSelectionCriterion(AspectValue criterion);
     
     /**
-     * TODO Consider refactoring
+     * TODO: Consider putting this functionality at the aspect model level.
      * Sets the selection criterion to null.
      */
     public void clearSelectionCriterion();
@@ -306,10 +310,5 @@ public interface Aspect extends Serializable {
      * @throws XBRLException
      */
     public void clearFacts() throws XBRLException;
-    
-
-    
-    
-
 
 }

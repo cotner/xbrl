@@ -26,8 +26,9 @@ public interface AspectModel extends Serializable {
 
     /**
      * @return a Collection of the aspects in the aspect model.
+     * @throws XBRLException
      */
-    public Collection<Aspect> getAspects();
+    public Collection<Aspect> getAspects() throws XBRLException;
 
     /**
      * @param type

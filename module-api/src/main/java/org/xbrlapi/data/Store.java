@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -381,10 +382,9 @@ public interface Store extends Serializable {
 
     /**
      * @param uri The string value of the URI of the document to get the stub for.
-     * @return the stub fragment or null if none exists.
-     * @throws XBRLException if there is more than one stub.
+     * @return the list of stub fragments for the given URI.
      */
-    public Stub getStub(URI uri) throws XBRLException;
+    public List<Stub> getStubs(URI uri) throws XBRLException;
     
     /**
      * @param document The document to store a stub for.
@@ -394,11 +394,10 @@ public interface Store extends Serializable {
     public void persistStub(URI document, String reason) throws XBRLException;    
     
     /**
-     * @param uri The URI of the document for which 
-     * the stub fragment is to be removed from the data store.
+     * @param stub The stub to be removed from the data store.
      * @throws XBRLException
      */
-    public void removeStub(String uri) throws XBRLException;
+    public void removeStub(Stub stub) throws XBRLException;
 
     /**
      * Return a list of XML resources in a data store
@@ -432,6 +431,7 @@ public interface Store extends Serializable {
     public long getNumberOfXMLResources(Class<?> specifiedClass) throws XBRLException;
     
     /**
+     * @deprecated
      * @param interfaceName The name of the interface.  EG: If a list of
      *  org.xbrlapi.impl.ReferenceArcImpl fragments is required then
      *  this parameter would have a value of "ReferenceArc".
@@ -557,6 +557,15 @@ public interface Store extends Serializable {
      * @throws XBRLException
      */
     public <F extends Fragment> List<F> getFragmentsFromDocument(URI uri, String interfaceName) throws XBRLException;
+    
+    /**
+     * @param uri The URI of the document to get the fragments from.
+     * @param fragmentClass The class of fragment being sought.
+     * @return a list of fragments in the given fragment class and in the given document.
+     * @throws XBRLException
+     * @see {@link Store#getFragmentsFromDocument(URI, String)}
+     */
+    public <F extends Fragment> List<F> getFragmentsFromDocument(URI uri, Class<?> fragmentClass) throws XBRLException;    
     
 
     /**
@@ -713,22 +722,22 @@ public interface Store extends Serializable {
      * implementation supports XQuery (rather than XPath).
      * 
      * @param uri The URI of the referencing document.
-     * @return a list of the documents directly referenced by this document.
-     * @throws XBRLException if the list of referenced documents cannot be populated.
+     * @return a set of the documents directly referenced by this document.
+     * @throws XBRLException if the set of referenced documents cannot be populated.
      */
-    public List<URI> getReferencedDocuments(URI uri) throws XBRLException;    
+    public Set<URI> getReferencedDocuments(URI uri) throws XBRLException;    
     
     /**
-     * @param uris The list of URIs to restrict query results to coming from.
-     * The list of URIs is set to the empty list if this parameter is null.
+     * @param uris The set of URIs to restrict query results to coming from.
+     * The set of URIs is set to the empty set if this parameter is null.
      */
-    public void setFilteringURIs(List<URI> uris);
+    public void setFilteringURIs(Set<URI> uris);
 
     /**
-     * @return the list of URIs to filter query results.  Empty list
+     * @return the set of URIs to filter query results.  Empty set
      * if no URIs are being used to filter query results.
      */
-    public List<URI> getFilteringURIs();
+    public Set<URI> getFilteringURIs();
     
     /**
      * Specify that the data store is not to filter query results to only come
@@ -910,28 +919,28 @@ public interface Store extends Serializable {
     public List<URI> getResourceRoles() throws XBRLException;    
     
     /**
-     * @param starters The list of URIs of the documents to use as 
+     * @param starters The collection of URIs of the documents to use as 
      * starting points for analysis.
-     * @return list of URIs for the documents in the data store
+     * @return set of URIs for the documents in the data store
      * that are referenced, directly or indirectly, by any of the documents
-     * identified by the supplied list of document URIs.  Each entry in the list is a String.
+     * identified by the supplied collection of document URIs.
      * @throws XBRLException if some of the referenced documents are not in
      * the data store.
      */
-    public List<URI> getMinimumDocumentSet(List<URI> starters) throws XBRLException;
+    public Set<URI> getMinimumDocumentSet(Collection<URI> starters) throws XBRLException;
     
     
     /**
      * This is just a convenience method.
      * @param uri The single document URI to use as 
      * starting points for analysis.
-     * @return list of URIs for the documents in the data store
+     * @return set of URIs for the documents in the data store
      * that are referenced, directly or indirectly, by the document
-     * identified by the supplied URI.  Each entry in the list is a String.
+     * identified by the supplied URI.
      * @throws XBRLException if some of the referenced documents are not in
      * the data store.
      */
-    public List<URI> getMinimumDocumentSet(URI uri) throws XBRLException;
+    public Set<URI> getMinimumDocumentSet(URI uri) throws XBRLException;
 
 
  
@@ -1335,4 +1344,14 @@ public interface Store extends Serializable {
      * @throws XBRLException
      */
     public <F extends SchemaContent> F getSchemaContent(URI namespace, String name) throws XBRLException;
+
+    /**
+     * @param childClass The class of child fragment.
+     *  @param parentIndex The index of the parent fragment.
+     * @return a list of fragments in the given fragment class
+     * and with the given parent fragment.  The list is empty if there
+     * are no child fragments.
+     * @throws XBRLException
+     */
+    public <F extends Fragment> List<F> getChildFragments(Class<?> childClass, String parentIndex) throws XBRLException;
 }

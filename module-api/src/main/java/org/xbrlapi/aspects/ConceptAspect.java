@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,6 +27,14 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class ConceptAspect extends BaseAspect implements Aspect {
 
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = 6087576193997045566L;
     public static String TYPE = "concept";
     
     /**
@@ -35,7 +44,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
         return TYPE;
     }
     
-    private final static Logger logger = Logger.getLogger(ConceptAspect.class);
+    private static final Logger logger = Logger.getLogger(ConceptAspect.class);
     
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -121,7 +130,7 @@ public class ConceptAspect extends BaseAspect implements Aspect {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         initialize();
     }

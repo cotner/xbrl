@@ -1,6 +1,7 @@
 package org.xbrlapi.networks;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -130,4 +131,8 @@ public class EquivalentRelationshipsImpl implements EquivalentRelationships, Ser
         return true;
     }	
 	
+    public Collection<Relationship> getAllRelationships() {
+        return relationships.values();
+    }
+    
 }

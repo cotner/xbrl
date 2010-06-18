@@ -124,7 +124,7 @@ public class XMLImpl implements XML {
      * @see java.lang.Comparable#compareTo(Object o)
      */
     public int compareTo(XML other) throws ClassCastException {
-        return this.getIndex().compareTo(other.getIndex());     
+        return this.getIndex().compareTo(other.getIndex());
     }
     
     /**

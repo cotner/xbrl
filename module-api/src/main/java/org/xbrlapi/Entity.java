@@ -1,5 +1,6 @@
 package org.xbrlapi;
 
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
@@ -16,7 +17,7 @@ public interface Entity extends ContextComponent {
      * @return the entity identifier scheme URI 
      * @throws XBRLException
      */
-    public String getIdentifierScheme() throws XBRLException;
+    public URI getIdentifierScheme() throws XBRLException;
     
 
 

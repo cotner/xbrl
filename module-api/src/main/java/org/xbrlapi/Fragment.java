@@ -162,7 +162,8 @@ public interface Fragment extends XML {
     /**
      * Get the namespace of the fragment root element.
      *
-     * @throws XBRLException
+     * @throws XBRLException if there is no data element
+     * in the fragment.
      */
     public URI getNamespace() throws XBRLException;
 
@@ -291,18 +292,28 @@ public interface Fragment extends XML {
     public List<LabelResource> getLabels(List<String> languages, List<URI> labelRoles) throws XBRLException;
     
     /**
-     * @param languages the list of language codes in order of preference from most preferred to least
-     * preferred, eventually allowing any language if no explicit preference match.
-     * @param labelRoles the list of label resource roles in order of preference from most preferred 
-     * to least preferred, eventually allowing any resource role.
-     * @param linkRoles the list of extended link roles in order of preference from most preferred 
-     * to least preferred, eventually allowing any link role.
+     * @param languages
+     *            the list of language codes in order of preference from most
+     *            preferred to least preferred, eventually allowing any language
+     *            if no explicit preference match.
+     * @param labelRoles
+     *            the list of label resource roles in order of preference from
+     *            most preferred to least preferred, eventually allowing any
+     *            resource role.
+     * @param linkRoles
+     *            the list of extended link roles in order of preference from
+     *            most preferred to least preferred, eventually allowing any
+     *            link role.
      * @return the list of labels that best match the specified search criteria.
-     * Note that a link role preference takes precedence over a label role preference which 
-     * takes precedence over a language preference.
+     *         Note that a link role preference takes precedence over a label
+     *         role preference which takes precedence over a language
+     *         preference. Note also that if none of the preferences are met, an
+     *         attempt is still made to return a list of all labels in the data store
+     *         for this fragment.
      * @throws XBRLException
      */
-    public List<LabelResource> getLabels(List<String> languages, List<URI> labelRoles, List<URI> linkRoles) throws XBRLException;    
+    public List<LabelResource> getLabels(List<String> languages,
+            List<URI> labelRoles, List<URI> linkRoles) throws XBRLException;    
     
     
     /**

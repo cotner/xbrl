@@ -567,4 +567,12 @@ public class NetworkImpl implements Network, Serializable {
         return true;
     }
     
+    public HashMap<String,HashMap<String,EquivalentRelationships>> getSourceRelationships() {
+        return this.sourceRelationships;
+    }
+
+    public HashMap<String,HashMap<String,EquivalentRelationships>> getTargetRelationships() {
+        return this.targetRelationships;
+    }
+
 }

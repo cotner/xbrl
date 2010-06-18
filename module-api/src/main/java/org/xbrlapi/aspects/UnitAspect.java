@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -16,6 +17,10 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class UnitAspect extends BaseAspect implements Aspect {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 7580982188301896251L;
     public final static String TYPE = "unit";
     
     /**
@@ -25,7 +30,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
         return TYPE;
     }
 
-    private final static Logger logger = Logger.getLogger(UnitAspect.class);    
+    private static final Logger logger = Logger.getLogger(UnitAspect.class);    
 
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -133,7 +138,7 @@ public class UnitAspect extends BaseAspect implements Aspect {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         initialize();
     }

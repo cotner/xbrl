@@ -15,6 +15,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class LocationAspectValue extends BaseAspectValue {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4216609408194340807L;
+
     public LocationAspectValue(Aspect aspect, Fact fact)
             throws XBRLException {
         super(aspect, fact);

@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -144,23 +145,23 @@ public abstract class BaseStoreImpl implements Store {
     }
 
     /**
-     * List of URIs to use when filtering query results to only get matches
+     * Set of URIs to use when filtering query results to only get matches
      * to a specific set of documents.
      */
-    private List<URI> uris = new Vector<URI>();
+    private Set<URI> uris = new HashSet<URI>();
 
     /**
-     * @see org.xbrlapi.data.Store#setFilteringURIs(List)
+     * @see org.xbrlapi.data.Store#setFilteringURIs(Set)
      */
-    public synchronized void setFilteringURIs(List<URI> uris) {
-        if (uris == null) this.uris = new Vector<URI>();
+    public synchronized void setFilteringURIs(Set<URI> uris) {
+        if (uris == null) this.uris = new HashSet<URI>();
         else this.uris = uris;
     }
     
     /**
      * @see org.xbrlapi.data.Store#getFilteringURIs()
      */
-    public List<URI> getFilteringURIs() {
+    public Set<URI> getFilteringURIs() {
         return this.uris;
     }    
     
@@ -168,7 +169,7 @@ public abstract class BaseStoreImpl implements Store {
      * @see org.xbrlapi.data.Store#clearFilteringURIs()
      */
     public void clearFilteringURIs() {
-        this.uris = new Vector<URI>();
+        this.uris = new HashSet<URI>();
     }
 
     /**
@@ -397,8 +398,10 @@ public abstract class BaseStoreImpl implements Store {
         }
 
         // Eliminate any document stub
-        Stub stub = this.getStub(uri);
-        if (stub != null) this.remove(stub);
+        List<Stub> stubs = this.getStubs(uri);
+        for (Stub stub: stubs) {
+            this.removeStub(stub);
+        }
         
     }
     
@@ -458,26 +461,13 @@ public abstract class BaseStoreImpl implements Store {
     /**
      * @see org.xbrlapi.data.Store#getReferencedDocuments(URI)
      */
-    public List<URI> getReferencedDocuments(URI uri) throws XBRLException {
-        String query = "#roots#[@uri='" + uri + "' and @targetDocumentURI]";
-        List<Fragment> fragments = this.<Fragment>queryForXMLResources(query);
-
-        List<URI> uris = new Vector<URI>();
-        HashMap<URI,String> map = new HashMap<URI,String>(); 
-
-        for (Fragment fragment: fragments) {
-            try {
-                URI target = new URI(fragment.getMetaAttribute("targetDocumentURI"));
-                if (!map.containsKey(target)) {
-                    map.put(target,"");
-                    uris.add(target);
-                }
-            } catch (URISyntaxException e) {
-                throw new XBRLException(fragment.getMetaAttribute("targetDocumentURI") + " has an invalid URI syntax.");
-            }
+    public Set<URI> getReferencedDocuments(URI uri) throws XBRLException {
+        Set<URI> result = new HashSet<URI>(); 
+        String query = "for $root in #roots#[@uri='" + uri + "' and @targetDocumentURI] return concat('',$root/@targetDocumentURI)";
+        for (String targetURI: queryForStrings(query)) {
+            result.add(URI.create(targetURI));
         }
-        
-        return uris;
+        return result;
     }
     
 
@@ -805,20 +795,17 @@ public abstract class BaseStoreImpl implements Store {
     }
     
     /**
-     * @see org.xbrlapi.data.Store#getStub(URI)
+     * @see org.xbrlapi.data.Store#getStubs(URI)
      */
-    public Stub getStub(URI uri) throws XBRLException {
-        List<Stub> stubs = this.<Stub>queryForXMLResources("#roots#[@type='org.xbrlapi.impl.StubImpl' and @resourceURI='" + uri + "']");
-        if (stubs.size() == 0) return null;
-        if (stubs.size() > 1) throw new XBRLException("There are " + stubs.size() + " stubs for " + uri);
-        return stubs.get(0);
+    public List<Stub> getStubs(URI uri) throws XBRLException {
+        return this.<Stub>queryForXMLResources("#roots#[@type='org.xbrlapi.impl.StubImpl' and @resourceURI='" + uri + "']");
     }
     
     /**
-     * @see org.xbrlapi.data.Store#getStub(URI stubId)
+     * @see Store#removeStub(Stub)
      */
-    public void removeStub(String stubId) throws XBRLException {
-        if (hasXMLResource(stubId)) remove(stubId);
+    public void removeStub(Stub stub) throws XBRLException {
+        if (hasXMLResource(stub.getIndex())) remove(stub);
     }
     
     /**
@@ -952,7 +939,14 @@ public abstract class BaseStoreImpl implements Store {
      */
     public <F extends Fragment> List<F> getChildFragments(String interfaceName, String parentIndex) throws XBRLException {
     	return this.<F>queryForXMLResources("#roots#[@type='org.xbrlapi.impl." + interfaceName + "Impl' and @parentIndex='" + parentIndex + "']");
-    }    
+    }
+    
+    /**
+     * @see org.xbrlapi.data.Store#getChildFragments(Class<?>, String)
+     */
+    public <F extends Fragment> List<F> getChildFragments(Class<?> childClass, String parentIndex) throws XBRLException {
+        return this.<F>queryForXMLResources("#roots#[@type='" + childClass.getName() + "' and @parentIndex='" + parentIndex + "']");
+    }
     
 
     
@@ -1041,11 +1035,11 @@ public abstract class BaseStoreImpl implements Store {
         Networks networks = new NetworksImpl(this);
 
         Set<String> linkIndices = getExtendedLinkIndices(linkRole);
-        logger.info(linkIndices.size() + " extended links with given link and arc roles.");
+        logger.debug(linkIndices.size() + " extended links with given link and arc roles.");
         for (String linkIndex: linkIndices) {
 
             Set<String> arcIndices = getArcIndices(arcrole,linkIndex);
-            logger.info(arcIndices.size() + " arcs with arcrole in given extended link.");
+            logger.debug(arcIndices.size() + " arcs with arcrole in given extended link.");
             for (String index: arcIndices) {
                 Arc arc = this.getXMLResource(index);
                 List<ArcEnd> sources = arc.getSourceFragments();
@@ -1066,7 +1060,7 @@ public abstract class BaseStoreImpl implements Store {
             }
         } 
         
-        logger.info("network size = " + networks.getSize());
+        logger.debug("network size = " + networks.getSize());
         return networks;        
     }
 
@@ -1295,6 +1289,15 @@ public abstract class BaseStoreImpl implements Store {
         if (interfaceName.indexOf(".") > -1) {
             query = "#roots#[@uri='"+ matchURI + "' and @type='" + interfaceName + "']";
         }
+        return this.<F>queryForXMLResources(query);
+    }
+    
+    /**
+     * @see Store#getFragmentsFromDocument(URI, Class<?>)
+     */
+    public <F extends Fragment> List<F> getFragmentsFromDocument(URI uri, Class<?> fragmentClass) throws XBRLException {
+        URI matchURI = getMatcher().getMatch(uri);
+        String query = "#roots#[@uri='"+ matchURI + "' and @type='"+fragmentClass.getName()+"']";        
         return this.<F>queryForXMLResources(query);
     }
     
@@ -1681,16 +1684,34 @@ public abstract class BaseStoreImpl implements Store {
     /**
      * @see org.xbrlapi.data.Store#getMinimumDocumentSet(URI)
      */
-    public List<URI> getMinimumDocumentSet(URI uri) throws XBRLException {
+    public Set<URI> getMinimumDocumentSet(URI uri) throws XBRLException {
         List<URI> starters = new Vector<URI>();
         starters.add(uri);
         return this.getMinimumDocumentSet(starters);
     }
     
     /**
-     * @see org.xbrlapi.data.Store#getMinimumDocumentSet(List)
+     * @see org.xbrlapi.data.Store#getMinimumDocumentSet(Collection<URI>)
      */
-    public List<URI> getMinimumDocumentSet(List<URI> starters) throws XBRLException {
+    public Set<URI> getMinimumDocumentSet(Collection<URI> starters) throws XBRLException {
+        
+        Set<URI> minimumDocumentSet = new HashSet<URI>();
+        Set<URI> checkThese = new HashSet<URI>();
+        checkThese.addAll(starters);
+        
+        while (checkThese.size() > 0) {
+            URI document = checkThese.iterator().next();
+            for (URI referencedDocument: getReferencedDocuments(document)) {
+                if ((! minimumDocumentSet.contains(referencedDocument)) && (! checkThese.contains(referencedDocument)))
+                    checkThese.add(referencedDocument);
+            }
+            
+            minimumDocumentSet.add(document);
+            checkThese.remove(document);
+        }
+        
+        return minimumDocumentSet;
+/*        
         
         List<URI> allDocuments = new Vector<URI>();        
         List<URI> documentsToCheck = new Vector<URI>();        
@@ -1717,7 +1738,7 @@ public abstract class BaseStoreImpl implements Store {
         }
 
         return allDocuments;
-
+*/
     }
  
     /**

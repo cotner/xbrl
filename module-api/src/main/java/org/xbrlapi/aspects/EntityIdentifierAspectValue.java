@@ -8,6 +8,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class EntityIdentifierAspectValue extends BaseAspectValue {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1629296721564235815L;
+
     public EntityIdentifierAspectValue(Aspect aspect, Entity entity)
             throws XBRLException {
         super(aspect, entity);

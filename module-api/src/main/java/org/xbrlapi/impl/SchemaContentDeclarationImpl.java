@@ -85,7 +85,7 @@ public class SchemaContentDeclarationImpl extends SchemaDeclarationImpl implemen
      * @see SchemaContentDeclaration#getTypeQName()
      */
     public String getTypeQName() throws XBRLException {
-        if (! hasTypeReference()) throw new XBRLException("The content declaration does not have a named type.");
+        if (! hasTypeReference()) throw new XBRLException(this.getIndex() + ": The schema content declaration does not have a named data type.");
         String qname = getDataRootElement().getAttribute("type");
         if (qname.equals("") || (qname == null)) throw new XBRLException("The element declaration does not declare its XML Schema data type via a type attribute.");
         return qname;

@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -15,12 +16,22 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 6562438537496949565L;
+
     public final static String TYPE = "period";
     
-    private final static Logger logger = Logger.getLogger(QuarterlyPeriodAspect.class);    
+    private static final Logger logger = Logger.getLogger(QuarterlyPeriodAspect.class);    
 
     private class PeriodComparator implements Comparator<String>, Serializable {
         
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -9171506851891328463L;
+
         public PeriodComparator() {
             super();
         }
@@ -45,7 +56,7 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
          * @throws IOException
          * @throws ClassNotFoundException
          */
-        private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
             in.defaultReadObject( );
         }
         
@@ -187,7 +198,7 @@ public class QuarterlyPeriodAspect extends ContextAspect implements Aspect {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         initialize();
     }

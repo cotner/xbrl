@@ -1,6 +1,5 @@
 package org.xbrlapi.aspects;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +24,16 @@ import org.xbrlapi.utilities.XBRLException;
  */
 abstract public class BaseAspect implements Aspect {
 
-    private final static Logger logger = Logger.getLogger(BaseAspect.class);  
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = -5123548785981838553L;
+
+    private static final Logger logger = Logger.getLogger(BaseAspect.class);  
     
     protected TreeMap<String,AspectValue> values;
     
@@ -447,37 +455,9 @@ abstract public class BaseAspect implements Aspect {
         return label;
     }    
 
-    /**
-     * Handles object serialization
-     * @param out The input object stream used to store the serialization of the object.
-     * @throws IOException
-     */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(model);
-        out.writeObject(criterion);
-        out.writeObject(axis);
-        out.writeObject(facts);
-        out.writeObject(fragmentMap);
-        out.writeObject(values);
-   }
+
     
-    /**
-     * Handles object inflation.
-     * @param in The input object stream used to access the object's serialization.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    @SuppressWarnings("unchecked")
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject( );
-        model = (AspectModel) in.readObject();
-        criterion = (AspectValue) in.readObject();
-        axis = (String) in.readObject();
-        facts = (Map<String,Set<Fact>>) in.readObject();
-        fragmentMap = (Map<String,Fragment>) in.readObject();
-        values = (TreeMap<String,AspectValue>) in.readObject();
-    }
+
 
     /**
      * @see java.lang.Object#hashCode()

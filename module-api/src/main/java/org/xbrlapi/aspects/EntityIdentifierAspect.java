@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +20,10 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class EntityIdentifierAspect extends ContextAspect implements Aspect {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8681965834660772461L;
     public static String TYPE = "entity";
     
     /**
@@ -30,7 +35,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
     
 
     
-    private final static Logger logger = Logger.getLogger(EntityIdentifierAspect.class);
+    private static final Logger logger = Logger.getLogger(EntityIdentifierAspect.class);
     
     /**
      * @param aspectModel The aspect model with this aspect.
@@ -149,7 +154,7 @@ public class EntityIdentifierAspect extends ContextAspect implements Aspect {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         initialize();
     }

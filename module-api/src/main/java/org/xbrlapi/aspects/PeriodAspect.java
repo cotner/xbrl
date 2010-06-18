@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectStreamField;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -16,6 +17,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class PeriodAspect extends ContextAspect implements Aspect {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -692270155210267276L;
+
     public final static String TYPE = "period";
     /**
      * @see Aspect#getType()
@@ -24,12 +30,17 @@ public class PeriodAspect extends ContextAspect implements Aspect {
         return TYPE;
     }
     
-    private final static Logger logger = Logger.getLogger(PeriodAspect.class);    
+    private static final Logger logger = Logger.getLogger(PeriodAspect.class);    
     
     private static final ObjectStreamField[] serialPersistentFields = {};
     
     private class PeriodComparator implements Comparator<String>, Serializable {
         
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 6422821735681622996L;
+
         public PeriodComparator() {
             super();
         }
@@ -57,7 +68,7 @@ public class PeriodAspect extends ContextAspect implements Aspect {
          * @throws IOException
          * @throws ClassNotFoundException
          */
-        private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
             in.defaultReadObject( );
         }
         
@@ -220,7 +231,7 @@ public class PeriodAspect extends ContextAspect implements Aspect {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         initialize();
     }

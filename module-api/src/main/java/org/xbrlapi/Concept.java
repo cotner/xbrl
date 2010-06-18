@@ -24,6 +24,7 @@ public interface Concept extends ElementDeclaration {
     
     /**
      * Get the concept's balance, one of debit or credit
+     * or null if the balance is not defined.
      *
      * @throws XBRLException
      */

@@ -1,6 +1,7 @@
 package org.xbrlapi;
 
-import java.util.Calendar;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.xbrlapi.utilities.XBRLException;
 
@@ -45,7 +46,7 @@ public interface Period extends ContextComponent {
      * @throws XBRLException if the period is not a finite duration.
      * @see java.util.Calendar
      */
-    public Calendar getInstantCalendar() throws XBRLException;
+    public XMLGregorianCalendar getInstantCalendar() throws XBRLException;
     
     
     
@@ -60,7 +61,7 @@ public interface Period extends ContextComponent {
      * @throws XBRLException if the period is not a finite duration.
      * @see java.util.Calendar
      */
-    public Calendar getStartCalendar() throws XBRLException;
+    public XMLGregorianCalendar getStartCalendar() throws XBRLException;
     
     /**
      * @return the end moment as a java.util.Calendar value.  Note that the
@@ -69,7 +70,7 @@ public interface Period extends ContextComponent {
      * @throws XBRLException if the period is not a finite duration.
      * @see java.util.Calendar
      */
-    public Calendar getEndCalendar() throws XBRLException;
+    public XMLGregorianCalendar getEndCalendar() throws XBRLException;
     
     /**
      * @return the end of the period.
@@ -77,4 +78,45 @@ public interface Period extends ContextComponent {
      */
     public String getEnd() throws XBRLException;
     
+    /**
+     * @return true if the end of a finite duration is specified as a date only,
+     * with no time (or timezone information) and false otherwise.
+     * @throws XBRLException if the period is not a finite duration.
+     */
+    public boolean endIsDateOnly() throws XBRLException;
+ 
+    /**
+     * @return true if the start of a finite duration is specified as a date only,
+     * with no time (or timezone information) and false otherwise.
+     * @throws XBRLException if the period is not a finite duration.
+     */
+    public boolean startIsDateOnly() throws XBRLException;
+ 
+    /**
+     * @return true if an instant is specified as a date only,
+     * with no time (or timezone information) and false otherwise.
+     * @throws XBRLException if the period is not an instant.
+     */
+    public boolean instantIsDateOnly() throws XBRLException;
+
+    /**
+     * @return true if the end of a finite duration specifies the timezone and
+     *         false otherwise.
+     * @throws XBRLException if the period is not a finite duration.
+     */
+    public boolean endHasTimezone() throws XBRLException;
+
+    /**
+     * @return true if the start of a finite duration specifies the timezone and
+     *         false otherwise.
+     * @throws XBRLException if the period is not a finite duration.
+     */
+    public boolean startHasTimezone() throws XBRLException;
+
+    /**
+     * @return true if an instant specifies the timezone and false otherwise.
+     * @throws XBRLException if the period is not an instant.
+     */
+    public boolean instantHasTimezone() throws XBRLException;
+
 }

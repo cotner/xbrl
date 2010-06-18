@@ -237,7 +237,7 @@ public class RelationshipImpl extends NonFragmentXMLImpl implements Relationship
      */
     public String getUse() {
         String use = getMetaAttribute("arcUse");
-        if (use== null) return "optional";
+        if (use == null) return "optional";
         return "prohibited";
     }    
 

@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.utilities.XBRLException;
@@ -10,7 +11,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class NonDimensionalAspectModel extends BaseAspectModel implements AspectModel {
 
-    private final static Logger logger = Logger.getLogger(NonDimensionalAspectModel.class);    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5027794569305067678L;
+    private static final Logger logger = Logger.getLogger(NonDimensionalAspectModel.class);    
     
     public NonDimensionalAspectModel() throws XBRLException {
         super();
@@ -38,7 +43,7 @@ public class NonDimensionalAspectModel extends BaseAspectModel implements Aspect
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         initialize();
    }

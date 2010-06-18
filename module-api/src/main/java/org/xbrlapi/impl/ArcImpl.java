@@ -44,10 +44,10 @@ public class ArcImpl extends ExtendedLinkContentImpl implements Arc {
     }
     
     /**
-     * @see org.xbrlapi.Arc#hasAttribute(String,String)
+     * @see org.xbrlapi.Arc#hasAttribute(URI,String)
      */    
-    public boolean hasAttribute(String namespace, String name) throws XBRLException {
-        return getDataRootElement().hasAttributeNS(namespace,name);
+    public boolean hasAttribute(URI namespace, String name) throws XBRLException {
+        return getDataRootElement().hasAttributeNS(namespace.toString(),name);
     }    
     
     /**

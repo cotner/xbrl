@@ -139,5 +139,13 @@ public interface ElementDeclaration extends SchemaContentDeclaration {
       * @return the minimum number of times that the element can occur within a complex type definition.
       * @throws XBRLException if the element declaration is global.
       */
-     public String getMinOccurs() throws XBRLException;     
+     public String getMinOccurs() throws XBRLException;    
+     
+     /**
+      * @param candidate The candidate element declaration. 
+      * @return true if this element substitutes for the candidate element declaration
+      * and false otherwise.
+      * @throws XBRLException
+      */
+     public boolean substitutesFor(ElementDeclaration candidate) throws XBRLException;     
 }

@@ -77,7 +77,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      * @see org.xbrlapi.Fragment#getSimpleLinks()
      */
     public List<SimpleLink> getSimpleLinks() throws XBRLException {
-    	return this.getStore().<SimpleLink>getChildFragments("SimpleLink",this.getIndex());
+    	return this.getStore().<SimpleLink>getChildFragments(SimpleLinkImpl.class,this.getIndex());
     }
     
     /**
@@ -522,11 +522,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	if (getDataRootElement() == null) {
     		throw new XBRLException("The XML fragment root node is null.");
     	}
-    	try {
-    	    return new URI(getDataRootElement().getNamespaceURI());
-    	} catch (URISyntaxException e) {
-    	    throw new XBRLException("The data root element namespace is not a valid URI.");
-    	}
+	    return URI.create(getDataRootElement().getNamespaceURI());
     }
     
     /**

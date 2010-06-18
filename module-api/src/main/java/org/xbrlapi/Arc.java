@@ -27,7 +27,7 @@ public interface Arc extends ExtendedLinkContent {
      * @return true if the arc has the attribute
      * @throws XBRLException
      */
-    public boolean hasAttribute(String namespace, String name) throws XBRLException;
+    public boolean hasAttribute(URI namespace, String name) throws XBRLException;
     
     /**
      * @param name The name of the attribute

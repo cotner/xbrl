@@ -91,11 +91,11 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      * @see org.xbrlapi.Schema#getExtendedLinks()
      */
     public List<ExtendedLink> getExtendedLinks() throws XBRLException {
-    	List<Linkbase> linkbases = getStore().<Linkbase>getChildFragments("Linkbase",getIndex());
+    	List<Linkbase> linkbases = getStore().<Linkbase>getChildFragments(LinkbaseImpl.class,getIndex());
     	logger.debug("The schema contains " + linkbases.size() + " linkbases.");
     	List<ExtendedLink> links = new Vector<ExtendedLink>();
     	for (Linkbase linkbase: linkbases) {
-        	links.addAll(getStore().<ExtendedLink>getChildFragments("ExtendedLink",linkbase.getIndex()));
+        	links.addAll(getStore().<ExtendedLink>getChildFragments(ExtendedLinkImpl.class,linkbase.getIndex()));
     	}
     	return links;
     }
@@ -205,7 +205,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      */
     public List<ComplexTypeDeclaration> getGlobalComplexTypes()
             throws XBRLException {
-        return getStore().<ComplexTypeDeclaration>getChildFragments("ComplexTypeDeclaration",getIndex());
+        return getStore().<ComplexTypeDeclaration>getChildFragments(ComplexTypeDeclarationImpl.class,getIndex());
     }
 
     /**
@@ -230,7 +230,7 @@ public class SchemaImpl extends SchemaContentImpl implements Schema {
      */
     public List<SimpleTypeDeclaration> getGlobalSimpleTypes()
             throws XBRLException {
-        return getStore().<SimpleTypeDeclaration>getChildFragments("SimpleTypeDeclaration",getIndex());
+        return getStore().<SimpleTypeDeclaration>getChildFragments(SimpleTypeDeclarationImpl.class,getIndex());
     }
     
 }

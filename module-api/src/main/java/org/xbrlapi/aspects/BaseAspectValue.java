@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.Vector;
 
@@ -9,9 +10,24 @@ import org.xbrlapi.Fragment;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
+ * The base aspect value provides a generic aspect value implementation.
+ * 
+ * Right now, aspect values are defined by their properties, consisting of
+ * a fragment and an aspect.  Ideally, this can be changed so that aspect values
+ * are an aspect identifier (the aspect type URI)
+ * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public abstract class BaseAspectValue implements AspectValue {
+
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = 594633300889830050L;
 
     protected final static Logger logger = Logger.getLogger(BaseAspectValue.class);  
     
@@ -119,7 +135,7 @@ public abstract class BaseAspectValue implements AspectValue {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         aspect = (Aspect) in.readObject();
         fragment = (Fragment) in.readObject();

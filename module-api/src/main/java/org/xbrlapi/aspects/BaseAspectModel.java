@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,7 +20,16 @@ import org.xbrlapi.utilities.XBRLException;
  */
 abstract public class BaseAspectModel implements AspectModel {
 
-    private final static Logger logger = Logger.getLogger(BaseAspectModel.class);  
+    /**
+     * The serial version UID.
+     * @see 
+     * http://java.sun.com/javase/6/docs/platform/serialization/spec/version.html#6678
+     * for information about what changes will require the serial version UID to be
+     * modified.
+     */
+    private static final long serialVersionUID = 7510152322907283308L;
+
+    private static final Logger logger = Logger.getLogger(BaseAspectModel.class);  
 
     /**
      * From aspect type to aspect.
@@ -447,7 +457,7 @@ abstract public class BaseAspectModel implements AspectModel {
      * @throws ClassNotFoundException
      */
     @SuppressWarnings("unchecked")
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject( );
         aspects = (Map<String,Aspect>) in.readObject();
         axes = (Map<String,List<Aspect>>) in.readObject();

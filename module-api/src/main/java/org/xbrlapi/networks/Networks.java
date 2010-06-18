@@ -73,7 +73,7 @@ public interface Networks extends Iterable<Network> {
 	 * for the specified arc role.
 	 * @throws XBRLException
 	 */
-	public List<Network> getNetworks(URI arcrole) throws XBRLException;
+	public Networks getNetworks(URI arcrole) throws XBRLException;
 	
 	/**
 	 * @param targetIndex The index of the fragment that is the target for the sources
@@ -192,5 +192,13 @@ public interface Networks extends Iterable<Network> {
 	 * @throws XBRLException
 	 */
 	public void addAll(Networks networks) throws XBRLException;
+
+    /**
+     * Merges the specified list of networks into this set of networks.
+     * @param networks The networks to merge 
+     * into this collection of networks.
+     * @throws XBRLException
+     */
+    public void addAll(List<Network> networks) throws XBRLException;
 	
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.xbrlapi.ComplexTypeDeclaration;
 import org.xbrlapi.ElementDeclaration;
+import org.xbrlapi.Fact;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -78,6 +79,16 @@ public class ElementDeclarationImpl extends SchemaContentDeclarationImpl impleme
           if (this.getName().equals("tuple") && this.getTargetNamespace().equals(Constants.XBRL21Namespace)) return true;
           if (! this.hasSubstitutionGroup()) return false;
           return this.getSubstitutionGroupDeclaration().isTuple();
+      }
+      
+      /**
+       * @see Fact#substitutesFor(ElementDeclaration)
+       */
+      public boolean substitutesFor(ElementDeclaration candidate) throws XBRLException {
+          if (! this.hasSubstitutionGroup() ) return false;
+          ElementDeclaration parent = this.getSubstitutionGroupDeclaration();
+          if (parent.equals(candidate)) return true;
+          return parent.substitutesFor(candidate);
       }
 
       /**

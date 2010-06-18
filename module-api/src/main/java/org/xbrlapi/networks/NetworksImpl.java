@@ -110,15 +110,17 @@ public class NetworksImpl implements Networks, Serializable {
 	/**
 	 * @see org.xbrlapi.networks.Networks#getNetworks(URI)
 	 */
-	public List<Network> getNetworks(URI arcrole) throws XBRLException {
+	public Networks getNetworks(URI arcrole) throws XBRLException {
 		
+	    Networks result = new NetworksImpl(this.getStore());
 		List<Network> selectedNetworks = new LinkedList<Network>();
 		List<URI> linkRoles = getLinkRoles(arcrole);
-		if (linkRoles.isEmpty()) return selectedNetworks;
+		if (linkRoles.isEmpty()) return result;
 		for (URI linkRole: linkRoles) {
 			selectedNetworks.add(this.getNetwork(linkRole,arcrole));
 		}
-		return selectedNetworks;
+		result.addAll(selectedNetworks);
+		return result;
 	}
 	
 	/**
@@ -128,7 +130,7 @@ public class NetworksImpl implements Networks, Serializable {
 		
 		List<F> fragments = new Vector<F>();
 		
-    	List<Network> selectedNetworks = this.getNetworks(arcrole);
+    	Networks selectedNetworks = this.getNetworks(arcrole);
     	for (Network network: selectedNetworks) {
     		SortedSet<Relationship> relationships = network.getActiveRelationshipsTo(targetIndex);
         	for (Relationship relationship: relationships) {
@@ -159,12 +161,9 @@ public class NetworksImpl implements Networks, Serializable {
 		
 		List<F> fragments = new Vector<F>();
 		
-    	List<Network> selectedNetworks = this.getNetworks(arcrole);
-    	logger.debug("There are " + selectedNetworks.size() + " networks with arcrole " + arcrole);
+    	Networks selectedNetworks = getNetworks(arcrole);
     	for (Network network: selectedNetworks) {
-            logger.debug("A network has linkrole " + network.getLinkRole());
     		SortedSet<Relationship> relationships = network.getActiveRelationshipsFrom(sourceIndex);
-            logger.debug("The network contains " + relationships.size() + " relationships from " + sourceIndex);
         	for (Relationship relationship: relationships) {
         		fragments.add(relationship.<F>getTarget());
         	}
@@ -301,6 +300,15 @@ public class NetworksImpl implements Networks, Serializable {
      * @see Networks#addAll(Networks)
      */
     public void addAll(Networks networks) throws XBRLException {
+        for (Network network: networks) {
+            this.addNetwork(network);
+        }
+    }
+    
+    /**
+     * @see Networks#addAll(List<Network>)
+     */
+    public void addAll(List<Network> networks) throws XBRLException {
         for (Network network: networks) {
             this.addNetwork(network);
         }

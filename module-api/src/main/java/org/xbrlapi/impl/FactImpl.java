@@ -7,6 +7,7 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Instance;
 import org.xbrlapi.Tuple;
+import org.xbrlapi.TypeDeclaration;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -67,6 +68,15 @@ public class FactImpl extends FragmentImpl implements Fact {
 		String unitRef = this.getDataRootElement().getAttribute("unitRef");
 		return (unitRef != "");
 	}
+	
+    /**
+     * @see Fact#isFraction()
+     */
+    public boolean isFraction() throws XBRLException {
+        Concept concept = this.getConcept();
+        TypeDeclaration type = concept.getTypeDeclaration();
+        return (type.isDerivedFrom(Constants.XBRL21Namespace,"fractionItemType"));
+    }
 
 	/** 
      * @see org.xbrlapi.Fact#isNil()

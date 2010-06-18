@@ -8,6 +8,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 public class SegmentAspectValue extends BaseAspectValue {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2781998986018034839L;
+
     public SegmentAspectValue(Aspect aspect, Segment segment) throws XBRLException {
         super(aspect, segment);
     }
