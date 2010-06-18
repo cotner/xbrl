@@ -8,6 +8,7 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.xbrlapi.tests");
 		//$JUnit-BEGIN$
+        suite.addTest(org.xbrlapi.aspects.alt.tests.AllTests.suite());
         suite.addTest(org.xbrlapi.aspects.tests.AllTests.suite());
 		suite.addTest(org.xbrlapi.builder.tests.AllTests.suite());
         suite.addTest(org.xbrlapi.cache.framework.tests.AllTests.suite());
