@@ -13,4 +13,5 @@ mvn install:install-file -DgroupId=net.sf.saxon -DartifactId=saxon -Dversion=9.1
 mvn install:install-file -DgroupId=net.sf.saxon -DartifactId=saxon-dom -Dversion=9.1 -Dpackaging=jar -Dfile=saxon9-dom.jar -DgeneratePom=true
 mvn install:install-file -DgroupId=net.sf.saxon -DartifactId=saxon-s9api -Dversion=9.1 -Dpackaging=jar -Dfile=saxon9-s9api.jar -DgeneratePom=true
 
+mvn install:install-file -DgroupId=com.google.code.google-collections -DartifactId=google-collect -Dversion=1.0 -Dpackaging=jar -Dfile=google-collect-1.0.jar -DgeneratePom=true
 
