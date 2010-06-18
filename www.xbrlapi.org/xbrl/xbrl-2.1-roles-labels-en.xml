@@ -577,7 +577,7 @@
   </generic:link>
 
   <generic:link xlink:type="extended" xlink:role="http://www.xbrl.org/2003/role/link">
-    <link:loc xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#notAll" xlink:type="locator" xlink:label="role"/>
+    <link:loc xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#dimension-default" xlink:type="locator" xlink:label="role"/>
     <label:label xlink:type="resource" xlink:label="label" 
     xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en">
       dimension has default value
