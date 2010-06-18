@@ -103,5 +103,11 @@ public class Constants {
     public final static URI StandardGenericReferenceRole = URI.create("http://www.xbrl.org/2008/role/reference");
     public final static URI LinkbaseReferenceArcrole = URI.create("http://www.w3.org/1999/xlink/properties/linkbase");
 
+    public final static URI PresentationLinkbaseReferenceRole = URI.create("http://www.xbrl.org/2003/role/presentationLinkbaseRef");
+    public final static URI DefinitionLinkbaseReferenceRole = URI.create("http://www.xbrl.org/2003/role/definitionLinkbaseRef");
+    public final static URI CalculationLinkbaseReferenceRole = URI.create("http://www.xbrl.org/2003/role/calculationLinkbaseRef");
+    public final static URI LabelLinkbaseReferenceRole = URI.create("http://www.xbrl.org/2003/role/labelLinkbaseRef");
+    public final static URI ReferenceLinkbaseReferenceRole = URI.create("http://www.xbrl.org/2003/role/referenceLinkbaseRef");
 
+    
 }
