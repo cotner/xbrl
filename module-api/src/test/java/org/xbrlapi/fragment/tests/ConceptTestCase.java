@@ -166,20 +166,19 @@ public class ConceptTestCase extends DOMLoadingTestCase {
                 logger.info(fact.getConcept().getLabels().get(0).getStringValue());
                 networks = store.getMinimalNetworksWithArcrole(fact.getConcept(),Constants.PresentationArcrole);
             }
-            List<Network> presentationNetworks = networks.getNetworks(Constants.PresentationArcrole);
+            Networks presentationNetworks = networks.getNetworks(Constants.PresentationArcrole);
             
-            assertEquals(1,presentationNetworks.size());
+            assertEquals(1,presentationNetworks.getSize());
             
-            Network network = presentationNetworks.get(0);
-            
-            assertEquals(2,network.getNumberOfActiveRelationships());
+            for (Network network: presentationNetworks) {
+                assertEquals(2,network.getNumberOfActiveRelationships());
 
-            List<Fragment> roots = network.getRootFragments(); 
-            assertEquals(1,roots.size());
-
-            network.complete();
-            
-            assertEquals(6,network.getNumberOfActiveRelationships());
+                List<Fragment> roots = network.getRootFragments(); 
+                assertEquals(1,roots.size());
+                network.complete();
+                
+                assertEquals(6,network.getNumberOfActiveRelationships());
+            }
             
         } catch (Exception e) {
             e.printStackTrace();
