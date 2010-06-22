@@ -39,7 +39,7 @@ public class ScenarioAspectValue extends AspectValueImpl implements AspectValue 
     }
 
     /**
-     * @param segment The scenario fragment.
+     * @param scenario The scenario fragment.
      */
     public ScenarioAspectValue(Scenario scenario) throws XBRLException {
         super();
