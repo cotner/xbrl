@@ -104,7 +104,6 @@ public class AspectsTestCase extends DOMLoadingTestCase {
                 }
             }
             
-
 /*            List<List<AspectValue>> rowMatrix = model.getAspectValueCombinationsForAxis("row");
             
             assertEquals(2,rowMatrix.size());
@@ -119,7 +118,7 @@ public class AspectsTestCase extends DOMLoadingTestCase {
                     logger.debug(matchingFact.getIndex());
                 }
             }
-*/            
+*/ 
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
