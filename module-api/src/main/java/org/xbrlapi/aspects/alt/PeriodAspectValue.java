@@ -156,10 +156,6 @@ public class PeriodAspectValue extends AspectValueImpl implements AspectValue {
         return "" + value;
     }    
     
-    
-    
-    
-
     /**
      * @see AspectHandler#getAspectId()
      */
