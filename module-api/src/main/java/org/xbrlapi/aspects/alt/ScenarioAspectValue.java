@@ -52,7 +52,7 @@ public class ScenarioAspectValue extends AspectValueImpl implements AspectValue 
      * @see AspectHandler#getAspectId()
      */
     public URI getAspectId() {
-        return UnitAspect.ID;
+        return ScenarioAspect.ID;
     }
     
     /**
@@ -73,9 +73,5 @@ public class ScenarioAspectValue extends AspectValueImpl implements AspectValue 
         else id = IDGenerator.getLabel(children);
         return id;
     }
-    
-    
-    
-    
     
 }

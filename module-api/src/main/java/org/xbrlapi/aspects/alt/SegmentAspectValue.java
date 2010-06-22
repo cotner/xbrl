@@ -52,7 +52,7 @@ public class SegmentAspectValue extends AspectValueImpl implements AspectValue {
      * @see AspectHandler#getAspectId()
      */
     public URI getAspectId() {
-        return UnitAspect.ID;
+        return SegmentAspect.ID;
     }
     
     /**
