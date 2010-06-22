@@ -35,11 +35,9 @@ public class FilterImpl implements Filter {
      */
     public Set<Fact> getMatchingFacts(FactSet candidateFacts) {
         Set<Fact> matches = new HashSet<Fact>();
-        boolean gotSomeMatches = false;
         for (AspectValue criterion: map.values()) {
-            if (! gotSomeMatches) {
+            if (matches.isEmpty()) {
                 matches.addAll(candidateFacts.getFacts(criterion));
-                gotSomeMatches = true;
             } else {
                 Collection<Fact> candidates = candidateFacts.getFacts(criterion);
                 matches.retainAll(candidates);
