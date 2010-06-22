@@ -24,6 +24,10 @@ import org.xbrlapi.utilities.XBRLException;
  *  <li>@see UnitAspect</li>
  * </ul>
  * 
+ * These are the full set of aspects defined under the non-XDT 
+ * aspect model in the XBRL Variables 1.0 specification.
+ * @see http://www.xbrl.org/Specification/variables/REC-2009-06-22/variables-REC-2009-06-22.html
+ * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 
