@@ -3,16 +3,22 @@ package org.xbrlapi.aspects.alt;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import org.xbrlapi.utilities.XBRLException;
 
 /**
+ * <p>
  * Defines the methods that are available to interact with 
- * lists of aspects and their sometimes heirarchically 
- * ordered values.
+ * lists of aspects and lists of their values.
+ * </p>
+ * 
+ * <p>
  * This object provides a range of functionality that assists
  * with activities such as creating multilevel table row or
  * column headings based upon combinations of aspect values.
+ * </p>
+ * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 
@@ -53,8 +59,6 @@ public interface AspectValueCombinations extends Serializable {
      * the specified Aspect.
      */
     public void clearAspectValues(URI aspectId) throws XBRLException;
-    
-    
 
     /**
      * @param aspectId The ID of the aspect of interest.
@@ -62,7 +66,7 @@ public interface AspectValueCombinations extends Serializable {
      * @throws XBRLException if the combinations do not include
      * the specified Aspect.
      */
-    public long getAspectValueCount(URI aspectId) throws XBRLException;
+    public int getAspectValueCount(URI aspectId) throws XBRLException;
 
     /**
      * @param aspectId The ID of the aspect of interest.
@@ -75,7 +79,7 @@ public interface AspectValueCombinations extends Serializable {
      * @throws XBRLException if the combinations do not include
      * the specified Aspect.
      */
-    public long getAncestorCount(URI aspectId) throws XBRLException;
+    public int getAncestorCount(URI aspectId) throws XBRLException;
 
     /**
      * @param aspectId The ID of the aspect of interest.
@@ -88,7 +92,7 @@ public interface AspectValueCombinations extends Serializable {
      * @throws XBRLException if the combinations do not include
      * the specified Aspect.
      */
-    public long getDescendantCount(URI aspectId) throws XBRLException;
+    public int getDescendantCount(URI aspectId) throws XBRLException;
     
     /**
      * @param aspects The list of aspects to use.
@@ -97,4 +101,28 @@ public interface AspectValueCombinations extends Serializable {
      */
     public void setAspectValues(URI aspectId, List<AspectValue> values) throws XBRLException;
 
+    /**
+     * @return the total number of different combinations of aspect values.
+     * @throws XBRLException
+     */
+    public int getCombinationCount();
+    
+    /**
+     * This method is useful when setting up filters for a specific combination
+     * of aspect values.
+     * The combinations are numbered from zero to the total number of combinations less one.
+     * @param aspectId The ID of the aspect that the value is being sought for.
+     * @param combination The index of the combination that an aspect value
+     * is being sought for.
+     * @return The value for the specified aspect in the specified combination.
+     */
+    public AspectValue getCombinationValue(URI aspectId, int combination) throws XBRLException;
+
+    /**
+     * @param combination The index of the combination of aspect values to retrieve
+     * @return a map from aspect IDs to the values of those aspects for the specified
+     * combination.
+     * @throws XBRLException
+     */
+    public Map<URI,AspectValue> getCombinationValues(int combination) throws XBRLException;
 }

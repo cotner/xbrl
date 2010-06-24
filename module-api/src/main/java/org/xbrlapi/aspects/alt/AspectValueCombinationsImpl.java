@@ -3,12 +3,27 @@ package org.xbrlapi.aspects.alt;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
+ * <h2>Aspect value combinations implementation</h2>
+ * 
+ * <p>
+ * This implementation requires a constructor that
+ * specifies the aspect model and the specific axis that
+ * the aspect value combinations will be required for.
+ * Thereafter, the list of values for each aspect must be
+ * set.  How the list of aspect values is obtained is determined
+ * externally.  It may be from a fact set or it may be from
+ * an aspect domain or it may be from a combination of the two.
+ * The ordering of aspect values is also determined externally
+ * to this object.
+ * </p>
+ * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class AspectValueCombinationsImpl implements AspectValueCombinations {
@@ -71,11 +86,11 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     /**
      * @see AspectValueCombinations#getAncestorCount(URI)
      */
-    public long getAncestorCount(URI aspectId) throws XBRLException {
+    public int getAncestorCount(URI aspectId) throws XBRLException {
         List<Aspect> aspects = model.getAspects(axis);
         Aspect aspect = model.getAspect(aspectId);
         int index = aspects.indexOf(aspect);
-        if (index == 0) return 1L;
+        if (index == 0) return 1;
         Aspect parentAspect = aspects.get(index-1);
         return (getAspectValueCount(parentAspect.getId()) * getAncestorCount(parentAspect.getId())); 
     }
@@ -110,7 +125,7 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     /**
      * @see AspectValueCombinations#getAspectValueCount(URI)
      */
-    public long getAspectValueCount(URI aspectId) throws XBRLException {
+    public int getAspectValueCount(URI aspectId) throws XBRLException {
         return getAspectValues(aspectId).size();
     }
 
@@ -139,11 +154,11 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     /**
      * @see AspectValueCombinations#getDescendantCount(URI)
      */
-    public long getDescendantCount(URI aspectId) throws XBRLException {
+    public int getDescendantCount(URI aspectId) throws XBRLException {
         List<Aspect> aspects = model.getAspects(axis);
         Aspect aspect = model.getAspect(aspectId);
         int index = aspects.indexOf(aspect);
-        if (index == aspects.size()-1) return 1L;
+        if (index == aspects.size()-1) return 1;
         Aspect childAspect = aspects.get(index+1);
         return (getAspectValueCount(childAspect.getId()) * getAncestorCount(childAspect.getId()));
     }
@@ -155,4 +170,44 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
         return this.axis;
     }
 
+    /**
+     * @see AspectValueCombinations#getCombinationCount()
+     */
+    public int getCombinationCount() {
+        int result = 1;
+        for (Aspect aspect: this.getAspects()) {
+            try {
+                result *= this.getAspectValueCount(aspect.getId());
+            } catch (XBRLException e) {
+                // Cannot be thrown.
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * @see AspectValueCombinations#getCombinationValue(URI, int)
+     */
+    public AspectValue getCombinationValue(URI aspectId, int combination) throws XBRLException {
+
+        int valueCount = this.getAspectValueCount(aspectId);
+        int descendantCount = this.getDescendantCount(aspectId);
+        double ancestorIndex = Math.floor( combination / (descendantCount * valueCount) );
+        double valueIndex = Math.floor( (combination - descendantCount * valueCount * ancestorIndex) / descendantCount );
+        return this.getAspectValues(aspectId).get(new Double(valueIndex).intValue());
+        
+    }
+    
+    /**
+     * @see AspectValueCombinations#getCombinationValues(int)
+     */
+    public Map<URI,AspectValue> getCombinationValues(int combination) throws XBRLException {
+        Map<URI,AspectValue> result = new HashMap<URI,AspectValue>();
+        for (Aspect aspect: this.getAspects()) {
+            URI id = aspect.getId();
+            result.put(id,this.getCombinationValue(id,combination));
+        }
+        return result;
+    }
+    
 }
