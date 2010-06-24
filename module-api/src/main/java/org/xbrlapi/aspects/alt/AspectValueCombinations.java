@@ -119,6 +119,8 @@ public interface AspectValueCombinations extends Serializable {
     public AspectValue getCombinationValue(URI aspectId, int combination) throws XBRLException;
 
     /**
+     * This method is particularly useful in setting up fact set filtering based upon
+     * a combination of aspect values.
      * @param combination The index of the combination of aspect values to retrieve
      * @return a map from aspect IDs to the values of those aspects for the specified
      * combination.
