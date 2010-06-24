@@ -19,6 +19,12 @@ import org.xbrlapi.utilities.XBRLException;
 public interface AspectValueCombinations extends Serializable {
 
     /**
+     * @return the axis of the model that this combinations object
+     * relates to.
+     */
+    public String getAxis();    
+    
+    /**
      * @return the ordered list of the underlying aspects.
      */
     public List<Aspect> getAspects();
@@ -30,25 +36,25 @@ public interface AspectValueCombinations extends Serializable {
      * @throws XBRLException if the aspect ID is null
      */
     public boolean hasAspect(URI aspectId) throws XBRLException;
-    
-
-    
-    /**
-     * @return the fact set defining the values for each aspect.
-     */
-    public FactSet getFactSet();
-
-
-
 
     /**
-     * @param <V> The class of aspect value being retrieved.
      * @param aspectId The ID of the aspect of interest.
-     * @return the ordered list of aspect values for the aspect of interest.
+     * @return the list of aspect values for the aspect of interest or
+     * the empty list of no aspect values have been set for the aspect of interest.
      * @throws XBRLException if the combinations do not include
      * the specified Aspect.
      */
-    public <V extends AspectValue> List<V> getAspectValues(URI aspectId) throws XBRLException;
+    public List<AspectValue> getAspectValues(URI aspectId) throws XBRLException;
+    
+    /**
+     * Removes the aspect values for the specified aspect.
+     * @param aspectId The ID of the aspect of interest.
+     * @throws XBRLException if the combinations do not include
+     * the specified Aspect.
+     */
+    public void clearAspectValues(URI aspectId) throws XBRLException;
+    
+    
 
     /**
      * @param aspectId The ID of the aspect of interest.
@@ -83,5 +89,12 @@ public interface AspectValueCombinations extends Serializable {
      * the specified Aspect.
      */
     public long getDescendantCount(URI aspectId) throws XBRLException;
+    
+    /**
+     * @param aspects The list of aspects to use.
+     * @throws XBRLException if the aspects parameter is null or the aspect is not in the
+     * specified axis of the aspect model.  
+     */
+    public void setAspectValues(URI aspectId, List<AspectValue> values) throws XBRLException;
 
 }

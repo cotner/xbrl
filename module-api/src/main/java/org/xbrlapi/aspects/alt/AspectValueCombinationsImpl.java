@@ -1,9 +1,11 @@
 package org.xbrlapi.aspects.alt;
 
 import java.net.URI;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -14,35 +16,58 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     /**
      * 
      */
-    private static final long serialVersionUID = -904161372281068318L;
+    private static final long serialVersionUID = -6280457826226771955L;
 
-    /**
-     * @param model The model containing the aspects and their arrangement into axes.
-     * @param factSet The set of facts.
-     * @param axis The model axis to generate a combination for.
-     * @throws XBRLException
-     */
-    public AspectValueCombinationsImpl(AspectModel model, FactSet factSet, String axis) throws XBRLException {
-        super();
-        setFactSet(factSet);
-        setAxis(axis);
-    }
-
-    /**
-     * The set of facts determining the values for each aspect.
-     */
-    private FactSet factSet;
-
-    /**
-     * The axis of the model to generate combinations for.
-     */
-    private String axis;
-
+    private static final Logger logger = Logger.getLogger(AspectValueCombinationsImpl.class);
+    
     /**
      * The aspect model in use.
      */
     private AspectModel model;
     
+    /**
+     * The map from Aspect IDs to the lists of aspect values .
+     */
+    private HashMap<URI,List<AspectValue>> aspectValues = new HashMap<URI,List<AspectValue>>();
+    
+    
+    /**
+     * The axis of the aspect model defining the aspects to get combinations of values for.
+     */
+    private String axis;
+    
+    /**
+     * @param model The model containing the aspects and their arrangement into axes.
+     * @param axis The model axis to generate a combination for.
+     * @throws XBRLException
+     */
+    public AspectValueCombinationsImpl(AspectModel model, String axis) throws XBRLException {
+        super();
+        setModel(model);
+        setAxis(axis);
+    }
+
+    /**
+     * @param model The aspect model to use.
+     * @throws XBRLException if the aspect model parameter is null or
+     * the model does not have the axis set in this object.
+     */
+    private void setModel(AspectModel model) throws XBRLException {
+        if (model == null) throw new XBRLException("The aspect model must not be null.");
+        if (! model.hasAxis(this.getAxis())) throw new XBRLException("The model does not have axis " + this.getAxis());
+        this.model = model;
+    }
+    
+    /**
+     * @param aspects The list of aspects to use.
+     * @throws XBRLException if the aspects parameter is null.
+     */
+    private void setAxis(String axis) throws XBRLException {
+        if (axis == null) throw new XBRLException("The axis must not be null.");
+        if (! model.hasAxis(axis)) throw new XBRLException("The model does not have axis " + axis);
+        this.axis= axis;
+    }
+
     /**
      * @see AspectValueCombinations#getAncestorCount(URI)
      */
@@ -64,20 +89,29 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     }
 
     /**
-     * @param aspects The list of aspects to use.
-     * @throws XBRLException if the aspects parameter is null.
+     * @see AspectValueCombinations#setAspectValues(URI, List<AspectValue>)
      */
-    private void setAxis(String axis) throws XBRLException {
-        if (axis == null) throw new XBRLException("The axis must not be null.");
-        if (! model.hasAxis(axis)) throw new XBRLException("The model does not have axis " + axis);
-        this.axis= axis;
+    public void setAspectValues(URI aspectId, List<AspectValue> values) throws XBRLException {
+        if (! this.hasAspect(aspectId)) 
+            throw new XBRLException("The aspect " + aspectId + " is not in this combination.");
+        if (values == null) throw new XBRLException("The list of aspect values must not be null.");
+        aspectValues.put(aspectId,values);
+    }
+    
+    /**
+     * @see AspectValueCombinations#clearAspectValues(URI)
+     */
+    public void clearAspectValues(URI aspectId) throws XBRLException {
+        if (! this.hasAspect(aspectId)) 
+            throw new XBRLException("The aspect " + aspectId + " is not in this combination.");
+        aspectValues.remove(aspectId);
     }
 
     /**
      * @see AspectValueCombinations#getAspectValueCount(URI)
      */
     public long getAspectValueCount(URI aspectId) throws XBRLException {
-        return factSet.getAspectValues(aspectId).size();
+        return getAspectValues(aspectId).size();
     }
 
     /**
@@ -85,26 +119,14 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
      */
     public List<AspectValue> getAspectValues(URI aspectId)
             throws XBRLException {
+        
         if (! this.hasAspect(aspectId)) 
             throw new XBRLException("The aspect " + aspectId + " is not in this combination.");
-        Aspect aspect = model.getAspect(aspectId);
-        Domain domain = aspect.getDomain();
-        Collection<AspectValue> aspectValues = getFactSet().getAspectValues(aspectId);
         
-        /*
-         * Aspect value options are:
-         * 1. Get the aspect values based on the domain alone - this is not always feasible.
-         * 2. Get the aspect values based on facts alone - this always works.
-         * 3. Augment the aspect values from facts with others defined by the domain.
-         * 
-         * Steps involved in getting the aspect values into order are:
-         * 1. Get the root aspect values.
-         * 2. Build out each tree structure stopping each branch where the leaves are empty.
-         */
+        if (aspectValues.containsKey(aspectId))
+            return aspectValues.get(aspectId);        
         
-        //List<AspectValue> result = this.sort(domain, aspectValues);
-        //return result;
-        return null;
+        return new Vector<AspectValue>();
     }
 
     /**
@@ -115,7 +137,7 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     }
 
     /**
-     * @see AspectValueCombinations#getDescendantCount(java.net.URI)
+     * @see AspectValueCombinations#getDescendantCount(URI)
      */
     public long getDescendantCount(URI aspectId) throws XBRLException {
         List<Aspect> aspects = model.getAspects(axis);
@@ -127,23 +149,10 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     }
 
     /**
-     * @see AspectValueCombinations#getFactSet()
+     * @see AspectValueCombinations#getAxis()
      */
-    public FactSet getFactSet() {
-        return factSet;
+    public String getAxis() {
+        return this.axis;
     }
 
-    /**
-     * @param factSet The fact set defining the values for each aspect.
-     * @throws XBRLException if the fact set is null.
-     */
-    private void setFactSet(FactSet factSet) throws XBRLException {
-        if (factSet == null) throw new XBRLException("The fact set must not be null.");
-        this.factSet = factSet;
-    }
-
-
-    
-    
-    
 }
