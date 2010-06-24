@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects.alt;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
@@ -36,13 +37,14 @@ import org.xbrlapi.utilities.XBRLException;
  * <li>A set of rules for determining those aspect values in the domain, such as
  * an XLink relationship network.</li>
  * </ul>
- * 
- * @param <T>
- *            The aspect value that this is a domain for.
- * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public interface Domain<T extends AspectValue> extends Serializable {
+public interface Domain extends Serializable {
+    
+    /**
+     * @return the URI identifying the aspect that this is a domain for.
+     */
+    public URI getAspectId();
     
     /**
      * @param value
@@ -51,7 +53,7 @@ public interface Domain<T extends AspectValue> extends Serializable {
      *         otherwise.
      * @throws XBRLException
      */
-    public boolean hasChildren(T value) throws XBRLException;
+    public boolean hasChildren(AspectValue value) throws XBRLException;
 
     /**
      * @param parent
@@ -61,8 +63,8 @@ public interface Domain<T extends AspectValue> extends Serializable {
      *         values in the domain for the given parent aspect value.
      * @throws XBRLException
      */
-    public List<T> getChildren(T parent)
-            throws XBRLException;
+    public List<AspectValue> getChildren(AspectValue parent)
+            throws XBRLException; 
 
     /**
      * @param child
@@ -71,7 +73,7 @@ public interface Domain<T extends AspectValue> extends Serializable {
      *         model and false otherwise.
      * @throws XBRLException
      */
-    public boolean hasParent(T child) throws XBRLException;
+    public boolean hasParent(AspectValue child) throws XBRLException;
 
     /**
      * @param child
@@ -79,7 +81,7 @@ public interface Domain<T extends AspectValue> extends Serializable {
      * @return the parent aspect value or null if none exists.
      * @throws XBRLException
      */
-    public T getParent(T child) throws XBRLException;
+    public AspectValue getParent(AspectValue child) throws XBRLException;
 
     /**
      * @param aspectValue
@@ -90,7 +92,7 @@ public interface Domain<T extends AspectValue> extends Serializable {
      *         not define a heirarchical ordering of aspect values.
      * @throws XBRLException
      */
-    public int getDepth(T aspectValue) throws XBRLException;
+    public int getDepth(AspectValue aspectValue) throws XBRLException;
     
     /**
      * @return a list of all of the aspect values in the domain. The list is
@@ -100,8 +102,8 @@ public interface Domain<T extends AspectValue> extends Serializable {
      *         if there is one.
      * @throws XBRLException
      */
-    public List<T> getAllAspectValues() throws XBRLException;
-    
+    public List<AspectValue> getAllAspectValues() throws XBRLException;
+
     /**
      * @return the number of aspect values in the domain or null if
      * the domain size is infinite.
@@ -113,7 +115,7 @@ public interface Domain<T extends AspectValue> extends Serializable {
      * @return true if the aspect value is in the domain and false otherwise.
      * @throws XBRLException
      */
-    public boolean isInDomain(T candidate) throws XBRLException;
+    public boolean isInDomain(AspectValue candidate) throws XBRLException;
     
     /**
      * The getSize() and the getAllAspectValues methods must only be implemented

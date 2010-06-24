@@ -21,7 +21,7 @@ import org.xbrlapi.utilities.XBRLException;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class SegmentRemainderAspect extends AspectImpl<SegmentRemainderAspectValue> implements Aspect {
+public class SegmentRemainderAspect extends AspectImpl implements Aspect {
 
     /**
      * 
@@ -46,14 +46,13 @@ public class SegmentRemainderAspect extends AspectImpl<SegmentRemainderAspectVal
      * @param domain The domain for this aspect.
      * @throws XBRLException
      */
-    public SegmentRemainderAspect(Domain<SegmentRemainderAspectValue> domain) throws XBRLException {
+    public SegmentRemainderAspect(Domain domain) throws XBRLException {
         super(domain);
     }
     
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public SegmentRemainderAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return getMissingValue();
         if (fact.isNil()) return getMissingValue();
@@ -64,18 +63,9 @@ public class SegmentRemainderAspect extends AspectImpl<SegmentRemainderAspectVal
     }
 
     /**
-     * @see Aspect#getDomain()
-     */
-    @SuppressWarnings("unchecked")
-    public Domain<SegmentRemainderAspectValue> getDomain() {
-        return domain;
-    }
-
-    /**
      * Implies no missing values are defined.
      * @return null.
      */
-    @SuppressWarnings("unchecked")
     public SegmentRemainderAspectValue getMissingValue() {
         return new SegmentRemainderAspectValue();
     }

@@ -12,11 +12,12 @@ import org.xbrlapi.utilities.XBRLException;
  * <h2>Scenario aspect details</h2>
  * 
  * <p>
+ * Scenario aspects capture information in the context scenario.
  * </p>
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ScenarioAspect extends AspectImpl<ScenarioAspectValue> implements Aspect {
+public class ScenarioAspect extends AspectImpl implements Aspect {
     
     /**
      * 
@@ -41,14 +42,13 @@ public class ScenarioAspect extends AspectImpl<ScenarioAspectValue> implements A
      * @param domain The domain for this aspect.
      * @throws XBRLException
      */
-    public ScenarioAspect(Domain<ScenarioAspectValue> domain) throws XBRLException {
+    public ScenarioAspect(Domain domain) throws XBRLException {
         super(domain);
     }
     
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public ScenarioAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return getMissingValue();
         if (fact.isNil()) return getMissingValue();
@@ -57,23 +57,13 @@ public class ScenarioAspect extends AspectImpl<ScenarioAspectValue> implements A
         if (scenario == null) return getMissingValue();
         return new ScenarioAspectValue(scenario);
     }
-
-    /**
-     * @see Aspect#getDomain()
-     */
-    @SuppressWarnings("unchecked")
-    public Domain<ScenarioAspectValue> getDomain() {
-        return domain;
-    }
-
+    
     /**
      * Implies no missing values are defined.
      * @return null.
      */
-    @SuppressWarnings("unchecked")
     public ScenarioAspectValue getMissingValue() {
         return new ScenarioAspectValue();
     }
-
 
 }

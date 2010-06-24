@@ -117,7 +117,6 @@ public class FactSetImpl implements FactSet {
             if (! aspectMap.containsEntry(value.getAspectId(),value)) aspectMap.put(value.getAspectId(),value);
         }
     }
-
     
     /**
      * Adds an aspect-value - fact pairing to the fact set.

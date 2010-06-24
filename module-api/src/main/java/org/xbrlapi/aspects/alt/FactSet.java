@@ -61,11 +61,10 @@ public interface FactSet extends Serializable {
     public Set<AspectValue> getAspectValues();
     
     /**
-     * @param <V> The subclass of aspect values.
      * @param aspectId The ID of the aspect.
      * @return the set of all values for the aspect.
      */
-    public <V extends AspectValue> Collection<V> getAspectValues(URI aspectId);
+    public Collection<AspectValue> getAspectValues(URI aspectId);
 
     /**
      * @param fact The fact.

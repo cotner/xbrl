@@ -7,7 +7,7 @@ import org.xbrlapi.utilities.XBRLException;
  * Abstract implementation of common aspect methods.
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-abstract public class AspectImpl<V extends AspectValue> implements Aspect {
+abstract public class AspectImpl implements Aspect {
 
     /**
      * 
@@ -16,15 +16,23 @@ abstract public class AspectImpl<V extends AspectValue> implements Aspect {
 
     private static final Logger logger = Logger.getLogger(AspectImpl.class);
     
-    protected Domain<V> domain;
+    protected Domain domain;
 
     /**
      * @param domain The domain for this aspect.
      * @throws XBRLException if the domain is null.
      */
-    public AspectImpl(Domain<V> domain) throws XBRLException {
+    public AspectImpl(Domain domain) throws XBRLException {
         if (domain == null) throw new XBRLException("The domain must not be null.");
+        if (domain.getAspectId().equals(this.getId())) throw new XBRLException("The domain " + domain.getAspectId() + " is not for aspect " + this.getId());
         this.domain = domain;
+    }
+    
+    /**
+     * @see Aspect#getDomain()
+     */
+    public Domain getDomain() {
+        return domain;
     }
 
 }

@@ -9,16 +9,15 @@ import org.xbrlapi.Period;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
- * <h2>Entity aspect details</h2>
+ * <h2>Period aspect details</h2>
  * 
  * <p>
- * Entity aspects capture the entity identifier information in XBRL contexts.
- * They do not capture entity segment information.
+ * Period aspects capture the period information in XBRL contexts.
  * </p>
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class PeriodAspect extends AspectImpl<PeriodAspectValue> implements Aspect {
+public class PeriodAspect extends AspectImpl implements Aspect {
 
     /**
      * 
@@ -43,14 +42,13 @@ public class PeriodAspect extends AspectImpl<PeriodAspectValue> implements Aspec
      * @param domain The domain for this aspect.
      * @throws XBRLException
      */
-    public PeriodAspect(Domain<PeriodAspectValue> domain) throws XBRLException {
+    public PeriodAspect(Domain domain) throws XBRLException {
         super(domain);
     }
     
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public PeriodAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return getMissingValue();
         if (fact.isNil()) return getMissingValue();
@@ -58,19 +56,10 @@ public class PeriodAspect extends AspectImpl<PeriodAspectValue> implements Aspec
         Period period = item.getContext().getPeriod();
         return new PeriodAspectValue(period);
     }
-
-    /**
-     * @see Aspect#getDomain()
-     */
-    @SuppressWarnings("unchecked")
-    public Domain<PeriodAspectValue> getDomain() {
-        return domain;
-    }
     
     /**
      * @see Aspect#getMissingValue()
      */
-    @SuppressWarnings("unchecked")
     public PeriodAspectValue getMissingValue() {
         return new PeriodAspectValue();
     }

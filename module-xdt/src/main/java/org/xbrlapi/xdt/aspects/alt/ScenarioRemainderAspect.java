@@ -21,7 +21,7 @@ import org.xbrlapi.utilities.XBRLException;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ScenarioRemainderAspect extends AspectImpl<ScenarioRemainderAspectValue> implements Aspect {
+public class ScenarioRemainderAspect extends AspectImpl implements Aspect {
 
     /**
      * 
@@ -46,14 +46,13 @@ public class ScenarioRemainderAspect extends AspectImpl<ScenarioRemainderAspectV
      * @param domain The domain for this aspect.
      * @throws XBRLException
      */
-    public ScenarioRemainderAspect(Domain<ScenarioRemainderAspectValue> domain) throws XBRLException {
+    public ScenarioRemainderAspect(Domain domain) throws XBRLException {
         super(domain);
     }
     
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public ScenarioRemainderAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return getMissingValue();
         if (fact.isNil()) return getMissingValue();
@@ -64,18 +63,9 @@ public class ScenarioRemainderAspect extends AspectImpl<ScenarioRemainderAspectV
     }
 
     /**
-     * @see Aspect#getDomain()
-     */
-    @SuppressWarnings("unchecked")
-    public Domain<ScenarioRemainderAspectValue> getDomain() {
-        return domain;
-    }
-
-    /**
      * Implies no missing values are defined.
      * @return null.
      */
-    @SuppressWarnings("unchecked")
     public ScenarioRemainderAspectValue getMissingValue() {
         return new ScenarioRemainderAspectValue();
     }

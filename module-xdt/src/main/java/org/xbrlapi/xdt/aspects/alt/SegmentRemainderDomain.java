@@ -1,44 +1,48 @@
 package org.xbrlapi.xdt.aspects.alt;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Vector;
 
+import org.xbrlapi.aspects.alt.AspectValue;
 import org.xbrlapi.aspects.alt.Domain;
 import org.xbrlapi.utilities.XBRLException;
 
-public class SegmentRemainderDomain implements Domain<SegmentRemainderAspectValue> {
+public class SegmentRemainderDomain implements Domain {
 
     /**
      * 
      */
     private static final long serialVersionUID = 2844552022220878846L;
 
+    public URI getAspectId() { return SegmentRemainderAspect.ID; }
+
     /**
      * @see Domain#getAllAspectValues()
      */
-    public List<SegmentRemainderAspectValue> getAllAspectValues() throws XBRLException {
+    public List<AspectValue> getAllAspectValues() throws XBRLException {
         throw new XBRLException("The domain is not finite");
     }
 
     /**
      * @see Domain#getChildren(AspectValue)
      */
-    public List<SegmentRemainderAspectValue> getChildren(SegmentRemainderAspectValue parent)
+    public List<AspectValue> getChildren(AspectValue parent)
             throws XBRLException {
-        return new Vector<SegmentRemainderAspectValue>();
+        return new Vector<AspectValue>();
     }
 
     /**
      * @see Domain#getDepth(AspectValue)
      */
-    public int getDepth(SegmentRemainderAspectValue aspectValue) throws XBRLException {
+    public int getDepth(AspectValue aspectValue) throws XBRLException {
         return 0;
     }
 
     /**
      * @see Domain#getParent(AspectValue)
      */
-    public SegmentRemainderAspectValue getParent(SegmentRemainderAspectValue child)
+    public AspectValue getParent(AspectValue child)
             throws XBRLException {
         return null;
     }
@@ -53,7 +57,7 @@ public class SegmentRemainderDomain implements Domain<SegmentRemainderAspectValu
     /**
      * @see Domain#hasChildren(AspectValue)
      */
-    public boolean hasChildren(SegmentRemainderAspectValue value)
+    public boolean hasChildren(AspectValue value)
             throws XBRLException {
         return false;
     }
@@ -61,14 +65,14 @@ public class SegmentRemainderDomain implements Domain<SegmentRemainderAspectValu
     /**
      * @see Domain#hasParent(AspectValue)
      */
-    public boolean hasParent(SegmentRemainderAspectValue child) throws XBRLException {
+    public boolean hasParent(AspectValue child) throws XBRLException {
         return false;
     }
 
     /**
      * @see Domain#isInDomain(AspectValue)
      */
-    public boolean isInDomain(SegmentRemainderAspectValue candidate)
+    public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
         return true;
     }

@@ -1,5 +1,6 @@
 package org.xbrlapi.aspects.alt;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -8,13 +9,13 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.XML;
-import org.xbrlapi.aspects.AspectValue;
+import org.xbrlapi.aspects.alt.AspectValue;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.InstanceImpl;
 import org.xbrlapi.impl.TupleImpl;
 import org.xbrlapi.utilities.XBRLException;
 
-public class LocationDomain extends Base implements Domain<LocationAspectValue>, StoreHandler {
+public class LocationDomain extends Base implements Domain, StoreHandler {
 
     /**
      * 
@@ -24,15 +25,20 @@ public class LocationDomain extends Base implements Domain<LocationAspectValue>,
     public LocationDomain(Store store) throws XBRLException {
         super(store);
     }
+
+    /**
+     * @see Domain#getAspectId()
+     */
+    public URI getAspectId() { return LocationAspect.ID; }
     
     /**
      * @see Domain#getAllAspectValues()
      */
-    public List<LocationAspectValue> getAllAspectValues() throws XBRLException {
+    public List<AspectValue> getAllAspectValues() throws XBRLException {
         Set<String> factIndices = getStore().queryForIndices("for $root in #roots#[@fact] return $root");
-        List<LocationAspectValue> values = new Vector<LocationAspectValue>();
+        List<AspectValue> values = new Vector<AspectValue>();
         for (String factIndex: factIndices) {
-            LocationAspectValue value = new LocationAspectValue(factIndex);
+            AspectValue value = new LocationAspectValue(factIndex);
             values.add(value);
         }
         return values;
@@ -41,14 +47,14 @@ public class LocationDomain extends Base implements Domain<LocationAspectValue>,
     /**
      * @see Domain#getChildren(AspectValue)
      */
-    public List<LocationAspectValue> getChildren(LocationAspectValue parent)
+    public List<AspectValue> getChildren(AspectValue parent)
             throws XBRLException {
-        List<LocationAspectValue> result = new Vector<LocationAspectValue>();
-        Fact fact = getStore().<Fact> getXMLResource(parent.getFactIndex());
+        List<AspectValue> result = new Vector<AspectValue>();
+        Fact fact = getStore().<Fact> getXMLResource(((LocationAspectValue)parent).getFactIndex());
         if (fact.isa(TupleImpl.class)) {
             List<Fact> children = ((Tuple) fact).getChildFacts();
             for (Fact child: children) {
-                result.add( new LocationAspectValue(child.getIndex()));
+                result.add(new LocationAspectValue(child.getIndex()));
             }
         }
         return result;        
@@ -57,7 +63,7 @@ public class LocationDomain extends Base implements Domain<LocationAspectValue>,
     /**
      * @see Domain#getDepth(AspectValue)
      */
-    public int getDepth(LocationAspectValue aspectValue) throws XBRLException {
+    public int getDepth(AspectValue aspectValue) throws XBRLException {
         if (! hasParent(aspectValue)) return 0;
         return (getDepth(getParent(aspectValue)) + 1);
     }
@@ -65,9 +71,9 @@ public class LocationDomain extends Base implements Domain<LocationAspectValue>,
     /**
      * @see Domain#getParent(AspectValue)
      */
-    public LocationAspectValue getParent(LocationAspectValue child)
+    public LocationAspectValue getParent(AspectValue child)
             throws XBRLException {
-        Fact fact = getStore().<Fact> getXMLResource(child.getFactIndex());
+        Fact fact = getStore().<Fact> getXMLResource(((LocationAspectValue)child).getFactIndex());
         Fragment parent = fact.getParent();
         if (parent.isa(InstanceImpl.class)) {
             return null;
@@ -86,9 +92,9 @@ public class LocationDomain extends Base implements Domain<LocationAspectValue>,
     /**
      * @see Domain#hasChildren(AspectValue)
      */
-    public boolean hasChildren(LocationAspectValue value)
+    public boolean hasChildren(AspectValue value)
             throws XBRLException {
-        Fact fact = getStore().<Fact> getXMLResource(value.getFactIndex());
+        Fact fact = getStore().<Fact> getXMLResource(((LocationAspectValue)value).getFactIndex());
         if (! fact.isa(TupleImpl.class)) return false;
         List<Fact> children = ((Tuple) fact).getChildFacts();
         return (children.size() > 0);
@@ -97,8 +103,8 @@ public class LocationDomain extends Base implements Domain<LocationAspectValue>,
     /**
      * @see Domain#hasParent(AspectValue)
      */
-    public boolean hasParent(LocationAspectValue child) throws XBRLException {
-        Fact fact = getStore().<Fact> getXMLResource(child.getFactIndex());
+    public boolean hasParent(AspectValue child) throws XBRLException {
+        Fact fact = getStore().<Fact> getXMLResource(((LocationAspectValue)child).getFactIndex());
         if (fact.getParent().isa(InstanceImpl.class)) return false;
         return true;
     }
@@ -106,12 +112,11 @@ public class LocationDomain extends Base implements Domain<LocationAspectValue>,
     /**
      * @see Domain#isInDomain(AspectValue)
      */
-    public boolean isInDomain(LocationAspectValue candidate)
-            throws XBRLException {
+    public boolean isInDomain(AspectValue candidate) {
         
         XML resource = null;
         try {
-            resource = getStore().<XML>getXMLResource(candidate.getFactIndex());
+            resource = getStore().<XML>getXMLResource(((LocationAspectValue)candidate).getFactIndex());
             String factAttribute = resource.getMetaAttribute("fact");
             if (factAttribute == null) return false;
             return true;

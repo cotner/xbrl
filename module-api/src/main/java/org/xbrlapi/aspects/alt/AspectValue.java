@@ -58,8 +58,9 @@ public interface AspectValue extends AspectHandler, Serializable {
     /**
      * This method must be implemented by each concrete aspect value class.
      * 
-     * The identifier associated with a "missing-value" aspect value is implementation dependent.
-     * You cannot assume that it will be the empty string or a null value.
+     * The identifier associated with a "missing-value" aspect value is
+     * implementation dependent. You cannot assume that it will be the empty
+     * string or a null value.
      * 
      * @return the string value that uniquely identifies this aspect value, for
      *         a given aspect. This value is not generally human readable. The
@@ -71,7 +72,8 @@ public interface AspectValue extends AspectHandler, Serializable {
     /**
      * This method must be implemented by each concrete aspect value class.
      * 
-     * @return true if this aspect value represents a missing value and false otherwise.
+     * @return true if this aspect value represents a missing value and false
+     *         otherwise.
      */
     public boolean isMissing();
     

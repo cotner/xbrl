@@ -61,6 +61,14 @@ public class AspectModelImpl implements AspectModel {
     public boolean hasAspect(URI aspectId) {
         return aspects.containsKey(aspectId);
     }
+    
+    /**
+     * @see AspectModel#getAspect(URI)
+     */
+    public Aspect getAspect(URI aspectId) {
+        return aspects.get(aspectId);
+    }
+    
 
     /**
      * @see AspectModel#getAspects()
@@ -72,7 +80,7 @@ public class AspectModelImpl implements AspectModel {
     /**
      * @see AspectModel#getAspects(String)
      */
-    public List<Aspect> getAspects(String axis) throws XBRLException {
+    public List<Aspect> getAspects(String axis) {
         if (axes.containsKey(axis))
             return axes.get(axis);
         return new Vector<Aspect>();
@@ -95,12 +103,11 @@ public class AspectModelImpl implements AspectModel {
     }
 
     /**
-     * @see AspectModel#axisContainsAspect(String, Aspect)
+     * @see AspectModel#axisContainsAspect(String, URI)
      */
-    public boolean axisContainsAspect(String axis, Aspect aspect) {
-        if (!axes.containsKey(axis))
-            return false;
-        return axes.get(axis).contains(aspect);
+    public boolean axisContainsAspect(String axis, URI aspectId) {
+        if (!axes.containsKey(axis)) return false;
+        return axes.get(axis).contains(aspects.get(aspectId));
     }
 
     /**
@@ -123,7 +130,7 @@ public class AspectModelImpl implements AspectModel {
             addAspect(axis, aspect);
             return;
         }
-        if (!axisContainsAspect(axis, parentAspect)) {
+        if (!axisContainsAspect(axis, parentAspect.getId())) {
             addAspect(axis, aspect);
             return;
         }

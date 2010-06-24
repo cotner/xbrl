@@ -25,7 +25,7 @@ import org.xbrlapi.xdt.values.DimensionValueAccessor;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class TypedDimensionAspect extends AspectImpl<TypedDimensionAspectValue> implements Aspect {
+public class TypedDimensionAspect extends AspectImpl implements Aspect {
 
     /**
      * 
@@ -56,7 +56,7 @@ public class TypedDimensionAspect extends AspectImpl<TypedDimensionAspectValue> 
      * @param id The URI that is the ID for this explicit dimension aspect.
      * @throws XBRLException if the ID parameter is null.
      */
-    public TypedDimensionAspect(Domain<TypedDimensionAspectValue> domain, URI dimensionNamespace, String dimensionLocalname) throws XBRLException {
+    public TypedDimensionAspect(Domain domain, URI dimensionNamespace, String dimensionLocalname) throws XBRLException {
         super(domain);
         try {
             if (dimensionNamespace == null) throw new XBRLException("The explicit dimension namespace must not be null.");
@@ -64,7 +64,7 @@ public class TypedDimensionAspect extends AspectImpl<TypedDimensionAspectValue> 
             this.dimensionNamespace = dimensionNamespace;
             this.dimensionLocalname = dimensionLocalname;
             TypedDimensionDomain d = (TypedDimensionDomain) domain;
-            if (! d.getDimensionNamespace().equals(dimensionNamespace) || d.getDimensionLocalname().equals(dimensionLocalname)) throw new XBRLException("The domain is not for this aspect.");
+            if (! (d.getDimensionNamespace().equals(dimensionNamespace) && d.getDimensionLocalname().equals(dimensionLocalname))) throw new XBRLException("The domain is not for this aspect.");
         } catch (ClassCastException e) {
             throw new XBRLException("The given domain is not derived from the ExplicitDimensionDomain");
         }
@@ -73,7 +73,6 @@ public class TypedDimensionAspect extends AspectImpl<TypedDimensionAspectValue> 
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public TypedDimensionAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isNil()) return getMissingValue();
         if (fact.isTuple()) return getMissingValue();
@@ -107,15 +106,6 @@ public class TypedDimensionAspect extends AspectImpl<TypedDimensionAspectValue> 
             }
         }
         return null;
-    }    
-    
-
-    /**
-     * @see Aspect#getDomain()
-     */
-    @SuppressWarnings("unchecked")
-    public Domain<TypedDimensionAspectValue> getDomain() {
-        return domain;
     }
 
     /**
@@ -123,7 +113,6 @@ public class TypedDimensionAspect extends AspectImpl<TypedDimensionAspectValue> 
      * @return null.
      * @see Aspect#getMissingValue()
      */
-    @SuppressWarnings("unchecked")
     public TypedDimensionAspectValue getMissingValue() {
         try {
             return new TypedDimensionAspectValue(getId());

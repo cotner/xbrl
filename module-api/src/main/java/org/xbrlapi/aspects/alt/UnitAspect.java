@@ -15,7 +15,7 @@ import org.xbrlapi.utilities.XBRLException;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class UnitAspect extends AspectImpl<UnitAspectValue> implements Aspect {
+public class UnitAspect extends AspectImpl implements Aspect {
     
     /**
      * 
@@ -40,14 +40,13 @@ public class UnitAspect extends AspectImpl<UnitAspectValue> implements Aspect {
      * @param domain The domain for this aspect.
      * @throws XBRLException
      */
-    public UnitAspect(Domain<UnitAspectValue> domain) throws XBRLException {
+    public UnitAspect(Domain domain) throws XBRLException {
         super(domain);
     }
     
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public UnitAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isNil()) return getMissingValue();
         if (fact.isNumeric()) return new UnitAspectValue(((NumericItem) fact).getUnit());
@@ -55,21 +54,11 @@ public class UnitAspect extends AspectImpl<UnitAspectValue> implements Aspect {
     }
 
     /**
-     * @see Aspect#getDomain()
-     */
-    @SuppressWarnings("unchecked")
-    public Domain<UnitAspectValue> getDomain() {
-        return domain;
-    }
-
-    /**
      * Implies no missing values are defined.
      * @return null.
      */
-    @SuppressWarnings("unchecked")
     public UnitAspectValue getMissingValue() {
         return new UnitAspectValue();
     }
-
 
 }

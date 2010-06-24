@@ -27,7 +27,7 @@ import org.xbrlapi.xdt.values.DimensionValueAccessor;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ExplicitDimensionAspect extends AspectImpl<ExplicitDimensionAspectValue> implements Aspect {
+public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
 
     /**
      * 
@@ -58,7 +58,7 @@ public class ExplicitDimensionAspect extends AspectImpl<ExplicitDimensionAspectV
      * @param id The URI that is the ID for this explicit dimension aspect.
      * @throws XBRLException if the ID parameter is null.
      */
-    public ExplicitDimensionAspect(Domain<ExplicitDimensionAspectValue> domain, URI dimensionNamespace, String dimensionLocalname) throws XBRLException {
+    public ExplicitDimensionAspect(Domain domain, URI dimensionNamespace, String dimensionLocalname) throws XBRLException {
         super(domain);
         try {
             if (dimensionNamespace == null) throw new XBRLException("The explicit dimension namespace must not be null.");
@@ -66,7 +66,7 @@ public class ExplicitDimensionAspect extends AspectImpl<ExplicitDimensionAspectV
             this.dimensionNamespace = dimensionNamespace;
             this.dimensionLocalname = dimensionLocalname;
             ExplicitDimensionDomain d = (ExplicitDimensionDomain) domain;
-            if (! d.getDimensionNamespace().equals(dimensionNamespace) || d.getDimensionLocalname().equals(dimensionLocalname)) throw new XBRLException("The domain is not for this aspect.");
+            if (! (d.getDimensionNamespace().equals(dimensionNamespace) && d.getDimensionLocalname().equals(dimensionLocalname))) throw new XBRLException("The domain is not for this aspect.");
         } catch (ClassCastException e) {
             throw new XBRLException("The given domain is not derived from the ExplicitDimensionDomain");
         }
@@ -75,7 +75,6 @@ public class ExplicitDimensionAspect extends AspectImpl<ExplicitDimensionAspectV
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public ExplicitDimensionAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isNil()) return getMissingValue();
         if (fact.isTuple()) return getMissingValue();
@@ -113,21 +112,9 @@ public class ExplicitDimensionAspect extends AspectImpl<ExplicitDimensionAspectV
         return null;
     }    
     
-
     /**
-     * @see Aspect#getDomain()
-     */
-    @SuppressWarnings("unchecked")
-    public Domain<ExplicitDimensionAspectValue> getDomain() {
-        return domain;
-    }
-
-    /**
-     * Implies no missing values are defined.
-     * @return null.
      * @see Aspect#getMissingValue()
      */
-    @SuppressWarnings("unchecked")
     public ExplicitDimensionAspectValue getMissingValue() {
         try {
             return new ExplicitDimensionAspectValue(getId());

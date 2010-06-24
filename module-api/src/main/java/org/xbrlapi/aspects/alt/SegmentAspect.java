@@ -12,11 +12,12 @@ import org.xbrlapi.utilities.XBRLException;
  * <h2>Segment aspect details</h2>
  * 
  * <p>
+ * Scenario aspects capture information in the context segment.
  * </p>
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class SegmentAspect extends AspectImpl<SegmentAspectValue> implements Aspect {
+public class SegmentAspect extends AspectImpl implements Aspect {
     
     /**
      * 
@@ -41,14 +42,13 @@ public class SegmentAspect extends AspectImpl<SegmentAspectValue> implements Asp
      * @param domain The domain for this aspect.
      * @throws XBRLException
      */
-    public SegmentAspect(Domain<SegmentAspectValue> domain) throws XBRLException {
+    public SegmentAspect(Domain domain) throws XBRLException {
         super(domain);
     }
     
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public SegmentAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return getMissingValue();
         if (fact.isNil()) return getMissingValue();
@@ -59,18 +59,9 @@ public class SegmentAspect extends AspectImpl<SegmentAspectValue> implements Asp
     }
 
     /**
-     * @see Aspect#getDomain()
-     */
-    @SuppressWarnings("unchecked")
-    public Domain<SegmentAspectValue> getDomain() {
-        return domain;
-    }
-
-    /**
      * Implies no missing values are defined.
      * @return null.
      */
-    @SuppressWarnings("unchecked")
     public SegmentAspectValue getMissingValue() {
         return new SegmentAspectValue();
     }

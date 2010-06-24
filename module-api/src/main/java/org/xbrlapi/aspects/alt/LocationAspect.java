@@ -17,7 +17,7 @@ import org.xbrlapi.utilities.XBRLException;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class LocationAspect extends AspectImpl<LocationAspectValue> implements Aspect {
+public class LocationAspect extends AspectImpl implements Aspect {
     
     /**
      * 
@@ -42,34 +42,22 @@ public class LocationAspect extends AspectImpl<LocationAspectValue> implements A
      * @param domain The domain for this aspect.
      * @throws XBRLException
      */
-    public LocationAspect(Domain<LocationAspectValue> domain) throws XBRLException {
+    public LocationAspect(Domain domain) throws XBRLException {
         super(domain);
     }
     
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public LocationAspectValue getValue(Fact fact) throws XBRLException {
         return new LocationAspectValue(fact.getIndex());
     }
 
     /**
-     * @see Aspect#getDomain()
+     * @see Aspect#getMissingValue()
      */
-    @SuppressWarnings("unchecked")
-    public Domain<LocationAspectValue> getDomain() {
-        return domain;
+    public LocationAspectValue getMissingValue() throws XBRLException {
+        throw new XBRLException("There are no missing values for the location aspect.");
     }
-
-    /**
-     * Implies no missing values are defined.
-     * @return null.
-     */
-    @SuppressWarnings("unchecked")
-    public LocationAspectValue getMissingValue() {
-        return null;
-    }
-
 
 }

@@ -18,7 +18,7 @@ import org.xbrlapi.utilities.XBRLException;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class EntityAspect extends AspectImpl<EntityAspectValue> implements Aspect {
+public class EntityAspect extends AspectImpl implements Aspect {
 
     /**
      * 
@@ -43,14 +43,13 @@ public class EntityAspect extends AspectImpl<EntityAspectValue> implements Aspec
      * @param domain The domain for this aspect.
      * @throws XBRLException
      */
-    public EntityAspect(Domain<EntityAspectValue> domain) throws XBRLException {
+    public EntityAspect(Domain domain) throws XBRLException {
         super(domain);
     }
     
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public EntityAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return new EntityAspectValue();
         if (fact.isNil()) return new EntityAspectValue();
@@ -58,19 +57,10 @@ public class EntityAspect extends AspectImpl<EntityAspectValue> implements Aspec
         Entity entity = item.getContext().getEntity();
         return new EntityAspectValue(entity.getIdentifierScheme(),entity.getIdentifierValue());
     }
-
-    /**
-     * @see Aspect#getDomain()
-     */
-    @SuppressWarnings("unchecked")
-    public Domain<EntityAspectValue> getDomain() {
-        return domain;
-    }
     
     /**
      * @see Aspect#getMissingValue()
      */
-    @SuppressWarnings("unchecked")
     public EntityAspectValue getMissingValue() {
         return new EntityAspectValue();
     }

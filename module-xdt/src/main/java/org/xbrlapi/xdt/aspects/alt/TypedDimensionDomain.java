@@ -11,7 +11,7 @@ import org.xbrlapi.aspects.alt.StoreHandler;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
-public class TypedDimensionDomain extends Base implements Domain<TypedDimensionAspectValue>, StoreHandler {
+public class TypedDimensionDomain extends Base implements Domain, StoreHandler {
 
     /**
      * 
@@ -36,32 +36,34 @@ public class TypedDimensionDomain extends Base implements Domain<TypedDimensionA
         this.dimensionLocalname = dimensionLocalname;
     }
     
+    public URI getAspectId() { return URI.create(this.dimensionNamespace + "#" + this.dimensionLocalname); }
+    
     /**
      * @see Domain#getAllAspectValues()
      */
-    public List<TypedDimensionAspectValue> getAllAspectValues() throws XBRLException {
+    public List<AspectValue> getAllAspectValues() throws XBRLException {
         throw new XBRLException("The domain is not finite.");
     }
 
     /**
      * @see Domain#getChildren(AspectValue)
      */
-    public List<TypedDimensionAspectValue> getChildren(TypedDimensionAspectValue parent)
+    public List<AspectValue> getChildren(AspectValue parent)
             throws XBRLException {
-        return new Vector<TypedDimensionAspectValue>();
+        return new Vector<AspectValue>();
     }
 
     /**
      * @see Domain#getDepth(AspectValue)
      */
-    public int getDepth(TypedDimensionAspectValue aspectValue) throws XBRLException {
+    public int getDepth(AspectValue aspectValue) throws XBRLException {
         return 0;
     }
 
     /**
      * @see Domain#getParent(AspectValue)
      */
-    public TypedDimensionAspectValue getParent(TypedDimensionAspectValue child)
+    public AspectValue getParent(AspectValue child)
             throws XBRLException {
         return null;
     }
@@ -76,7 +78,7 @@ public class TypedDimensionDomain extends Base implements Domain<TypedDimensionA
     /**
      * @see Domain#hasChildren(AspectValue)
      */
-    public boolean hasChildren(TypedDimensionAspectValue value)
+    public boolean hasChildren(AspectValue value)
             throws XBRLException {
         return false;
     }
@@ -84,14 +86,14 @@ public class TypedDimensionDomain extends Base implements Domain<TypedDimensionA
     /**
      * @see Domain#hasParent(AspectValue)
      */
-    public boolean hasParent(TypedDimensionAspectValue child) throws XBRLException {
+    public boolean hasParent(AspectValue child) throws XBRLException {
         return false;
     }
 
     /**
      * @see Domain#isInDomain(AspectValue)
      */
-    public boolean isInDomain(TypedDimensionAspectValue candidate)
+    public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
         return true;
     }

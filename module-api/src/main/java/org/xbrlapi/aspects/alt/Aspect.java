@@ -42,21 +42,17 @@ import org.xbrlapi.utilities.XBRLException;
 public interface Aspect extends Serializable {
 
     /**
-     * @param <T>
-     *            The class of aspect value being returned.
      * @param fact
      *            The fact to get the aspect value for.
      * @return a value for this aspect for the given fact.
      * @throws XBRLException
      */
-    public <T extends AspectValue> T getValue(Fact fact) throws XBRLException;
+    public AspectValue getValue(Fact fact) throws XBRLException;
 
     /**
-     * @param <T>
-     *            The class of aspect value allowed by the domain being returned.
      * @return The domain of valid values for this aspect.
      */
-    public <T extends AspectValue> Domain<T> getDomain();
+    public Domain getDomain();
     
     /**
      * @return the URI that identifies this aspect.
@@ -64,9 +60,9 @@ public interface Aspect extends Serializable {
     public URI getId();
     
     /**
-     * @return the missing aspect value for this aspect or null
-     * if a missing value is defined.
+     * @return the missing aspect value for this aspect.
+     * @throws XBRLException if the aspect does not define a missing value.
      */
-    public <T extends AspectValue> T getMissingValue();
+    public AspectValue getMissingValue() throws XBRLException;
     
 }

@@ -1,36 +1,42 @@
 package org.xbrlapi.aspects.alt;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Vector;
 
 import org.xbrlapi.utilities.XBRLException;
 
-public class EntityDomain implements Domain<EntityAspectValue> {
-
+public class EntityDomain implements Domain {
+    
     /**
      * 
      */
     private static final long serialVersionUID = -1180707610130423730L;
 
     /**
+     * @see Domain#getAspectId()
+     */
+    public URI getAspectId() { return EntityAspect.ID; }
+    
+    /**
      * @see Domain#getAllAspectValues()
      */
-    public List<EntityAspectValue> getAllAspectValues() throws XBRLException {
+    public List<AspectValue> getAllAspectValues() throws XBRLException {
         throw new XBRLException("The domain is not finite");
     }
 
     /**
      * @see Domain#getChildren(AspectValue)
      */
-    public List<EntityAspectValue> getChildren(EntityAspectValue parent)
+    public List<AspectValue> getChildren(AspectValue parent)
             throws XBRLException {
-        return new Vector<EntityAspectValue>();
+        return new Vector<AspectValue>();
     }
 
     /**
      * @see Domain#getDepth(AspectValue)
      */
-    public int getDepth(EntityAspectValue aspectValue) throws XBRLException {
+    public int getDepth(AspectValue aspectValue) throws XBRLException {
         // TODO Auto-generated method stub
         return 0;
     }
@@ -38,7 +44,7 @@ public class EntityDomain implements Domain<EntityAspectValue> {
     /**
      * @see Domain#getParent(AspectValue)
      */
-    public EntityAspectValue getParent(EntityAspectValue child)
+    public AspectValue getParent(AspectValue child)
             throws XBRLException {
         return null;
     }
@@ -53,7 +59,7 @@ public class EntityDomain implements Domain<EntityAspectValue> {
     /**
      * @see Domain#hasChildren(AspectValue)
      */
-    public boolean hasChildren(EntityAspectValue value)
+    public boolean hasChildren(AspectValue value)
             throws XBRLException {
         return false;
     }
@@ -61,14 +67,14 @@ public class EntityDomain implements Domain<EntityAspectValue> {
     /**
      * @see Domain#hasParent(AspectValue)
      */
-    public boolean hasParent(EntityAspectValue child) throws XBRLException {
+    public boolean hasParent(AspectValue child) throws XBRLException {
         return false;
     }
 
     /**
      * @see Domain#isInDomain(AspectValue)
      */
-    public boolean isInDomain(EntityAspectValue candidate)
+    public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
         return true;
     }

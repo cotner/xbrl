@@ -48,6 +48,14 @@ public interface AspectModel extends Serializable {
      * @return true if the aspect model includes the aspect and false otherwise.
      */
     public boolean hasAspect(URI aspectId);
+    
+    /**
+     * @param aspectId
+     *            the aspect ID.
+     * @return The aspect if it is in the model.
+     * @throws XBRLException if the aspect is not in the model.
+     */
+    public Aspect getAspect(URI aspectId) throws XBRLException;
 
     /**
      * @param axis
@@ -57,9 +65,8 @@ public interface AspectModel extends Serializable {
      * @return the list of aspects for the specified axis. The list is empty if
      *         there are no aspects assigned to the chosen axis or the aspect
      *         model does not have the specified axis.
-     * @throws XBRLException
      */
-    public List<Aspect> getAspects(String axis) throws XBRLException;
+    public List<Aspect> getAspects(String axis);
 
     /**
      * The aspect will be added as the last aspect in the given axis.
@@ -105,12 +112,12 @@ public interface AspectModel extends Serializable {
     /**
      * @param axis
      *            The axis
-     * @param aspect
+     * @param aspectId
      *            the aspect
      * @return true if the axis is in the aspect model and contains the aspect
      *         and false otherwise.
      */
-    public boolean axisContainsAspect(String axis, Aspect aspect);
+    public boolean axisContainsAspect(String axis, URI aspectId);
 
     /**
      * @return a set of strings, each of which is an axis of the aspect model.

@@ -1,44 +1,48 @@
 package org.xbrlapi.xdt.aspects.alt;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Vector;
 
+import org.xbrlapi.aspects.alt.AspectValue;
 import org.xbrlapi.aspects.alt.Domain;
 import org.xbrlapi.utilities.XBRLException;
 
-public class ScenarioRemainderDomain implements Domain<ScenarioRemainderAspectValue> {
+public class ScenarioRemainderDomain implements Domain {
 
     /**
      * 
      */
     private static final long serialVersionUID = -2458464836980529306L;
 
+    public URI getAspectId() { return ScenarioRemainderAspect.ID; }
+    
     /**
      * @see Domain#getAllAspectValues()
      */
-    public List<ScenarioRemainderAspectValue> getAllAspectValues() throws XBRLException {
+    public List<AspectValue> getAllAspectValues() throws XBRLException {
         throw new XBRLException("The domain is not finite");
     }
 
     /**
      * @see Domain#getChildren(AspectValue)
      */
-    public List<ScenarioRemainderAspectValue> getChildren(ScenarioRemainderAspectValue parent)
+    public List<AspectValue> getChildren(AspectValue parent)
             throws XBRLException {
-        return new Vector<ScenarioRemainderAspectValue>();
+        return new Vector<AspectValue>();
     }
 
     /**
      * @see Domain#getDepth(AspectValue)
      */
-    public int getDepth(ScenarioRemainderAspectValue aspectValue) throws XBRLException {
+    public int getDepth(AspectValue aspectValue) throws XBRLException {
         return 0;
     }
 
     /**
      * @see Domain#getParent(AspectValue)
      */
-    public ScenarioRemainderAspectValue getParent(ScenarioRemainderAspectValue child)
+    public ScenarioRemainderAspectValue getParent(AspectValue child)
             throws XBRLException {
         return null;
     }
@@ -53,7 +57,7 @@ public class ScenarioRemainderDomain implements Domain<ScenarioRemainderAspectVa
     /**
      * @see Domain#hasChildren(AspectValue)
      */
-    public boolean hasChildren(ScenarioRemainderAspectValue value)
+    public boolean hasChildren(AspectValue value)
             throws XBRLException {
         return false;
     }
@@ -61,14 +65,14 @@ public class ScenarioRemainderDomain implements Domain<ScenarioRemainderAspectVa
     /**
      * @see Domain#hasParent(AspectValue)
      */
-    public boolean hasParent(ScenarioRemainderAspectValue child) throws XBRLException {
+    public boolean hasParent(AspectValue child) throws XBRLException {
         return false;
     }
 
     /**
      * @see Domain#isInDomain(AspectValue)
      */
-    public boolean isInDomain(ScenarioRemainderAspectValue candidate)
+    public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
         return true;
     }

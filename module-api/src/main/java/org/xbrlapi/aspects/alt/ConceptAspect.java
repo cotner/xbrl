@@ -21,7 +21,7 @@ import org.xbrlapi.utilities.XBRLException;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ConceptAspect extends AspectImpl<ConceptAspectValue> implements Aspect {
+public class ConceptAspect extends AspectImpl implements Aspect {
 
     /**
      * The serial version UID.
@@ -50,33 +50,22 @@ public class ConceptAspect extends AspectImpl<ConceptAspectValue> implements Asp
      * @param domain The domain for this aspect.
      * @throws XBRLException
      */
-    public ConceptAspect(Domain<ConceptAspectValue> domain) throws XBRLException {
+    public ConceptAspect(Domain domain) throws XBRLException {
         super(domain);
     }
     
     /**
      * @see Aspect#getValue(Fact)
      */
-    @SuppressWarnings("unchecked")
     public ConceptAspectValue getValue(Fact fact) throws XBRLException {
         return new ConceptAspectValue(fact.getNamespace(),fact.getLocalname());
     }
 
     /**
-     * @see Aspect#getDomain()
+     * @see Aspect#getMissingValue()
      */
-    @SuppressWarnings("unchecked")
-    public Domain<ConceptAspectValue> getDomain() {
-        return domain;
-    }
-    
-    /**
-     * Implies no missing values are defined.
-     * @return null.
-     */
-    @SuppressWarnings("unchecked")
-    public ConceptAspectValue getMissingValue() {
-        return null;
+    public ConceptAspectValue getMissingValue() throws XBRLException {
+        throw new XBRLException("Concept aspects do not have missing values.");
     }
 
 }

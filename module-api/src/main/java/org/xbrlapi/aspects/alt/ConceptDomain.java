@@ -6,12 +6,13 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.xbrlapi.Schema;
+import org.xbrlapi.aspects.alt.AspectValue;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.impl.SchemaImpl;
 import org.xbrlapi.utilities.XBRLException;
 
-public class ConceptDomain extends Base implements Domain<ConceptAspectValue>, StoreHandler {
+public class ConceptDomain extends Base implements Domain, StoreHandler {
 
     /**
      * 
@@ -23,20 +24,24 @@ public class ConceptDomain extends Base implements Domain<ConceptAspectValue>, S
     }
     
     /**
+     * @see Domain#getAspectId()
+     */
+    public URI getAspectId() { return ConceptAspect.ID; }
+    
+    /**
      * @see Domain#getAllAspectValues()
      */
-    public List<ConceptAspectValue> getAllAspectValues() throws XBRLException {
+    public List<AspectValue> getAllAspectValues() throws XBRLException {
         
-        List<ConceptAspectValue> values = new Vector<ConceptAspectValue>();
+        List<AspectValue> values = new Vector<AspectValue>();
         Set<String> schemaIndices = getStore().queryForIndices("for $root in #roots#[@type='"+SchemaImpl.class.getName()+"'] return $root");
         for (String schemaIndex: schemaIndices) {
             Schema schema = getStore().<Schema>getXMLResource(schemaIndex);
             URI namespace = schema.getTargetNamespace();
             String query = "for $root in #roots#[@type='" + ConceptImpl.class.getName() + "' and @parentIndex='" + schemaIndex + "'] return $root/xbrlapi:data/xsd:element/@name";
             for (String name: getStore().queryForStrings(query)) {
-                ConceptAspectValue value = new ConceptAspectValue(namespace,name);
+                AspectValue value = new ConceptAspectValue(namespace,name);
                 values.add(value);
-                
             }
         }
         return values;
@@ -45,23 +50,22 @@ public class ConceptDomain extends Base implements Domain<ConceptAspectValue>, S
     /**
      * @see Domain#getChildren(AspectValue)
      */
-    public List<ConceptAspectValue> getChildren(ConceptAspectValue parent)
+    public List<AspectValue> getChildren(AspectValue parent)
             throws XBRLException {
-        return new Vector<ConceptAspectValue>();
+        return new Vector<AspectValue>();
     }
 
     /**
      * @see Domain#getDepth(AspectValue)
      */
-    public int getDepth(ConceptAspectValue aspectValue) throws XBRLException {
-        // TODO Auto-generated method stub
+    public int getDepth(AspectValue aspectValue) throws XBRLException {
         return 0;
     }
 
     /**
      * @see Domain#getParent(AspectValue)
      */
-    public ConceptAspectValue getParent(ConceptAspectValue child)
+    public AspectValue getParent(AspectValue child)
             throws XBRLException {
         return null;
     }
@@ -76,7 +80,7 @@ public class ConceptDomain extends Base implements Domain<ConceptAspectValue>, S
     /**
      * @see Domain#hasChildren(AspectValue)
      */
-    public boolean hasChildren(ConceptAspectValue value)
+    public boolean hasChildren(AspectValue value)
             throws XBRLException {
         return false;
     }
@@ -84,17 +88,18 @@ public class ConceptDomain extends Base implements Domain<ConceptAspectValue>, S
     /**
      * @see Domain#hasParent(AspectValue)
      */
-    public boolean hasParent(ConceptAspectValue child) throws XBRLException {
+    public boolean hasParent(AspectValue child) throws XBRLException {
         return false;
     }
 
     /**
      * @see Domain#isInDomain(AspectValue)
      */
-    public boolean isInDomain(ConceptAspectValue candidate)
+    public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
         try {
-            getStore().getConcept(candidate.getNamespace(), candidate.getLocalname());
+            ConceptAspectValue value = (ConceptAspectValue) candidate;
+            getStore().getConcept(value.getNamespace(), value.getLocalname());
             return true;
         } catch (XBRLException e) {
             return false;
@@ -114,6 +119,14 @@ public class ConceptDomain extends Base implements Domain<ConceptAspectValue>, S
      */
     public boolean allowsMissingValues() {
         return false;
+    }
+
+
+
+
+    public int compare(ConceptAspectValue value0, ConceptAspectValue value1) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }
