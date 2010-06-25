@@ -43,6 +43,7 @@ public class PeriodAspectValue extends AspectValueImpl implements AspectValue {
      * Missing aspect value constructor - relevant for tuples and nil facts.
      */
     public PeriodAspectValue() {
+        super();
     }
     
     /**

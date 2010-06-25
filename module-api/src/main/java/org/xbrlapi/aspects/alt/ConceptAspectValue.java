@@ -24,6 +24,13 @@ public class ConceptAspectValue extends AspectValueImpl implements AspectValue {
      * The namespace of the concept associated with this aspect value.
      */
     private String localname;
+
+    /**
+     * Missing value constructor
+     */
+    public ConceptAspectValue() {
+        super();
+    }
     
     /**
      * @param namespace The namespace of the concept.

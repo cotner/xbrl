@@ -38,6 +38,7 @@ public class ScenarioAspect extends AspectImpl implements Aspect {
         return ID;
     }
     
+    
     /**
      * @param domain The domain for this aspect.
      * @throws XBRLException
@@ -59,8 +60,7 @@ public class ScenarioAspect extends AspectImpl implements Aspect {
     }
     
     /**
-     * Implies no missing values are defined.
-     * @return null.
+     * @see Aspect#getMissingValue()
      */
     public ScenarioAspectValue getMissingValue() {
         return new ScenarioAspectValue();

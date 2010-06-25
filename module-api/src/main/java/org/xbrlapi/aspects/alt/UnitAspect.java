@@ -54,8 +54,7 @@ public class UnitAspect extends AspectImpl implements Aspect {
     }
 
     /**
-     * Implies no missing values are defined.
-     * @return null.
+     * @see Aspect#getMissingValue()
      */
     public UnitAspectValue getMissingValue() {
         return new UnitAspectValue();

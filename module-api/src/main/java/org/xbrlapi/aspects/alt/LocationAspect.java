@@ -56,8 +56,8 @@ public class LocationAspect extends AspectImpl implements Aspect {
     /**
      * @see Aspect#getMissingValue()
      */
-    public LocationAspectValue getMissingValue() throws XBRLException {
-        throw new XBRLException("There are no missing values for the location aspect.");
+    public LocationAspectValue getMissingValue() {
+        return new LocationAspectValue();
     }
 
 }

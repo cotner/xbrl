@@ -63,8 +63,7 @@ public class ScenarioRemainderAspect extends AspectImpl implements Aspect {
     }
 
     /**
-     * Implies no missing values are defined.
-     * @return null.
+     * @see Aspect#getMissingValue()
      */
     public ScenarioRemainderAspectValue getMissingValue() {
         return new ScenarioRemainderAspectValue();

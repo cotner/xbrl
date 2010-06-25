@@ -63,8 +63,7 @@ public class SegmentRemainderAspect extends AspectImpl implements Aspect {
     }
 
     /**
-     * Implies no missing values are defined.
-     * @return null.
+     * @see Aspect#getMissingValue()
      */
     public SegmentRemainderAspectValue getMissingValue() {
         return new SegmentRemainderAspectValue();

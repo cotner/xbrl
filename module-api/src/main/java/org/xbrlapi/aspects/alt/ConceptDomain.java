@@ -133,7 +133,8 @@ public class ConceptDomain extends Base implements Domain, StoreHandler {
      *         second. Any aspect values that are not in this domain
      *         are placed last in the aspect value ordering.
      *         Otherwise, the comparison is based upon the natural ordering of
-     *         the aspect value IDs.
+     *         the concept namespaces and then the concept local names.
+     *         Missing values are ranked last among aspect values of the same type.
      */
     public int compare(AspectValue first, AspectValue second) {
         if (! (first instanceof ConceptAspectValue)) {
@@ -144,7 +145,20 @@ public class ConceptDomain extends Base implements Domain, StoreHandler {
             logger.error("Aspect values of the wrong type are being compared.");
             return -1;
         }
-        return first.getId().compareTo(second.getId());
+
+        if (first.isMissing()) {
+            if (second.isMissing()) return 0;
+            return 1;
+        }
+        if (second.isMissing()) return -1;
+        
+        ConceptAspectValue f = (ConceptAspectValue) first;
+        ConceptAspectValue s = (ConceptAspectValue) second;
+     
+        int result = f.getNamespace().compareTo(s.getNamespace());
+        if (result != 0) return result;
+        
+        return (f.getLocalname().compareTo(s.getLocalname()));
     }
 
 }

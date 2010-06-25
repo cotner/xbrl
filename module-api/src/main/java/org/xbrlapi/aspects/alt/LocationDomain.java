@@ -154,7 +154,9 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
      *         second. Any aspect values that are not in this domain
      *         are placed last in the aspect value ordering.
      *         Otherwise, the comparison is based upon the natural ordering of
-     *         the aspect value IDs.
+     *         the aspect value IDs, treating the document part of the identifier
+     *         as a string and the fragment number within the document as an integer.
+     *         Missing values are ranked last among aspect values of the same type.
      */
     public int compare(AspectValue first, AspectValue second) {
         if (! (first instanceof LocationAspectValue)) {
@@ -165,7 +167,20 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
             logger.error("Aspect values of the wrong type are being compared.");
             return -1;
         }
-        return first.getId().compareTo(second.getId());
+
+
+        if (first.isMissing()) {
+            if (second.isMissing()) return 0;
+            return 1;
+        }
+        if (second.isMissing()) return -1;
+
+        String[] fParts = first.getId().split("_"); 
+        String[] sParts = first.getId().split("_"); 
+        
+        int result = fParts[0].compareTo(sParts[0]);
+        if (result != 0) return result;
+        return (new Integer(fParts[1])).compareTo(new Integer(sParts[1]));
     }    
     
 }

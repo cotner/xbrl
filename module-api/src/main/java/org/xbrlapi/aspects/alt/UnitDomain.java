@@ -104,6 +104,7 @@ public class UnitDomain implements Domain {
      *         are placed last in the aspect value ordering.
      *         Otherwise, the comparison is based upon the natural ordering of
      *         the aspect value IDs.
+     *         Missing values are ranked last among aspect values of the same type.
      */
     public int compare(AspectValue first, AspectValue second) {
         if (! (first instanceof UnitAspectValue)) {
@@ -114,6 +115,12 @@ public class UnitDomain implements Domain {
             logger.error("Aspect values of the wrong type are being compared.");
             return -1;
         }
+
+        if (first.isMissing()) {
+            if (second.isMissing()) return 0;
+            return 1;
+        }
+        if (second.isMissing()) return -1;
         return first.getId().compareTo(second.getId());
     }          
     

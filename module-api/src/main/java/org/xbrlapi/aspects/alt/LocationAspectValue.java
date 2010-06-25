@@ -18,6 +18,13 @@ public class LocationAspectValue extends AspectValueImpl implements AspectValue 
      * The index of the fact.
      */
     private String factIndex;
+
+    /**
+     * Missing aspect value constructor
+     */
+    public LocationAspectValue() {
+        super();
+    }
     
     /**
      * @param index The index of the fact.

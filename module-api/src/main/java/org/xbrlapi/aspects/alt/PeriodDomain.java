@@ -114,6 +114,7 @@ public class PeriodDomain implements Domain {
      *         on the date/time ordering of the start-date/instants.
      *         If the ordering remains indeterminate, then the periods are 
      *         treated as equal.
+     *         Missing values are ranked last among aspect values of the same type.
      */
     public int compare(AspectValue first, AspectValue second) {
         if (! (first instanceof PeriodAspectValue)) {
@@ -124,7 +125,13 @@ public class PeriodDomain implements Domain {
             logger.error("Aspect values of the wrong type are being compared.");
             return -1;
         }
-        
+
+        if (first.isMissing()) {
+            if (second.isMissing()) return 0;
+            return 1;
+        }
+        if (second.isMissing()) return -1;
+
         PeriodAspectValue f = (PeriodAspectValue) first;
         PeriodAspectValue s = (PeriodAspectValue) second;
      

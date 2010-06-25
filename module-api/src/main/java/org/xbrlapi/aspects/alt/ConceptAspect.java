@@ -64,8 +64,8 @@ public class ConceptAspect extends AspectImpl implements Aspect {
     /**
      * @see Aspect#getMissingValue()
      */
-    public ConceptAspectValue getMissingValue() throws XBRLException {
-        throw new XBRLException("Concept aspects do not have missing values.");
+    public ConceptAspectValue getMissingValue() {
+        return new ConceptAspectValue();
     }
 
 }
