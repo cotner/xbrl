@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.aspects.alt.AspectValue;
 import org.xbrlapi.aspects.alt.Base;
 import org.xbrlapi.aspects.alt.Domain;
@@ -17,6 +18,8 @@ public class TypedDimensionDomain extends Base implements Domain, StoreHandler {
      * 
      */
     private static final long serialVersionUID = -6321737264369339787L;
+
+    protected final static Logger logger = Logger.getLogger(TypedDimensionDomain.class);
 
     /**
      * The namespace of the relevant explicit dimension.
@@ -126,5 +129,28 @@ public class TypedDimensionDomain extends Base implements Domain, StoreHandler {
     public String getDimensionLocalname() {
         return dimensionLocalname;
     }
-    
+
+    /**
+     * @param first
+     *            The first aspect value
+     * @param second
+     *            The second aspect value
+     * @return -1 if the first aspect value is less than the second, 0 if they
+     *         are equal and 1 if the first aspect value is greater than the
+     *         second. Any aspect values that are not in this domain
+     *         are placed last in the aspect value ordering.
+     *         Otherwise, the comparison is based upon the natural ordering of
+     *         the aspect value IDs.
+     */
+    public int compare(AspectValue first, AspectValue second) {
+        if (! (first instanceof TypedDimensionAspectValue)) {
+            logger.error("Aspect values of the wrong type are being compared.");
+            return 1;
+        }
+        if (! (second instanceof TypedDimensionAspectValue)) {
+            logger.error("Aspect values of the wrong type are being compared.");
+            return -1;
+        }
+        return first.getId().compareTo(second.getId());
+    }         
 }

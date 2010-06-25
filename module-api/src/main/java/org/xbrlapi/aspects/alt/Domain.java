@@ -2,6 +2,7 @@ package org.xbrlapi.aspects.alt;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 
 import org.xbrlapi.utilities.XBRLException;
@@ -39,7 +40,7 @@ import org.xbrlapi.utilities.XBRLException;
  * </ul>
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public interface Domain extends Serializable {
+public interface Domain extends Serializable, Comparator<AspectValue> {
     
     /**
      * @return the URI identifying the aspect that this is a domain for.

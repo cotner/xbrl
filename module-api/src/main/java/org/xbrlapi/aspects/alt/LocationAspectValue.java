@@ -12,8 +12,7 @@ public class LocationAspectValue extends AspectValueImpl implements AspectValue 
      */
     private static final long serialVersionUID = -9147415332504512016L;
 
-    protected final static Logger logger = Logger
-    .getLogger(LocationAspectValue.class);
+    protected final static Logger logger = Logger.getLogger(LocationAspectValue.class);
 
     /**
      * The index of the fact.

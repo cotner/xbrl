@@ -143,7 +143,7 @@ public class FactSetImpl implements FactSet {
     }
 
     /**
-     * @see FactSet#getAspectValues(AspectId)
+     * @see FactSet#getCombinationValues(AspectId)
      */
     public Collection<AspectValue> getAspectValues(URI aspectId) {
         return aspectMap.get(aspectId);
