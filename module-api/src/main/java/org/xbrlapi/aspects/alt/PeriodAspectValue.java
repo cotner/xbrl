@@ -72,7 +72,7 @@ public class PeriodAspectValue extends AspectValueImpl implements AspectValue {
      * @see AspectValue#getId()
      */
     public String getId() {
-        if (isMissing) return "";
+        if (this.isMissing()) return "";
         if (isForever) return "forever";
         if (isFiniteDuration()) return getString(start) + " to " + getString(end);
         return getString(end);
@@ -165,7 +165,6 @@ public class PeriodAspectValue extends AspectValueImpl implements AspectValue {
     }
     
     /**
-     * Null for tuples and nil facts.
      * @see AspectValue#isMissing()
      */
     public boolean isMissing() {

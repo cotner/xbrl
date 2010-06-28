@@ -22,7 +22,7 @@ import org.xbrlapi.utilities.XBRLException;
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 
-public interface AspectValueCombinations extends Serializable {
+public interface Combinations extends Serializable {
 
     /**
      * @return the axis of the model that this combinations object
@@ -100,6 +100,16 @@ public interface AspectValueCombinations extends Serializable {
      * specified axis of the aspect model.  
      */
     public void setAspectValues(URI aspectId, List<AspectValue> values) throws XBRLException;
+    
+    /**
+     * For each aspect in the combination, its aspect values are set equal to the 
+     * list of aspect values obtained from the fact set, sorted based on the comparator
+     * provided by the aspect's domain.
+     * @param factSet set of facts to use when obtaining the aspect values.
+     * @throws XBRLException if the aspects parameter is null or the aspect is not in the
+     * specified axis of the aspect model.
+     */
+    public void setAspectValues(FactSet factSet) throws XBRLException;    
 
     /**
      * @return the total number of different combinations of aspect values.

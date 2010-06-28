@@ -4,6 +4,8 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fact;
+import org.xbrlapi.Fragment;
+import org.xbrlapi.impl.InstanceImpl;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -50,7 +52,9 @@ public class LocationAspect extends AspectImpl implements Aspect {
      * @see Aspect#getValue(Fact)
      */
     public LocationAspectValue getValue(Fact fact) throws XBRLException {
-        return new LocationAspectValue(fact.getIndex());
+        Fragment parent = fact.getParent();
+        if (parent.isa(InstanceImpl.class)) return new LocationAspectValue(fact.getIndex());
+        return new LocationAspectValue(parent.getIndex(),fact.getIndex());
     }
 
     /**

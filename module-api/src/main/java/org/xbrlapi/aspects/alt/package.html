@@ -24,19 +24,22 @@ structures that can be used to analyse XBRL data.</p>
 
 <p>To define a new aspect, you must provide the {@link:Aspect aspect
 implementation} and the associated {@link:AspectValue aspect value
-implementation}.  You also need to define an aspect value domain to define
-the heirarchical ordering of aspect values within the domain.</p>
+implementation}. You also need to define an {@link:Domain aspect value
+domain implementation} to define thedomain of values for the custom
+aspect.</p>
 
 <p>Aspects can be organised into groups and this is done by defining
-{@link:AspectModel aspect models}.</p>
+{@link:AspectModel aspect models}. Aspects in a model can be put into
+ordered groups, identified as axes. {@link:Combinations Aspect value
+combinations} define combinations of values for the aspects in a given
+axis of an aspect model. The aspect values that are combined are
+determined outside of the combinations object and are generally based on
+a set of facts, aspect domains, or a combination of the two.</p>
 
-<p>A {@link:Domain domain} is a collection of {@link:AspectValue
-aspect values} for a given aspect.</p>
-
-<p>{@link:Cube Cubes} are a combination of an aspect model, that
+<p>{@link:FactSet Fact sets} are a combination of an aspect model, that
 defines the dimensions of the cube, a domain for each aspect, and a set
 of facts, each of which may map to a point defined by the aspect value
-space. Cubes keep track of which aspect value, if any, in each domain
+space. Fact sets keep track of which aspect value, if any, in each domain
 each fact maps to. This information can be cached for performance
 purposes.</p>
 
@@ -45,7 +48,7 @@ about labels etc by locale/role choice etc is separable from the
 implementation of aspects so that you can swap in and out various
 caching strategies to achieve the desired point in the
 complexity/performance tradeoff. The caching system works through the
-{@link:AspectCache aspect cache interface}.</p>
+{@link:Cache aspect cache interface}.</p>
 
 <!-- Put @see and @since tags down here. -->
 

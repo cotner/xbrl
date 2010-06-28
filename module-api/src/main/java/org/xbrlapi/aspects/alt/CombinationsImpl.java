@@ -1,6 +1,7 @@
 package org.xbrlapi.aspects.alt;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +27,14 @@ import org.xbrlapi.utilities.XBRLException;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class AspectValueCombinationsImpl implements AspectValueCombinations {
+public class CombinationsImpl implements Combinations {
 
     /**
      * 
      */
     private static final long serialVersionUID = -6280457826226771955L;
 
-    private static final Logger logger = Logger.getLogger(AspectValueCombinationsImpl.class);
+    private static final Logger logger = Logger.getLogger(CombinationsImpl.class);
     
     /**
      * The aspect model in use.
@@ -52,24 +53,29 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     private String axis;
     
     /**
+     * The aspect value lists are initialised to a list containing a single missing value.
      * @param model The model containing the aspects and their arrangement into axes.
      * @param axis The model axis to generate a combination for.
-     * @throws XBRLException
+     * @throws XBRLException If the model does not have the specified axis.
      */
-    public AspectValueCombinationsImpl(AspectModel model, String axis) throws XBRLException {
+    public CombinationsImpl(AspectModel model, String axis) throws XBRLException {
         super();
-        setModel(model);
+        if (! model.hasAxis(axis)) throw new XBRLException("The model does not have axis " + this.getAxis());
         setAxis(axis);
+        setModel(model);
+        for (Aspect aspect: model.getAspects(axis)) {
+            List<AspectValue> values = new Vector<AspectValue>();
+            values.add(aspect.getMissingValue());
+            aspectValues.put(aspect.getId(),values);
+        }
     }
 
     /**
      * @param model The aspect model to use.
-     * @throws XBRLException if the aspect model parameter is null or
-     * the model does not have the axis set in this object.
+     * @throws XBRLException if the aspect model parameter is null.
      */
     private void setModel(AspectModel model) throws XBRLException {
         if (model == null) throw new XBRLException("The aspect model must not be null.");
-        if (! model.hasAxis(this.getAxis())) throw new XBRLException("The model does not have axis " + this.getAxis());
         this.model = model;
     }
     
@@ -79,12 +85,11 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
      */
     private void setAxis(String axis) throws XBRLException {
         if (axis == null) throw new XBRLException("The axis must not be null.");
-        if (! model.hasAxis(axis)) throw new XBRLException("The model does not have axis " + axis);
         this.axis= axis;
     }
 
     /**
-     * @see AspectValueCombinations#getAncestorCount(URI)
+     * @see Combinations#getAncestorCount(URI)
      */
     public int getAncestorCount(URI aspectId) throws XBRLException {
         List<Aspect> aspects = model.getAspects(axis);
@@ -96,7 +101,7 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     }
 
     /**
-     * @see AspectValueCombinations#hasAspect(URI)
+     * @see Combinations#hasAspect(URI)
      */
     public boolean hasAspect(URI aspectId) throws XBRLException {
         if (aspectId == null) throw new XBRLException("The aspect ID must not be null.");
@@ -114,7 +119,7 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     }
     
     /**
-     * @see AspectValueCombinations#clearAspectValues(URI)
+     * @see Combinations#clearAspectValues(URI)
      */
     public void clearAspectValues(URI aspectId) throws XBRLException {
         if (! this.hasAspect(aspectId)) 
@@ -123,14 +128,14 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     }
 
     /**
-     * @see AspectValueCombinations#getAspectValueCount(URI)
+     * @see Combinations#getAspectValueCount(URI)
      */
     public int getAspectValueCount(URI aspectId) throws XBRLException {
         return getAspectValues(aspectId).size();
     }
 
     /**
-     * @see AspectValueCombinations#getAspectValues(URI)
+     * @see Combinations#getAspectValues(URI)
      */
     public List<AspectValue> getAspectValues(URI aspectId)
             throws XBRLException {
@@ -145,33 +150,35 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     }
 
     /**
-     * @see AspectValueCombinations#getAspects()
+     * @see Combinations#getAspects()
      */
     public List<Aspect> getAspects() {
         return model.getAspects(axis);
     }
 
     /**
-     * @see AspectValueCombinations#getDescendantCount(URI)
+     * @see Combinations#getDescendantCount(URI)
      */
     public int getDescendantCount(URI aspectId) throws XBRLException {
         List<Aspect> aspects = model.getAspects(axis);
         Aspect aspect = model.getAspect(aspectId);
         int index = aspects.indexOf(aspect);
-        if (index == aspects.size()-1) return 1;
+        if (index == (aspects.size()-1)) {
+            return 1;
+        }
         Aspect childAspect = aspects.get(index+1);
-        return (getAspectValueCount(childAspect.getId()) * getAncestorCount(childAspect.getId()));
+        return (getAspectValueCount(childAspect.getId()) * getDescendantCount(childAspect.getId()));
     }
 
     /**
-     * @see AspectValueCombinations#getAxis()
+     * @see Combinations#getAxis()
      */
     public String getAxis() {
         return this.axis;
     }
 
     /**
-     * @see AspectValueCombinations#getCombinationCount()
+     * @see Combinations#getCombinationCount()
      */
     public int getCombinationCount() {
         int result = 1;
@@ -186,7 +193,7 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     }
     
     /**
-     * @see AspectValueCombinations#getCombinationValue(URI, int)
+     * @see Combinations#getCombinationValue(URI, int)
      */
     public AspectValue getCombinationValue(URI aspectId, int combination) throws XBRLException {
 
@@ -199,7 +206,7 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
     }
     
     /**
-     * @see AspectValueCombinations#getCombinationValues(int)
+     * @see Combinations#getCombinationValues(int)
      */
     public Map<URI,AspectValue> getCombinationValues(int combination) throws XBRLException {
         Map<URI,AspectValue> result = new HashMap<URI,AspectValue>();
@@ -208,6 +215,20 @@ public class AspectValueCombinationsImpl implements AspectValueCombinations {
             result.put(id,this.getCombinationValue(id,combination));
         }
         return result;
+    }
+
+    /**
+     * @see Combinations#setAspectValues(FactSet)
+     */
+    public void setAspectValues(FactSet factSet)
+            throws XBRLException {
+
+        for (Aspect aspect: this.getAspects()) {
+            List<AspectValue> values = new Vector<AspectValue>(factSet.getAspectValues(aspect.getId()));
+            Collections.sort(values,aspect.getDomain());
+            this.setAspectValues(aspect.getId(), values);
+        }
+        
     }
     
 }

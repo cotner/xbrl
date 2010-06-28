@@ -48,7 +48,7 @@ public class EntityAspectValue extends AspectValueImpl implements AspectValue {
      * @see AspectValue#getId()
      */
     public String getId() {
-        if (scheme == null) return "";
+        if (this.isMissing()) return "missing";
         return scheme + "#" + value;
     }
 

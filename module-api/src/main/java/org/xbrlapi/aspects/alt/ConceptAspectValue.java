@@ -49,6 +49,7 @@ public class ConceptAspectValue extends AspectValueImpl implements AspectValue {
      * @see AspectValue#getId()
      */
     public String getId() {
+        if (this.isMissing()) return "missing";
         return namespace + "#" + localname;
     }
 

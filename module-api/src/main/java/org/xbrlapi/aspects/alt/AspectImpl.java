@@ -24,7 +24,7 @@ abstract public class AspectImpl implements Aspect {
      */
     public AspectImpl(Domain domain) throws XBRLException {
         if (domain == null) throw new XBRLException("The domain must not be null.");
-        if (domain.getAspectId().equals(this.getId())) throw new XBRLException("The domain " + domain.getAspectId() + " is not for aspect " + this.getId());
+        if (! domain.getAspectId().equals(this.getId())) throw new XBRLException("The domain " + domain.getAspectId() + " is not for aspect " + this.getId());
         this.domain = domain;
     }
     

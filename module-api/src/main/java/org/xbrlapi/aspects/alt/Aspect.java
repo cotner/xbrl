@@ -61,8 +61,7 @@ public interface Aspect extends Serializable {
     
     /**
      * @return the missing aspect value for this aspect.
-     * @throws XBRLException if the aspect does not define a missing value.
      */
-    public AspectValue getMissingValue() throws XBRLException;
+    public AspectValue getMissingValue();
     
 }

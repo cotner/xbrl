@@ -84,8 +84,8 @@ public class UnitAspectValue extends AspectValueImpl implements AspectValue {
      */
     public String getId() {
         
-        if (numerators.isEmpty()) return "";
-
+        if (isMissing()) return "";
+        
         String id = "";
 
         Collections.<Measure>sort(numerators);
