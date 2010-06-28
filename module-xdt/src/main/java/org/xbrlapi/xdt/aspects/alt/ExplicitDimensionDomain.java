@@ -98,6 +98,7 @@ public class ExplicitDimensionDomain extends Base implements Domain, StoreHandle
      */
     public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
+        if (! (candidate instanceof ExplicitDimensionAspectValue)) return false;
         return true;
     }
 

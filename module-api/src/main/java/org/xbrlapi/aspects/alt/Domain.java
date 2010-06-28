@@ -94,13 +94,13 @@ public interface Domain extends Serializable, Comparator<AspectValue> {
      * @throws XBRLException
      */
     public int getDepth(AspectValue aspectValue) throws XBRLException;
-    
+
     /**
-     * @return a list of all of the aspect values in the domain. The list is
-     *         ordered based on a depth first traversal of the aspect values in
-     *         the domain. Thus, parent values come immediately before their
-     *         child values and child values are sorted by their strict ordering
-     *         if there is one.
+     * @return a list of all of the aspect values in the domain except for the
+     *         missing value. The list is ordered based on a depth first
+     *         traversal of the aspect values in the domain. Thus, parent values
+     *         come immediately before their child values and child values are
+     *         sorted by their strict ordering if there is one.
      * @throws XBRLException
      */
     public List<AspectValue> getAllAspectValues() throws XBRLException;

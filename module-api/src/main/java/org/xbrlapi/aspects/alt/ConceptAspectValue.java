@@ -61,12 +61,10 @@ public class ConceptAspectValue extends AspectValueImpl implements AspectValue {
     }
     
     /**
-     * There is no such thing as a missing concept aspect value.
-     * All facts are facts specifying a value for a concept.
      * @see AspectValue#isMissing()
      */
     public boolean isMissing() {
-        return false;
+        return (this.namespace == null);
     }
 
     /**

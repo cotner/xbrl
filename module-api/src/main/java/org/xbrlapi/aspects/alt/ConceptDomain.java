@@ -100,9 +100,12 @@ public class ConceptDomain extends Base implements Domain, StoreHandler {
     public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
         try {
-            ConceptAspectValue value = (ConceptAspectValue) candidate;
-            getStore().getConcept(value.getNamespace(), value.getLocalname());
-            return true;
+            if (candidate instanceof ConceptAspectValue) {
+                ConceptAspectValue value = (ConceptAspectValue) candidate;
+                getStore().getConcept(value.getNamespace(), value.getLocalname());
+                return true;
+            }
+            return false;
         } catch (XBRLException e) {
             return false;
         }

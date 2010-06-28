@@ -81,6 +81,7 @@ public class PeriodDomain implements Domain {
      */
     public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
+        if (! (candidate instanceof PeriodAspectValue)) return false;
         return true;
     }
 

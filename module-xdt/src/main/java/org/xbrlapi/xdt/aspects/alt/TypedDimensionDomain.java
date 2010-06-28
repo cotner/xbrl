@@ -98,7 +98,9 @@ public class TypedDimensionDomain extends Base implements Domain, StoreHandler {
      */
     public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
+        if (! (candidate instanceof TypedDimensionAspectValue)) return false;
         return true;
+
     }
 
     /**

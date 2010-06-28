@@ -75,6 +75,7 @@ public class SegmentDomain implements Domain {
      */
     public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
+        if (! (candidate instanceof SegmentAspectValue)) return false;
         return true;
     }
 

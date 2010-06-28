@@ -75,6 +75,7 @@ public class UnitDomain implements Domain {
      */
     public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
+        if (! (candidate instanceof UnitAspectValue)) return false;
         return true;
     }
 

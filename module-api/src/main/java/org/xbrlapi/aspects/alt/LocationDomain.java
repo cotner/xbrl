@@ -116,7 +116,9 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
      * @see Domain#isInDomain(AspectValue)
      */
     public boolean isInDomain(AspectValue candidate) {
-        
+
+        if (! (candidate instanceof LocationAspectValue)) return false;
+
         XML resource = null;
         try {
             resource = getStore().<XML>getXMLResource(((LocationAspectValue)candidate).getFactIndex());

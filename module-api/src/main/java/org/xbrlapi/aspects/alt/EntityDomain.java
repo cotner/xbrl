@@ -79,7 +79,8 @@ public class EntityDomain implements Domain {
      */
     public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
-        return true;
+        if (candidate instanceof EntityAspectValue) return true;
+        return false;
     }
 
     /**

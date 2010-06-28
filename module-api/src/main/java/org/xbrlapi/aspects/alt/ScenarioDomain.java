@@ -75,6 +75,7 @@ public class ScenarioDomain implements Domain {
      */
     public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
+        if (! (candidate instanceof ScenarioAspectValue)) return false;
         return true;
     }
 
