@@ -225,9 +225,7 @@ abstract public class BaseAspectModel implements AspectModel {
     public Set<Fact> getAllFacts() throws XBRLException {
         return facts;
     }
-    
 
-    
     /**
      * @see AspectModel#getMatchingFacts()
      */
