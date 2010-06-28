@@ -53,14 +53,15 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
     public List<AspectValue> getChildren(AspectValue parent)
             throws XBRLException {
         List<AspectValue> result = new Vector<AspectValue>();
-        Fact fact = getStore().<Fact> getXMLResource(((LocationAspectValue)parent).getFactIndex());
+        LocationAspectValue aspectValue = (LocationAspectValue) parent;
+        Fact fact = getStore().<Fact> getXMLResource(aspectValue.getFactIndex());
         if (fact.isa(TupleImpl.class)) {
             List<Fact> children = ((Tuple) fact).getChildFacts();
             for (Fact child: children) {
-                result.add(new LocationAspectValue(child.getIndex()));
+                result.add(new LocationAspectValue(fact.getIndex(), child.getIndex()));
             }
         }
-        return result;        
+        return result;
     }
 
     /**
@@ -81,7 +82,9 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
         if (parent.isa(InstanceImpl.class)) {
             return null;
         }
-        return new LocationAspectValue(parent.getIndex());
+        Fragment grandparent = parent.getParent();
+        if (grandparent.isa(InstanceImpl.class)) return new LocationAspectValue(parent.getIndex());
+        return new LocationAspectValue(grandparent.getIndex(), parent.getIndex());
     }
 
     /**
