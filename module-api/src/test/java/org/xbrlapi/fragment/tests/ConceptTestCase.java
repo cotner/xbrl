@@ -24,6 +24,7 @@ public class ConceptTestCase extends DOMLoadingTestCase {
 	private final String FOOTNOTELINKS = "test.data.footnote.links";
 	private final String LABELLINKS = "test.data.label.links";
     private final String PRESENTATIONLINKS = "test.data.local.xbrl.presentation.simple";
+    private final String TUPLES = "test.data.local.xbrl.instance.tuples.with.units";
 	
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -71,6 +72,27 @@ public class ConceptTestCase extends DOMLoadingTestCase {
             fail(e.getMessage());
         }
     }
+    
+    public void testGetRootFacts() {   
+
+        boolean testDone = false;
+        try {
+            loader.discover(this.getURI(TUPLES));
+            List<Concept> concepts = store.<Concept>getXMLResources("Concept");
+            assertTrue(concepts.size() > 0);
+            for (Concept concept: concepts) {
+                List<Fact> facts = concept.getRootFacts();
+                logger.info(concept.getName() + " # facts = " + facts.size());
+                for (Fact fact: facts) {
+                    assertEquals(fact.getLocalname(), fact.getConcept().getName());
+                    testDone = true;
+                }
+            }
+            assertTrue(testDone);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }    
     
     public void testGetFactCount() {   
 
