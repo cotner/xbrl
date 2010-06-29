@@ -69,6 +69,15 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     }
     
     /**
+     * @see org.xbrlapi.Concept#getRootFacts()
+     */
+     public List<Fact> getRootFacts() throws XBRLException {
+         getStore().setNamespaceBinding(this.getTargetNamespace(),"xbrlapi_concept");
+         String query = "for $instance in #roots#[@type='"+InstanceImpl.class.getName()+"'], $root in #roots#[xbrlapi:data/xbrlapi_concept:"+ this.getName() + "] where ($instance/@index = $root/@parentIndex) return $root";
+         return getStore().<Fact>queryForXMLResources(query);
+     }    
+    
+    /**
      * @see org.xbrlapi.Concept#getFactCount()
      */
     public long getFactCount() throws XBRLException {
