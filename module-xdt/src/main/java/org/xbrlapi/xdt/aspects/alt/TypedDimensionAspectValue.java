@@ -72,7 +72,7 @@ public class TypedDimensionAspectValue extends AspectValueImpl implements Aspect
      */
     public String getId() {
         if (isMissing()) return "";
-        return aspectId + " " + IDGenerator.getLabelFromMixedNodes(children);
+        return IDGenerator.getLabelFromMixedNodes(children);
     }
     
 }

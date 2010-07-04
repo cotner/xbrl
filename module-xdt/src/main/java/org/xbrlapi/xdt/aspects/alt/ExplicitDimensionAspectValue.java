@@ -90,7 +90,7 @@ public class ExplicitDimensionAspectValue extends AspectValueImpl implements Asp
      */
     public String getId() {
         if (isMissing()) return "";
-        return aspectId + " " + namespace + "#" + name;
+        return namespace + "#" + name;
     }
     
 }

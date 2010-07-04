@@ -52,6 +52,14 @@ public class TypedDimensionAspect extends AspectImpl implements Aspect {
     }
     
     /**
+     * @see Aspect#isExtensible()
+     */
+    @Override
+    public boolean isExtensible() {
+        return true;
+    }
+    
+    /**
      * @param domain The domain for this aspect.
      * @param id The URI that is the ID for this explicit dimension aspect.
      * @throws XBRLException if the ID parameter is null.

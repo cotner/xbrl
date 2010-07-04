@@ -52,6 +52,14 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
     public URI getId() {
         return URI.create(dimensionNamespace + "#" + dimensionLocalname);
     }
+
+    /**
+     * @see Aspect#isExtensible()
+     */
+    @Override
+    public boolean isExtensible() {
+        return true;
+    }
     
     /**
      * @param domain The domain for this aspect.
@@ -122,6 +130,14 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
             // Cannot occur because ID is never null after this is instantiated.
             return null;
         }
+    }
+    
+    public URI getDimensionNamespace() {
+        return dimensionNamespace;
+    }
+    
+    public String getDimensionLocalname() {
+        return dimensionLocalname;
     }
 
 

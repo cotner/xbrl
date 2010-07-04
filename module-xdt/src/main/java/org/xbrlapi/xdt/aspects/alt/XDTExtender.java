@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
@@ -69,6 +70,8 @@ public class XDTExtender implements Extender {
      * 
      */
     private static final long serialVersionUID = 8292817281957644676L;
+    
+    private static final Logger logger = Logger.getLogger(XDTExtender.class);    
     
     /**
      * Set to true when the default dimensions have been added
