@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.util.List;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.Context;
 import org.xbrlapi.Item;
@@ -20,7 +22,10 @@ public class ItemImpl extends FactImpl implements Item {
 	 * @see org.xbrlapi.Item#getContext()
 	 */
 	public Context getContext() throws XBRLException {
-	    return getInstance().getContext(this.getContextId());
+	    String query = "for $root in #roots#[@uri='"+this.getURI()+"' and @type='"+ContextImpl.class.getName()+"' and xbrlapi:data/xbrli:context/@id='"+this.getContextId()+"'] return $root";
+	    List<Context> contexts = getStore().<Context>queryForXMLResources(query);
+	    if (contexts.size() == 1) return contexts.get(0);
+	    throw new XBRLException("There is not a unique matching context with ID "+this.getContextId()+" for this fact in instance " + this.getURI());
 	}
 	
     /** 
