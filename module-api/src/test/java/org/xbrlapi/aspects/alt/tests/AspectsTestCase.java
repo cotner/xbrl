@@ -7,7 +7,6 @@ import org.xbrlapi.DOMLoadingTestCase;
 import org.xbrlapi.Fact;
 import org.xbrlapi.aspects.alt.Aspect;
 import org.xbrlapi.aspects.alt.AspectModel;
-import org.xbrlapi.aspects.alt.AspectModelImpl;
 import org.xbrlapi.aspects.alt.ConceptAspect;
 import org.xbrlapi.aspects.alt.ConceptAspectValue;
 import org.xbrlapi.aspects.alt.ConceptDomain;
@@ -17,9 +16,8 @@ import org.xbrlapi.aspects.alt.Filter;
 import org.xbrlapi.aspects.alt.FilterImpl;
 import org.xbrlapi.aspects.alt.LocationAspect;
 import org.xbrlapi.aspects.alt.LocationAspectValue;
-import org.xbrlapi.aspects.alt.LocationDomain;
 import org.xbrlapi.aspects.alt.PeriodAspect;
-import org.xbrlapi.aspects.alt.StandardExtender;
+import org.xbrlapi.aspects.alt.StandardAspectModel;
 import org.xbrlapi.impl.ConceptImpl;
 
 
@@ -54,25 +52,25 @@ public class AspectsTestCase extends DOMLoadingTestCase {
 			assertEquals(2,facts.size());
 			
 			// Set up the aspect model
-            AspectModel model = new AspectModelImpl();
-            ConceptDomain conceptDomain = new ConceptDomain(store);
+            AspectModel model = new StandardAspectModel(store);
+            ConceptAspect conceptAspect = (ConceptAspect) model.getAspect(ConceptAspect.ID);
+            ConceptDomain conceptDomain = (ConceptDomain) conceptAspect.getDomain();
             assertEquals(store.<Concept>getXMLResources(ConceptImpl.class).size(),conceptDomain.getSize());
             assertEquals(conceptDomain.getSize(), conceptDomain.getAllAspectValues().size());
-            ConceptAspect conceptAspect = new ConceptAspect(conceptDomain);
             model.addAspect("row", conceptAspect);
-            assertEquals(1,model.getAspects().size());
+            assertEquals(7,model.getAspects().size());
             assertTrue(model.hasAxis("row"));
             assertFalse(model.hasAxis("col"));
             assertEquals(1,model.getAspects("row").size());
-            assertEquals(1,model.getAxes().size());
+            assertEquals(2,model.getAxes().size());
 
             // Add in the location aspect
-            LocationAspect locationAspect = new LocationAspect(new LocationDomain(store));
+            LocationAspect locationAspect = (LocationAspect) model.getAspect(LocationAspect.ID);
             model.addAspect("row", locationAspect);
             assertEquals(2,model.getAspects("row").size());
             model.addAspect("col", locationAspect);
             assertEquals(1,model.getAspects("row").size());
-            assertEquals(2,model.getAxes().size());
+            assertEquals(3,model.getAxes().size());
             assertTrue(model.hasAxis("col"));
 
             // Set up the filtration system
@@ -89,7 +87,6 @@ public class AspectsTestCase extends DOMLoadingTestCase {
             assertFalse(filter.filtersOn(LocationAspect.ID));
 
             // Create a fact set
-            model.addExtender(new StandardExtender());
             FactSet factSet = new FactSetImpl(model);
             factSet.addFacts(facts);
 
@@ -124,6 +121,8 @@ public class AspectsTestCase extends DOMLoadingTestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+	
 	
 	
 	
