@@ -47,6 +47,8 @@ public interface Domain extends Serializable, Comparator<AspectValue> {
      */
     public URI getAspectId();
     
+
+    
     /**
      * @param value
      *            The aspect value.

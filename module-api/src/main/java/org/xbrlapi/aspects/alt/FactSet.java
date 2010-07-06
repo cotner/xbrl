@@ -3,7 +3,6 @@ package org.xbrlapi.aspects.alt;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import org.xbrlapi.Fact;
@@ -26,6 +25,8 @@ import org.xbrlapi.utilities.XBRLException;
 public interface FactSet extends Serializable {
 
     /**
+     * Adds the fact to the fact set, computing the aspect values
+     * for the fact for each aspect in the fact set's aspect model.
      * @param fact The fact to add.
      * @throws XBRLException
      */
@@ -33,6 +34,8 @@ public interface FactSet extends Serializable {
 
 
     /**
+     * Adds the facts to the fact set, computing the aspect values
+     * for the facts for each aspect in the fact set's aspect model.
      * @param facts The facts to add.
      * @throws XBRLException
      */
@@ -68,9 +71,18 @@ public interface FactSet extends Serializable {
 
     /**
      * @param fact The fact.
-     * @return the set of aspect values for the given fact.
+     * @return the set of aspect values for the given fact, including missing
+     * values for those aspects for which the fact does not have a value.
      */
-    public Collection<AspectValue> getAspectValues(Fact fact);
+    public Collection<AspectValue> getAspectValues(Fact fact) throws XBRLException;
+    
+    /**
+     * @param aspectId the ID of the aspect to get the aspect value for.
+     * @param fact The fact.
+     * @return the aspect value for the given fact and aspect.
+     * @throws XBRLException
+     */
+    public AspectValue getAspectValue(URI aspectId, Fact fact) throws XBRLException;
 
     /**
      * @param value The aspect value.
@@ -78,28 +90,16 @@ public interface FactSet extends Serializable {
      */
     public Collection<Fact> getFacts(AspectValue value);
  
-    /**
-     * This method is intended to simplify generation of things like table
-     * row or column headings with multiple levels, one per aspect.  At each
-     * level, the headings reflect the values for the aspect at that level.
-     * 
-     * The data structure that is returned by this method allows easy traversal 
-     * to generate the table headings.
-     * 
-     * @param axis
-     *            The name of the axis.
-     * @return a list of combinations of aspect values where each combination is
-     *         a list of one aspect value for each aspect in the axis. The
-     *         aspect values in each combination are ordered in the same order
-     *         as the aspects in the axis. The lists in the list are ordered by
-     *         the orderings of the values for each aspect.
-     */
-    public List<List<AspectValue>> getAspectValueCombinationsForAxis(String axis)
-            throws XBRLException;    
+    
 
     /**
      * @return the number of facts in the fact set.
      */
     public long getSize();
+    
+    /**
+     * @return the aspect model underpinning this fact set.
+     */
+    public AspectModel getAspectModel();
     
 }

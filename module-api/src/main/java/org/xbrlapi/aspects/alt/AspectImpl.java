@@ -19,12 +19,17 @@ abstract public class AspectImpl implements Aspect {
     protected Domain domain;
 
     /**
-     * @param domain The domain for this aspect.
-     * @throws XBRLException if the domain is null.
+     * @param domain
+     *            The domain for this aspect.
+     * @throws XBRLException
+     *             if the domain is null or the domain aspect ID does not match
+     *             the ID of the aspect it is being associated with.
      */
     public AspectImpl(Domain domain) throws XBRLException {
         if (domain == null) throw new XBRLException("The domain must not be null.");
-        if (! domain.getAspectId().equals(this.getId())) throw new XBRLException("The domain " + domain.getAspectId() + " is not for aspect " + this.getId());
+        if (! this.isExtensible())
+            if (! domain.getAspectId().equals(this.getId())) 
+                throw new XBRLException("The domain " + domain.getAspectId() + " is not for aspect " + this.getId());
         this.domain = domain;
     }
     
@@ -34,5 +39,12 @@ abstract public class AspectImpl implements Aspect {
     public Domain getDomain() {
         return domain;
     }
+    
+    /**
+     * @see Aspect#isExtensible()
+     */
+    public boolean isExtensible() {
+        return false;
+    }    
 
 }

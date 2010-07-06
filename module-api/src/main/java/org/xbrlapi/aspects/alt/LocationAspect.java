@@ -53,6 +53,16 @@ public class LocationAspect extends AspectImpl implements Aspect {
      */
     public LocationAspectValue getValue(Fact fact) throws XBRLException {
         Fragment parent = fact.getParent();
+        return getValue(fact, parent);
+    }
+
+    /**
+     * @param fact The fact
+     * @param parent The parent fragment of the fact
+     * @return The location aspect value.
+     * @throws XBRLException
+     */
+    public LocationAspectValue getValue(Fact fact, Fragment parent) throws XBRLException {
         if (parent.isa(InstanceImpl.class)) return new LocationAspectValue(fact.getIndex());
         return new LocationAspectValue(parent.getIndex(),fact.getIndex());
     }

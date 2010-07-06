@@ -64,4 +64,11 @@ public interface Aspect extends Serializable {
      */
     public AspectValue getMissingValue();
     
+    /**
+     * @return true if the aspect can be defined by DTS augmentations
+     * and false otherwise.  True for XDT dimensions, for example, and false
+     * for concept and location aspects, for example.
+     */
+    public boolean isExtensible();
+    
 }

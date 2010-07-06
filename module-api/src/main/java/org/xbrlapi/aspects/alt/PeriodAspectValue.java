@@ -47,9 +47,8 @@ public class PeriodAspectValue extends AspectValueImpl implements AspectValue {
     }
     
     /**
-     * @param scheme The namespace of the concept.
-     * @param value The local name of the concept.
-     * @throws XBRLException if either of the parameters is null.
+     * @param period The context period.
+     * @throws XBRLException if the parameter is null.
      */
     public PeriodAspectValue(Period period) throws XBRLException {
         super();

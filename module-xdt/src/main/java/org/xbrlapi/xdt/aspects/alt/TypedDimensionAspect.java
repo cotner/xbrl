@@ -13,7 +13,6 @@ import org.xbrlapi.aspects.alt.Aspect;
 import org.xbrlapi.aspects.alt.AspectImpl;
 import org.xbrlapi.aspects.alt.Domain;
 import org.xbrlapi.utilities.XBRLException;
-import org.xbrlapi.xdt.Dimension;
 import org.xbrlapi.xdt.XDTConstants;
 import org.xbrlapi.xdt.values.DimensionValueAccessor;
 
@@ -86,20 +85,16 @@ public class TypedDimensionAspect extends AspectImpl implements Aspect {
         if (fact.isTuple()) return getMissingValue();
         
         Context context = ((Item) fact).getContext();
-        Element container = this.getContainerElementFromOCC(context.getEntity().getSegment());
-        if (container == null) {
-            container = this.getContainerElementFromOCC(context.getScenario());
-        }
-        if (container == null) return this.getMissingValue();
-
-        return new TypedDimensionAspectValue(getId(), container);
+        TypedDimensionAspectValue result = this.getValue(context.getEntity().getSegment());
+        if (! result.isMissing()) return result;
+        return this.getValue(context.getScenario());
     }
     
     /**
-     * @see DimensionValueAccessor#getDomainMemberFromOpenContextComponent(OpenContextComponent, Dimension)
+     * @see DimensionValueAccessor#getDomainMemberFromOpenContextComponent(OpenContextComponent)
      */
-    private Element getContainerElementFromOCC(OpenContextComponent occ) throws XBRLException {
-        if (occ == null) return null;
+    private TypedDimensionAspectValue getValue(OpenContextComponent occ) throws XBRLException {
+        if (occ == null) return getMissingValue();
         List<Element> children = occ.getChildElements();
         for (Element child: children) {
             if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace.toString())) {
@@ -108,12 +103,12 @@ public class TypedDimensionAspect extends AspectImpl implements Aspect {
                     URI candidateNamespace = occ.getNamespaceFromQName(dimensionQName,child);
                     String candidateLocalname = occ.getLocalnameFromQName(dimensionQName);
                     if (candidateNamespace.equals(dimensionNamespace) && candidateLocalname.equals(dimensionLocalname)) {                                
-                        return child;
+                        return new TypedDimensionAspectValue(getId(), child);
                     }
                 }
             }
         }
-        return null;
+        return getMissingValue();
     }
 
     /**

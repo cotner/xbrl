@@ -54,9 +54,18 @@ public class SegmentAspect extends AspectImpl implements Aspect {
         if (fact.isNil()) return getMissingValue();
         Item item = (Item) fact;
         Segment segment = item.getContext().getEntity().getSegment();
+        return getValue(segment);
+    }
+    
+    /**
+     * @param segment The context segment
+     * @return the saspect value.
+     * @throws XBRLException
+     */
+    public SegmentAspectValue getValue(Segment segment) throws XBRLException {
         if (segment == null) return getMissingValue();
         return new SegmentAspectValue(segment);
-    }
+    }        
 
     /**
      * @see Aspect#getMissingValue()

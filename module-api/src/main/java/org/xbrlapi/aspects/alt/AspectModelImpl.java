@@ -3,15 +3,14 @@ package org.xbrlapi.aspects.alt;
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fact;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -27,7 +26,7 @@ public class AspectModelImpl implements AspectModel {
     /**
      * 
      */
-    private static final long serialVersionUID = -352814819536983560L;
+    private static final long serialVersionUID = -6655272544674517422L;
 
     private static final Logger logger = Logger
             .getLogger(AspectModelImpl.class);
@@ -43,10 +42,42 @@ public class AspectModelImpl implements AspectModel {
      */
     private Map<URI,Aspect> aspects = new HashMap<URI,Aspect>();
     
-    /** 
-     * The set of extenders used by the aspect model.
+
+    /**
+     * The axis of the aspect model to add new aspects to by default.
+     * This defaults to "orphan".
      */
-    private Set<Extender> extenders = new TreeSet<Extender>();
+    private String defaultAxis = "orphan";
+
+    /**
+     * The data store used to define some of the standard aspects.
+     */
+    private Store store;
+    
+    /**
+     * @param store The data store required to create domains for some aspects.
+     * @throws XBRLException if the store is null.
+     */
+    public AspectModelImpl(Store store) throws XBRLException {
+        super();
+        if (store == null) throw new XBRLException("The data store must not be null.");
+        this.store = store;
+    }
+    
+    /**
+     * @see AspectModel#getNewAspectAxis()
+     */
+    public String getDefaultAxis() {
+        return defaultAxis;
+    }
+
+    /**
+     * @see AspectModel#setNewAspectAxis(String)
+     */
+    public void setDefaultAxis(String defaultAxis) {
+        this.defaultAxis = defaultAxis;
+    }
+        
     
     /**
      * @see AspectModel#hasAxis(String)
@@ -65,7 +96,8 @@ public class AspectModelImpl implements AspectModel {
     /**
      * @see AspectModel#getAspect(URI)
      */
-    public Aspect getAspect(URI aspectId) {
+    public Aspect getAspect(URI aspectId) throws XBRLException {
+        if (! aspects.containsKey(aspectId)) throw new XBRLException(aspectId + " is not in the aspect model.");
         return aspects.get(aspectId);
     }
     
@@ -118,6 +150,13 @@ public class AspectModelImpl implements AspectModel {
         axes.put(axis, aspect);
         aspects.put(aspect.getId(),aspect);
     }
+    
+    /**
+     * @see AspectModel#addAspect(URI)
+     */
+    public void addAspect(Aspect aspect) {
+        this.addAspect(this.getDefaultAxis(),aspect);
+    }
 
     /**
      * @see AspectModel#addAspect(String, Aspect, Aspect)
@@ -141,6 +180,14 @@ public class AspectModelImpl implements AspectModel {
             if (a.equals(parentAspect)) axes.put(axis, aspect);
         }
     }
+    
+    /**
+     * @see AspectModel#addAspect(Aspect, Aspect)
+     */
+    public void addAspect(Aspect parentAspect, Aspect aspect)
+            throws XBRLException {
+        this.addAspect(this.getDefaultAxis(), parentAspect, aspect);
+    }    
 
     /**
      * @see AspectModel#getAxes()
@@ -148,38 +195,38 @@ public class AspectModelImpl implements AspectModel {
     public Set<String> getAxes() throws XBRLException {
         return this.axes.keySet();
     }
-    
-    /**
-     * @see AspectModel#addExtender(Extender)
-     */
-    public void addExtender(Extender extender) throws XBRLException {
-        if (extender == null) throw new XBRLException("The aspect model extender must not be null.");
-        extenders.add(extender);
-    }
 
     /**
-     * @see AspectModel#removeAllExtenders()
+     * @see AspectModel#getAspectValues(Fact)
      */
-    public void removeAllExtenders() {
-        extenders.clear();
-    }
-
-    /**
-     * @see AspectModel#removeExtender(Extender)
-     */
-    public void removeExtender(Extender extender) {
-        extenders.remove(extender);
-    }
-
-    /**
-     * @see AspectModel#getNewAspects(Fact)
-     */
-    public Set<Aspect> getNewAspects(Fact fact) throws XBRLException {
-        Set<Aspect> newAspects = new HashSet<Aspect>();
-        for (Extender extender: extenders) {
-            newAspects.addAll(extender.getNewAspects(this,fact));
+    public Map<URI,AspectValue> getAspectValues(Fact fact) throws XBRLException {
+        Map<URI,AspectValue> result = new HashMap<URI,AspectValue>();
+        for (Aspect aspect: this.getAspects()) {
+            result.put(aspect.getId(),aspect.getValue(fact));
         }
-        return newAspects;
+        return result;
     }
 
+    /**
+     * @see AspectModel#getAspectValues(Fact, Map<URI,AspectValue>)
+     */
+    public Map<URI,AspectValue> getAspectValues(Fact fact, Map<URI,AspectValue> existingValues) throws XBRLException {
+        Map<URI,AspectValue> result = new HashMap<URI,AspectValue>();
+        for (Aspect aspect: this.getAspects()) {
+            URI id = aspect.getId();
+            if (existingValues.containsKey(id)) result.put(id,existingValues.get(id));
+            result.put(id,aspect.getValue(fact));
+        }
+        return result;
+    }
+ 
+    /**
+     * @see AspectModel#moveAspects(String, String)
+     */
+    public void moveAspects(String originalAxis, String newAxis) throws XBRLException {
+        if (! this.hasAxis(originalAxis)) throw new XBRLException(originalAxis + " is not an axis of this model.");
+        for (Aspect aspect: this.getAspects(originalAxis)) {
+            this.addAspect(newAxis, aspect);
+        }
+    }
 }

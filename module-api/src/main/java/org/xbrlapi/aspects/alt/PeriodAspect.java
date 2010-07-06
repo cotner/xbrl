@@ -54,8 +54,17 @@ public class PeriodAspect extends AspectImpl implements Aspect {
         if (fact.isNil()) return getMissingValue();
         Item item = (Item) fact;
         Period period = item.getContext().getPeriod();
-        return new PeriodAspectValue(period);
+        return getValue(period);
     }
+    
+    /**
+     * @param period The context period.
+     * @return the period aspect value for the given context period.
+     * @throws XBRLException
+     */
+    public PeriodAspectValue getValue(Period period) throws XBRLException {
+        return new PeriodAspectValue(period);
+    }    
     
     /**
      * @see Aspect#getMissingValue()

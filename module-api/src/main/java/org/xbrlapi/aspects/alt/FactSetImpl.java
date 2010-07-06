@@ -2,11 +2,11 @@ package org.xbrlapi.aspects.alt;
 
 import java.net.URI;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fact;
+import org.xbrlapi.tests.Timer;
 import org.xbrlapi.utilities.XBRLException;
 
 import com.google.common.collect.HashMultimap;
@@ -79,6 +79,13 @@ public class FactSetImpl implements FactSet {
     }
     
     /**
+     * @see FactSet#getAspectModel()
+     */
+    public AspectModel getAspectModel() {
+        return this.model;
+    }
+    
+    /**
      * @see FactSet#addFacts(Collection)
      */
     public void addFacts(Collection<Fact> facts) throws XBRLException {
@@ -91,27 +98,12 @@ public class FactSetImpl implements FactSet {
      * @see FactSet#addFact(Fact)
      */
     public void addFact(Fact fact) throws XBRLException {
-        
-        Set<Aspect> aspects = model.getNewAspects(fact);
 
-        // Update the aspect values for facts already in the fact set.
-        if (! aspects.isEmpty()) {
-            Collection<Fact> facts = factMap.keySet();
-            for (Aspect aspect: aspects) {
-                model.addAspect("orphan", aspect);
-                if (aspect.getDomain().allowsMissingValues()) {
-                    this.valueMap.putAll(aspect.getMissingValue(), facts);                
-                } else {
-                    for (Fact f: facts) {
-                        addAspectValue(aspect.getValue(f),f);
-                    }
-                }
-            }
-        }
-        
-        // Put the new fact itself into the fact map.
+        logger.info("adding fact to fact set: " + Timer.now());
+        // Put the new fact into the various maps.
         for (Aspect aspect: model.getAspects()) {
             AspectValue value = aspect.getValue(fact);
+            logger.info("added value for aspect " + aspect.getId() + " : " + Timer.now());
             if (! valueMap.containsEntry(value,fact)) valueMap.put(value,fact);
             if (! factMap.containsEntry(fact,value)) factMap.put(fact,value);
             if (! aspectMap.containsEntry(value.getAspectId(),value)) aspectMap.put(value.getAspectId(),value);
@@ -138,16 +130,37 @@ public class FactSetImpl implements FactSet {
     /**
      * @see FactSet#getAspectValues(Fact)
      */
-    public Collection<AspectValue> getAspectValues(Fact fact) {
-        return factMap.get(fact);
+    public Collection<AspectValue> getAspectValues(Fact fact) throws XBRLException {
+        Collection<AspectValue> values = factMap.get(fact);
+        Collection<Aspect> aspects = getAspectModel().getAspects();
+        for (AspectValue value: values) {
+            aspects.remove(getAspectModel().getAspect(value.getAspectId()));
+        }
+        for (Aspect aspect: aspects) {
+            values.add(aspect.getMissingValue());
+        }
+        return values;
     }
+    
+    /**
+     * @see FactSet#getAspectValue(URI, Fact)
+     */
+    public AspectValue getAspectValue(URI aspectId, Fact fact) throws XBRLException {
+        for (AspectValue value: factMap.get(fact)) {
+            if (value.getAspectId().equals(aspectId)) return value;
+        }
+        return this.getAspectModel().getAspect(aspectId).getMissingValue();
+            
+    }    
 
     /**
-     * @see FactSet#getCombinationValues(AspectId)
+     * @see FactSet#getAspectValues(AspectId)
      */
     public Collection<AspectValue> getAspectValues(URI aspectId) {
         return aspectMap.get(aspectId);
     }
+    
+
 
     /**
      * @see FactSet#getFacts()
@@ -160,7 +173,8 @@ public class FactSetImpl implements FactSet {
      * @see FactSet#getFacts(AspectValue)
      */
     public Collection<Fact> getFacts(AspectValue value) {
-        return valueMap.get(value);
+        Collection<Fact> facts = valueMap.get(value);
+        return facts;
     }
 
     /**
@@ -177,45 +191,7 @@ public class FactSetImpl implements FactSet {
         return factMap.containsKey(fact);
     }
 
-    /**
-     * @see AspectModel#getAspectValueCombinationsForAxis(String)
-     */
-    public List<List<AspectValue>> getAspectValueCombinationsForAxis(String axis) throws XBRLException {
-        /*         
-        List<Aspect> aspects = this.getAspects(axis);
-        for (int i=aspects.size()-1; i>=0; i--) {
-            List<Heading> headings = new Vector<Heading>();
-            
-        }
-        
-        // Set up the result matrix
-        List<Aspect> aspects = getAxisAspects(dimension);
-        List<List<AspectValue>> result = new Vector<List<AspectValue>>();
-        Aspect firstAspect = aspects.get(0);
-        int combinations = firstAspect.getValues().size() * firstAspect.getDescendantCount();
-        for (int i=0; i<combinations; i++) {
-            result.add(new Vector<AspectValue>());
-        }
-        for (Aspect aspect: aspects) {
-            
-            List<AspectValue> values = aspect.getValuesByHierarchy();
-            int vCount = aspect.size();
-            int dCount = aspect.getDescendantCount();
-            int aCount = aspect.getAncestorCount();
-            for (int a_i=0; a_i<aCount; a_i++) {
-                for (int d_i=0; d_i<dCount; d_i++) {
-                    for (int v_i=0; v_i<vCount; v_i++) {
-                        int index = dCount*vCount*a_i + dCount*v_i + d_i;
-                        result.get(index).add(values.get(v_i));
-                    }
-                }
-            }            
-            
-        }
-        return result;
-    */
-        return null;
-    }
+
     
     /**
      * @see FactSet#getSize()

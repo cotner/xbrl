@@ -51,10 +51,18 @@ public class EntityAspect extends AspectImpl implements Aspect {
      * @see Aspect#getValue(Fact)
      */
     public EntityAspectValue getValue(Fact fact) throws XBRLException {
-        if (fact.isTuple()) return new EntityAspectValue();
-        if (fact.isNil()) return new EntityAspectValue();
-        Item item = (Item) fact;
-        Entity entity = item.getContext().getEntity();
+        if (fact.isTuple()) return getMissingValue();
+        if (fact.isNil()) return getMissingValue();
+        return getValue(((Item) fact).getContext().getEntity());
+    }
+    
+    /**
+     * @param entity The entity fragment to base the entity aspect value on.
+     * @return the entity aspect value reflecting the scheme and value expressed by the entity aspect.
+     * @throws XBRLException if the entity is null.
+     */
+    public EntityAspectValue getValue(Entity entity) throws XBRLException {
+        if (entity == null) throw new XBRLException("The entity must not be null.");
         return new EntityAspectValue(entity.getIdentifierScheme(),entity.getIdentifierValue());
     }
     

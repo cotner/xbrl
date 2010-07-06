@@ -57,11 +57,20 @@ public class SegmentRemainderAspect extends AspectImpl implements Aspect {
         if (fact.isTuple()) return getMissingValue();
         if (fact.isNil()) return getMissingValue();
         Item item = (Item) fact;
-        Segment Segment = item.getContext().getEntity().getSegment();
-        if (Segment == null) return getMissingValue();
-        return new SegmentRemainderAspectValue(Segment);
+        Segment segment = item.getContext().getEntity().getSegment();
+        return getValue(segment);
     }
 
+    /**
+     * @param segment The context segment, which may be null.
+     * @return the segment remainder aspect value.
+     * @throws XBRLException
+     */
+    public SegmentRemainderAspectValue getValue(Segment segment) throws XBRLException {
+        if (segment == null) return getMissingValue();
+        return new SegmentRemainderAspectValue(segment);
+    }
+    
     /**
      * @see Aspect#getMissingValue()
      */

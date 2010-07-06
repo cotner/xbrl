@@ -58,6 +58,15 @@ public class ScenarioRemainderAspect extends AspectImpl implements Aspect {
         if (fact.isNil()) return getMissingValue();
         Item item = (Item) fact;
         Scenario scenario = item.getContext().getScenario();
+        return getValue(scenario);
+    }
+    
+    /**
+     * @param scenario The context scenario, which may be null.
+     * @return the scenario remainder aspect value.
+     * @throws XBRLException
+     */
+    public ScenarioRemainderAspectValue getValue(Scenario scenario) throws XBRLException {
         if (scenario == null) return getMissingValue();
         return new ScenarioRemainderAspectValue(scenario);
     }

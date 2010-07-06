@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.xbrlapi.Fact;
@@ -78,6 +79,15 @@ public interface AspectModel extends Serializable {
      *            the axis to put the aspect in, in last place in the ordering.
      */
     public void addAspect(String axis, Aspect aspect);
+    
+    /**
+     * The aspect will be added as the last aspect in the default axis.
+     * If the aspect model does not already have the default axis, that axis
+     * will be added to the aspect model.
+     * @param aspect
+     *            The aspect to add to the aspect model.
+     */
+    public void addAspect(Aspect aspect);
 
     /**
      * The aspect will be added to the aspect model in the specified axis
@@ -92,6 +102,21 @@ public interface AspectModel extends Serializable {
      *            The aspect to add to the aspect model.
      */
     public void addAspect(String axis, Aspect parentAspect, Aspect aspect)
+            throws XBRLException;
+
+    /**
+     * The aspect will be added to the aspect model in the default axis and it
+     * will be immediately follow the parent aspect ID in the list of aspects
+     * associated with the default axis if that axis has the parent aspect in
+     * it. Otherwise the aspect will be added as the last aspect for the default
+     * axis.
+     * 
+     * @param parentAspect
+     *            The parent aspect for the aspect being added.
+     * @param aspect
+     *            The aspect to add to the aspect model.
+     */
+    public void addAspect(Aspect parentAspect, Aspect aspect)
             throws XBRLException;
 
     /**
@@ -125,30 +150,59 @@ public interface AspectModel extends Serializable {
      */
     public Set<String> getAxes() throws XBRLException;
     
+
+
+
+    
+
+
+
+    
+
+
+   
+
+    
+ 
     /**
-     * @param extender The aspect model extender.
-     * @throws XBRLException if the extender is null.
+     * @return the axis that new aspects are added to by default.
      */
-    public void addExtender(Extender extender) throws XBRLException;
+    public String getDefaultAxis();
 
     /**
-     * Removes the given extender from the aspect model if the aspect model
-     * is currently using the given extender.
-     * @param extender The aspect model extender to remove from the aspect model.
+     * @param defaultAxis the axis to add aspects to by default.
+     * @throws XBRLException if the axis is null.
      */
-    public void removeExtender(Extender extender);
+    public void setDefaultAxis(String defaultAxis) throws XBRLException;
     
     /**
-     * Removes all extenders from the aspect model.
+     * @param fact
+     *            The fact to get the aspect values for.
+     * @return the map from Aspect IDs to values for those aspects, for the
+     *         fact, with missing values for all aspects in the aspect model,
+     *         that do not have a value for the given fact.
+     * @throws XBRLException
      */
-    public void removeAllExtenders();
+    public Map<URI, AspectValue> getAspectValues(Fact fact)
+            throws XBRLException;
 
-   /**
-    * @param fact The fact to get the new aspects from.
-    * @return the set of aspects not in the model that are associated
-    * with the fact and that are detected by the extenders being used 
-    * by the aspect model.
-    */
-    public Set<Aspect> getNewAspects(Fact fact) throws XBRLException;
+    /**
+     * @param fact
+     *            The fact to get the aspect values for.
+     * @param existingValues
+     *            The map of aspect values that we already have and so do not
+     *            need to get now.
+     * @return the map of existing and new aspect values, one for each aspect in
+     *         this aspect model.
+     * @throws XBRLException
+     */
+    public Map<URI, AspectValue> getAspectValues(Fact fact,
+            Map<URI, AspectValue> existingValues) throws XBRLException;
     
+    /**
+     * @param originalAxis The axis to move the aspects from
+     * @param newAxis The axis to move the aspects to
+     * @throws XBRLException if the original axis does not exist.
+     */
+    public void moveAspects(String originalAxis, String newAxis) throws XBRLException;
 }

@@ -3,19 +3,21 @@ package org.xbrlapi.xdt.aspects.alt;
 import java.net.URI;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
+import org.xbrlapi.Concept;
 import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Item;
 import org.xbrlapi.OpenContextComponent;
+import org.xbrlapi.Scenario;
+import org.xbrlapi.Segment;
 import org.xbrlapi.aspects.alt.Aspect;
 import org.xbrlapi.aspects.alt.AspectImpl;
 import org.xbrlapi.aspects.alt.Domain;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
-import org.xbrlapi.xdt.Dimension;
+import org.xbrlapi.xdt.ExplicitDimension;
 import org.xbrlapi.xdt.XDTConstants;
 import org.xbrlapi.xdt.values.DimensionValueAccessor;
 
@@ -88,19 +90,40 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
         if (fact.isTuple()) return getMissingValue();
         
         Context context = ((Item) fact).getContext();
-        QName memberQName = this.getMemberQNameFromOCC(context.getEntity().getSegment());
-        if (memberQName == null) {
-            memberQName = this.getMemberQNameFromOCC(context.getScenario());
-        }
-        if (memberQName == null) return this.getMissingValue();
+        
+        // Try segment
+        Segment segment = context.getEntity().getSegment();
+        ExplicitDimensionAspectValue result = this.getValue(segment);
+        if (! result.isMissing()) return result;
+        
+        // Give scenario a whirl
+        Scenario scenario = context.getScenario();
+        result = this.getValue(scenario);
+        if (! result.isMissing()) return result;
 
-        return new ExplicitDimensionAspectValue(getId(), URI.create(memberQName.getNamespaceURI()), memberQName.getLocalPart());
+        // Go for a default with fall back to a missing value
+        return getDefaultValue(fact.getStore());
+        
     }
+
+    public ExplicitDimensionAspectValue getDefaultValue(Store store) throws XBRLException {
+        ExplicitDimension dimension = store.<ExplicitDimension>getSchemaContent(this.getDimensionNamespace(), this.getDimensionLocalname());
+        try {
+            Concept defaultMember = dimension.getDefaultDomainMember();
+            return new ExplicitDimensionAspectValue(getId(), defaultMember.getTargetNamespace(), defaultMember.getName());
+        } catch (XBRLException e) { // There is no default so return a missing value
+            return getMissingValue();
+        }
+    }
+
+    
+
+    
     /**
-     * @see DimensionValueAccessor#getDomainMemberFromOpenContextComponent(OpenContextComponent, Dimension)
+     * @see DimensionValueAccessor#getDomainMemberFromOpenContextComponent(OpenContextComponent)
      */
-    private QName getMemberQNameFromOCC(OpenContextComponent occ) throws XBRLException {
-        if (occ == null) return null;
+    public ExplicitDimensionAspectValue getValue(OpenContextComponent occ) throws XBRLException {
+        if (occ == null) return getMissingValue();
         List<Element> children = occ.getChildElements();
         for (Element child: children) {
             if (child.getNamespaceURI().equals(XDTConstants.XBRLDINamespace.toString())) {
@@ -112,12 +135,12 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
                         String memberQName = child.getTextContent().trim();
                         URI memberNamespace = occ.getNamespaceFromQName(memberQName,child);
                         String memberLocalname = occ.getLocalnameFromQName(memberQName);
-                        return new QName(memberNamespace.toString(), memberLocalname);
+                        return new ExplicitDimensionAspectValue(this.getId(), memberNamespace, memberLocalname);
                     }
                 }
             }
         }
-        return null;
+        return this.getMissingValue();
     }    
     
     /**

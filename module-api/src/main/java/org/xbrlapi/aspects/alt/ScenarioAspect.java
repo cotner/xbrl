@@ -55,9 +55,18 @@ public class ScenarioAspect extends AspectImpl implements Aspect {
         if (fact.isNil()) return getMissingValue();
         Item item = (Item) fact;
         Scenario scenario = item.getContext().getScenario();
+        return getValue(scenario);
+    }
+    
+    /**
+     * @param scenario The context scenario
+     * @return the scenario aspect value.
+     * @throws XBRLException
+     */
+    public ScenarioAspectValue getValue(Scenario scenario) throws XBRLException {
         if (scenario == null) return getMissingValue();
         return new ScenarioAspectValue(scenario);
-    }
+    }    
     
     /**
      * @see Aspect#getMissingValue()

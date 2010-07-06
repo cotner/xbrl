@@ -52,11 +52,19 @@ public class TupleAspect extends AspectImpl implements Aspect {
      */
     public TupleAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return new TupleAspectValue(true);
-        Fragment parent = fact.getParent();
+        return getValue(fact.getParent());
+    }
+
+    /**
+     * @param parent The fact's parent fragment
+     * @return the tuple aspect value based on the parent being a tuple or an XBRL instance.
+     * @throws XBRLException
+     */
+    public TupleAspectValue getValue(Fragment parent) throws XBRLException {
         if (parent.isa(InstanceImpl.class)) return new TupleAspectValue(false);
         return new TupleAspectValue(true);
     }
-
+    
     /**
      * @see Aspect#getMissingValue()
      */
