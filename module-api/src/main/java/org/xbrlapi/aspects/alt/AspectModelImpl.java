@@ -63,6 +63,13 @@ public class AspectModelImpl implements AspectModel {
         if (store == null) throw new XBRLException("The data store must not be null.");
         this.store = store;
     }
+
+    /**
+     * @return the data store underlying this aspect model.
+     */
+    protected Store getStore() {
+        return this.store;
+    }
     
     /**
      * @see AspectModel#getNewAspectAxis()
@@ -119,9 +126,9 @@ public class AspectModelImpl implements AspectModel {
     }
 
     /**
-     * @see AspectModel#deleteAspect(Aspect)
+     * @param aspect The aspect to remove from an axis.
      */
-    public void deleteAspect(Aspect aspect) {
+    private void deleteAspect(Aspect aspect) {
         if (axes.containsValue(aspect)) {
             for (String key : axes.keySet()) {
                 if (axes.get(key).contains(aspect)) {
@@ -131,7 +138,6 @@ public class AspectModelImpl implements AspectModel {
             }
             aspects.remove(aspect.getId());
         }
-        
     }
 
     /**
@@ -215,7 +221,7 @@ public class AspectModelImpl implements AspectModel {
         for (Aspect aspect: this.getAspects()) {
             URI id = aspect.getId();
             if (existingValues.containsKey(id)) result.put(id,existingValues.get(id));
-            result.put(id,aspect.getValue(fact));
+            else result.put(id,aspect.getValue(fact));
         }
         return result;
     }
@@ -225,7 +231,9 @@ public class AspectModelImpl implements AspectModel {
      */
     public void moveAspects(String originalAxis, String newAxis) throws XBRLException {
         if (! this.hasAxis(originalAxis)) throw new XBRLException(originalAxis + " is not an axis of this model.");
-        for (Aspect aspect: this.getAspects(originalAxis)) {
+        Collection<Aspect> aspects = this.getAspects(originalAxis);
+        this.axes.removeAll(originalAxis);
+        for (Aspect aspect: aspects) {
             this.addAspect(newAxis, aspect);
         }
     }

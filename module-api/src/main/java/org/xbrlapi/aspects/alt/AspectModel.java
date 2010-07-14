@@ -119,11 +119,7 @@ public interface AspectModel extends Serializable {
     public void addAspect(Aspect parentAspect, Aspect aspect)
             throws XBRLException;
 
-    /**
-     * @param aspect
-     *            The aspect to delete from the aspect model.
-     */
-    public void deleteAspect(Aspect aspect);
+
 
     /**
      * @param axis

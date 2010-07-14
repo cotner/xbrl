@@ -19,7 +19,6 @@ import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.ExplicitDimension;
 import org.xbrlapi.xdt.XDTConstants;
-import org.xbrlapi.xdt.values.DimensionValueAccessor;
 
 /**
  * <h2>Explicit dimension aspect details</h2>
@@ -34,7 +33,7 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
     /**
      * 
      */
-    private static final long serialVersionUID = -4922858269680499821L;
+    private static final long serialVersionUID = -2685802347509982429L;
 
     private static final Logger logger = Logger.getLogger(ExplicitDimensionAspect.class);
 
@@ -106,22 +105,29 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
         
     }
 
-    public ExplicitDimensionAspectValue getDefaultValue(Store store) throws XBRLException {
-        ExplicitDimension dimension = store.<ExplicitDimension>getSchemaContent(this.getDimensionNamespace(), this.getDimensionLocalname());
-        try {
-            Concept defaultMember = dimension.getDefaultDomainMember();
-            return new ExplicitDimensionAspectValue(getId(), defaultMember.getTargetNamespace(), defaultMember.getName());
-        } catch (XBRLException e) { // There is no default so return a missing value
-            return getMissingValue();
-        }
-    }
-
-    
-
+    ExplicitDimensionAspectValue defaultValue = null;
     
     /**
-     * @see DimensionValueAccessor#getDomainMemberFromOpenContextComponent(OpenContextComponent)
+     * This method only determines the default value from the store on the first time.
+     * Thereafter it is cached, even if the data store changes.
+     * @param store The data store to use to get the default value.
+     * @return the default value for this dimension or the missing value
+     * if there is no default.
+     * @throws XBRLException
      */
+    public ExplicitDimensionAspectValue getDefaultValue(Store store) throws XBRLException {
+        if (defaultValue == null) {
+            ExplicitDimension dimension = store.<ExplicitDimension>getSchemaContent(this.getDimensionNamespace(), this.getDimensionLocalname());
+            try {
+                Concept defaultMember = dimension.getDefaultDomainMember();
+                defaultValue = new ExplicitDimensionAspectValue(getId(), defaultMember.getTargetNamespace(), defaultMember.getName());
+            } catch (XBRLException e) { // There is no default so return a missing value
+                defaultValue = getMissingValue();
+            }
+        }
+        return defaultValue;
+    }
+
     public ExplicitDimensionAspectValue getValue(OpenContextComponent occ) throws XBRLException {
         if (occ == null) return getMissingValue();
         List<Element> children = occ.getChildElements();
@@ -132,16 +138,20 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
                     URI candidateNamespace = occ.getNamespaceFromQName(dimensionQName,child);
                     String candidateLocalname = occ.getLocalnameFromQName(dimensionQName);
                     if (candidateNamespace.equals(dimensionNamespace) && candidateLocalname.equals(dimensionLocalname)) {                                
-                        String memberQName = child.getTextContent().trim();
-                        URI memberNamespace = occ.getNamespaceFromQName(memberQName,child);
-                        String memberLocalname = occ.getLocalnameFromQName(memberQName);
-                        return new ExplicitDimensionAspectValue(this.getId(), memberNamespace, memberLocalname);
+                        return getValue(occ, child);
                     }
                 }
             }
         }
         return this.getMissingValue();
     }    
+
+    public ExplicitDimensionAspectValue getValue(OpenContextComponent occ, Element child) throws XBRLException {
+        String memberQName = child.getTextContent().trim();
+        URI memberNamespace = occ.getNamespaceFromQName(memberQName,child);
+        String memberLocalname = occ.getLocalnameFromQName(memberQName);
+        return new ExplicitDimensionAspectValue(this.getId(), memberNamespace, memberLocalname);
+    }
     
     /**
      * @see Aspect#getMissingValue()

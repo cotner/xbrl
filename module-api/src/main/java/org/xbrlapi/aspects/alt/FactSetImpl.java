@@ -2,11 +2,14 @@ package org.xbrlapi.aspects.alt;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.xbrlapi.Fact;
-import org.xbrlapi.tests.Timer;
 import org.xbrlapi.utilities.XBRLException;
 
 import com.google.common.collect.HashMultimap;
@@ -63,12 +66,27 @@ public class FactSetImpl implements FactSet {
     AspectModel model;
     
     /**
+     * @see #FactSet#getModel()
+     */
+    public AspectModel getModel() {
+        return model;
+    }
+
+    /**
+     * @param model The model to set.
+     * @throws XBRLException if the model is null.
+     */
+    private void setModel(AspectModel model) throws XBRLException {
+        if (model == null) throw new XBRLException("The model must not be null.");
+        this.model = model;
+    }
+
+    /**
      * @param model The aspect model determining the aspects to work with.
-     * @throws XBRLException if the aspect model is null.
+     * @throws XBRLException
      */
     public FactSetImpl(AspectModel model) throws XBRLException {
-        if (model == null) throw new XBRLException("The aspect model must not be null.");
-        this.model = model;
+        this.setModel(model);
         
         valueMap =  Multimaps.synchronizedSetMultimap(HashMultimap.<AspectValue, Fact>create()); 
         
@@ -99,26 +117,18 @@ public class FactSetImpl implements FactSet {
      */
     public void addFact(Fact fact) throws XBRLException {
 
-        logger.info("adding fact to fact set: " + Timer.now());
-        // Put the new fact into the various maps.
-        for (Aspect aspect: model.getAspects()) {
-            AspectValue value = aspect.getValue(fact);
-            logger.info("added value for aspect " + aspect.getId() + " : " + Timer.now());
-            if (! valueMap.containsEntry(value,fact)) valueMap.put(value,fact);
-            if (! factMap.containsEntry(fact,value)) factMap.put(fact,value);
-            if (! aspectMap.containsEntry(value.getAspectId(),value)) aspectMap.put(value.getAspectId(),value);
+        Map<URI,AspectValue> values = model.getAspectValues(fact);
+        for (URI id: values.keySet()) {
+            AspectValue value = values.get(id);
+            if (! value.isMissing()) {
+                if (! valueMap.containsEntry(value,fact)) valueMap.put(value,fact);
+                if (! factMap.containsEntry(fact,value)) factMap.put(fact,value);
+                if (! aspectMap.containsEntry(id,value)) aspectMap.put(id,value);
+            }
         }
     }
     
-    /**
-     * Adds an aspect-value - fact pairing to the fact set.
-     * @param value The aspect value to add.
-     * @param fact The fact to add.
-     */
-    protected void addAspectValue(AspectValue value, Fact fact) {
-        valueMap.put(value,fact);
-        factMap.put(fact,value);
-    }
+
     
     /**
      * @see FactSet#getAspectValues()
@@ -132,12 +142,13 @@ public class FactSetImpl implements FactSet {
      */
     public Collection<AspectValue> getAspectValues(Fact fact) throws XBRLException {
         Collection<AspectValue> values = factMap.get(fact);
-        Collection<Aspect> aspects = getAspectModel().getAspects();
+        Set<URI> aspectsWithValues = new HashSet<URI>();
         for (AspectValue value: values) {
-            aspects.remove(getAspectModel().getAspect(value.getAspectId()));
+            aspectsWithValues.add(value.getAspectId());
         }
-        for (Aspect aspect: aspects) {
-            values.add(aspect.getMissingValue());
+        for (Aspect aspect: model.getAspects()) {
+            if (! aspectsWithValues.contains(aspect.getId()))
+                values.add(aspect.getMissingValue());
         }
         return values;
     }
@@ -157,7 +168,13 @@ public class FactSetImpl implements FactSet {
      * @see FactSet#getAspectValues(AspectId)
      */
     public Collection<AspectValue> getAspectValues(URI aspectId) {
-        return aspectMap.get(aspectId);
+        Collection<AspectValue> values = aspectMap.get(aspectId);
+        try {
+            values.add(model.getAspect(aspectId).getMissingValue());
+        } catch (XBRLException e) {
+            ; // Generally unreachable.
+        }
+        return values;
     }
     
 
@@ -191,13 +208,33 @@ public class FactSetImpl implements FactSet {
         return factMap.containsKey(fact);
     }
 
-
-    
     /**
      * @see FactSet#getSize()
      */
     public long getSize() {
         return this.factMap.keySet().size();
     }
+
+    /**
+     * @see FactSet#isPopulated(URI)
+     */
+    public boolean isPopulated(URI aspectId) {
+        return (!aspectMap.get(aspectId).isEmpty());
+    }
+
+    /**
+     * @see FactSet#getRootFacts(URI)
+     */
+    public List<Fact> getRootFacts(URI aspectId) throws XBRLException {
+        List<Fact> rootFacts = new Vector<Fact>();
+        for (AspectValue value: this.getAspectValues(aspectId)) {
+            Domain domain = model.getAspect(aspectId).getDomain();
+            if (domain.isRoot(value)) {
+                rootFacts.addAll(this.getFacts(value));
+            } 
+        }
+        return rootFacts;
+    }
+    
     
 }

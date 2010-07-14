@@ -14,7 +14,6 @@ import org.xbrlapi.aspects.alt.AspectImpl;
 import org.xbrlapi.aspects.alt.Domain;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.XDTConstants;
-import org.xbrlapi.xdt.values.DimensionValueAccessor;
 
 /**
  * <h2>Typed dimension aspect details</h2>
@@ -77,6 +76,14 @@ public class TypedDimensionAspect extends AspectImpl implements Aspect {
         }
     }
     
+    public String getDimensionLocalname() {
+        return dimensionLocalname;
+    }
+    
+    public URI getDimensionNamespace() {
+        return dimensionNamespace;
+    }    
+    
     /**
      * @see Aspect#getValue(Fact)
      */
@@ -89,11 +96,8 @@ public class TypedDimensionAspect extends AspectImpl implements Aspect {
         if (! result.isMissing()) return result;
         return this.getValue(context.getScenario());
     }
-    
-    /**
-     * @see DimensionValueAccessor#getDomainMemberFromOpenContextComponent(OpenContextComponent)
-     */
-    private TypedDimensionAspectValue getValue(OpenContextComponent occ) throws XBRLException {
+
+    public TypedDimensionAspectValue getValue(OpenContextComponent occ) throws XBRLException {
         if (occ == null) return getMissingValue();
         List<Element> children = occ.getChildElements();
         for (Element child: children) {
@@ -103,7 +107,7 @@ public class TypedDimensionAspect extends AspectImpl implements Aspect {
                     URI candidateNamespace = occ.getNamespaceFromQName(dimensionQName,child);
                     String candidateLocalname = occ.getLocalnameFromQName(dimensionQName);
                     if (candidateNamespace.equals(dimensionNamespace) && candidateLocalname.equals(dimensionLocalname)) {                                
-                        return new TypedDimensionAspectValue(getId(), child);
+                        return getValue(child);
                     }
                 }
             }
@@ -111,6 +115,10 @@ public class TypedDimensionAspect extends AspectImpl implements Aspect {
         return getMissingValue();
     }
 
+    public TypedDimensionAspectValue getValue(Element child) throws XBRLException {
+        return new TypedDimensionAspectValue(getId(), child);
+    }    
+    
     /**
      * @see Aspect#getMissingValue()
      */

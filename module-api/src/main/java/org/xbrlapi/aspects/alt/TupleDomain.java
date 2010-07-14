@@ -5,17 +5,22 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
-public class TupleDomain implements Domain {
+public class TupleDomain extends DomainImpl implements Domain {
 
     /**
      * 
      */
-    private static final long serialVersionUID = -1251406995495349569L;
+    private static final long serialVersionUID = -7809445921191054988L;
     
     protected final static Logger logger = Logger.getLogger(TupleDomain.class);
     
+    public TupleDomain(Store store) throws XBRLException {
+        super(store);
+    }
+
     /**
      * @see Domain#getAspectId()
      */
@@ -24,6 +29,7 @@ public class TupleDomain implements Domain {
     /**
      * @see Domain#getAllAspectValues()
      */
+    @Override
     public List<AspectValue> getAllAspectValues() throws XBRLException {
         
         List<AspectValue> values = new Vector<AspectValue>();
@@ -33,48 +39,11 @@ public class TupleDomain implements Domain {
     }
 
     /**
-     * @see Domain#getChildren(AspectValue)
-     */
-    public List<AspectValue> getChildren(AspectValue parent)
-            throws XBRLException {
-        return new Vector<AspectValue>();
-    }
-
-    /**
-     * @see Domain#getDepth(AspectValue)
-     */
-    public int getDepth(AspectValue aspectValue) throws XBRLException {
-        return 0;
-    }
-
-    /**
-     * @see Domain#getParent(AspectValue)
-     */
-    public AspectValue getParent(AspectValue child)
-            throws XBRLException {
-        return null;
-    }
-
-    /**
      * @see Domain#getSize()
      */
+    @Override
     public long getSize() throws XBRLException {
         return 2L;
-    }
-
-    /**
-     * @see Domain#hasChildren(AspectValue)
-     */
-    public boolean hasChildren(AspectValue value)
-            throws XBRLException {
-        return false;
-    }
-
-    /**
-     * @see Domain#hasParent(AspectValue)
-     */
-    public boolean hasParent(AspectValue child) throws XBRLException {
-        return false;
     }
 
     /**
@@ -89,16 +58,9 @@ public class TupleDomain implements Domain {
     /**
      * @see Domain#isFinite()
      */
+    @Override
     public boolean isFinite() {
         return true;
-    }
-
-    /**
-     * Returns false.
-     * @see Domain#allowsMissingValues()
-     */
-    public boolean allowsMissingValues() {
-        return false;
     }
 
     /**

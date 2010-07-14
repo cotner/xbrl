@@ -11,11 +11,4 @@ public interface StoreHandler {
      */
     public Store getStore() throws XBRLException;
     
-    /**
-     * @param store
-     *            The data store to use.
-     * @throws XBRLException
-     *             if the data store is null.
-     */
-    public void setStore(Store store) throws XBRLException;
 }

@@ -9,6 +9,7 @@ import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Item;
+import org.xbrlapi.NumericItem;
 import org.xbrlapi.Period;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.Segment;
@@ -53,17 +54,18 @@ public class StandardAspectModel extends AspectModelImpl implements AspectModel 
         
         addAspect(new LocationAspect(new LocationDomain(store)));
         addAspect(new ConceptAspect(new ConceptDomain(store)));
-        addAspect(new UnitAspect(new UnitDomain()));
-        addAspect(new PeriodAspect(new PeriodDomain()));
-        addAspect(new EntityAspect(new EntityDomain()));
-        addAspect(new SegmentAspect(new SegmentDomain()));
-        addAspect(new ScenarioAspect(new ScenarioDomain()));
+        addAspect(new UnitAspect(new UnitDomain(store)));
+        addAspect(new PeriodAspect(new PeriodDomain(store)));
+        addAspect(new EntityAspect(new EntityDomain(store)));
+        addAspect(new SegmentAspect(new SegmentDomain(store)));
+        addAspect(new ScenarioAspect(new ScenarioDomain(store)));
         
     }
 
     /**
      * @see AspectModel#getAspectValues(Fact)
      */
+    @Override
     public Map<URI,AspectValue> getAspectValues(Fact fact) throws XBRLException {
         Map<URI,AspectValue> result = new HashMap<URI,AspectValue>();
 
@@ -72,22 +74,32 @@ public class StandardAspectModel extends AspectModelImpl implements AspectModel 
         Fragment parent = fact.getParent();
         result.put(LocationAspect.ID, ((LocationAspect)getAspect(LocationAspect.ID)).getValue(fact,parent) );
 
-        if (fact.isNil()) return result;
-        if (fact.isTuple()) return result;
+        if (fact.isNil() || fact.isTuple()) {
+            result.put(EntityAspect.ID, getAspect(EntityAspect.ID).getMissingValue() );
+            result.put(PeriodAspect.ID, getAspect(PeriodAspect.ID).getMissingValue() );
+            result.put(SegmentAspect.ID, getAspect(SegmentAspect.ID).getMissingValue() );
+            result.put(ScenarioAspect.ID, getAspect(ScenarioAspect.ID).getMissingValue() );
+            result.put(UnitAspect.ID, getAspect(UnitAspect.ID).getMissingValue() );
+        } else {
         
-        Item item = (Item) fact;
-        
-        Context context = item.getContext();
-        Entity entity = context.getEntity();
-        Period period = context.getPeriod();
-        Scenario scenario = context.getScenario();
-        Segment segment = entity.getSegment();
-        
-        result.put(EntityAspect.ID, ((EntityAspect)getAspect(EntityAspect.ID)).getValue(entity) );
-        result.put(PeriodAspect.ID, ((PeriodAspect)getAspect(PeriodAspect.ID)).getValue(period) );
-        result.put(SegmentAspect.ID, ((SegmentAspect)getAspect(SegmentAspect.ID)).getValue(segment) );
-        result.put(ScenarioAspect.ID, ((ScenarioAspect)getAspect(ScenarioAspect.ID)).getValue(scenario) );
-        
+            Item item = (Item) fact;
+            
+            Context context = item.getContext();
+            Entity entity = context.getEntity();
+            Period period = context.getPeriod();
+            Scenario scenario = context.getScenario();
+            Segment segment = entity.getSegment();
+            
+            result.put(EntityAspect.ID, ((EntityAspect)getAspect(EntityAspect.ID)).getValue(entity) );
+            result.put(PeriodAspect.ID, ((PeriodAspect)getAspect(PeriodAspect.ID)).getValue(period) );
+            result.put(SegmentAspect.ID, ((SegmentAspect)getAspect(SegmentAspect.ID)).getValue(segment) );
+            result.put(ScenarioAspect.ID, ((ScenarioAspect)getAspect(ScenarioAspect.ID)).getValue(scenario) );
+            
+            if (item.isNumeric()) 
+                result.put(UnitAspect.ID, ((UnitAspect)getAspect(UnitAspect.ID)).getValue(((NumericItem) item).getUnit()) );
+            else 
+                result.put(UnitAspect.ID, getAspect(UnitAspect.ID).getMissingValue());
+        }   
         // Return the map of aspect values, filling in gaps for any aspects other than those dealt with above.
         return this.getAspectValues(fact,result);
         

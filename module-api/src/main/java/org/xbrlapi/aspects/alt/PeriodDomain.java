@@ -1,23 +1,26 @@
 package org.xbrlapi.aspects.alt;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Vector;
 
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
-public class PeriodDomain implements Domain {
+public class PeriodDomain extends DomainImpl implements Domain {
 
     /**
      * 
      */
-    private static final long serialVersionUID = 4798320671196789758L;
-
+    private static final long serialVersionUID = -4367394263354299714L;
+    
     protected final static Logger logger = Logger.getLogger(PeriodAspectValue.class);
+    
+    public PeriodDomain(Store store) throws XBRLException {
+        super(store);
+    }
     
     /**
      * @see Domain#getAspectId()
@@ -25,79 +28,11 @@ public class PeriodDomain implements Domain {
     public URI getAspectId() { return PeriodAspect.ID; }
     
     /**
-     * @see Domain#getAllAspectValues()
-     */
-    public List<AspectValue> getAllAspectValues() throws XBRLException {
-        throw new XBRLException("The domain is not finite");
-    }
-
-    /**
-     * @see Domain#getChildren(AspectValue)
-     */
-    public List<AspectValue> getChildren(AspectValue parent)
-            throws XBRLException {
-        return new Vector<AspectValue>();
-    }
-
-    /**
-     * @see Domain#getDepth(AspectValue)
-     */
-    public int getDepth(AspectValue aspectValue) throws XBRLException {
-        return 0;
-    }
-
-    /**
-     * @see Domain#getParent(AspectValue)
-     */
-    public AspectValue getParent(AspectValue child)
-            throws XBRLException {
-        return null;
-    }
-
-    /**
-     * @see Domain#getSize()
-     */
-    public long getSize() throws XBRLException {
-        throw new XBRLException("The domain is not finite");
-    }
-
-    /**
-     * @see Domain#hasChildren(AspectValue)
-     */
-    public boolean hasChildren(AspectValue value)
-            throws XBRLException {
-        return false;
-    }
-
-    /**
-     * @see Domain#hasParent(AspectValue)
-     */
-    public boolean hasParent(AspectValue child) throws XBRLException {
-        return false;
-    }
-
-    /**
      * @see Domain#isInDomain(AspectValue)
      */
     public boolean isInDomain(AspectValue candidate)
             throws XBRLException {
         if (! (candidate instanceof PeriodAspectValue)) return false;
-        return true;
-    }
-
-    /**
-     * @return false always.
-     * @see Domain#isFinite()
-     */
-    public boolean isFinite() {
-        return false;
-    }
-
-    /**
-     * Returns true to allow for tuples and nil facts.
-     * @see Domain#allowsMissingValues()
-     */
-    public boolean allowsMissingValues() {
         return true;
     }
 
@@ -159,5 +94,5 @@ public class PeriodDomain implements Domain {
         
         return 0;
     }
-    
+
 }

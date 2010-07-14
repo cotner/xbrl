@@ -40,7 +40,7 @@ import org.xbrlapi.utilities.XBRLException;
  * </ul>
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public interface Domain extends Serializable, Comparator<AspectValue> {
+public interface Domain extends StoreHandler, Serializable, Comparator<AspectValue> {
     
     /**
      * @return the URI identifying the aspect that this is a domain for.
@@ -80,9 +80,9 @@ public interface Domain extends Serializable, Comparator<AspectValue> {
 
     /**
      * @param child
-     *            The child aspect value.
-     * @return the parent aspect value or null if none exists.
-     * @throws XBRLException
+     *            The aspect value.
+     * @return the parent aspect value.
+     * @throws XBRLException if the aspect value does not have a parent.
      */
     public AspectValue getParent(AspectValue child) throws XBRLException;
 
@@ -96,6 +96,13 @@ public interface Domain extends Serializable, Comparator<AspectValue> {
      * @throws XBRLException
      */
     public int getDepth(AspectValue aspectValue) throws XBRLException;
+    
+    /**
+     * @param aspectValue The aspect value to test.
+     * @return true if and only if the aspect value has depth of zero.
+     * @throws XBRLException
+     */
+    public boolean isRoot(AspectValue aspectValue) throws XBRLException;
 
     /**
      * @return a list of all of the aspect values in the domain except for the
@@ -128,13 +135,6 @@ public interface Domain extends Serializable, Comparator<AspectValue> {
      */
     public boolean isFinite();
     
-    /**
-     * If this returns true, then the relevant aspect value implementation must
-     * include a no-parameter constructor that produces missing aspect values.
-     * 
-     * @return true if the domain includes the missing value and false
-     *         otherwise.
-     */
-    public boolean allowsMissingValues();
+
     
 }

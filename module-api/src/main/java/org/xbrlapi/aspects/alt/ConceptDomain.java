@@ -12,19 +12,19 @@ import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.impl.SchemaImpl;
 import org.xbrlapi.utilities.XBRLException;
 
-public class ConceptDomain extends Base implements Domain, StoreHandler {
+public class ConceptDomain extends DomainImpl implements Domain {
 
     /**
      * 
      */
-    private static final long serialVersionUID = -1180707610130423730L;
-
+    private static final long serialVersionUID = 8182173364220660426L;
+    
     protected final static Logger logger = Logger.getLogger(ConceptDomain.class);
     
     public ConceptDomain(Store store) throws XBRLException {
         super(store);
     }
-    
+
     /**
      * @see Domain#getAspectId()
      */
@@ -48,35 +48,14 @@ public class ConceptDomain extends Base implements Domain, StoreHandler {
         }
         return values;
     }
-
     /**
-     * @see Domain#getChildren(AspectValue)
-     */
-    public List<AspectValue> getChildren(AspectValue parent)
-            throws XBRLException {
-        return new Vector<AspectValue>();
-    }
-
-    /**
-     * @see Domain#getDepth(AspectValue)
-     */
-    public int getDepth(AspectValue aspectValue) throws XBRLException {
-        return 0;
-    }
-
-    /**
-     * @see Domain#getParent(AspectValue)
-     */
-    public AspectValue getParent(AspectValue child)
-            throws XBRLException {
-        return null;
-    }
-
-    /**
+     * Returns the number of non-abstract concepts in the data store.
      * @see Domain#getSize()
      */
+    @Override
     public long getSize() throws XBRLException {
-        return getStore().getNumberOfXMLResources(ConceptImpl.class);
+        String query = "for $root in #roots#[@type='"+ConceptImpl.class.getName()+"' and not(xbrlapi:data/xsd:element/@abstract='true')] return $root";
+        return getStore().queryCount(query);
     }
 
     /**
@@ -116,14 +95,6 @@ public class ConceptDomain extends Base implements Domain, StoreHandler {
      */
     public boolean isFinite() {
         return true;
-    }
-
-    /**
-     * Returns false.
-     * @see Domain#allowsMissingValues()
-     */
-    public boolean allowsMissingValues() {
-        return false;
     }
 
     /**

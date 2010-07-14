@@ -10,7 +10,6 @@ import org.xbrlapi.Fact;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.Tuple;
 import org.xbrlapi.XML;
-import org.xbrlapi.aspects.alt.AspectValue;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.impl.InstanceImpl;
 import org.xbrlapi.impl.TupleImpl;
@@ -69,7 +68,13 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
      */
     public int getDepth(AspectValue aspectValue) throws XBRLException {
         if (! hasParent(aspectValue)) return 0;
-        return (getDepth(getParent(aspectValue)) + 1);
+        int depth = 0;
+        Fragment parent = getStore().<Fragment> getXMLResource(((LocationAspectValue) aspectValue).getParentFactIndex());
+        while (! (parent instanceof InstanceImpl)) {
+            depth++;
+            parent = parent.getParent();
+        }
+        return depth;
     }
 
     /**
@@ -77,13 +82,10 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
      */
     public LocationAspectValue getParent(AspectValue child)
             throws XBRLException {
-        Fact fact = getStore().<Fact> getXMLResource(((LocationAspectValue)child).getFactIndex());
-        Fragment parent = fact.getParent();
-        if (parent.isa(InstanceImpl.class)) {
-            return null;
-        }
+        if (! hasParent(child)) throw new XBRLException("The aspect value " + child.getId() + " does not have a parent aspect value.");
+        Fact parent = getStore().<Fact> getXMLResource(((LocationAspectValue)child).getParentFactIndex());
         Fragment grandparent = parent.getParent();
-        if (grandparent.isa(InstanceImpl.class)) return new LocationAspectValue(parent.getIndex());
+        if (grandparent instanceof InstanceImpl) return new LocationAspectValue(parent.getIndex());
         return new LocationAspectValue(grandparent.getIndex(), parent.getIndex());
     }
 
@@ -110,9 +112,7 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
      * @see Domain#hasParent(AspectValue)
      */
     public boolean hasParent(AspectValue child) throws XBRLException {
-        Fact fact = getStore().<Fact> getXMLResource(((LocationAspectValue)child).getFactIndex());
-        if (fact.getParent().isa(InstanceImpl.class)) return false;
-        return true;
+        return (! ((LocationAspectValue)child).isRootLocation());
     }
 
     /**
@@ -187,5 +187,12 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
         if (result != 0) return result;
         return (new Integer(fParts[1])).compareTo(new Integer(sParts[1]));
     }    
-    
+
+    /**
+     * @see Domain#isRoot(AspectValue)
+     */
+    public boolean isRoot(AspectValue aspectValue) throws XBRLException {
+        return ((LocationAspectValue) aspectValue).isRootLocation();
+    }
+
 }
