@@ -264,7 +264,8 @@ public class BuilderImpl implements Builder {
 		// Insert all attributes with namespaces
 		for (int i=0; i<attrs.getLength(); i++) {
 			if (attrs.getURI(i).equals(Constants.XMLNamespace.toString())) {
-				newElement.setAttribute(attrs.getQName(i), attrs.getValue(i));
+				//newElement.setAttribute(attrs.getQName(i), attrs.getValue(i));
+                newElement.setAttributeNS(attrs.getURI(i), attrs.getQName(i),attrs.getValue(i));
 				prefixes.add(Constants.XMLPrefix);
 			} else if (! attrs.getURI(i).equals("")) {
 				newElement.setAttributeNS(attrs.getURI(i), attrs.getQName(i),attrs.getValue(i));
