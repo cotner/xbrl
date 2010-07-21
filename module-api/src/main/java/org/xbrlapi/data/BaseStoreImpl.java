@@ -1126,7 +1126,6 @@ public abstract class BaseStoreImpl implements Store {
             }
             return labels;            
         } catch (XBRLException e) {
-            e.printStackTrace();
             throw e;
         }
         
@@ -1181,7 +1180,39 @@ public abstract class BaseStoreImpl implements Store {
             return references;
         }
 
-        Networks referenceNetworks = this.getNetworksFrom(fragment,linkRole,Constants.ReferenceArcrole);
+        try {
+
+            Networks referenceNetworks = this.getNetworksFrom(fragment,linkRole,Constants.ReferenceArcrole);
+            referenceNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericReferenceArcrole));
+            
+            List<ReferenceResource> references = new Vector<ReferenceResource>();
+            for (Network network: referenceNetworks) {
+                RELATIONSHIPS: for (Relationship relationship: network.getAllActiveRelationships()) {
+                    ReferenceResource reference = (ReferenceResource) relationship.getTarget();
+                    if (resourceRole == null && language == null) {
+                        references.add(reference);
+                        continue RELATIONSHIPS;
+                    }
+                    boolean languagesMatch = false;
+                    boolean resourceRolesMatch = false;
+                    String l = reference.getLanguage();
+                    URI r = reference.getResourceRole();
+                    
+                    if (language == null) languagesMatch = true;
+                    else if (l != null && l.equals(language)) languagesMatch = true; 
+
+                    if (resourceRole == null) resourceRolesMatch = true;
+                    else if (resourceRole != null && resourceRole != null && r.equals(resourceRole)) resourceRolesMatch = true; 
+
+                    if (languagesMatch && resourceRolesMatch) references.add(reference); 
+                }
+            }
+            return references;            
+        } catch (XBRLException e) {
+            throw e;
+        }        
+        
+/*        Networks referenceNetworks = this.getNetworksFrom(fragment,linkRole,Constants.ReferenceArcrole);
         referenceNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericReferenceArcrole));
         
         List<ReferenceResource> references = new Vector<ReferenceResource>();
@@ -1197,7 +1228,7 @@ public abstract class BaseStoreImpl implements Store {
         }
         return references;
 
-    }
+*/    }
         
     /**
      * @see Store#getReferences(String, URI, String)
