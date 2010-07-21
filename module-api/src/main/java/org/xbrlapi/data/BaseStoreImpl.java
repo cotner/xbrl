@@ -1097,21 +1097,39 @@ public abstract class BaseStoreImpl implements Store {
             return labels;
         }
 
-        Networks labelNetworks = this.getNetworksFrom(fragment,linkRole,Constants.LabelArcrole);
-        labelNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericLabelArcrole));
-        
-        List<LabelResource> labels = new Vector<LabelResource>();
-        for (Network network: labelNetworks) {
-            for (Relationship relationship: network.getAllActiveRelationships()) {
-                LabelResource label = (LabelResource) relationship.getTarget();
-                String l = label.getLanguage();
-                URI r = label.getResourceRole();
-                if (resourceRole == null && language == null) labels.add(label);
-                else if (resourceRole == null) if (label.getLanguage().equals(l)) labels.add(label); 
-                else if (language == null) if (label.getResourceRole().equals(r)) labels.add(label); 
+        try {
+
+            Networks labelNetworks = this.getNetworksFrom(fragment,linkRole,Constants.LabelArcrole);
+            labelNetworks.addAll(this.getNetworksFrom(fragment,linkRole,Constants.GenericLabelArcrole));
+            
+            List<LabelResource> labels = new Vector<LabelResource>();
+            for (Network network: labelNetworks) {
+                RELATIONSHIPS: for (Relationship relationship: network.getAllActiveRelationships()) {
+                    LabelResource label = (LabelResource) relationship.getTarget();
+                    if (resourceRole == null && language == null) {
+                        labels.add(label);
+                        continue RELATIONSHIPS;
+                    }
+                    boolean languagesMatch = false;
+                    boolean resourceRolesMatch = false;
+                    String l = label.getLanguage();
+                    URI r = label.getResourceRole();
+                    
+                    if (language == null) languagesMatch = true;
+                    else if (l != null && l.equals(language)) languagesMatch = true; 
+
+                    if (resourceRole == null) resourceRolesMatch = true;
+                    else if (resourceRole != null && resourceRole != null && r.equals(resourceRole)) resourceRolesMatch = true; 
+
+                    if (languagesMatch && resourceRolesMatch) labels.add(label); 
+                }
             }
+            return labels;            
+        } catch (XBRLException e) {
+            e.printStackTrace();
+            throw e;
         }
-        return labels;
+        
         
     }
     
@@ -2399,7 +2417,7 @@ public abstract class BaseStoreImpl implements Store {
             Set<String> uris = this.queryForStrings(query);
             String uriCriteria = "";
             for (String uri: uris) {
-                uriCriteria += " or @uri='"+uri+"'"; 
+                uriCriteria += " or @uri='"+uri+"'";
             }
             uriCriteria = uriCriteria.substring(4);
             uriCriteria = "(" + uriCriteria + ")";
