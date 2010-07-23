@@ -15,13 +15,13 @@ import org.xbrlapi.data.Store;
 import org.xbrlapi.data.resource.InStoreMatcherImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
-import org.xbrlapi.sax.EntityResolverImpl;
+import org.xbrlapi.utilities.EntityResolver;
+import org.xbrlapi.utilities.EntityResolverImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
-import org.xbrlapi.sax.EntityResolver;
 
 /**
  * Provides a base test case for tests involving the BDB XML database.
