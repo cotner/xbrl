@@ -43,7 +43,7 @@ public class ResourceImpl extends ArcEndImpl implements Resource {
     public String getLanguage() throws XBRLException {
         Element root = getDataRootElement();
         if (! root.hasAttributeNS(Constants.XMLNamespace.toString(),"lang")) return null;
-        return getDataRootElement().getAttributeNS(Constants.XMLNamespace.toString(),"lang");
+        return root.getAttributeNS(Constants.XMLNamespace.toString(),"lang");
     }
     
     /**
