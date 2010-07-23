@@ -18,9 +18,9 @@ import org.xbrlapi.aspects.alt.LocationAspect;
 import org.xbrlapi.aspects.alt.LocationAspectValue;
 import org.xbrlapi.aspects.alt.LocationDomain;
 import org.xbrlapi.aspects.alt.PeriodAspect;
+import org.xbrlapi.aspects.alt.PeriodDomain;
 import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.xdt.aspects.alt.DimensionalAspectModel;
-import org.xbrlapi.xdt.aspects.alt.XDTExtender;
 import org.xbrlapi.xdt.tests.BaseTestCase;
 
 
@@ -63,7 +63,7 @@ public class AspectsTestCase extends BaseTestCase {
 			assertTrue(facts.size() > 0);
 			
 			// Set up the aspect model
-            AspectModel model = new AspectModelImpl();
+            AspectModel model = new AspectModelImpl(store);
             ConceptDomain conceptDomain = new ConceptDomain(store);
             assertEquals(store.<Concept>getXMLResources(ConceptImpl.class).size(),conceptDomain.getSize());
             assertEquals(conceptDomain.getSize(), conceptDomain.getAllAspectValues().size());
@@ -98,7 +98,7 @@ public class AspectsTestCase extends BaseTestCase {
             assertFalse(filter.filtersOn(LocationAspect.ID));
 
             // Create a fact set
-            model.addExtender(new XDTExtender());
+            model.addAspect(new PeriodAspect(new PeriodDomain(store)));
             FactSet factSet = new FactSetImpl(model);
             factSet.addFacts(facts);
 
@@ -113,21 +113,6 @@ public class AspectsTestCase extends BaseTestCase {
                 }
             }
             
-/*            List<List<AspectValue>> rowMatrix = model.getAspectValueCombinationsForAxis("row");
-            
-            assertEquals(2,rowMatrix.size());
-            assertEquals(1,rowMatrix.get(0).size());
-
-            for (List<AspectValue> rowCombination: rowMatrix) {
-                for (AspectValue rValue: rowCombination) {
-                    logger.debug("R: " + rValue.getAspect().getType() + " = " + rValue.getLabel());
-                }
-                Set<Fact> matchingFacts = filter.getMatchingFacts();
-                for (Fact matchingFact: matchingFacts) {
-                    logger.debug(matchingFact.getIndex());
-                }
-            }
-*/ 
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -140,7 +125,7 @@ public class AspectsTestCase extends BaseTestCase {
             loader.discover(this.getURI(this.EXPLICIT_DIMENSIONS));
             loader.discover(this.getURI(this.TYPED_DIMENSIONS));
             
-            DimensionalAspectModel model = new DimensionalAspectModel();
+            DimensionalAspectModel model = new DimensionalAspectModel(store);
             FactSet factSet = new FactSetImpl(model);
             factSet.addFacts(store.getAllFacts());
 
@@ -162,7 +147,7 @@ public class AspectsTestCase extends BaseTestCase {
 
         try {
             loader.discover(this.getURI(this.EXPLICIT_DIMENSIONS_WITH_DEFAULTS));
-            DimensionalAspectModel model = new DimensionalAspectModel();
+            DimensionalAspectModel model = new DimensionalAspectModel(store);
             FactSet factSet = new FactSetImpl(model);
             factSet.addFacts(store.getAllFacts());
             List<Aspect> aspects = model.getExplicitDimensionAspects();
