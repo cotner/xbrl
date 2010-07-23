@@ -1,10 +1,7 @@
 package org.xbrlapi.aspects.alt;
 
 import java.net.URI;
-import java.util.List;
 
-import org.xbrlapi.Concept;
-import org.xbrlapi.LabelResource;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -14,19 +11,25 @@ import org.xbrlapi.utilities.XBRLException;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ConceptCachingLabeller extends LabellerImpl implements Labeller {
-
+public class CachingLabeller extends ConceptLabeller implements Labeller {
+    
     /**
      * 
      */
-    private static final long serialVersionUID = -2179477289946077839L;
-
+    private static final long serialVersionUID = -1573186723917326226L;
+    
+    /**
+     * The aspect value label caching system.
+     */
+    private LabelCache cache;
+    
     /**
      * @param aspect The aspect to be a labeller for.
      */
-    public ConceptCachingLabeller(Aspect aspect) throws XBRLException {
+    public CachingLabeller(Aspect aspect, LabelCache cache) throws XBRLException {
         super(aspect);
-        if (! aspect.getId().equals(ConceptAspect.ID)) throw new XBRLException("This labeller only works for the aspect: " + ConceptAspect.ID);
+        if (cache == null) throw new XBRLException("The label cache must not be null.");
+        this.cache = cache;
     }
 
     /**
@@ -45,11 +48,9 @@ public class ConceptCachingLabeller extends LabellerImpl implements Labeller {
             URI resourceRole, URI linkRole) {
         
         try {
-            ConceptAspectValue v = (ConceptAspectValue) value;
-            Concept concept = getStore().getConcept(v.getNamespace(),v.getLocalname());
-            List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRoleAndLinkRole(locale,resourceRole, linkRole);
-            if (labels.isEmpty()) super.getAspectValueLabel(value,locale,resourceRole,linkRole);
-            return labels.get(0).getStringValue();
+            String label = cache.getLabel(getAspect().getId(), value.getId(), locale, resourceRole, linkRole);
+            if (label != null) return label;
+            return super.getAspectValueLabel(value, locale, resourceRole, linkRole);
         } catch (Throwable e) {
             return super.getAspectValueLabel(value,locale,resourceRole,linkRole);
         }

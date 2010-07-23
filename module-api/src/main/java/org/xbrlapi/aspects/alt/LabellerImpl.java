@@ -46,6 +46,13 @@ public class LabellerImpl implements Labeller {
         if (aspect == null) throw new XBRLException("The aspect must not be null.");
         this.aspect = aspect;
     }
+    
+    /** 
+     * No-parameter constructor - useful for caching labellers.
+     */
+    public LabellerImpl() {
+        super();
+    }
 
     /**
      * @see Labeller#getAspect()
