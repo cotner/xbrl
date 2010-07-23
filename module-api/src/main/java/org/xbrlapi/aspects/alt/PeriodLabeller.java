@@ -44,11 +44,13 @@ public class PeriodLabeller extends LabellerImpl implements Labeller {
             PeriodAspectValue v = (PeriodAspectValue) value;
             if (v.isForever()) return "forever";
             
+            String result = "";
             if (v.isFiniteDuration()) {
-                return v.getStart().toXMLFormat() + " - " + v.getEnd().toXMLFormat();
+                result = v.getStart().toXMLFormat() + " - " + v.getEnd().toXMLFormat();
+            } else {
+                result = v.getInstant().toXMLFormat();
             }
-            
-            return v.getEnd().toXMLFormat();
+            return result.replaceAll("T00:00:00","");
 
         } catch (Throwable e) {
             return super.getAspectValueLabel(value,locale,resourceRole,linkRole);

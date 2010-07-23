@@ -39,18 +39,26 @@ public class AspectModelImpl implements AspectModel {
 
     /**
      * Map from aspect IDs to the aspect implementations being used.
+     * @serial
      */
     private Map<URI,Aspect> aspects = new HashMap<URI,Aspect>();
-    
+
+    /**
+     * Map from aspect IDs to the aspect labellers being used.
+     * @serial
+     */
+    private Map<URI,Labeller> labellers = new HashMap<URI,Labeller>();
 
     /**
      * The axis of the aspect model to add new aspects to by default.
      * This defaults to "orphan".
+     * @serial
      */
     private String defaultAxis = "orphan";
 
     /**
      * The data store used to define some of the standard aspects.
+     * @serial
      */
     private Store store;
     
@@ -155,6 +163,11 @@ public class AspectModelImpl implements AspectModel {
         this.deleteAspect(aspect);
         axes.put(axis, aspect);
         aspects.put(aspect.getId(),aspect);
+        try {
+            labellers.put(aspect.getId(),new LabellerImpl(aspect));
+        } catch (XBRLException e) {
+            ; // Cannot be thrown.
+        }
     }
     
     /**
@@ -185,8 +198,34 @@ public class AspectModelImpl implements AspectModel {
             axes.put(axis, a);
             if (a.equals(parentAspect)) axes.put(axis, aspect);
         }
+        try {
+            labellers.put(aspect.getId(),new LabellerImpl(aspect));
+        } catch (XBRLException e) {
+            ; // Cannot be thrown.
+        }
     }
     
+    
+    
+    /**
+     * @see AspectModel#getLabeller(URI)
+     */
+    public Labeller getLabeller(URI aspectId) throws XBRLException {
+        if (aspectId == null) throw new XBRLException("The aspect ID must not be null.");
+        if (labellers.containsKey(aspectId)) return labellers.get(aspectId);
+        return new LabellerImpl(this.getAspect(aspectId));
+    }
+
+    /**
+     * @see AspectModel#setLabeller(URI, Labeller)
+     */
+    public void setLabeller(URI aspectId, Labeller labeller)
+            throws XBRLException {
+        if (aspectId == null) throw new XBRLException("The aspect ID must not be null.");
+        if (labeller == null) throw new XBRLException("The aspect labeller must not be null.");
+        labellers.put(aspectId, labeller);
+    }
+
     /**
      * @see AspectModel#addAspect(Aspect, Aspect)
      */

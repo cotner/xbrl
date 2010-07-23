@@ -2,6 +2,7 @@ package org.xbrlapi.aspects.alt;
 
 import java.net.URI;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -28,8 +29,10 @@ public class LabellerImpl implements Labeller {
     /**
      * 
      */
-    private static final long serialVersionUID = 7650474817670341486L;
+    private static final long serialVersionUID = 519089390627009535L;
 
+    protected final static Logger logger = Logger.getLogger(LabellerImpl.class);
+    
     /**
      * The aspect that this labeller deals with.
      */

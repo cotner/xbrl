@@ -73,6 +73,8 @@ public interface AspectModel extends Serializable {
      * The aspect will be added as the last aspect in the given axis.
      * If the aspect model does not already have the given axis, that axis
      * will be added to the aspect model.
+     * The labeller for the aspect is set to the default labeller.
+     * @see LabellerImpl
      * @param aspect
      *            The aspect to add to the aspect model.
      * @param axis
@@ -90,10 +92,13 @@ public interface AspectModel extends Serializable {
     public void addAspect(Aspect aspect);
 
     /**
-     * The aspect will be added to the aspect model in the specified axis
-     * and it will be immediately follow the parent aspect ID in the list 
-     * of aspects associated with the given axis if that axis has the parent aspect
-     * in it.  Otherwise the aspect will be added as the last aspect for the given axis.
+     * The aspect will be added to the aspect model in the specified axis and it
+     * will be immediately follow the parent aspect ID in the list of aspects
+     * associated with the given axis if that axis has the parent aspect in it.
+     * Otherwise the aspect will be added as the last aspect for the given axis.
+     * The labeller for the aspect is set to the default labeller.
+     * 
+     * @see LabellerImpl
      * @param axis
      *            the axis to put the aspect in.
      * @param parentAspect
@@ -201,4 +206,21 @@ public interface AspectModel extends Serializable {
      * @throws XBRLException if the original axis does not exist.
      */
     public void moveAspects(String originalAxis, String newAxis) throws XBRLException;
+    
+    /**
+     * @param aspectId The ID of the aspect that the labeller is to be used for.
+     * @param labeller The labeller to use.
+     * @throws XBRLException if a parameter is null or if the labeller is not
+     * for the specified aspect.
+     */
+    public void setLabeller(URI aspectId, Labeller labeller) throws XBRLException;
+    
+    /**
+     * @param aspectId The ID of the aspect to get the labeller for.
+     * @return the labeller for the specified aspect.  If no labeller has been
+     * explicitly set for the aspect, then the default labeller is returned.
+     * @see LabellerImpl
+     * @throws XBRLException if the aspect ID is null.
+     */
+    public Labeller getLabeller(URI aspectId) throws XBRLException;
 }

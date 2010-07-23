@@ -41,7 +41,7 @@ public class UnitLabeller extends LabellerImpl implements Labeller {
         
         URI namespace = measure.getNamespace();
         String name = measure.getLocalname();
-        String query = "for $root in #roots#[@type='"+MeasureResourceImpl.class.getName()+"'] let $data:=$root/xbrlapi.data/* where $data/@namespace='"+namespace+"' and $data/@name='"+name+"' return $root";
+        String query = "for $root in #roots#[@type='"+MeasureResourceImpl.class.getName()+"'] let $data:=$root/xbrlapi:data/* where $data/@namespace='"+namespace+"' and $data/@name='"+name+"' return $root";
         List<MeasureResource> unitResources = getStore().<MeasureResource>queryForXMLResources(query);
         for (MeasureResource unitResource: unitResources) {
             List<LabelResource> labels = unitResource.getLabelsWithLanguageAndResourceRoleAndLinkRole(locale,resourceRole,linkRole);
