@@ -62,17 +62,17 @@ public class AspectValueLabelImpl extends NonFragmentXMLImpl implements AspectVa
 
     private void setLocale(String locale) throws XBRLException {
         if (locale == null) this.setMetaAttribute("locale","null");
-        this.setMetaAttribute("locale",locale);
+        else this.setMetaAttribute("locale",locale);
     }
 
     private void setResourceRole(URI resourceRole) throws XBRLException {
         if (resourceRole == null) this.setMetaAttribute("resourceRole","null");
-        this.setMetaAttribute("resourceRole",resourceRole.toString());
+        else this.setMetaAttribute("resourceRole",resourceRole.toString());
     }
     
     private void setLinkRole(URI linkRole) throws XBRLException {
-        if (linkRole == null) this.setMetaAttribute("linkRole","null");
-        this.setMetaAttribute("linkRole",linkRole.toString());
+        if (linkRole == null) setMetaAttribute("linkRole","null");
+        else setMetaAttribute("linkRole",linkRole.toString());
     }
     
     private void setLabel(String label) throws XBRLException {

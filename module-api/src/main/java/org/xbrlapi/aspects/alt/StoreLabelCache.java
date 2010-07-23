@@ -14,6 +14,10 @@ import org.xbrlapi.utilities.XBRLException;
  * Provides a label caching system based on the underlying data store.
  * </p>
  * 
+ * <p>
+ * Do not use this with a DOM based data store.  It will cause concurrency problems.
+ * </p>
+ * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class StoreLabelCache implements LabelCache {
@@ -57,7 +61,7 @@ public class StoreLabelCache implements LabelCache {
                 "$root/@valueId='"+ valueId +"' and " +
                 "$root/@locale='"+ locale +"' and " +
                 "$root/@resourceRole='"+ resourceRole +"' and " +
-                "$root/@linkRole='"+ linkRole +"' and " +
+                "$root/@linkRole='"+ linkRole +"' " +
                 "return $root";
         List<AspectValueLabel> labels = store.<AspectValueLabel>queryForXMLResources(query);
         if (labels.size() == 0) return null;
