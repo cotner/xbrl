@@ -20,6 +20,7 @@ import org.xbrlapi.impl.ReferenceResourceImpl;
 import org.xbrlapi.impl.ResourceImpl;
 import org.xbrlapi.impl.SimpleLinkImpl;
 import org.xbrlapi.impl.TitleImpl;
+import org.xbrlapi.impl.MeasureResourceImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -209,8 +210,11 @@ public class XBRLXLinkHandlerImpl extends XLinkHandlerDefaultImpl implements XLi
                 if (lName.equals("identifier")) {
                     fragment = new EntityResourceImpl();             
                 }
-			}
-			
+            } else if (namespaceURI.equals(Constants.XBRLAPIMeasuresNamespace.toString())) {
+                if (lName.equals("measure")) {
+                    fragment = new MeasureResourceImpl();    
+                }
+            }			
 			if (fragment == null) {
 				fragment = new ResourceImpl();
 			}
