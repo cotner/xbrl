@@ -1,5 +1,7 @@
 package org.xbrlapi.impl;
 
+import java.util.List;
+
 import org.w3c.dom.Element;
 import org.xbrlapi.NumericItem;
 import org.xbrlapi.Unit;
@@ -20,7 +22,10 @@ public class NumericItemImpl extends ItemImpl implements NumericItem {
 	 * @see org.xbrlapi.NumericItem#getUnit()
 	 */
 	public Unit getUnit() throws XBRLException {
-		return getInstance().getUnit(getUnitId());
+        String query = "for $root in #roots#[@uri='"+this.getURI()+"' and @type='"+UnitImpl.class.getName()+"' and xbrlapi:data/xbrli:unit/@id='"+this.getUnitId()+"'] return $root";
+        List<Unit> units = getStore().<Unit>queryForXMLResources(query);
+        if (units.size() == 1) return units.get(0);
+        throw new XBRLException("There is not a unique matching context with ID "+this.getUnitId()+" for this fact in instance " + this.getURI());
 	}
 
     /** 
