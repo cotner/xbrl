@@ -9,6 +9,7 @@ import org.xbrlapi.utilities.XBRLException;
 public interface NumericItem extends Item {
 
 	/** 
+	 * Presumes that there is at most one XBRL instance in each document in the data store.
 	 * @return the units fragment referenced by this numeric item.
 	 * @throws XBRLException
 	 */

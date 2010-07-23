@@ -41,6 +41,14 @@ public interface Concept extends ElementDeclaration {
      * @throws XBRLException
      */
     public List<Fact> getFacts() throws XBRLException;
+
+    /**
+     * @return the list of root-level facts in the data store giving values for
+     *         this concept. Root-level facts are facts that are children of
+     *         XBRL-instance elements.
+     * @throws XBRLException
+     */
+    public List<Fact> getRootFacts() throws XBRLException;    
     
     /**
      * @return the number of facts for this concept
