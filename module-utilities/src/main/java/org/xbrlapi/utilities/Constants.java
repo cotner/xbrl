@@ -45,6 +45,8 @@ public class Constants {
     public final static URI XBRLAPINamespace = URI.create("http://xbrlapi.org/");
     public final static URI CompNamespace = URI.create("http://xbrlapi.org/composite");
     public final static URI XBRLAPIEntitiesNamespace = URI.create("http://xbrlapi.org/entities");
+    public final static URI XBRLAPIMeasuresNamespace = URI.create("http://xbrlapi.org/measures");
+    
     public final static URI XBRLAPIEquivalentEntitiesArcrole = URI.create("http://xbrlapi.org/arcrole/equivalent-entity");
     public final static URI XBRLAPILanguagesNamespace = URI.create("http://xbrlapi.org/rfc1766/languages");    
     public final static URI XMLSchemaNamespace = URI.create("http://www.w3.org/2001/XMLSchema");
