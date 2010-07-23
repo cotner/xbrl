@@ -45,14 +45,14 @@ import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.NetworkImpl;
 import org.xbrlapi.networks.Networks;
 import org.xbrlapi.networks.NetworksImpl;
-import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
+import org.xbrlapi.utilities.EntityResolver;
+import org.xbrlapi.utilities.EntityResolverImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
-import org.xbrlapi.sax.EntityResolver;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;

@@ -26,14 +26,14 @@ import org.xbrlapi.data.Store;
 import org.xbrlapi.data.bdbxml.StoreImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.LoaderImpl;
-import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
+import org.xbrlapi.utilities.EntityResolver;
+import org.xbrlapi.utilities.EntityResolverImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
-import org.xbrlapi.sax.EntityResolver;
 
 /**
  *  This example loads a set of documents, including one or more XBRL instances,

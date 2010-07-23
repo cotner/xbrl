@@ -49,8 +49,9 @@ import org.xbrlapi.networks.AnalyserImpl;
 import org.xbrlapi.networks.Network;
 import org.xbrlapi.networks.Storer;
 import org.xbrlapi.networks.StorerImpl;
-import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.Constants;
+import org.xbrlapi.utilities.EntityResolver;
+import org.xbrlapi.utilities.EntityResolverImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.LoaderImpl;
 import org.xbrlapi.xdt.aspects.DimensionalAspectModel;
@@ -58,7 +59,6 @@ import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
-import org.xbrlapi.sax.EntityResolver;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;

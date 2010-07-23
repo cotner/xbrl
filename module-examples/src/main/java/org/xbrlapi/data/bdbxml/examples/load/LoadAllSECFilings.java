@@ -19,14 +19,14 @@ import org.xbrlapi.grabber.SecGrabberImpl;
 import org.xbrlapi.loader.Loader;
 import org.xbrlapi.loader.discoverer.Discoverer;
 import org.xbrlapi.networks.AnalyserImpl;
-import org.xbrlapi.sax.EntityResolverImpl;
+import org.xbrlapi.utilities.EntityResolver;
+import org.xbrlapi.utilities.EntityResolverImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xdt.LoaderImpl;
 import org.xbrlapi.xlink.XLinkProcessor;
 import org.xbrlapi.xlink.XLinkProcessorImpl;
 import org.xbrlapi.xlink.handler.XBRLCustomLinkRecogniserImpl;
 import org.xbrlapi.xlink.handler.XBRLXLinkHandlerImpl;
-import org.xbrlapi.sax.EntityResolver;
 
 /**
  *  This example loads all of the data identified in the 
