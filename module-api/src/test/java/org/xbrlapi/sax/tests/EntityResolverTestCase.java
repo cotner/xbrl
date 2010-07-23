@@ -10,11 +10,11 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
-import org.xbrlapi.sax.EntityResolverImpl;
 import org.xbrlapi.utilities.BaseTestCase;
+import org.xbrlapi.utilities.EntityResolver;
+import org.xbrlapi.utilities.EntityResolverImpl;
 import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.Attributes;
-import org.xbrlapi.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
