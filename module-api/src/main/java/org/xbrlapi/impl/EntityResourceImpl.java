@@ -51,7 +51,7 @@ public class EntityResourceImpl extends MixedContentResourceImpl implements Enti
      * @throws XBRLException
      */
     protected String getStringIdentifier() throws XBRLException {
-        return this.getIdentifierScheme() + ":" + this.getIdentifierValue();
+        return this.getIdentifierScheme() + "#" + this.getIdentifierValue();
     }
 
     /**
