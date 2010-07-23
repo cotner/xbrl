@@ -1,4 +1,4 @@
-package org.xbrlapi.sax;
+package org.xbrlapi.utilities;
 
 import java.io.Serializable;
 

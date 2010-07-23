@@ -1,4 +1,4 @@
-package org.xbrlapi.sax;
+package org.xbrlapi.utilities;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import org.apache.xerces.xni.XNIException;
 import org.apache.xerces.xni.parser.XMLInputSource;
 import org.xbrlapi.cache.Cache;
 import org.xbrlapi.cache.CacheImpl;
-import org.xbrlapi.utilities.XBRLException;
 import org.xml.sax.InputSource;
 
 
