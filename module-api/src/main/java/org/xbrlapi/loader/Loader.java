@@ -8,7 +8,7 @@ import org.w3c.dom.Document;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.cache.Cache;
 import org.xbrlapi.data.Store;
-import org.xbrlapi.sax.EntityResolver;
+import org.xbrlapi.utilities.EntityResolver;
 import org.xbrlapi.utilities.XBRLException;
 import org.xbrlapi.xlink.ElementState;
 import org.xbrlapi.xlink.XLinkProcessor;
