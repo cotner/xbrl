@@ -26,9 +26,6 @@ class XlinkImpl extends FragmentImpl implements Xlink {
     private static final long serialVersionUID = 711390844077916793L;
 
     /**
-     * Get the xlink type (The xxlink:type attribute value).
-     * @return the value of the xlink:type attribute.
-     * @throws XBRLException
      * @see org.xbrlapi.Xlink#getXlinkType()
      */
     public String getXlinkType() throws XBRLException {
@@ -36,9 +33,6 @@ class XlinkImpl extends FragmentImpl implements Xlink {
     }
 
     /**
-     * Get the  title (The xlink:title attribute value).
-     * @return the value of the xlink:title attribute or null if none is supplied. 
-     * @throws XBRLException
      * @see org.xbrlapi.Xlink#getTitleAttribute()
      */
     public String getTitleAttribute() throws XBRLException {
@@ -51,9 +45,6 @@ class XlinkImpl extends FragmentImpl implements Xlink {
 
 
     /**
-     * Get a list of titles (The xlink:title children elements).
-     * @return a fragment list of title elements or null if there are none.
-     * @throws XBRLException
      * @see org.xbrlapi.Xlink#getTitleElements()
      */
     public List<Title> getTitleElements() throws XBRLException {
@@ -61,10 +52,6 @@ class XlinkImpl extends FragmentImpl implements Xlink {
     }
 
     /**
-     * Get a specific title fragment 
-     * @param index The index of the required title element
-     * @return the title fragment or null if there are no title children elements.
-     * @throws XBRLException if the index is out of bounds
      * @see org.xbrlapi.Xlink#getTitleElement(int)
      */
     public Title getTitleElement(int index) throws XBRLException {
@@ -85,17 +72,17 @@ class XlinkImpl extends FragmentImpl implements Xlink {
     public String getAttribute(String name) throws XBRLException {
     	return getDataRootElement().getAttribute(name);
     }
-    
 
-    
-	/** 
-	 * Get the URI of the document containing the fragment targetted
-	 * by the supplied URI.
-	 * @param uri The supplied URI for decomposition.
-	 * @return The URI of the the document containing the fragment targetted
-	 * by the supplied URI.
-	 * @throws XBRLException
-	 */
+    /**
+     * Get the URI of the document containing the fragment targeted by the
+     * supplied URI.
+     * 
+     * @param uri
+     *            The supplied URI for decomposition.
+     * @return The URI of the the document containing the fragment targeted by
+     *         the supplied URI.
+     * @throws XBRLException
+     */
 	protected URI getTargetDocumentURI(URI uri) throws XBRLException {
 		try {
 			return new URI(uri.getScheme(),null,uri.getHost(),uri.getPort(),uri.getPath(),null,null);
