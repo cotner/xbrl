@@ -439,10 +439,32 @@ public interface Fragment extends XML {
     public String getLanguage(Node node) throws XBRLException;
 
     /**
-    * @return the value of the xml:lang attribute applying to the fragment root
-    *         element or null if no such attribute is applicable.
-    * @throws XBRLException
-    */
-    public String getLanguage() throws XBRLException;    
+     * @return the value of the xml:lang attribute applying to the fragment root
+     *         element or null if no such attribute is applicable. This takes
+     *         into account xml:lang attribute inheritance though the XML
+     *         heirarchy within an XML document.
+     * @throws XBRLException
+     */
+    public String getLanguage() throws XBRLException;
+
+    /**
+     * @param languageNameEncoding The language encoding of the language name, available
+     * in the data store in the form of a Language XML resource.
+     * @see org.xbrlapi.Language for details of these objects.
+     * @return the name of the language used for the fragment or 
+     * null if none is specified or no appropriate Language resource 
+     * is available in the data store.
+     * @throws XBRLException
+     */
+    public String getLanguageName(String languageNameEncoding) throws XBRLException;
+    
+    /**
+     * @return the name of the language used for the fragment or null if none is 
+     * specified or none is available. The name is obtained by working through the
+     * list of language encodings from first to last, returning the first name that 
+     * is available in the data store in the form of a Language XML resource.
+     * @throws XBRLException
+     */
+    public String getLanguageName(List<String> languageNameEncodings) throws XBRLException;
     
 }
