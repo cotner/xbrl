@@ -9,7 +9,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"Test for org.xbrlapi.SAXHandlers.tests");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(EntityResolverTestCase.class);
+		//suite.addTestSuite(EntityResolverTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}
