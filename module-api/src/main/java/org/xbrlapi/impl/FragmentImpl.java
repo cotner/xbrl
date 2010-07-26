@@ -34,7 +34,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     private static final long serialVersionUID = 935011241451397867L;
 
     /**
-     * @see org.xbrlapi.Fragment#getAncestorOrSelf(String)
+     * @see Fragment#getAncestorOrSelf(String)
      */
     public Fragment getAncestorOrSelf(String type) throws XBRLException {
     	if (getType().equals(type)) return this;
@@ -44,7 +44,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getChildren(String)
+     * @see Fragment#getChildren(String)
      */
     public <F extends Fragment> List<F> getChildren(String type) throws XBRLException {
         String query = "#roots#[@parentIndex='" + getIndex() + "' and @type='org.xbrlapi.impl." + type + "Impl']";
@@ -57,7 +57,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getChildren(Class)
+     * @see Fragment#getChildren(Class)
      */
     public <F extends Fragment> List<F> getChildren(Class<?> requiredClass) throws XBRLException {
         String query = "#roots#[@parentIndex='" + getIndex() + "' and @type='" + requiredClass.getName() + "']";        
@@ -66,7 +66,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }    
     
     /**
-     * @see org.xbrlapi.Fragment#getChildrenIndices(String)
+     * @see Fragment#getChildrenIndices(String)
      */
     public Set<String> getChildrenIndices(String type) throws XBRLException {
         String query = "#roots#[@parentIndex='" + getIndex() + "' and @type='" + type + "']";
@@ -74,14 +74,14 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }    
     
     /**
-     * @see org.xbrlapi.Fragment#getSimpleLinks()
+     * @see Fragment#getSimpleLinks()
      */
     public List<SimpleLink> getSimpleLinks() throws XBRLException {
     	return this.getStore().<SimpleLink>getChildFragments(SimpleLinkImpl.class,this.getIndex());
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getAllChildren()
+     * @see Fragment#getAllChildren()
      */
     public List<Fragment> getAllChildren() throws XBRLException {
     	String xpath = "#roots#[@parentIndex='" + getIndex() + "']";
@@ -90,7 +90,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getAllChildrenIndices()
+     * @see Fragment#getAllChildrenIndices()
      */
     public Set<String> getAllChildrenIndices() throws XBRLException {
         String xpath = "#roots#[@parentIndex='" + getIndex() + "']";
@@ -98,7 +98,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }    
     
     /**
-     * @see org.xbrlapi.Fragment#getChild(String, int)
+     * @see Fragment#getChild(String, int)
      */
     public Fragment getChild(String type, int index) throws XBRLException {
     	List<Fragment> children = getChildren(type);
@@ -109,7 +109,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
 
     /**
-     * @see org.xbrlapi.Fragment#getDataRootElement()
+     * @see Fragment#getDataRootElement()
      */
     public Element getDataRootElement() throws XBRLException {
         Element dataContainer;
@@ -127,7 +127,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#isNewFragment()
+     * @see Fragment#isNewFragment()
      */
     public boolean isNewFragment() throws XBRLException {
     	if (getBuilder() == null) return false;
@@ -135,7 +135,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
 
     /**
-     * @see org.xbrlapi.Fragment#getURI()
+     * @see Fragment#getURI()
      */
     public URI getURI() throws XBRLException {
         try {
@@ -144,18 +144,16 @@ public class FragmentImpl extends XMLImpl implements Fragment {
             throw new XBRLException(this.getMetaAttribute("uri") + " has an invalid URI syntax.");
         }
     }
-    
 
-    
     /**
-     * @see org.xbrlapi.Fragment#setURI(URI)
+     * @see Fragment#setURI(URI)
      */
     public void setURI(URI uri) throws XBRLException {
         this.setMetaAttribute("uri",uri.toString());
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getReferencingLocators()
+     * @see Fragment#getReferencingLocators()
      */
     public List<Locator> getReferencingLocators() throws XBRLException {
     	
@@ -174,20 +172,16 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	
     	return getStore().<Locator>queryForXMLResources(query);
     }
-    
 
-    
     /**
-     * @see org.xbrlapi.Fragment#getLabels()
+     * @see Fragment#getLabels()
      */
     public List<LabelResource> getLabels() throws XBRLException {
         return getStore().getLabels(getIndex());
     }    
-    
 
-    
     /**
-     * @see org.xbrlapi.Fragment#getLabelsWithResourceRole(URI)
+     * @see Fragment#getLabelsWithResourceRole(URI)
      */
     public List<LabelResource> getLabelsWithResourceRole(URI role) throws XBRLException {
         return getStore().getLabels(getIndex(),role);
@@ -240,46 +234,37 @@ public class FragmentImpl extends XMLImpl implements Fragment {
         return new Vector<LabelResource>();
 
     }    
-    
-    
+
     /**
-     * @see org.xbrlapi.Fragment#getReferencesWithResourceRole(String)
+     * @see Fragment#getReferencesWithResourceRole(String)
      */
     public List<ReferenceResource> getReferencesWithResourceRole(String role) throws XBRLException {
         return getStore().getReferences(getIndex(),role);
     }
-    
 
-    
     /**
-     * @see org.xbrlapi.Fragment#getLabelsWithLanguage(String)
+     * @see Fragment#getLabelsWithLanguage(String)
      */
     public List<LabelResource> getLabelsWithLanguage(String language) throws XBRLException {
         return getStore().getLabels(getIndex(),language);
     }
 
-
-    
     /**
-     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndResourceRole(String, URI)
+     * @see Fragment#getLabelsWithLanguageAndResourceRole(String, URI)
      */
     public List<LabelResource> getLabelsWithLanguageAndResourceRole(String language, URI role) throws XBRLException {
         return getStore().getLabels(getIndex(),role, language);
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getLabelsWithLanguageAndResourceRole(String, URI)
+     * @see Fragment#getLabelsWithLanguageAndResourceRole(String, URI)
      */
     public List<LabelResource> getLabelsWithLanguageAndResourceRoleAndLinkRole(String language, URI resourceRole, URI linkRole) throws XBRLException {
         return getStore().getLabels(getIndex(),linkRole, resourceRole, language);
     }    
-    
-    
-    
 
-    
     /**
-     * @see org.xbrlapi.Fragment#getReferences()
+     * @see Fragment#getReferences()
      */
     public List<ReferenceResource> getReferences() throws XBRLException {
         List<ReferenceResource> references = getStore().getTargets(getIndex(),null,Constants.ReferenceArcrole);
@@ -289,7 +274,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getReferencesWithLanguage(String)
+     * @see Fragment#getReferencesWithLanguage(String)
      */
     public List<ReferenceResource> getReferencesWithLanguage(String language) throws XBRLException {
         List<ReferenceResource> references = new Vector<ReferenceResource>();
@@ -303,7 +288,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getReferencesWithLanguageAndRole(String, URI)
+     * @see Fragment#getReferencesWithLanguageAndRole(String, URI)
      */
     public List<ReferenceResource> getReferencesWithLanguageAndRole(String language, URI role) throws XBRLException {
         List<ReferenceResource> references = new Vector<ReferenceResource>();
@@ -325,7 +310,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getReferencesWithLanguageAndResourceRoleAndLinkRole(String, URI, URI)
+     * @see Fragment#getReferencesWithLanguageAndResourceRoleAndLinkRole(String, URI, URI)
      */
     public List<ReferenceResource> getReferencesWithLanguageAndResourceRoleAndLinkRole(String language, URI resourceRole, URI linkRole) throws XBRLException {
         List<ReferenceResource> references = new Vector<ReferenceResource>();
@@ -347,20 +332,6 @@ public class FragmentImpl extends XMLImpl implements Fragment {
         }
         return references;
     }    
-    
-
-
-
-    
-
-    
-
-
-
-    
-
-
-
 
     /**
      * @see Fragment#getParentIndex()
@@ -386,21 +357,21 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#isRoot()
+     * @see Fragment#isRoot()
      */
     public boolean isRoot() throws XBRLException {
         return (getParentIndex().equals(""));
     }
     
     /**
-     * @see org.xbrlapi.Fragment#setParentIndex(String)
+     * @see Fragment#setParentIndex(String)
      */
     public void setParentIndex(String index) throws XBRLException {
         setMetaAttribute("parentIndex",index);
     }
 
     /**
-     * @see org.xbrlapi.Fragment#getXPath()
+     * @see Fragment#getXPath()
      */
     public String getXPath() throws XBRLException {
 
@@ -414,8 +385,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	}    	
     	return xpath.toString();
     }
-    
-    
+
     /**
      * Determines the sibling order of 
      * @param current The element that we are determining
@@ -438,7 +408,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#setSequenceToParentElement(Fragment)
+     * @see Fragment#setSequenceToParentElement(Fragment)
      */
     public void setSequenceToParentElement(Fragment parent) throws XBRLException {
 
@@ -471,14 +441,14 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getSequenceToParentElement()
+     * @see Fragment#getSequenceToParentElement()
      */
     public String[] getSequenceToParentElement() throws XBRLException {
     	return this.getSequenceToParentElementAsString().split(" ");
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getSequenceToParentElementAsString()
+     * @see Fragment#getSequenceToParentElementAsString()
      */
     public String getSequenceToParentElementAsString() throws XBRLException {
     	String value = this.getMetaAttribute("sequenceToParentElement");
@@ -486,14 +456,8 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	return value;
     }    
 
-
-
-
-
-
-    
     /**
-     * @see org.xbrlapi.Fragment#appendID(String)
+     * @see Fragment#appendID(String)
      * TODO Eliminate the ID metadata element given the existence of the xptr elements.
      */
     public void appendID(String id) throws XBRLException {
@@ -502,10 +466,8 @@ public class FragmentImpl extends XMLImpl implements Fragment {
 		appendMetadataElement("ID",attributes);
     }
 
-    
-    
     /**
-     * @see org.xbrlapi.Fragment#appendElementSchemeXPointer(String)
+     * @see Fragment#appendElementSchemeXPointer(String)
      */
     public void appendElementSchemeXPointer(String expression) throws XBRLException {
     	HashMap<String,String> attributes = new HashMap<String,String>();
@@ -513,10 +475,8 @@ public class FragmentImpl extends XMLImpl implements Fragment {
 		appendMetadataElement("xptr",attributes);
     }
 
-    
-    
     /**
-     * @see org.xbrlapi.Fragment#getNamespace()
+     * @see Fragment#getNamespace()
      */
     public URI getNamespace() throws XBRLException {
     	if (getDataRootElement() == null) {
@@ -526,14 +486,14 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getLocalname()
+     * @see Fragment#getLocalname()
      */
     public String getLocalname() throws XBRLException {
     	return getDataRootElement().getLocalName();
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getPrefixFromQName(String)
+     * @see Fragment#getPrefixFromQName(String)
      */
     public String getPrefixFromQName(String qname) {
     	// Get the required namespace prefix from the QName
@@ -544,9 +504,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     	}
     	return prefix;
     }
-    
 
-    
     /**
      * Algorithm is as follows:
      * <ol>
@@ -561,7 +519,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      *   </ol>
      * </ol>
      * 
-     * @see org.xbrlapi.Fragment#getNamespaceFromQName(String, Node)
+     * @see Fragment#getNamespaceFromQName(String, Node)
      */
     public URI getNamespaceFromQName(String qname, Node node) throws XBRLException {
         
@@ -667,7 +625,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      *   </ol>
      * </ol>
      * 
-     * @see org.xbrlapi.Fragment#getLanguage(Node)
+     * @see Fragment#getLanguage(Node)
      */
     public String getLanguage(Node node) throws XBRLException {
         
@@ -699,22 +657,19 @@ public class FragmentImpl extends XMLImpl implements Fragment {
         
         // Check for a language code on the parent element
         return getLanguage(element.getParentNode());
-        
 
     }
     
     /**
-     * @see org.xbrlapi.Fragment#getLanguage()
-     * @see org.xbrlapi.Fragment#getLanguage(Node)
+     * @see Fragment#getLanguage()
+     * @see Fragment#getLanguage(Node)
      */
     public String getLanguage() throws XBRLException {
         return this.getLanguage(this.getDataRootElement());
     }
-    
-    
 
     /**
-     * @see org.xbrlapi.Fragment#getParent()
+     * @see Fragment#getParent()
      */
     public Fragment getParent() throws XBRLException {
         if (! this.isChild()) return null;
@@ -729,7 +684,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
      *  data root element is the parent - use that.</li>
      *  <li>Loop through the sequence to the parent element.</li>
      * </ol>
-     * @see org.xbrlapi.Fragment#getParentElement(Element)
+     * @see Fragment#getParentElement(Element)
      */
     public Element getParentElement(Element parentDataRootElement) throws XBRLException {
 
@@ -765,7 +720,7 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     }
 
     /**
-     * @see org.xbrlapi.Fragment#getLocalnameFromQName(String)
+     * @see Fragment#getLocalnameFromQName(String)
      */
     public String getLocalnameFromQName(String qname) {
     	String localname = qname;
@@ -809,8 +764,5 @@ public class FragmentImpl extends XMLImpl implements Fragment {
         if (idElement.hasAttribute("id")) return idElement.getAttribute("id");
         throw new XBRLException("The shorthand ID for this fragment is missing.");
     }
-    
-
-
 
 }
