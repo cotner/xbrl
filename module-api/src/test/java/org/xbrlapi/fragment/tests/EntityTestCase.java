@@ -49,7 +49,7 @@ public class EntityTestCase extends DOMLoadingTestCase {
             List<Entity> entities = store.<Entity>getXMLResources("Entity");
             assertTrue(entities.size() > 0);
             for (Entity entity: entities) {
-                assertEquals("www.dnb.com", entity.getIdentifierScheme());
+                assertEquals("www.dnb.com", entity.getIdentifierScheme().toString());
                 assertEquals("121064880", entity.getIdentifierValue());
             }
         } catch (Exception e) {
