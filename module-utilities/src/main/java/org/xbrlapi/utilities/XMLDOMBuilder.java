@@ -26,7 +26,6 @@ public class XMLDOMBuilder {
 	
 	private DocumentBuilderFactory factory = null;	
 	private DocumentBuilder builder = null;
-	private EntityResolver testEntityResolver = null;
 	
 	public XMLDOMBuilder() throws XBRLException {
 		initialise();
@@ -45,9 +44,6 @@ public class XMLDOMBuilder {
 			}
 	        if (builder == null) {
 		        builder = factory.newDocumentBuilder();
-				if (testEntityResolver != null) {
-					builder.setEntityResolver(testEntityResolver);
-				}
 	        }
 		} catch (Exception e) {
 			logger.error("The fragment builder could not be constructed.");
