@@ -10,11 +10,17 @@ import org.xbrlapi.utilities.XBRLException;
 /**
  * <p>
  * Provides an in-memory label caching system.
+ * This is really only useful for unit-testing purposes.
  * </p>
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public class MemoryLabelCache implements LabelCache {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6478712477019768054L;
 
     protected final static Logger logger = Logger.getLogger(MemoryLabelCache.class);
     
@@ -23,7 +29,7 @@ public class MemoryLabelCache implements LabelCache {
     /**
      * @param store The data store to use.
      */
-    public MemoryLabelCache() throws XBRLException {
+    public MemoryLabelCache() {
         super();
     }
 
