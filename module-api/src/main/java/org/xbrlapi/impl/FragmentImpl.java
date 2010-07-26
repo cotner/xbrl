@@ -651,8 +651,8 @@ public class FragmentImpl extends XMLImpl implements Fragment {
         }
         
         // Check for a language code on the current element
-        if (element.hasAttribute("xml:lang")) {
-            return element.getAttribute("xml:lang");
+        if (element.hasAttributeNS(Constants.XMLNamespace.toString(), "lang")) {
+            return element.getAttributeNS(Constants.XMLNamespace.toString(), "lang");
         }
         
         // Check for a language code on the parent element
