@@ -1,6 +1,6 @@
 <project name="xlinkapi" default="executable" basedir=".">
 
-  <property name="version" value="5.2"/>
+  <property name="version" value="5.3"/>
   <property name="root" location=".."/>
   <property name="data" location="${root}/data"/>
   <property name="build" location="${root}/bin"/>
@@ -26,7 +26,7 @@
    <target name="source" depends="javadoc" description="generate the source zip" >
       <tstamp/>
       <zip destfile="${dist}/xbrlapi-${version}-source.zip">
-        <fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
+        <fileset dir="${root}/" includes="module*/src/main/java/**/*.java" />
         <fileset dir="${root}/" includes="module*/src/test/java/**/*.java" />
       </zip>
     </target>
