@@ -59,7 +59,7 @@ public class LocationAspectValue extends AspectValueImpl implements AspectValue 
      * @see AspectValue#getId()
      */
     public String getId() {
-        if (this.isMissing()) return "";
+        if (this.isMissing()) return "missing";
         if (this.isRootLocation()) return "report";
         return factIndex;
     }
@@ -76,7 +76,7 @@ public class LocationAspectValue extends AspectValueImpl implements AspectValue 
      * @see AspectValue#isMissing()
      */
     public boolean isMissing() {
-        return false;
+        return (getFactIndex() == null);
     }
     
     /**
