@@ -14,6 +14,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xbrlapi.Fragment;
 import org.xbrlapi.LabelResource;
+import org.xbrlapi.Language;
 import org.xbrlapi.Locator;
 import org.xbrlapi.ReferenceResource;
 import org.xbrlapi.SimpleLink;
@@ -27,11 +28,11 @@ import org.xbrlapi.utilities.XBRLException;
  */
 
 public class FragmentImpl extends XMLImpl implements Fragment {
-	
+
     /**
      * 
      */
-    private static final long serialVersionUID = 935011241451397867L;
+    private static final long serialVersionUID = 8591668366284792007L;
 
     /**
      * @see Fragment#getAncestorOrSelf(String)
@@ -667,6 +668,28 @@ public class FragmentImpl extends XMLImpl implements Fragment {
     public String getLanguage() throws XBRLException {
         return this.getLanguage(this.getDataRootElement());
     }
+    
+
+    
+    /**
+     * @see Fragment#getLanguageName(String)
+     */
+    public String getLanguageName(String language) throws XBRLException {
+        Language l  = getStore().getLanguage(language,this.getLanguage());
+        if (l == null) return null;
+        return l.getName();
+    }
+    
+    /**
+     * @see Fragment#getLanguageName(List)
+     */
+    public String getLanguageName(List<String> languages) throws XBRLException {
+        for (String language: languages) {
+            Language l  = getStore().getLanguage(language,this.getLanguage());
+            if (l != null) return l.getName();
+        }
+        return null;
+    }    
 
     /**
      * @see Fragment#getParent()
