@@ -115,6 +115,10 @@ public class CombinationsImpl implements Combinations {
         if (! this.hasAspect(aspectId)) 
             throw new XBRLException("The aspect " + aspectId + " is not in this combination.");
         if (values == null) throw new XBRLException("The list of aspect values must not be null.");
+        if (values.size() == 0) aspectValues.remove(aspectId);
+        for (AspectValue value: values) {
+            if (! value.getAspectId().equals(aspectId)) throw new XBRLException("The aspect ID of an aspect value does not match the aspect.");
+        }
         aspectValues.put(aspectId,values);
     }
     
