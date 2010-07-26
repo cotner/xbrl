@@ -2,12 +2,10 @@ package org.xbrlapi.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.ExtendedLink;
 import org.xbrlapi.Fragment;
-import org.xbrlapi.Language;
 import org.xbrlapi.Resource;
 import org.xbrlapi.utilities.Constants;
 import org.xbrlapi.utilities.XBRLException;
@@ -18,10 +16,10 @@ import org.xbrlapi.utilities.XBRLException;
 
 public class ResourceImpl extends ArcEndImpl implements Resource {
 
-	/**
+    /**
      * 
      */
-    private static final long serialVersionUID = -7256786150687986598L;
+    private static final long serialVersionUID = -3515868937307864773L;
 
     /**
 	 * @see org.xbrlapi.Resource#getResourceRole()
@@ -37,35 +35,6 @@ public class ResourceImpl extends ArcEndImpl implements Resource {
         }
 	}
 
-    /**
-     * @see org.xbrlapi.Resource#getLanguage()
-     */
-    public String getLanguage() throws XBRLException {
-        Element root = getDataRootElement();
-        if (! root.hasAttributeNS(Constants.XMLNamespace.toString(),"lang")) return null;
-        return root.getAttributeNS(Constants.XMLNamespace.toString(),"lang");
-    }
-    
-    /**
-     * @see org.xbrlapi.Resource#getLanguageName(String)
-     */
-    public String getLanguageName(String language) throws XBRLException {
-        Language l  = getStore().getLanguage(language,this.getLanguage());
-        if (l == null) return null;
-        return l.getName();
-    }
-    
-    /**
-     * @see Resource#getLanguageName(List)
-     */
-    public String getLanguageName(List<String> languages) throws XBRLException {
-        for (String language: languages) {
-            Language l  = getStore().getLanguage(language,this.getLanguage());
-            if (l != null) return l.getName();
-        }
-        return null;
-    }    
-	
     /**
      * @see org.xbrlapi.ExtendedLinkContent#getExtendedLink()
      */
