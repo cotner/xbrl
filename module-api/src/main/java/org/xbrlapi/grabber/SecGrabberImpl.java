@@ -34,20 +34,22 @@ public class SecGrabberImpl extends AbstractGrabberImpl implements Grabber {
 		List<URI> resources = new ArrayList<URI>();
 		Document feed = getDocument(getSource());
 		NodeList nodes = feed.getElementsByTagNameNS(NAMESPACE,NAME);
+
+		logger.info("# XBRL files = " + nodes.getLength());
+		
 		LOOP: for (int i=0; i<nodes.getLength(); i++) {
 			Element element = (Element) nodes.item(i);
-            String type = element.getAttribute("type");
-            String uri = element.getAttribute("url");
+            String type = element.getAttributeNS(NAMESPACE, "type");
+            String uri = element.getAttributeNS(NAMESPACE, "url");
             if (! (type.equals("EX-100.INS") || type.equals("EX-101.INS"))) {
                 logger.debug("Skipping " + uri);
-                continue LOOP;// Only interested in certain XBRL instances as entry points.
+                continue LOOP;// Only interested in XBRL instances as entry points.
             }
 			if (
 					(uri != null) &&
 					(
 						(uri.endsWith(".xml")) 
 						|| (uri.endsWith(".xbrl"))
-						|| (uri.endsWith(".xsd"))
 					)
 				) {
 				try {
