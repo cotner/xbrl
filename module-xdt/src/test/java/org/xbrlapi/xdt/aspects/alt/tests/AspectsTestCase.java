@@ -1,6 +1,7 @@
 package org.xbrlapi.xdt.aspects.alt.tests;
 
 import java.util.List;
+import java.util.Vector;
 
 import org.xbrlapi.Concept;
 import org.xbrlapi.Fact;
@@ -65,7 +66,12 @@ public class AspectsTestCase extends BaseTestCase {
 			// Set up the aspect model
             AspectModel model = new AspectModelImpl(store);
             ConceptDomain conceptDomain = new ConceptDomain(store);
-            assertEquals(store.<Concept>getXMLResources(ConceptImpl.class).size(),conceptDomain.getSize());
+            List<Concept> concepts = store.<Concept>getXMLResources(ConceptImpl.class);
+            List<Concept> concreteConcepts = new Vector<Concept>();
+            for (Concept concept: concepts) {
+                if (! concept.isAbstract()) concreteConcepts.add(concept);
+            }
+            assertEquals(concreteConcepts.size(),conceptDomain.getSize());
             assertEquals(conceptDomain.getSize(), conceptDomain.getAllAspectValues().size());
             ConceptAspect conceptAspect = new ConceptAspect(conceptDomain);
             model.addAspect("row", conceptAspect);
@@ -133,9 +139,9 @@ public class AspectsTestCase extends BaseTestCase {
             for (Aspect aspect: model.getAspects()) {
                 logger.info(aspect.getId());
             }
-            assertEquals(9,model.getAspects().size());
-            List<Aspect> aspects = model.getExplicitDimensionAspects();
-            assertEquals(2, aspects.size());
+            assertEquals(10,model.getAspects().size());
+            List<Aspect> explicitAspects = model.getExplicitDimensionAspects();
+            assertEquals(2, explicitAspects.size());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());

@@ -40,7 +40,7 @@ public class ConceptDomain extends DomainImpl implements Domain {
         for (String schemaIndex: schemaIndices) {
             Schema schema = getStore().<Schema>getXMLResource(schemaIndex);
             URI namespace = schema.getTargetNamespace();
-            String query = "for $root in #roots#[@type='" + ConceptImpl.class.getName() + "' and @parentIndex='" + schemaIndex + "'] return $root/xbrlapi:data/xsd:element/@name";
+            String query = "for $root in #roots#[@type='" + ConceptImpl.class.getName() + "' and @parentIndex='" + schemaIndex + "'] where not($root/xbrlapi:data/xsd:element/@abstract='true') return $root/xbrlapi:data/xsd:element/@name";
             for (String name: getStore().queryForStrings(query)) {
                 AspectValue value = new ConceptAspectValue(namespace,name);
                 values.add(value);
@@ -54,7 +54,7 @@ public class ConceptDomain extends DomainImpl implements Domain {
      */
     @Override
     public long getSize() throws XBRLException {
-        String query = "for $root in #roots#[@type='"+ConceptImpl.class.getName()+"' and not(xbrlapi:data/xsd:element/@abstract='true')] return $root";
+        String query = "for $root in #roots#[@type='"+ConceptImpl.class.getName()+"'] where not($root/xbrlapi:data/xsd:element/@abstract='true') return $root";
         return getStore().queryCount(query);
     }
 
