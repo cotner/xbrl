@@ -33,13 +33,12 @@ public class SecAsyncGrabberImplTest extends BaseTestCase {
 
             int cnt = 2;
             List<URI> r1 = resources.subList(0,cnt);
-            DiscoveryManager d1 = new DiscoveryManager(loader, r1, 20000);
-            Thread t1 = new Thread(d1);
-            t1.start();
+            Thread discoveryThread = new Thread(new DiscoveryManager(loader, r1, 20000));
+            discoveryThread.start();
 
-            while (t1.isAlive()) {
+            while (discoveryThread.isAlive()) {
                 Thread.sleep(2000);
-                if (store.getDocumentURIs().size()>10)
+                if (store.getDocumentURIs().size()>2)
                     loader.requestInterrupt();
             }
             
