@@ -20,7 +20,7 @@ public class SecGrabberImplTest extends BaseTestCase {
         Grabber grabber = new SecGrabberImpl(feedURI);
         resources = grabber.getResources();
         logger.info("# resources = " + resources.size());
-        assertTrue(resources.size() > 400);
+        assertTrue(resources.size() > 100);
 	}
 
 	protected void tearDown() throws Exception {

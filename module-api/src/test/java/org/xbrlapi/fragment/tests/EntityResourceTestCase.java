@@ -41,7 +41,7 @@ public class EntityResourceTestCase extends DOMLoadingTestCase {
             for (Context context: contexts) {
                 if (context.getId().equals("c1")) {
                     Entity entity = context.getEntity();
-                    assertEquals("http://xbrlapi.org/integer/entity/scheme/", entity.getIdentifierScheme());
+                    assertEquals("http://xbrlapi.org/integer/entity/scheme/", entity.getIdentifierScheme().toString());
                     assertEquals("1", entity.getIdentifierValue());
                     List<EntityResource> resources = entity.getEntityResources();
                     assertEquals(1,resources.size());
