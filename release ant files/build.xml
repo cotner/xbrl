@@ -2,7 +2,6 @@
 
   <property name="version" value="5.3"/>
   <property name="root" location=".."/>
-  <property name="data" location="${root}/data"/>
   <property name="build" location="${root}/bin"/>
   <property name="dist"  location="${root}/dist"/>
   <property name="manifest"  location="${root}/module-api/src/main/resources/META-INF"/>
@@ -118,7 +117,7 @@
   <target name="module-data" depends="module-examples" description="generate the data zip" >
     <tstamp/>
   	<zip destfile="${dist}/xbrlapi-${version}-data.zip">
-      <fileset dir="${data}" includes="**/*.*" />
+      <fileset dir="${root}" includes="data/**/*.*" />
     </zip>
   </target>	
 	
