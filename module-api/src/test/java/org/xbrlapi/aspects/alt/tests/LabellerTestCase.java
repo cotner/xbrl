@@ -94,8 +94,4 @@ public class LabellerTestCase extends DOMLoadingTestCase {
 		}
 	}
 	
-	
-	
-	
-	
 }
