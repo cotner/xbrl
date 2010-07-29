@@ -6,8 +6,8 @@ mvn install:install-file -DgroupId=exist -DartifactId=xmldb-api -Dversion=custom
 mvn install:install-file -DgroupId=org.apache.xmlrpc -DartifactId=xmlrpc-common -Dversion=3.1.1 -Dpackaging=jar -Dfile=xmlrpc-common-3.1.1.jar -DgeneratePom=true
 mvn install:install-file -DgroupId=org.apache.xmlrpc -DartifactId=xmlrpc-client -Dversion=3.1.1 -Dpackaging=jar -Dfile=xmlrpc-client-3.1.1.jar -DgeneratePom=true
 
-mvn install:install-file -DgroupId=com.oracle.berkeley -DartifactId=db -Dversion=2.5.13 -Dpackaging=jar -Dfile=db.jar -DgeneratePom=true
-mvn install:install-file -DgroupId=com.oracle.berkeley -DartifactId=dbxml -Dversion=2.5.13 -Dpackaging=jar -Dfile=dbxml.jar -DgeneratePom=true
+mvn install:install-file -DgroupId=com.oracle.berkeley -DartifactId=db -Dversion=2.5.16 -Dpackaging=jar -Dfile=db.jar -DgeneratePom=true
+mvn install:install-file -DgroupId=com.oracle.berkeley -DartifactId=dbxml -Dversion=2.5.16 -Dpackaging=jar -Dfile=dbxml.jar -DgeneratePom=true
 
 mvn install:install-file -DgroupId=net.sf.saxon -DartifactId=saxon -Dversion=9.1 -Dpackaging=jar -Dfile=saxon9.jar -DgeneratePom=true
 mvn install:install-file -DgroupId=net.sf.saxon -DartifactId=saxon-dom -Dversion=9.1 -Dpackaging=jar -Dfile=saxon9-dom.jar -DgeneratePom=true
