@@ -292,7 +292,7 @@ public class CacheImpl implements Cache {
             if (i == 6)
                 if (File.separator.matches("\\\\"))
                     if (parts.get(i).matches("\\w_drive"))
-                        parts.set(i,parts.get(i).substring(0,0) + ":");          
+                        parts.set(i,parts.get(i).substring(0,1) + ":");          
             path += "/" + parts.get(i);
         }
 
@@ -331,7 +331,7 @@ public class CacheImpl implements Cache {
         StringTokenizer tokenizer = new StringTokenizer(path, "/");
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            if (File.separator.equals("\\"))
+            if (File.separator.equals("\\")) // If on windows a : is not allowed in a directory name so use _drive instead
                 if (token.matches("\\w\\Q:\\E"))
                     token = token.substring(0,1) + "_drive";
             if (token != null)
