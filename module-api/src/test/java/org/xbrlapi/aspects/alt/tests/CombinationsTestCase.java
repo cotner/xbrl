@@ -64,6 +64,8 @@ public class CombinationsTestCase extends DOMLoadingTestCase {
     public void testAspectValueCombinations() {
         try {
             
+            assertEquals(2,factSet.getSize());
+            
             // Create an aspect value combinations object
             Combinations combinations = new CombinationsImpl(model,"row");
 
@@ -75,11 +77,12 @@ public class CombinationsTestCase extends DOMLoadingTestCase {
             List<AspectValue> conceptAspectValues = new Vector<AspectValue>(factSet.getAspectValues(ConceptAspect.ID));
             Collections.sort(conceptAspectValues,model.getAspect(ConceptAspect.ID).getDomain());
             combinations.setAspectValues(ConceptAspect.ID,conceptAspectValues);
-            assertEquals(2, combinations.getAspectValueCount(ConceptAspect.ID));
+            assertEquals(3, combinations.getAspectValueCount(ConceptAspect.ID));
             assertEquals(1, combinations.getAncestorCount(ConceptAspect.ID));
             assertEquals(1, combinations.getDescendantCount(ConceptAspect.ID));
             
             List<AspectValue> locationAspectValues = new Vector<AspectValue>(factSet.getAspectValues(LocationAspect.ID));
+            assertEquals(2, locationAspectValues.size());
             Collections.sort(locationAspectValues,model.getAspect(LocationAspect.ID).getDomain());
             combinations.setAspectValues(LocationAspect.ID,locationAspectValues);
             assertEquals(2, combinations.getAspectValueCount(LocationAspect.ID));
@@ -87,10 +90,10 @@ public class CombinationsTestCase extends DOMLoadingTestCase {
             assertEquals(1, combinations.getAncestorCount(ConceptAspect.ID));
             assertEquals(2, combinations.getDescendantCount(ConceptAspect.ID));
 
-            assertEquals(2, combinations.getAncestorCount(LocationAspect.ID));
+            assertEquals(3, combinations.getAncestorCount(LocationAspect.ID));
             assertEquals(1, combinations.getDescendantCount(LocationAspect.ID));
             
-            assertEquals(4, combinations.getCombinationCount());
+            assertEquals(6, combinations.getCombinationCount());
 
             for (int i=0; i<combinations.getCombinationCount(); i++) {
                 logger.info(combinations.getCombinationValue(ConceptAspect.ID,i).getId() + " " + combinations.getCombinationValue(LocationAspect.ID,i).getId());
