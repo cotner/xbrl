@@ -45,7 +45,7 @@ public interface FactSet extends Serializable {
      * @param facts The facts to add.
      * @throws XBRLException
      */
-    public void addFacts(Collection<Fact> facts) throws XBRLException;
+    public <F extends Fact> void addFacts(Collection<F> facts) throws XBRLException;
     
     /**
      * @param fact The fact to test for.
@@ -82,6 +82,14 @@ public interface FactSet extends Serializable {
      *         aspect.
      */
     public boolean isPopulated(URI aspectId);
+    
+    /**
+     * @param aspectId
+     *            The ID of the aspect.
+     * @return true if the fact set has only one non-missing values for the specified
+     *         aspect.
+     */
+    public boolean isSingular(URI aspectId);    
     
     /**
      * @param fact The fact.

@@ -106,8 +106,8 @@ public class FactSetImpl implements FactSet {
     /**
      * @see FactSet#addFacts(Collection)
      */
-    public void addFacts(Collection<Fact> facts) throws XBRLException {
-        for (Fact fact: facts) {
+    public <F extends Fact> void addFacts(Collection<F> facts) throws XBRLException {
+        for (F fact: facts) {
             this.addFact(fact);
         }
     }
@@ -221,6 +221,13 @@ public class FactSetImpl implements FactSet {
     public boolean isPopulated(URI aspectId) {
         return (!aspectMap.get(aspectId).isEmpty());
     }
+    
+    /**
+     * @see FactSet#isSingular(URI)
+     */
+    public boolean isSingular(URI aspectId) {
+        return (aspectMap.get(aspectId).size() == 1);
+    }    
 
     /**
      * @see FactSet#getRootFacts(URI)
