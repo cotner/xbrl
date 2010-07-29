@@ -74,7 +74,7 @@ public class CachingLabeller extends LabellerImpl implements Labeller {
                 return label;
             }
             label = labeller.getAspectValueLabel(value, locale, resourceRole, linkRole);
-            this.cache.cacheLabel(aspectId, valueId,locale, resourceRole,linkRole, label);
+            this.cache.cacheLabel(aspectId, valueId, locale, resourceRole,linkRole, label);
             return label;
         } catch (Throwable e) {
             String label = labeller.getAspectValueLabel(value,locale,resourceRole,linkRole);
