@@ -40,7 +40,7 @@ public class LabellerTestCase extends DOMLoadingTestCase {
 		super(arg0);
 	}
 
-	public void testAspectLabels() {
+	public void testAspectLabelsWithInMemoryCaching() {
 		try {
 
 			// Set up the aspect model
