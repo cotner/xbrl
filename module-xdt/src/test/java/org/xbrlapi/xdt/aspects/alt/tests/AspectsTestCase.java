@@ -22,6 +22,7 @@ import org.xbrlapi.aspects.alt.PeriodAspect;
 import org.xbrlapi.aspects.alt.PeriodDomain;
 import org.xbrlapi.impl.ConceptImpl;
 import org.xbrlapi.xdt.aspects.alt.DimensionalAspectModel;
+import org.xbrlapi.xdt.aspects.alt.DimensionalAspectModelImpl;
 import org.xbrlapi.xdt.tests.BaseTestCase;
 
 
@@ -131,7 +132,7 @@ public class AspectsTestCase extends BaseTestCase {
             loader.discover(this.getURI(this.EXPLICIT_DIMENSIONS));
             loader.discover(this.getURI(this.TYPED_DIMENSIONS));
             
-            DimensionalAspectModel model = new DimensionalAspectModel(store);
+            DimensionalAspectModel model = new DimensionalAspectModelImpl(store);
             FactSet factSet = new FactSetImpl(model);
             factSet.addFacts(store.getAllFacts());
 
@@ -153,7 +154,7 @@ public class AspectsTestCase extends BaseTestCase {
 
         try {
             loader.discover(this.getURI(this.EXPLICIT_DIMENSIONS_WITH_DEFAULTS));
-            DimensionalAspectModel model = new DimensionalAspectModel(store);
+            DimensionalAspectModel model = new DimensionalAspectModelImpl(store);
             FactSet factSet = new FactSetImpl(model);
             factSet.addFacts(store.getAllFacts());
             List<Aspect> aspects = model.getExplicitDimensionAspects();

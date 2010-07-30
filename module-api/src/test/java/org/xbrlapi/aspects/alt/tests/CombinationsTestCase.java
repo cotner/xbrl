@@ -40,6 +40,7 @@ public class CombinationsTestCase extends DOMLoadingTestCase {
 
         // Set up the aspect model
         model = new StandardAspectModel(store);
+        model.initialise();
 
         // Create a fact set
         List<Fact> facts = store.getAllFacts();

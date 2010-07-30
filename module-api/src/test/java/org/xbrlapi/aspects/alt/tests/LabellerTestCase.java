@@ -57,6 +57,7 @@ public class LabellerTestCase extends DOMLoadingTestCase {
 
 			// Set up the aspect model
             AspectModel model = new StandardAspectModel(store);
+            model.initialise();
             model.addAspect(new TupleAspect(new TupleDomain(store)));
 
             model.setLabeller(LocationAspect.ID,new LocationLabeller(model.getAspect(LocationAspect.ID)));

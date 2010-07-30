@@ -1,5 +1,7 @@
 package org.xbrlapi.aspects.alt;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +28,7 @@ public class AspectModelImpl implements AspectModel {
     /**
      * 
      */
-    private static final long serialVersionUID = -6655272544674517422L;
+    private static final long serialVersionUID = 4240229374124118822L;
 
     private static final Logger logger = Logger
             .getLogger(AspectModelImpl.class);
@@ -70,6 +72,13 @@ public class AspectModelImpl implements AspectModel {
         super();
         if (store == null) throw new XBRLException("The data store must not be null.");
         this.store = store;
+    }
+    
+    /**
+     * @see AspectModel#initialise()
+     */
+    public void initialise() throws XBRLException {
+        ;
     }
 
     /**
@@ -276,4 +285,34 @@ public class AspectModelImpl implements AspectModel {
             this.addAspect(newAxis, aspect);
         }
     }
+    
+    /**
+     * @see AspectModel#duplicate()
+     */
+    public AspectModel duplicate() throws XBRLException {
+        
+        try {
+            Class<?> modelClass = this.getClass();
+            Constructor<?> constructor = modelClass.getConstructor(Store.class);
+            AspectModel duplicate = (AspectModel) constructor.newInstance(this.getStore());
+            for (String axis: axes.keySet()) {
+                for (Aspect aspect: axes.get(axis)) {
+                    URI id = aspect.getId();
+                    duplicate.addAspect(axis,aspect);
+                    duplicate.setLabeller(id,this.getLabeller(id));
+                }
+            }
+            return duplicate;
+        } catch (NoSuchMethodException nsme) {
+            throw new XBRLException("The aspect model constructor does not support duplication.",nsme);
+        } catch (InvocationTargetException ite) {
+            throw new XBRLException("The aspect model constructor does not support duplication.",ite);
+        } catch (IllegalAccessException iae) {
+            throw new XBRLException("The aspect model constructor does not support duplication.",iae);
+        } catch (InstantiationException ie) {
+            throw new XBRLException("The aspect model constructor does not support duplication.",ie);
+        }
+        
+    }
+    
 }

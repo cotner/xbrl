@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
@@ -47,21 +48,27 @@ public class StandardAspectModel extends AspectModelImpl implements AspectModel 
     /**
      * 
      */
-    private static final long serialVersionUID = 4772514502569970096L;
+    private static final long serialVersionUID = -7677982636300869250L;
+    private static final Logger logger = Logger
+    .getLogger(StandardAspectModel.class);
 
     public StandardAspectModel(Store store) throws XBRLException {
         super(store);
-        
-        addAspect(new LocationAspect(new LocationDomain(store)));
-        addAspect(new ConceptAspect(new ConceptDomain(store)));
-        addAspect(new UnitAspect(new UnitDomain(store)));
-        addAspect(new PeriodAspect(new PeriodDomain(store)));
-        addAspect(new EntityAspect(new EntityDomain(store)));
-        addAspect(new SegmentAspect(new SegmentDomain(store)));
-        addAspect(new ScenarioAspect(new ScenarioDomain(store)));
-        
     }
 
+    /**
+     * @see AspectModel#initialise()
+     */
+    public void initialise() throws XBRLException {
+        addAspect(new LocationAspect(new LocationDomain(getStore())));
+        addAspect(new ConceptAspect(new ConceptDomain(getStore())));
+        addAspect(new UnitAspect(new UnitDomain(getStore())));
+        addAspect(new PeriodAspect(new PeriodDomain(getStore())));
+        addAspect(new EntityAspect(new EntityDomain(getStore())));
+        addAspect(new SegmentAspect(new SegmentDomain(getStore())));
+        addAspect(new ScenarioAspect(new ScenarioDomain(getStore())));
+    }
+    
     /**
      * @see AspectModel#getAspectValues(Fact)
      */

@@ -29,13 +29,30 @@ import org.xbrlapi.utilities.XBRLException;
  * </p>
  * 
  * <p>
- * Aspect model extenders add all new aspects to the "orphan" axis.
+ * All aspect model classes need to have a constructor with a single parameter,
+ * that being the data store.  @see org.xbrlapi.data.Store
+ * This constructor is used by the aspect model duplicate method.
  * </p>
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
 public interface AspectModel extends Serializable {
 
+    /**
+     * Initialises the aspects and the aspect value labellers
+     * in the aspect model.  This should be called after the constructor
+     * has been run.
+     * Implementations of this class should always start by calling
+     * the initialise method of their super-class, if such a method exists.
+     * This use of initialise enables us to separate the resource intensive
+     * initialisation process from the constructor process.  This can be useful
+     * if there are ways to avoid the initialisation process because of information
+     * that is already available, eg in another aspect model.  In particular,
+     * this is useful for aspect model duplication.
+     * @throws XBRLException
+     */
+    public void initialise() throws XBRLException;
+    
     /**
      * @return a collection of all aspects in the aspect model, regardless
      * of their axis.
@@ -223,4 +240,19 @@ public interface AspectModel extends Serializable {
      * @throws XBRLException if the aspect ID is null.
      */
     public Labeller getLabeller(URI aspectId) throws XBRLException;
+    
+    /**
+     * @return a new aspect model that is a duplicate of this model.
+     * The aspects in the new aspect model are references to the same
+     * aspects as are in this aspect model (so this is not generating 
+     * a real clone of the original aspect model) but the 
+     * mapping from axis to aspects are cloned so that they can be changed
+     * in the duplicate aspect model without altering those mappings in the
+     * original aspect model.  The data store is also not duplicated.
+     * In general, this does the work of the initialise method without doing
+     * a formal initialisation on the duplicate aspect model.
+     * @throws XBRLException if the aspect model does not support duplication.
+     */
+    public AspectModel duplicate() throws XBRLException;
+    
 }

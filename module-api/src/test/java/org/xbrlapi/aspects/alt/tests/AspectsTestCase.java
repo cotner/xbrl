@@ -53,6 +53,7 @@ public class AspectsTestCase extends DOMLoadingTestCase {
 			
 			// Set up the aspect model
             AspectModel model = new StandardAspectModel(store);
+            model.initialise();
             ConceptAspect conceptAspect = (ConceptAspect) model.getAspect(ConceptAspect.ID);
             ConceptDomain conceptDomain = (ConceptDomain) conceptAspect.getDomain();
             assertEquals(store.<Concept>getXMLResources(ConceptImpl.class).size(),conceptDomain.getSize());

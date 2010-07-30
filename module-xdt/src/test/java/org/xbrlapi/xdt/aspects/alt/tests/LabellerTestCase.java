@@ -9,8 +9,7 @@ import org.xbrlapi.aspects.alt.AspectValue;
 import org.xbrlapi.aspects.alt.FactSet;
 import org.xbrlapi.aspects.alt.FactSetImpl;
 import org.xbrlapi.aspects.alt.Labeller;
-import org.xbrlapi.aspects.alt.MemoryLabelCache;
-import org.xbrlapi.xdt.aspects.alt.DimensionalAspectModelWithCachingLabellers;
+import org.xbrlapi.xdt.aspects.alt.DimensionalAspectModelWithMemoryCachingLabellers;
 
 
 /**
@@ -44,8 +43,9 @@ public class LabellerTestCase extends DOMLoadingTestCase {
 		try {
 
 			// Set up the aspect model
-            AspectModel model = new DimensionalAspectModelWithCachingLabellers(store, new MemoryLabelCache());
-
+            AspectModel model = new DimensionalAspectModelWithMemoryCachingLabellers(store);
+            model.initialise();
+            
             // Load and retrieve the facts
             loader.discover(this.getURI(MEASURES));       
             loader.discover(this.getURI(FIRST_SMALL_INSTANCE));       
