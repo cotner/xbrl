@@ -13,7 +13,6 @@ import org.xbrlapi.OpenContextComponent;
 import org.xbrlapi.Scenario;
 import org.xbrlapi.Segment;
 import org.xbrlapi.aspects.alt.Aspect;
-import org.xbrlapi.aspects.alt.AspectImpl;
 import org.xbrlapi.aspects.alt.Domain;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
@@ -28,39 +27,14 @@ import org.xbrlapi.xdt.XDTConstants;
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
  */
-public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
+public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
 
     /**
      * 
      */
-    private static final long serialVersionUID = -2685802347509982429L;
-
+    private static final long serialVersionUID = 1229327071811330083L;
+    
     private static final Logger logger = Logger.getLogger(ExplicitDimensionAspect.class);
-
-    /**
-     * The namespace of this explicit dimension.
-     */
-    private URI dimensionNamespace;
-    
-    /**
-     * The local name of this explicit dimension.
-     */
-    private String dimensionLocalname;
-    
-    /**
-     * @see Aspect#getId()
-     */
-    public URI getId() {
-        return URI.create(dimensionNamespace + "#" + dimensionLocalname);
-    }
-
-    /**
-     * @see Aspect#isExtensible()
-     */
-    @Override
-    public boolean isExtensible() {
-        return true;
-    }
     
     /**
      * @param domain The domain for this aspect.
@@ -68,12 +42,8 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
      * @throws XBRLException if the ID parameter is null.
      */
     public ExplicitDimensionAspect(Domain domain, URI dimensionNamespace, String dimensionLocalname) throws XBRLException {
-        super(domain);
+        super(domain, dimensionNamespace, dimensionLocalname);
         try {
-            if (dimensionNamespace == null) throw new XBRLException("The explicit dimension namespace must not be null.");
-            if (dimensionLocalname == null) throw new XBRLException("The explicit dimension local name must not be null.");
-            this.dimensionNamespace = dimensionNamespace;
-            this.dimensionLocalname = dimensionLocalname;
             ExplicitDimensionDomain d = (ExplicitDimensionDomain) domain;
             if (! (d.getDimensionNamespace().equals(dimensionNamespace) && d.getDimensionLocalname().equals(dimensionLocalname))) throw new XBRLException("The domain is not for this aspect.");
         } catch (ClassCastException e) {
@@ -137,7 +107,7 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
                 if (! dimensionQName.equals("")) {
                     URI candidateNamespace = occ.getNamespaceFromQName(dimensionQName,child);
                     String candidateLocalname = occ.getLocalnameFromQName(dimensionQName);
-                    if (candidateNamespace.equals(dimensionNamespace) && candidateLocalname.equals(dimensionLocalname)) {                                
+                    if (candidateNamespace.equals(getDimensionNamespace()) && candidateLocalname.equals(getDimensionLocalname())) {                                
                         return getValue(occ, child);
                     }
                 }
@@ -164,14 +134,5 @@ public class ExplicitDimensionAspect extends AspectImpl implements Aspect {
             return null;
         }
     }
-    
-    public URI getDimensionNamespace() {
-        return dimensionNamespace;
-    }
-    
-    public String getDimensionLocalname() {
-        return dimensionLocalname;
-    }
-
 
 }
