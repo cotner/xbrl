@@ -200,4 +200,18 @@ public class PeriodAspectValue extends AspectValueImpl implements AspectValue {
         return isMissing;
     }
 
+    /**
+     * @return true if the period is a finite duration and the start
+     * date has no time component and false otherwise.
+     */
+    public boolean startIsDateOnly() {
+        if (! isFiniteDuration()) return false;
+        return this.getStart().getXMLSchemaType().getLocalPart().equals("date");
+    }    
+
+    public boolean endIsDateOnly() {
+        if (isForever()) return false;
+        return this.getEnd().getXMLSchemaType().getLocalPart().equals("date");
+    }    
+
 }
