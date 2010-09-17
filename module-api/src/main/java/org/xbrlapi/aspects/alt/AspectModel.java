@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
+import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -203,6 +205,47 @@ public interface AspectModel extends Serializable {
      * @throws XBRLException
      */
     public Map<URI, AspectValue> getAspectValues(Fact fact) throws XBRLException;
+    
+    /**
+     * @param context The context to determine the aspect values from.
+     * @return the map of aspect values that can be constructed from
+     * the given context.
+     * @throws XBRLException
+     */
+    public Map<URI, AspectValue> getAspectValues(Context context) throws XBRLException;
+    
+    /**
+     * @param unit The unit to determine the aspect values from.
+     * @return the map of aspect values that can be constructed from
+     * the given unit.
+     * @throws XBRLException
+     */
+    public Map<URI, AspectValue> getAspectValues(Unit unit) throws XBRLException;
+    /**
+     * @param unit
+     *            The unit to get the aspect values for.
+     * @param existingValues
+     *            The map of aspect values that we already have and so do not
+     *            need to get now.
+     * @return the map of existing and new aspect values, one for each aspect in
+     *         this aspect model.
+     * @throws XBRLException
+     */
+    public Map<URI, AspectValue> getAspectValues(Unit unit,
+            Map<URI, AspectValue> existingValues) throws XBRLException;
+    
+    /**
+     * @param context
+     *            The context to get the aspect values for.
+     * @param existingValues
+     *            The map of aspect values that we already have and so do not
+     *            need to get now.
+     * @return the map of existing and new aspect values, one for each aspect in
+     *         this aspect model.
+     * @throws XBRLException
+     */
+    public Map<URI, AspectValue> getAspectValues(Context context,
+            Map<URI, AspectValue> existingValues) throws XBRLException;
     
 
 

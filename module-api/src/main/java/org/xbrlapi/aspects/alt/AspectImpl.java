@@ -1,6 +1,8 @@
 package org.xbrlapi.aspects.alt;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Context;
+import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -45,6 +47,20 @@ abstract public class AspectImpl implements Aspect {
      */
     public boolean isExtensible() {
         return false;
-    }    
+    }
+    
+    /**
+     * @see Aspect#getValue(Context)
+     */
+    public AspectValue getValue(Context context) throws XBRLException {
+        return getMissingValue();
+    }
+
+    /**
+     * @see Aspect#getValue(Unit)
+     */
+    public AspectValue getValue(Unit unit) throws XBRLException {
+        return getMissingValue();
+    }
 
 }

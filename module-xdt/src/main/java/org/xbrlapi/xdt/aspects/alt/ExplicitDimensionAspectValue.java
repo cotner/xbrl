@@ -31,7 +31,7 @@ public class ExplicitDimensionAspectValue extends AspectValueImpl implements Asp
     /**
      * The local name of the member.
      */
-    private String name;
+    private String localName;
     
     /**
      * Missing aspect value constructor.
@@ -53,7 +53,7 @@ public class ExplicitDimensionAspectValue extends AspectValueImpl implements Asp
         if (namespace == null) throw new XBRLException("The member namespace must not be null.");
         if (name == null) throw new XBRLException("The local name must not be null.");
         this.namespace = namespace;
-        this.name = name;
+        this.localName = name;
     }
     
     /**
@@ -74,7 +74,7 @@ public class ExplicitDimensionAspectValue extends AspectValueImpl implements Asp
      * @return the local name of the member.
      */
     public String getLocalname() {
-        return name;
+        return localName;
     }
     
     /**
@@ -90,7 +90,7 @@ public class ExplicitDimensionAspectValue extends AspectValueImpl implements Asp
      */
     public String getId() {
         if (isMissing()) return "";
-        return namespace + "#" + name;
+        return namespace + "#" + localName;
     }
     
 }

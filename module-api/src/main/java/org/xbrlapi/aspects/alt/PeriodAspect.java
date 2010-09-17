@@ -3,6 +3,7 @@ package org.xbrlapi.aspects.alt;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Item;
 import org.xbrlapi.Period;
@@ -52,9 +53,14 @@ public class PeriodAspect extends AspectImpl implements Aspect {
     public PeriodAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return getMissingValue();
         if (fact.isNil()) return getMissingValue();
-        Item item = (Item) fact;
-        Period period = item.getContext().getPeriod();
-        return getValue(period);
+        return getValue(((Item) fact).getContext());
+    }
+    
+    /**
+     * @see Aspect#getValue(Context)
+     */
+    public PeriodAspectValue getValue(Context context) throws XBRLException {
+        return getValue(context.getPeriod());
     }
     
     /**
@@ -73,4 +79,5 @@ public class PeriodAspect extends AspectImpl implements Aspect {
         return new PeriodAspectValue();
     }
 
+    
 }

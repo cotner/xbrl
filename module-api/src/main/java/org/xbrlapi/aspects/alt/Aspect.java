@@ -3,7 +3,9 @@ package org.xbrlapi.aspects.alt;
 import java.io.Serializable;
 import java.net.URI;
 
+import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
+import org.xbrlapi.Unit;
 import org.xbrlapi.utilities.XBRLException;
 
 /**
@@ -49,6 +51,23 @@ public interface Aspect extends Serializable {
      */
     public AspectValue getValue(Fact fact) throws XBRLException;
 
+    
+    /**
+     * @param context The context to get the aspect value from.
+     * @return the aspect value for the context or the missing aspect value if 
+     * the context does not define a value for the aspect.
+     * @throws XBRLException
+     */
+    public AspectValue getValue(Context context) throws XBRLException;
+    
+    /**
+     * @param unit The unit to get the aspect value from.
+     * @return the aspect value for the context or the missing aspect value if 
+     * the unit does not define a value for the aspect.
+     * @throws XBRLException
+     */
+    public AspectValue getValue(Unit unit) throws XBRLException;
+    
     /**
      * @return The domain of valid values for this aspect.
      */

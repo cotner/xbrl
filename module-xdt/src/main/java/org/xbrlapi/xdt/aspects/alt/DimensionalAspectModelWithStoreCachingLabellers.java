@@ -62,7 +62,7 @@ public class DimensionalAspectModelWithStoreCachingLabellers extends Dimensional
         
         for (Aspect aspect: this.getExplicitDimensionAspects()) {
             this.setLabeller(aspect.getId(), new CachingLabeller(cache, new ExplicitDimensionLabeller(this.getAspect(aspect.getId()))));
-        }        
+        }
         
     }       
     

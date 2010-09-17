@@ -57,9 +57,14 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
     public ExplicitDimensionAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isNil()) return getMissingValue();
         if (fact.isTuple()) return getMissingValue();
-        
-        Context context = ((Item) fact).getContext();
-        
+        return getValue(((Item) fact).getContext());
+    }
+    
+    /**
+     * @see Aspect#getValue(Context)
+     */
+    public ExplicitDimensionAspectValue getValue(Context context) throws XBRLException {
+
         // Try segment
         Segment segment = context.getEntity().getSegment();
         ExplicitDimensionAspectValue result = this.getValue(segment);
@@ -71,9 +76,9 @@ public class ExplicitDimensionAspect extends DimensionAspect implements Aspect {
         if (! result.isMissing()) return result;
 
         // Go for a default with fall back to a missing value
-        return getDefaultValue(fact.getStore());
+        return getDefaultValue(context.getStore());
         
-    }
+    }     
 
     ExplicitDimensionAspectValue defaultValue = null;
     

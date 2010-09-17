@@ -57,7 +57,6 @@ public class DimensionalAspectModelImpl extends AspectModelImpl implements Dimen
      */
     public DimensionalAspectModelImpl(Store store) throws XBRLException {
         super(store);
-        
     }
 
     /**
@@ -112,6 +111,7 @@ public class DimensionalAspectModelImpl extends AspectModelImpl implements Dimen
             result.put(SegmentRemainderAspect.ID, getAspect(SegmentRemainderAspect.ID).getMissingValue() );
             result.put(ScenarioRemainderAspect.ID, getAspect(ScenarioRemainderAspect.ID).getMissingValue() );
             result.put(UnitAspect.ID, getAspect(UnitAspect.ID).getMissingValue() );
+
         } else {
         
             Item item = (Item) fact;
@@ -148,6 +148,7 @@ public class DimensionalAspectModelImpl extends AspectModelImpl implements Dimen
                     }
                 }
             }
+
             if (scenario != null) {
                 List<Element> children = segment.getChildElements();
                 for (Element child: children) {

@@ -3,6 +3,7 @@ package org.xbrlapi.aspects.alt;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Item;
 import org.xbrlapi.Segment;
@@ -52,10 +53,15 @@ public class SegmentAspect extends AspectImpl implements Aspect {
     public SegmentAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return getMissingValue();
         if (fact.isNil()) return getMissingValue();
-        Item item = (Item) fact;
-        Segment segment = item.getContext().getEntity().getSegment();
-        return getValue(segment);
+        return getValue(((Item) fact).getContext());
     }
+
+    /**
+     * @see Aspect#getValue(Context)
+     */
+    public SegmentAspectValue getValue(Context context) throws XBRLException {
+        return getValue(context.getEntity().getSegment());
+    }       
     
     /**
      * @param segment The context segment

@@ -60,6 +60,10 @@ public class ConceptAspect extends AspectImpl implements Aspect {
     public ConceptAspectValue getValue(Fact fact) throws XBRLException {
         return new ConceptAspectValue(fact.getNamespace(),fact.getLocalname());
     }
+    
+
+
+    
 
     /**
      * @see Aspect#getMissingValue()

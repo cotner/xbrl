@@ -3,6 +3,7 @@ package org.xbrlapi.aspects.alt;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Context;
 import org.xbrlapi.Entity;
 import org.xbrlapi.Fact;
 import org.xbrlapi.Item;
@@ -53,7 +54,14 @@ public class EntityAspect extends AspectImpl implements Aspect {
     public EntityAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isTuple()) return getMissingValue();
         if (fact.isNil()) return getMissingValue();
-        return getValue(((Item) fact).getContext().getEntity());
+        return getValue(((Item) fact).getContext());
+    }
+    
+    /**
+     * @see Aspect#getValue(Context)
+     */
+    public EntityAspectValue getValue(Context context) throws XBRLException {
+        return getValue(context.getEntity());
     }
     
     /**

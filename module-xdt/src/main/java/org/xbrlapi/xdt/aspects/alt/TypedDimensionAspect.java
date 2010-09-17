@@ -51,13 +51,18 @@ public class TypedDimensionAspect extends DimensionAspect implements Aspect {
     public TypedDimensionAspectValue getValue(Fact fact) throws XBRLException {
         if (fact.isNil()) return getMissingValue();
         if (fact.isTuple()) return getMissingValue();
-        
-        Context context = ((Item) fact).getContext();
-        TypedDimensionAspectValue result = this.getValue(context.getEntity().getSegment());
+        return getValue(((Item) fact).getContext());
+    }
+
+    /**
+     * @see Aspect#getValue(Context)
+     */
+    public TypedDimensionAspectValue getValue(Context context) throws XBRLException {
+        TypedDimensionAspectValue result = getValue(context.getEntity().getSegment());
         if (! result.isMissing()) return result;
         return this.getValue(context.getScenario());
     }
-
+    
     public TypedDimensionAspectValue getValue(OpenContextComponent occ) throws XBRLException {
         if (occ == null) return getMissingValue();
         List<Element> children = occ.getChildElements();

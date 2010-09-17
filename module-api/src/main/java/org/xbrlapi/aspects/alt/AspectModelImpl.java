@@ -11,7 +11,9 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.xbrlapi.Context;
 import org.xbrlapi.Fact;
+import org.xbrlapi.Unit;
 import org.xbrlapi.data.Store;
 import org.xbrlapi.utilities.XBRLException;
 
@@ -281,7 +283,55 @@ public class AspectModelImpl implements AspectModel {
         }
         return result;
     }
+    
+    /**
+     * @see AspectModel#getAspectValues(Context)
+     */
+    public Map<URI,AspectValue> getAspectValues(Context context) throws XBRLException {
+        Map<URI,AspectValue> result = new HashMap<URI,AspectValue>();
+        for (Aspect aspect: this.getAspects()) {
+            result.put(aspect.getId(),aspect.getValue(context));
+        }
+        return result;
+    }
+    
+    /**
+     * @see AspectModel#getAspectValues(Context, Map<URI,AspectValue>)
+     */
+    public Map<URI,AspectValue> getAspectValues(Context context, Map<URI,AspectValue> existingValues) throws XBRLException {
+        Map<URI,AspectValue> result = new HashMap<URI,AspectValue>();
+        for (Aspect aspect: this.getAspects()) {
+            URI id = aspect.getId();
+            if (existingValues.containsKey(id)) result.put(id,existingValues.get(id));
+            else result.put(id,aspect.getValue(context));
+        }
+        return result;
+    }    
  
+    /**
+     * @see AspectModel#getAspectValues(Unit)
+     */
+    public Map<URI,AspectValue> getAspectValues(Unit unit) throws XBRLException {
+        Map<URI,AspectValue> result = new HashMap<URI,AspectValue>();
+        for (Aspect aspect: this.getAspects()) {
+            result.put(aspect.getId(),aspect.getValue(unit));
+        }
+        return result;
+    }
+    
+    /**
+     * @see AspectModel#getAspectValues(Unit, Map<URI,AspectValue>)
+     */
+    public Map<URI,AspectValue> getAspectValues(Unit unit, Map<URI,AspectValue> existingValues) throws XBRLException {
+        Map<URI,AspectValue> result = new HashMap<URI,AspectValue>();
+        for (Aspect aspect: this.getAspects()) {
+            URI id = aspect.getId();
+            if (existingValues.containsKey(id)) result.put(id,existingValues.get(id));
+            else result.put(id,aspect.getValue(unit));
+        }
+        return result;
+    }        
+    
     /**
      * @see AspectModel#moveAspects(String, String)
      */
