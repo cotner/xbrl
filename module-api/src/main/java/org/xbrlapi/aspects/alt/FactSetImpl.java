@@ -40,7 +40,7 @@ public class FactSetImpl implements FactSet {
     /**
      * 
      */
-    private static final long serialVersionUID = -3788375960630670676L;
+    private static final long serialVersionUID = 4346339645057432855L;
 
     private static final Logger logger = Logger
     .getLogger(FactSetImpl.class);
@@ -177,6 +177,13 @@ public class FactSetImpl implements FactSet {
         return values;
     }
     
+    /**
+     * @see FactSet#getAspectValueCount(AspectId)
+     */
+    public int getAspectValueCount(URI aspectId) {
+        return aspectMap.get(aspectId).size();
+    }
+    
 
 
     /**
@@ -242,6 +249,15 @@ public class FactSetImpl implements FactSet {
         }
         return rootFacts;
     }
-    
+
+    /**
+     * @see FactSet#getPopulatedAspects()
+     */
+    public Collection<Aspect> getPopulatedAspects() throws XBRLException {
+        Collection<Aspect> result = new Vector<Aspect>();
+        for (Aspect aspect: getModel().getAspects())
+            if (this.isPopulated(aspect.getId())) result.add(aspect);
+        return result;
+    }
     
 }

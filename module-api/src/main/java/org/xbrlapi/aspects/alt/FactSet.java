@@ -74,6 +74,12 @@ public interface FactSet extends Serializable {
      * @return the set of all values for the aspect, also always including the missing value.
      */
     public Collection<AspectValue> getAspectValues(URI aspectId);
+    
+    /**
+     * @param aspectId The ID of the aspect.
+     * @return the number of non-missing aspect values for the given aspect.
+     */
+    public int getAspectValueCount(URI aspectId);    
 
     /**
      * @param aspectId
@@ -134,4 +140,13 @@ public interface FactSet extends Serializable {
      */
     public List<Fact> getRootFacts(URI aspectId) throws XBRLException;
 
+    /**
+     * @return a collection of the populated aspects in the underlying aspect model.
+     * This leaves out all aspects that only have the missing value as their aspect value,
+     * for all facts in the fact set.
+     * @throws XBRLException
+     */
+    public Collection<Aspect> getPopulatedAspects() throws XBRLException;
+    
+    
 }

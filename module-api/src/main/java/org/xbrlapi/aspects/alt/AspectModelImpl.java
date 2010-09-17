@@ -173,7 +173,8 @@ public class AspectModelImpl implements AspectModel {
         axes.put(axis, aspect);
         aspects.put(aspect.getId(),aspect);
         try {
-            labellers.put(aspect.getId(),new LabellerImpl(aspect));
+            if (! hasLabeller(aspect.getId()))
+                labellers.put(aspect.getId(),new LabellerImpl(aspect));
         } catch (XBRLException e) {
             ; // Cannot be thrown.
         }
@@ -224,6 +225,13 @@ public class AspectModelImpl implements AspectModel {
         if (labellers.containsKey(aspectId)) return labellers.get(aspectId);
         return new LabellerImpl(this.getAspect(aspectId));
     }
+    
+    /**
+     * @see AspectModel#hasLabeller(URI)
+     */
+    public boolean hasLabeller(URI aspectId) {
+        return labellers.containsKey(aspectId);
+    }    
 
     /**
      * @see AspectModel#setLabeller(URI, Labeller)
@@ -295,13 +303,16 @@ public class AspectModelImpl implements AspectModel {
             Class<?> modelClass = this.getClass();
             Constructor<?> constructor = modelClass.getConstructor(Store.class);
             AspectModel duplicate = (AspectModel) constructor.newInstance(this.getStore());
-            for (String axis: axes.keySet()) {
+            
+            for (String axis: this.getAxes()) {
                 for (Aspect aspect: axes.get(axis)) {
                     URI id = aspect.getId();
                     duplicate.addAspect(axis,aspect);
-                    duplicate.setLabeller(id,this.getLabeller(id));
+                    Labeller labeller = this.getLabeller(id);
+                    duplicate.setLabeller(id,labeller);
                 }
             }
+            
             return duplicate;
         } catch (NoSuchMethodException nsme) {
             throw new XBRLException("The aspect model constructor does not support duplication.",nsme);
@@ -315,4 +326,35 @@ public class AspectModelImpl implements AspectModel {
         
     }
     
+    /**
+     * @see AspectModel#getAspectLabel(String, URI, URI)
+     */
+    public String getAspectLabel(URI aspectId, String locale, URI resourceRole, URI linkRole) throws XBRLException {
+        if (! hasAspect(aspectId)) throw new XBRLException("Aspect " + aspectId + " is not in this aspect model.");
+        String label = this.getLabeller(aspectId).getAspectLabel(locale, resourceRole, linkRole);
+        return label;
+    }
+
+    /**
+     * A local cache for labels to save repeated label retrieval using the one aspect model.
+     * When an aspect model is duplicated, this map is not part of the duplication.
+     */
+    Map<String,String> labelMap = new HashMap<String,String>();
+
+    /**
+     * @see AspectModel#getAspectValueLabel(AspectValue, String, URI, URI)
+     */
+    public String getAspectValueLabel(AspectValue value, String locale,
+            URI resourceRole, URI linkRole) throws XBRLException {
+        URI aspectId = value.getAspectId();
+        if (! hasAspect(aspectId)) throw new XBRLException("Aspect " + aspectId + " is not in this aspect model.");
+
+        String key = aspectId + value.getId() + locale + resourceRole + linkRole;
+        if (labelMap.containsKey(key)) return labelMap.get(key);
+        String label = this.getLabeller(aspectId).getAspectValueLabel(value,locale, resourceRole, linkRole);
+        labelMap.put(key, label);
+        return label;
+
+    }
+
 }

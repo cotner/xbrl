@@ -10,15 +10,16 @@ import org.xbrlapi.utilities.XBRLException;
 
 /**
  * <p>
- * A labeller for the location aspect based upon generic XBRL labels.
- * The label for a location aspect value is the XBRL 2.1 or XBRL generic label for the
- * concept underpinning the fact that is at the location associated with the location
- * aspect value.
+ * A labeller for the location aspect based upon generic XBRL labels. The label
+ * for a location aspect value is the XBRL 2.1 or XBRL generic label for the
+ * concept underpinning the fact that is at the location associated with the
+ * location aspect value.
  * </p>
  * 
  * <p>
- * This labeller does not make use of label caching systems.  XBRL 2.1 and generic XBRL labels
- * are used where possible.  Otherwise, the fact's namespace and local name are used.
+ * This labeller does not make use of label caching systems. XBRL 2.1 and
+ * generic XBRL labels are used where possible. Otherwise, the fact's namespace
+ * and local name are used.
  * </p>
  * 
  * @author Geoff Shuetrim (geoff@galexy.net)
@@ -56,7 +57,8 @@ public class LocationLabeller extends LabellerImpl implements Labeller {
         try {
             LocationAspectValue v = (LocationAspectValue) value;
             
-            Fact fact = getStore().<Fact>getXMLResource(v.getFactIndex());
+            if (v.isRootLocation()) return "report";
+            Fact fact = getStore().<Fact>getXMLResource(v.getParentFactIndex());
             Concept concept = fact.getConcept();
             List<LabelResource> labels = concept.getLabelsWithLanguageAndResourceRoleAndLinkRole(locale,resourceRole, linkRole);
             if (! labels.isEmpty()) return labels.get(0).getStringValue();

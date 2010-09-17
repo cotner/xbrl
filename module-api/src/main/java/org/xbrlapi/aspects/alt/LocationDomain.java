@@ -20,8 +20,8 @@ public class LocationDomain extends Base implements Domain, StoreHandler {
     /**
      * 
      */
-    private static final long serialVersionUID = -2049528909761058435L;
-
+    private static final long serialVersionUID = 6991871946096405025L;
+    
     protected final static Logger logger = Logger.getLogger(LocationDomain.class);
 
     public LocationDomain(Store store) throws XBRLException {

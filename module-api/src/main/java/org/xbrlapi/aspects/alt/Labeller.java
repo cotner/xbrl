@@ -50,12 +50,19 @@ public interface Labeller extends Serializable {
     public String getAspectLabel(String locale, URI resourceRole, URI linkRole);
     
     /**
-     * @param value The aspect value to get a label for.
-     * @param locale The locale (language code etc) of the label. Set to null if the label is not locale dependent.
-     * @param resourceRole The resource role of the XLink resource providing the label.  Set to null if the label 
-     * does not depend on the resource role.
-     * @param linkRole The link role of the extended link network that is to be analysed to obtain the label. Set to 
-     * null if the label does not depend on the link role.
+     * @param value
+     *            The aspect value to get a label for.
+     * @param locale
+     *            The locale (language code) of the label. This can be set to
+     *            null if the label is not locale dependent.
+     * @param resourceRole
+     *            The resource role of the XLink resource providing the label.
+     *            This can be set to null if the label does not depend on the
+     *            resource role.
+     * @param linkRole
+     *            The link role of the extended link network that is to be
+     *            analysed to obtain the label. This can be set to null if the
+     *            label does not depend on the link role.
      * @return the label for the aspect based upon the given parameters.
      */
     public String getAspectValueLabel(AspectValue value, String locale, URI resourceRole, URI linkRole);
