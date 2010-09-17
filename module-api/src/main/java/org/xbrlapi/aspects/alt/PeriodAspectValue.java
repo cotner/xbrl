@@ -26,8 +26,18 @@ public class PeriodAspectValue extends AspectValueImpl implements AspectValue {
     
     /**
      * The start and end dates for periods.
+     * The end is for instants and the ends of finite durations.
      */
     private XMLGregorianCalendar start, end;
+    
+    
+    /**
+     * The start and end date string values as given in the
+     * XBRL contexts.  The rawEnd is used for ends of finite 
+     * durations and for instants.
+     */
+    private String rawStart = null;
+    private String rawEnd = null;
     
     /**
      * The boolean flags for date/only values
@@ -55,11 +65,14 @@ public class PeriodAspectValue extends AspectValueImpl implements AspectValue {
         if (period == null) throw new XBRLException("The context period must not be null.");
         isMissing = false;
         if (period.isInstantPeriod()) {
+            rawEnd = period.getInstant();
             end = period.getInstantCalendar();
             endDateOnly = period.instantIsDateOnly();
         } else if (period.isFiniteDurationPeriod()) {
             start = period.getStartCalendar();
             end = period.getEndCalendar();
+            rawStart = period.getStart();
+            rawEnd = period.getEnd();
             endDateOnly = period.endIsDateOnly();
             startDateOnly = period.startIsDateOnly();
         } else {
@@ -91,6 +104,23 @@ public class PeriodAspectValue extends AspectValueImpl implements AspectValue {
         if (! isDuration()) return null;
         return end;
     }
+    
+    /**
+     * @return the raw String representation of the finite duration end date
+     * or the instant date in a context period.  Returns null if the period is
+     * forever.
+     */
+    public String getRawEnd() {
+        return rawEnd;
+    }
+    
+    /**
+     * @return the raw String representation of the finite duration start date 
+     * in a context period.  Returns null if the period is not a finite duration.
+     */
+    public String getRawStart() {
+        return rawEnd;
+    }    
     
     /**
      * @return the instant date/time Calendar or null if it is not defined.
