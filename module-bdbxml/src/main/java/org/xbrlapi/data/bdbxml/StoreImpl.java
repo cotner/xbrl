@@ -16,7 +16,6 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xbrlapi.Fragment;
 import org.xbrlapi.XML;
 import org.xbrlapi.data.BaseStoreImpl;
 import org.xbrlapi.data.Store;
@@ -56,7 +55,7 @@ public class StoreImpl extends BaseStoreImpl implements Store {
     /**
      * 
      */
-    private static final long serialVersionUID = 6332799888939599527L;
+    private static final long serialVersionUID = 668818404270811849L;
 
     private static final Logger logger = Logger.getLogger(StoreImpl.class); 
     
@@ -587,13 +586,9 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public synchronized long queryCount(String query) throws XBRLException {
 
-        logger.info("Getting the query result count from the Berkeley database.");
         XmlResults xmlResults = null;
         try {
-            List<Fragment> results = this.queryForXMLResources(query);
-            logger.info(results.size());
             xmlResults = runQuery(query, XmlQueryContext.Eager);
-            logger.info("Query: " + query + " gives " + xmlResults.size() + " results.");
             return xmlResults.size();
         } catch (XmlException e) {
             logger.error("The query stuffed up. " + query);
