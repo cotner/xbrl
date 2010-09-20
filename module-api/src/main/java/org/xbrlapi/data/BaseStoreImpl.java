@@ -2436,21 +2436,22 @@ public abstract class BaseStoreImpl implements Store {
     /**
      * @see Store#getSchemaContent(URI, String)
      */
-    public <F extends SchemaContent> F getSchemaContent(URI namespace, String name) {
+    public <F extends SchemaContent> F getSchemaContent(URI namespace, String name) throws XBRLException {
         try {
 
             // Get the uris of the containing schemas.
             String query = "for $root in #roots#[@parentIndex=''] where $root/xbrlapi:data/xsd:schema/@targetNamespace='" + namespace + "' return string($root/@uri)";
             Set<String> uris = this.queryForStrings(query);
+            if (uris.size() == 0) throw new XBRLException("The namespace does not match a schema in the data store.");
             String uriCriteria = "";
             for (String uri: uris) {
                 uriCriteria += " or @uri='"+uri+"'";
             }
-            uriCriteria = uriCriteria.substring(4);
+            uriCriteria = uriCriteria.substring(4);// Delete the first or.
             uriCriteria = "(" + uriCriteria + ")";
             query = "for $root in #roots#["+uriCriteria+"] where $root/xbrlapi:data/*/@name='" + name + "' return $root";
             List<F> candidates = this.<F>queryForXMLResources(query);
-
+            if (candidates.size() == 0) throw new XBRLException("The local name does not match content in a schema with the given namespace.");
             for (F candidate: candidates) {
                 Schema schema = candidate.getSchema();
                 if (namespace.equals(schema.getTargetNamespace()) && schema.isAncestorOf(candidate)) 
