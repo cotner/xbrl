@@ -127,7 +127,16 @@ public interface Store extends Serializable {
 
 	 /**
 	  * This deletion method ensures that all related documents
-	  * are also deleted from the data store. 
+	  * are also deleted from the data store.  A related document is defined
+	  * as a document that causes the discovery of this document.
+	  * Note that this means that applying this method to an XBRL instance 
+	  * only causes the XBRL instance to be deleted because no other documents
+	  * cause discovery of this document.
+	  * This method is intended to allow document deletions to occur without 
+	  * violating the closure property of a DTS.  In otherwords, if you want
+	  * to delete the specified document from the DTS defined by the content of the
+	  * data store, you also delete all documents that would require it to be 
+	  * in the DTS.
 	  * @param uri The URI of the document to delete.
 	  * @throws XBRLException
 	  */
