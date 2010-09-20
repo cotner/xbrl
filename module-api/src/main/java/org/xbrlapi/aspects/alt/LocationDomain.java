@@ -15,8 +15,9 @@ import org.xbrlapi.impl.InstanceImpl;
 import org.xbrlapi.impl.TupleImpl;
 import org.xbrlapi.utilities.XBRLException;
 
-public class LocationDomain extends Base implements Domain, StoreHandler {
+public class LocationDomain extends DomainImpl implements Domain, StoreHandler {
 
+    
     /**
      * 
      */
