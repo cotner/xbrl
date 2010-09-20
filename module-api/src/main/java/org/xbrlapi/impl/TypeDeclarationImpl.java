@@ -136,7 +136,7 @@ public class TypeDeclarationImpl extends SchemaDeclarationImpl implements TypeDe
      */
     public URI getParentTypeNamespace() throws XBRLException {
         Element derivation = this.getDerivation();
-        if (derivation == null) throw new XBRLException("This type is not derived from another.");
+        if (derivation == null) throw new XBRLException("Type " +getIndex() + " is not derived from another. It is in " + getTargetNamespace());
         if (derivation.hasAttribute("base")) {
             String qname = derivation.getAttribute("base");
             URI namespace = this.getNamespaceFromQName(qname,derivation);
