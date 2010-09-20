@@ -407,6 +407,9 @@ public abstract class BaseStoreImpl implements Store {
     
 
  
+    /**
+     * @see Store#deleteRelatedDocuments(URI)
+     */
     public void deleteRelatedDocuments(URI uri) throws XBRLException {
         
         HashMap<URI,Boolean> documentsToDelete = new HashMap<URI,Boolean>();    	
