@@ -65,7 +65,7 @@ public class ConceptImpl extends ElementDeclarationImpl implements Concept {
     */
     public List<Fact> getFacts() throws XBRLException {
         getStore().setNamespaceBinding(this.getTargetNamespace(),"xbrlapi_concept");
-    	return getStore().<Fact>queryForXMLResources("#roots#[*/xbrlapi_concept:"+ this.getName() + "]");
+    	return getStore().<Fact>queryForXMLResources("#roots#[xbrlapi:data/xbrlapi_concept:"+ this.getName() + "]");
     }
     
     /**
