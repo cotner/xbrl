@@ -152,7 +152,7 @@ public class InstanceImpl extends FragmentImpl implements Instance {
      * @see org.xbrlapi.Instance#getChildItems()
      */
     public List<Item> getChildItems() throws XBRLException {
-        return getStore().<Item>queryForXMLResources("#roots#[@parentIndex='" + this.getIndex() + "' and (@type='org.xbrlapi.impl.SimpleNumericItemImpl' or @type='org.xbrlapi.impl.FractionItemImpl' or @type='org.xbrlapi.impl.NonNumericItemImpl')]");
+        return getStore().<Item>queryForXMLResources("#roots#[@parentIndex='" + this.getIndex() + "' and (@type='"+SimpleNumericItemImpl.class.getName() +"' or @type='"+FractionItemImpl.class.getName()+"' or @type='"+NonNumericItemImpl.class.getName()+"')]");
     }
 
     /**
