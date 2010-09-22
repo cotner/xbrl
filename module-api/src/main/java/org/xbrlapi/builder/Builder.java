@@ -2,6 +2,7 @@ package org.xbrlapi.builder;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.w3c.dom.Element;
 import org.xbrlapi.utilities.XBRLException;
@@ -188,10 +189,10 @@ public interface Builder {
     /**
      * Appends a child element to the root metadata element.
      * @param eName Name of the element to be added (no namespaces are used).
-     * @param attributes A hashmap from attribute name keys to attribute values.
+     * @param attributes A map from attribute name keys to attribute values.
      * @throws XBRLException if the metadata element cannot be appended.
      */
-    public void appendMetadataElement(String eName, HashMap<String,String> attributes) throws XBRLException;
+    public void appendMetadataElement(String eName, Map<String,String> attributes) throws XBRLException;
     
     /**
      * Removes a child element from the metadata root element by 

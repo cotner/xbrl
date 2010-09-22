@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -456,10 +457,10 @@ public class BuilderImpl implements Builder {
     /**
      * Appends a child element to the root metadata element.
      * @param eName Name of the element to be added (no namespaces are used).
-     * @param attributes A hashmap from attribute name keys to attribute values.
+     * @param attributes A map from attribute name keys to attribute values.
      * @throws XBRLException if the metadata element cannot be appended.
      */
-    public void appendMetadataElement(String eName, HashMap<String,String> attributes) throws XBRLException {
+    public void appendMetadataElement(String eName, Map<String,String> attributes) throws XBRLException {
 
 		Element child = getDOM().createElementNS(Constants.XBRLAPINamespace.toString(),Constants.XBRLAPIPrefix + ":" + eName);
 		Iterator<String> attributeNames = attributes.keySet().iterator();
