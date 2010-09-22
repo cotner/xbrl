@@ -1565,11 +1565,9 @@ public abstract class BaseStoreImpl implements Store {
      * @throws XBRLException
      */
     private List<Item> getItemsFromInstances(List<Instance> instances) throws XBRLException {
-        List<Fact> facts = getFactsFromInstances(instances);
         List<Item> items = new Vector<Item>();
-        for (Fact fact: facts) {
-            if (! fact.getType().equals("org.xbrlapi.org.impl.TupleImpl"))
-                items.add((Item) fact);
+        for (Instance instance: instances) {
+            items.addAll(instance.getChildItems());
         }
         return items;
     }
