@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -284,9 +285,9 @@ public class XMLImpl implements XML {
     }
 
     /**
-     * @see org.xbrlapi.XML#appendMetadataElement(String, HashMap)
+     * @see org.xbrlapi.XML#appendMetadataElement(String, Map)
      */
-    public void appendMetadataElement(String eName, HashMap<String,String> attributes) throws XBRLException {
+    public void appendMetadataElement(String eName, Map<String,String> attributes) throws XBRLException {
         if (eName == null) throw new XBRLException("An element name must be specified.");
         
         if (getBuilder() != null) {
