@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -147,10 +148,10 @@ public abstract interface XML extends Comparable<XML>, Serializable {
     /**
      * Appends a child element to the root metadata element.
      * @param eName Name of the element to be added (no namespaces are used).
-     * @param attributes A hashmap from attribute name keys to attribute values.
+     * @param attributes A map from attribute name keys to attribute values.
      * @throws XBRLException.
      */
-    public void appendMetadataElement(String eName, HashMap<String,String> attributes) throws XBRLException;
+    public void appendMetadataElement(String eName, Map<String,String> attributes) throws XBRLException;
     
     /**
      * removes a child element from the metadata root element by specifying the name of the child and
