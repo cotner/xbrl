@@ -30,7 +30,6 @@ import org.w3c.dom.Node;
  */
 abstract public class BaseTestCase extends TestCase {
 
-	// Create the logger
 	protected static Logger logger = Logger.getLogger(BaseTestCase.class);	
 	
 	/**
@@ -103,6 +102,8 @@ abstract public class BaseTestCase extends TestCase {
 	public URI getURI(String property) {
 
 		String myProperty = configuration.getProperty(property);
+		logger.info("Getting URI given test config property " + property);
+        logger.info("property value is " + myProperty);
 
 		URI uri = null;
 		try {
@@ -111,11 +112,16 @@ abstract public class BaseTestCase extends TestCase {
 	        } else if (myProperty.startsWith("file:/")) {
 	            uri = new URI(myProperty);
 	        } else if (property.startsWith("test.data.local.")) {
-	            File root = new File(configuration.getProperty("local.test.data.root"));
-	            File file = new File(root,configuration.getProperty(property));
+	            String rootProperty = configuration.getProperty("local.test.data.root");
+	            logger.info("Local test data root directory is " + rootProperty);
+	            File root = new File(rootProperty);
+	            File file = new File(root,myProperty);
+	            logger.info("Local test file is " + file);
 	            uri = file.toURI();
+	            logger.info("Local test file URI is " + uri);
 	        } else {
-	            uri = new URI(baseURI + configuration.getProperty(property));		    
+	            logger.info("Making a new URI from " + baseURI + myProperty);
+	            uri = new URI(baseURI + myProperty);		    
 	        }
 		} catch (URISyntaxException e) {
 		    fail("The URI syntax is invalid.");
