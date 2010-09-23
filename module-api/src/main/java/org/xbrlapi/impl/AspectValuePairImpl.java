@@ -30,7 +30,7 @@ public class AspectValuePairImpl extends NonFragmentXMLImpl implements AspectVal
         setBuilder(new BuilderImpl());
 	}
 	
-	private AspectValuePairImpl(AspectValue aspectValue, Fragment fragment) throws XBRLException {
+	public AspectValuePairImpl(AspectValue aspectValue, Fragment fragment) throws XBRLException {
 		this();
         if (aspectValue == null) throw new XBRLException("The aspect value must not be null.");
         if (fragment == null) throw new XBRLException("The fragment must not be null.");
