@@ -38,13 +38,5 @@ public class ItemImpl extends FactImpl implements Item {
         }
         throw new XBRLException("The contextRef is missing on an item.");
     }
-    
 
-    
-    
-	
-
-	
-	
-	
 }
