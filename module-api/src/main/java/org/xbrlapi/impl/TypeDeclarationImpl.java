@@ -72,6 +72,7 @@ public class TypeDeclarationImpl extends SchemaDeclarationImpl implements TypeDe
      * @see org.xbrlapi.TypeDeclaration#isDerivedFrom(java.net.URI, java.lang.String)
      */
     public boolean isDerivedFrom(URI namespace, String name) throws XBRLException {
+        if (this.getTargetNamespace().equals(namespace) && (this.getName() != null) && this.getName().equals(name)) return true;
         URI parentNamespace = getParentTypeNamespace();
         String parentName = this.getParentTypeLocalname();
         if (parentNamespace.equals(namespace) && parentName.equals(name)) return true;
@@ -85,6 +86,8 @@ public class TypeDeclarationImpl extends SchemaDeclarationImpl implements TypeDe
      * @throws XBRLException
      */
     private Element getDerivation() throws XBRLException {
+        
+        logger.info("Getting type derivation");
         Element data = this.getDataRootElement();
         NodeList contents = data.getElementsByTagNameNS(Constants.XMLSchemaNamespace.toString(),"restriction");
         if (contents.getLength() != 0) return (Element) contents.item(0);
@@ -136,7 +139,7 @@ public class TypeDeclarationImpl extends SchemaDeclarationImpl implements TypeDe
      */
     public URI getParentTypeNamespace() throws XBRLException {
         Element derivation = this.getDerivation();
-        if (derivation == null) throw new XBRLException("Type " +getIndex() + " is not derived from another. It is in " + getTargetNamespace());
+        if (derivation == null) throw new XBRLException("Type " + getIndex() + " is not derived from another. It is in " + getTargetNamespace());
         if (derivation.hasAttribute("base")) {
             String qname = derivation.getAttribute("base");
             URI namespace = this.getNamespaceFromQName(qname,derivation);

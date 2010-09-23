@@ -28,8 +28,7 @@ public class FactImpl extends FragmentImpl implements Fact {
     public boolean isTuple() throws XBRLException {
         return (! this.getDataRootElement().hasAttribute("contextRef"));
     }
-    
-    
+
 	/**
 	 * @see org.xbrlapi.Fact#getInstance()
 	 */
@@ -73,9 +72,14 @@ public class FactImpl extends FragmentImpl implements Fact {
      * @see Fact#isFraction()
      */
     public boolean isFraction() throws XBRLException {
-        Concept concept = this.getConcept();
-        TypeDeclaration type = concept.getTypeDeclaration();
-        return (type.isDerivedFrom(Constants.XBRL21Namespace,"fractionItemType"));
+        try {
+            Concept concept = this.getConcept();
+            TypeDeclaration type = concept.getTypeDeclaration();
+            return (type.isDerivedFrom(Constants.XBRL21Namespace,"fractionItemType"));
+        } catch (XBRLException e) {
+            //e.printStackTrace();
+            throw e;
+        }
     }
 
 	/** 
