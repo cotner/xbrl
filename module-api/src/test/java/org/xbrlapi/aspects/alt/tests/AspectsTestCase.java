@@ -27,7 +27,6 @@ import org.xbrlapi.impl.ConceptImpl;
 public class AspectsTestCase extends DOMLoadingTestCase {
 	private final String FIRST_SMALL_INSTANCE = "test.data.small.instance";
     private final String SECOND_SMALL_INSTANCE = "test.data.small.instance.2";
-    
     private final String TUPLE_INSTANCE = "test.data.local.xbrl.instance.tuples.with.units";
 	
 	protected void setUp() throws Exception {
