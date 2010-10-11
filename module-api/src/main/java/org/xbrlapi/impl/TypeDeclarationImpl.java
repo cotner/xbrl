@@ -87,7 +87,6 @@ public class TypeDeclarationImpl extends SchemaDeclarationImpl implements TypeDe
      */
     private Element getDerivation() throws XBRLException {
         
-        logger.info("Getting type derivation");
         Element data = this.getDataRootElement();
         NodeList contents = data.getElementsByTagNameNS(Constants.XMLSchemaNamespace.toString(),"restriction");
         if (contents.getLength() != 0) return (Element) contents.item(0);
