@@ -160,6 +160,18 @@ the mandatory options are:
 <li>-cache [the directory containing the document cache]</li>
 </ul>
 
+<p>
+The optional options are:
+</p>
+
+<ul>
+<li>-dbCacheSize [the number of megabytes of cache to use for the Oracle Berkeley XML database. Specify as an integer value.]</li>
+</ul>
+
+<p>
+Note that you will run into errors if you set up a database container with one cache size and then 
+attempt to reuse it with a different cache size.  In such situations force the container to be deleted,
+along with its environment between load runs.</p>
 
 <h1>
 SEC XBRL filings loading example.
