@@ -74,6 +74,11 @@ public class Load {
                     } else if (args[i].equals("-cache")) {
                         i++;
                         arguments.put("cache", args[i]);
+                        
+                    } else if (args[i].equals("-dbCacheSize")) {
+                        i++;
+                        arguments.put("dbCacheSize", args[i]);
+                        
                     } else
                         badUsage("Unknown argument: " + args[i]);
                 } else {
@@ -99,8 +104,11 @@ public class Load {
                 badUsage("There are problems with the cache location: " + arguments.get("cache"));
             }
             
+            // Set up the cache size if that has been specified.
+            
+            
             // Set up the data store to load the data
-            store = createStore(arguments.get("database"),arguments.get("container"));
+            store = createStore(arguments.get("database"),arguments.get("container"), arguments.get("dbCacheSize"));
 
             // Set up the data loader (does the parsing and data discovery)
             Loader loader = createLoader(store,arguments.get("cache"));
@@ -180,7 +188,10 @@ public class Load {
         System.err.println(" -database VALUE   directory containing the Oracle BDB XML database");
         System.err.println(" -container VALUE  name of the data container");
         System.err.println(" -cache VALUE      directory that is the root of the document cache");
-        
+        System.err.println("Optional arguments: ");
+        System.err.println(" -dbCacheSize VALUE    Size of the cache (in MB) to use for the Oracle BDB XML database");        
+        System.err.println("EG: To load the XBRL instance schema.");
+        System.err.println("java -Xmx1g -Dlog4j.configuration=/home/geoff/log4j.xml org.xbrlapi.bdbxml.examples.load.Load -dbCacheSize 250 -database test -container /home/geoff/container -cache /home/geoff/cache http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");        
     }
     
     /**
@@ -188,11 +199,14 @@ public class Load {
      * cast to an XBRL data store to expose XBRL store enhancements.
      * @param database The location to use for the new store.
      * @param container The name to use for the XML container.
+     * @param cacheSize The string representation of the number of MB of database
+     * cache to use.
      * @return the new store.
      * @throws XBRLException if the store cannot be initialised.
      */
-    private static Store createStore(String database, String container) throws XBRLException {
-        return new StoreImpl(database,container);
+    private static Store createStore(String database, String container, String cacheSize) throws XBRLException {
+        if (cacheSize == null)return new StoreImpl(database,container);
+        return new StoreImpl(database,container, (new Integer(cacheSize)).intValue());
     }
     
     
