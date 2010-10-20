@@ -191,7 +191,7 @@ public class Load {
         System.err.println("Optional arguments: ");
         System.err.println(" -dbCacheSize VALUE    Size of the cache (in MB) to use for the Oracle BDB XML database");        
         System.err.println("EG: To load the XBRL instance schema.");
-        System.err.println("java -Xmx1g -Dlog4j.configuration=/home/geoff/log4j.xml org.xbrlapi.bdbxml.examples.load.Load -dbCacheSize 250 -database test -container /home/geoff/container -cache /home/geoff/cache http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");        
+        System.err.println("java -Xmx1g -Dlog4j.configuration=/home/geoff/log4j.xml org.xbrlapi.bdbxml.examples.load.Load -dbCacheSize 250 -database /home/geoff/container -container test -cache /home/geoff/cache http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd");        
     }
     
     /**
