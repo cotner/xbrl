@@ -169,9 +169,8 @@ The optional options are:
 </ul>
 
 <p>
-Note that you will run into errors if you set up a database container with one cache size and then 
-attempt to reuse it with a different cache size.  In such situations force the container to be deleted,
-along with its environment between load runs.</p>
+Note that the cache size only has an impact if you are creating the database environment when setting
+up the container.  If the environment already exists, this option is ignored.</p>
 
 <h1>
 SEC XBRL filings loading example.
