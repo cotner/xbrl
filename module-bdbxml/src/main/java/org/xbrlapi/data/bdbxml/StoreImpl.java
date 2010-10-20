@@ -87,8 +87,8 @@ public class StoreImpl extends BaseStoreImpl implements Store {
      */
     public StoreImpl(String location, String container, int cacheSize) throws XBRLException {
         super();
-        initialize(location,container);
         this.CACHE_SIZE = cacheSize * 1024*1024;
+        initialize(location,container);
     }    
     
 
