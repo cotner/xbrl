@@ -205,8 +205,13 @@ public class Load {
      * @throws XBRLException if the store cannot be initialised.
      */
     private static Store createStore(String database, String container, String cacheSize) throws XBRLException {
-        if (cacheSize == null)return new StoreImpl(database,container);
-        return new StoreImpl(database,container, (new Integer(cacheSize)).intValue());
+        if (cacheSize == null) {
+            System.out.println("Using the default cache size.");
+            return new StoreImpl(database,container);
+        }
+        int size = new Integer(cacheSize).intValue();
+        System.out.println("Using the cache size = " + size);
+        return new StoreImpl(database,container,size);
     }
     
     
