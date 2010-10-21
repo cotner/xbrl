@@ -16,14 +16,20 @@ public class MixedContentResourceImpl extends ResourceImpl implements MixedConte
     private static final long serialVersionUID = 4954206459559699372L;
 
     /**
-     * Get the value of the resource as a NodeList containing all of the children 
-     * elements and text nodes nested in the resource.
-     * @return a list of child nodes of the resource including attributes, 
-     * XHTML elements, and text nodes.
-     * @throws XBRLException
-     * @see org.xbrlapi.MixedContentResource#getContent()
+     * @see org.xbrlapi.MixedContentResource#getContentAsNodeList()
      */
-    public NodeList getContent() throws XBRLException {
+    public NodeList getContentAsNodeList() throws XBRLException {
     	return getDataRootElement().getChildNodes();
     }
+    
+    /**
+     * @see org.xbrlapi.MixedContentResource#getContentAsXHTMLString()
+     */
+    public String getContentAsXHTMLString() throws XBRLException {
+        String xml = getStore().serializeToString(getDataRootElement());
+        xml = xml.substring(xml.indexOf(">")+1);
+        String result = xml.substring(0,xml.lastIndexOf("<"));
+        return result;
+    }
+    
 }

@@ -16,8 +16,14 @@ public interface MixedContentResource extends Resource {
      * XHTML elements, and text nodes.
      * @throws XBRLException
      */
-    public NodeList getContent() throws XBRLException;
-	
+    public NodeList getContentAsNodeList() throws XBRLException;
 
-    
+    /**
+     * @return the content of the resource as a string serialising the XHTML content
+     * of the resource.  If the resource only contains a string without XHTML markup
+     * then that string is what is returned.
+     * @throws XBRLException
+     */
+    public String getContentAsXHTMLString() throws XBRLException;
+
 }

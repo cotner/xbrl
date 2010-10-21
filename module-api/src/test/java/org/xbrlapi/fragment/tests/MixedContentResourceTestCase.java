@@ -49,7 +49,7 @@ public class MixedContentResourceTestCase extends DOMLoadingTestCase {
 		try {
 			List<MixedContentResource> fragments = store.<MixedContentResource>getXMLResources("LabelResource");
 			MixedContentResource fragment = fragments.get(0);
-			assertEquals(1, fragment.getContent().getLength());
+			assertEquals(1, fragment.getContentAsNodeList().getLength());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

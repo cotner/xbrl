@@ -32,7 +32,7 @@ public class LabelResourceImpl extends MixedContentResourceImpl implements Label
 	 */
 	public String getStringValue() throws XBRLException {
 		String value = "";
-		NodeList nodes = getContent();
+		NodeList nodes = getContentAsNodeList();
 		for (int i=0; i<nodes.getLength(); i++) {
 			Node node = nodes.item(i);
 			if (node.getNodeType() == Node.TEXT_NODE) value = value + " " + node.getTextContent().trim() + " ";
