@@ -68,12 +68,18 @@ public class ExplicitDimensionLabeller extends LabellerImpl implements Labeller 
             URI resourceRole, URI linkRole) {
         
         try {
+            if (value.isMissing()) return "";
             ExplicitDimensionAspectValue v = (ExplicitDimensionAspectValue) value;
+            logger.info("Getting label for aspect value: " + v.getAspectId() + " = " + v.getId());
             SchemaContent sc = getStore().getSchemaContent(v.getNamespace(),v.getLocalname());
             List<LabelResource> labels = sc.getLabelsWithLanguageAndResourceRoleAndLinkRole(locale,resourceRole, linkRole);
-            if (labels.isEmpty()) super.getAspectValueLabel(value,locale,resourceRole,linkRole);
+            if (labels.isEmpty()) {
+                logger.info("No real labels found so having to do the dodgy with the superclass.");
+                return super.getAspectValueLabel(value,locale,resourceRole,linkRole);
+            }
             return labels.get(0).getStringValue();
         } catch (Throwable e) {
+            logger.info(e.getMessage());
             return super.getAspectValueLabel(value,locale,resourceRole,linkRole);
         }
         

@@ -67,14 +67,22 @@ public class CachingLabeller extends LabellerImpl implements Labeller {
         
         URI aspectId = getAspect().getId();
         String valueId = value.getId();
+
         
         try {
+
+            
             String label = cache.getLabel(aspectId, valueId, locale, resourceRole, linkRole);
             if (label != null) {
                 return label;
             }
+
+            if (value.isMissing()) {
+                this.cache.cacheLabel(aspectId, valueId, locale, resourceRole,linkRole, "");
+                return "";
+            }
+            
             label = labeller.getAspectValueLabel(value, locale, resourceRole, linkRole);
-            logger.info("The label is " + label);
             this.cache.cacheLabel(aspectId, valueId, locale, resourceRole,linkRole, label);
             return label;
         } catch (Throwable e) {
@@ -82,6 +90,7 @@ public class CachingLabeller extends LabellerImpl implements Labeller {
             try {
                 this.cache.cacheLabel(aspectId, valueId,locale, resourceRole,linkRole, label);
             } catch (XBRLException x) {
+                x.printStackTrace();
                 logger.error("The label could not be cached.");
                 ; // Ignore the exception - effectively bailing out of the caching operation.
             }
