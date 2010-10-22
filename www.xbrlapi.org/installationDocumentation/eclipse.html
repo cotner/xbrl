@@ -34,14 +34,21 @@ pageTracker._trackPageview();
 <p>Download and install <a href="http://www.eclipse.org/downloads/">Eclipse version 3.1.2</a>
 or later. You can use the normal or the much larger EE version. Extract
 it to create, say, the ~/programs/eclipse folder. Open Eclipse and and
-set the workspace to, say, the ~/eclipse directory.</p>
+set the workspace to, say, the ~/Eclipse directory.</p>
 
-<h2>Check out the XBRLAPI project from the Sourceforge Subversion repository.</h2>
+<h2>Install a SVN plugin</h2>
 
 <p>
 Create a new project by checking it out from the XBRLAPI Sourceforge Subversion repository.
-First install Eclipse <a href="http://subclipse.tigris.org/">Subclipse</a>.
+First install Eclipse <a href="http://www.eclipse.org/subversive/">Subversive</a>.
 </p>
+
+<p>
+Use the Install new software option within Eclipse to find 
+the collaboration tool plugins and install the Subversion one.
+</p>
+
+<h2>Check out the XBRLAPI project from the Sourceforge Subversion repository.</h2>
 
 <p>
 Open the Subversion repository exploring perspective in Eclipse via the windows/perspectives menu.
@@ -57,9 +64,8 @@ Open the XBRLAPI subversion repository to show the branches, tags trunk and www.
 
 <p>
 Select the trunk and choose check-out from the context menu to check it out as a project in Eclipse.
-That should set up the project more or less correctly.
+That should set up the project "more or less" correctly.
 </p>
-
 
 <p>In the "Java build path" project properties, add two libraries,
 one for the Java runtime library (if it is not there already) and one
@@ -76,40 +82,16 @@ Windows-&gt;Preferences-&gt;Java-&gt;Installed JREs, for the JRE that you use fo
 unit testing, edit the configuration and add the following parameter to
 the set of default virtual machine (VM) arguments:</p>
 
-<p><code>-Dxbrlapi.test.configuration=/home/geoff/eclipse/xbrlapi/test.configuration.properties</code></p>
+<p><code>-Dxbrlapi.test.configuration=/home/geoff/Eclipse/xbrlapi.org/test.configuration.properties</code></p>
 
 <p>You should now be able to run the full set of tests in the suite provided by
 <code>org.xbrlapi.tests.AllTests</code>. This can be run by finding that
 source file in the package explorer, right mouse clicking on it to
 access the context menu, and then choosing to run the file as a JUnit test.</p>
 
-<h2>Set up specific run jobs to test the basics of the XBRLAPI installation.</h2>
-
-<h3>DOM data store creation, population and usage to build an XML
-representation of a DTS</h3>
-
-<p>Create a run job called "XBRLAPI DOM data store Compose operation"</p>
-<p>The job is for the xbrlapi project and the main class is org.xbrlapi.Run</p>
-<p>The program arguments (on *NIX) are:</p>
-<code>
--class org.xbrlapi.data.dom.Compose<br/>
--logger /home/username/eclipse/xbrlapi/conf/log4j.xml<br/>
--cache /home/username/taxonomy_cache<br/>
--output /home/username/dts.xml<br/>
-URL<br/>
-</code>
-<p>Note that this requires you to create a directory for the taxonomy cache at ~/taxonomy_cache</p>
-<p>Note also that this requires you to specify the necessary URL to use as a starting point for 
-the discovery process in place of "URL".</p>
-
-<p>The virtual machine arguments are: <code>-Xmx1g</code> to ensure that you have adequate memory allocated.</p>
-
-<p>All other settings for the run job should be set to their default values.</p>
-
 <p>
 <a href="http://sourceforge.net/projects/xbrlapi"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=135539&type=11" width="120" height="30" border="0" alt="Get Java XBRL API implementation at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
 </p>
-
 
 </div>
 
